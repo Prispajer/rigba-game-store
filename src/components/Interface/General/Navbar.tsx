@@ -1,0 +1,54 @@
+export default function Navbar() {
+  return (
+    <>
+      <nav className="bg-[#244673]">
+        <ul className="text-[white]">
+          <li>
+            <a
+              href="
+            "
+            >
+              Sklep
+            </a>
+          </li>
+          <li>
+            <a
+              href="
+            "
+            ></a>
+          </li>
+          <li>
+            <a
+              href="
+            "
+            ></a>
+          </li>
+          <li>
+            <a
+              href="
+            "
+            ></a>
+          </li>
+          <li>
+            <a
+              href="
+            "
+            ></a>
+          </li>
+          <li>
+            <a
+              href="
+            "
+            ></a>
+          </li>
+          <li>
+            <a
+              href="
+            "
+            ></a>
+          </li>
+        </ul>
+      </nav>
+    </>
+  );
+}

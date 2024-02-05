@@ -2,7 +2,7 @@ export default function Navbar() {
   return (
     <>
       <nav className="bg-[#244673]">
-        <ul className="text-[white]">
+        <ul className="text-[white] flex items-center mx-auto max-w-[1240px] w-full py-3 px-3 gap-10 text-[18px]">
           <li>
             <a
               href="
@@ -15,37 +15,49 @@ export default function Navbar() {
             <a
               href="
             "
-            ></a>
+            >
+              Gry
+            </a>
           </li>
           <li>
             <a
               href="
             "
-            ></a>
+            >
+              Karty do gier
+            </a>
           </li>
           <li>
             <a
               href="
             "
-            ></a>
+            >
+              eKarty
+            </a>
           </li>
           <li>
             <a
               href="
             "
-            ></a>
+            >
+              Xbox
+            </a>
           </li>
           <li>
             <a
               href="
             "
-            ></a>
+            >
+              PSN
+            </a>
           </li>
           <li>
             <a
               href="
             "
-            ></a>
+            >
+              Nintendo
+            </a>
           </li>
         </ul>
       </nav>

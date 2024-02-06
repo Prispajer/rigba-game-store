@@ -1,6 +1,13 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
+import {
+  generalLinks,
+  specificLinks,
+  GeneralLinks,
+  SpecificLinks,
+} from "@/utils/types";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -17,13 +24,21 @@ export default function Navbar() {
     <>
       <nav className="relative bg-[#244673]">
         <ul className="flex items-center max-w-[1240px] w-full mx-auto text-[18px] text-[white]">
-          <li
-            className="nav-li"
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          >
-            <a href="#">Sklep</a>
-            <div className="absolute left-0 top-[60px] w-full mx-auto bg-[#1c365b]">
+          {generalLinks.map((element: GeneralLinks, index: number) => (
+            <li
+              key={index}
+              className="nav-li"
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              <Link href={element.link}>{element.name}</Link>
+            </li>
+          ))}
+          {specificLinks.map((element: SpecificLinks, index: number) => (
+            <div
+              key={index}
+              className="absolute left-0 top-[60px] w-full mx-auto bg-[#1c365b]"
+            >
               <div
                 className={
                   isOpen
@@ -32,110 +47,16 @@ export default function Navbar() {
                 }
               >
                 <ul>
-                  <span className="ul-span">Platforma</span>
-                  <li className="ul-li">
-                    <a href="/">Steam Gry</a>
-                  </li>
-                  <li className="ul-li">
-                    <a href="/">Xbox Gry</a>
-                  </li>
-                  <li className="ul-li">
-                    <a href="/">PSN Gry</a>
-                  </li>
-                  <li className="ul-li">
-                    <a href="/">Nintendo Switch Gry</a>
-                  </li>
-                  <li className="ul-li">
-                    <a href="/">Origin Gry</a>
-                  </li>
-                  <li className="ul-li">
-                    <a href="/">Ubisoft Connect Gry</a>
-                  </li>
-                  <li className="ul-li">
-                    <a href="/">Epic Games Gry</a>
-                  </li>
-                  <li className="ul-li">
-                    <a href="/">GOG Gry</a>
-                  </li>
-                  <li className="ul-li">
-                    <a href="/">Battle.net Gry</a>
-                  </li>
-                  <li className="ul-li">
-                    <a href="/">Steam Gry</a>
-                  </li>
-                  <li className="ul-li">
-                    <a href="/">Przedsprzedaż</a>
-                  </li>
-                  <li className="ul-li">
-                    <a href="/">DLC</a>
-                  </li>
-                  <li className="ul-li">
-                    <a href="/">Wszystkie</a>
-                  </li>
-                </ul>
-                <ul>
-                  <span className="ul-span">Platforma</span>
-                  <li className="ul-li">
-                    <a href="/">Steam Gry</a>
-                  </li>
-                  <li className="ul-li">
-                    <a href="/">Xbox Gry</a>
-                  </li>
-                  <li className="ul-li">
-                    <a href="/">PSN Gry</a>
-                  </li>
-                  <li className="ul-li">
-                    <a href="/">Nintendo Switch Gry</a>
-                  </li>
-                  <li className="ul-li">
-                    <a href="/">Origin Gry</a>
-                  </li>
-                  <li className="ul-li">
-                    <a href="/">Ubisoft Connect Gry</a>
-                  </li>
-                  <li className="ul-li">
-                    <a href="/">Epic Games Gry</a>
-                  </li>
-                  <li className="ul-li">
-                    <a href="/">GOG Gry</a>
-                  </li>
-                  <li className="ul-li">
-                    <a href="/">Battle.net Gry</a>
-                  </li>
-                  <li className="ul-li">
-                    <a href="/">Steam Gry</a>
-                  </li>
-                  <li className="ul-li">
-                    <a href="/">Przedsprzedaż</a>
-                  </li>
-                  <li className="ul-li">
-                    <a href="/">DLC</a>
-                  </li>
-                  <li className="ul-li">
-                    <a href="/">Wszystkie</a>
-                  </li>
+                  <span className="ul-span">{element.title}</span>
+                  {element.specificLinks.map((element, index) => (
+                    <li key={index} className="ul-li">
+                      <a href={element.link}>{element.name}</a>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
-          </li>
-          <li className="nav-li">
-            <a href="#">Gry</a>
-          </li>
-          <li className="nav-li">
-            <a href="#">Karty do gier</a>
-          </li>
-          <li className="nav-li">
-            <a href="#">eKarty</a>
-          </li>
-          <li className="nav-li">
-            <a href="#">Xbox</a>
-          </li>
-          <li className="nav-li">
-            <a href="#">PSN</a>
-          </li>
-          <li className="nav-li">
-            <a href="#">Nintendo</a>
-          </li>
+          ))}
         </ul>
       </nav>
     </>

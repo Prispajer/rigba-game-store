@@ -7,7 +7,7 @@ import { FaSearch } from "react-icons/fa";
 export default function Header() {
   return (
     <header className="bg-[#296CA6]">
-      <div className="flex items-center mx-auto max-w-[1240px] w-full py-2">
+      <div className="flex items-center max-w-[1240px] w-full mx-auto py-2">
         <div className="flex-0">
           <Link className="flex items-center mr-[20px]" href={"/"}>
             <Image src="/icons/logo.png" width={90} height={90} alt="" />
@@ -15,10 +15,10 @@ export default function Header() {
             {/* KIRBA */}
           </Link>
         </div>
-        <div className="flex items-center border-[white] border-[2px] bg-transparent flex-1 p-[20px]">
+        <div className="flex items-center  flex-1 p-[20px] border-[white] border-[2px] bg-transparent">
           <FaSearch size={"25px"} color={"white"} className="mr-3" />
           <input
-            className="color-[white] border-none outline-none bg-transparent w-[100%]"
+            className="text-[white]       border-none outline-none bg-transparent w-[100%]"
             type="text"
             name="text"
             placeholder="Szukaj"

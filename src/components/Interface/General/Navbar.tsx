@@ -2,63 +2,59 @@
 
 import React from "react";
 import Link from "next/link";
-import {
-  generalLinks,
-  specificLinks,
-  GeneralLinks,
-  SpecificLinks,
-} from "@/utils/types";
+import { navLinks, NavLinks } from "@/data/links";
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState<string | null>(null);
 
-  const handleMouseEnter = () => {
-    setIsOpen(true);
+  const handleMouseEnter = (title: string) => {
+    setIsOpen(title);
   };
 
   const handleMouseLeave = () => {
-    setIsOpen(false);
+    setIsOpen(null);
   };
 
   return (
-    <>
-      <nav className="relative bg-[#244673]">
-        <ul className="flex items-center max-w-[1240px] w-full mx-auto text-[18px] text-[white]">
-          {generalLinks.map((element: GeneralLinks, index: number) => (
-            <li
-              key={index}
-              className="nav-li"
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-            >
-              <Link href={element.link}>{element.name}</Link>
-            </li>
-          ))}
-          {specificLinks.map((element: SpecificLinks, index: number) => (
-            <div
-              key={index}
-              className="absolute left-0 top-[60px] w-full mx-auto bg-[#1c365b]"
-            >
-              <div
-                className={
-                  isOpen
-                    ? "flex p-6 gap-x-20 max-w-[1240px] mx-auto px-4 py- bg-[#1c365b]"
-                    : "hidden"
-                }
-              >
-                <ul>
-                  <span className="ul-span">{element.title}</span>
-                  {element.specificLinks.map((element, index) => (
-                    <li key={index} className="ul-li">
-                      <a href={element.link}>{element.name}</a>
-                    </li>
-                  ))}
-                </ul>
+    <nav className="relative bg-[#244673]">
+      <ul className="flex items-center max-w-[1240px] w-full mx-auto text-[18px] text-[white]">
+        {navLinks.map((element: NavLinks, index: number) => (
+          <li
+            key={index}
+            className="nav-li"
+            onMouseEnter={() => handleMouseEnter(element.title)}
+            onMouseLeave={handleMouseLeave}
+          >
+            <Link href="/">{element.title}</Link>
+            {isOpen === element.title && (
+              <div className="absolute left-0 top-[60px] w-full mx-auto bg-[#1c365b] ">
+                <div
+                  className={
+                    isOpen
+                      ? "flex p-6 gap-x-20 max-w-[1240px] mx-auto px-4 py- bg-[#1c365b]"
+                      : "hidden"
+                  }
+                >
+                  <ul className="flex gap-14 pb-2 ">
+                    {element.links.map((link, index) => (
+                      <div key={index} className=" ">
+                        <span className="ul-span">{link.category}</span>
+                        <ul>
+                          {link.items.map((item, idx) => (
+                            <li key={idx} className="ul-li">
+                              <Link href={item.url}>{item.name}</Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </ul>
+                </div>
               </div>
-            </div>
-          ))}
-        </ul>
-      </nav>
-    </>
+            )}
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 }

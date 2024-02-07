@@ -13,7 +13,7 @@ body {
 }
 
 .nav-li {
-  @apply flex items-center h-[60px] px-4  transition duration-300  hover:text-[#BF6597] hover:bg-[#1c365b];
+  @apply flex items-center h-[60px] px-4  transition duration-300 hover:text-[#BF6597] hover:bg-[#1c365b];
 }
 
 .nav-link {
@@ -21,7 +21,7 @@ body {
 }
 
 .ul-li {
-  @apply mt-[2px] text-[14px] text-[white] hover:text-[#BF6597];
+  @apply mt-[4px] text-[14px] text-[white] hover:text-[#BF6597];
 }
 
 .ul-span {

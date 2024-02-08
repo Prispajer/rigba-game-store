@@ -10,9 +10,14 @@ export default function Header() {
       <div className="flex items-center max-w-[1240px] w-full mx-auto py-2">
         <div className="flex-0">
           <Link className="flex items-center mr-[20px]" href={"/"}>
-            <Image src="/icons/logo.png" width={90} height={90} alt="" />
+            <Image
+              src="/icons/logo.png"
+              width={90}
+              height={90}
+              alt="logo"
+              priority={true}
+            />
             <span className="text-white text-[40px]">RIGBA</span>
-            {/* KIRBA */}
           </Link>
         </div>
         <div className="flex items-center  flex-1 p-[20px] border-[white] border-[2px] bg-transparent">

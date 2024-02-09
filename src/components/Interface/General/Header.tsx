@@ -1,10 +1,19 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { FaRegHeart } from "react-icons/fa";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
+// import { useRouter } from "next/navigation";
 
 export default function Header() {
+  // const router = useRouter();
+
+  // const handleClick = () => {
+  //   router.push("/login");
+  // };
+
   return (
     <header className="bg-[#296CA6]">
       <div className="flex items-center max-w-[1240px] w-full mx-auto py-2">
@@ -34,16 +43,16 @@ export default function Header() {
           <FaRegHeart className="nav-icon" size={"40px"}></FaRegHeart>
           <FaShoppingCart className="nav-icon" size={"40px"}></FaShoppingCart>
           <div className="cursor-pointer flex items-center hover:text-[#BF6597] text-[white]">
-            <a className="nav-link" href="/">
+            <Link href="/login" className="nav-link">
               Zaloguj
-            </a>
+            </Link>
           </div>
 
           <span className="text-white">|</span>
           <div className="cursor-pointer flex items-center hover:text-[#BF6597] text-[white]">
-            <a className="nav-link" href="/">
+            <Link href="/register" className="nav-link">
               Zarejestruj
-            </a>
+            </Link>
           </div>
         </div>
       </div>

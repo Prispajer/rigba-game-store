@@ -47,7 +47,6 @@ export default function Header() {
               Zaloguj
             </Link>
           </div>
-
           <span className="text-white">|</span>
           <div className="cursor-pointer flex items-center hover:text-[#BF6597] text-[white]">
             <Link href="/register" className="nav-link">

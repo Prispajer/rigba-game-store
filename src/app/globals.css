@@ -27,3 +27,7 @@ body {
 .ul-span {
   @apply block mb-3 text-[14px] font-bold text-[white] cursor-default;
 }
+
+.platforms-span {
+  @apply ml-2 font-bold;
+}

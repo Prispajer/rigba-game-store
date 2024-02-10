@@ -9,10 +9,10 @@ export default function AuthLayout({
 }) {
   return (
     <html lang="en" className="h-full">
-      <body className={`flex flex-col h-full`}>
+      <body className="flex flex-col h-full">
         <div className="flex flex-col flex-1 justify-between p-[15px] bg-[#1c365b]">
           <header>
-            <Link className="flex items-center mr-[20px]" href={"/"}>
+            <Link className="flex items-center max-w-[200px]" href={"/"}>
               <Image
                 src="/icons/logo.png"
                 width={90}

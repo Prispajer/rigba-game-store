@@ -5,8 +5,8 @@ import { FaSteamSymbol } from "react-icons/fa";
 
 export default function LoginContainer() {
   return (
-    <main className="flex justify-center items-center w-full gap-[50px]">
-      <h1 className="block text-[80px] text-[white]">
+    <main className="flex items-center mx-auto gap-[150px]">
+      <h1 className=" block text-[80px] text-[white] font-bold">
         Witaj!
         <br />
         Miło Cię widzieć!
@@ -19,12 +19,15 @@ export default function LoginContainer() {
             </h2>
             <h3 className="font-normal cursor-default text-[#DFEDF2]">
               Nie masz konta?
-              <Link className="text-[#E2999B] ml-1" href="/register">
+              <Link
+                className="text-[#E2999B] font-medium ml-1"
+                href="/register"
+              >
                 Zarejestruj się
               </Link>
             </h3>
           </div>
-          <div className="mt-6">
+          <div className="my-6">
             <div className="platforms bg-[#FFFFFF]">
               <Link href="/social-connect/google" className="flex items-center">
                 <FaGoogle size={20} color={"black"} />
@@ -53,6 +56,56 @@ export default function LoginContainer() {
               </Link>
             </div>
           </div>
+          <div className="flex items-center justify-center text-[#ffffff1f]">
+            <div className="flex-1 border-[1px] border-[#ffffff1f] "></div>
+            <span className="flex-0 px-2 cursor-default">albo</span>
+            <div className="flex-1 border-[1px] border-[#ffffff1f]"></div>
+          </div>
+          <form
+            action="
+          "
+          >
+            <div className="py-4">
+              <input
+                className="bg-[#244673]  w-[100%] p-[15px]"
+                type="email"
+                name="username"
+                id="username"
+                placeholder="E-mail"
+                autoCorrect="off"
+              />
+            </div>
+            <div className="">
+              <input
+                className="bg-[#244673]  w-[100%] p-[15px]"
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Hasło"
+                autoCorrect="off"
+              />
+            </div>
+            <button
+              className="text-[14px] text-[#E2999B] font-medium"
+              type="button"
+            >
+              Pokaż hasło
+            </button>
+            <div className="flex flex-col items-center justfiy-center w- pt-4">
+              <button
+                className="text-[black] font-semibold	w-full bg-[#BF6597] p-[10px]"
+                type="submit"
+              >
+                Zaloguj się
+              </button>
+              <Link
+                className="text-[14px] font-medium text-[#E2999B]"
+                href="/forgot-password"
+              >
+                Nie pamiętasz hasła?
+              </Link>
+            </div>
+          </form>
         </div>
       </div>
     </main>

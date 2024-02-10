@@ -27,8 +27,12 @@ export default function AuthLayout({
           <footer className="text-center p-[5px] ">
             <div className="flex justify-center items-center gap-8 text-[white] text-[14px]">
               <button>Zmień język</button>
-              <Link href={"/terms-and-conditions"}>Regulamin</Link>
-              <Link href={"/support"}>Pomoc</Link>
+              <Link className="font-bold" href={"/terms-and-conditions"}>
+                Regulamin
+              </Link>
+              <Link className="font-bold" href={"/support"}>
+                Pomoc
+              </Link>
               <span className="cursor-default">
                 Copyright @ 2024 Rigba. Wszelkie prawa zastrzeżone
               </span>

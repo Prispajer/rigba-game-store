@@ -8,6 +8,14 @@ body {
   box-sizing: border-box;
 }
 
+.requirements::before {
+  content: "!";
+  display: inline;
+  align-items: center;
+  margin-right: 5px;
+  color: #e2999b;
+}
+
 .nav-icon {
   @apply m-3 py-1 cursor-pointer transition duration-300 text-white hover:text-[#BF6597];
 }
@@ -28,10 +36,14 @@ body {
   @apply block mb-3 text-[14px] font-bold text-[white] cursor-default;
 }
 
-.platforms {
+.social-link {
   @apply p-[15px] my-4 cursor-pointer;
 }
 
-.platforms-span {
+.social-link-span {
   @apply ml-5 font-bold;
+}
+
+.requirements {
+  @apply text-[13px] text-white;
 }

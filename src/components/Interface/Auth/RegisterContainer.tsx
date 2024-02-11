@@ -3,106 +3,112 @@ import { FaGoogle } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
 import { FaSteamSymbol } from "react-icons/fa";
 
-export default function RegisterContainer() {
+export default function LoginContainer() {
   return (
-    <main className="flex items-center mx-auto gap-[150px]">
-      <h1 className=" block text-[80px] text-[white] font-bold">
+    <main className="flex flex-col lg:flex-row justify-center items-center mx-auto lg:px-[100px] gap-x-[120px]">
+      <h1 className="hidden lg:block text-[80px] leading-[90px] font-bold text-[white]">
         Witaj!
         <br />
         Miło Cię widzieć!
       </h1>
-      <div className="flex flex-col max-w-[380px]">
-        <div className="min-w-[380px] py-[30px] px-[40px] bg-[#296CA6]">
-          <div>
-            <h2 className="text-[22px] font-bold tracking-wide text-[white]">
-              Stwórz konto
-            </h2>
-            <h3 className="font-normal cursor-default text-[#DFEDF2]">
-              Masz już konto?
-              <Link className="text-[#E2999B] font-medium ml-1" href="/login">
-                Zaloguj się
-              </Link>
-            </h3>
-          </div>
-          <div className="my-6">
-            <div className="platforms bg-[#FFFFFF]">
-              <Link href="/social-connect/google" className="flex items-center">
-                <FaGoogle size={20} color={"black"} />
-                <span className="platforms-span  text-[black]">
-                  Kontynuuj jako Google
-                </span>
-              </Link>
-            </div>
-            <div className="platforms bg-[#5266fc]">
-              <Link
-                href="/social-connect/facebook"
-                className="flex items-center"
-              >
-                <FaFacebookF size={20} color={"white"} />
-                <span className="platforms-span text-[white]">
-                  Kontynuuj jako Facebook
-                </span>
-              </Link>
-            </div>
-            <div className="platforms bg-[#171d25]">
-              <Link href="/social-connect/steam" className="flex items-center">
-                <FaSteamSymbol size={20} color={"white"} />
-                <span className="platforms-span  text-[white]">
-                  Kontynuuj jako Steam
-                </span>
-              </Link>
-            </div>
-          </div>
-          <div className="flex items-center justify-center text-[#ffffff1f]">
-            <div className="flex-1 border-[1px] border-[#ffffff1f] "></div>
-            <span className="flex-0 px-2 cursor-default">albo</span>
-            <div className="flex-1 border-[1px] border-[#ffffff1f]"></div>
-          </div>
-          <form
-            action="
+      <div className="min-w-[300px] lg:min-w-[400px] py-[30px] px-[20px] lg:px-[40px] lg:bg-[#296CA6]">
+        <div>
+          <h2 className="text-[22px] font-bold tracking-wide text-[white]">
+            Stwórz konto
+          </h2>
+          <h3 className="cursor-default font-normal text-[#DFEDF2]">
+            Masz już konto?
+            <Link className="ml-1 font-medium text-[#E2999B] " href="/login">
+              Zaloguj się
+            </Link>
+          </h3>
+        </div>
+        <form
+          action="
           "
+        >
+          <div className="pt-4">
+            <input
+              className="bg-[#244673]  w-[100%] p-[15px]"
+              type="email"
+              name="username"
+              id="username"
+              placeholder="E-mail"
+              autoComplete="off"
+            />
+          </div>
+          <div className="pt-4">
+            <input
+              className="bg-[#244673]  w-[100%] p-[15px]"
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Hasło"
+              autoComplete="off"
+            />
+          </div>
+          <div className="pt-4">
+            <input
+              className="bg-[#244673]  w-[100%] p-[15px]"
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Powtórz hasło"
+              autoComplete="off"
+            />
+          </div>
+          <button
+            className="text-[14px] text-[#E2999B] font-medium"
+            type="button"
           >
-            <div className="py-4">
-              <input
-                className="bg-[#244673]  w-[100%] p-[15px]"
-                type="email"
-                name="username"
-                id="username"
-                placeholder="E-mail"
-                autoCorrect="off"
-              />
-            </div>
-            <div className="">
-              <input
-                className="bg-[#244673]  w-[100%] p-[15px]"
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Hasło"
-                autoCorrect="off"
-              />
-            </div>
+            Pokaż hasło
+          </button>
+          <div className="flex flex-col items-center justfiy-center  py-4">
             <button
-              className="text-[14px] text-[#E2999B] font-medium"
-              type="button"
+              className="text-[black] font-semibold	w-full bg-[#BF6597] p-[10px]"
+              type="submit"
             >
-              Pokaż hasło
+              Stwórz konto
             </button>
-            <div className="flex flex-col items-center justfiy-center w- pt-4">
-              <button
-                className="text-[black] font-semibold	w-full bg-[#BF6597] p-[10px]"
-                type="submit"
-              >
-                Zaloguj się
-              </button>
-              <Link
-                className="text-[14px] font-medium text-[#E2999B]"
-                href="/forgot-password"
-              >
-                Nie pamiętasz hasła?
-              </Link>
-            </div>
-          </form>
+          </div>
+          <div className="flex flex-col pb-4 leading-[16px]">
+            <span className="requirements">Co najmniej 8 liter</span>
+            <span className="requirements">
+              Co najmniej jedna cyfra lub znak specjalny
+            </span>
+            <span className="requirements">Co najmniej jedna duża litera</span>
+          </div>
+        </form>
+        <div className="flex items-center justify-center text-[#ffffff1f]">
+          <div className="flex-1 border-[1px] border-[#ffffff1f] "></div>
+          <span className="flex-0 px-2 cursor-default">albo</span>
+          <div className="flex-1 border-[1px] border-[#ffffff1f]"></div>
+        </div>
+        <div className="">
+          <div className="social-link bg-[#FFFFFF]">
+            <Link href="/social-connect/google" className="flex items-center">
+              <FaGoogle size={20} color={"black"} />
+              <span className="social-link-span  text-[black]">
+                Kontynuuj jako Google
+              </span>
+            </Link>
+          </div>
+          <div className="social-link bg-[#5266fc]">
+            <Link href="/social-connect/facebook" className="flex items-center">
+              <FaFacebookF size={20} color={"white"} />
+              <span className="social-link-span text-[white]">
+                Kontynuuj jako Facebook
+              </span>
+            </Link>
+          </div>
+          <div className="social-link bg-[#171d25]">
+            <Link href="/social-connect/steam" className="flex items-center">
+              <FaSteamSymbol size={20} color={"white"} />
+              <span className="social-link-span  text-[white]">
+                Kontynuuj jako Steam
+              </span>
+            </Link>
+          </div>
         </div>
       </div>
     </main>

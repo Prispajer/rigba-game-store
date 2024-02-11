@@ -11,7 +11,7 @@ export default function LoginContainer() {
         <br />
         Miło Cię widzieć!
       </h1>
-      <div className="min-w-[380px] py-[30px] px-[40px] lg:bg-[#296CA6]">
+      <div className="min-w-[300px] lg:min-w-[400px] py-[30px] px-[20px] lg:px-[40px] lg:bg-[#296CA6]">
         <div>
           <h2 className="text-[22px] font-bold tracking-wide text-[white]">
             Zaloguj się
@@ -24,26 +24,26 @@ export default function LoginContainer() {
           </h3>
         </div>
         <div className="">
-          <div className="platforms bg-[#FFFFFF]">
+          <div className="social-link bg-[#FFFFFF]">
             <Link href="/social-connect/google" className="flex items-center">
               <FaGoogle size={20} color={"black"} />
-              <span className="platforms-span  text-[black]">
+              <span className="social-link-span  text-[black]">
                 Kontynuuj jako Google
               </span>
             </Link>
           </div>
-          <div className="platforms bg-[#5266fc]">
+          <div className="social-link bg-[#5266fc]">
             <Link href="/social-connect/facebook" className="flex items-center">
               <FaFacebookF size={20} color={"white"} />
-              <span className="platforms-span text-[white]">
+              <span className="social-link-span text-[white]">
                 Kontynuuj jako Facebook
               </span>
             </Link>
           </div>
-          <div className="platforms bg-[#171d25]">
+          <div className="social-link bg-[#171d25]">
             <Link href="/social-connect/steam" className="flex items-center">
               <FaSteamSymbol size={20} color={"white"} />
-              <span className="platforms-span  text-[white]">
+              <span className="social-link-span  text-[white]">
                 Kontynuuj jako Steam
               </span>
             </Link>
@@ -58,7 +58,7 @@ export default function LoginContainer() {
           action="
           "
         >
-          <div className="py-4">
+          <div className="pt-4">
             <input
               className="bg-[#244673]  w-[100%] p-[15px]"
               type="email"
@@ -68,7 +68,7 @@ export default function LoginContainer() {
               autoCorrect="off"
             />
           </div>
-          <div className="">
+          <div className="pt-4">
             <input
               className="bg-[#244673]  w-[100%] p-[15px]"
               type="password"

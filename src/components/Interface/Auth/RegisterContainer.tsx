@@ -3,27 +3,24 @@ import { FaGoogle } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
 import { FaSteamSymbol } from "react-icons/fa";
 
-export default function LoginContainer() {
+export default function RegisterContainer() {
   return (
-    <main className="flex flex-col lg:flex-row items-center  mx-auto justify-center max-w-[1650px] w-full  lg:px-[100px] gap-x-[100px]">
-      <h1 className="hidden lg:block text-[80px]  text-[white] font-bold leading-[90px]">
+    <main className="flex items-center mx-auto gap-[150px]">
+      <h1 className=" block text-[80px] text-[white] font-bold">
         Witaj!
         <br />
         Miło Cię widzieć!
       </h1>
       <div className="flex flex-col max-w-[380px]">
-        <div className="min-w-[380px] py-[30px] px-[40px] bg-transparent lg:bg-[#296CA6]">
+        <div className="min-w-[380px] py-[30px] px-[40px] bg-[#296CA6]">
           <div>
             <h2 className="text-[22px] font-bold tracking-wide text-[white]">
-              Zaloguj się
+              Stwórz konto
             </h2>
             <h3 className="font-normal cursor-default text-[#DFEDF2]">
-              Nie masz konta?
-              <Link
-                className="text-[#E2999B] font-medium ml-1"
-                href="/register"
-              >
-                Zarejestruj się
+              Masz już konto?
+              <Link className="text-[#E2999B] font-medium ml-1" href="/login">
+                Zaloguj się
               </Link>
             </h3>
           </div>

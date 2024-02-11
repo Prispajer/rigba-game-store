@@ -8,9 +8,9 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="h-full">
-      <body className="flex flex-col h-full">
-        <div className="flex flex-col flex-1 justify-between p-[15px] bg-[#1c365b]">
+    <html lang="en">
+      <body className="flex h-screen w-screen lg:bg-[#1c365b] bg-[#296CA6]">
+        <div className="flex flex-col flex-1 justify-between p-[15px] h-full">
           <header>
             <Link className="flex items-center max-w-[200px]" href={"/"}>
               <Image
@@ -25,7 +25,7 @@ export default function AuthLayout({
           </header>
           {children}
           <footer className="text-center p-[5px] ">
-            <div className="flex justify-center items-center gap-8 text-[white] text-[14px]">
+            <div className="flex flex-col lg:flex-row justify-center items-center mt-4 gap-8 text-[white] text-[14px]">
               <button>Zmień język</button>
               <Link className="font-bold" href={"/terms-and-conditions"}>
                 Regulamin

@@ -9,10 +9,13 @@ export default function AuthLayout({
 }) {
   return (
     <html lang="en">
-      <body className="flex h-screen w-screen lg:bg-[#1c365b] bg-[#296CA6]">
-        <div className="flex flex-col flex-1 justify-between p-[15px] h-full">
+      <body className="flex h-screen lg:bg-[#1c365b] bg-[#296CA6]">
+        <div className="flex flex-col justify-between flex-1 h-full">
           <header>
-            <Link className="flex items-center max-w-[200px]" href={"/"}>
+            <Link
+              className="flex items-center pl-3 pt-3 max-w-[200px]"
+              href="/"
+            >
               <Image
                 src="/icons/logo.png"
                 width={90}
@@ -20,12 +23,12 @@ export default function AuthLayout({
                 alt="logo"
                 priority={true}
               />
-              <span className="text-white text-[40px]">RIGBA</span>
+              <span className="text-[40px] text-white">RIGBA</span>
             </Link>
           </header>
           {children}
           <footer className="text-center p-[5px] ">
-            <div className="flex flex-col lg:flex-row justify-center items-center mt-4 gap-8 text-[white] text-[14px]">
+            <div className="flex flex-col lg:flex-row justify-center items-center m-4 gap-6 lg:gap-8 text-[white] text-[14px]">
               <button>Zmień język</button>
               <Link className="font-bold" href={"/terms-and-conditions"}>
                 Regulamin

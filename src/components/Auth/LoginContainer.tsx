@@ -13,7 +13,7 @@ export default function LoginContainer() {
       </h1>
       <div className="min-w-[300px] lg:min-w-[400px] py-[30px] px-[20px] lg:px-[40px] lg:bg-[#296CA6]">
         <div>
-          <h2 className="text-[22px] font-bold tracking-wide text-[white]">
+          <h2 className="text-[22px] font-bold tracking-wide text-[white] cursor-default">
             Zaloguj się
           </h2>
           <h3 className="cursor-default font-normal text-[#DFEDF2]">
@@ -58,9 +58,9 @@ export default function LoginContainer() {
           action="
           "
         >
-          <div className="pt-4">
+          <div className="pt-4 text-white">
             <input
-              className="bg-[#244673]  w-[100%] p-[15px]"
+              className="bg-[#244673] hover:bg-[#244673] w-[100%] p-[15px]"
               type="email"
               name="username"
               id="username"
@@ -68,7 +68,7 @@ export default function LoginContainer() {
               autoCorrect="off"
             />
           </div>
-          <div className="pt-4">
+          <div className="pt-4 text-white">
             <input
               className="bg-[#244673]  w-[100%] p-[15px]"
               type="password"

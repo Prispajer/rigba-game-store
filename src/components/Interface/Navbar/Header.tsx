@@ -1,10 +1,12 @@
 "use client";
 
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaRegHeart } from "react-icons/fa";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
+import Modal from "./Modal";
 // import { useRouter } from "next/navigation";
 
 export default function Header() {
@@ -13,6 +15,12 @@ export default function Header() {
   // const handleClick = () => {
   //   router.push("/login");
   // };
+
+  const [isOpen, setIsOpen] = React.useState<boolean>(false);
+
+  const openModal = () => {
+    setIsOpen((prevState) => !prevState);
+  };
 
   return (
     <header className="bg-[#296CA6]">
@@ -41,7 +49,12 @@ export default function Header() {
         </div>
         <div className="flex flex-1 justify-end items-center">
           <FaRegHeart className="nav-icon" size={"40px"}></FaRegHeart>
-          <FaShoppingCart className="nav-icon" size={"40px"}></FaShoppingCart>
+          <FaShoppingCart
+            onClick={openModal}
+            className="nav-icon"
+            size={"40px"}
+          ></FaShoppingCart>
+          <Modal isOpen={isOpen}>Yoxdd</Modal>
           <div className="cursor-pointer flex items-center hover:text-[#BF6597] text-[white]">
             <Link href="/login" className="nav-link">
               Zaloguj

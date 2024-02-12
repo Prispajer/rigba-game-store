@@ -16,6 +16,19 @@ body {
   color: #e2999b;
 }
 
+.modal::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: 25px;
+  width: 20px;
+  height: 20px;
+  border-top: 8px solid #296ca6;
+  border-left: 8px solid #296ca6;
+  background-color: #296ca6;
+  transform: rotate(45deg);
+}
+
 .nav-icon {
   @apply m-3 py-1 cursor-pointer transition duration-300 text-white hover:text-[#BF6597];
 }
@@ -46,4 +59,8 @@ body {
 
 .requirements {
   @apply text-[13px] text-white;
+}
+
+.modal {
+  @apply absolute w-[360px] bg-[#296CA6] transform translate-x-[-157px] translate-y-[60px] z-20;
 }

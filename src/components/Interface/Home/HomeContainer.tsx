@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { GET } from "@/app/api/route";
+import { GET } from "@/api/route";
 
 export default function HomeContainer() {
   const [userData, setUserData] = React.useState([]);

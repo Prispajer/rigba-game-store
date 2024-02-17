@@ -4,30 +4,30 @@ import { FaRegTrashAlt } from "react-icons/fa";
 
 export default function ModalContainer() {
   return (
-    <section className="py-[10px]">
+    <section className="py-[20px]">
       <div className="flex justify-between items-center text-white border-b-[1px] border-[#ffffff1a] pb-[10px] px-[20px]">
         <strong className="text-[20px]">Mój koszyk</strong>
         <button>
           <IoCloseSharp size="25px" />
         </button>
       </div>
-      <div className="flex justify-between items-center px-[20px] pt-[10px]">
-        <div className="flex flex-0 min-w-[100[px]">
+      <div className="flex justify-between items-center pt-[10px] px-[20px]">
+        <div className="flex flex-0 min-w-[50px]">
           <Image
             src="/images/banner.jpg"
-            width="50"
-            height="70"
+            width={90}
+            height={90}
             alt="banner"
           ></Image>
         </div>
-        <div className="flex flex-1 items-center flex-col ">
-          <div className="flex">
+        <div className="flex items-center  flex-col flex-1">
+          <div className="flex items-center text-white">
             <div>asdadsadssssssssssssssssssssssssssssssss</div>
             <div>
               <FaRegTrashAlt />
             </div>
           </div>
-          <div className="flex justify-between ">
+          <div className="flex justify-between w-full text-white">
             <div className="">
               <button>-</button>
               <span>1</span>
@@ -37,6 +37,17 @@ export default function ModalContainer() {
               <span>18,92zł</span>
             </div>
           </div>
+        </div>
+      </div>
+      <div className="px-[20px]">
+        <div className="flex justify-between items-center w-full text-white">
+          <strong>Łącznie</strong>
+          <strong className="text-[30px]">148,20zł</strong>
+        </div>
+        <div className="w-full">
+          <button className="bg-[#BF6597] w-[100%] min-h-[35px] font-medium">
+            Zobacz Koszyk
+          </button>
         </div>
       </div>
     </section>

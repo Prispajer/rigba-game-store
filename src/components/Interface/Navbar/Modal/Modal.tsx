@@ -1,18 +1,17 @@
 import React from "react";
+import ModalBackdrop from "./ModalBackdrop";
+import ReactDOM from "react-dom";
+import ModalContainer from "./ModalContainer";
 
 export default function Modal({
-  children,
   isOpen,
   closeModal,
 }: {
-  children: React.ReactNode;
   isOpen: boolean;
   closeModal: () => void;
   openModal: () => void;
 }) {
   const menuRef = React.useRef<HTMLDivElement>(null);
-
-  console.log(menuRef);
 
   React.useEffect(() => {
     const mouseHandler = (event: MouseEvent) => {
@@ -21,9 +20,11 @@ export default function Modal({
       }
     };
     document.addEventListener("click", mouseHandler);
+    console.log("monting coimponent");
 
     return () => {
       document.removeEventListener("click", mouseHandler);
+      console.log("demonting coimponent");
     };
   });
 
@@ -33,7 +34,8 @@ export default function Modal({
 
   return (
     <div ref={menuRef} className="modal">
-      {children}
+      {/* <ModalBackdrop /> */}
+      <ModalContainer />
     </div>
   );
 }

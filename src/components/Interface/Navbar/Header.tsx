@@ -6,7 +6,7 @@ import Link from "next/link";
 import { FaRegHeart } from "react-icons/fa";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
-import Modal from "./Modal";
+import Modal from "./Modal/Modal";
 
 export default function Header() {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
@@ -51,9 +51,11 @@ export default function Header() {
             className="nav-icon"
             size={"40px"}
           ></FaShoppingCart>
-          <Modal openModal={openModal} closeModal={closeModal} isOpen={isOpen}>
-            Yoxdd
-          </Modal>
+          <Modal
+            openModal={openModal}
+            closeModal={closeModal}
+            isOpen={isOpen}
+          ></Modal>
           <div className="cursor-pointer flex items-center hover:text-[#BF6597] text-[white]">
             <Link href="/login" className="nav-link">
               Zaloguj

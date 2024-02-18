@@ -9,7 +9,6 @@ export default function Modal({
 }: {
   isOpen: boolean;
   closeModal: () => void;
-  openModal: () => void;
 }) {
   const menuRef = React.useRef<HTMLDivElement>(null);
 
@@ -20,11 +19,9 @@ export default function Modal({
       }
     };
     document.addEventListener("click", mouseHandler);
-    console.log("monting coimponent");
 
     return () => {
       document.removeEventListener("click", mouseHandler);
-      console.log("demonting coimponent");
     };
   });
 
@@ -34,7 +31,6 @@ export default function Modal({
 
   return (
     <div ref={menuRef} className="modal">
-      {/* <ModalBackdrop /> */}
       <ModalContainer />
     </div>
   );

@@ -60,5 +60,5 @@ body {
 }
 
 .modal {
-  @apply absolute w-[360px] bg-[#296CA6] transform top-6 translate-x-[-157px] translate-y-[65px] z-20;
+  @apply absolute w-[360px] transform top-6 z-20 translate-x-[-157px] translate-y-[65px] bg-[#296CA6];
 }

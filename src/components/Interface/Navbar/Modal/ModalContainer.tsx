@@ -4,42 +4,80 @@ import { FaRegTrashAlt } from "react-icons/fa";
 
 export default function ModalContainer() {
   return (
-    <section className="py-[20px]">
-      <div className="flex justify-between items-center text-white border-b-[1px] border-[#ffffff1a] pb-[10px] px-[20px]">
+    <>
+      <div className="flex justify-between items-center text-white border-b-[1px] border-[#ffffff1a] py-[10px] px-[20px]">
         <strong className="text-[20px]">Mój koszyk</strong>
         <button>
           <IoCloseSharp size="25px" />
         </button>
       </div>
-      <div className="flex justify-between items-center pt-[10px] px-[20px]">
-        <div className="flex flex-0 min-w-[50px]">
-          <Image
-            src="/images/banner.jpg"
-            width={90}
-            height={90}
-            alt="banner"
-          ></Image>
-        </div>
-        <div className="flex items-center  flex-col flex-1">
-          <div className="flex items-center text-white">
-            <div>asdadsadssssssssssssssssssssssssssssssss</div>
-            <div>
-              <FaRegTrashAlt />
+      <ul className="flex flex-col w-full">
+        <li className="flex w-full py-[10px] px-[20px] gap-2 border-b-[1px] border-[#ffffff1a] ">
+          <div className="flex flex-0 min-w-[50px] h-[100px]">
+            <Image
+              src="/images/banner.jpg"
+              width={50}
+              height={50}
+              alt="banner"
+            ></Image>
+          </div>
+          <div className="flex flex-1 flex-col items-center justify-center text-white w-[100px] relative">
+            <div className="flex w-full text-justify">
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. A
+              excepturi quas suscipit dicta inventore earum, aspernatur nam
+              adipisci quis vel pariatur commodi! Ipsum dolores ut nihil iusto
+              expedita nesciunt. Perferendis deserunt nostrum quibusdam et
+              doloremque officiis possimus quod, enim dolorem.
+            </div>
+            <div className="flex justify-between w-full text-white">
+              <div className="">
+                <button>-</button>
+                <span>1</span>
+                <button>+</button>
+              </div>
+              <div className="flex ">
+                <FaRegTrashAlt />
+              </div>
+              <div className="">
+                <span>18,92zł</span>
+              </div>
             </div>
           </div>
-          <div className="flex justify-between w-full text-white">
-            <div className="">
-              <button>-</button>
-              <span>1</span>
-              <button>+</button>
+        </li>
+        <li className="flex w-full py-[10px] px-[20px] gap-2 border-b-[1px] border-[#ffffff1a] ">
+          <div className="flex flex-0 min-w-[50px] h-[100px]">
+            <Image
+              src="/images/banner.jpg"
+              width={50}
+              height={50}
+              alt="banner"
+            ></Image>
+          </div>
+          <div className="flex flex-1 flex-col items-center justify-center text-white w-[100px] relative">
+            <div className="flex w-full text-justify">
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. A
+              excepturi quas suscipit dicta inventore earum, aspernatur nam
+              adipisci quis vel pariatur commodi! Ipsum dolores ut nihil iusto
+              expedita nesciunt. Perferendis deserunt nostrum quibusdam et
+              doloremque officiis possimus quod, enim dolorem.
             </div>
-            <div className="">
-              <span>18,92zł</span>
+            <div className="flex justify-between w-full text-white">
+              <div className="">
+                <button>-</button>
+                <span>1</span>
+                <button>+</button>
+              </div>
+              <div className="flex ">
+                <FaRegTrashAlt />
+              </div>
+              <div className="">
+                <span>18,92zł</span>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div className="px-[20px]">
+        </li>
+      </ul>
+      <div className="py-[10px] px-[20px]">
         <div className="flex justify-between items-center w-full text-white">
           <strong>Łącznie</strong>
           <strong className="text-[30px]">148,20zł</strong>
@@ -50,6 +88,6 @@ export default function ModalContainer() {
           </button>
         </div>
       </div>
-    </section>
+    </>
   );
 }

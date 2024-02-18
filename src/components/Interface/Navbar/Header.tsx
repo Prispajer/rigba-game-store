@@ -51,11 +51,7 @@ export default function Header() {
             className="nav-icon"
             size={"40px"}
           ></FaShoppingCart>
-          <Modal
-            openModal={openModal}
-            closeModal={closeModal}
-            isOpen={isOpen}
-          ></Modal>
+          <Modal closeModal={closeModal} isOpen={isOpen}></Modal>
           <div className="cursor-pointer flex items-center hover:text-[#BF6597] text-[white]">
             <Link href="/login" className="nav-link">
               Zaloguj

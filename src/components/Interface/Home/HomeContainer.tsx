@@ -17,7 +17,7 @@ export default function HomeContainer() {
 
   return (
     <>
-      <main className="bg-[#296CA6] w-full h-full">
+      <main className="bg-secondaryColor w-full h-full">
         <div className="flex items-center justify-center"></div>
       </main>
     </>

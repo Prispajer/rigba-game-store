@@ -16,7 +16,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="relative bg-[#244673]">
+    <nav className="relative bg-secondaryColor">
       <ul className="flex items-center max-w-[1240px] w-full mx-auto text-[18px] text-[white]">
         {navLinks.map((element: NavLinks, index: number) => (
           <li
@@ -27,7 +27,7 @@ export default function Navbar() {
           >
             <Link href="/">{element.title}</Link>
             {isOpen === element.title && (
-              <div className="absolute left-0 top-[60px] w-full mx-auto bg-[#1c365b] ">
+              <div className="absolute left-0 top-[60px] w-full mx-auto bg-tertiaryColor ">
                 <div
                   className={
                     isOpen

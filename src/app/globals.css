@@ -28,11 +28,11 @@ body {
 }
 
 .nav-icon {
-  @apply m-3 py-1 cursor-pointer transition duration-300 text-white hover:text-[#BF6597];
+  @apply m-3 py-1 cursor-pointer transition duration-300 text-white hover:text-headerHover;
 }
 
 .nav-li {
-  @apply flex items-center h-[60px] px-4  transition duration-300 hover:text-[#BF6597] hover:bg-[#1c365b];
+  @apply flex items-center h-[60px] px-4  transition duration-300 hover:text-headerHover hover:bg-tertiaryColor;
 }
 
 .nav-link {
@@ -40,7 +40,7 @@ body {
 }
 
 .ul-li {
-  @apply mt-[4px] text-[14px] text-[white] hover:text-[#BF6597];
+  @apply mt-[4px] text-[14px] text-[white] hover:text-headerHover;
 }
 
 .ul-span {
@@ -60,5 +60,5 @@ body {
 }
 
 .modal {
-  @apply absolute w-[360px] transform top-6 z-20 translate-x-[-157px] translate-y-[65px] bg-[#296CA6];
+  @apply absolute w-[360px] transform top-6 z-20 translate-x-[-157px] translate-y-[65px] bg-primaryColor;
 }

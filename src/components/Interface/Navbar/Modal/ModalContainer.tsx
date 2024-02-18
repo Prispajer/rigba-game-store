@@ -1,89 +1,69 @@
-import { IoCloseSharp } from "react-icons/io5";
 import Image from "next/image";
+import Link from "next/link";
+import { IoCloseSharp } from "react-icons/io5";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
 
 export default function ModalContainer() {
   return (
     <>
-      <div className="flex justify-between items-center text-white border-b-[1px] border-[#ffffff1a] py-[10px] px-[20px]">
-        <strong className="text-[20px]">Mój koszyk</strong>
+      <div className="flex justify-between items-center text-white border-b-[1px] border-[#ffffff1a] p-[20px]">
+        <strong className=" text-[20px] cursor-default">Mój koszyk</strong>
         <button>
           <IoCloseSharp size="25px" />
         </button>
       </div>
       <ul className="flex flex-col w-full">
-        <li className="flex w-full py-[10px] px-[20px] gap-2 border-b-[1px] border-[#ffffff1a] ">
-          <div className="flex flex-0 min-w-[50px] h-[100px]">
+        <li className="flex w-full p-[20px] gap-2 border-b-[1px] border-[#ffffff1a] ">
+          <Link
+            href="/"
+            className="flex flex-0 min-w-[50px] items-center h-[100px]"
+          >
             <Image
-              src="/images/banner.jpg"
+              src="/images/RE4.jpg"
               width={50}
-              height={50}
+              height={100}
               alt="banner"
             ></Image>
-          </div>
-          <div className="flex flex-1 flex-col items-center justify-center text-white w-[100px] relative">
-            <div className="flex w-full text-justify">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. A
-              excepturi quas suscipit dicta inventore earum, aspernatur nam
-              adipisci quis vel pariatur commodi! Ipsum dolores ut nihil iusto
-              expedita nesciunt. Perferendis deserunt nostrum quibusdam et
-              doloremque officiis possimus quod, enim dolorem.
+          </Link>
+          <div className="flex flex-1 flex-col px-2 gap-y-[10px] text-white">
+            <Link
+              href="/"
+              className="flex w-full font-medium hover:text-modalHover"
+            >
+              Resident Evil 4 Deluxe Edition Key
+            </Link>
+            <div className="flex items-center text-[#ffffffb3] text-[16px]">
+              <span className="mr-1 cursor-default">Produkt cyfrowy</span>
+              <span className="mt-1 hover:text-modalHover">
+                <HiMiniQuestionMarkCircle />
+              </span>
             </div>
-            <div className="flex justify-between w-full text-white">
+            <div className="flex justify-between items-center w-full text-white">
               <div className="">
-                <button>-</button>
-                <span>1</span>
-                <button>+</button>
+                <button className="mr-2 hover:text-modalHover">-</button>
+                <span className="cursor-default">1</span>
+                <button className="ml-2 hover:text-modalHover">+</button>
               </div>
-              <div className="flex ">
+              <button className="text-[14px] hover:text-modalHover">
                 <FaRegTrashAlt />
-              </div>
+              </button>
               <div className="">
-                <span>18,92zł</span>
-              </div>
-            </div>
-          </div>
-        </li>
-        <li className="flex w-full py-[10px] px-[20px] gap-2 border-b-[1px] border-[#ffffff1a] ">
-          <div className="flex flex-0 min-w-[50px] h-[100px]">
-            <Image
-              src="/images/banner.jpg"
-              width={50}
-              height={50}
-              alt="banner"
-            ></Image>
-          </div>
-          <div className="flex flex-1 flex-col items-center justify-center text-white w-[100px] relative">
-            <div className="flex w-full text-justify">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. A
-              excepturi quas suscipit dicta inventore earum, aspernatur nam
-              adipisci quis vel pariatur commodi! Ipsum dolores ut nihil iusto
-              expedita nesciunt. Perferendis deserunt nostrum quibusdam et
-              doloremque officiis possimus quod, enim dolorem.
-            </div>
-            <div className="flex justify-between w-full text-white">
-              <div className="">
-                <button>-</button>
-                <span>1</span>
-                <button>+</button>
-              </div>
-              <div className="flex ">
-                <FaRegTrashAlt />
-              </div>
-              <div className="">
-                <span>18,92zł</span>
+                <strong className="cursor-default">18,92zł</strong>
               </div>
             </div>
           </div>
         </li>
       </ul>
-      <div className="py-[10px] px-[20px]">
+      <div className="p-[20px]">
         <div className="flex justify-between items-center w-full text-white">
-          <strong>Łącznie</strong>
-          <strong className="text-[30px]">148,20zł</strong>
+          <strong className="cursor-default">Łącznie</strong>
+          <strong className="text-[30px] pb-[8px] cursor-default">
+            148,20zł
+          </strong>
         </div>
         <div className="w-full">
-          <button className="bg-[#BF6597] w-[100%] min-h-[35px] font-medium">
+          <button className="w-[100%] min-h-[35px] transition duration-300  font-medium text-buttonTextColor bg-buttonBackground hover:bg-buttonBackgroundHover">
             Zobacz Koszyk
           </button>
         </div>

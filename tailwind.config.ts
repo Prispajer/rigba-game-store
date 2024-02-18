@@ -20,8 +20,19 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      colors: {
+        primaryColor: "#296CA6",
+        secondaryColor: "#244673",
+        tertiaryColor: "#1c365b",
+        buttonTextColor: "#f3bfc7",
+        headerHover: "#BF6597",
+        modalHover: "#E2B0A5",
+        buttonBackgroundHover: "#bc558e",
+        buttonBackground: "#BF6597",
+      },
     },
   },
   plugins: [],
 };
+
 export default config;

@@ -11,7 +11,7 @@ export default function LoginContainer() {
         <br />
         Miło Cię widzieć!
       </h1>
-      <div className="min-w-[300px] lg:min-w-[400px] py-[30px] px-[20px] lg:px-[40px] lg:bg-[#296CA6]">
+      <div className="min-w-[300px] lg:min-w-[400px] py-[30px] px-[20px] lg:px-[40px] lg:bg-primaryColor">
         <div>
           <h2 className="text-[22px] font-bold tracking-wide text-[white] cursor-default">
             Stwórz konto
@@ -29,7 +29,7 @@ export default function LoginContainer() {
         >
           <div className="pt-4 text-white">
             <input
-              className="bg-[#244673]  w-[100%] p-[15px]"
+              className="bg-secondaryColor  w-[100%] p-[15px]"
               type="email"
               name="username"
               id="username"
@@ -39,7 +39,7 @@ export default function LoginContainer() {
           </div>
           <div className="pt-4 text-white">
             <input
-              className="bg-[#244673]  w-[100%] p-[15px]"
+              className="bg-secondaryColor w-[100%] p-[15px]"
               type="password"
               name="password"
               id="password"
@@ -49,7 +49,7 @@ export default function LoginContainer() {
           </div>
           <div className="pt-4 text-white">
             <input
-              className="bg-[#244673]  w-[100%] p-[15px]"
+              className="bg-secondaryColor  w-[100%] p-[15px]"
               type="password"
               name="password"
               id="password"
@@ -65,7 +65,7 @@ export default function LoginContainer() {
           </button>
           <div className="flex flex-col items-center justfiy-center  py-4">
             <button
-              className="text-[black] font-semibold	w-full bg-[#BF6597] p-[10px]"
+              className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px]"
               type="submit"
             >
               Stwórz konto
@@ -87,7 +87,7 @@ export default function LoginContainer() {
         <div className="">
           <div className="social-link bg-[#FFFFFF]">
             <Link href="/social-connect/google" className="flex items-center">
-              <FaGoogle size={20} color={"black"} />
+              <FaGoogle size={20} color="black" />
               <span className="social-link-span  text-[black]">
                 Kontynuuj jako Google
               </span>

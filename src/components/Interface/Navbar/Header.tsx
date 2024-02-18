@@ -20,7 +20,7 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-[#296CA6]">
+    <header className="bg-primaryColor">
       <div className="flex items-center max-w-[1240px] w-full mx-auto py-2">
         <div className="flex-0">
           <Link className="flex items-center mr-[20px]" href={"/"}>
@@ -52,13 +52,13 @@ export default function Header() {
             size={"40px"}
           ></FaShoppingCart>
           <Modal closeModal={closeModal} isOpen={isOpen}></Modal>
-          <div className="cursor-pointer flex items-center hover:text-[#BF6597] text-[white]">
+          <div className="cursor-pointer flex items-center hover:text-headerHover text-[white]">
             <Link href="/login" className="nav-link">
               Zaloguj
             </Link>
           </div>
           <span className="text-white">|</span>
-          <div className="cursor-pointer flex items-center hover:text-[#BF6597] text-[white]">
+          <div className="cursor-pointer flex items-center hover:text-headerHover text-[white]">
             <Link href="/register" className="nav-link">
               Zarejestruj
             </Link>

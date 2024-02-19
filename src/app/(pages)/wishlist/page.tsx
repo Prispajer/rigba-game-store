@@ -1,7 +1,9 @@
+import WishListContainer from "@/components/Interface/Wishlist/WishListContainer";
+
 export const metadata = {
-  title: "Wish list revolution",
+  title: "Wish list | RIGBA",
 };
 
 export default function Wishlist() {
-  return <p>siema</p>;
+  return <WishListContainer />;
 }

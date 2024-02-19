@@ -6,7 +6,7 @@ import Link from "next/link";
 import { FaRegHeart } from "react-icons/fa";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
-import Modal from "./Modal/Modal";
+import Modal from "../ShoppingCart/Modal";
 
 export default function Header() {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
@@ -35,7 +35,7 @@ export default function Header() {
           </Link>
         </div>
         <div className="flex items-center  flex-1 p-[20px] border-[white] border-[2px] bg-transparent">
-          <FaSearch size={"25px"} color={"white"} className="mr-3" />
+          <FaSearch size="25px" color="white" className="mr-3" />
           <input
             className="text-[white] border-none outline-none bg-transparent w-[100%]"
             type="text"
@@ -45,7 +45,9 @@ export default function Header() {
           />
         </div>
         <div className="flex flex-1 justify-end items-center">
-          <FaRegHeart className="nav-icon" size={"40px"}></FaRegHeart>
+          <Link href="/wishlist">
+            <FaRegHeart className="nav-icon" size={"40px"}></FaRegHeart>
+          </Link>
           <FaShoppingCart
             onClick={openModal}
             className="nav-icon"

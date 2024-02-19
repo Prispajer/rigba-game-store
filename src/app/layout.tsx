@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 import { workbench } from "../utils/fonts";
 import "./globals.css";
+import Header from "@/components/Interface/Shared/Header/Header";
+import Navbar from "@/components/Interface/Shared/Navbar/Navbar";
 
 export const metadata: Metadata = {
   title: "Buy, browse, learn everything about games | RIGBA",
@@ -14,7 +16,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Header />
+        <Navbar />
+        {children}
+      </body>
     </html>
   );
 }

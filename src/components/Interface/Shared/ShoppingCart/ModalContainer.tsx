@@ -10,7 +10,7 @@ export default function ModalContainer() {
       <div className="flex justify-between items-center text-white border-b-[1px] border-[#ffffff1a] p-[20px]">
         <strong className=" text-[20px] cursor-default">Mój koszyk</strong>
         <button>
-          <IoCloseSharp size="25px" />
+          <IoCloseSharp className="hover:text-modalHover" size="25px" />
         </button>
       </div>
       <ul className="flex flex-col w-full">

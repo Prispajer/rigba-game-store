@@ -1,9 +1,29 @@
+"use client";
+
+import { RootState } from "@reduxjs/toolkit/query";
 import Link from "next/link";
 import { FaGoogle } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
 import { FaSteamSymbol } from "react-icons/fa";
+import { useSelector, useDispatch } from "react-redux";
+import { registerUser } from "@/redux/user/userSlice";
 
 export default function LoginContainer() {
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user);
+
+  const handleRegister = () => {
+    dispatch(
+      registerUser({
+        id: 1,
+        login: "example@example.com",
+        password: "password123",
+        registerDate: new Date(),
+        lastLoggedIn: new Date(),
+      })
+    );
+  };
+
   return (
     <main className="flex flex-col lg:flex-row justify-center items-center mx-auto lg:px-[100px] gap-x-[120px]">
       <h1 className="hidden lg:block text-[80px] leading-[90px] font-bold text-[white]">
@@ -65,10 +85,12 @@ export default function LoginContainer() {
           </button>
           <div className="flex flex-col items-center justfiy-center  py-4">
             <button
+              onClick={() => dispatch(handleRegister())}
               className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px]"
               type="submit"
             >
               Stwórz konto
+              {user}
             </button>
           </div>
           <div className="flex flex-col pb-4 leading-[16px] cursor-default">

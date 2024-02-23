@@ -3,6 +3,7 @@ import { workbench } from "../utils/fonts";
 import "./globals.css";
 import Header from "@/components/Interface/Shared/Header/Header";
 import Navbar from "@/components/Interface/Shared/Navbar/Navbar";
+import ReduxProvider from "@/redux/ReduxProvider";
 
 export const metadata: Metadata = {
   title: "Buy, browse, learn everything about games | RIGBA",
@@ -17,9 +18,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Header />
-        <Navbar />
-        {children}
+        <ReduxProvider>
+          <Header />
+          <Navbar />
+          {children}
+        </ReduxProvider>
       </body>
     </html>
   );

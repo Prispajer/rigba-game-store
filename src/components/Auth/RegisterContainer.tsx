@@ -24,6 +24,8 @@ export default function LoginContainer() {
     );
   };
 
+  console.log(handleRegister);
+
   return (
     <main className="flex flex-col lg:flex-row justify-center items-center mx-auto lg:px-[100px] gap-x-[120px]">
       <h1 className="hidden lg:block text-[80px] leading-[90px] font-bold text-[white]">
@@ -90,7 +92,6 @@ export default function LoginContainer() {
               type="submit"
             >
               Stwórz konto
-              {user}
             </button>
           </div>
           <div className="flex flex-col pb-4 leading-[16px] cursor-default">

@@ -2,18 +2,28 @@
 
 import React from "react";
 import Image from "next/image";
-import { GET } from "@/api/route";
 
 export default function HomeContainer() {
   const [userData, setUserData] = React.useState([]);
 
-  type Users = {
-    userId: number;
-    userLogin: string;
-    userPassword: string;
-    userRegisterDate: Date;
-    userLastLogin: Date;
-  };
+  async function getProducts() {
+    const getData = {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+      },
+    };
+    const fetchData = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}/api/registerData`,
+      getData
+    );
+    const response = await fetchData.json();
+    console.log(response.users);
+  }
+
+  React.useEffect(() => {
+    getProducts();
+  }, []);
 
   return (
     <>

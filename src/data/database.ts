@@ -15,7 +15,7 @@ export async function query({ query, values = [] }: QueryOptions) {
 
   try {
     const [results] = await dataBase.execute(query, values);
-    dataBase.end();
+    await dataBase.end();
     return results;
   } catch (error: any) {
     throw new Error(error.message);

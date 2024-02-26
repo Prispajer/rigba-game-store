@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { RootState } from "@reduxjs/toolkit/query";
 import Link from "next/link";
 import { FaGoogle } from "react-icons/fa";
@@ -7,24 +8,23 @@ import { FaFacebookF } from "react-icons/fa";
 import { FaSteamSymbol } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { registerUser } from "@/redux/user/userSlice";
+import { useFormStatus, useFormState } from "react-dom";
 
-export default function LoginContainer() {
+export default function RegisterContainer() {
+  const [email, setEmail] = React.useState("");
+  const [repeatPassword, setRepeatPassword] = React.useState("");
+  const [password, setPassword] = React.useState("");
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
 
-  const handleRegister = () => {
-    dispatch(
-      registerUser({
-        id: 1,
-        login: "example@example.com",
-        password: "password123",
-        registerDate: new Date(),
-        lastLoggedIn: new Date(),
-      })
-    );
-  };
-
-  console.log(handleRegister);
+  function handleFormSubmit(event: any) {
+    event.preventDefault();
+    fetch("/api/register", {
+      method: "POST",
+      body: JSON.stringify({ email, password, repeatPassword }),
+      headers: { "Content-Type": "application/json" },
+    });
+  }
 
   return (
     <main className="flex flex-col lg:flex-row justify-center items-center mx-auto lg:px-[100px] gap-x-[120px]">
@@ -45,16 +45,15 @@ export default function LoginContainer() {
             </Link>
           </h3>
         </div>
-        <form
-          action="
-          "
-        >
+        <form method="post" onSubmit={handleFormSubmit}>
           <div className="pt-4 text-white">
             <input
               className="bg-secondaryColor  w-[100%] p-[15px]"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
               type="email"
-              name="username"
-              id="username"
+              name="email"
+              id="email"
               placeholder="E-mail"
               autoComplete="off"
             />
@@ -62,6 +61,8 @@ export default function LoginContainer() {
           <div className="pt-4 text-white">
             <input
               className="bg-secondaryColor w-[100%] p-[15px]"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
               type="password"
               name="password"
               id="password"
@@ -72,6 +73,8 @@ export default function LoginContainer() {
           <div className="pt-4 text-white">
             <input
               className="bg-secondaryColor  w-[100%] p-[15px]"
+              value={repeatPassword}
+              onChange={(event) => setRepeatPassword(event.target.value)}
               type="password"
               name="password"
               id="password"
@@ -87,7 +90,6 @@ export default function LoginContainer() {
           </button>
           <div className="flex flex-col items-center justfiy-center  py-4">
             <button
-              onClick={() => dispatch(handleRegister())}
               className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px]"
               type="submit"
             >

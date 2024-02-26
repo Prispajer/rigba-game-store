@@ -1,7 +1,7 @@
 export type User = {
-  id: number | undefined;
-  login: string | undefined;
-  password: string | undefined;
-  registerDate: Date | undefined;
-  lastLoggedIn: Date | undefined;
+  id: number;
+  login: string;
+  password: string;
+  registerDate: Date;
+  lastLoggedIn: Date;
 };

@@ -4,10 +4,6 @@ import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
 import generateRandomValue from "@/utils/prices";
 
-type Properties = {
-  results: Game[];
-};
-
 export default function ProductInformations() {
   const [data, setData] = React.useState<Games>([]);
 
@@ -26,6 +22,7 @@ export default function ProductInformations() {
         );
         const data = await response.json();
         setData(data);
+        console.log(data);
       } catch (error) {
         console.error("Error:", error);
       }

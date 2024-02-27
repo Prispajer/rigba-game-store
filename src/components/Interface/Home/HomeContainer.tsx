@@ -2,8 +2,6 @@
 
 import React from "react";
 import Image from "next/image";
-import { User } from "@/utils/types";
-
 export default function HomeContainer() {
   const [userData, setUserData] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);

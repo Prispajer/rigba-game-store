@@ -21,7 +21,7 @@ export default function HomeContainer() {
         getData
       );
       const response = await fetchData.json();
-      setUserData(response.query);
+      setUserData(response);
       setIsLoading(false);
     } catch (error) {
       console.log("Coś poszło nie tak!", error);
@@ -38,7 +38,7 @@ export default function HomeContainer() {
     <main className="bg-primaryColor">
       <section className="flex w-full max-w-[1240px] mx-auto px-2 py-6">
         <div className="flex items-center w-full h-full">
-          {isLoading ? ( // Renderowanie komunikatu ładowania, jeśli dane są w trakcie pobierania
+          {isLoading ? ( //
             <div>Ładowanie...</div>
           ) : (
             userData.map((user: User) => (

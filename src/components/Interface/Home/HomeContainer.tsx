@@ -15,7 +15,7 @@ export default function HomeContainer() {
     };
     try {
       const fetchData = await fetch(
-        `${process.env.NEXT_PUBLIC_URL}/api/products`,
+        `${process.env.NEXT_PUBLIC_URL}/api/users`,
         getData
       );
       const response = await fetchData.json();
@@ -25,8 +25,6 @@ export default function HomeContainer() {
       console.log("Coś poszło nie tak!", error);
     }
   }
-
-  console.log(userData);
 
   React.useEffect(() => {
     getProducts();

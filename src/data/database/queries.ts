@@ -3,7 +3,7 @@ import dataBase from "./connection";
 
 export async function selectQuery<T>(
   query: string,
-  params?: []
+  params: any[] = []
 ): Promise<Partial<T>[]> {
   try {
     const [results] = await dataBase.execute(query, params);
@@ -16,7 +16,7 @@ export async function selectQuery<T>(
 
 export async function ModifyQuery(
   query: string,
-  params?: []
+  params: any[] = []
 ): Promise<ResultSetHeader> {
   const [results] = await dataBase.execute(query, params);
   return results as ResultSetHeader;

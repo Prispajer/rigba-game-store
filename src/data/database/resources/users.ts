@@ -13,7 +13,7 @@ export function getAllUsers() {
   return selectQuery<User>("SELECT * FROM users");
 }
 
-export function getOneUser(id: string) {
+export function getOneUser(id: number) {
   const queryString = "SELECT * FROM users WHERE id = ?";
   return selectQuery<User>(queryString, [id]);
 }

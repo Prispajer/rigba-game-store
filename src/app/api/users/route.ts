@@ -23,17 +23,3 @@ export async function POST(request: Request, response: Response) {
     throw new Error("Wystąpił błąd przy pobieraniu danych z bazy danych.");
   }
 }
-
-export async function PUT(request: Request, response: Response) {
-  try {
-    const userBody = await request.json();
-    const addUser = await users.updateValues(userBody, userBody.id);
-    return new Response(JSON.stringify(addUser), {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  } catch (error) {
-    throw new Error("Wystąpił błąd przy pobieraniu danych z bazy danych.");
-  }
-}

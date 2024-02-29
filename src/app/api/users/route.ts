@@ -4,6 +4,7 @@ import * as users from "../../../data/database/resources/users";
 export async function GET() {
   try {
     const results = await users.getAllUsers();
+    console.log(results);
     return NextResponse.json(results);
   } catch (error) {
     throw new Error("Wystąpił błąd przy pobieraniu danych z bazy danych.");

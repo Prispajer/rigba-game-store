@@ -41,3 +41,8 @@ export function updateValues(
   const queryString = `UPDATE users SET email = ?, password = ? WHERE id = ?`;
   return ModifyQuery(queryString, [updateUser.email, updateUser.password, id]);
 }
+
+export function deleteValues(id: number) {
+  const queryString = `DELETE FROM users WHERE id=?`;
+  return ModifyQuery(queryString, [id]);
+}

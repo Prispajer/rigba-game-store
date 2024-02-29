@@ -16,7 +16,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="relative z-10 bg-secondaryColor ">
+    <nav className="relative  bg-secondaryColor ">
       <ul className="flex items-center max-w-[1240px] w-full mx-auto text-[18px] text-[white]">
         {navLinks.map((element: NavLinks, index: number) => (
           <li

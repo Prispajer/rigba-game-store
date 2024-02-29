@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import * as users from "../../../data/database/resources/users";
 
 export async function GET() {
@@ -11,11 +11,11 @@ export async function GET() {
   }
 }
 
-export async function POST(request: Request, response: Response) {
+export async function POST(request: NextRequest, response: NextResponse) {
   try {
     const userBody = await request.json();
     const addUser = await users.insertValues(userBody);
-    return new Response(JSON.stringify(addUser), {
+    return NextResponse.json(addUser, {
       headers: {
         "Content-Type": "application/json",
       },

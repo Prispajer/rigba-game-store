@@ -7,10 +7,6 @@ export async function GET(request: Request, { params }: any) {
     const userId = parseInt(params.userId);
     const userData = await users.getOneUser(userId);
 
-    if (!userId) {
-      throw new Error("Nie znaleziono użytkownika z podanym ID.");
-    }
-
     return NextResponse.json(userData, {
       headers: {
         "Content-Type": "application/json",
@@ -26,6 +22,7 @@ export async function PUT(request: Request, { params }: any) {
     const userId = parseInt(params.userId);
     const userBody = await request.json();
     const updateUser = await users.updateValues(userBody, userId);
+
     return NextResponse.json(updateUser, {
       headers: {
         "Content-Type": "application/json",

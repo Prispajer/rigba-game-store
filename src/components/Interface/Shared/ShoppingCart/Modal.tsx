@@ -14,7 +14,7 @@ export default function Modal({
 
   React.useEffect(() => {
     const mouseHandler = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      if (!menuRef.current?.contains(event.target as Node)) {
         closeModal();
       }
     };
@@ -29,9 +29,13 @@ export default function Modal({
     return null;
   }
 
-  return (
-    <div ref={menuRef} className="modal">
-      <ModalContainer />
-    </div>
+  return ReactDOM.createPortal(
+    <>
+      <ModalBackdrop />
+      <div ref={menuRef} className="modal">
+        <ModalContainer />
+      </div>
+    </>,
+    document.body
   );
 }

@@ -1,8 +1,8 @@
 export default function ProductDetailsLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body>

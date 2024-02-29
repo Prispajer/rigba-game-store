@@ -1,6 +1,5 @@
 import React from "react";
-import ModalBackdrop from "./ModalBackdrop";
-import ReactDOM from "react-dom";
+import Backdrop from "../Backdrop/Backdrop";
 import ModalContainer from "./ModalContainer";
 
 export default function Modal({
@@ -29,13 +28,12 @@ export default function Modal({
     return null;
   }
 
-  return ReactDOM.createPortal(
+  return (
     <>
-      <ModalBackdrop />
+      <Backdrop />
       <div ref={menuRef} className="modal">
         <ModalContainer />
       </div>
-    </>,
-    document.body
+    </>
   );
 }

@@ -7,7 +7,7 @@ import { LuPencil } from "react-icons/lu";
 import { FiSearch } from "react-icons/fi";
 import { LuMenuSquare } from "react-icons/lu";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
-import ProductInformations from "../Shared/Products/ProductInformations";
+import ProductInformations from "../Shared/Products/ProductInformationsCol";
 
 export default function WishListContainer() {
   return (

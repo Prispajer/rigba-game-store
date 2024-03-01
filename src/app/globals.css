@@ -62,3 +62,28 @@ body {
 .modal {
   @apply absolute w-[360px] transform top-6 z-20 translate-x-[-157px] translate-y-[65px] bg-primaryColor;
 }
+
+.scrollbar::-webkit-scrollbar {
+  overflow-x: hidden;
+  height: 8px;
+}
+
+.scrollbar:hover::-webkit-scrollbar {
+  overflow-x: auto;
+  height: 8px;
+}
+
+.scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: #ffffff;
+  border-radius: 14px;
+}
+
+.scrollbar:hover::-webkit-scrollbar-track {
+  background: #5389b7;
+  border-radius: 5px;
+}
+
+.scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: #ffffff;
+  border-radius: 14px;
+}

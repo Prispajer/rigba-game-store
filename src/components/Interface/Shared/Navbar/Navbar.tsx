@@ -16,7 +16,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="relative  bg-secondaryColor ">
+    <nav className="relative  bg-secondaryColor">
       <ul className="flex items-center max-w-[1240px] w-full mx-auto text-[18px] text-[white]">
         {navLinks.map((element: NavLinks, index: number) => (
           <li
@@ -31,7 +31,7 @@ export default function Navbar() {
                 <div
                   className={
                     isOpen
-                      ? "flex p-6 gap-x-20 max-w-[1240px] mx-auto px-4 py- bg-[#1c365b]"
+                      ? "flex p-6 gap-x-20 max-w-[1240px] mx-auto px-4 py- bg-[#1c365b] z-20"
                       : "hidden"
                   }
                 >

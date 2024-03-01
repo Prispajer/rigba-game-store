@@ -1,9 +1,9 @@
-import HomeContainer from "@/components/Interface/Home/HomeContainer";
+import HomeUpComingGames from "@/components/Interface/Home/HomeUpComingGames";
 
 export default function Home() {
   return (
     <>
-      <HomeContainer />
+      <HomeUpComingGames />
     </>
   );
 }

@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
 import generateRandomValue from "@/utils/prices";
+import AddToWishList from "./AddToWishList";
 
 export default function ProductInformations() {
   const [data, setData] = React.useState<Games>([]);
@@ -11,7 +12,7 @@ export default function ProductInformations() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://api.rawg.io/api/games?key=b3c85b14e19f4d618df8debc3d5b01b6",
+          "https://api.rawg.io/api/games?ordering=-rating&key=b3c85b14e19f4d618df8debc3d5b01b6",
           {
             headers: {
               "User-Agent": "Mozilla/5.0",
@@ -21,7 +22,7 @@ export default function ProductInformations() {
           }
         );
         const data = await response.json();
-        setData(data);
+        setData(data.results);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -31,27 +32,29 @@ export default function ProductInformations() {
 
   return (
     <>
-      {data.results &&
-        data.results.map((game) => (
+      {data &&
+        data.map((game) => (
           <div
             key={game.id}
-            className="relative min-w-[200px] bg-tertiaryColor my-[20px]"
+            className="relative min-w-[200px] min-h-[360px] mt-[20px] mb-[10px] bg-tertiaryColor"
           >
             <Link href="/">
-              <div className="relative w-full h-[250px] overflow-hidden">
+              <div className="relative w-full min-h-[220px]">
                 <Image src={game.background_image} layout="fill" alt="game" />
               </div>
-              <div className="px-[15px] pt-[10px]">
-                <div>
-                  <span className="font-bold text-[14px]">{game.external}</span>
+              <div className="flex flex-col justify-between h-[70px] px-[15px] pt-[10px]">
+                <div className="leading-none overflow-hidden overflow-ellipsis line-clamp-2 text-[#ffffff]">
+                  <span className="font-bold text-[13px] text-[#ffffff]">
+                    {game.name}
+                  </span>
                 </div>
                 <div>
                   <span className="text-[12px] text-[#fffa84] font-bold">
-                    CAŁY ŚWIAT
+                    {game.added}
                   </span>
                 </div>
               </div>
-              <div className="px-[15px] py-[10px]">
+              <div className="h-[80px] px-[15px] ">
                 <div className="text-[14px] text-[#ffffff80] font-medium ">
                   Od
                 </div>
@@ -68,11 +71,9 @@ export default function ProductInformations() {
                     {game.rating}
                   </span>
                 </div>
+                <AddToWishList />
               </div>
             </Link>
-            <div className="absolute top-0 right-[10%] p-[10px] border-[1px] border-[#e5e176] hover:border-[1px] hover:border-[#ffffff] transition duration-300 bg-[#e5e176] hover:bg-[#ffffff80] cursor-pointer">
-              <CiHeart size="30px" color="white" />
-            </div>
           </div>
         ))}
     </>

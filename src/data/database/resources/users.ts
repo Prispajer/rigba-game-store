@@ -1,13 +1,5 @@
-import { RowDataPacket } from "mysql2";
 import { ModifyQuery, selectQuery } from "../queries";
-
-export interface User extends RowDataPacket {
-  id: number;
-  login: string;
-  password: string;
-  registerDate: Date;
-  lastLoggedIn: Date;
-}
+import { User } from "@/utils/types";
 
 export function getAllUsers() {
   return selectQuery<User>("SELECT * FROM users");
@@ -18,17 +10,9 @@ export function getOneUser(id: number) {
   return selectQuery<User>(queryString, [id]);
 }
 
-export function insertValues(newUser: {
-  id: number;
-  email: string;
-  password: string;
-}) {
-  const queryString = `INSERT INTO users SET id = ?, email = ?, password = ?`;
-  return ModifyQuery(queryString, [
-    newUser.id,
-    newUser.email,
-    newUser.password,
-  ]);
+export function insertValues(newUser: { email: string; password: string }) {
+  const queryString = `INSERT INTO users SET email = ?, password = ?`;
+  return ModifyQuery(queryString, [newUser.email, newUser.password]);
 }
 
 export function updateValues(

@@ -1,9 +1,7 @@
 import { Metadata } from "next";
 import { workbench } from "../utils/fonts";
 import "./globals.css";
-import Header from "@/components/Interface/Shared/Header/Header";
-import Navbar from "@/components/Interface/Shared/Navbar/Navbar";
-import ReduxProvider from "@/redux/ReduxProvider";
+import GlobalProvider from "@/redux/GlobalProvider";
 
 export const metadata: Metadata = {
   title: "Buy, browse, learn everything about games | RIGBA",
@@ -18,11 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ReduxProvider>
-          <Header />
-          <Navbar />
-          {children}
-        </ReduxProvider>
+        <GlobalProvider>{children}</GlobalProvider>
       </body>
     </html>
   );

@@ -1,12 +1,11 @@
-import Register from "@/app/(auth)/register/page";
-import { registerUser } from "@/redux/user/userSlice";
 import { z } from "zod";
 
-const RegisterSchema = z
+export const RegisterSchema = z
   .object({
     email: z
       .string()
       .email({ message: "Invalid email format!" })
+      .min(8, { message: "Email must be at least 8 character long!" })
       .max(100, { message: "Email must be at most 100 characters long!" }),
     password: z
       .string()
@@ -22,10 +21,14 @@ const RegisterSchema = z
     path: ["confirmPassword"],
   });
 
-type User = z.infer<typeof RegisterSchema>;
-
-const user = {
-  email: 2,
-};
-
-console.log(RegisterSchema.parse(user));
+export const LoginSchema = z.object({
+  email: z
+    .string()
+    .email({ message: "Invalid email format!" })
+    .min(8, { message: "Email must be at least 8 character long!" })
+    .max(100, { message: "Email must be at most 100 characters long!" }),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters long!" })
+    .max(50, { message: "Password must be at most 50 characters long!" }),
+});

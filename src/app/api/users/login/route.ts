@@ -1,14 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import * as users from "../../../data/database/resources/users";
-
-export async function GET() {
-  try {
-    const results = await users.getAllUsers();
-    return NextResponse.json(results);
-  } catch (error) {
-    throw new Error("Wystąpił błąd przy pobieraniu danych z bazy danych.");
-  }
-}
+import * as users from "../../../../data/database/resources/users";
 
 export async function POST(request: NextRequest, response: NextResponse) {
   try {

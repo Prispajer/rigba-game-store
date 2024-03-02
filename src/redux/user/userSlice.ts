@@ -1,10 +1,10 @@
-import { User } from "@/utils/types";
+import { RegisterSchema } from "@/utils/schemas/rei";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { retry } from "@reduxjs/toolkit/query";
 
 const initialState: User = {
   id: undefined,
-  login: undefined,
+  email: undefined,
   password: undefined,
   registerDate: undefined,
   lastLoggedIn: undefined,
@@ -18,15 +18,15 @@ const userSlice = createSlice({
       state,
       action: PayloadAction<{
         id: number | undefined;
-        login: string | undefined;
+        email: string | undefined;
         password: string | undefined;
         registerDate: Date | undefined;
         lastLoggedIn: Date | undefined;
       }>
     ) => {
-      const { id, login, password, registerDate, lastLoggedIn } =
+      const { id, email, password, registerDate, lastLoggedIn } =
         action.payload;
-      return { ...state, id, login, password, registerDate, lastLoggedIn };
+      return { ...state, id, email, password, registerDate, lastLoggedIn };
     },
   },
 });

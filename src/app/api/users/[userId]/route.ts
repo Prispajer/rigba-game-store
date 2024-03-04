@@ -5,9 +5,9 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request, { params }: any) {
   try {
     const userId = parseInt(params.userId);
-    const userData = await users.getOneUser(userId);
+    const getUser = await users.getOneUser(userId);
 
-    return NextResponse.json(userData, {
+    return NextResponse.json(getUser, {
       headers: {
         "Content-Type": "application/json",
       },

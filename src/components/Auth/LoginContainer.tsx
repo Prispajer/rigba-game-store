@@ -21,21 +21,20 @@ export default function LoginContainer() {
 
   function handleFormSubmit(data: z.infer<typeof LoginSchema>) {
     const { email, password } = data;
-    fetch("http://localhost:3000/api/users", {
+    fetch("http://localhost:3000/api/users/", {
       headers: { "Content-Type": "application/json" },
-      method: "POST",
-      body: JSON.stringify({ email, password }),
+      method: "GET",
     })
       .then((response) => {
         if (response.ok) {
-          console.log("Użytkownik został pomyślnie zarejestrowany!");
+          data.json();
         } else {
-          console.error("Wystąpił błąd podczas rejestracji użytkownika.");
+          console.error("Wystąpił błąd podczas logowania użytkownika.");
         }
       })
       .catch((error) => {
         console.error(
-          "Wystąpił błąd podczas wysyłania żądania rejestracji użytkownika:",
+          "Wystąpił błąd podczas wysyłania żądania logowania użytkownika:",
           error
         );
       });

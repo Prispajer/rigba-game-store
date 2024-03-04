@@ -23,6 +23,26 @@ export default function ProductInformations() {
         );
         const data = await response.json();
         setData(data.results);
+        console.log(data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await fetch("http://localhost:3000/api/products", {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            "User-Agent": "Mozilla/5.0",
+            "Content-Type": "application/json",
+          },
+        });
+        console.log(JSON.stringify(data, null, 2));
       } catch (error) {
         console.error("Error:", error);
       }

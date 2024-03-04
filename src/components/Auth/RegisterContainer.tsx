@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { use } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { FaGoogle } from "react-icons/fa";
@@ -99,7 +99,7 @@ export default function RegisterContainer() {
             />
             {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
           </div>
-          <div className="flex flex-col items-center justfiy-center  py-4">
+          <div className="flex flex-col items-center justfiy-center py-4">
             <button
               className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px]"
               type="submit"

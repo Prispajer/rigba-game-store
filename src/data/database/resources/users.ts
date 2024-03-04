@@ -5,6 +5,11 @@ export function getAllUsers() {
   return selectQuery<User>("SELECT * FROM users");
 }
 
+export function getUserByEmail(email: string) {
+  const queryString = "SELECT * FROM users WHERE email = ?";
+  return selectQuery<User>(queryString, [email]);
+}
+
 export function getOneUser(id: number) {
   const queryString = "SELECT * FROM users WHERE id = ?";
   return selectQuery<User>(queryString, [id]);

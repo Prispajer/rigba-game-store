@@ -1,6 +1,4 @@
-import { RegisterSchema } from "@/utils/schemas/rei";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { retry } from "@reduxjs/toolkit/query";
 
 const initialState: User = {
   id: undefined,

@@ -3,8 +3,23 @@ import Link from "next/link";
 import { IoCloseSharp } from "react-icons/io5";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
+import { useSelector, useDispatch } from "react-redux";
+import { createProduct } from "@/redux/user/productSlice";
 
 export default function ModalContainer() {
+  const product = useSelector((state: RootState) => state.product);
+  const dispatch = useDispatch();
+
+  const newProduct = {
+    id: 1,
+    name: "Resident Evil 4 Deluxe Edition Key",
+    price: 18.92,
+    genres: "Action",
+    platform: "PC",
+  };
+
+  console.log(product);
+
   return (
     <>
       <div className="flex justify-between items-center text-white border-b-[1px] border-[#ffffff1a] p-[20px]">
@@ -41,7 +56,12 @@ export default function ModalContainer() {
             </div>
             <div className="flex justify-between items-center w-full text-white">
               <div className="">
-                <button className="mr-2 hover:text-modalHover">-</button>
+                <button
+                  onClick={() => dispatch(createProduct(newProduct))}
+                  className="mr-2 hover:text-modalHover"
+                >
+                  -
+                </button>
                 <span className="cursor-default">1</span>
                 <button className="ml-2 hover:text-modalHover">+</button>
               </div>

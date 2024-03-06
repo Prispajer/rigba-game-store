@@ -4,8 +4,8 @@ import { queryRequests } from "@/data/database/resources/users";
 export async function POST(request: NextRequest, response: NextResponse) {
   try {
     const userBody = await request.json();
-    const { email } = userBody;
-    const userExists = await queryRequests.getUserByEmail(email);
+    const { email, password } = userBody;
+    const userExists = await queryRequests.getUser(email, password);
 
     if (userExists.length > 0) {
       return NextResponse.json({

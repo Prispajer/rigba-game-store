@@ -26,11 +26,14 @@ export default function RegisterContainer() {
 
   function handleFormSubmit(data: z.infer<typeof RegisterSchema>) {
     const { email, password, confirmPassword } = data;
-    fetch("http://localhost:3000/api/users", {
-      method: "POST",
-      body: JSON.stringify({ email, password, confirmPassword }),
-      headers: { "Content-Type": "application/json" },
-    })
+    fetch(
+      "http://localhost:3000/api/users/breakpoints/userAuthentication/registerUser",
+      {
+        method: "POST",
+        body: JSON.stringify({ email, password, confirmPassword }),
+        headers: { "Content-Type": "application/json" },
+      }
+    )
       .then((response) => {
         if (response.ok) {
           console.log("Użytkownik został pomyślnie zarejestrowany!");

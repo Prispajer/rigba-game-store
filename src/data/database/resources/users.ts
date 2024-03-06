@@ -1,37 +1,40 @@
-import { ModifyQuery, selectQuery } from "../queries";
-import { User } from "@/utils/types";
+import { modifyQuery, selectQuery } from "../queries";
 
-export function getAllUsers() {
-  return selectQuery<User>("SELECT * FROM users");
+class QueryRequests {
+  getUser(email: string, password: string) {
+    const queryString = "SELECT * FROM users WHERE email = ? AND password = ?";
+    return selectQuery(queryString, [email, password]);
+  }
+
+  getUserById(id: number) {
+    const queryString = "SELECT * FROM users WHERE id = ?";
+    return selectQuery(queryString, [id]);
+  }
+
+  registerUser(newUser: { email: string; password: string }) {
+    const queryString = `INSERT INTO users SET email = ?, password = ?`;
+    return modifyQuery(queryString, [newUser.email, newUser.password]);
+  }
+
+  modifyUser(
+    modifyUser: {
+      email?: string;
+      password?: string;
+    },
+    id: number
+  ) {
+    const queryString = `UPDATE users SET email = ?, password = ? WHERE id = ?`;
+    return modifyQuery(queryString, [
+      modifyUser.email,
+      modifyUser.password,
+      id,
+    ]);
+  }
+
+  deleteUser(id: number) {
+    const queryString = `DELETE FROM users WHERE id=?`;
+    return modifyQuery(queryString, [id]);
+  }
 }
 
-export function getUserByEmail(email: string) {
-  const queryString = "SELECT * FROM users WHERE email = ?";
-  return selectQuery<User>(queryString, [email]);
-}
-
-export function getOneUser(id: number) {
-  const queryString = "SELECT * FROM users WHERE id = ?";
-  return selectQuery<User>(queryString, [id]);
-}
-
-export function insertValues(newUser: { email: string; password: string }) {
-  const queryString = `INSERT INTO users SET email = ?, password = ?`;
-  return ModifyQuery(queryString, [newUser.email, newUser.password]);
-}
-
-export function updateValues(
-  updateUser: {
-    email?: string;
-    password?: string;
-  },
-  id: number
-) {
-  const queryString = `UPDATE users SET email = ?, password = ? WHERE id = ?`;
-  return ModifyQuery(queryString, [updateUser.email, updateUser.password, id]);
-}
-
-export function deleteValues(id: number) {
-  const queryString = `DELETE FROM users WHERE id=?`;
-  return ModifyQuery(queryString, [id]);
-}
+export const queryRequests = new QueryRequests();

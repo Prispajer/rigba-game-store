@@ -15,19 +15,28 @@ export default function LoginContainer() {
     defaultValues: {
       email: "",
       password: "",
-      confirmPassword: "",
     },
   });
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = loginObject;
+
   function handleFormSubmit(data: z.infer<typeof LoginSchema>) {
     const { email, password } = data;
-    fetch("http://localhost:3000/api/users/", {
-      headers: { "Content-Type": "application/json" },
-      method: "GET",
-    })
+    fetch(
+      "http://localhost:3000/api/users/breakpoints/userAuthentication/loginUser",
+      {
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+      }
+    )
       .then((response) => {
         if (response.ok) {
-          data.json();
+          response.json();
         } else {
           console.error("Wystąpił błąd podczas logowania użytkownika.");
         }
@@ -39,12 +48,6 @@ export default function LoginContainer() {
         );
       });
   }
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = loginObject;
 
   return (
     <main className="flex flex-col lg:flex-row justify-center items-center mx-auto lg:px-[100px] gap-x-[120px]">

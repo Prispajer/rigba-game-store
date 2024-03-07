@@ -26,6 +26,8 @@ export default function RegisterContainer() {
 
   function handleFormSubmit(data: z.infer<typeof RegisterSchema>) {
     const { email, password, confirmPassword } = data;
+    console.log(registerObject);
+    console.log(data);
     fetch(
       "http://localhost:3000/api/users/breakpoints/userAuthentication/registerUser",
       {

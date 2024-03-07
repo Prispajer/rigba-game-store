@@ -18,8 +18,6 @@ export default function ModalContainer() {
     platform: "PC",
   };
 
-  console.log(product);
-
   return (
     <>
       <div className="flex justify-between items-center text-white border-b-[1px] border-[#ffffff1a] p-[20px]">
@@ -62,7 +60,7 @@ export default function ModalContainer() {
                 >
                   -
                 </button>
-                <span className="cursor-default">1</span>
+                <span className="cursor-default">{product.price}</span>
                 <button className="ml-2 hover:text-modalHover">+</button>
               </div>
               <button className="text-[14px] hover:text-modalHover">

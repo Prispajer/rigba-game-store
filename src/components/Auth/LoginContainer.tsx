@@ -8,8 +8,13 @@ import { FaSteamSymbol } from "react-icons/fa";
 import { LoginSchema } from "@/utils/schemas/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "@/redux/store";
+import { loginUser } from "@/redux/user/userSlice";
 
 export default function LoginContainer() {
+  const user = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
   const loginObject = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -26,6 +31,7 @@ export default function LoginContainer() {
 
   function handleFormSubmit(data: z.infer<typeof LoginSchema>) {
     const { email, password } = data;
+    const createUser = dispatch(loginUser({ email, password }));
     fetch(
       "http://localhost:3000/api/users/breakpoints/userAuthentication/loginUser",
       {

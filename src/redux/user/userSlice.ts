@@ -4,8 +4,6 @@ const initialState: User = {
   id: undefined,
   email: undefined,
   password: undefined,
-  registerDate: undefined,
-  lastLoggedIn: undefined,
 };
 
 const userSlice = createSlice({
@@ -15,19 +13,26 @@ const userSlice = createSlice({
     registerUser: (
       state,
       action: PayloadAction<{
-        id: number | undefined;
         email: string | undefined;
         password: string | undefined;
-        registerDate: Date | undefined;
-        lastLoggedIn: Date | undefined;
+        confirmPassword: string | undefined;
       }>
     ) => {
-      const { id, email, password, registerDate, lastLoggedIn } =
-        action.payload;
-      return { ...state, id, email, password, registerDate, lastLoggedIn };
+      const { email, password, confirmPassword } = action.payload;
+      return { ...state, email, password, confirmPassword };
+    },
+    loginUser: (
+      state,
+      action: PayloadAction<{
+        email: string | undefined;
+        password: string | undefined;
+      }>
+    ) => {
+      const { email, password } = action.payload;
+      return { ...state, email, password };
     },
   },
 });
 
-export const { registerUser } = userSlice.actions;
+export const { registerUser, loginUser } = userSlice.actions;
 export default userSlice.reducer;

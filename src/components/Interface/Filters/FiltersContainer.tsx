@@ -6,6 +6,10 @@ import FilterByType from "./FilterByType";
 import FilterByGenre from "./FilterByGenre";
 import FilterByPlatform from "./FilterByPlatform";
 import FilterByRegion from "./FilterByRegion";
+import SelectedFilters from "./SelectedFilters";
+import SortBy from "./SortBy";
+import DisplayGames from "./DisplayGames";
+import ChangePage from "./changePage";
 import { MdKeyboardArrowUp } from "react-icons/md";
 import { MdKeyboardArrowDown } from "react-icons/md";
 
@@ -18,8 +22,8 @@ export default function WishListContainer() {
             Store
           </h2>
         </div>
-        <div>
-          <aside className="max-w-[220px] my-[20px]">
+        <div className="flex my-[20px] gap-x-[20px]">
+          <aside className="max-w-[220px]">
             <form className="bg-[#5389b7]">
               <FilterByPrice />
               <FilterByType />
@@ -28,6 +32,12 @@ export default function WishListContainer() {
               <FilterByRegion />
             </form>
           </aside>
+          <section className="w-[calc(100%-220px)]">
+            <SelectedFilters />
+            <SortBy />
+            <DisplayGames />
+            <ChangePage />
+          </section>
         </div>
       </section>
     </main>

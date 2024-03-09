@@ -4,7 +4,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 export default function FilterByType() {
   return (
     <>
-      <div className="py-[15px] px-[20px] text-[#ffffff] font-bold text-[18px]  border-b-[2px] border-b-primaryColor">
+      <div className="py-[15px] px-[20px] text-[#ffffff] text-[18px]  border-b-[2px] border-b-primaryColor">
         <div className="flex items-center justify-between max-w-[300px] pb-[10px] cursor-pointer">
           <span>Typ</span>
           <MdKeyboardArrowUp size="25px" />

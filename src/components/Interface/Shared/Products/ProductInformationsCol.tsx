@@ -31,40 +31,45 @@ export default function ProductInformations() {
   }, []);
 
   return (
-    <div className="grid grid-cols-4 gap-x-[10px]">
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-x-[10px]">
       {data.results &&
         data.results.map((game) => (
-          <div key={game.id} className="relative bg-tertiaryColor my-[10px]">
-            <Link href="/">
-              <div className="relative w-full h-[250px] overflow-hidden">
+          <div key={game.id} className="relative  bg-tertiaryColor my-[10px]">
+            <Link
+              className="flex flex-row md:flex-col w-full p-2 md:p-0"
+              href="/"
+            >
+              <div className="relative h-[135px] w-[95px] md:w-full md:h-[250px]">
                 <Image src={game.background_image} layout="fill" alt="game" />
               </div>
-              <div className="px-[15px] pt-[10px]">
+              <div className="my-[10px] px-[15px]">
                 <div>
-                  <span className="font-bold text-[14px]">{game.external}</span>
+                  <div className="leading-none overflow-hidden overflow-ellipsis line-clamp-2 text-[#ffffff]">
+                    <span className="font-bold text-[14px]">{game.name}</span>
+                  </div>
+                  <div>
+                    <span className="text-[12px] text-[#fffa84] font-bold">
+                      CAŁY ŚWIAT
+                    </span>
+                  </div>
                 </div>
                 <div>
-                  <span className="text-[12px] text-[#fffa84] font-bold">
-                    CAŁY ŚWIAT
-                  </span>
-                </div>
-              </div>
-              <div className="px-[15px] py-[10px]">
-                <div className="text-[14px] text-[#ffffff80] font-medium ">
-                  Od
-                </div>
-                <div className="text-[20px] text-[#ffffff] font-bold">
-                  {generateRandomValue()}
-                </div>
-                <div className="flex items-center">
-                  <CiHeart
-                    className="ml-[-3px] mr-[3px]"
-                    size="20px"
-                    color="#ffffff80"
-                  />
-                  <span className="text-[14px] text-[#ffffff80]">
-                    {game.rating}
-                  </span>
+                  <div className="text-[14px] text-[#ffffff80] font-medium ">
+                    Od
+                  </div>
+                  <div className="text-[20px] text-[#ffffff] font-bold">
+                    {generateRandomValue()}
+                  </div>
+                  <div className="flex items-center">
+                    <CiHeart
+                      className="ml-[-3px] mr-[3px]"
+                      size="20px"
+                      color="#ffffff80"
+                    />
+                    <span className="text-[14px] text-[#ffffff80]">
+                      {game.rating}
+                    </span>
+                  </div>
                 </div>
               </div>
             </Link>

@@ -5,14 +5,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { LuPencil } from "react-icons/lu";
 import { FiSearch } from "react-icons/fi";
-import { LuMenuSquare } from "react-icons/lu";
-import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { FaSortAmountUpAlt } from "react-icons/fa";
+import { MdKeyboardArrowUp } from "react-icons/md";
+import { MdKeyboardArrowDown } from "react-icons/md";
 import ProductInformations from "../Shared/Products/ProductInformationsCol";
 
 export default function WishListContainer() {
   return (
     <main className="flex items-center justify-center w-full h-full bg-primaryColor">
-      <section className="flex flex-col items-center w-full max-w-[1240px] mx-auto mt-[40px] mb-[100px] px-2 ">
+      <section className="flex flex-col items-center w-full max-w-[1240px] mx-auto mt-[40px] mb-[100px] px-4 md:px-2">
         <div className="flex items-center w-full mb-[40px]">
           <div className="relative h-[64px] w-[64px]">
             <Image
@@ -42,8 +43,8 @@ export default function WishListContainer() {
             </span>
           </div>
         </div>
-        <div className="w-full mt-[40px] grid grid-cols-[220px,calc(100%-220px)]">
-          <aside className="bg-[#5389b7] text-white max-h-[120px]">
+        <div className="w-full mt-[40px] md:grid grid-cols-[220px,calc(100%-220px)]">
+          <aside className="max-h-[120px] bg-[#5389b7] text-white ">
             <form className="pb-[20px]">
               <div className="pt-[15px] px-[20px] pb-[10px]">
                 <span className="font-bold">Nazwa produktu</span>
@@ -58,17 +59,17 @@ export default function WishListContainer() {
             </form>
           </aside>
           <div className="flex flex-col w-full px-[15px] text-white">
-            <div className="flex justify-between w-full min-h-[50px] ">
-              <div>
+            <div className="flex flex-col md:flex-row md:justify-between w-full min-h-[50px] my-[20px] md:my-0">
+              <div className="pb-[10px]">
                 <span>Znalezione wyniki: 2</span>
               </div>
               <div>
-                <button className="flex items-center hover:text-headerHover">
-                  <LuMenuSquare />
+                <button className="flex items-center text-[16px] md:text-[18px] hover:text-headerHover text-[#ffffff]">
+                  <FaSortAmountUpAlt />
                   <span className="ml-[8px] mr-[4px] font-bold">
                     Cena: Od wysokich do niskich
                   </span>
-                  <MdOutlineKeyboardArrowDown />
+                  <MdKeyboardArrowDown />
                 </button>
               </div>
             </div>

@@ -11,6 +11,8 @@ import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
 import { loginUser } from "@/redux/user/userSlice";
+import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
+import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 
 export default function LoginContainer() {
   const user = useSelector((state: RootState) => state.user);
@@ -128,6 +130,8 @@ export default function LoginContainer() {
             />
             {errors.password && <p>{errors.password.message}</p>}
           </div>
+          <FormError message="" />
+          <FormSuccess message="" />
           <div className="flex flex-col items-center justfiy-center w- pt-4">
             <button
               className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px]"

@@ -28,7 +28,7 @@ body {
 }
 
 .nav-icon {
-  @apply m-3 py-1 cursor-pointer transition duration-300 text-white hover:text-headerHover;
+  @apply m-[6px] py-1 cursor-pointer transition duration-300 text-white hover:text-headerHover;
 }
 
 .nav-li {

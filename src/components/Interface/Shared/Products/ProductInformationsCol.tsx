@@ -3,9 +3,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
 import generateRandomValue from "@/utils/prices";
+import AddToWishList from "./AddToWishList";
+
+export type Game = {
+  id: number;
+  background_image: string;
+  name: string;
+  rating: number;
+};
 
 export default function ProductInformations() {
-  const [data, setData] = React.useState<Games>([]);
+  const [data, setData] = React.useState<Game[]>([]);
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -21,7 +29,7 @@ export default function ProductInformations() {
           }
         );
         const data = await response.json();
-        setData(data);
+        setData(data.results);
         console.log(data);
       } catch (error) {
         console.error("Error:", error);
@@ -32,32 +40,40 @@ export default function ProductInformations() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-x-[10px]">
-      {data.results &&
-        data.results.map((game) => (
-          <div key={game.id} className="relative  bg-tertiaryColor my-[10px]">
+      {data &&
+        data.map((game: Game) => (
+          <div
+            key={game.id}
+            className=" relative max-h-[150px] md:max-h-full my-[10px]"
+          >
             <Link
-              className="flex flex-row md:flex-col w-full p-2 md:p-0"
+              className="flex flex-row md:flex-col bg-tertiaryColor"
               href="/"
             >
-              <div className="relative h-[135px] w-[95px] md:w-full md:h-[250px]">
-                <Image src={game.background_image} layout="fill" alt="game" />
+              <div className="relative min-w-[75px] ty:min-w-[95px] h-[150px] md:h-[250px]">
+                <Image
+                  className="p-1"
+                  src={game.background_image}
+                  layout="fill"
+                  alt="game"
+                />
               </div>
-              <div className="my-[10px] px-[15px]">
-                <div>
+              <div className="max-w-[50%] md:max-w-[100%] my-[10px] px-[15px]">
+                <div className="flex flex-col justify-between h-[50%] md:h-[70px] ">
                   <div className="leading-none overflow-hidden overflow-ellipsis line-clamp-2 text-[#ffffff]">
                     <span className="font-bold text-[14px]">{game.name}</span>
                   </div>
                   <div>
-                    <span className="text-[12px] text-[#fffa84] font-bold">
+                    <span className=" overflow-hidden overflow-ellipsis line-clamp-1 text-[12px] text-[#fffa84] font-bold ">
                       CAŁY ŚWIAT
                     </span>
                   </div>
                 </div>
-                <div>
+                <div className="h-[50%] md:h-[75px]">
                   <div className="text-[14px] text-[#ffffff80] font-medium ">
                     Od
                   </div>
-                  <div className="text-[20px] text-[#ffffff] font-bold">
+                  <div className="overflow-hidden overflow-ellipsis line-clamp-1 text-[20px] text-[#ffffff] font-bold">
                     {generateRandomValue()}
                   </div>
                   <div className="flex items-center">
@@ -66,16 +82,14 @@ export default function ProductInformations() {
                       size="20px"
                       color="#ffffff80"
                     />
-                    <span className="text-[14px] text-[#ffffff80]">
+                    <span className="overflow-hidden overflow-ellipsis line-clamp-1 text-[14px] text-[#ffffff80]">
                       {game.rating}
                     </span>
                   </div>
                 </div>
               </div>
+              <AddToWishList />
             </Link>
-            <div className="absolute top-0 right-[10%] p-[10px] border-[1px] border-[#e5e176] hover:border-[1px] hover:border-[#ffffff] transition duration-300 bg-[#e5e176] hover:bg-[#ffffff80] cursor-pointer">
-              <CiHeart size="30px" color="white" />
-            </div>
           </div>
         ))}
     </div>

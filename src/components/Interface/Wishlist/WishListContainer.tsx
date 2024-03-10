@@ -65,7 +65,7 @@ export default function WishListContainer() {
               </div>
               <div>
                 <button className="flex items-center text-[16px] md:text-[18px] hover:text-headerHover text-[#ffffff]">
-                  <FaSortAmountUpAlt />
+                  <FaSortAmountUpAlt className="md:block" />
                   <span className="ml-[8px] mr-[4px] font-bold">
                     Cena: Od wysokich do niskich
                   </span>

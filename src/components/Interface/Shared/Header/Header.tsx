@@ -4,6 +4,7 @@ import React from "react";
 import Logo from "./Logo";
 import SearchBar from "./SearchBar";
 import Icons from "./Icons";
+import Sidebar from "../Navbar/Sidebar";
 
 export default function Header() {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
@@ -36,8 +37,9 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="bg-primaryColor">
-      <div className="flex items-center max-w-[1240px] w-full mx-auto py-2">
+    <header className="md:border-b-0  border-b-2 border-secondaryColor bg-primaryColor ">
+      <Sidebar />
+      <div className="flex items-center max-w-[1240px] w-full mx-auto md:py-2">
         <Logo isMediumScreenSize={isMediumScreenSize} />
         <SearchBar />
         <Icons

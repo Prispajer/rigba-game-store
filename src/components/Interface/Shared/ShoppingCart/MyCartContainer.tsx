@@ -6,7 +6,7 @@ import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
 import { useSelector, useDispatch } from "react-redux";
 import { createProduct } from "@/redux/user/productSlice";
 
-export default function ModalContainer() {
+export default function MyCartContainer() {
   const product = useSelector((state: RootState) => state.product);
   const dispatch = useDispatch();
 
@@ -21,7 +21,7 @@ export default function ModalContainer() {
   return (
     <>
       <div className="flex justify-between items-center text-white border-b-[1px] border-[#ffffff1a] p-[20px]">
-        <strong className=" text-[20px] cursor-default">Mój koszyk</strong>
+        <strong className="text-[20px] cursor-default">Mój koszyk</strong>
         <button>
           <IoCloseSharp className="hover:text-modalHover" size="25px" />
         </button>

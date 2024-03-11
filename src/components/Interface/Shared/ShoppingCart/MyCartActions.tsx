@@ -1,8 +1,8 @@
 import React from "react";
 import Backdrop from "../Backdrop/Backdrop";
-import ModalContainer from "./ModalContainer";
+import MyCartContainer from "./MyCartContainer";
 
-export default function Modal({
+export default function MyCartActions({
   isOpen,
   closeModal,
 }: {
@@ -31,8 +31,8 @@ export default function Modal({
   return (
     <>
       <Backdrop />
-      <div ref={menuRef} className="modal">
-        <ModalContainer />
+      <div ref={menuRef} className="mycart">
+        <MyCartContainer />
       </div>
     </>
   );

@@ -3,7 +3,8 @@ import { FaRegHeart } from "react-icons/fa";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
-import Modal from "../ShoppingCart/Modal";
+import MyCartActions from "../ShoppingCart/MyCartActions";
+import ProfileSidebar from "./ProfileSidebar";
 
 export default function Icons({
   isMediumScreenSize,
@@ -12,7 +13,8 @@ export default function Icons({
   closeModal,
 }) {
   return (
-    <div className="flex flex-1 justify-end items-center">
+    <div className="flex flex-1 justify-end items-center relative">
+      <ProfileSidebar />
       <FaSearch
         className={isMediumScreenSize ? "hidden" : "nav-icon"}
         size="35px"
@@ -21,7 +23,7 @@ export default function Icons({
         <FaRegHeart className="hidden ty:block  nav-icon" size="35px" />
       </Link>
       <FaShoppingCart onClick={openModal} className="nav-icon" size="35px" />
-      <Modal closeModal={closeModal} isOpen={isOpen} />
+      <MyCartActions closeModal={closeModal} isOpen={isOpen} />
       {isMediumScreenSize ? (
         <div className="flex items-center">
           <div className="cursor-pointer flex items-center hover:text-headerHover text-[white]">

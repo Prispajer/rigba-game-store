@@ -4,7 +4,7 @@ import { IoCloseSharp } from "react-icons/io5";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
 import { useSelector, useDispatch } from "react-redux";
-import { createProduct } from "@/redux/user/productSlice";
+import { createProduct } from "@/redux/slices/productSlice";
 
 export default function MyCartContainer() {
   const product = useSelector((state: RootState) => state.product);

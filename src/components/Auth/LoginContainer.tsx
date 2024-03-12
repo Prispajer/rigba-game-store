@@ -10,12 +10,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
-import { loginUser } from "@/redux/user/userSlice";
+import { loginUser } from "@/redux/slices/userSlice";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 
 export default function LoginContainer() {
-  const user = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: RootState) => state.user.loginUser);
   const dispatch = useDispatch();
   const loginObject = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),

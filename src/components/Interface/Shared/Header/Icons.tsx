@@ -3,8 +3,10 @@ import { FaRegHeart } from "react-icons/fa";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
+import useSharedGeneralActions from "@/redux/actions/useSharedGeneralActions";
 import MyCartActions from "../ShoppingCart/MyCartActions";
 import ProfileSidebar from "./ProfileSidebar";
+import { openSidebar } from "@/redux/slices/utilitySlice";
 
 export default function Icons({
   isMediumScreenSize,
@@ -12,6 +14,7 @@ export default function Icons({
   openModal,
   closeModal,
 }) {
+  const { utilityState, useOpenSidebar } = useSharedGeneralActions();
   return (
     <div className="flex flex-1 justify-end items-center relative">
       <ProfileSidebar />
@@ -40,7 +43,7 @@ export default function Icons({
         </div>
       ) : (
         <div className="flex items-center">
-          <FaUser className="nav-icon" size="35px" />
+          <FaUser onClick={useOpenSidebar} className="nav-icon" size="35px" />
         </div>
       )}
     </div>

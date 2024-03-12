@@ -1,20 +1,16 @@
 import React from "react";
 import Backdrop from "../Backdrop/Backdrop";
 import MyCartContainer from "./MyCartContainer";
+import useSharedGeneralActions from "@/redux/actions/useSharedGeneralActions";
 
-export default function MyCartActions({
-  isOpen,
-  closeModal,
-}: {
-  isOpen: boolean;
-  closeModal: () => void;
-}) {
-  const menuRef = React.useRef<HTMLDivElement>(null);
+export default function MyCartActions() {
+  const { myCartState, handleCloseSidebar } = useSharedGeneralActions();
+  const elementRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     const mouseHandler = (event: MouseEvent) => {
-      if (!menuRef.current?.contains(event.target as Node)) {
-        closeModal();
+      if (!elementRef.current?.contains(event.target as Node)) {
+        handleCloseSidebar("myCart");
       }
     };
     document.addEventListener("click", mouseHandler);
@@ -24,14 +20,9 @@ export default function MyCartActions({
     };
   });
 
-  if (!isOpen) {
-    return null;
-  }
-
   return (
     <>
-      <Backdrop />
-      <div ref={menuRef} className="mycart">
+      <div ref={elementRef} className={myCartState ? "mycart" : ""}>
         <MyCartContainer />
       </div>
     </>

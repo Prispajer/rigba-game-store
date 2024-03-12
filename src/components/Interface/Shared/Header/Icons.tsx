@@ -6,15 +6,9 @@ import { FaUser } from "react-icons/fa";
 import useSharedGeneralActions from "@/redux/actions/useSharedGeneralActions";
 import MyCartActions from "../ShoppingCart/MyCartActions";
 import ProfileSidebar from "./ProfileSidebar";
-import { openSidebar } from "@/redux/slices/utilitySlice";
 
-export default function Icons({
-  isMediumScreenSize,
-  isOpen,
-  openModal,
-  closeModal,
-}) {
-  const { utilityState, useOpenSidebar } = useSharedGeneralActions();
+export default function Icons({ isMediumScreenSize }) {
+  const { handleOpenSidebar } = useSharedGeneralActions();
   return (
     <div className="flex flex-1 justify-end items-center relative">
       <ProfileSidebar />
@@ -25,8 +19,12 @@ export default function Icons({
       <Link href="/wishlist">
         <FaRegHeart className="hidden ty:block  nav-icon" size="35px" />
       </Link>
-      <FaShoppingCart onClick={openModal} className="nav-icon" size="35px" />
-      <MyCartActions closeModal={closeModal} isOpen={isOpen} />
+      <FaShoppingCart
+        onClick={() => handleOpenSidebar("myCart")}
+        className="nav-icon"
+        size="35px"
+      />
+      <MyCartActions />
       {isMediumScreenSize ? (
         <div className="flex items-center">
           <div className="cursor-pointer flex items-center hover:text-headerHover text-[white]">
@@ -43,7 +41,11 @@ export default function Icons({
         </div>
       ) : (
         <div className="flex items-center">
-          <FaUser onClick={useOpenSidebar} className="nav-icon" size="35px" />
+          <FaUser
+            onClick={() => handleOpenSidebar("userSidebar")}
+            className="nav-icon"
+            size="35px"
+          />
         </div>
       )}
     </div>

@@ -1,17 +1,26 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+
+type UIElementState = {
+  [key: string]: boolean;
+};
+
+const initialState: UIElementState = {
+  userSidebar: false,
+  myCart: false,
+  navSidebar: false,
+};
 
 const utilitySlice = createSlice({
   name: "utility",
-  initialState: {
-    isSidebarOpen: false,
-  },
+  initialState,
   reducers: {
-    closeSidebar: (state) => {
-      state.isSidebarOpen = false;
-      console.log(state.isSidebarOpen);
+    closeSidebar: (state, action: PayloadAction<string>) => {
+      const element = action.payload;
+      state[element] = false;
     },
-    openSidebar: (state) => {
-      state.isSidebarOpen = true;
+    openSidebar: (state, action: PayloadAction<string>) => {
+      const element = action.payload;
+      state[element] = true;
     },
   },
 });

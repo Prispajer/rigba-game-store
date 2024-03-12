@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { workbench } from "../utils/fonts";
+import { workbench } from "../utils/helpers/fonts";
 import "./globals.css";
 import GlobalProvider from "@/redux/GlobalProvider";
 

@@ -3,10 +3,10 @@ import { IoCloseSharp } from "react-icons/io5";
 import useSharedGeneralActions from "@/redux/actions/useSharedGeneralActions";
 
 export default function ProfileSidebar() {
-  const { utilityState, useCloseSidebar } = useSharedGeneralActions();
+  const { userSidebarState, handleCloseSidebar } = useSharedGeneralActions();
 
   return (
-    utilityState && (
+    userSidebarState && (
       <div className="fixed top-0 right-0 bottom-0 h-full w-[300px] z-10 bg-primaryColor">
         <div className="relative flex flex-col items-center justify-center gap-y-[10px] py-[20px] bg-secondaryColor font-medium">
           <Link
@@ -22,7 +22,7 @@ export default function ProfileSidebar() {
             Zarejestruj
           </Link>
           <IoCloseSharp
-            onClick={useCloseSidebar}
+            onClick={() => handleCloseSidebar("userSidebar")}
             size="25px"
             className="absolute right-4 top-4 text-[#ffffff] cursor-pointer"
           />

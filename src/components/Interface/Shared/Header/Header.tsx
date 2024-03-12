@@ -7,17 +7,8 @@ import Icons from "./Icons";
 import Sidebar from "../Navbar/Sidebar";
 
 export default function Header() {
-  const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const [isMediumScreenSize, setIsMediumScreenSize] =
     React.useState<boolean>(false);
-
-  const openModal = () => {
-    setIsOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsOpen(false);
-  };
 
   const isProperWidth = () => {
     if (window.innerWidth > 768) {
@@ -42,12 +33,7 @@ export default function Header() {
       <div className="flex items-center max-w-[1240px] w-full mx-auto md:py-2">
         <Logo isMediumScreenSize={isMediumScreenSize} />
         <SearchBar />
-        <Icons
-          isMediumScreenSize={isMediumScreenSize}
-          isOpen={isOpen}
-          openModal={openModal}
-          closeModal={closeModal}
-        />
+        <Icons isMediumScreenSize={isMediumScreenSize} />
       </div>
     </header>
   );

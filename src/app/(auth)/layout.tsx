@@ -1,4 +1,4 @@
-import { workbench } from "../../utils/fonts";
+import { workbench } from "../../utils/helpers/fonts";
 import Link from "next/link";
 import Image from "next/image";
 

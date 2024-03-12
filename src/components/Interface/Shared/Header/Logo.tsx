@@ -1,11 +1,15 @@
 import { RxHamburgerMenu } from "react-icons/rx";
 import Image from "next/image";
 import Link from "next/link";
+import useSharedGeneralActions from "@/redux/actions/useSharedGeneralActions";
 
 export default function Logo({ isMediumScreenSize }) {
+  const { handleOpenSidebar } = useSharedGeneralActions();
+
   return (
     <div className="flex items-center flex-0">
       <RxHamburgerMenu
+        onClick={() => handleOpenSidebar("navSidebar")}
         size="30px"
         className={
           isMediumScreenSize

@@ -1,15 +1,25 @@
 import Image from "next/image";
 import Link from "next/link";
+import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import { IoCloseSharp } from "react-icons/io5";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
-import { useSelector, useDispatch } from "react-redux";
 import useSharedGeneralActions from "@/redux/actions/useSharedGeneralActions";
 
 export default function MyCartContainer() {
-  const { myCartState, handleCloseSidebar } = useSharedGeneralActions();
+  const { myCartState, handleOpenSidebar, handleCloseSidebar } =
+    useSharedGeneralActions();
+
+  const handleOutsideClick = () => {
+    if (myCartState) {
+      handleOpenSidebar("myCart");
+    }
+    console.log(myCartState);
+  };
+
   return (
-    myCartState && (
+    <OutsideClickHandler handleOutsideClick={handleOutsideClick}>
+      myCartState && (
       <>
         <div className="flex justify-between items-center text-white border-b-[1px] border-[#ffffff1a] p-[20px]">
           <strong className="text-[20px] cursor-default">Mój koszyk</strong>
@@ -77,6 +87,7 @@ export default function MyCartContainer() {
           </div>
         </div>
       </>
-    )
+      )
+    </OutsideClickHandler>
   );
 }

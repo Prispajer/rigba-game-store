@@ -4,8 +4,8 @@ import { FaShoppingCart } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
 import useSharedGeneralActions from "@/redux/actions/useSharedGeneralActions";
-import MyCartActions from "../ShoppingCart/MyCartActions";
 import ProfileSidebar from "./ProfileSidebar";
+import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 
 export default function Icons({ isMediumScreenSize }) {
   const { handleOpenSidebar } = useSharedGeneralActions();
@@ -24,7 +24,6 @@ export default function Icons({ isMediumScreenSize }) {
         className="nav-icon"
         size="35px"
       />
-      <MyCartActions />
       {isMediumScreenSize ? (
         <div className="flex items-center">
           <div className="cursor-pointer flex items-center hover:text-headerHover text-[white]">

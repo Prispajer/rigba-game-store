@@ -8,7 +8,7 @@ const initialState: UIElementState = {
   userSidebar: false,
   myCart: false,
   navSidebar: false,
-  nav: false,
+  searchSidebar: false,
 };
 
 const utilitySlice = createSlice({

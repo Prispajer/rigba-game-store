@@ -4,7 +4,8 @@ import React from "react";
 import Logo from "./Logo";
 import SearchBar from "./SearchBar";
 import Icons from "./Icons";
-import Sidebar from "../Navbar/Sidebar";
+import NavbarSidebar from "@/components/Interface/Shared/Navbar/NavbarSidebar";
+import NavbarOptions from "../Navbar/NavbarOptions";
 
 export default function Header() {
   const [isMediumScreenSize, setIsMediumScreenSize] =
@@ -29,7 +30,7 @@ export default function Header() {
 
   return (
     <header className="md:border-b-0  border-b-2 border-secondaryColor bg-primaryColor ">
-      <Sidebar />
+      <NavbarSidebar />
       <div className="flex items-center max-w-[1240px] w-full mx-auto md:py-2">
         <Logo isMediumScreenSize={isMediumScreenSize} />
         <SearchBar />

@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { navLinks, NavLinks } from "@/data/links";
+import { navLinks, NavLinks } from "@/utils/helpers/links";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = React.useState<string | null>(null);

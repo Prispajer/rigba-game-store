@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { openSidebar, closeSidebar } from "@/redux/slices/utilitySlice";
 import { RootState } from "../store";
+import { Root } from "postcss";
 
 export default function useSharedGeneralActions() {
   const userSidebarState = useSelector(
@@ -10,6 +11,10 @@ export default function useSharedGeneralActions() {
   const navSidebarState = useSelector(
     (state: RootState) => state.utility.navSidebar
   );
+  const searchSidebarState = useSelector(
+    (state: RootState) => state.utility.searchSidebar
+  );
+
   const dispatch = useDispatch();
   const handleOpenSidebar = (element: string) => {
     dispatch(openSidebar(element));
@@ -22,6 +27,7 @@ export default function useSharedGeneralActions() {
     userSidebarState,
     myCartState,
     navSidebarState,
+    searchSidebarState,
     handleOpenSidebar,
     handleCloseSidebar,
   };

@@ -5,14 +5,17 @@ import { FaSearch } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
 import useSharedGeneralActions from "@/redux/actions/useSharedGeneralActions";
 import ProfileSidebar from "./ProfileSidebar";
-import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
+import SearchSidebar from "./SearchSidebar";
+import MyCartContainer from "../ShoppingCart/MyCartContainer";
 
 export default function Icons({ isMediumScreenSize }) {
   const { handleOpenSidebar } = useSharedGeneralActions();
   return (
     <div className="flex flex-1 justify-end items-center relative">
       <ProfileSidebar />
+      <SearchSidebar />
       <FaSearch
+        onClick={() => handleOpenSidebar("searchSidebar")}
         className={isMediumScreenSize ? "hidden" : "nav-icon"}
         size="35px"
       />
@@ -47,6 +50,7 @@ export default function Icons({ isMediumScreenSize }) {
           />
         </div>
       )}
+      <MyCartContainer />
     </div>
   );
 }

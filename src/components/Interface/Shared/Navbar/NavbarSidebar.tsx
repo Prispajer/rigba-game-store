@@ -1,28 +1,37 @@
+// Komponent Sidebar.js
 import React, { useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
-import { navLinks, NavLinks } from "@/utils/helpers/links";
+import { navLinks } from "@/utils/helpers/links";
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import { IoCloseSharp } from "react-icons/io5";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import useSharedGeneralActions from "@/redux/actions/useSharedGeneralActions";
+import NavbarOptions from "./NavbarOptions";
+import NavbarLinks from "./NavbarLinks";
 
-export default function Sidebar() {
+export default function NavbarSidebar() {
   const [selectedTitle, setSelectedTitle] = useState<string>("");
-  const { navSidebarState, handleCloseSidebar } = useSharedGeneralActions();
+  const [selectedNavIndex, setSelectedNavIndex] = useState<number>(-1);
+  const { navSidebarCategoryState, handleClose } = useSharedGeneralActions();
 
-  const handleSetClick = (title: string) => {
-    setSelectedTitle(title);
-  };
-
-  const handleOutsideClick = () => {
-    if (navSidebarState) {
-      handleCloseSidebar("navSidebar");
+  const handleSetClick = (title: any, index: number) => {
+    if (selectedNavIndex === index) {
+      handleClose("navSidebarCategory");
+    } else {
+      setSelectedTitle(title);
+      setSelectedNavIndex(index);
     }
   };
 
+  console.log(selectedTitle);
+
+  const handleOutsideClick = () => {
+    setSelectedNavIndex(selectedNavIndex - 1);
+    handleClose("navSidebarCategory");
+  };
+
   return (
-    navSidebarState && (
+    navSidebarCategoryState && (
       <OutsideClickHandler handleOutsideClick={handleOutsideClick}>
         <div className="bg-primaryColor fixed h-full w-[300px] z-10">
           <div className="flex items-center justify-between w-full px-[10px] border-b-2 border-secondaryColor">
@@ -40,7 +49,7 @@ export default function Sidebar() {
             </div>
             <button className="mr-[10px]">
               <IoCloseSharp
-                onClick={() => handleCloseSidebar("navSidebar")}
+                onClick={handleOutsideClick}
                 size="25px"
                 color="white"
               />
@@ -48,43 +57,37 @@ export default function Sidebar() {
           </div>
           <nav className="bg-primaryColor">
             <ul className="flex flex-col w-full text-[18px] text-[white] bg-primaryColor">
-              {navLinks.map((element: NavLinks, index: number) => (
+              {navLinks.map((element, index) => (
                 <li key={index} className="sidebar-li">
                   <div
                     className="flex items-center justify-between w-full"
-                    onClick={() => handleSetClick(element.title)}
+                    onClick={() => handleSetClick(element.title, index)}
                   >
                     <div className="flex items-center h-[50px]">
-                      <MdKeyboardArrowLeft size="25px" color="white" />
                       <span className="pl-[4px] text-[16px] font-[600] text-white">
                         {element.title}
                       </span>
                     </div>
                     <MdKeyboardArrowRight size="25px" color="white" />
                   </div>
-                  {selectedTitle === element.title && (
-                    <div className="bg-primaryColor">
-                      <ul className="flex flex-col w-full text-[18px] text-[white] bg-primaryColor">
-                        {element.links.map((link: any, linkIndex: number) => (
-                          <li key={linkIndex} className="sidebar-li">
-                            <Link href={link.category}>
-                              <div className="flex items-center justify-between w-full">
-                                {link.category}
-                                <MdKeyboardArrowRight
-                                  size="25px"
-                                  color="white"
-                                />
-                              </div>
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
                 </li>
               ))}
             </ul>
           </nav>
+          {/* {selectedNavIndex !== -1 && (
+            <NavbarOptions
+              selectedTitle={selectedTitle}
+              selectedNavIndex={selectedNavIndex}
+              setSelectedNavIndex={setSelectedNavIndex}
+            />
+          )} */}
+          {selectedNavIndex !== -1 && (
+            <NavbarLinks
+              selectedTitle={selectedTitle}
+              selectedNavIndex={selectedNavIndex}
+              setSelectedNavIndex={setSelectedNavIndex}
+            />
+          )}
         </div>
       </OutsideClickHandler>
     )

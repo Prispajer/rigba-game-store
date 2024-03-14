@@ -4,12 +4,12 @@ import Link from "next/link";
 import useSharedGeneralActions from "@/redux/actions/useSharedGeneralActions";
 
 export default function Logo({ isMediumScreenSize }) {
-  const { handleOpenSidebar } = useSharedGeneralActions();
+  const { handleOpen } = useSharedGeneralActions();
 
   return (
     <div className="flex items-center flex-0">
       <RxHamburgerMenu
-        onClick={() => handleOpenSidebar("navSidebar")}
+        onClick={() => handleOpen("navSidebarCategory")}
         size="30px"
         className={
           isMediumScreenSize

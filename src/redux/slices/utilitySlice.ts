@@ -7,24 +7,23 @@ type UIElementState = {
 const initialState: UIElementState = {
   userSidebar: false,
   myCart: false,
-  navSidebar: false,
-  searchSidebar: false,
+  navSidebarCategory: false,
 };
 
 const utilitySlice = createSlice({
   name: "utility",
   initialState,
   reducers: {
-    closeSidebar: (state, action: PayloadAction<string>) => {
+    close: (state, action: PayloadAction<string>) => {
       const element = action.payload;
       state[element] = false;
     },
-    openSidebar: (state, action: PayloadAction<string>) => {
+    open: (state, action: PayloadAction<string>) => {
       const element = action.payload;
       state[element] = true;
     },
   },
 });
 
-export const { closeSidebar, openSidebar } = utilitySlice.actions;
+export const { close, open } = utilitySlice.actions;
 export default utilitySlice.reducer;

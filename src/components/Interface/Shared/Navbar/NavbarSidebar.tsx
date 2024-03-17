@@ -1,33 +1,29 @@
-// Komponent Sidebar.js
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { navLinks } from "@/utils/helpers/links";
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import { IoCloseSharp } from "react-icons/io5";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import useSharedGeneralActions from "@/redux/actions/useSharedGeneralActions";
-import NavbarOptions from "./NavbarOptions";
-import NavbarLinks from "./NavbarLinks";
+import InnerNavbarLinks from "./InnerNavbarLinks";
+import InnerNavbarOptions from "./InnerNavbarOptions";
 
 export default function NavbarSidebar() {
-  const [selectedTitle, setSelectedTitle] = useState<string>("");
-  const [selectedNavIndex, setSelectedNavIndex] = useState<number>(-1);
+  const [selectedTitle, setSelectedTitle] = React.useState<string>("");
   const { navSidebarCategoryState, handleClose } = useSharedGeneralActions();
+  const foundObject = navLinks.find((option) => option.title === selectedTitle);
 
-  const handleSetClick = (title: any, index: number) => {
-    if (selectedNavIndex === index) {
-      handleClose("navSidebarCategory");
-    } else {
-      setSelectedTitle(title);
-      setSelectedNavIndex(index);
-    }
+  const handleElementClick = (title: string) => {
+    setSelectedTitle(title);
   };
 
-  console.log(selectedTitle);
-
   const handleOutsideClick = () => {
-    setSelectedNavIndex(selectedNavIndex - 1);
     handleClose("navSidebarCategory");
+    setSelectedTitle("");
+  };
+
+  const handleBack = () => {
+    setSelectedTitle("");
   };
 
   return (
@@ -61,7 +57,7 @@ export default function NavbarSidebar() {
                 <li key={index} className="sidebar-li">
                   <div
                     className="flex items-center justify-between w-full"
-                    onClick={() => handleSetClick(element.title, index)}
+                    onClick={() => handleElementClick(element.title)}
                   >
                     <div className="flex items-center h-[50px]">
                       <span className="pl-[4px] text-[16px] font-[600] text-white">
@@ -70,24 +66,18 @@ export default function NavbarSidebar() {
                     </div>
                     <MdKeyboardArrowRight size="25px" color="white" />
                   </div>
+                  {selectedTitle === element.title && (
+                    <InnerNavbarOptions
+                      selectedTitle={selectedTitle}
+                      handleBack={handleBack}
+                      foundObject={foundObject}
+                      handleElementClick={handleElementClick}
+                    />
+                  )}
                 </li>
               ))}
             </ul>
           </nav>
-          {/* {selectedNavIndex !== -1 && (
-            <NavbarOptions
-              selectedTitle={selectedTitle}
-              selectedNavIndex={selectedNavIndex}
-              setSelectedNavIndex={setSelectedNavIndex}
-            />
-          )} */}
-          {selectedNavIndex !== -1 && (
-            <NavbarLinks
-              selectedTitle={selectedTitle}
-              selectedNavIndex={selectedNavIndex}
-              setSelectedNavIndex={setSelectedNavIndex}
-            />
-          )}
         </div>
       </OutsideClickHandler>
     )

@@ -5,17 +5,35 @@ import { IoCloseSharp } from "react-icons/io5";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import { navLinks } from "@/utils/helpers/links";
 import useSharedGeneralActions from "@/redux/actions/useSharedGeneralActions";
+import InnerNavbarLinks from "./InnerNavbarLinks";
 
-export default function NavbarOptions({
-  selectedTitle,
-  selectedNavIndex,
-  setSelectedNavIndex,
+export default function InnerNavbarOptions({
+  foundObject,
+  handleElementClick,
+  handleBack,
+}: {
+  foundObject: {
+    title: string;
+    links: {
+      category: string;
+      items: {
+        name: string;
+        url: string;
+      }[];
+    }[];
+  };
+  handleElementClick: (title: string) => void;
+  handleBack: () => void;
 }) {
+  const [selectedOption, setSelectedOption] = React.useState<string>("");
   const { handleClose } = useSharedGeneralActions();
-  const foundObject = navLinks.find((option) => option.title === selectedTitle);
 
-  const handleBackClick = () => {
-    setSelectedNavIndex(-1);
+  const clearOption = () => {
+    setSelectedOption("");
+  };
+
+  const handleOptionClick = (title: string) => {
+    setSelectedOption(title);
   };
 
   return (
@@ -24,7 +42,7 @@ export default function NavbarOptions({
         <div className="flex items-center justify-between w-full pl-[10px] border-b-2 border-secondaryColor">
           <div className="flex items-center h-[50px]">
             <MdKeyboardArrowLeft
-              onClick={handleBackClick}
+              onClick={handleBack}
               size="25px"
               color="white"
               className="cursor-pointer"
@@ -35,7 +53,7 @@ export default function NavbarOptions({
           </div>
           <button className="pr-[20px]">
             <IoCloseSharp
-              onClick={() => handleClose("navSidebarOptionState")}
+              onClick={() => handleClose("navSidebarCategory")}
               size="25px"
               color="white"
             />
@@ -44,9 +62,20 @@ export default function NavbarOptions({
         <nav className="bg-primaryColor">
           <ul className="flex flex-col w-full text-[18px] text-[white] bg-primaryColor">
             {foundObject.links.map((link, linkIndex) => (
-              <li key={linkIndex} className="sidebar-li">
+              <li
+                onClick={() => handleOptionClick(link.category)}
+                key={linkIndex}
+                className="sidebar-li"
+              >
                 {link.category}
                 <MdKeyboardArrowRight size="25px" color="white" />
+                {selectedOption === link.category && (
+                  <InnerNavbarLinks
+                    link={link}
+                    handleBack={handleBack}
+                    handleElementClick={handleElementClick}
+                  />
+                )}
               </li>
             ))}
           </ul>

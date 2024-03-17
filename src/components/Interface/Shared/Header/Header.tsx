@@ -5,7 +5,7 @@ import Logo from "./Logo";
 import SearchBar from "./SearchBar";
 import Icons from "./Icons";
 import NavbarSidebar from "@/components/Interface/Shared/Navbar/NavbarSidebar";
-import NavbarOptions from "../Navbar/NavbarOptions";
+import NavbarOptions from "../Navbar/InnerNavbarOptions";
 
 export default function Header() {
   const [isMediumScreenSize, setIsMediumScreenSize] =

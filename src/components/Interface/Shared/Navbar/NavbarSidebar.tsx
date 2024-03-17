@@ -5,12 +5,11 @@ import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import { IoCloseSharp } from "react-icons/io5";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import useSharedGeneralActions from "@/redux/actions/useSharedGeneralActions";
-import InnerNavbarLinks from "./InnerNavbarLinks";
 import InnerNavbarOptions from "./InnerNavbarOptions";
 
 export default function NavbarSidebar() {
   const [selectedTitle, setSelectedTitle] = React.useState<string>("");
-  const { navSidebarCategoryState, handleClose } = useSharedGeneralActions();
+  const { navSidebarState, handleClose } = useSharedGeneralActions();
   const foundObject = navLinks.find((option) => option.title === selectedTitle);
 
   const handleElementClick = (title: string) => {
@@ -18,7 +17,7 @@ export default function NavbarSidebar() {
   };
 
   const handleOutsideClick = () => {
-    handleClose("navSidebarCategory");
+    handleClose("navSidebar");
     setSelectedTitle("");
   };
 
@@ -27,7 +26,7 @@ export default function NavbarSidebar() {
   };
 
   return (
-    navSidebarCategoryState && (
+    navSidebarState && (
       <OutsideClickHandler handleOutsideClick={handleOutsideClick}>
         <div className="bg-primaryColor fixed h-full w-[300px] z-10">
           <div className="flex items-center justify-between w-full px-[10px] border-b-2 border-secondaryColor">

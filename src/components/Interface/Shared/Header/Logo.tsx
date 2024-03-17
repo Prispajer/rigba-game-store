@@ -9,7 +9,7 @@ export default function Logo({ isMediumScreenSize }) {
   return (
     <div className="flex items-center flex-0">
       <RxHamburgerMenu
-        onClick={() => handleOpen("navSidebarCategory")}
+        onClick={() => handleOpen("navSidebar")}
         size="30px"
         className={
           isMediumScreenSize

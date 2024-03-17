@@ -2,8 +2,6 @@ import React from "react";
 import Link from "next/link";
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import { IoCloseSharp } from "react-icons/io5";
-import { navLinks } from "@/utils/helpers/links";
-import InnerNavbarOptions from "./InnerNavbarOptions";
 import useSharedGeneralActions from "@/redux/actions/useSharedGeneralActions";
 
 export default function InnerNavbarLinks({
@@ -41,7 +39,7 @@ export default function InnerNavbarLinks({
               </div>
               <button className="pr-[20px]">
                 <IoCloseSharp
-                  onClick={() => handleClose("navSidebarCategory")}
+                  onClick={() => handleClose("navSidebar")}
                   size="25px"
                   color="white"
                 />

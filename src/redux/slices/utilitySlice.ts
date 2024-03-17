@@ -7,7 +7,7 @@ type UIElementState = {
 const initialState: UIElementState = {
   userSidebar: false,
   myCart: false,
-  navSidebarCategory: false,
+  navSidebar: false,
 };
 
 const utilitySlice = createSlice({

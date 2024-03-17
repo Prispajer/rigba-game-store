@@ -4,11 +4,11 @@ import useSharedGeneralActions from "@/redux/actions/useSharedGeneralActions";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 
 export default function ProfileSidebar() {
-  const { userSidebarState, handleCloseSidebar } = useSharedGeneralActions();
+  const { userSidebarState, handleClose } = useSharedGeneralActions();
 
   const handleOutsideClick = () => {
     if (userSidebarState) {
-      handleCloseSidebar("userSidebar");
+      handleClose("userSidebar");
     }
   };
 
@@ -31,7 +31,7 @@ export default function ProfileSidebar() {
                 Zarejestruj
               </Link>
               <IoCloseSharp
-                onClick={() => handleCloseSidebar("userSidebar")}
+                onClick={() => handleClose("userSidebar")}
                 size="25px"
                 className="absolute right-4 top-4 text-[#ffffff] cursor-pointer"
               />

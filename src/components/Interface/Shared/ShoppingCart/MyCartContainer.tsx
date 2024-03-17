@@ -7,11 +7,11 @@ import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
 import useSharedGeneralActions from "@/redux/actions/useSharedGeneralActions";
 
 export default function MyCartContainer() {
-  const { myCartState, handleCloseSidebar } = useSharedGeneralActions();
+  const { myCartState, handleClose } = useSharedGeneralActions();
 
   const handleOutsideClick = () => {
     if (myCartState) {
-      handleCloseSidebar("myCart");
+      handleClose("myCart");
     }
   };
 
@@ -24,7 +24,7 @@ export default function MyCartContainer() {
               <strong className="text-[20px] cursor-default">Mój koszyk</strong>
               <button>
                 <IoCloseSharp
-                  onClick={() => handleCloseSidebar("myCart")}
+                  onClick={() => handleClose("myCart")}
                   className="hover:text-modalHover"
                   size="25px"
                 />

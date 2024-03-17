@@ -9,13 +9,13 @@ import SearchSidebar from "./SearchSidebar";
 import MyCartContainer from "../ShoppingCart/MyCartContainer";
 
 export default function Icons({ isMediumScreenSize }) {
-  const { handleOpenSidebar } = useSharedGeneralActions();
+  const { handleOpen } = useSharedGeneralActions();
   return (
     <div className="flex flex-1 justify-end items-center relative">
       <ProfileSidebar />
       <SearchSidebar />
       <FaSearch
-        onClick={() => handleOpenSidebar("searchSidebar")}
+        onClick={() => handleOpen("searchSidebar")}
         className={isMediumScreenSize ? "hidden" : "nav-icon"}
         size="35px"
       />
@@ -23,7 +23,7 @@ export default function Icons({ isMediumScreenSize }) {
         <FaRegHeart className="hidden ty:block  nav-icon" size="35px" />
       </Link>
       <FaShoppingCart
-        onClick={() => handleOpenSidebar("myCart")}
+        onClick={() => handleOpen("myCart")}
         className="nav-icon"
         size="35px"
       />
@@ -44,7 +44,7 @@ export default function Icons({ isMediumScreenSize }) {
       ) : (
         <div className="flex items-center">
           <FaUser
-            onClick={() => handleOpenSidebar("userSidebar")}
+            onClick={() => handleOpen("userSidebar")}
             className="nav-icon"
             size="35px"
           />

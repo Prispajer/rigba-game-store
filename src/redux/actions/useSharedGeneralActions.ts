@@ -8,8 +8,8 @@ export default function useSharedGeneralActions() {
     (state: RootState) => state.utility.userSidebar
   );
   const myCartState = useSelector((state: RootState) => state.utility.myCart);
-  const navSidebarCategoryState = useSelector(
-    (state: RootState) => state.utility.navSidebarCategory
+  const navSidebarState = useSelector(
+    (state: RootState) => state.utility.navSidebar
   );
   const searchSidebarState = useSelector(
     (state: RootState) => state.utility.searchSidebar
@@ -26,7 +26,7 @@ export default function useSharedGeneralActions() {
   return {
     userSidebarState,
     myCartState,
-    navSidebarCategoryState,
+    navSidebarState,
     searchSidebarState,
     handleOpen,
     handleClose,

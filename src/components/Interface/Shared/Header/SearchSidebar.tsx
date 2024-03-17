@@ -5,11 +5,11 @@ import useSharedGeneralActions from "@/redux/actions/useSharedGeneralActions";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 
 export default function SearchSidebar() {
-  const { searchSidebarState, handleCloseSidebar } = useSharedGeneralActions();
+  const { searchSidebarState, handleClose } = useSharedGeneralActions();
 
   const handleOutsideClick = () => {
     if (searchSidebarState) {
-      handleCloseSidebar("searchSidebar");
+      handleClose("searchSidebar");
     }
   };
 
@@ -31,7 +31,7 @@ export default function SearchSidebar() {
                 size="30px"
                 color="white"
                 className="mx-2"
-                onClick={() => handleCloseSidebar("searchSidebar")}
+                onClick={() => handleClose("searchSidebar")}
               />
             </div>
           </div>

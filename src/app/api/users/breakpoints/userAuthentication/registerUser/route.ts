@@ -9,12 +9,12 @@ export async function POST(request: NextRequest, response: NextResponse) {
 
     if (userExists.length > 0) {
       return NextResponse.json({
-        message: "User with provided email exists",
+        error: "User with provided email exists",
       });
     } else {
       await queryRequests.registerUser(userBody);
       return NextResponse.json({
-        message: "User has been created",
+        success: "User has been created",
       });
     }
   } catch (error) {

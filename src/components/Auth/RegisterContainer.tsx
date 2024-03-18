@@ -7,8 +7,12 @@ import { FaFacebookF } from "react-icons/fa";
 import { FaSteamSymbol } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { RegisterSchema } from "@/utils/schemas/user";
+import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
+import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 
 export default function RegisterContainer() {
+  const [error, setError] = React.useState<string | undefined>("");
+  const [success, setSuccess] = React.useState<string | undefined>("");
   const [isPending, startTransition] = React.useTransition();
   const registerObject = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
@@ -26,10 +30,10 @@ export default function RegisterContainer() {
   } = registerObject;
 
   function handleFormSubmit(data: z.infer<typeof RegisterSchema>) {
+    setError("");
+    setSuccess("");
     startTransition(() => {
       const { email, password, confirmPassword } = data;
-      console.log(registerObject);
-      console.log(data);
       fetch(
         "http://localhost:3000/api/users/breakpoints/userAuthentication/registerUser",
         {
@@ -40,10 +44,14 @@ export default function RegisterContainer() {
       )
         .then((response) => {
           if (response.ok) {
-            console.log("Użytkownik został pomyślnie zarejestrowany!");
+            return response.json();
           } else {
             console.error("Wystąpił błąd podczas rejestracji użytkownika.");
           }
+        })
+        .then((data) => {
+          setSuccess(data.success);
+          setError(data.error);
         })
         .catch((error) => {
           console.error(
@@ -110,6 +118,8 @@ export default function RegisterContainer() {
             />
             {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
           </div>
+          <FormSuccess message={success} />
+          <FormError message={error} />
           <div className="flex flex-col items-center justfiy-center py-4">
             <button
               disabled={isPending}

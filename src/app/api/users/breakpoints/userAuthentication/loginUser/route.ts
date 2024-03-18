@@ -7,17 +7,16 @@ export async function POST(request: NextRequest, response: NextResponse) {
     const userBody = await request.json();
     const { email, password } = userBody;
     const userExists = await queryRequests.getUser(email, password);
-
     console.log(userExists);
 
     if (userExists.length > 0 && userExists) {
       await queryRequests.getUser(email, password);
       return NextResponse.json({
-        success: "User found",
+        success: "Logowanie powiodło się!",
       });
     } else {
       return NextResponse.json({
-        error: "User not found!",
+        error: "Błędny email lub hasło!",
       });
     }
   } catch (error) {

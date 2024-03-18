@@ -16,6 +16,7 @@
     "@react-icons/all-files": "^4.1.0",
     "@reduxjs/toolkit": "^2.2.1",
     "babel-plugin-styled-components": "^2.1.4",
+    "bcrypt": "^5.1.1",
     "css.gg": "^2.1.1",
     "dotenv": "^16.4.1",
     "mysql": "^2.18.1",
@@ -32,6 +33,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/mysql": "^2.15.25",
     "@types/node": "^20",
     "@types/react": "^18",

@@ -11,11 +11,11 @@ export default function Home() {
     <>
       <Header />
       <Navbar />
-      {/* <HomeUpComingGames />
+      <HomeUpComingGames />
       <HomePopularGames />
       <HomeBestGames />
       <HomeTheLongestGames />
-      <Categories /> */}
+      <Categories />
     </>
   );
 }

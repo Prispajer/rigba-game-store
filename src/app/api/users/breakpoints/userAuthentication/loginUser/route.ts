@@ -13,11 +13,11 @@ export async function POST(request: NextRequest, response: NextResponse) {
     if (userExists.length > 0 && userExists) {
       await queryRequests.getUser(email, password);
       return NextResponse.json({
-        message: "User found",
+        success: "User found",
       });
     } else {
       return NextResponse.json({
-        message: "User not found!",
+        error: "User not found!",
       });
     }
   } catch (error) {

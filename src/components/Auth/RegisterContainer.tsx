@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { RegisterSchema } from "@/utils/schemas/user";
 
 export default function RegisterContainer() {
+  const [isPending, startTransition] = React.useTransition();
   const registerObject = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -25,30 +26,32 @@ export default function RegisterContainer() {
   } = registerObject;
 
   function handleFormSubmit(data: z.infer<typeof RegisterSchema>) {
-    const { email, password, confirmPassword } = data;
-    console.log(registerObject);
-    console.log(data);
-    fetch(
-      "http://localhost:3000/api/users/breakpoints/userAuthentication/registerUser",
-      {
-        method: "POST",
-        body: JSON.stringify({ email, password, confirmPassword }),
-        headers: { "Content-Type": "application/json" },
-      }
-    )
-      .then((response) => {
-        if (response.ok) {
-          console.log("Użytkownik został pomyślnie zarejestrowany!");
-        } else {
-          console.error("Wystąpił błąd podczas rejestracji użytkownika.");
+    startTransition(() => {
+      const { email, password, confirmPassword } = data;
+      console.log(registerObject);
+      console.log(data);
+      fetch(
+        "http://localhost:3000/api/users/breakpoints/userAuthentication/registerUser",
+        {
+          method: "POST",
+          body: JSON.stringify({ email, password, confirmPassword }),
+          headers: { "Content-Type": "application/json" },
         }
-      })
-      .catch((error) => {
-        console.error(
-          "Wystąpił błąd podczas wysyłania żądania rejestracji użytkownika:",
-          error
-        );
-      });
+      )
+        .then((response) => {
+          if (response.ok) {
+            console.log("Użytkownik został pomyślnie zarejestrowany!");
+          } else {
+            console.error("Wystąpił błąd podczas rejestracji użytkownika.");
+          }
+        })
+        .catch((error) => {
+          console.error(
+            "Wystąpił błąd podczas wysyłania żądania rejestracji użytkownika:",
+            error
+          );
+        });
+    });
   }
 
   return (
@@ -74,6 +77,7 @@ export default function RegisterContainer() {
           <div className="pt-4 text-white">
             <input
               {...register("email")}
+              disabled={isPending}
               className="bg-secondaryColor  w-[100%] p-[15px]"
               type="text"
               name="email"
@@ -85,6 +89,7 @@ export default function RegisterContainer() {
           <div className="pt-4 text-white">
             <input
               {...register("password")}
+              disabled={isPending}
               className="bg-secondaryColor w-[100%] p-[15px]"
               type="password"
               name="password"
@@ -96,6 +101,7 @@ export default function RegisterContainer() {
           <div className="pt-4 text-white">
             <input
               {...register("confirmPassword")}
+              disabled={isPending}
               className="bg-secondaryColor  w-[100%] p-[15px]"
               type="password"
               name="confirmPassword"
@@ -106,6 +112,7 @@ export default function RegisterContainer() {
           </div>
           <div className="flex flex-col items-center justfiy-center py-4">
             <button
+              disabled={isPending}
               className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px]"
               type="submit"
             >

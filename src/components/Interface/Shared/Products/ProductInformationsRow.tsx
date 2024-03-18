@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
-import generateRandomValue from "@/utils/prices";
+import generateRandomValue from "@/utils/tools/prices";
 import AddToWishList from "./AddToWishList";
 
 export default function ProductInformations() {

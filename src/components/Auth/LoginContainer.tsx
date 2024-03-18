@@ -15,6 +15,9 @@ import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 
 export default function LoginContainer() {
+  const [error, setError] = React.useState<string | undefined>("");
+  const [success, setSuccess] = React.useState<string | undefined>("");
+  const [isPending, startTransition] = React.useTransition();
   const user = useSelector((state: RootState) => state.user.loginUser);
   const dispatch = useDispatch();
   const loginObject = useForm<z.infer<typeof LoginSchema>>({
@@ -32,31 +35,40 @@ export default function LoginContainer() {
   } = loginObject;
 
   function handleFormSubmit(data: z.infer<typeof LoginSchema>) {
-    const { email, password } = data;
-    const createUser = dispatch(loginUser({ email, password }));
-    fetch(
-      "http://localhost:3000/api/users/breakpoints/userAuthentication/loginUser",
-      {
-        headers: { "Content-Type": "application/json" },
-        method: "POST",
-        body: JSON.stringify({ email, password }),
-      }
-    )
-      .then((response) => {
-        if (response.ok) {
-          response.json();
-        } else {
-          console.error("Wystąpił błąd podczas logowania użytkownika.");
-        }
-      })
-      .catch((error) => {
-        console.error(
-          "Wystąpił błąd podczas wysyłania żądania logowania użytkownika:",
-          error
-        );
-      });
-  }
+    startTransition(() => {
+      setError("");
+      setSuccess("");
 
+      const { email, password } = data;
+
+      fetch(
+        "http://localhost:3000/api/users/breakpoints/userAuthentication/loginUser",
+        {
+          headers: { "Content-Type": "application/json" },
+          method: "POST",
+          body: JSON.stringify({ email, password }),
+        }
+      )
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error("Wystąpił błąd podczas logowania użytkownika.");
+          }
+        })
+        .then((data) => {
+          setSuccess(data.success);
+          setError(data.error);
+        })
+        .catch((error) => {
+          console.error(
+            "Wystąpił błąd podczas wysyłania żądania logowania użytkownika:",
+            error
+          );
+          setError("Wystąpił błąd podczas logowania użytkownika.");
+        });
+    });
+  }
   return (
     <main className="flex flex-col lg:flex-row justify-center items-center mx-auto lg:px-[100px] gap-x-[120px]">
       <h1 className="hidden lg:block text-[80px] leading-[90px] font-bold text-[white]">
@@ -111,6 +123,7 @@ export default function LoginContainer() {
           <div className="pt-4 text-white">
             <input
               {...register("email")}
+              disabled={isPending}
               className="bg-secondaryColor  w-[100%] p-[15px]"
               type="text"
               name="email"
@@ -122,6 +135,7 @@ export default function LoginContainer() {
           <div className="pt-4 text-white">
             <input
               {...register("password")}
+              disabled={isPending}
               className="bg-secondaryColor   w-[100%] p-[15px]"
               type="password"
               name="password"
@@ -130,10 +144,11 @@ export default function LoginContainer() {
             />
             {errors.password && <p>{errors.password.message}</p>}
           </div>
-          <FormError message="" />
-          <FormSuccess message="" />
+          <FormSuccess message={success} />
+          <FormError message={error} />
           <div className="flex flex-col items-center justfiy-center w- pt-4">
             <button
+              disabled={isPending}
               className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px]"
               type="submit"
             >

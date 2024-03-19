@@ -13,13 +13,16 @@ import { RootState } from "@/redux/store";
 import { loginUser } from "@/redux/slices/userSlice";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
+import { signIn } from "../../../auth";
+import { DEFAULT_LOGIN_REDIRECT } from "../../../routes";
 
 export default function LoginContainer() {
   const [error, setError] = React.useState<string | undefined>("");
   const [success, setSuccess] = React.useState<string | undefined>("");
   const [isPending, startTransition] = React.useTransition();
-  const user = useSelector((state: RootState) => state.user.loginUser);
+  const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
+
   const loginObject = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -34,41 +37,56 @@ export default function LoginContainer() {
     formState: { errors },
   } = loginObject;
 
-  function handleFormSubmit(data: z.infer<typeof LoginSchema>) {
+  async function handleFormSubmit(data: z.infer<typeof LoginSchema>) {
     startTransition(() => {
       setError("");
       setSuccess("");
 
       const { email, password } = data;
 
-      fetch(
-        "http://localhost:3000/api/users/breakpoints/userAuthentication/loginUser",
-        {
-          headers: { "Content-Type": "application/json" },
-          method: "POST",
-          body: JSON.stringify({ email, password }),
-        }
-      )
-        .then((response) => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error("Wystąpił błąd podczas logowania użytkownika.");
-          }
-        })
-        .then((data) => {
-          setSuccess(data.success);
-          setError(data.error);
-        })
-        .catch((error) => {
-          console.error(
-            "Wystąpił błąd podczas wysyłania żądania logowania użytkownika:",
-            error
-          );
-          setError("Wystąpił błąd podczas logowania użytkownika.");
+      try {
+        signIn("credentials", {
+          email,
+          password,
+          redirectTo: DEFAULT_LOGIN_REDIRECT,
         });
+
+        dispatch(loginUser({ email, password }));
+        console.log(dispatch(loginUser({ email, password })));
+
+        fetch(
+          "http://localhost:3000/api/users/breakpoints/userAuthentication/loginUser",
+          {
+            headers: { "Content-Type": "application/json" },
+            method: "POST",
+            body: JSON.stringify({ email, password }),
+          }
+        )
+          .then((response) => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error("Wystąpił błąd podczas logowania użytkownika.");
+            }
+          })
+          .then((data) => {
+            setSuccess(data.success);
+            setError(data.error);
+          })
+          .catch((error) => {
+            console.error(
+              "Wystąpił błąd podczas wysyłania żądania logowania użytkownika:",
+              error
+            );
+            setError("Wystąpił błąd podczas logowania użytkownika.");
+          });
+      } catch (error) {
+        console.error("Wystąpił błąd podczas logowania użytkownika:", error);
+        setError("Wystąpił błąd podczas logowania użytkownika.");
+      }
     });
   }
+
   return (
     <main className="flex flex-col lg:flex-row justify-center items-center mx-auto lg:px-[100px] gap-x-[120px]">
       <h1 className="hidden lg:block text-[80px] leading-[90px] font-bold text-[white]">

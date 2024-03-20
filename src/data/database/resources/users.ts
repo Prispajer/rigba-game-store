@@ -1,9 +1,9 @@
 import { modifyQuery, selectQuery } from "../queries";
 
 class QueryRequests {
-  getUser(email: string, password: string) {
-    const queryString = "SELECT * FROM users WHERE email = ? AND password = ?";
-    return selectQuery(queryString, [email, password]);
+  getUser(email: string) {
+    const queryString = "SELECT * FROM users WHERE email = ?";
+    return selectQuery(queryString, [email]);
   }
 
   getUserById(id: number) {

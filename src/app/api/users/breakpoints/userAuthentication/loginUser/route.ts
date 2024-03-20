@@ -1,16 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { queryRequests } from "@/data/database/resources/users";
-import { modifyQuery } from "@/data/database/queries";
+import { signIn } from "@/../../auth";
+import { DEFAULT_LOGIN_REDIRECT } from "@/../../routes";
+import { AuthError } from "next-auth";
 
 export async function POST(request: NextRequest, response: NextResponse) {
+  const userBody = await request.json();
+  const { email, password } = userBody;
   try {
-    const userBody = await request.json();
-    const { email, password } = userBody;
-    const userExists = await queryRequests.getUser(email, password);
-    console.log(userExists);
+    const userExists = await queryRequests.getUser(email);
+    await signIn("credentials", {
+      email,
+      password,
+      redirectTo: DEFAULT_LOGIN_REDIRECT,
+    });
 
     if (userExists.length > 0 && userExists) {
-      await queryRequests.getUser(email, password);
+      await queryRequests.getUser(email);
       return NextResponse.json({
         success: "Logowanie powiodło się!",
       });
@@ -20,8 +26,14 @@ export async function POST(request: NextRequest, response: NextResponse) {
       });
     }
   } catch (error) {
-    throw new Error(
-      "An error occurred while downloading data from the database."
-    );
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return { error: "Invalid credentials!" };
+        default:
+          return { error: "Something went wrong!" };
+      }
+      throw error;
+    }
   }
 }

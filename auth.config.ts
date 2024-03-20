@@ -10,21 +10,25 @@ export default {
       async authorize(credentials: { email: string; password: string }) {
         const fields = LoginSchema.safeParse(credentials);
 
+        console.log(credentials);
+
         if (fields.success) {
           const { email, password } = fields.data;
 
-          const user = await queryRequests.getUser(email, password);
+          const user = await queryRequests.getUser(email);
 
           if (!user || !user.password) {
-            return null;
+            return;
           }
 
           const passwordMatch = await bcrypt.compare(password, user.password);
 
-          if (passwordMatch) return user;
+          if (passwordMatch) {
+            return user;
+          }
         }
-        return null;
+        return;
       },
     }),
   ],
-} as NextAuthConfig;
+} satisfies NextAuthConfig;

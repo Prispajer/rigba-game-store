@@ -8,20 +8,13 @@ import { FaSteamSymbol } from "react-icons/fa";
 import { LoginSchema } from "@/utils/schemas/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "@/redux/store";
-import { loginUser } from "@/redux/slices/userSlice";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
-import { signIn } from "../../../auth";
-import { DEFAULT_LOGIN_REDIRECT } from "../../../routes";
 
 export default function LoginContainer() {
   const [error, setError] = React.useState<string | undefined>("");
   const [success, setSuccess] = React.useState<string | undefined>("");
   const [isPending, startTransition] = React.useTransition();
-  const user = useSelector((state: RootState) => state.user);
-  const dispatch = useDispatch();
 
   const loginObject = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -45,15 +38,6 @@ export default function LoginContainer() {
       const { email, password } = data;
 
       try {
-        signIn("credentials", {
-          email,
-          password,
-          redirectTo: DEFAULT_LOGIN_REDIRECT,
-        });
-
-        dispatch(loginUser({ email, password }));
-        console.log(dispatch(loginUser({ email, password })));
-
         fetch(
           "http://localhost:3000/api/users/breakpoints/userAuthentication/loginUser",
           {

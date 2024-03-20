@@ -8,7 +8,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
     const { email, password } = userBody;
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const userExists = await queryRequests.getUser(email, password);
+    const userExists = await queryRequests.getUser(email);
 
     if (userExists.length > 0) {
       return NextResponse.json({

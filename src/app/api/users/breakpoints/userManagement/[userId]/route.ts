@@ -1,4 +1,4 @@
-import { queryRequests } from "@/data/database/resources/users";
+import { queryRequests } from "@/data/database/localSQL/resources/users";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(

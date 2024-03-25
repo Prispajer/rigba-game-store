@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { queryRequests } from "@/data/database/resources/users";
+// import { queryRequests } from "@/data/database/localSQL/resources/users";
+import { getUserByEmail } from "@/data/database/publicSQL/queries";
 import { signIn } from "@/../../auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/../../routes";
 import { AuthError } from "next-auth";
@@ -7,16 +8,18 @@ import { AuthError } from "next-auth";
 export async function POST(request: NextRequest, response: NextResponse) {
   const userBody = await request.json();
   const { email, password } = userBody;
+  console.log(userBody);
   try {
-    const userExists = await queryRequests.getUser(email);
+    const userExists = await getUserByEmail(email);
+
     await signIn("credentials", {
       email,
       password,
       redirectTo: DEFAULT_LOGIN_REDIRECT,
     });
 
-    if (userExists.length > 0 && userExists) {
-      await queryRequests.getUser(email);
+    if (userExists) {
+      await getUserByEmail(email);
       return NextResponse.json({
         success: "Logowanie powiodło się!",
       });
@@ -29,11 +32,11 @@ export async function POST(request: NextRequest, response: NextResponse) {
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
-          return { error: "Invalid credentials!" };
+          return NextResponse.json({ error: "Invalid credentials!" });
         default:
-          return { error: "Something went wrong!" };
+          return NextResponse.json({ error: "Something went wrong!" });
       }
-      throw error;
     }
+    throw error;
   }
 }

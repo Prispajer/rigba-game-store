@@ -2,20 +2,20 @@ import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import type { NextAuthConfig } from "next-auth";
 import { LoginSchema } from "@/utils/schemas/user";
-import { queryRequests } from "@/data/database/resources/users";
+import { getUserByEmail } from "@/data/database/publicSQL/queries";
+import credentials from "next-auth/providers/credentials";
+// import { queryRequests } from "@/data/database/resources/users";
 
 export default {
   providers: [
-    Credentials({
+    credentials({
       async authorize(credentials: { email: string; password: string }) {
         const fields = LoginSchema.safeParse(credentials);
-
-        console.log(credentials);
 
         if (fields.success) {
           const { email, password } = fields.data;
 
-          const user = await queryRequests.getUser(email);
+          const user = await getUserByEmail(email);
 
           if (!user || !user.password) {
             return;

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import * as users from "../../../data/database/resources/users";
+import * as users from "../../../data/database/localSQL/resources/users";
 
 export async function POST(request: NextRequest, response: NextResponse) {
   try {

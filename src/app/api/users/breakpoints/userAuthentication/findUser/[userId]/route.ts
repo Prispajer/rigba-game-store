@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { queryRequests } from "@/data/database/resources/users";
+import { queryRequests } from "@/data/database/localSQL/resources/users";
 
 export async function GET(
   request: NextRequest,

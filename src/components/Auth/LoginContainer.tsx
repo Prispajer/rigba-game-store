@@ -50,7 +50,7 @@ export default function LoginContainer() {
             if (response.ok) {
               return response.json();
             } else {
-              throw new Error("Wystąpił błąd podczas logowania użytkownika.");
+              throw new Error("There was problem with data base response.");
             }
           })
           .then((data) => {
@@ -58,15 +58,11 @@ export default function LoginContainer() {
             setError(data.error);
           })
           .catch((error) => {
-            console.error(
-              "Wystąpił błąd podczas wysyłania żądania logowania użytkownika:",
-              error
-            );
-            setError("Wystąpił błąd podczas logowania użytkownika.");
+            console.error("There was error while logging into user.", error);
+            setError("There was error while logging into user.");
           });
       } catch (error) {
-        console.error("Wystąpił błąd podczas logowania użytkownika:", error);
-        setError("Wystąpił błąd podczas logowania użytkownika.");
+        setError("There was error while logging into user.");
       }
     });
   }

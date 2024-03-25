@@ -8,7 +8,6 @@ import {
   authRoutes,
   publicRoutes,
 } from "@/../../routes";
-import { NextURL } from "next/dist/server/web/next-url";
 
 const { auth } = NextAuth(authConfig);
 

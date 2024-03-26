@@ -8,18 +8,17 @@ import { AuthError } from "next-auth";
 export async function POST(request: NextRequest, response: NextResponse) {
   const userBody = await request.json();
   const { email, password } = userBody;
-  console.log(userBody);
+
   try {
     const userExists = await getUserByEmail(email);
 
-    await signIn("credentials", {
-      email,
-      password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
-    });
-
     if (userExists) {
       await getUserByEmail(email);
+      await signIn("credentials", {
+        email,
+        password,
+        redirectTo: DEFAULT_LOGIN_REDIRECT,
+      });
       return NextResponse.json({
         success: "Logowanie powiodło się!",
       });

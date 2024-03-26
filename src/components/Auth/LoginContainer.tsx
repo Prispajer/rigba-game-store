@@ -36,7 +36,6 @@ export default function LoginContainer() {
       setSuccess("");
 
       const { email, password } = data;
-
       try {
         fetch(
           "http://localhost:3000/api/users/breakpoints/userAuthentication/loginUser",

@@ -10,11 +10,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
+import { signIn } from "next-auth/react";
+import { DEFAULT_LOGIN_REDIRECT } from "../../../routes";
 
 export default function LoginContainer() {
   const [error, setError] = React.useState<string | undefined>("");
   const [success, setSuccess] = React.useState<string | undefined>("");
   const [isPending, startTransition] = React.useTransition();
+
+  const handleProviderClick = (provider: "google" | "facebook" | "steam") => {
+    signIn(provider, {
+      callbackUrl: DEFAULT_LOGIN_REDIRECT,
+    });
+  };
 
   const loginObject = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -86,29 +94,32 @@ export default function LoginContainer() {
           </h3>
         </div>
         <div className="">
-          <div className="social-link bg-[#FFFFFF]">
-            <Link href="/social-connect/google" className="flex items-center">
-              <FaGoogle size={20} color="black" />
-              <span className="social-link-span  text-[black]">
-                Kontynuuj jako Google
-              </span>
-            </Link>
+          <div
+            className="social-link bg-[#FFFFFF]"
+            onClick={() => handleProviderClick("google")}
+          >
+            <FaGoogle size={20} color="black" />
+            <span className="social-link-span  text-[black]">
+              Kontynuuj jako Google
+            </span>
           </div>
-          <div className="social-link bg-[#5266fc]">
-            <Link href="/social-connect/facebook" className="flex items-center">
-              <FaFacebookF size={20} color="white" />
-              <span className="social-link-span text-[white]">
-                Kontynuuj jako Facebook
-              </span>
-            </Link>
+          <div
+            className="social-link bg-[#5266fc]"
+            onClick={() => handleProviderClick("facebook")}
+          >
+            <FaFacebookF size={20} color="white" />
+            <span className="social-link-span text-[white]">
+              Kontynuuj jako Facebook
+            </span>
           </div>
-          <div className="social-link bg-[#171d25]">
-            <Link href="/social-connect/steam" className="flex items-center">
-              <FaSteamSymbol size={20} color="white" />
-              <span className="social-link-span  text-[white]">
-                Kontynuuj jako Steam
-              </span>
-            </Link>
+          <div
+            className="social-link bg-[#171d25]"
+            onClick={() => handleProviderClick("steam")}
+          >
+            <FaSteamSymbol size={20} color="white" />
+            <span className="social-link-span  text-[white]">
+              Kontynuuj jako Steam
+            </span>
           </div>
         </div>
         <div className="flex items-center justify-center text-[#ffffff1f]">

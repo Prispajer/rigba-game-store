@@ -44,6 +44,7 @@ export default function LoginContainer() {
       setSuccess("");
 
       const { email, password } = data;
+
       try {
         fetch(
           "http://localhost:3000/api/users/breakpoints/userAuthentication/loginUser",
@@ -54,10 +55,10 @@ export default function LoginContainer() {
           }
         )
           .then((response) => {
-            if (response.ok) {
-              return response.json();
+            if (response.status === 200) {
+              window.location.href = DEFAULT_LOGIN_REDIRECT;
             } else {
-              throw new Error("There was problem with data base response.");
+              return response.json();
             }
           })
           .then((data) => {

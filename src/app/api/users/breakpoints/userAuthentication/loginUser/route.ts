@@ -13,27 +13,29 @@ export async function POST(request: NextRequest, response: NextResponse) {
     const userExists = await getUserByEmail(email);
 
     if (userExists) {
-      await getUserByEmail(email);
       await signIn("credentials", {
         email,
         password,
         redirectTo: DEFAULT_LOGIN_REDIRECT,
-      });
-      return NextResponse.json({
-        success: "Logowanie powiodło się!",
-      });
-    } else {
-      return NextResponse.json({
-        error: "Błędny email lub hasło!",
       });
     }
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
-          return NextResponse.json({ error: "Invalid credentials!" });
+          return NextResponse.json(
+            { error: "Invalid credentials!" },
+            {
+              status: 400,
+            }
+          );
         default:
-          return NextResponse.json({ error: "Something went wrong!" });
+          return NextResponse.json(
+            { error: "Something went wrong!" },
+            {
+              status: 400,
+            }
+          );
       }
     }
     throw error;

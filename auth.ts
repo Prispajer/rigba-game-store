@@ -23,7 +23,7 @@ export const {
 } = NextAuth({
   pages: {
     signIn: "/login",
-    error: "/login/error",
+    error: "/error",
   },
   events: {
     async linkAccount({ user }) {

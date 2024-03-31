@@ -8,18 +8,26 @@ import { FaSteamSymbol } from "react-icons/fa";
 import { LoginSchema } from "@/utils/schemas/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useSearchParams } from "next/navigation";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import { signIn } from "next-auth/react";
 import { DEFAULT_LOGIN_REDIRECT } from "../../../routes";
 
 export default function LoginContainer() {
+  const searchParams = useSearchParams();
+  const urlError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "Email already in use widy different provider!"
+      : "";
   const [error, setError] = React.useState<string | undefined>("");
   const [success, setSuccess] = React.useState<string | undefined>("");
   const [isPending, startTransition] = React.useTransition();
 
-  const handleProviderClick = (provider: "google" | "facebook" | "steam") => {
-    signIn(provider, {
+  const handleProviderClick = async (
+    provider: "google" | "facebook" | "steam"
+  ) => {
+    await signIn(provider, {
       callbackUrl: DEFAULT_LOGIN_REDIRECT,
     });
   };
@@ -154,7 +162,7 @@ export default function LoginContainer() {
             {errors.password && <p>{errors.password.message}</p>}
           </div>
           <FormSuccess message={success} />
-          <FormError message={error} />
+          <FormError message={error || urlError} />
           <div className="flex flex-col items-center justfiy-center w- pt-4">
             <button
               disabled={isPending}

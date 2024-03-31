@@ -5,8 +5,7 @@ import { LoginSchema } from "@/utils/schemas/user";
 import { getUserByEmail } from "@/data/database/publicSQL/queries";
 import credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
-import FacebookProvider from "next-auth/providers/facebook";
-
+import Facebook from "next-auth/providers/facebook";
 // import { queryRequests } from "@/data/database/resources/users";
 
 export default {
@@ -15,7 +14,7 @@ export default {
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
-    FacebookProvider({
+    Facebook({
       clientId: process.env.FACEBOOK_CLIENT_ID,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
     }),

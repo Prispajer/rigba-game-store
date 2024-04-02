@@ -52,7 +52,7 @@ body {
 }
 
 .social-link {
-  @apply flex items-center p-[15px] my-4 cursor-pointer;
+  @apply flex items-center p-[15px] my-4 cursor-pointer transition duration-300;
 }
 
 .social-link-span {

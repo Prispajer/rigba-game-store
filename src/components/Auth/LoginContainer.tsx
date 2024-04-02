@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { FaGoogle } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
-import { FaSteamSymbol } from "react-icons/fa";
+import { FaDiscord } from "react-icons/fa";
 import { LoginSchema } from "@/utils/schemas/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -18,14 +18,14 @@ export default function LoginContainer() {
   const searchParams = useSearchParams();
   const urlError =
     searchParams.get("error") === "OAuthAccountNotLinked"
-      ? "Email already in use widy different provider!"
+      ? "Email already in use with different provider!"
       : "";
   const [error, setError] = React.useState<string | undefined>("");
   const [success, setSuccess] = React.useState<string | undefined>("");
   const [isPending, startTransition] = React.useTransition();
 
   const handleProviderClick = async (
-    provider: "google" | "facebook" | "steam"
+    provider: "google" | "facebook" | "discord"
   ) => {
     await signIn(provider, {
       callbackUrl: DEFAULT_LOGIN_REDIRECT,
@@ -104,7 +104,7 @@ export default function LoginContainer() {
         </div>
         <div className="">
           <div
-            className="social-link bg-[#FFFFFF]"
+            className="social-link bg-[#FFFFFF] hover:bg-[#efeded]"
             onClick={() => handleProviderClick("google")}
           >
             <FaGoogle size={20} color="black" />
@@ -113,7 +113,7 @@ export default function LoginContainer() {
             </span>
           </div>
           <div
-            className="social-link bg-[#5266fc]"
+            className="social-link bg-[#5266fc] hover:bg-[#5257fc]"
             onClick={() => handleProviderClick("facebook")}
           >
             <FaFacebookF size={20} color="white" />
@@ -122,12 +122,12 @@ export default function LoginContainer() {
             </span>
           </div>
           <div
-            className="social-link bg-[#171d25]"
-            onClick={() => handleProviderClick("steam")}
+            className="social-link bg-[#7289da] hover:bg-[#7280da]"
+            onClick={() => handleProviderClick("discord")}
           >
-            <FaSteamSymbol size={20} color="white" />
+            <FaDiscord size={20} color="white" />
             <span className="social-link-span  text-[white]">
-              Kontynuuj jako Steam
+              Kontynuuj jako Discord
             </span>
           </div>
         </div>

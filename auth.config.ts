@@ -6,6 +6,7 @@ import { getUserByEmail } from "@/data/database/publicSQL/queries";
 import credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import Facebook from "next-auth/providers/facebook";
+import Discord from "@auth/core/providers/discord";
 // import { queryRequests } from "@/data/database/resources/users";
 
 export default {
@@ -17,6 +18,10 @@ export default {
     Facebook({
       clientId: process.env.FACEBOOK_CLIENT_ID,
       clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+    }),
+    Discord({
+      clientId: process.env.DISCORD_CLIENT_ID,
+      clientSecret: process.env.DISCORD_CLIENT_SECRET,
     }),
     credentials({
       async authorize(credentials: { email: string; password: string }) {

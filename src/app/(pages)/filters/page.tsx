@@ -4,6 +4,6 @@ export const metadata = {
   title: "Wish list | RIGBA",
 };
 
-export default function Wishlist() {
+export default function Filters() {
   return <FiltersContainer />;
 }

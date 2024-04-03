@@ -9,9 +9,9 @@ export default function SettingsLayout({
 }) {
   return (
     <html lang="en">
-      <body className="flex h-screen lg:bg-[#1c365b] bg-[#296CA6]">
+      <body className="flex h-scree">
         <div className="flex flex-col justify-between flex-1 h-full">
-          <header className="flex justify-between py-3 px-6">
+          <header className="flex justify-between items-center py-2 px-4 bg-secondaryColor">
             <div>
               <Link className="flex items-center max-w-[200px]" href="/">
                 <Image
@@ -26,11 +26,10 @@ export default function SettingsLayout({
             </div>
             <div>
               <button className="flex items-center">
-                <span className="pr-3 text-[#ffffff] font-[600]">
+                <span className="hidden md:flex pr-3 text-[#ffffff] font-[600]">
                   duzykox123@gmail.com
                 </span>
                 <Image
-                  className="pt-1"
                   src="/icons/logo.png"
                   width={40}
                   height={40}

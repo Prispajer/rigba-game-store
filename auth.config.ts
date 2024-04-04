@@ -1,4 +1,3 @@
-import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import type { NextAuthConfig } from "next-auth";
 import { LoginSchema } from "@/utils/schemas/user";

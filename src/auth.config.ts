@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import type { NextAuthConfig } from "next-auth";
 import { LoginSchema } from "@/utils/schemas/user";
 import { getUserByEmail } from "@/data/database/publicSQL/queries";
-import credentials from "next-auth/providers/credentials";
+import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import Facebook from "next-auth/providers/facebook";
 import Discord from "@auth/core/providers/discord";
@@ -22,7 +22,7 @@ export default {
       clientId: process.env.DISCORD_CLIENT_ID,
       clientSecret: process.env.DISCORD_CLIENT_SECRET,
     }),
-    credentials({
+    Credentials({
       async authorize(credentials: { email: string; password: string }) {
         const fields = LoginSchema.safeParse(credentials);
 

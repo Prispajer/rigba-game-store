@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 // import { queryRequests } from "@/data/database/localSQL/resources/users";
 import { getUserByEmail } from "@/data/database/publicSQL/queries";
-import { signIn } from "@/../../auth";
+import { signIn } from "@/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/../../routes";
 import { AuthError } from "next-auth";
 

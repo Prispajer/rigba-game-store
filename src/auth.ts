@@ -1,5 +1,5 @@
 import NextAuth, { DefaultSession } from "next-auth";
-import authConfig from "@/../../auth.config";
+import authConfig from "./auth.config";
 import { getUserById } from "@/data/database/publicSQL/queries";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { postgres } from "@/data/database/publicSQL/postgres";

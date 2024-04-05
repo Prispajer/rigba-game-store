@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 // import { queryRequests } from "@/data/database/resources/users";
 import { postgres } from "@/data/database/publicSQL/postgres";
 import { getUserByEmail } from "@/data/database/publicSQL/queries";
+import { generateVerificationToken } from "@/data/database/publicSQL/tokens";
+import { sendVerificationEmail } from "@/data/database/publicSQL/mail";
 import bcrypt from "bcryptjs";
 
 export async function POST(request: NextRequest, response: NextResponse) {
@@ -23,7 +25,13 @@ export async function POST(request: NextRequest, response: NextResponse) {
       },
     });
 
-    return NextResponse.json({ success: "User created successfully!" });
+    const verificationToken = await generateVerificationToken(email);
+    await sendVerificationEmail(
+      verificationToken.email,
+      verificationToken.token
+    );
+
+    return NextResponse.json({ success: "Confirmation email sent!" });
   } catch (error) {
     throw new Error("An error occurred while creating a new user.");
   }

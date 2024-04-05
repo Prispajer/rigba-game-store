@@ -4,15 +4,31 @@ import { getUserByEmail } from "@/data/database/publicSQL/queries";
 import { signIn } from "@/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/../../routes";
 import { AuthError } from "next-auth";
+import { generateVerificationToken } from "@/data/database/publicSQL/tokens";
+import { sendVerificationEmail } from "@/data/database/publicSQL/mail";
 
 export async function POST(request: NextRequest, response: NextResponse) {
   const userBody = await request.json();
   const { email, password } = userBody;
 
-  try {
-    const userExists = await getUserByEmail(email);
+  const existingUser = await getUserByEmail(email);
 
-    if (userExists) {
+  if (!existingUser || !existingUser.email || !existingUser.password) {
+    return NextResponse.json({ error: "Email doesn't exist!" });
+  }
+
+  if (!existingUser.emailVerified) {
+    const verificationToken = await generateVerificationToken(email);
+    await sendVerificationEmail(
+      verificationToken.email,
+      verificationToken.token
+    );
+
+    return NextResponse.json({ success: "Confirmation email sent!" });
+  }
+
+  try {
+    if (existingUser) {
       await signIn("credentials", {
         email,
         password,

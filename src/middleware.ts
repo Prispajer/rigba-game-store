@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 import {
   publicRoutes,
   authRoutes,
+  breakpointsRoutes,
   apiAuthPrefix,
   DEFAULT_LOGIN_REDIRECT,
 } from "../routes";
@@ -17,8 +18,7 @@ export default auth((req) => {
   const isApiRoute = req.nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = publicRoutes.includes(req.nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(req.nextUrl.pathname);
-
-  console.log(isApiRoute, isPublicRoute, isAuthRoute);
+  const isBreakpointRoute = breakpointsRoutes.includes(req.nextUrl.pathname);
 
   if (isApiRoute) {
     return;
@@ -33,7 +33,7 @@ export default auth((req) => {
     return;
   }
 
-  if (!isPublicRoute && !isLoggedIn) {
+  if (!isLoggedIn && !isPublicRoute && !isBreakpointRoute) {
     return NextResponse.redirect(new URL("/login", req.nextUrl));
   }
 

@@ -64,6 +64,7 @@ export default function LoginContainer() {
           }
         )
           .then((response) => {
+            // Need to fix redirect from client to middleware
             if (response.status === 200) {
               window.location.href = DEFAULT_LOGIN_REDIRECT;
             } else {

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 // import { queryRequests } from "@/data/database/resources/users";
 import { postgres } from "@/data/database/publicSQL/postgres";
+import { getUserByEmail } from "@/data/database/publicSQL/queries";
 import bcrypt from "bcryptjs";
 
 export async function POST(request: NextRequest, response: NextResponse) {
@@ -9,11 +10,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
     const { email, password } = userBody;
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const existingUser = await postgres.user.findUnique({
-      where: {
-        email,
-      },
-    });
+    const existingUser = await getUserByEmail(email);
 
     if (existingUser) {
       return NextResponse.json({ error: "Email already in use!" });

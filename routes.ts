@@ -1,4 +1,9 @@
-export const publicRoutes: string[] = ["/", "/filters", "/wishlist"];
+export const publicRoutes: string[] = [
+  "/",
+  "/filters",
+  "/wishlist",
+  "/new-verification",
+];
 export const authRoutes: string[] = ["/login", "/register", "/error"];
 export const breakpointsRoutes: string[] = [
   "/api/users/breakpoints/userAuthentication/registerUser",

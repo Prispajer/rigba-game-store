@@ -3,7 +3,8 @@ import React from "react";
 import Link from "next/link";
 import { MoonLoader } from "react-spinners";
 import { useSearchParams } from "next/navigation";
-import { newVerification } from "@/utils/tools/new-verification";
+import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
+import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 
 const NewVerificationContainer = () => {
   const [error, setError] = React.useState<string | undefined>("");
@@ -16,10 +17,28 @@ const NewVerificationContainer = () => {
       setError("Missing token!");
       return;
     }
-    newVerification(token).then((data) => {
-      setSuccess(data.success);
-      setError(data.error);
-    });
+
+    fetch(
+      `http://localhost:3000/api/users/breakpoints/tokenManagement/newVerification`,
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({ token }),
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setSuccess(data.success);
+        setError(data.error);
+      });
   }, [token]);
 
   React.useEffect(() => {
@@ -34,7 +53,9 @@ const NewVerificationContainer = () => {
         </span>
       </h1>
       <div className="flex justify-center text-center mt-[40px]">
-        <MoonLoader />
+        <FormSuccess message={success} />
+        <FormError message={error} />
+        {!success && !error && <MoonLoader />}
       </div>
       <div className="flex items-center  justify-center w-full mt-[60px]">
         <Link

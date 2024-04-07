@@ -64,12 +64,12 @@ export default function LoginContainer() {
           }
         )
           .then((response) => {
-            // Need to fix redirect from client to middleware
-            // if (response.status === 200) {
-            //   window.location.href = DEFAULT_LOGIN_REDIRECT;
-            // } else {
-            return response.json();
-            // }
+            // TODO LOGIN ALWAYS THROWS JSON  ERROR EVEN ON REDIRECT AND SUCCESS LOGIN
+            if (response.status === 200) {
+              window.location.href = DEFAULT_LOGIN_REDIRECT;
+            } else {
+              return response.json();
+            }
           })
           .then((data) => {
             setSuccess(data.success);

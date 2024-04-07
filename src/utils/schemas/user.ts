@@ -25,3 +25,7 @@ export const LoginSchema = z.object({
   email: z.string().email({ message: "Email is required!" }).min(8).max(50),
   password: z.string().min(8, { message: "Password is required!" }).max(50),
 });
+
+export const ResetSchema = z.object({
+  email: z.string().email({ message: "Email is required!" }).min(8).max(50),
+});

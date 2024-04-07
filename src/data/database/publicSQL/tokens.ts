@@ -1,4 +1,7 @@
-import { getVerificationTokenByEmail } from "./verification";
+import {
+  getVerificationTokenByEmail,
+  getPasswordResetTokenByEmail,
+} from "./queries";
 import { v4 as uuid4 } from "uuid";
 import { postgres } from "./postgres";
 
@@ -25,4 +28,29 @@ export const generateVerificationToken = async (email: string) => {
   });
 
   return verificationToken;
+};
+
+export const generatePasswordResetToken = async (email: string) => {
+  const token = uuid4();
+  const expires = new Date(new Date().getTime() + 3600 * 1000);
+
+  const existingToken = await getPasswordResetTokenByEmail(email);
+
+  if (existingToken) {
+    await postgres.passwordResetToken.delete({
+      where: {
+        id: existingToken.id,
+      },
+    });
+  }
+
+  const passwordResetToken = await postgres.passwordResetToken.create({
+    data: {
+      email,
+      token,
+      expires,
+    },
+  });
+
+  return passwordResetToken;
 };

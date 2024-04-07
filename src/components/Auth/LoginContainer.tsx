@@ -175,7 +175,7 @@ export default function LoginContainer() {
             </button>
             <Link
               className="text-[14px] font-medium text-[#E2999B]"
-              href="/forgot-password"
+              href="/reset-password"
             >
               Nie pamiętasz hasła?
             </Link>

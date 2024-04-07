@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-// import { queryRequests } from "@/data/database/resources/users";
 import { postgres } from "@/data/database/publicSQL/postgres";
 import { getUserByEmail } from "@/data/database/publicSQL/queries";
 import { generateVerificationToken } from "@/data/database/publicSQL/tokens";

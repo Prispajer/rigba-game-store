@@ -30,6 +30,7 @@ const NewVerificationContainer = () => {
       }
     )
       .then((response) => {
+        // TODO RESPONSE SUCCESS ERROR
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }

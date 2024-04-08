@@ -23,7 +23,7 @@ export default {
       clientSecret: process.env.DISCORD_CLIENT_SECRET,
     }),
     Credentials({
-      async authorize(credentials: { email: string; password: string }) {
+      async authorize(credentials) {
         const fields = LoginSchema.safeParse(credentials);
 
         if (fields.success) {

@@ -5,8 +5,8 @@ import { postgres } from "@/data/database/publicSQL/postgres";
 import bcrypt from "bcryptjs";
 
 export async function POST(request: NextRequest, response: NextResponse) {
-  const tokenBody = await request.json();
-  const { password, token } = tokenBody;
+  const newPasswordBody = await request.json();
+  const { password, token } = newPasswordBody;
 
   const existingToken = await getPasswordResetTokenByToken(token);
 
@@ -50,6 +50,6 @@ export async function POST(request: NextRequest, response: NextResponse) {
   });
 
   return NextResponse.json({
-    success: "Password changed successfully!",
+    success: "Password changed success!",
   });
 }

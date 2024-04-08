@@ -3,8 +3,9 @@
 import React from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { ResetPasswordSchema } from "@/utils/schemas/user";
+import { NewPasswordSchema } from "@/utils/schemas/user";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSearchParams } from "next/navigation";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 
@@ -12,11 +13,14 @@ export default function ResetPasswordContainer() {
   const [error, setError] = React.useState<string | undefined>("");
   const [success, setSuccess] = React.useState<string | undefined>("");
   const [isPending, startTransition] = React.useTransition();
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
 
-  const ResetPasswordObject = useForm<z.infer<typeof ResetPasswordSchema>>({
-    resolver: zodResolver(ResetPasswordSchema),
+  const resetPasswordObject = useForm<z.infer<typeof NewPasswordSchema>>({
+    resolver: zodResolver(NewPasswordSchema),
     defaultValues: {
-      email: "",
+      password: "",
+      confirmPassword: "",
     },
   });
 
@@ -24,22 +28,26 @@ export default function ResetPasswordContainer() {
     register,
     handleSubmit,
     formState: { errors },
-  } = ResetPasswordObject;
+  } = resetPasswordObject;
 
-  async function handleFormSubmit(data: z.infer<typeof ResetPasswordObject>) {
+  async function handleFormSubmit(data: z.infer<typeof resetPasswordObject>) {
     startTransition(() => {
       setError("");
       setSuccess("");
+      const { password } = data;
 
-      const { email } = data;
+      if (!token) {
+        setError("Missing token!");
+        return;
+      }
 
       try {
         fetch(
-          "http://localhost:3000/api/users/breakpoints/userAuthentication/resetPasswordUser",
+          "http://localhost:3000/api/users/breakpoints/tokenManagement/newPassword",
           {
             headers: { "Content-Type": "application/json" },
             method: "POST",
-            body: JSON.stringify({ email }),
+            body: JSON.stringify({ password, token }),
           }
         )
           .then((response) => {
@@ -71,41 +79,55 @@ export default function ResetPasswordContainer() {
       </h1>
       <div className="max-w-[300px] lg:min-w-[400px] py-[30px] px-[20px] lg:px-[40px] lg:bg-primaryColor">
         <div>
-          <h2 className="text-[22px] font-bold tracking-wide text-[white] cursor-default">
-            Nie pamiętasz hasła?
+          <h2 className="text-[22px] font-bold tracking-wide leading-none text-[white] cursor-default ">
+            Nowe hasło
           </h2>
-          <h3 className="cursor-default font-normal text-[14px] text-[#DFEDF2]">
-            Wyślemy Ci wiadomość e-mail z linkiem umożliwiającym ustawienie
-            nowego hasła
-          </h3>
+          <Link
+            className="text-[14px] font-medium text-[#E2999B]"
+            href="/login"
+          >
+            Wróc do login
+          </Link>
           <form onSubmit={handleSubmit(handleFormSubmit)}>
-            <div className="py-4 text-white">
+            <div className="pt-4 text-white">
               <input
-                {...register("email")}
+                {...register("password")}
                 disabled={isPending}
                 className="bg-secondaryColor  w-[100%] p-[15px]"
-                type="text"
-                name="email"
-                placeholder="E-mail"
+                type="password"
+                placeholder="Hasło"
                 autoCorrect="off"
               />
-              {errors.email && <p>{errors.email.message}</p>}
+              {errors.password && <p>{errors.password.message}</p>}
+            </div>
+            <div className="pt-4 text-white">
+              <input
+                {...register("confirmPassword")}
+                disabled={isPending}
+                className="bg-secondaryColor  w-[100%] p-[15px]"
+                type="password"
+                placeholder="Powtórz hasło"
+                autoCorrect="off"
+              />
+              {errors.confirmPassword && (
+                <p>{errors.confirmPassword.message}</p>
+              )}
+            </div>
+            <div className="flex flex-col py-4 leading-[16px] cursor-default">
+              <span className="requirements">Co najmniej 8 liter</span>
+              <span className="requirements">
+                Co najmniej jedna cyfra lub znak specjalny
+              </span>
             </div>
             <FormSuccess message={success} />
             <FormError message={error} />
-            <div className="flex flex-col items-center justfiy-center w- pt-4">
+            <div className="flex flex-col items-center justfiy-center w- ">
               <button
-                className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px]"
+                className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px] mt-4"
                 type="submit"
               >
                 Potwierdź
               </button>
-              <Link
-                className="text-[14px] font-medium text-[#E2999B]"
-                href="/login"
-              >
-                Wróc do login
-              </Link>
             </div>
           </form>
         </div>

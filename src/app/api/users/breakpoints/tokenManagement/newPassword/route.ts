@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getUserByEmail } from "@/data/database/publicSQL/queries";
-import { getVerificationTokenByToken } from "@/data/database/publicSQL/queries";
+import { getPasswordResetTokenByToken } from "@/data/database/publicSQL/queries";
 import { postgres } from "@/data/database/publicSQL/postgres";
+import bcrypt from "bcryptjs";
 
 export async function POST(request: NextRequest, response: NextResponse) {
   const tokenBody = await request.json();
-  const { token } = tokenBody;
+  const { password, token } = tokenBody;
 
-  const existingToken = await getVerificationTokenByToken(token);
+  const existingToken = await getPasswordResetTokenByToken(token);
 
   if (!existingToken) {
     return NextResponse.json({
@@ -31,23 +32,24 @@ export async function POST(request: NextRequest, response: NextResponse) {
     });
   }
 
+  const hashedPassword = await bcrypt.hash(password, 10);
+
   await postgres.user.update({
     where: {
       id: existingUser.id,
     },
     data: {
-      emailVerified: new Date(),
-      email: existingUser.email,
+      password: hashedPassword,
     },
   });
 
-  await postgres.verificationToken.delete({
+  await postgres.passwordResetToken.delete({
     where: {
       id: existingToken.id,
     },
   });
 
   return NextResponse.json({
-    success: "Email verified!",
+    success: "Password changed successfully!",
   });
 }

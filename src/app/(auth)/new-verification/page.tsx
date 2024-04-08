@@ -1,7 +1,5 @@
 import NewVerificationContainer from "@/components/auth/NewVerificationContainer";
 
-const NewVerification = () => {
+export default function NewVerification() {
   return <NewVerificationContainer />;
-};
-
-export default NewVerification;
+}

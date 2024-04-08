@@ -33,12 +33,12 @@ export default function RegisterContainer() {
     setError("");
     setSuccess("");
     startTransition(() => {
-      const { email, password, confirmPassword } = data;
+      const { email, password } = data;
       fetch(
         "http://localhost:3000/api/users/breakpoints/userAuthentication/registerUser",
         {
           method: "POST",
-          body: JSON.stringify({ email, password, confirmPassword }),
+          body: JSON.stringify({ email, password }),
           headers: { "Content-Type": "application/json" },
         }
       )
@@ -88,7 +88,6 @@ export default function RegisterContainer() {
               disabled={isPending}
               className="bg-secondaryColor  w-[100%] p-[15px]"
               type="text"
-              name="email"
               placeholder="E-mail"
               autoComplete="off"
             />
@@ -100,19 +99,17 @@ export default function RegisterContainer() {
               disabled={isPending}
               className="bg-secondaryColor w-[100%] p-[15px]"
               type="password"
-              name="password"
               placeholder="Hasło"
               autoComplete="off"
             />
             {errors.password && <p>{errors.password.message}</p>}
           </div>
-          <div className="pt-4 text-white">
+          <div className="py-4 text-white">
             <input
               {...register("confirmPassword")}
               disabled={isPending}
               className="bg-secondaryColor  w-[100%] p-[15px]"
               type="password"
-              name="confirmPassword"
               placeholder="Powtórz hasło"
               autoComplete="off"
             />

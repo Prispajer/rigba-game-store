@@ -10,7 +10,7 @@ export const FormError = ({ message }: FormErrorProps) => {
   }
 
   return (
-    <div className="flex items-center p-3 mt-4  cursor-default bg-red-100 text-red-900">
+    <div className="flex items-center p-3  cursor-default bg-red-100 text-red-900">
       <IoWarningSharp />
       <p className="ml-2">{message}</p>
     </div>

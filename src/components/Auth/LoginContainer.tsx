@@ -145,19 +145,17 @@ export default function LoginContainer() {
               disabled={isPending}
               className="bg-secondaryColor  w-[100%] p-[15px]"
               type="text"
-              name="email"
               placeholder="E-mail"
               autoCorrect="off"
             />
             {errors.email && <p>{errors.email.message}</p>}
           </div>
-          <div className="pt-4 text-white">
+          <div className="py-4 text-white">
             <input
               {...register("password")}
               disabled={isPending}
               className="bg-secondaryColor   w-[100%] p-[15px]"
               type="password"
-              name="password"
               placeholder="Hasło"
               autoCorrect="off"
             />

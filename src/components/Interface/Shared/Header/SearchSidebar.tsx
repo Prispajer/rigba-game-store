@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { IoCloseSharp } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
-import useSharedGeneralActions from "@/redux/actions/useSharedGeneralActions";
+import useSharedGeneralActions from "@/hooks/useWindowVisibility";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 
 export default function SearchSidebar() {

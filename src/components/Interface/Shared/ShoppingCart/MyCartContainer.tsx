@@ -4,7 +4,7 @@ import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import { IoCloseSharp } from "react-icons/io5";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
-import useSharedGeneralActions from "@/redux/actions/useSharedGeneralActions";
+import useSharedGeneralActions from "@/hooks/useWindowVisibility";
 
 export default function MyCartContainer() {
   const { myCartState, handleClose } = useSharedGeneralActions();

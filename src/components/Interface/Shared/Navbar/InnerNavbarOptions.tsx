@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import { IoCloseSharp } from "react-icons/io5";
-import useSharedGeneralActions from "@/redux/actions/useSharedGeneralActions";
+import useSharedGeneralActions from "@/hooks/useWindowVisibility";
 import InnerNavbarLinks from "./InnerNavbarLinks";
 
 export default function InnerNavbarOptions({

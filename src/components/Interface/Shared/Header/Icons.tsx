@@ -3,7 +3,7 @@ import { FaRegHeart } from "react-icons/fa";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
-import useSharedGeneralActions from "@/redux/actions/useSharedGeneralActions";
+import useSharedGeneralActions from "@/hooks/useWindowVisibility";
 import ProfileSidebar from "./ProfileSidebar";
 import SearchSidebar from "./SearchSidebar";
 import MyCartContainer from "../ShoppingCart/MyCartContainer";

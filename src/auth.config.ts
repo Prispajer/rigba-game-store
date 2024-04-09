@@ -6,7 +6,6 @@ import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import Facebook from "next-auth/providers/facebook";
 import Discord from "@auth/core/providers/discord";
-// import { queryRequests } from "@/data/database/resources/users";
 
 export default {
   providers: [

@@ -4,7 +4,7 @@ import { navLinks } from "@/utils/helpers/links";
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import { IoCloseSharp } from "react-icons/io5";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
-import useSharedGeneralActions from "@/redux/actions/useSharedGeneralActions";
+import useSharedGeneralActions from "@/hooks/useWindowVisibility";
 import InnerNavbarOptions from "./InnerNavbarOptions";
 
 export default function NavbarSidebar() {

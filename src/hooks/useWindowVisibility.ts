@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { open, close } from "@/redux/slices/utilitySlice";
-import { RootState } from "../store";
-import { Root } from "postcss";
+import { RootState } from "../redux/store";
 
 export default function useSharedGeneralActions() {
   const userSidebarState = useSelector(

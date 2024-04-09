@@ -21,6 +21,7 @@ export default function LoginContainer() {
       ? "Email already in use with different provider!"
       : "";
 
+  const [showTwoFactor, setShowTwoFactor] = React.useState(false);
   const [error, setError] = React.useState<string | undefined>("");
   const [success, setSuccess] = React.useState<string | undefined>("");
   const [isPending, startTransition] = React.useTransition();
@@ -38,6 +39,7 @@ export default function LoginContainer() {
     defaultValues: {
       email: "",
       password: "",
+      code: "",
     },
   });
 
@@ -52,7 +54,7 @@ export default function LoginContainer() {
       setError("");
       setSuccess("");
 
-      const { email, password } = data;
+      const { email, password, code } = data;
 
       try {
         fetch(
@@ -60,24 +62,31 @@ export default function LoginContainer() {
           {
             headers: { "Content-Type": "application/json" },
             method: "POST",
-            body: JSON.stringify({ email, password }),
+            body: JSON.stringify({ email, password, code }),
           }
         )
           .then((response) => {
             // TODO LOGIN ALWAYS THROWS JSON  ERROR EVEN ON REDIRECT AND SUCCESS LOGIN
-            if (response.status === 200) {
-              window.location.href = DEFAULT_LOGIN_REDIRECT;
-            } else {
-              return response.json();
-            }
+            // if (response.status === 200) {
+            //   window.location.href = DEFAULT_LOGIN_REDIRECT;
+            // } else {
+            return response.json();
+            // }
           })
           .then((data) => {
-            setSuccess(data.success);
-            setError(data.error);
+            if (data?.error) {
+              setError(data.error);
+            }
+            if (data?.success) {
+              setSuccess(data.success);
+            }
+            if (data?.twoFactor) {
+              setShowTwoFactor(true);
+              console.log(showTwoFactor);
+            }
           })
-          .catch((error) => {
-            console.error("There was error while logging into user.", error);
-            setError("There was error while logging into user.");
+          .catch(() => {
+            setError("Something went wrong");
           });
       } catch (error) {
         setError("There was error while logging into user.");
@@ -138,47 +147,82 @@ export default function LoginContainer() {
           <span className="flex-0 px-2 cursor-default">albo</span>
           <div className="flex-1 border-[1px] border-[#ffffff1f]"></div>
         </div>
-        <form onSubmit={handleSubmit(handleFormSubmit)}>
-          <div className="pt-4 text-white">
-            <input
-              {...register("email")}
-              disabled={isPending}
-              className="bg-secondaryColor  w-[100%] p-[15px]"
-              type="text"
-              placeholder="E-mail"
-              autoCorrect="off"
-            />
-            {errors.email && <p>{errors.email.message}</p>}
-          </div>
-          <div className="py-4 text-white">
-            <input
-              {...register("password")}
-              disabled={isPending}
-              className="bg-secondaryColor   w-[100%] p-[15px]"
-              type="password"
-              placeholder="Hasło"
-              autoCorrect="off"
-            />
-            {errors.password && <p>{errors.password.message}</p>}
-          </div>
-          <FormSuccess message={success} />
-          <FormError message={error || urlError} />
-          <div className="flex flex-col items-center justfiy-center w- pt-4">
-            <button
-              disabled={isPending}
-              className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px]"
-              type="submit"
-            >
-              Zaloguj się
-            </button>
-            <Link
-              className="text-[14px] font-medium text-[#E2999B]"
-              href="/reset-password"
-            >
-              Nie pamiętasz hasła?
-            </Link>
-          </div>
-        </form>
+        <>
+          {!showTwoFactor && (
+            <form onSubmit={handleSubmit(handleFormSubmit)}>
+              <div className="pt-4 text-white">
+                <input
+                  {...register("email")}
+                  disabled={isPending}
+                  className="bg-secondaryColor  w-[100%] p-[15px]"
+                  type="text"
+                  placeholder="E-mail"
+                  autoCorrect="off"
+                />
+                {errors.email && <p>{errors.email.message}</p>}
+              </div>
+              <div className="py-4 text-white">
+                <input
+                  {...register("password")}
+                  disabled={isPending}
+                  className="bg-secondaryColor   w-[100%] p-[15px]"
+                  type="password"
+                  placeholder="Hasło"
+                  autoCorrect="off"
+                />
+                {errors.password && <p>{errors.password.message}</p>}
+              </div>
+              <FormSuccess message={success} />
+              <FormError message={error || urlError} />
+              <div className="flex flex-col items-center justfiy-center w- pt-4">
+                <button
+                  disabled={isPending}
+                  className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px]"
+                  type="submit"
+                >
+                  Zaloguj się
+                </button>
+                <Link
+                  className="text-[14px] font-medium text-[#E2999B]"
+                  href="/reset-password"
+                >
+                  Nie pamiętasz hasła?
+                </Link>
+              </div>
+            </form>
+          )}
+          {showTwoFactor && (
+            <form onSubmit={handleSubmit(handleFormSubmit)}>
+              <div className="pt-4 text-white">
+                <input
+                  {...register("code")}
+                  disabled={isPending}
+                  className="bg-secondaryColor  w-[100%] p-[15px]"
+                  placeholder="Two Factor Code"
+                  autoCorrect="off"
+                />
+                {errors.code && <p>{errors.code.message}</p>}
+              </div>
+              <FormSuccess message={success} />
+              <FormError message={error || urlError} />
+              <div className="flex flex-col items-center justfiy-center w- pt-4">
+                <button
+                  disabled={isPending}
+                  className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px]"
+                  type="submit"
+                >
+                  Potwierdź
+                </button>
+                <Link
+                  className="text-[14px] font-medium text-[#E2999B]"
+                  href="/login"
+                >
+                  Wróć do login
+                </Link>
+              </div>
+            </form>
+          )}
+        </>
       </div>
     </main>
   );

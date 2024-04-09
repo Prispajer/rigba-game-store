@@ -1,6 +1,7 @@
 import NextAuth, { DefaultSession } from "next-auth";
 import authConfig from "./auth.config";
 import { getUserById } from "@/data/database/publicSQL/queries";
+import { getTwoFactorConfirmationByUserId } from "@/data/database/publicSQL/queries";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { postgres } from "@/data/database/publicSQL/postgres";
 import { UserRole } from "@prisma/client";
@@ -34,16 +35,32 @@ export const {
     },
   },
   callbacks: {
-    async signIn({ user, account }) {
+    async signIn({ user, account }): Promise<T> {
       if (account?.provider !== "credentials") {
         return true;
       }
 
-      const existingUser = await getUserById(user.id);
+      const existingUser = await getUserById(user.id as string);
 
       if (!existingUser?.emailVerified) {
         return false;
       }
+      if (!existingUser?.isTwoFactorEnabled) {
+        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
+          existingUser.id
+        );
+
+        if (!twoFactorConfirmation) {
+          return false;
+        }
+
+        await postgres.twoFactorConfirmation.delete({
+          where: {
+            id: twoFactorConfirmation.id,
+          },
+        });
+      }
+
       return true;
     },
     async session({ token, session }) {

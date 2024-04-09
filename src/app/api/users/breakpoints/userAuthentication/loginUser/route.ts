@@ -1,14 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getUserByEmail } from "@/data/database/publicSQL/queries";
+import {
+  getTwoFactorConfirmationByUserId,
+  getUserByEmail,
+} from "@/data/database/publicSQL/queries";
 import { signIn } from "@/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/../../routes";
 import { AuthError } from "next-auth";
-import { generateVerificationToken } from "@/data/database/publicSQL/tokens";
-import { sendVerificationEmail } from "@/data/database/publicSQL/mail";
+import {
+  generateVerificationToken,
+  generateTwoFactorToken,
+} from "@/data/database/publicSQL/tokens";
+import {
+  sendVerificationEmail,
+  sendTwoFactorTokenEmail,
+} from "@/data/database/publicSQL/mail";
+import { getTwoFactorTokenByEmail } from "@/data/database/publicSQL/queries";
+import { postgres } from "@/data/database/publicSQL/postgres";
 
 export async function POST(request: NextRequest, response: NextResponse) {
   const userBody = await request.json();
-  const { email, password } = userBody;
+  const { email, password, code } = userBody;
 
   const existingUser = await getUserByEmail(email);
 
@@ -24,6 +35,57 @@ export async function POST(request: NextRequest, response: NextResponse) {
     );
 
     return NextResponse.json({ success: "Confirmation email sent!" });
+  }
+
+  if (!existingUser.isTwoFactorEnabled && existingUser.email) {
+    if (code) {
+      const twoFactorToken = await getTwoFactorTokenByEmail(existingUser.email);
+
+      if (!twoFactorToken) {
+        return NextResponse.json({
+          error: "Invalid code!",
+        });
+      }
+
+      if (twoFactorToken.token !== code) {
+        return NextResponse.json({
+          error: "Invalid code!",
+        });
+      }
+
+      const hasExpired = new Date(twoFactorToken.expires) < new Date();
+
+      if (hasExpired) {
+        return NextResponse.json({
+          error: "Code expired!",
+        });
+      }
+
+      await postgres.twoFactorToken.delete({
+        where: { id: twoFactorToken.id },
+      });
+
+      const existingConfirmation = await getTwoFactorConfirmationByUserId(
+        existingUser.id
+      );
+
+      if (existingConfirmation) {
+        await postgres.twoFactorConfirmation.delete({
+          where: { id: existingConfirmation.id },
+        });
+      }
+
+      await postgres.twoFactorConfirmation.create({
+        data: {
+          userId: existingUser.id,
+        },
+      });
+    } else {
+      const twoFactorToken = await generateTwoFactorToken(existingUser.email);
+      await sendTwoFactorTokenEmail(twoFactorToken.email, twoFactorToken.token);
+
+      return NextResponse.json({ twoFactor: true });
+    }
   }
 
   try {

@@ -1,9 +1,11 @@
 import {
   getVerificationTokenByEmail,
   getPasswordResetTokenByEmail,
+  getTwoFactorTokenByEmail,
 } from "./queries";
 import { v4 as uuid4 } from "uuid";
 import { postgres } from "./postgres";
+import crypto from "crypto";
 
 export const generateVerificationToken = async (email: string) => {
   const token = uuid4();
@@ -53,4 +55,29 @@ export const generatePasswordResetToken = async (email: string) => {
   });
 
   return passwordResetToken;
+};
+
+export const generateTwoFactorToken = async (email: string) => {
+  const token = crypto.randomInt(100000, 1000000).toString();
+  const expires = new Date(new Date().getTime() + 3600 * 1000);
+
+  const existingToken = await getTwoFactorTokenByEmail(email);
+
+  if (existingToken) {
+    await postgres.twoFactorToken.delete({
+      where: {
+        id: existingToken.id,
+      },
+    });
+  }
+
+  const twoFactorToken = await postgres.twoFactorToken.create({
+    data: {
+      email,
+      token,
+      expires,
+    },
+  });
+
+  return twoFactorToken;
 };

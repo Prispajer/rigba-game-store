@@ -83,3 +83,16 @@ export const getTwoFactorTokenByEmail = async (email: string) => {
     return null;
   }
 };
+
+export const getTwoFactorConfirmationByUserId = async (userId: string) => {
+  try {
+    const twoFactorConfirmation =
+      await postgres.twoFactorConfirmation.findUnique({
+        where: { userId },
+      });
+
+    return twoFactorConfirmation;
+  } catch {
+    return null;
+  }
+};

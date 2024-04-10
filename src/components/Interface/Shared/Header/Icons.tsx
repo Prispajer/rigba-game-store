@@ -3,13 +3,17 @@ import { FaRegHeart } from "react-icons/fa";
 import { FaShoppingCart } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
-import useSharedGeneralActions from "@/hooks/useWindowVisibility";
+import useWindowVisibility from "@/hooks/useWindowVisibility";
 import ProfileSidebar from "./ProfileSidebar";
 import SearchSidebar from "./SearchSidebar";
-import MyCartContainer from "../ShoppingCart/MyCartContainer";
+import CartModalContainer from "../CartModal/CartModalContainer";
 
-export default function Icons({ isMediumScreenSize }) {
-  const { handleOpen } = useSharedGeneralActions();
+export default function Icons({
+  isMediumScreenSize,
+}: {
+  isMediumScreenSize: boolean;
+}) {
+  const { handleOpen } = useWindowVisibility();
   return (
     <div className="flex flex-1 justify-end items-center relative">
       <ProfileSidebar />
@@ -23,7 +27,7 @@ export default function Icons({ isMediumScreenSize }) {
         <FaRegHeart className="hidden ty:block  nav-icon" size="35px" />
       </Link>
       <FaShoppingCart
-        onClick={() => handleOpen("myCart")}
+        onClick={() => handleOpen("cartModal")}
         className="nav-icon"
         size="35px"
       />
@@ -50,7 +54,7 @@ export default function Icons({ isMediumScreenSize }) {
           />
         </div>
       )}
-      <MyCartContainer />
+      <CartModalContainer />
     </div>
   );
 }

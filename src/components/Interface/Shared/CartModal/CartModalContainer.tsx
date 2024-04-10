@@ -4,27 +4,27 @@ import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import { IoCloseSharp } from "react-icons/io5";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
-import useSharedGeneralActions from "@/hooks/useWindowVisibility";
+import useWindowVisibility from "@/hooks/useWindowVisibility";
 
-export default function MyCartContainer() {
-  const { myCartState, handleClose } = useSharedGeneralActions();
+export default function CartModalContainer() {
+  const { cartModalState, handleClose } = useWindowVisibility();
 
   const handleOutsideClick = () => {
-    if (myCartState) {
-      handleClose("myCart");
+    if (cartModalState) {
+      handleClose("cartModal");
     }
   };
 
   return (
     <>
-      {myCartState && (
+      {cartModalState && (
         <OutsideClickHandler handleOutsideClick={handleOutsideClick}>
-          <div className="mycart">
+          <div className="cart-modal">
             <div className="flex justify-between items-center text-white border-b-[1px] border-[#ffffff1a] p-[20px]">
               <strong className="text-[20px] cursor-default">Mój koszyk</strong>
               <button>
                 <IoCloseSharp
-                  onClick={() => handleClose("myCart")}
+                  onClick={() => handleClose("cartModal")}
                   className="hover:text-modalHover"
                   size="25px"
                 />

@@ -16,17 +16,6 @@ body {
   color: #e2999b;
 }
 
-.mycart::before {
-  content: "";
-  position: absolute;
-  top: -10px;
-  right: 25px;
-  width: 20px;
-  height: 20px;
-  background-color: #296ca6;
-  transform: rotate(45deg);
-}
-
 .nav-icon {
   @apply m-[6px] py-1 cursor-pointer transition duration-300 text-white hover:text-headerHover;
 }
@@ -63,8 +52,34 @@ body {
   @apply text-[13px] text-white;
 }
 
-.mycart {
+.cart-modal {
   @apply fixed md:absolute w-full sm:w-[360px] h-full md:h-auto  top-0 right-0 z-20 transform translate-x-0 translate-y-0 md:translate-x-[-149px]   md:translate-y-[65px] bg-primaryColor;
+}
+
+.cart-modal::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: 25px;
+  width: 20px;
+  height: 20px;
+  background-color: #296ca6;
+  transform: rotate(45deg);
+}
+
+.profile-modal {
+  @apply fixed md:absolute w-full sm:w-[360px] h-full md:h-auto  top-0 right-0 z-20 transform translate-x-0 translate-y-0 md:translate-x-[-2px] md:translate-y-[70px] bg-[#ffffff];
+}
+
+.profile-modal::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: 25px;
+  width: 20px;
+  height: 20px;
+  background-color: #ffffff;
+  transform: rotate(45deg);
 }
 
 .scrollbar::-webkit-scrollbar {

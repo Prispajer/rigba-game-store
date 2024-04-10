@@ -6,8 +6,10 @@ type UIElementState = {
 
 const initialState: UIElementState = {
   userSidebar: false,
-  myCart: false,
+  profileModal: false,
+  cartModal: false,
   navSidebar: false,
+  searchSidebar: false,
 };
 
 const utilitySlice = createSlice({

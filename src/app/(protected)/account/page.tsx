@@ -9,17 +9,15 @@ export default function Account() {
   const user = useCurrentUser();
 
   // TODO LOGOUT USER FROM BREAKPOINT SERVER COMPONENT
-  const onClick = () => {
+  const handleLogout = () => {
     logout();
   };
 
   return (
     <>
-      {JSON.stringify(user)}
       <AccountContainer />
       <form>
-        <button onClick={onClick} type="submit">
-          <p>{user?.email}</p>
+        <button onClick={handleLogout} type="submit">
           Sign Out
         </button>
       </form>

@@ -2,11 +2,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { open, close } from "@/redux/slices/utilitySlice";
 import { RootState } from "../redux/store";
 
-export default function useSharedGeneralActions() {
+export default function useWindowVisibility() {
   const userSidebarState = useSelector(
     (state: RootState) => state.utility.userSidebar
   );
-  const myCartState = useSelector((state: RootState) => state.utility.myCart);
+  const profileModalState = useSelector(
+    (state: RootState) => state.utility.profileModal
+  );
+  console.log(profileModalState);
+  const cartModalState = useSelector(
+    (state: RootState) => state.utility.cartModal
+  );
   const navSidebarState = useSelector(
     (state: RootState) => state.utility.navSidebar
   );
@@ -24,7 +30,8 @@ export default function useSharedGeneralActions() {
 
   return {
     userSidebarState,
-    myCartState,
+    profileModalState,
+    cartModalState,
     navSidebarState,
     searchSidebarState,
     handleOpen,

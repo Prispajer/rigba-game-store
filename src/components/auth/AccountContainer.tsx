@@ -8,7 +8,7 @@ export default function AccountContainer() {
       <h1 className="flex justify-start text-[#1A396E] text-[20px] cursor-default ">
         Moje konto
       </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 justify-center mt-[60px]">
+      <div className="grid grid-cols-1 md:grid-cols-3 justify-center mt-[60px]">
         <div className="flex flex-col justify-between w-full mb-2 bg-[white]">
           <div className="flex-0 py-[15px] px-[20px] border-b-[1px] font-[600]">
             <h2>PROFIL</h2>

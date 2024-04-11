@@ -9,7 +9,6 @@ export default function useWindowVisibility() {
   const profileModalState = useSelector(
     (state: RootState) => state.utility.profileModal
   );
-  console.log(profileModalState);
   const cartModalState = useSelector(
     (state: RootState) => state.utility.cartModal
   );

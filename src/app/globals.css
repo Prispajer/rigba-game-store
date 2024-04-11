@@ -53,7 +53,7 @@ body {
 }
 
 .cart-modal {
-  @apply fixed md:absolute w-full sm:w-[360px] h-full md:h-auto  top-0 right-0 z-20 transform translate-x-0 translate-y-0 md:translate-x-[-149px]   md:translate-y-[65px] bg-primaryColor;
+  @apply fixed md:absolute w-full sm:w-[360px] h-full md:h-auto top-0 right-0 z-20 transform translate-x-0 translate-y-0 md:translate-x-[-149px] md:translate-y-[65px] bg-primaryColor;
 }
 
 .cart-modal::before {
@@ -68,14 +68,14 @@ body {
 }
 
 .profile-modal {
-  @apply fixed md:absolute w-full sm:w-[360px] h-full md:h-auto  top-0 right-0 z-20 transform translate-x-0 translate-y-0 md:translate-x-[-2px] md:translate-y-[70px] bg-[#ffffff];
+  @apply fixed md:absolute w-full sm:w-[290px] h-full md:h-auto top-0 right-[4px] z-20 transform translate-x-0 translate-y-0 md:translate-x-[-2px] md:translate-y-[70px] bg-[#ffffff];
 }
 
 .profile-modal::before {
   content: "";
   position: absolute;
   top: -10px;
-  right: 25px;
+  right: 20px;
   width: 20px;
   height: 20px;
   background-color: #ffffff;

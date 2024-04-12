@@ -28,7 +28,6 @@ export default function AccountNavbar() {
           onClick={() => handleOpen("profileModal")}
           className="flex items-center"
         >
-          <ProfileModalContainer />
           <span className="hidden md:flex pr-3 text-[#ffffff] font-[600]">
             {user?.email}
           </span>
@@ -39,6 +38,7 @@ export default function AccountNavbar() {
             alt="user"
           ></Image>
         </button>
+        <ProfileModalContainer />
       </div>
     </header>
   );

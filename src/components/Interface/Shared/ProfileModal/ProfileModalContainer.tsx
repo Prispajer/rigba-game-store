@@ -30,7 +30,7 @@ export default function ProfileModalContainer() {
       {profileModalState && (
         <OutsideClickHandler handleOutsideClick={handleOutsideClick}>
           <div className="profile-modal">
-            <div className="flex items-center py-[10px] relative px-[20px]">
+            <div className="flex md:hidden  items-center py-[10px] relative px-[20px]">
               <div className="flex items-center flex-0">
                 <Link className="flex items-center max-w-[200px]" href="/">
                   <Image
@@ -43,10 +43,12 @@ export default function ProfileModalContainer() {
                 </Link>
               </div>
               <div className="flex items-center flex-1 justify-end">
-                <IoCloseSharp
-                  onClick={() => handleClose("profileModal")}
-                  size="26px"
-                />
+                <button>
+                  <IoCloseSharp
+                    onClick={() => handleClose("profileModal")}
+                    size="26px"
+                  />
+                </button>
               </div>
             </div>
             <div className="flex items-center justify-between py-[15px] px-[20px] border-b-[1px]">

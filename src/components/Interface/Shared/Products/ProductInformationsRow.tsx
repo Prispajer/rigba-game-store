@@ -23,7 +23,6 @@ export default function ProductInformations() {
         );
         const data = await response.json();
         setData(data.results);
-        console.log(data);
       } catch (error) {
         console.error("Error:", error);
       }

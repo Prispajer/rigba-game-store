@@ -9,8 +9,6 @@ import useWindowVisibility from "@/hooks/useWindowVisibility";
 export default function CartModalContainer() {
   const { cartModalState, handleClose } = useWindowVisibility();
 
-  console.log(cartModalState);
-
   const handleOutsideClick = () => {
     if (cartModalState) {
       handleClose("cartModal");

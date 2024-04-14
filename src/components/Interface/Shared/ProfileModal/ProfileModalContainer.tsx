@@ -13,8 +13,6 @@ export default function ProfileModalContainer() {
   const { profileModalState, handleClose } = useWindowVisibility();
   const user = useCurrentUser();
 
-  console.log(profileModalState);
-
   const handleLogout = () => {
     logout();
   };

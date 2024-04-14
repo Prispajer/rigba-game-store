@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import ProductContainer from "@/components/Interface/Product/ProductContainer";
 
 type Props = {
   params: {
@@ -20,5 +21,5 @@ export const generateMetadata = async ({
 };
 
 export default function productDetails({ params }: Props) {
-  return <h1>{params.productId}</h1>;
+  return <ProductContainer />;
 }

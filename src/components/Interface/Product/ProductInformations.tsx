@@ -28,7 +28,7 @@ export default function ProductInformations() {
   }, []);
 
   return (
-    <div className="flex w-full pb-[10px]">
+    <div className="flex w-full relative ">
       {gameDetails && (
         <>
           <div className="flex relative flex-0 w-[70px]">
@@ -46,7 +46,7 @@ export default function ProductInformations() {
                   {gameDetails.name}
                 </h1>
               </div>
-              <div className="relative">
+              <div className="">
                 <AddToWishListGame />
               </div>
             </div>

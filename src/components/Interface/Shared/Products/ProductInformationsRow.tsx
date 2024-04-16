@@ -30,25 +30,6 @@ export default function ProductInformations() {
     fetchData();
   }, []);
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await fetch("http://localhost:3000/api/products", {
-          method: "POST",
-          body: JSON.stringify(data),
-          headers: {
-            "User-Agent": "Mozilla/5.0",
-            "Content-Type": "application/json",
-          },
-        });
-        console.log(JSON.stringify(data, null, 2));
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
-    fetchData();
-  }, []);
-
   return (
     <>
       {data &&

@@ -4,7 +4,7 @@ import HomeUpComingGames from "@/components/Interface/Home/HomeUpComingGames";
 import HomePopularGames from "@/components/Interface/Home/HomePopularGames";
 import HomeBestGames from "@/components/Interface/Home/HomeBestGames";
 import HomeTheLongestGames from "@/components/Interface/Home/HomeTheLongestGames";
-import Categories from "@/components/Interface/Home/Categories";
+import HomeCategories from "@/components/Interface/Home/HomeCategories";
 
 export default function Home() {
   return (
@@ -15,7 +15,7 @@ export default function Home() {
       <HomePopularGames />
       <HomeBestGames />
       <HomeTheLongestGames />
-      <Categories />
+      <HomeCategories />
     </>
   );
 }

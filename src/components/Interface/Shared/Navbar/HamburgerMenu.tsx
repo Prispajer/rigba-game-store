@@ -7,7 +7,7 @@ import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import useSharedGeneralActions from "@/hooks/useWindowVisibility";
 import InnerNavbarOptions from "./InnerNavbarOptions";
 
-export default function NavbarSidebar() {
+export default function HamburgerMenu() {
   const [selectedTitle, setSelectedTitle] = React.useState<string>("");
   const { navSidebarState, handleClose } = useSharedGeneralActions();
   const foundObject = navLinks.find((option) => option.title === selectedTitle);

@@ -19,7 +19,7 @@ export default function ProductInformations() {
   const games = useFetchGameDataByLink("https://api.rawg.io/api/games");
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-x-[10px]">
+    <div className="w-full grid grid-cols-1 md:grid-cols-4 gap-x-[10px]">
       {games?.results &&
         games?.results.map((game: Game) => (
           <div

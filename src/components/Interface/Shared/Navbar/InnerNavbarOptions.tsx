@@ -26,10 +26,6 @@ export default function InnerNavbarOptions({
   const [selectedOption, setSelectedOption] = React.useState<string>("");
   const { handleClose } = useSharedGeneralActions();
 
-  const clearOption = () => {
-    setSelectedOption("");
-  };
-
   const handleOptionClick = (title: string) => {
     setSelectedOption(title);
   };

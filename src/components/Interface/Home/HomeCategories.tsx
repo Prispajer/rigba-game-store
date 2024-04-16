@@ -1,6 +1,6 @@
 import { MdAttractions } from "react-icons/md";
 
-export default function Categories() {
+export default function HomeCategories() {
   return (
     <main className="bg-primaryColor py-[15px]">
       <section className="flex max-w-[1240px] mx-auto px-2 py-6">

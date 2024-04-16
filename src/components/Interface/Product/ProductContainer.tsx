@@ -3,7 +3,8 @@ import ProductInformations from "./ProductInformations";
 import ProductBuyOrAdd from "./ProductBuyOrAdd";
 import PaymentWays from "./PaymentWays";
 import DigitalProductDetails from "./DigitalProductDetails";
-
+import ProductImages from "./ProductImages";
+import ProductInformationsCol from "../Shared/Products/ProductInformationsCol";
 export default function ProductsContainer() {
   return (
     <main className="py-[15px] bg-primaryColor">
@@ -22,6 +23,12 @@ export default function ProductsContainer() {
       </section>
       <section className="flex max-w-[1240px] md:mx-auto pb-[15px] px-[20px] pt-4 bg-secondaryColor shadow-md">
         <DigitalProductDetails />
+      </section>
+      <section className="flex max-w-[1240px] md:mx-auto pb-[15px] px-[20px] pt-4 bg-secondaryColor shadow-md">
+        <ProductImages />
+      </section>
+      <section className="flex max-w-[1240px] md:mx-auto pb-[15px] px-[20px] pt-4 bg-primaryColor shadow-md">
+        <ProductInformationsCol />
       </section>
     </main>
   );

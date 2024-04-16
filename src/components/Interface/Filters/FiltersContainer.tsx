@@ -9,7 +9,7 @@ import FilterByRegion from "./FilterByRegion";
 import SelectedFilters from "./SelectedFilters";
 import SortBy from "./SortBy";
 import DisplayGames from "./DisplayGames";
-import ChangePage from "./changePage";
+import ChangePage from "./ChangePage";
 import { MdKeyboardArrowUp } from "react-icons/md";
 import { MdKeyboardArrowDown } from "react-icons/md";
 

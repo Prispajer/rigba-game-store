@@ -2,31 +2,13 @@
 import React from "react";
 import AddToWishListGame from "../Shared/Products/AddToWishListGame";
 import Image from "next/image";
+import useFetchGameDataByLink from "@/hooks/useFetchGameDataByLink";
 import { CiShare1 } from "react-icons/ci";
 
 export default function ProductInformations() {
-  const [gameDetails, setGameDetails] = React.useState(null);
-
-  React.useEffect(() => {
-    const fetchGameDetails = async () => {
-      const response = await fetch(
-        "https://api.rawg.io/api/games/123?key=b3c85b14e19f4d618df8debc3d5b01b6",
-        {
-          headers: {
-            "User-Agent": "Mozilla/5.0",
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      );
-
-      const gameId = await response.json();
-      setGameDetails(gameId);
-      console.log(gameId);
-    };
-    fetchGameDetails();
-  }, []);
-
+  const gameDetails = useFetchGameDataByLink(
+    "https://api.rawg.io/api/games/17"
+  );
   return (
     <div className="flex w-full relative ">
       {gameDetails && (

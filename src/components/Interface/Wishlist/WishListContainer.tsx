@@ -3,7 +3,7 @@
 import React from "react";
 import Profile from "./Profile";
 import WishListCounter from "./WishListCounter";
-import ProductInformations from "../Shared/Products/ProductInformationsCol";
+import ProductInformationsCol from "../Shared/Products/ProductInformationsCol";
 import SearchBar from "./SearchBar";
 import SortBy from "./SortBy";
 
@@ -19,7 +19,7 @@ export default function WishListContainer() {
           </aside>
           <div className="flex flex-col w-full px-[15px] text-white">
             <SortBy />
-            <ProductInformations />
+            <ProductInformationsCol />
           </div>
         </div>
       </section>

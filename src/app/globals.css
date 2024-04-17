@@ -8,12 +8,16 @@ body {
   box-sizing: border-box;
 }
 
-.requirements::before {
+.register-requirements::before {
   content: "!";
   display: inline;
   align-items: center;
   margin-right: 5px;
   color: #e2999b;
+}
+
+.register-requirements {
+  @apply text-[13px] text-white;
 }
 
 .nav-icon {
@@ -46,10 +50,6 @@ body {
 
 .social-link-span {
   @apply ml-5 font-bold;
-}
-
-.requirements {
-  @apply text-[13px] text-white;
 }
 
 .cart-modal {

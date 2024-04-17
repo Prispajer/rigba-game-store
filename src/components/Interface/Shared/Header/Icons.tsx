@@ -20,7 +20,7 @@ export default function Icons({
       <SearchWindow />
       <FaSearch
         onClick={() => handleOpen("searchSidebar")}
-        className={isMediumScreenSize ? "hidden" : "nav-icon"}
+        className="nav-icon md:hidden"
         size="35px"
       />
       <Link href="/wishlist">

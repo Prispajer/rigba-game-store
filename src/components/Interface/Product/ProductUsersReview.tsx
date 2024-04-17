@@ -4,7 +4,7 @@ import { AiFillDislike } from "react-icons/ai";
 import Image from "next/image";
 import useCurrentUser from "@/hooks/useCurrentUser";
 
-export default function ProductReview() {
+export default function ProductUsersReview() {
   const user = useCurrentUser();
 
   return (

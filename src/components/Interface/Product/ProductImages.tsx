@@ -11,23 +11,25 @@ export default function ProductImages() {
   );
 
   return (
-    <div className="flex w-full overflow-x-auto ">
-      {screenshots?.results ? (
-        screenshots.results.map((screenshot) => (
-          <div className="mr-[10px]" key={screenshot.image}>
-            <button className="relative w-[176px] h-[100px]">
-              <Image
-                src={screenshot.image}
-                alt={screenshot.image}
-                layout="fill"
-                objectFit="cover"
-              />
-            </button>
-          </div>
-        ))
-      ) : (
-        <div>Brak zrzutów ekranu</div>
-      )}
-    </div>
+    <section className="flex max-w-[1240px] md:mx-auto pb-[15px] px-[20px] pt-4 bg-secondaryColor shadow-md">
+      <div className="flex w-full overflow-x-auto ">
+        {screenshots?.results ? (
+          screenshots.results.map((screenshot) => (
+            <div className="mr-[10px]" key={screenshot.image}>
+              <button className="relative w-[176px] h-[100px]">
+                <Image
+                  src={screenshot.image}
+                  alt={screenshot.image}
+                  layout="fill"
+                  objectFit="cover"
+                />
+              </button>
+            </div>
+          ))
+        ) : (
+          <div>Brak zrzutów ekranu</div>
+        )}
+      </div>
+    </section>
   );
 }

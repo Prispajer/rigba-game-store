@@ -127,11 +127,13 @@ export default function RegisterContainer() {
             </button>
           </div>
           <div className="flex flex-col pb-4 leading-[16px] cursor-default">
-            <span className="requirements">Co najmniej 8 liter</span>
-            <span className="requirements">
+            <span className="register-requirements">Co najmniej 8 liter</span>
+            <span className="register-requirements">
               Co najmniej jedna cyfra lub znak specjalny
             </span>
-            <span className="requirements">Co najmniej jedna duża litera</span>
+            <span className="register-requirements">
+              Co najmniej jedna duża litera
+            </span>
           </div>
         </form>
         <div className="flex items-center justify-center text-[#ffffff1f]">

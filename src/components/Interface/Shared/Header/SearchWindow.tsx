@@ -4,7 +4,7 @@ import { FaSearch } from "react-icons/fa";
 import useSharedGeneralActions from "@/hooks/useWindowVisibility";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 
-export default function SearchSidebar() {
+export default function SearchWindow() {
   const { searchSidebarState, handleClose } = useSharedGeneralActions();
 
   const handleOutsideClick = () => {

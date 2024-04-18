@@ -3,7 +3,7 @@ import { FaCcMastercard } from "react-icons/fa";
 
 export default function PaymentWays() {
   return (
-    <section className="flex max-w-[1240px] md:mx-auto pb-[15px] px-[20px] pt-4 bg-primaryColor shadow-md">
+    <section className="flex max-w-[1240px] sm:mx-[20px] md:mx-auto pb-[15px] px-[20px] pt-4 bg-[#296ca6]  shadow-md">
       <div className="flex flex-col w-full">
         <>
           <div className="flex w-full">

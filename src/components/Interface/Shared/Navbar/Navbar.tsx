@@ -31,11 +31,11 @@ export default function Navbar() {
           >
             <Link href="/">{element.title}</Link>
             {isOpen === element.title && (
-              <div className="absolute left-0 top-[60px] w-full mx-auto bg-tertiaryColor ">
+              <div className="absolute left-0 top-[60px] w-full mx-auto bg-tertiaryColor">
                 <div
                   className={
                     isOpen
-                      ? "flex p-6 gap-x-20 max-w-[1240px] mx-auto px-4 py- bg-[#1c365b] z-20"
+                      ? "flex p-6 gap-x-20 max-w-[1240px] mx-auto px-4 py- bg-bg-tertiaryColor z-20"
                       : "hidden"
                   }
                 >

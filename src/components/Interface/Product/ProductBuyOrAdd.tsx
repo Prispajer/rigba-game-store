@@ -11,7 +11,7 @@ export default function ProductBuyOrAdd() {
   );
 
   return (
-    <section className="flex max-w-[1240px] md:mx-auto pb-[15px] px-[20px] pt-4 bg-secondaryColor shadow-md">
+    <section className="flex max-w-[1240px] sm:mx-[20px]  md:mx-auto pb-[15px] px-[20px] pt-4 bg-[#3479b7] shadow-md">
       <div className="flex flex-col w-full">
         {gameDetails && (
           <>

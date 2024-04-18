@@ -10,7 +10,7 @@ export default function ProductInformations() {
     "https://api.rawg.io/api/games/17"
   );
   return (
-    <section className="flex max-w-[1240px] md:mx-auto px-[20px] pb-[15px] bg-primaryColor shadow-md">
+    <section className="flex max-w-[1240px] md:mx-auto px-[20px] py-[15px] bg-primaryColor ">
       <div className="flex w-full relative ">
         {gameDetails && (
           <>

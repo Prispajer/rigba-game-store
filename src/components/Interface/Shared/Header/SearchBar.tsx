@@ -1,6 +1,6 @@
 import { FaSearch } from "react-icons/fa";
 
-export default function SearchBar() {
+export default function Searchbar() {
   return (
     <div className="hidden md:flex items-center  flex-1 p-[20px] border-[white] border-[2px] bg-transparent">
       <FaSearch size="25px" color="white" className="mr-3" />

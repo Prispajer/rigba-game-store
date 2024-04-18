@@ -86,7 +86,7 @@ export default function RegisterContainer() {
             <input
               {...register("email")}
               disabled={isPending}
-              className="bg-secondaryColor  w-[100%] p-[15px]"
+              className="input"
               type="text"
               placeholder="E-mail"
               autoComplete="off"
@@ -97,7 +97,7 @@ export default function RegisterContainer() {
             <input
               {...register("password")}
               disabled={isPending}
-              className="bg-secondaryColor w-[100%] p-[15px]"
+              className="input"
               type="password"
               placeholder="Hasło"
               autoComplete="off"
@@ -108,7 +108,7 @@ export default function RegisterContainer() {
             <input
               {...register("confirmPassword")}
               disabled={isPending}
-              className="bg-secondaryColor  w-[100%] p-[15px]"
+              className="input"
               type="password"
               placeholder="Powtórz hasło"
               autoComplete="off"

@@ -154,7 +154,7 @@ export default function LoginContainer() {
                 <input
                   {...register("email")}
                   disabled={isPending}
-                  className="bg-secondaryColor  w-[100%] p-[15px]"
+                  className="input"
                   type="text"
                   placeholder="E-mail"
                   autoCorrect="off"
@@ -165,7 +165,7 @@ export default function LoginContainer() {
                 <input
                   {...register("password")}
                   disabled={isPending}
-                  className="bg-secondaryColor   w-[100%] p-[15px]"
+                  className="input"
                   type="password"
                   placeholder="Hasło"
                   autoCorrect="off"
@@ -197,7 +197,7 @@ export default function LoginContainer() {
                 <input
                   {...register("code")}
                   disabled={isPending}
-                  className="bg-secondaryColor  w-[100%] p-[15px]"
+                  className="input"
                   placeholder="Two Factor Code"
                   autoCorrect="off"
                 />

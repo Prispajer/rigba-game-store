@@ -2,9 +2,9 @@
 
 import React from "react";
 import Logo from "./Logo";
-import SearchBar from "./SearchBar";
+import Searchbar from "./SearchBar";
 import Icons from "./Icons";
-import HamburgerMenu from "@/components/Interface/Shared/Navbar/HamburgerMenu";
+import HamburgerMenu from "@/components/Interface/Shared/Navbar/NavbarSidebar";
 
 export default function Header() {
   const [isMediumScreenSize, setIsMediumScreenSize] =
@@ -35,7 +35,7 @@ export default function Header() {
       {!isMediumScreenSize && <HamburgerMenu />}
       <div className="flex items-center max-w-[1240px] w-full mx-auto md:py-2">
         <Logo />
-        <SearchBar />
+        <Searchbar />
         <Icons isMediumScreenSize={isMediumScreenSize} />
       </div>
     </header>

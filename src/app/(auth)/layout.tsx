@@ -9,7 +9,7 @@ export default function AuthLayout({
 }) {
   return (
     <html lang="en">
-      <body className="flex h-screen lg:bg-[#1c365b] bg-[#296CA6]">
+      <body className="flex h-screen lg:bg-[#122339] bg-primaryColor">
         <div className="flex flex-col justify-between flex-1 h-full">
           <header>
             <Link

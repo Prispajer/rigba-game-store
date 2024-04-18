@@ -53,8 +53,12 @@ export default function InnerNavbarLinks({
                     key={itemIndex}
                     className="sidebar-li"
                   >
-                    <Link href={item.url}>{item.name}</Link>
-                    <MdKeyboardArrowRight size="25px" color="white" />
+                    <Link
+                      className="flex items-center w-full h-full"
+                      href={item.url}
+                    >
+                      {item.name}
+                    </Link>
                   </li>
                 ))}
               </ul>

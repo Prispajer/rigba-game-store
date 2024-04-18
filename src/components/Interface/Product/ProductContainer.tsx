@@ -16,13 +16,13 @@ import ProductRemainingDetails from "./ProductRemainingDetails";
 
 export default function ProductsContainer() {
   return (
-    <main className="pt-[15px] pb-[100px] bg-primaryColor">
+    <main className="pb-[100px] bg-primaryColor">
       <ProductInformations />
       <ProductBuyOrAdd />
       <PaymentWays />
       <DigitalProductDetails />
       <ProductImages />
-      <section className="flex items-center justify-center z max-w-[1240px] md:mx-auto pb-[15px] px-[20px] pt-4 bg-primaryColor shadow-md">
+      <section className="flex items-center justify-center z max-w-[1240px] md:mx-auto  px-[20px] pt-4 bg-primaryColor shadow-md">
         <ProductInformationsCol />
       </section>
       <ShowMoreButton buttonText="Wczytaj więcej" />

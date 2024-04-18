@@ -4,7 +4,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
-import ProfileWindow from "./ProfileWindow";
+import ProfileSidebar from "./ProfileSidebar";
 import SearchWindow from "./SearchWindow";
 import CartModalContainer from "../CartModal/CartModalContainer";
 
@@ -16,7 +16,7 @@ export default function Icons({
   const { handleOpen } = useWindowVisibility();
   return (
     <div className="flex flex-1 justify-end items-center relative">
-      <ProfileWindow />
+      <ProfileSidebar />
       <SearchWindow />
       <FaSearch
         onClick={() => handleOpen("searchSidebar")}

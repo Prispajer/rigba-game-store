@@ -22,7 +22,8 @@ export default function ProductsContainer() {
       <PaymentWays />
       <DigitalProductDetails />
       <ProductImages />
-      <section className="flex items-center justify-center z max-w-[1240px] md:mx-auto  px-[20px] pt-4 bg-primaryColor shadow-md">
+      <ProductHeaders headerText="Podobne tytuły" />
+      <section className="flex items-center justify-center z max-w-[1240px] md:mx-auto  px-[20px] bg-primaryColor shadow-md">
         <ProductInformationsCol />
       </section>
       <ShowMoreButton buttonText="Wczytaj więcej" />

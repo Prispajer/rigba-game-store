@@ -4,11 +4,13 @@ import { FaSteam } from "react-icons/fa";
 
 export default function DigitalProductDetails() {
   return (
-    <section className="flex max-w-[1240px] md:mx-auto pb-[15px] px-[20px] pt-4 bg-secondaryColor shadow-md">
-      <div className="flex flex-col w-full">
-        <ul className="shadow-md">
-          <li className="flex items-center w-full pb-[15px]">
-            <IoMdDoneAll size="35px" color="#ffffff" />
+    <section className="flex max-w-[1240px] md:mx-auto pb-[15px] px-[20px] pt-4 bg-primaryColor">
+      <div className="flex flex-col">
+        <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  shadow-sm">
+          <li className="flex items-center w-full pb-[15px] pr-[15px]">
+            <div className="w-[35px] h-[35px]">
+              <IoMdDoneAll size="35px" color="#ffffff" />
+            </div>
             <div className="flex flex-col ml-[15px]">
               <strong className="text-[18px] text-[#ffffff]">Cały świat</strong>
               <span className=" text-[#FFFFFF96] text-[14px]">
@@ -19,9 +21,11 @@ export default function DigitalProductDetails() {
               </span>
             </div>
           </li>
-          <li className="flex w-full items-center pb-[15px]">
-            <FaSteam size="35px" color="#ffffff" />
-            <div className="flex flex-col  ml-[15px]">
+          <li className="flex w-full items-center pb-[15px] pr-[15px]">
+            <div className="w-[35px] h-[35px]">
+              <FaSteam size="35px" color="#ffffff" />
+            </div>
+            <div className="flex flex-col ml-[15px]">
               <strong className="text-[18px] text-[#ffffff]">Steam</strong>
               <span className="text-[#FFFFFF96] text-[14px]">
                 Może być aktywowany na platformie Steam
@@ -31,9 +35,11 @@ export default function DigitalProductDetails() {
               </span>
             </div>
           </li>
-          <li className="flex w-full items-center pb-[15px]">
-            <IoKeyOutline size="35px" color="#ffffff" />
-            <div className="flex flex-col  ml-[15px]">
+          <li className="flex w-full items-center pb-[15px] pr-[15px]">
+            <div className="flex-0 w-[35px] h-[35px]">
+              <IoKeyOutline size="35px" color="#ffffff" />
+            </div>
+            <div className="flex  flex-col ml-[15px]">
               <strong className="text-[18px] text-[#ffffff]">
                 Klucz cyfrowy
               </strong>

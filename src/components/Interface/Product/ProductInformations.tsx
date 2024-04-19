@@ -22,10 +22,10 @@ export default function ProductInformations() {
                 alt="gameImage"
               />
             </div>
-            <div className="flex flex-col flex-1 pl-[15px]">
+            <div className="flex flex-col pl-[15px]">
               <div className="flex w-full justify-between">
                 <div className="flex-1 mb-[20px]">
-                  <h1 className="text-[18px] text-[#FFFFFF] font-[600]">
+                  <h1 className="text-[18px] md:text-[26px] text-[#FFFFFF] font-[600]">
                     {gameDetails.name}
                   </h1>
                 </div>
@@ -43,7 +43,7 @@ export default function ProductInformations() {
                 </span>
               </div>
               <div>
-                <button className="flex items-center p-[6px] bg-[#3A83D4]">
+                <button className="flex items-center p-[6px] bg-[#487CBD] ">
                   <span className="text-[14px] text-[#FFFFFF]">Udostępnij</span>
                   <span className="text-[14px] text-[#FFFFFF] ml-[6px]">
                     <CiShare1 />

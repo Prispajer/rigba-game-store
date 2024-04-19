@@ -19,18 +19,18 @@ export default function ProductInformations() {
   const games = useFetchGameDataByLink("https://api.rawg.io/api/games");
 
   return (
-    <div className="w-full grid grid-cols-1 md:grid-cols-4 gap-x-[10px]">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 w-full gap-x-[10px]">
       {games?.results &&
         games?.results.map((game: Game) => (
           <div
             key={game.id}
-            className=" relative max-h-[150px] md:max-h-full my-[10px]"
+            className="relative max-h-[150px] sm:max-h-full my-[10px]"
           >
             <Link
-              className="flex flex-row md:flex-col bg-tertiaryColor"
+              className="flex flex-row sm:flex-col  bg-tertiaryColor"
               href="/"
             >
-              <div className="relative min-w-[75px] ty:min-w-[95px] h-[150px] md:h-[250px]">
+              <div className="relative min-w-[75px] ty:min-w-[95px] h-[150px] sm:h-[250px]">
                 <Image
                   className="p-1"
                   src={game.background_image}
@@ -38,8 +38,8 @@ export default function ProductInformations() {
                   alt="game"
                 />
               </div>
-              <div className="max-w-[50%] md:max-w-[100%] my-[10px] px-[15px]">
-                <div className="flex flex-col justify-between h-[50%] md:h-[70px] ">
+              <div className="max-w-[50%] sm:max-w-[100%] my-[10px] px-[15px]">
+                <div className="flex flex-col justify-between h-[50%] md:h-[70px]">
                   <div className="leading-none overflow-hidden overflow-ellipsis line-clamp-2 text-[#ffffff]">
                     <span className="font-bold text-[14px]">{game.name}</span>
                   </div>

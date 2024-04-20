@@ -4,9 +4,9 @@ import { FaSteam } from "react-icons/fa";
 
 export default function DigitalProductDetails() {
   return (
-    <section className="flex max-w-[1240px] md:mx-auto pb-[15px] px-[20px] pt-4 bg-primaryColor">
+    <section className="flex max-w-[1240px] md:mx-auto xl:hidden pb-[15px] px-[20px] pt-4 bg-primaryColor">
       <div className="flex flex-col">
-        <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  shadow-sm">
+        <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2  shadow-sm">
           <li className="flex items-center w-full pb-[15px] pr-[15px]">
             <div className="w-[35px] h-[35px]">
               <IoMdDoneAll size="35px" color="#ffffff" />

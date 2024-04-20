@@ -7,12 +7,12 @@ import useFetchGameDataByLink from "@/hooks/useFetchGameDataByLink";
 import Image from "next/image";
 export default function ProductImages() {
   const screenshots = useFetchGameDataByLink(
-    "https://api.rawg.io/api/games/17/screenshots"
+    "https://api.rawg.io/api/games/417/screenshots"
   );
 
   return (
     <section className="flex max-w-[1240px] md:mx-auto pb-[15px] px-[20px] pt-4 bg-primaryColor">
-      <div className="flex w-full overflow-x-auto ">
+      <div className="flex w-full overflow-x-auto">
         {screenshots?.results ? (
           screenshots.results.map((screenshot) => (
             <div className="mr-[10px]" key={screenshot.image}>

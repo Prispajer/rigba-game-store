@@ -10,6 +10,7 @@ const initialState: UIElementState = {
   searchWindow: false,
   profileModal: false,
   cartModal: false,
+  gameImageModal: false,
 };
 
 const utilitySlice = createSlice({

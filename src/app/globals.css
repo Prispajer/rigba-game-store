@@ -68,6 +68,10 @@ body {
   @apply fixed md:absolute w-full sm:w-[360px] h-full md:h-auto top-0 right-0 z-20 transform translate-x-0 translate-y-0 md:translate-x-[-149px] md:translate-y-[65px] bg-primaryColor;
 }
 
+.game-image-modal {
+  @apply fixed top-[50%] left-[50%] w-full  translate-y-[-50%] translate-x-[-50%] z-20;
+}
+
 .cart-modal::before {
   content: "";
   position: absolute;

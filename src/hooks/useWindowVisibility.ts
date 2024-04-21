@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { open, close } from "@/redux/slices/utilitySlice";
 import { RootState } from "../redux/store";
+import { use } from "react";
 
 export default function useWindowVisibility() {
   const userSidebarState = useSelector(
@@ -18,6 +19,9 @@ export default function useWindowVisibility() {
   const searchSidebarState = useSelector(
     (state: RootState) => state.utility.searchSidebar
   );
+  const gameImageModalState = useSelector(
+    (state: RootState) => state.utility.gameImageModal
+  );
 
   const dispatch = useDispatch();
   const handleOpen = (element: string) => {
@@ -33,6 +37,7 @@ export default function useWindowVisibility() {
     cartModalState,
     navSidebarState,
     searchSidebarState,
+    gameImageModalState,
     handleOpen,
     handleClose,
   };

@@ -31,7 +31,11 @@ export default function Header() {
   }, [isMediumScreenSize]);
 
   return (
-    <header className="md:border-b-0  border-b-2 border-secondaryColor bg-primaryColor ">
+    <header
+      className={`md:border-b-0  border-b-2 z-[1] border-secondaryColor bg-primaryColor ${
+        !isMediumScreenSize ? "sticky top-0" : "flex"
+      }`}
+    >
       {!isMediumScreenSize && <HamburgerMenu />}
       <div className="flex items-center max-w-[1240px] w-full mx-auto md:py-2">
         <Logo />

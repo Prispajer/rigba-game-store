@@ -19,7 +19,7 @@ export default function ProductInformations() {
     <>
       {gameDetails && (
         <div className="flex flex-0 w-full py-[20px] px-[20px]">
-          <div className="relative min-w-[72px] lg:min-w-[150px] lg:h-[225px] xl:min-w-[200px] xl:h-[300px]">
+          <div className="relative min-w-[72px] lg:min-w-[150px] lg:h-[225px] xl:min-w-[200px] xl:h-[300px] xxl:min-w-[225px] xxl:min-h-[315px]">
             <Image
               src={gameDetails.background_image}
               layout="fill"

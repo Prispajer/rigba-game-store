@@ -13,12 +13,23 @@ export default function ProductImages() {
     "https://api.rawg.io/api/games/417/screenshots"
   );
 
+  const [currentImageId, setCurrentImageId] = React.useState(null);
+
+  const handleImageClick = (id) => {
+    setCurrentImageId(id);
+    handleOpen("gameImageModal");
+  };
+
   return (
     <section className="flex max-w-[1240px] md:mx-auto pb-[15px] px-[20px] pt-4 bg-primaryColor">
       <div className="flex w-full overflow-x-auto">
         {screenshots?.results ? (
           screenshots.results.map((screenshot) => (
-            <div className="mr-[10px]" key={screenshot.image}>
+            <div
+              onClick={() => handleImageClick(screenshot.id)}
+              className="mr-[10px]"
+              key={screenshot.image}
+            >
               <button
                 onClick={() => handleOpen("gameImageModal")}
                 className="relative w-[176px] h-[100px]"
@@ -36,7 +47,7 @@ export default function ProductImages() {
           <div>Brak zrzutów ekranu</div>
         )}
       </div>
-      <GameImageModal />
+      <GameImageModal currentImageId={currentImageId} />
     </section>
   );
 }

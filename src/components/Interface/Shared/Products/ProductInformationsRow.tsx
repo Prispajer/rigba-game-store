@@ -1,3 +1,6 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -6,7 +9,12 @@ import generateRandomValue from "@/utils/tools/prices";
 import AddToWishList from "./AddToWishList";
 
 export default function ProductInformations() {
+  const router = useRouter();
   const [data, setData] = React.useState<Games>([]);
+
+  function handleClick(slug: string) {
+    router.push(`/product/${slug}`);
+  }
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -36,6 +44,7 @@ export default function ProductInformations() {
         data.map((game) => (
           <div
             key={game.id}
+            onClick={() => handleClick(game.slug)}
             className="relative min-w-[200px] min-h-[360px] mt-[20px] mb-[10px] bg-tertiaryColor"
           >
             <Link href="/">

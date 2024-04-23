@@ -38,7 +38,6 @@ export default function ProductImages() {
                   src={screenshot.image}
                   alt={screenshot.image}
                   layout="fill"
-                  objectFit="cover"
                 />
               </button>
             </div>

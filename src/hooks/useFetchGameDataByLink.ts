@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 
 export default function useFetchGameDataByLink(url: string) {
@@ -18,7 +20,6 @@ export default function useFetchGameDataByLink(url: string) {
 
       const parsedData = await response.json();
       setData(parsedData);
-      console.log(parsedData);
     };
     fetchData();
   }, [url]);

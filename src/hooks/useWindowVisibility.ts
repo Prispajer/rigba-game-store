@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { open, close } from "@/redux/slices/utilitySlice";
 import { RootState } from "../redux/store";
-import { use } from "react";
 
 export default function useWindowVisibility() {
   const userSidebarState = useSelector(

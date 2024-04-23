@@ -45,7 +45,7 @@ export default function GameImageModal({ currentImageId }) {
           <div className="fixed top-[50%] left-[50%] w-full p-[10px] xxl:w-[80%] translate-y-[-50%] translate-x-[-50%] z-20">
             <div className="relative flex justify-center items-center">
               <button
-                className="text-[#FFFFFF] absolute top-0 right-0"
+                className="text-[#FFFFFF] absolute top-2 right-2"
                 onClick={() => handleClose("gameImageModal")}
               >
                 <IoCloseSharp
@@ -55,8 +55,10 @@ export default function GameImageModal({ currentImageId }) {
               </button>
               <div className="flex items-center justify-center w-full">
                 <button
-                  className={`absolute left-0 transition duration-300 ease-in-out z-[20] text-[#FFFFFF] hover:bg-[#FFFFFF20] bg-[#FFFFFF44] ${
-                    currentImageIndex === 0 ? "bg-[#FFFFFF20]" : ""
+                  className={`absolute left-0 transition duration-300 ease-in-out z-[20] text-[#FFFFFF] hover:bg-[#FFFFFF20]  ${
+                    currentImageIndex === 0
+                      ? "bg-[#FFFFFF20]"
+                      : "bg-[#FFFFFF44]"
                   }`}
                   onClick={handlePreviousImage}
                   disabled={currentImageIndex === 0}
@@ -64,16 +66,16 @@ export default function GameImageModal({ currentImageId }) {
                   <MdKeyboardArrowLeft size="60" />
                 </button>
                 <Image
-                  src={screenshots.results[currentImageIndex].image}
-                  alt={screenshots.results[currentImageIndex].image}
+                  src={screenshots?.results[currentImageIndex]?.image}
+                  alt={screenshots?.results[currentImageIndex]?.image}
                   width={1800}
                   height={1800}
                 />
                 <button
-                  className={`absolute right-0 transition duration-300 ease-in-out z-[20] text-[#FFFFFF] hover:bg-[#FFFFFF20] bg-[#FFFFFF44]  ${
+                  className={`absolute right-0 transition duration-300 ease-in-out z-[20] text-[#FFFFFF] hover:bg-[#FFFFFF20]  ${
                     currentImageIndex === screenshots.results.length - 1
                       ? "bg-[#FFFFFF20]"
-                      : ""
+                      : "bg-[#FFFFFF44]"
                   }`}
                   onClick={handleNextImage}
                   disabled={

@@ -1,3 +1,6 @@
+"use client";
+
+import Image from "next/image";
 import React from "react";
 import ProductInformations from "./ProductInformations";
 import ProductBuyOrAdd from "./ProductBuyOrAdd";
@@ -13,15 +16,28 @@ import ProductDescription from "./ProductDescription";
 import ProductSystemRequirements from "./ProductSystemRequirements";
 import ProductHeaders from "./ProductHeaders";
 import ProductRemainingDetails from "./ProductRemainingDetails";
+import useFetchGameDataByLink from "@/hooks/useFetchGameDataByLink";
 import { CiShare1 } from "react-icons/ci";
 
-export default function ProductsContainer() {
+export default function ProductsContainer({ product, screenshots }) {
+  const data = useFetchGameDataByLink("https://api.rawg.io/api/games");
+
   return (
     <main className=" pb-[100px] bg-primaryColor">
       <section className="grid grid-cols-1 lg:grid-cols-[calc(100%-380px),380px] max-w-[1600px] mx-auto">
         <div>
           <ProductInformations />
           <div className="lg:hidden">
+            <p>{product}</p>
+            {screenshots.map((screenshot) => (
+              <Image
+                width={50}
+                height={50}
+                alt={screenshot.image}
+                src={screenshot.image}
+              ></Image>
+            ))}
+
             <ProductBuyOrAdd />
             <PaymentWays />
           </div>

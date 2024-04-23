@@ -12,18 +12,41 @@ export const generateMetadata = async ({
 }: Props): Promise<Metadata> => {
   const title = await new Promise((resolve) => {
     setTimeout(() => {
-      resolve(`iPhone ${params.productId}`);
+      resolve(`${params.productId}`);
     }, 100);
   });
+
   return {
-    title: `Product ${title}`,
+    title: `Kup ${title}`,
   };
 };
 
-export default function productDetails({ params }: Props) {
+async function getProduct(productId: string) {
+  const res = await fetch(
+    `https://api.rawg.io/api/games/${productId}?key=b3c85b14e19f4d618df8debc3d5b01b6`
+  );
+  const data = await res.json();
+  return data;
+}
+
+async function getGameScreenshots(productId: string) {
+  const res = await fetch(
+    `https://api.rawg.io/api/games/${productId}/screenshots?key=b3c85b14e19f4d618df8debc3d5b01b6`
+  );
+  const data = await res.json();
+  return data.results;
+}
+
+export default async function productDetails({ params }: Props) {
+  const [product, screenshots] = await Promise.all([
+    getProduct(params.productId),
+    getGameScreenshots(params.productId),
+  ]);
+  console.log({ product, screenshots });
+
   return (
     <div>
-      <ProductContainer />;
+      <ProductContainer product={product.name} screenshots={screenshots} />
     </div>
   );
 }

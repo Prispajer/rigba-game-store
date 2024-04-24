@@ -37,16 +37,26 @@ async function getGameScreenshots(productId: string) {
   return data.results;
 }
 
+async function getSuggestedGames(productId: string) {
+  const res = await fetch(
+    `https://api.rawg.io/api/games/${productId}/game-series?key=b3c85b14e19f4d618df8debc3d5b01b6`
+  );
+  const data = await res.json();
+  console.log(data);
+  return data;
+}
+
 export default async function productDetails({ params }: Props) {
   const [product, screenshots] = await Promise.all([
     getProduct(params.productId),
     getGameScreenshots(params.productId),
+    getSuggestedGames(params.productId),
   ]);
   console.log({ product, screenshots });
 
   return (
     <div>
-      <ProductContainer product={product.name} screenshots={screenshots} />
+      <ProductContainer product={product} screenshots={screenshots} />
     </div>
   );
 }

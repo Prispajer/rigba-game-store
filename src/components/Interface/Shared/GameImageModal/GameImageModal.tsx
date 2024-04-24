@@ -1,5 +1,4 @@
 import React from "react";
-import useFetchGameDataByLink from "@/hooks/useFetchGameDataByLink";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import { MdKeyboardArrowRight } from "react-icons/md";
@@ -7,22 +6,18 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import Image from "next/image";
 import { IoCloseSharp } from "react-icons/io5";
 
-export default function GameImageModal({ currentImageId }) {
+export default function GameImageModal({ currentImageId, screenshots }) {
   const { gameImageModalState, handleClose } = useWindowVisibility();
   const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
 
-  const screenshots = useFetchGameDataByLink(
-    "https://api.rawg.io/api/games/417/screenshots"
-  );
-
   React.useEffect(() => {
-    const index = screenshots?.results.findIndex(
+    const index = screenshots?.findIndex(
       (image) => image.id === currentImageId
     );
     if (index !== -1) {
       setCurrentImageIndex(index);
     }
-  }, [currentImageId, screenshots?.results]);
+  }, [currentImageId, screenshots]);
 
   const handleOutsideClick = () => {
     if (gameImageModalState) {
@@ -40,10 +35,10 @@ export default function GameImageModal({ currentImageId }) {
 
   return (
     <>
-      {gameImageModalState && screenshots?.results && (
+      {gameImageModalState && screenshots && (
         <OutsideClickHandler handleOutsideClick={handleOutsideClick}>
           <div className="fixed top-[50%] left-[50%] w-full p-[10px] xxl:w-[80%] translate-y-[-50%] translate-x-[-50%] z-20">
-            <div className="relative flex justify-center items-center">
+            <div className="relative w-full flex justify-center items-center">
               <button
                 className="text-[#FFFFFF] absolute top-2 right-2"
                 onClick={() => handleClose("gameImageModal")}
@@ -66,21 +61,19 @@ export default function GameImageModal({ currentImageId }) {
                   <MdKeyboardArrowLeft size="60" />
                 </button>
                 <Image
-                  src={screenshots?.results[currentImageIndex]?.image}
-                  alt={screenshots?.results[currentImageIndex]?.image}
+                  src={screenshots[currentImageIndex]?.image}
+                  alt={screenshots[currentImageIndex]?.image}
                   width={1800}
                   height={1800}
                 />
                 <button
                   className={`absolute right-0 transition duration-300 ease-in-out z-[20] text-[#FFFFFF] hover:bg-[#FFFFFF20]  ${
-                    currentImageIndex === screenshots.results.length - 1
+                    currentImageIndex === screenshots.length - 1
                       ? "bg-[#FFFFFF20]"
                       : "bg-[#FFFFFF44]"
                   }`}
                   onClick={handleNextImage}
-                  disabled={
-                    currentImageIndex === screenshots.results.length - 1
-                  }
+                  disabled={currentImageIndex === screenshots.length - 1}
                 >
                   <MdKeyboardArrowRight size="60" />
                 </button>

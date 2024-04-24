@@ -1,27 +1,20 @@
 "use client";
 import React from "react";
-import AddToWishListGame from "../Shared/Products/AddToWishListGame";
 import Image from "next/image";
-import useFetchGameDataByLink from "@/hooks/useFetchGameDataByLink";
 import { CiHeart } from "react-icons/ci";
-
-import DigitalProductDetails from "./DigitalProductDetails";
 import { CiShare1 } from "react-icons/ci";
 import { IoMdDoneAll } from "react-icons/io";
 import { IoKeyOutline } from "react-icons/io5";
 import { FaSteam } from "react-icons/fa";
 
-export default function ProductInformations() {
-  const gameDetails = useFetchGameDataByLink(
-    "https://api.rawg.io/api/games/417"
-  );
+export default function ProductInformations({ product }) {
   return (
     <>
-      {gameDetails && (
+      {product && (
         <div className="flex flex-0 w-full py-[20px] px-[20px]">
           <div className="relative min-w-[72px] lg:min-w-[150px] lg:h-[225px] xl:min-w-[200px] xl:h-[300px] xxl:min-w-[225px] xxl:min-h-[315px]">
             <Image
-              src={gameDetails.background_image}
+              src={product.background_image}
               layout="fill"
               alt="game-image"
             />
@@ -30,7 +23,7 @@ export default function ProductInformations() {
             <div className="flex justify-between">
               <div className="pr-[20px]">
                 <h1 className="text-[18px] sm:text-[22px] md:text-[24px] lg:text-[26px] text-[#FFFFFF] font-[600]">
-                  {gameDetails.name}
+                  {product.name}
                 </h1>
               </div>
               <div className="">
@@ -41,11 +34,11 @@ export default function ProductInformations() {
             </div>
             <div className="mb-[10px]">
               <span className="text-[16px] text-buttonBackground font-[800] ">
-                {gameDetails.rating}
+                {product.rating}
               </span>
               <span className="text-[14px] text-[#FFFFFF]"> z </span>
               <span className="text-[14px] text-[#FFFFFF]">
-                {gameDetails.ratings_count} ocen
+                {product.ratings_count} ocen
               </span>
             </div>
             <div className="hidden xl:flex flex-col">

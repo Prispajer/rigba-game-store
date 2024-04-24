@@ -20,29 +20,17 @@ import useFetchGameDataByLink from "@/hooks/useFetchGameDataByLink";
 import { CiShare1 } from "react-icons/ci";
 
 export default function ProductsContainer({ product, screenshots }) {
-  const data = useFetchGameDataByLink("https://api.rawg.io/api/games");
-
   return (
     <main className=" pb-[100px] bg-primaryColor">
       <section className="grid grid-cols-1 lg:grid-cols-[calc(100%-380px),380px] max-w-[1600px] mx-auto">
         <div>
-          <ProductInformations />
+          <ProductInformations product={product} />
           <div className="lg:hidden">
-            <p>{product}</p>
-            {screenshots.map((screenshot) => (
-              <Image
-                width={50}
-                height={50}
-                alt={screenshot.image}
-                src={screenshot.image}
-              ></Image>
-            ))}
-
             <ProductBuyOrAdd />
             <PaymentWays />
           </div>
           <DigitalProductDetails />
-          <ProductImages />
+          <ProductImages screenshots={screenshots} />
           <ProductHeaders headerText="Podobne tytuły" />
           <section className="flex items-center justify-center z max-w-[1240px] md:mx-auto  px-[20px] bg-primaryColor shadow-md">
             <ProductInformationsCol />
@@ -54,7 +42,7 @@ export default function ProductsContainer({ product, screenshots }) {
           <ShowMoreButton buttonText="Załaduj więcej recenzji" />
           <ProductHeaders headerText="Opis produktu" />
           <ProductGenres />
-          <ProductDescription />
+          <ProductDescription product={product} />
           <ProductHeaders headerText="Wymagania systemowe" />
           <ProductSystemRequirements />
           <ProductHeaders headerText="Pozostałe szczegóły" />

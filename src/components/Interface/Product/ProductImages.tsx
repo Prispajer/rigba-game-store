@@ -7,12 +7,8 @@ import useFetchGameDataByLink from "@/hooks/useFetchGameDataByLink";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import GameImageModal from "../Shared/GameImageModal/GameImageModal";
 import Image from "next/image";
-export default function ProductImages() {
+export default function ProductImages({ screenshots }) {
   const { handleOpen } = useWindowVisibility();
-  const screenshots = useFetchGameDataByLink(
-    "https://api.rawg.io/api/games/417/screenshots"
-  );
-
   const [currentImageId, setCurrentImageId] = React.useState(null);
 
   const handleImageClick = (id) => {
@@ -23,8 +19,8 @@ export default function ProductImages() {
   return (
     <section className="flex max-w-[1240px] md:mx-auto pb-[15px] px-[20px] pt-4 bg-primaryColor">
       <div className="flex w-full overflow-x-auto">
-        {screenshots?.results ? (
-          screenshots.results.map((screenshot) => (
+        {screenshots ? (
+          screenshots.map((screenshot) => (
             <div
               onClick={() => handleImageClick(screenshot.id)}
               className="mr-[10px]"
@@ -46,7 +42,10 @@ export default function ProductImages() {
           <div>Brak zrzutów ekranu</div>
         )}
       </div>
-      <GameImageModal currentImageId={currentImageId} />
+      <GameImageModal
+        screenshots={screenshots}
+        currentImageId={currentImageId}
+      />
     </section>
   );
 }

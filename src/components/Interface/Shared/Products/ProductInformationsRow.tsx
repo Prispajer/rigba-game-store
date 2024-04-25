@@ -12,8 +12,8 @@ export default function ProductInformations() {
   const router = useRouter();
   const [data, setData] = React.useState<Games>([]);
 
-  function handleClick(slug: string) {
-    router.push(`/product/${slug}`);
+  function handleClick(id: string) {
+    router.push(`/product/${id}`);
   }
 
   React.useEffect(() => {
@@ -44,7 +44,7 @@ export default function ProductInformations() {
         data.map((game) => (
           <div
             key={game.id}
-            onClick={() => handleClick(game.slug)}
+            onClick={() => handleClick(game.id)}
             className="relative min-w-[200px] min-h-[360px] mt-[20px] mb-[10px] bg-tertiaryColor"
           >
             <Link href="/">

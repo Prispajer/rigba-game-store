@@ -19,7 +19,7 @@ import ProductRemainingDetails from "./ProductRemainingDetails";
 import useFetchGameDataByLink from "@/hooks/useFetchGameDataByLink";
 import { CiShare1 } from "react-icons/ci";
 
-export default function ProductsContainer({ product, screenshots }) {
+export default function ProductsContainer({ product, screenshots, genres }) {
   return (
     <main className=" pb-[100px] bg-primaryColor">
       <section className="grid grid-cols-1 lg:grid-cols-[calc(100%-380px),380px] max-w-[1600px] mx-auto">
@@ -44,7 +44,7 @@ export default function ProductsContainer({ product, screenshots }) {
           <ProductGenres />
           <ProductDescription product={product} />
           <ProductHeaders headerText="Wymagania systemowe" />
-          <ProductSystemRequirements />
+          <ProductSystemRequirements genres={genres} />
           <ProductHeaders headerText="Pozostałe szczegóły" />
           <ProductRemainingDetails />
         </div>

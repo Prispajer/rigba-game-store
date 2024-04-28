@@ -37,14 +37,14 @@ export default function ProductsContainer({ product, screenshots, genres }) {
           </section>
           <ShowMoreButton buttonText="Wczytaj więcej" />
           <ProductHeaders headerText="Opinie: 26" />
-          <ProductReview />
+          <ProductReview product={product} />
           <ProductUsersReview />
           <ShowMoreButton buttonText="Załaduj więcej recenzji" />
           <ProductHeaders headerText="Opis produktu" />
           <ProductGenres />
           <ProductDescription product={product} />
           <ProductHeaders headerText="Wymagania systemowe" />
-          <ProductSystemRequirements genres={genres} />
+          <ProductSystemRequirements product={product} genres={genres} />
           <ProductHeaders headerText="Pozostałe szczegóły" />
           <ProductRemainingDetails />
         </div>

@@ -1,4 +1,5 @@
-export default function ProductSystemRequirements({ genres }) {
+export default function ProductSystemRequirements({ product, genres }) {
+  console.log(product);
   console.log(genres);
   return (
     <>
@@ -17,6 +18,7 @@ export default function ProductSystemRequirements({ genres }) {
           <li className="leading-[18px]">
             <div className="text-[14px] text-[#C3DAC9]">
               Wymagania systemowe:
+              {product.stores.map((store) => store.store.name)}
             </div>
             <div className="text-[14px] text-[#DCD8E6]">
               {genres &&

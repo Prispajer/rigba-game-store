@@ -1,7 +1,7 @@
 export default function ProductReview({ product }) {
   return (
     <section className="flex flex-col md:flex-row justify-between md:items-center max-w-[1240px] md:mx-auto px-[20px] pb-[15px] bg-secondaryColor shadow-md">
-      <div className="flex flex-col pt-[20px] px-[20px] md:px-0 pb-[15px]">
+      <div className="flex flex-col pt-[20px] md:px-0 pb-[15px]">
         <div className="flex items-center">
           <ul className="flex flex-col md:flex-row">
             {product.ratings.map((rating, index) => (

@@ -1,6 +1,4 @@
 export default function ProductSystemRequirements({ product, genres }) {
-  console.log(product);
-  console.log(genres);
   return (
     <>
       <section className="flex items-center z max-w-[1240px] md:mx-auto bg-tertiaryColor">

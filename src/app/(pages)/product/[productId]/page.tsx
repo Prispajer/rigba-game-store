@@ -45,12 +45,20 @@ async function getGameGenres(productId: string) {
   return data;
 }
 
+async function getGameTags(productId: string) {
+  const res = await fetch(
+    `https://api.rawg.io/api/tags/${productId}?key=b3c85b14e19f4d618df8debc3d5b01b6`
+  );
+  const data = await res.json();
+  return data;
+}
+
 export default async function productDetails({ params }: Props) {
-  const [product, screenshots, genres] = await Promise.all([
+  const [product, screenshots, genres, tags] = await Promise.all([
     getProduct(params.productId),
     getGameScreenshots(params.productId),
     getGameGenres(params.productId),
-    ,
+    getGameTags(params.productId),
   ]);
 
   console.log(genres);
@@ -61,6 +69,7 @@ export default async function productDetails({ params }: Props) {
         product={product}
         screenshots={screenshots}
         genres={genres}
+        tags={tags}
       />
     </div>
   );

@@ -11,6 +11,7 @@ const initialState: UIElementState = {
   profileModal: false,
   cartModal: false,
   gameImageModal: false,
+  isMediumScreen: false,
 };
 
 const utilitySlice = createSlice({
@@ -25,8 +26,11 @@ const utilitySlice = createSlice({
       const element = action.payload;
       state[element] = true;
     },
+    toggleMediumScreen: (state, action: PayloadAction<boolean>) => {
+      state.isMediumScreen = action.payload;
+    },
   },
 });
 
-export const { close, open } = utilitySlice.actions;
+export const { close, open, toggleMediumScreen } = utilitySlice.actions;
 export default utilitySlice.reducer;

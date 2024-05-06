@@ -8,12 +8,9 @@ import ProfileSidebar from "./ProfileSidebar";
 import SearchWindow from "./SearchWindow";
 import CartModalContainer from "../CartModal/CartModalContainer";
 
-export default function Icons({
-  isMediumScreenSize,
-}: {
-  isMediumScreenSize: boolean;
-}) {
-  const { handleOpen } = useWindowVisibility();
+export default function Icons({}) {
+  const { isMediumScreenState, handleOpen } = useWindowVisibility();
+
   return (
     <div className="flex flex-1 justify-end items-center relative">
       <ProfileSidebar />
@@ -31,7 +28,7 @@ export default function Icons({
         className="nav-icon"
         size="35px"
       />
-      {isMediumScreenSize ? (
+      {isMediumScreenState ? (
         <div className="flex items-center">
           <div className="cursor-pointer flex items-center hover:text-headerHover text-[white]">
             <Link href="/login" className="nav-link">

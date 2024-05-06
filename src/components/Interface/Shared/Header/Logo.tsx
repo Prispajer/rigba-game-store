@@ -1,10 +1,10 @@
 import { RxHamburgerMenu } from "react-icons/rx";
 import Image from "next/image";
 import Link from "next/link";
-import useSharedGeneralActions from "@/hooks/useWindowVisibility";
+import useWindowVisibility from "@/hooks/useWindowVisibility";
 
 export default function Logo() {
-  const { handleOpen } = useSharedGeneralActions();
+  const { handleOpen } = useWindowVisibility();
 
   return (
     <div className="flex items-center flex-0">
@@ -22,7 +22,6 @@ export default function Logo() {
             priority={true}
           />
         </div>
-
         <span className="text-white text-[30px] md:text-[35px]">RIGBA</span>
       </Link>
     </div>

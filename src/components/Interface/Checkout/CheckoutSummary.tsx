@@ -1,11 +1,18 @@
 "use client";
 
 import React from "react";
+import useWindowVisibility from "@/hooks/useWindowVisibility";
 
 export default function CheckoutSummary() {
+  const { resolutionState } = useWindowVisibility();
+
   return (
-    <div className="fixed md:flex w-full bottom-0 left-0 bg-primaryColor lg:max-w-[560px] ">
-      <div className="flex flex-col py-[15px] px-[30px]">
+    <div
+      className={`w-full bg-primaryColor md:bg-secondaryColor ${
+        resolutionState ? "flex" : "fixed bottom-0 left-0 z-[1]"
+      }`}
+    >
+      <div className="flex flex-col w-full py-[15px] px-[30px] md:px-[10px]">
         <div className="mb-[15px]">
           <h2 className="font-[700] text-[18px] text-[#FFFFFF]">
             Podsumowanie

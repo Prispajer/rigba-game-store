@@ -1,6 +1,6 @@
 "use client";
 import { useDispatch, useSelector } from "react-redux";
-import { open, close, toggleMediumScreen } from "@/redux/slices/utilitySlice";
+import { open, close, toggleScreen } from "@/redux/slices/utilitySlice";
 import { RootState } from "../redux/store";
 
 export default function useWindowVisibility() {
@@ -22,8 +22,8 @@ export default function useWindowVisibility() {
   const gameImageModalState = useSelector(
     (state: RootState) => state.utility.gameImageModal
   );
-  const isMediumScreenState = useSelector(
-    (state: RootState) => state.utility.isMediumScreen
+  const resolutionState = useSelector(
+    (state: RootState) => state.utility.resolution
   );
 
   const dispatch = useDispatch();
@@ -33,9 +33,11 @@ export default function useWindowVisibility() {
   const handleClose = (element: string) => {
     dispatch(close(element));
   };
-  const handleToggleScreen = () => {
-    const mediumScreen = window.innerWidth > 768;
-    dispatch(toggleMediumScreen(mediumScreen));
+  const handleToggleScreen = (resolution: number) => {
+    return () => {
+      const windowScreen = window.innerWidth > resolution;
+      dispatch(toggleScreen(windowScreen));
+    };
   };
 
   return {
@@ -45,7 +47,7 @@ export default function useWindowVisibility() {
     navSidebarState,
     searchSidebarState,
     gameImageModalState,
-    isMediumScreenState,
+    resolutionState,
     handleOpen,
     handleClose,
     handleToggleScreen,

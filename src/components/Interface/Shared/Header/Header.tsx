@@ -11,9 +11,9 @@ export default function Header() {
   const { isMediumScreenState, handleToggleScreen } = useWindowVisibility();
 
   React.useEffect(() => {
-    window.addEventListener("resize", handleToggleScreen);
+    window.addEventListener("resize", handleToggleScreen(768));
     return () => {
-      window.removeEventListener("resize", handleToggleScreen);
+      window.removeEventListener("resize", handleToggleScreen(768));
     };
   }, [handleToggleScreen]);
 

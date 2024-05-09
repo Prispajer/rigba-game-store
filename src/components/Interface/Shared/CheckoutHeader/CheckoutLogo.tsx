@@ -4,15 +4,7 @@ import Link from "next/link";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 
 export default function CheckoutLogo() {
-  const { isMediumScreenState, handleToggleScreen } = useWindowVisibility();
-
-  React.useEffect(() => {
-    window.addEventListener("resize", handleToggleScreen);
-
-    return () => {
-      window.removeEventListener("resize", handleToggleScreen);
-    };
-  }, [handleToggleScreen]);
+  const { resolutionState } = useWindowVisibility();
 
   return (
     <div className="flex items-center flex-1">
@@ -26,7 +18,7 @@ export default function CheckoutLogo() {
           />
         </div>
         <span className="text-white text-[20px] md:text-[35px] font-[600]">
-          {isMediumScreenState ? "RIGBA" : "Koszyk"}
+          {resolutionState ? "RIGBA" : "Koszyk"}
         </span>
       </Link>
     </div>

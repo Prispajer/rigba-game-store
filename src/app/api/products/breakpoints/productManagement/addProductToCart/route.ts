@@ -1,7 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getUserByEmail } from "@/data/database/publicSQL/queries";
-import { generatePasswordResetToken } from "@/data/database/publicSQL/tokens";
-import { sendPasswordResetEmail } from "@/data/database/publicSQL/mail";
 
 export async function POST(request: NextRequest, response: NextResponse) {
   try {

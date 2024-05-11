@@ -8,7 +8,7 @@ import HamburgerMenu from "@/components/Interface/Shared/Navbar/NavbarSidebar";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 
 export default function Header() {
-  const { isMediumScreenState, handleToggleScreen } = useWindowVisibility();
+  const { resolutionState, handleToggleScreen } = useWindowVisibility();
 
   React.useEffect(() => {
     window.addEventListener("resize", handleToggleScreen(768));
@@ -20,10 +20,10 @@ export default function Header() {
   return (
     <header
       className={`md:border-b-0  border-b-2 z-[1] border-secondaryColor bg-primaryColor ${
-        !isMediumScreenState ? "sticky top-0" : "flex"
+        !resolutionState ? "sticky top-0" : "flex"
       }`}
     >
-      {!isMediumScreenState && <HamburgerMenu />}
+      {!resolutionState && <HamburgerMenu />}
       <div className="flex items-center max-w-[1240px] w-full mx-auto md:py-2">
         <Logo />
         <Searchbar />

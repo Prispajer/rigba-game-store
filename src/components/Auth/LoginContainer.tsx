@@ -82,7 +82,6 @@ export default function LoginContainer() {
             }
             if (data?.twoFactor) {
               setShowTwoFactor(true);
-              console.log(showTwoFactor);
             }
           })
           .catch(() => {

@@ -15,6 +15,7 @@ export default function ResetPasswordContainer() {
   const [isPending, startTransition] = React.useTransition();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
+  console.log(token);
 
   const resetPasswordObject = useForm<z.infer<typeof NewPasswordSchema>>({
     resolver: zodResolver(NewPasswordSchema),

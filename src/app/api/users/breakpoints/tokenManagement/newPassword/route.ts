@@ -50,6 +50,6 @@ export async function POST(request: NextRequest, response: NextResponse) {
   });
 
   return NextResponse.json({
-    success: "Password changed success!",
+    success: "Password changed successfully!",
   });
 }

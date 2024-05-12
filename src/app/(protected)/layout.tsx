@@ -9,7 +9,7 @@ export default function SettingsLayout({
   return (
     <html lang="en">
       <body className="flex h-screen">
-        <div className="flex flex-col justify-between flex-1 h-full">
+        <div className="flex flex-col  flex-1 h-full">
           <AccountNavbar />
           {children}
           <footer className="text-center p-[5px] ">

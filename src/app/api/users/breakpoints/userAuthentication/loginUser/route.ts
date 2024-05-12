@@ -4,6 +4,7 @@ import {
   getUserByEmail,
 } from "@/data/database/publicSQL/queries";
 import { signIn } from "@/auth";
+import bcrypt from "bcryptjs";
 import { DEFAULT_LOGIN_REDIRECT } from "@/../../routes";
 import { AuthError } from "next-auth";
 import {
@@ -25,6 +26,15 @@ export async function POST(request: NextRequest, response: NextResponse) {
 
   if (!existingUser || !existingUser.email || !existingUser.password) {
     return NextResponse.json({ error: "Email doesn't exist!" });
+  }
+
+  const isPasswordCorrect = await bcrypt.compare(
+    password,
+    existingUser.password
+  );
+
+  if (!isPasswordCorrect) {
+    return NextResponse.json({ error: "Invalid password!" });
   }
 
   if (!existingUser.emailVerified) {

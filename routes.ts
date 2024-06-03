@@ -10,6 +10,7 @@ export const authRoutes: string[] = [
   "/error",
   "/reset-password",
   "/new-password",
+  "/lost-password",
 ];
 export const breakpointsRoutes: string[] = [
   "/api/users/breakpoints/userAuthentication/registerUser",

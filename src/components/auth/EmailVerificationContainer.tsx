@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 
-const NewVerificationContainer = () => {
+export default function EmailVerificationContainer() {
   const [error, setError] = React.useState<string | undefined>("");
   const [success, setSuccess] = React.useState<string | undefined>("");
   const searchParams = useSearchParams();
@@ -19,7 +19,7 @@ const NewVerificationContainer = () => {
     }
 
     fetch(
-      `http://localhost:3000/api/users/breakpoints/tokenManagement/newVerification`,
+      `http://localhost:3000/api/users/breakpoints/tokenManagement/emailVerification`,
       {
         headers: {
           Accept: "application/json",
@@ -68,6 +68,4 @@ const NewVerificationContainer = () => {
       </div>
     </main>
   );
-};
-
-export default NewVerificationContainer;
+}

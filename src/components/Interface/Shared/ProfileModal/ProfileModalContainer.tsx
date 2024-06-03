@@ -5,7 +5,7 @@ import { CiHeart } from "react-icons/ci";
 import { CiLogout } from "react-icons/ci";
 import { IoReload } from "react-icons/io5";
 import { IoCloseSharp } from "react-icons/io5";
-import { logout } from "@/utils/tools/logout";
+import { logout } from "@/utils/services/logout";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useCurrentUser from "@/hooks/useCurrentUser";
 

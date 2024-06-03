@@ -7,7 +7,7 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
 import ProductInformations from "../Shared/Products/ProductInformationsCol";
 import ProductHeaders from "../Product/ProductHeaders";
-import CheckoutSummary from "./CheckoutSummary";
+import CheckoutCart from "./CheckoutCart";
 
 export default function CheckoutContainer() {
   return (
@@ -74,7 +74,7 @@ export default function CheckoutContainer() {
               </div>
             </li>
           </ul>
-          <CheckoutSummary />
+          <CheckoutCart />
         </div>
         <div className="hidden lg:max-w-[560px] w-full mx-[10px] mb-[40px]">
           <aside className="max-w-[220px]">

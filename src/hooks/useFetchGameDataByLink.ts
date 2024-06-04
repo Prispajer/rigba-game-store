@@ -8,7 +8,7 @@ export default function useFetchGameDataByLink(url: string) {
   React.useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(
-        `${url}?key=b3c85b14e19f4d618df8debc3d5b01b6`,
+        `${url}?key=b3c85b14e19f4d618df8debc3d5b01b6&page_size=40`,
         {
           headers: {
             "User-Agent": "Mozilla/5.0",

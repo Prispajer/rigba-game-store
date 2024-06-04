@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
-import generateRandomValue from "@/utils/services/prices";
+import generateRandomValue from "@/utils/classes/prices";
 import AddToWishList from "./AddToWishList";
 import useFetchGameDataByLink from "@/hooks/useFetchGameDataByLink";
 
@@ -18,6 +18,7 @@ export type Game = {
 export default function ProductInformations() {
   const games = useFetchGameDataByLink("https://api.rawg.io/api/games");
 
+  console.log(games);
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-4 xxl:grid-cols-5 w-full gap-x-[10px]">
       {games?.results &&

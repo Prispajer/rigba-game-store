@@ -5,15 +5,15 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
-import generateRandomValue from "@/utils/services/prices";
+import generateRandomValue from "@/utils/classes/prices";
 import AddToWishList from "./AddToWishList";
 
 export default function ProductInformations() {
   const router = useRouter();
   const [data, setData] = React.useState<Games>([]);
 
-  function handleClick(id: string) {
-    router.push(`/product/${id}`);
+  function handleClick(name: string) {
+    router.push(`/product/${name}`);
   }
 
   React.useEffect(() => {
@@ -44,7 +44,7 @@ export default function ProductInformations() {
         data.map((game) => (
           <div
             key={game.id}
-            onClick={() => handleClick(game.id)}
+            onClick={() => handleClick(game.slug)}
             className="relative min-w-[200px] min-h-[360px] mt-[20px] mb-[10px] bg-tertiaryColor"
           >
             <Link href="/">

@@ -1,6 +1,6 @@
 "use client";
 import { useDispatch, useSelector } from "react-redux";
-import { open, close, toggleScreen } from "@/redux/slices/utilitySlice";
+import { open, close, toggleScreen, toggle } from "@/redux/slices/utilitySlice";
 import { RootState } from "../redux/store";
 
 export default function useWindowVisibility() {
@@ -16,14 +16,17 @@ export default function useWindowVisibility() {
   const navSidebarState = useSelector(
     (state: RootState) => state.utility.navSidebar
   );
-  const searchSidebarState = useSelector(
-    (state: RootState) => state.utility.searchSidebar
+  const mobileSearchModalState = useSelector(
+    (state: RootState) => state.utility.mobileSearchModal
   );
   const gameImageModalState = useSelector(
     (state: RootState) => state.utility.gameImageModal
   );
   const resolutionState = useSelector(
     (state: RootState) => state.utility.resolution
+  );
+  const desktopSearchBarState = useSelector(
+    (state: RootState) => state.utility.desktopSearchBar
   );
 
   const dispatch = useDispatch();
@@ -32,6 +35,9 @@ export default function useWindowVisibility() {
   };
   const handleClose = (element: string) => {
     dispatch(close(element));
+  };
+  const handleToggle = (element: string) => {
+    dispatch(toggle(element));
   };
   const handleToggleScreen = (resolution: number) => {
     return () => {
@@ -45,11 +51,13 @@ export default function useWindowVisibility() {
     profileModalState,
     cartModalState,
     navSidebarState,
-    searchSidebarState,
+    mobileSearchModalState,
     gameImageModalState,
     resolutionState,
+    desktopSearchBarState,
     handleOpen,
     handleClose,
+    handleToggle,
     handleToggleScreen,
   };
 }

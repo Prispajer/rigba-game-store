@@ -2,7 +2,7 @@
 
 import React from "react";
 import Logo from "./Logo";
-import Searchbar from "./Searchbar";
+import DesktopSearchBar from "./DesktopSearchBar";
 import Icons from "./Icons";
 import HamburgerMenu from "@/components/Interface/Shared/Navbar/NavbarSidebar";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
@@ -26,7 +26,7 @@ export default function Header() {
       {!resolutionState && <HamburgerMenu />}
       <div className="flex items-center max-w-[1240px] w-full mx-auto md:py-2">
         <Logo />
-        <Searchbar />
+        <DesktopSearchBar />
         <Icons />
       </div>
     </header>

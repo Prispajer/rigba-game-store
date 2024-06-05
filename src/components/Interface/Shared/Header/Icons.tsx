@@ -5,8 +5,9 @@ import { FaSearch } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import ProfileSidebar from "./ProfileSidebar";
-import SearchWindow from "./SearchWindow";
+import SearchWindow from "./MobileSearchModal";
 import CartModalContainer from "../CartModal/CartModalContainer";
+import MobileSearchModal from "./MobileSearchModal";
 
 export default function Icons({}) {
   const { resolutionState, handleOpen } = useWindowVisibility();
@@ -14,9 +15,9 @@ export default function Icons({}) {
   return (
     <div className="flex flex-1 justify-end items-center relative">
       <ProfileSidebar />
-      <SearchWindow />
+      <MobileSearchModal />
       <FaSearch
-        onClick={() => handleOpen("searchSidebar")}
+        onClick={() => handleOpen("mobileSearchModal")}
         className="nav-icon md:hidden"
         size="35px"
       />

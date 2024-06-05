@@ -1,6 +1,7 @@
-import { UtilsInterface } from "../interfaces/utilsInterface";
+import { IUtilsService } from "../interfaces/iUtilsService";
+import { GameSearchData } from "../helpers/types";
 
-export class UtilsService implements UtilsInterface {
+export class UtilsService implements IUtilsService {
   private _searchText: string;
 
   constructor(searchText: string) {
@@ -13,5 +14,13 @@ export class UtilsService implements UtilsInterface {
 
   setSearchText(searchText: string): void {
     this._searchText = searchText;
+  }
+
+  searchProducts(searchData: GameSearchData[]): GameSearchData[] {
+    const searchText = this.getSearchText();
+    if (!searchData || !searchText) return [];
+    return searchData.filter((game) =>
+      game.name.toLowerCase().includes(searchText.toLowerCase())
+    );
   }
 }

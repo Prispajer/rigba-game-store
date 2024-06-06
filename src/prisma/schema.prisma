@@ -1,6 +1,6 @@
 datasource db {
   provider  = "postgresql"
-  url  	    = env("DATABASE_URL")
+  url       = env("DATABASE_URL")
   directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
@@ -14,25 +14,26 @@ enum UserRole {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime? 
-  password      String?
-  role          UserRole @default(USER)
-  image         String?
-  accounts      Account[]
-  isTwoFactorEnabled Boolean @default(false)
+  id                   String                @id @default(cuid())
+  name                 String?
+  email                String?               @unique
+  emailVerified        DateTime?
+  password             String?
+  role                 UserRole              @default(USER)
+  image                String?
+  accounts             Account[]
+  cartId               String?               @unique
+  cart                 Cart?                 
+  isTwoFactorEnabled   Boolean               @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
-
 }
 
 model Account {
   id                 String  @id @default(cuid())
-  userId             String  
+  userId             String
   type               String
   provider           String
-  providerAccountId  String 
+  providerAccountId  String
   refresh_token      String? @db.Text
   access_token       String? @db.Text
   expires_at         Int?
@@ -40,69 +41,69 @@ model Account {
   scope              String?
   id_token           String? @db.Text
   session_state      String?
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
 
 model VerificationToken {
-  id String @id @default(cuid())
-  email String
-  token String @unique
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
   expires DateTime
 
   @@unique([email, token])
 }
 
 model PasswordResetToken {
-  id String @id @default(cuid())
-  email String
-  token String @unique
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
   expires DateTime
 
   @@unique([email, token])
 }
 
 model TwoFactorToken {
-  id String @id @default(cuid())
-  email String
-  token String @unique
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
   expires DateTime
 
   @@unique([email, token])
 }
 
 model TwoFactorConfirmation {
-  id String @id @default(cuid()) 
-  userId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  id      String   @id @default(cuid())
+  userId  String
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@unique([userId])
 }
 
-
 model Cart {
-  id         String   @id @default(cuid())
-  userId     String   
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  products   ProductInCart[]
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model ProductInCart {
-  id         String   @id @default(cuid())
-  cartId     String   
-  productId  String
-  quantity   Int
-  cart       Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  product    Product  @relation(fields: [productId], references: [id])
+  id        String           @id @default(cuid())
+  userId    String           @unique
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  products  ProductInCart[]
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Product {
-  id          String   @id @default(cuid())
+  id          String          @id @default(cuid())
   name        String
   description String?
   price       Float
   imageUrl    String?
+  productInCart   ProductInCart[]
+}
+
+model ProductInCart {
+  id        String   @id @default(cuid())
+  cartId    String
+  productId String
+  quantity  Int
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id])
 }

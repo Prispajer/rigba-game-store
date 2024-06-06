@@ -96,3 +96,17 @@ export const getTwoFactorConfirmationByUserId = async (userId: string) => {
     return null;
   }
 };
+
+export const getUserCart = async (userId: string) => {
+  try {
+    const userCart = await postgres.cart.findUnique({
+      where: { userId },
+    });
+
+    return userCart;
+  } catch {
+    return null;
+  }
+};
+
+console.log(getUserCart("clurfx5o1000029a4lvymddau"));

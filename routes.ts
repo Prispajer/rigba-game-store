@@ -19,6 +19,7 @@ export const breakpointsRoutes: string[] = [
   "/api/users/breakpoints/tokenManagement/newVerification",
   "/api/users/breakpoints/userAuthentication/resetPasswordUser",
   "/api/users/breakpoints/tokenManagement/newPassword",
+  "/api/products/breakpoints/productManagement/addProductToCart",
 ];
 export const apiAuthPrefix: string = "/api/auth";
 export const DEFAULT_LOGIN_REDIRECT: string = "/account";

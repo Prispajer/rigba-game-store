@@ -5,12 +5,17 @@ import Logo from "./Logo";
 import DesktopSearchBar from "./DesktopSearchBar";
 import Icons from "./Icons";
 import HamburgerMenu from "@/components/Interface/Shared/Navbar/NavbarSidebar";
+import { useDispatch, useSelector } from "react-redux";
+import { open, close, toggleScreen, toggle } from "@/redux/slices/utilitySlice";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 
 export default function Header() {
   const { resolutionState, handleToggleScreen } = useWindowVisibility();
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
+    const windowScreen = window.innerWidth >= 768;
+    dispatch(toggleScreen(windowScreen));
     window.addEventListener("resize", handleToggleScreen(768));
     return () => {
       window.removeEventListener("resize", handleToggleScreen(768));

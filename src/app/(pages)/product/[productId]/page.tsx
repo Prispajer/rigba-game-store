@@ -61,8 +61,6 @@ export default async function productDetails({ params }: Props) {
     getGameTags(params.productId),
   ]);
 
-  console.log(genres);
-
   return (
     <div>
       <ProductContainer

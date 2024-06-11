@@ -27,13 +27,13 @@ export default function ProductUsersReview() {
         <div className="flex items-center mb-[10px]">
           <Image
             className="flex-0 mr-[10px] rounded-full"
-            src={user?.image}
+            src={user?.image ? user.image : "/icons/logo.png"}
             width="22"
             height="22"
-            alt="avatar"
+            alt="user-avatar"
           />
           <strong className="flex-0 mr-[10px] text-[16px] text-[#FFFFFF]">
-            Prispajer
+            {user?.name ? user.name : `rigba ${user?.id} `}
           </strong>
           <span className="flex-1 text-[#C3DAC9] text-[12px]">24.01.2024</span>
         </div>

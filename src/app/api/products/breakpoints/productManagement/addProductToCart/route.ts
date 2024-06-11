@@ -1,76 +1,77 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getUserByEmail } from "@/data/database/publicSQL/queries";
+import { getUserByEmail, getUserCart } from "@/data/database/publicSQL/queries";
 import { postgres } from "@/data/database/publicSQL/postgres";
 
 export async function POST(request: NextRequest) {
   try {
     const productData = await request.json();
-    const { id, quantity } = productData;
+    const { id } = productData;
 
-    if (!id || !quantity) {
-      return NextResponse.json({
-        error: "Product ID and quantity are required!",
-      });
+    if (!id) {
+      return NextResponse.json({ error: "Product ID is required!" });
     }
 
-    const userEmail = "koziel.adrian98@gmail.com";
+    const userEmail = "duzykox123@gmail.com";
     const existingUser = await getUserByEmail(userEmail);
 
     if (!existingUser) {
       return NextResponse.json({ error: "User not found!" });
     }
 
-    let user = await postgres.user.findUnique({
-      where: { id: existingUser.id },
-      include: { cart: true },
-    });
+    let userCart = await getUserCart(existingUser.id);
 
-    if (!user.cart) {
-      user = await postgres.user.update({
-        where: { id: existingUser.id },
+    if (!userCart) {
+      userCart = await postgres.cart.create({
         data: {
-          cart: {
-            create: {
-              products: {
-                create: {
-                  id,
-                  quantity,
-                },
-              },
-            },
-          },
-        },
-        include: { cart: true },
-      });
-    } else {
-      user = await postgres.cart.update({
-        where: { id: user.cart.id },
-        data: {
+          userId: existingUser.id,
           products: {
             create: {
-              id,
-              quantity,
+              productId: id,
+              quantity: 1,
             },
           },
         },
-        include: { products: true },
       });
-    }
+      // } else {
+      //   const existingProductInCart = await postgres.productInCart.findFirst({
+      //     where: {
+      //       cartId: userCart.id,
+      //       productId: id,
+      //     },
+      //   });
 
+      //   if (existingProductInCart) {
+      //     await postgres.productInCart.update({
+      //       where: { id: existingProductInCart.id },
+      //       data: { quantity: existingProductInCart.quantity + 1 },
+      //     });
+      //   } else {
+      //     await postgres.productInCart.create({
+      //       data: {
+      //         cartId: userCart.id,
+      //         productId: id,
+      //         quantity: 1,
+      //       },
+      //     });
+      //   }
+
+      //   userCart = await postgres.cart.findUnique({
+      //     where: { id: userCart.id },
+      //     include: { products: true },
+      //   });
+      // }
+    }
     return NextResponse.json({
       success: "Product added to cart successfully!",
       user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        cart: user.cart,
+        id: existingUser.id,
+        name: existingUser.name,
+        email: existingUser.email,
+        cart: userCart,
       },
     });
   } catch (error) {
     console.error("Error while adding product to cart:", error);
-    return NextResponse.json({
-      error: "An error occurred while adding product to cart.",
-      details: error.message,
-    });
+    return NextResponse.json({ error: "Error while adding product to cart" });
   }
 }

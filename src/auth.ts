@@ -4,10 +4,11 @@ import { getUserById } from "@/data/database/publicSQL/queries";
 import { getTwoFactorConfirmationByUserId } from "@/data/database/publicSQL/queries";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { postgres } from "@/data/database/publicSQL/postgres";
-import { UserRole } from "@prisma/client";
+import { UserRole, Cart } from "@prisma/client";
 
 export type ExtentedUser = DefaultSession["user"] & {
   role: UserRole;
+  cart: Cart | null;
 };
 
 declare module "next-auth" {
@@ -70,6 +71,9 @@ export const {
       if (token.role && session.user) {
         session.user.role = token.role as UserRole;
       }
+      if (token.cart && session.user) {
+        session.user.cart = token.cart as Cart;
+      }
       return session;
     },
     async jwt({ token }) {
@@ -84,6 +88,13 @@ export const {
       }
 
       token.role = existingUser.role;
+
+      const userCart = await postgres.cart.findUnique({
+        where: { userId: existingUser.id },
+        include: { products: true },
+      });
+
+      token.cart = userCart;
 
       return token;
     },

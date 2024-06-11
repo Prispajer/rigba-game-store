@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { open, close, toggleScreen, toggle } from "@/redux/slices/utilitySlice";
 import { RootState } from "../redux/store";
@@ -39,12 +40,15 @@ export default function useWindowVisibility() {
   const handleToggle = (element: string) => {
     dispatch(toggle(element));
   };
-  const handleToggleScreen = (resolution: number) => {
-    return () => {
-      const windowScreen = window.innerWidth > resolution;
-      dispatch(toggleScreen(windowScreen));
-    };
-  };
+  const handleToggleScreen = React.useCallback(
+    (resolution: number) => {
+      return () => {
+        const windowScreen = window.innerWidth >= resolution;
+        dispatch(toggleScreen(windowScreen));
+      };
+    },
+    [dispatch]
+  );
 
   return {
     userSidebarState,

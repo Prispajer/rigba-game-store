@@ -22,8 +22,7 @@ model User {
   role                 UserRole              @default(USER)
   image                String?
   accounts             Account[]
-  cartId               String?               @unique
-  cart                 Cart?                 
+  cart                 Cart?          
   isTwoFactorEnabled   Boolean               @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
 }
@@ -90,20 +89,21 @@ model Cart {
   user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model Product {
-  id          String          @id @default(cuid())
-  name        String
-  description String?
-  price       Float
-  imageUrl    String?
-  productInCart   ProductInCart[]
-}
-
 model ProductInCart {
   id        String   @id @default(cuid())
   cartId    String
   productId String
   quantity  Int
+  product   Product[]  
   cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  product   Product  @relation(fields: [productId], references: [id])
+}
+
+model Product {
+  id          String          @id @default(cuid())
+  productId   String
+  name        String
+  description String?
+  price       Float
+  imageUrl    String?
+  product ProductInCart     @relation(fields: [productId], references:[id], onDelete: Cascade)
 }

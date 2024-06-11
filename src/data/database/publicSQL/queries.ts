@@ -108,5 +108,3 @@ export const getUserCart = async (userId: string) => {
     return null;
   }
 };
-
-console.log(getUserCart("clurfx5o1000029a4lvymddau"));

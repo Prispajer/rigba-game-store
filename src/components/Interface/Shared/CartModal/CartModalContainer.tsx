@@ -5,8 +5,10 @@ import { IoCloseSharp } from "react-icons/io5";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 export default function CartModalContainer() {
+  const user = useCurrentUser();
   const { cartModalState, handleClose } = useWindowVisibility();
 
   const handleOutsideClick = () => {
@@ -14,6 +16,8 @@ export default function CartModalContainer() {
       handleClose("cartModal");
     }
   };
+
+  console.log(user);
 
   return (
     <>
@@ -48,7 +52,7 @@ export default function CartModalContainer() {
                     href="/"
                     className="flex w-full font-medium hover:text-modalHover"
                   >
-                    Resident Evil 4 Deluxe Edition Key
+                    {user?.cart?.products.map((product) => product.productId)}
                   </Link>
                   <div className="flex items-center text-[#ffffffb3] text-[16px]">
                     <span className="mr-1 cursor-default">Produkt cyfrowy</span>

@@ -26,40 +26,55 @@ export async function POST(request: NextRequest) {
           userId: existingUser.id,
           products: {
             create: {
-              productId: id,
+              externalProductId: id,
               quantity: 1,
+              productsInformations: {
+                create: {
+                  name: "xd",
+                  description: "xd",
+                  price: 1.11,
+                  imageUrl: "xd",
+                },
+              },
             },
           },
         },
       });
-      // } else {
-      //   const existingProductInCart = await postgres.productInCart.findFirst({
-      //     where: {
-      //       cartId: userCart.id,
-      //       productId: id,
-      //     },
-      //   });
+    } else {
+      const existingProductInCart = await postgres.product.findFirst({
+        where: {
+          cartId: userCart.id,
+          externalProductId: id,
+        },
+      });
 
-      //   if (existingProductInCart) {
-      //     await postgres.productInCart.update({
-      //       where: { id: existingProductInCart.id },
-      //       data: { quantity: existingProductInCart.quantity + 1 },
-      //     });
-      //   } else {
-      //     await postgres.productInCart.create({
-      //       data: {
-      //         cartId: userCart.id,
-      //         productId: id,
-      //         quantity: 1,
-      //       },
-      //     });
-      //   }
+      if (existingProductInCart) {
+        await postgres.product.update({
+          where: { id: existingProductInCart.id },
+          data: { quantity: existingProductInCart.quantity + 1 },
+        });
+      } else {
+        await postgres.product.create({
+          data: {
+            cartId: userCart.id,
+            externalProductId: id,
+            quantity: 1,
+            productsInformations: {
+              create: {
+                name: "haha",
+                description: "hahaha",
+                price: 9.11,
+                imageUrl: "hahahahah",
+              },
+            },
+          },
+        });
+      }
 
-      //   userCart = await postgres.cart.findUnique({
-      //     where: { id: userCart.id },
-      //     include: { products: true },
-      //   });
-      // }
+      userCart = await postgres.cart.findUnique({
+        where: { id: userCart.id },
+        include: { products: true },
+      });
     }
     return NextResponse.json({
       success: "Product added to cart successfully!",

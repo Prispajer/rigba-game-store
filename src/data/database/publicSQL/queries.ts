@@ -108,3 +108,15 @@ export const getUserCart = async (userId: string) => {
     return null;
   }
 };
+
+export const getProductInformations = async (productId: string) => {
+  try {
+    const productInformations = await postgres.productInformations.findUnique({
+      where: { productId },
+    });
+
+    return productInformations;
+  } catch {
+    return null;
+  }
+};

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import React from "react";
 import ProductInformations from "./ProductInformations";
 import ProductBuyOrAdd from "./ProductBuyOrAdd";
@@ -16,7 +15,6 @@ import ProductDescription from "./ProductDescription";
 import ProductSystemRequirements from "./ProductSystemRequirements";
 import ProductHeaders from "./ProductHeaders";
 import ProductRemainingDetails from "./ProductRemainingDetails";
-import useFetchGameDataByLink from "@/hooks/useFetchGameDataByLink";
 import { CiShare1 } from "react-icons/ci";
 
 export default function ProductsContainer({
@@ -25,6 +23,16 @@ export default function ProductsContainer({
   genres,
   tags,
 }) {
+  console.log(product);
+  const data = fetch(
+    "http://localhost:3000//api/products/breakpoints/productManagement/addProductToCart",
+    {
+      headers: { "Content-Type": "application/json" },
+      method: "POST",
+      body: JSON.stringify({ product }),
+    }
+  );
+
   return (
     <main className=" pb-[100px] bg-primaryColor">
       <section className="grid grid-cols-1 lg:grid-cols-[calc(100%-380px),380px] max-w-[1600px] mx-auto">

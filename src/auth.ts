@@ -91,7 +91,13 @@ export const {
 
       const userCart = await postgres.cart.findUnique({
         where: { userId: existingUser.id },
-        include: { products: true },
+        include: {
+          products: {
+            include: {
+              productsInformations: true,
+            },
+          },
+        },
       });
 
       token.cart = userCart;

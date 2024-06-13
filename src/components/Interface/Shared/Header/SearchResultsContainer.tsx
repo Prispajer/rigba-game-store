@@ -1,4 +1,5 @@
 import { FaCartPlus } from "react-icons/fa";
+import { GameSearchData } from "@/utils/helpers/types";
 import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -18,7 +19,7 @@ export default function SearchResultsContainer({ filteredGames }) {
   return (
     <div className="absolute top-[67px] left-0 w-full bg-primaryColor">
       {filteredGames ? (
-        filteredGames.map((game) => (
+        filteredGames.map((game: GameSearchData) => (
           <ul key={game.id}>
             <li
               className="my-[10px] py-[5px] cursor-pointer hover:bg-secondaryColor"

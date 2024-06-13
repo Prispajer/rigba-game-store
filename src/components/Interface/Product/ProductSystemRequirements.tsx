@@ -16,10 +16,9 @@ export default function ProductSystemRequirements({ product, genres }) {
           <li className="leading-[18px]">
             <div className="text-[14px] text-[#C3DAC9]">
               Wymagania systemowe:
-              {product.stores.map((store) => store.store.name)}
             </div>
             <div className="text-[14px] text-[#DCD8E6]">
-              {genres &&
+              {/* {genres &&
                 genres.results.map((genre) => (
                   <div key={genre.id}>
                     <p>{genre.name}</p>
@@ -30,7 +29,7 @@ export default function ProductSystemRequirements({ product, genres }) {
                       ))}
                     </ul>
                   </div>
-                ))}
+                ))} */}
             </div>
           </li>
         </ul>

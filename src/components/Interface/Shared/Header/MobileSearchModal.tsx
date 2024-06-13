@@ -5,13 +5,16 @@ import { FaSearch } from "react-icons/fa";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import { UtilsService } from "@/utils/classes/utilsService";
 import { IUtilsService } from "@/utils/interfaces/iUtilsService";
+import { GameSearchData } from "@/utils/helpers/types";
 import SearchResultsContainer from "./SearchResultsContainer";
 import debounce from "@/utils/classes/debounce";
 import useFetchGameDataByLink from "@/hooks/useFetchGameDataByLink";
 
 export default function MobileSearchModal() {
   const [searchText, setSearchText] = React.useState("");
-  const games = useFetchGameDataByLink("https://api.rawg.io/api/games");
+  const games: any = useFetchGameDataByLink("https://api.rawg.io/api/games");
+
+  console.log(games);
 
   const {
     mobileSearchModalState,

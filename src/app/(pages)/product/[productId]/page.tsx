@@ -1,5 +1,7 @@
 import { Metadata } from "next";
 import ProductContainer from "@/components/Interface/Product/ProductContainer";
+import { ApiService } from "@/utils/classes/apiService";
+import { IApiService } from "@/utils/interfaces/iApiService";
 
 type Props = {
   params: {
@@ -21,54 +23,23 @@ export const generateMetadata = async ({
   };
 };
 
-async function getProduct(productId: string) {
-  const res = await fetch(
-    `https://api.rawg.io/api/games/${productId}?key=b3c85b14e19f4d618df8debc3d5b01b6`
-  );
-  const data = await res.json();
-  return data;
-}
-
-async function getGameScreenshots(productId: string) {
-  const res = await fetch(
-    `https://api.rawg.io/api/games/${productId}/screenshots?key=b3c85b14e19f4d618df8debc3d5b01b6`
-  );
-  const data = await res.json();
-  return data.results;
-}
-
-async function getGameGenres() {
-  const res = await fetch(
-    `https://api.rawg.io/api/genres?key=b3c85b14e19f4d618df8debc3d5b01b6`
-  );
-  const data = await res.json();
-  return data;
-}
-
-async function getGameTags(productId: string) {
-  const res = await fetch(
-    `https://api.rawg.io/api/tags/${productId}?key=b3c85b14e19f4d618df8debc3d5b01b6`
-  );
-  const data = await res.json();
-  return data;
-}
-
 export default async function productDetails({ params }: Props) {
+  let apiService: IApiService;
+  apiService = new ApiService();
+
   const [product, screenshots, genres, tags] = await Promise.all([
-    getProduct(params.productId),
-    getGameScreenshots(params.productId),
-    getGameGenres(),
-    getGameTags(params.productId),
+    apiService.getProduct(params.productId),
+    apiService.getGameScreenshots(params.productId),
+    apiService.getGameGenres(),
+    apiService.getGameTags(params.productId),
   ]);
 
   return (
-    <div>
-      <ProductContainer
-        product={product}
-        screenshots={screenshots}
-        genres={genres}
-        tags={tags}
-      />
-    </div>
+    <ProductContainer
+      product={product}
+      screenshots={screenshots}
+      genres={genres}
+      tags={tags}
+    />
   );
 }

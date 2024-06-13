@@ -17,24 +17,21 @@ import ProductHeaders from "./ProductHeaders";
 import ProductRemainingDetails from "./ProductRemainingDetails";
 import { CiShare1 } from "react-icons/ci";
 
-export default function ProductsContainer({
+type Props = {
+  product: any;
+  screenshots: string[];
+  genres: string[];
+  tags: string[];
+};
+
+const ProductContainer: React.FC<Props> = ({
   product,
   screenshots,
   genres,
   tags,
-}) {
-  console.log(product);
-  const data = fetch(
-    "http://localhost:3000//api/products/breakpoints/productManagement/addProductToCart",
-    {
-      headers: { "Content-Type": "application/json" },
-      method: "POST",
-      body: JSON.stringify({ product }),
-    }
-  );
-
+}) => {
   return (
-    <main className=" pb-[100px] bg-primaryColor">
+    <main className="pb-[100px] bg-primaryColor">
       <section className="grid grid-cols-1 lg:grid-cols-[calc(100%-380px),380px] max-w-[1600px] mx-auto">
         <div>
           <ProductInformations product={product} />
@@ -45,7 +42,7 @@ export default function ProductsContainer({
           <DigitalProductDetails />
           <ProductImages screenshots={screenshots} />
           <ProductHeaders headerText="Podobne tytuły" />
-          <section className="flex items-center justify-center z max-w-[1240px] md:mx-auto  px-[20px] bg-primaryColor shadow-md">
+          <section className="flex items-center justify-center z max-w-[1240px] md:mx-auto px-[20px] bg-primaryColor shadow-md">
             <ProductInformationsCol />
           </section>
           <ShowMoreButton buttonText="Wczytaj więcej" />
@@ -81,4 +78,6 @@ export default function ProductsContainer({
       </section>
     </main>
   );
-}
+};
+
+export default ProductContainer;

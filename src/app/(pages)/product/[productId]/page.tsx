@@ -24,8 +24,7 @@ export const generateMetadata = async ({
 };
 
 export default async function productDetails({ params }: Props) {
-  let apiService: IApiService;
-  apiService = new ApiService();
+  const apiService: IApiService = new ApiService();
 
   const [product, screenshots, genres, tags] = await Promise.all([
     apiService.getProduct(params.productId),

@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import OutsideClickHandler from "../Backdrop/OutsideClickHandler";
+import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import { IoCloseSharp } from "react-icons/io5";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";

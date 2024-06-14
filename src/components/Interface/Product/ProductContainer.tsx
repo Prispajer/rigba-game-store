@@ -24,19 +24,19 @@ type Props = {
   tags: string[];
 };
 
-const ProductContainer: React.FC<Props> = ({
+export default function ProductContainer({
   product,
   screenshots,
   genres,
   tags,
-}) => {
+}: Props) {
   return (
     <main className="pb-[100px] bg-primaryColor">
       <section className="grid grid-cols-1 lg:grid-cols-[calc(100%-380px),380px] max-w-[1600px] mx-auto">
         <div>
           <ProductInformations product={product} />
           <div className="lg:hidden">
-            <ProductBuyOrAdd />
+            <ProductBuyOrAdd product={product} />
             <PaymentWays />
           </div>
           <DigitalProductDetails />
@@ -71,13 +71,11 @@ const ProductContainer: React.FC<Props> = ({
                 </span>
               </button>
             </div>
-            <ProductBuyOrAdd />
+            <ProductBuyOrAdd product={product} />
             <PaymentWays />
           </div>
         </div>
       </section>
     </main>
   );
-};
-
-export default ProductContainer;
+}

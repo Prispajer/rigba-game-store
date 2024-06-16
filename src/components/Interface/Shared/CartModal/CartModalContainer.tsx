@@ -18,7 +18,7 @@ export default function CartModalContainer() {
     }
   };
 
-  const userProduct = user?.cart?.products.map((product) => product);
+  const userProduct = user?.cart?.products;
 
   return (
     <>
@@ -46,7 +46,7 @@ export default function CartModalContainer() {
                     className="flex flex-0 min-w-[50px] items-center h-[100px]"
                   >
                     <Image
-                      src="/images/RE4.jpg"
+                      src={product.productsInformations.imageUrl}
                       width={50}
                       height={100}
                       alt={product.productsInformations.name}

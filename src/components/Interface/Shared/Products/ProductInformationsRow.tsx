@@ -7,7 +7,6 @@ import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
 import generateRandomValue from "@/utils/classes/prices";
 import AddToWishList from "./AddToWishList";
-import { getUserCart } from "@/data/database/publicSQL/queries";
 
 export default function ProductInformations() {
   const router = useRouter();
@@ -32,8 +31,6 @@ export default function ProductInformations() {
         );
         const data = await response.json();
         setData(data.results);
-        const userCart = await getUserCart("clurfx5o1000029a4lvymddau");
-        console.log(userCart);
       } catch (error) {
         console.error("Error:", error);
       }

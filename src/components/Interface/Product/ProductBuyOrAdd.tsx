@@ -1,28 +1,40 @@
 "use client";
 import React from "react";
-import { NextResponse } from "next/server";
 import { FaCartPlus } from "react-icons/fa";
+import { ProductMixedInformations } from "@/utils/helpers/types";
+import generateRandomValue from "@/utils/classes/prices";
 
-export default function ProductBuyOrAdd({ product }) {
+export default function ProductBuyOrAdd({
+  product,
+}: {
+  product: ProductMixedInformations;
+}) {
   const handleAddToCart = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000//api/products/breakpoints/productManagement/addProductToCart",
+        "http://localhost:3000/api/products/breakpoints/productManagement/addProductToCart",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            id: product?.id,
+            externalProductId: product?.id,
+            name: product?.name,
+            description: product?.description_raw,
+            price: generateRandomValue(),
+            imageUrl: product?.background_image,
           }),
         }
       );
+      console.log(product);
 
       const result = await response.json();
 
       if (response.ok) {
-        return NextResponse.json({ message: "Pomyślnie dodano produkt!" });
+        alert(result.success);
+      } else {
+        alert(result.error || "Something went wrong");
       }
     } catch (error) {
       console.error("Error adding product to cart:", error);

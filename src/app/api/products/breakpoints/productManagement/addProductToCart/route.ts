@@ -5,9 +5,10 @@ import { postgres } from "@/data/database/publicSQL/postgres";
 export async function POST(request: NextRequest) {
   try {
     const productData = await request.json();
-    const { id } = productData;
+    const { externalProductId, name, description, price, imageUrl } =
+      productData;
 
-    if (!id) {
+    if (!externalProductId) {
       return NextResponse.json({ error: "Product ID is required!" });
     }
 
@@ -26,14 +27,14 @@ export async function POST(request: NextRequest) {
           userId: existingUser.id,
           products: {
             create: {
-              externalProductId: id,
+              externalProductId: externalProductId,
               quantity: 1,
               productsInformations: {
                 create: {
-                  name: "xd",
-                  description: "xd",
-                  price: 1.11,
-                  imageUrl: "xd",
+                  name: name,
+                  description: description,
+                  price: price,
+                  imageUrl: imageUrl,
                 },
               },
             },
@@ -44,7 +45,7 @@ export async function POST(request: NextRequest) {
       const existingProductInCart = await postgres.product.findFirst({
         where: {
           cartId: userCart.id,
-          externalProductId: id,
+          externalProductId: externalProductId,
         },
       });
 
@@ -57,14 +58,14 @@ export async function POST(request: NextRequest) {
         await postgres.product.create({
           data: {
             cartId: userCart.id,
-            externalProductId: id,
+            externalProductId: externalProductId,
             quantity: 1,
             productsInformations: {
               create: {
-                name: "haha",
-                description: "hahaha",
-                price: 9.11,
-                imageUrl: "hahahahah",
+                name: name,
+                description: description,
+                price: price,
+                imageUrl: imageUrl,
               },
             },
           },

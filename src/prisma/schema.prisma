@@ -92,7 +92,7 @@ model Cart {
 
 model Product {
   id        String    @id @default(cuid())
-  externalProductId String
+  externalProductId Int
   cartId    String
   quantity  Int
   productsInformations   ProductInformations?

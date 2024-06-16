@@ -31,13 +31,13 @@ export default function useWindowVisibility() {
   );
 
   const dispatch = useDispatch();
-  const handleOpen = (element: string) => {
+  const handleOpen = (element: string): void => {
     dispatch(open(element));
   };
-  const handleClose = (element: string) => {
+  const handleClose = (element: string): void => {
     dispatch(close(element));
   };
-  const handleToggle = (element: string) => {
+  const handleToggle = (element: string): void => {
     dispatch(toggle(element));
   };
   const handleToggleScreen = React.useCallback(

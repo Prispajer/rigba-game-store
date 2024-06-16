@@ -1,3 +1,4 @@
+import ProductDescription from "@/components/Interface/Product/ProductDescription";
 import { RowDataPacket } from "mysql2";
 
 export interface User extends RowDataPacket {
@@ -31,5 +32,7 @@ export type ProductRatings = {
 }[];
 
 export type ProductDescription = {
-  product_description: string;
+  description_raw: string;
 };
+
+export type ProductMixedInformations = ProductInformations & ProductDescription;

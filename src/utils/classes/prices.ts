@@ -1,4 +1,4 @@
-export default function generateRandomValue() {
+export default function generateRandomValue(): number {
   const minValue = 0;
   const maxValue = 300;
   const precision = 100;

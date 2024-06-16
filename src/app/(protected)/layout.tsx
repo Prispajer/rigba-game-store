@@ -1,5 +1,5 @@
 import Link from "next/link";
-import AccountNavbar from "../../components/auth/Account/AccountNavbar";
+import AccountNavbar from "../../components/Auth/Account/AccountNavbar";
 
 export default function SettingsLayout({
   children,

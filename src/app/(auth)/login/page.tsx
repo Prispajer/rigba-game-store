@@ -1,4 +1,4 @@
-import LoginContainer from "@/components/auth/LoginContainer";
+import LoginContainer from "@/components/Auth/LoginContainer";
 
 export default async function Login() {
   return <LoginContainer />;

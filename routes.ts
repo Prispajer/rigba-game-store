@@ -2,7 +2,7 @@ export const publicRoutes: string[] = [
   "/",
   "/filters",
   "/wishlist",
-  "/new-verification",
+  "/email-verification",
 ];
 export const authRoutes: string[] = [
   "/login",
@@ -16,7 +16,7 @@ export const breakpointsRoutes: string[] = [
   "/api/users/breakpoints/userAuthentication/registerUser",
   "/api/users/breakpoints/userAuthentication/loginUser",
   "/api/users/breakpoints/userAuthentication/findUser",
-  "/api/users/breakpoints/tokenManagement/newVerification",
+  "/api/users/breakpoints/tokenManagement/emailVerification",
   "/api/users/breakpoints/userAuthentication/resetPasswordUser",
   "/api/users/breakpoints/tokenManagement/newPassword",
   "/api/products/breakpoints/productManagement/addProductToCart",

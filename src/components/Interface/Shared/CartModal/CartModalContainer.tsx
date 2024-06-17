@@ -7,10 +7,12 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 export default function CartModalContainer() {
   const user = useCurrentUser();
   const { cartModalState, handleClose } = useWindowVisibility();
+  const { getItem } = useLocalStorage("LocalCart");
 
   const handleOutsideClick = () => {
     if (cartModalState) {
@@ -18,7 +20,10 @@ export default function CartModalContainer() {
     }
   };
 
-  const userProduct = user?.cart?.products;
+  const userProducts = user?.cart?.products || [];
+  const localCart = getItem() || [];
+
+  const productsToDisplay = user ? userProducts : localCart;
 
   return (
     <>
@@ -36,20 +41,22 @@ export default function CartModalContainer() {
               </button>
             </div>
             <ul className="flex flex-col w-full">
-              {userProduct?.map((product) => (
+              {productsToDisplay.map((product) => (
                 <li
                   key={product.id}
                   className="flex w-full p-[20px] gap-2 border-b-[1px] border-[#ffffff1a]"
                 >
                   <Link
                     href="/"
-                    className="flex flex-0 min-w-[50px] items-center h-[100px]"
+                    className="relative flex flex-0 min-w-[50px] items-center h-[100px]"
                   >
                     <Image
-                      src={product.productsInformations.imageUrl}
-                      width={50}
-                      height={100}
-                      alt={product.productsInformations.name}
+                      src={
+                        product.productsInformations?.imageUrl ||
+                        product.imageUrl
+                      }
+                      layout="fill"
+                      alt={product.productsInformations?.name || product.name}
                     />
                   </Link>
                   <div className="flex flex-1 flex-col px-2 gap-y-[10px] text-white">
@@ -57,7 +64,7 @@ export default function CartModalContainer() {
                       href="/"
                       className="flex w-full font-medium hover:text-modalHover"
                     >
-                      {product.productsInformations.name}
+                      {product.productsInformations?.name || product.name}
                     </Link>
                     <div className="flex items-center text-[#ffffffb3] text-[16px]">
                       <span className="mr-1 cursor-default">
@@ -73,7 +80,7 @@ export default function CartModalContainer() {
                           -
                         </button>
                         <span className="cursor-default">
-                          {product.quantity}
+                          {product.quantity || 1}
                         </span>
                         <button className="ml-2 hover:text-modalHover">
                           +
@@ -84,7 +91,8 @@ export default function CartModalContainer() {
                       </button>
                       <div>
                         <strong className="cursor-default">
-                          {product.productsInformations.price} zł
+                          {product.productsInformations?.price || product.price}
+                          zł
                         </strong>
                       </div>
                     </div>
@@ -96,7 +104,14 @@ export default function CartModalContainer() {
               <div className="flex justify-between items-center w-full text-white">
                 <strong className="cursor-default">Łącznie</strong>
                 <strong className="text-[30px] pb-[8px] cursor-default">
-                  148,20 zł
+                  {productsToDisplay.reduce(
+                    (total, product) =>
+                      total +
+                      (product.productsInformations?.price || product.price) *
+                        (product.quantity || 1),
+                    0
+                  )}
+                  zł
                 </strong>
               </div>
               <div className="w-full">

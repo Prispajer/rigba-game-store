@@ -3,12 +3,15 @@ import React from "react";
 import { FaCartPlus } from "react-icons/fa";
 import { ProductMixedInformations } from "@/utils/helpers/types";
 import generateRandomValue from "@/utils/classes/prices";
-
+import useCurrentUser from "@/hooks/useCurrentUser";
+import useLocalStorage from "@/hooks/useLocalStorage";
 export default function ProductBuyOrAdd({
   product,
 }: {
   product: ProductMixedInformations;
 }) {
+  const { setItem, getItem, removeItem } = useLocalStorage("LocalCart");
+  const user = useCurrentUser();
   const handleAddToCart = async () => {
     try {
       const response = await fetch(
@@ -24,17 +27,22 @@ export default function ProductBuyOrAdd({
             description: product?.description_raw,
             price: generateRandomValue(),
             imageUrl: product?.background_image,
+            email: user?.email,
           }),
         }
       );
-      console.log(product);
-
       const result = await response.json();
-
-      if (response.ok) {
-        alert(result.success);
+      if (user) {
+        if (response.ok) {
+          alert(result.success);
+        } else {
+          alert(result.error || "Something went wrong");
+        }
       } else {
-        alert(result.error || "Something went wrong");
+        const currentCart = getItem() || [];
+        currentCart.push(result.productData);
+        setItem(currentCart);
+        alert("Product added to local storage cart!");
       }
     } catch (error) {
       console.error("Error adding product to cart:", error);

@@ -1,9 +1,9 @@
 import authConfig from "./auth.config";
 import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
+import { handleDynamicId } from "../routes";
 
 import {
-  publicRoutes,
   authRoutes,
   breakpointsRoutes,
   apiAuthPrefix,
@@ -16,7 +16,7 @@ export default auth((req) => {
   const isLoggedIn = !!req.auth;
 
   const isApiRoute = req.nextUrl.pathname.startsWith(apiAuthPrefix);
-  const isPublicRoute = publicRoutes.includes(req.nextUrl.pathname);
+  const isPublicRoute = handleDynamicId(req.nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(req.nextUrl.pathname);
   const isBreakpointRoute = breakpointsRoutes.includes(req.nextUrl.pathname);
 

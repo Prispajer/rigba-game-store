@@ -5,22 +5,20 @@ import { postgres } from "@/data/database/publicSQL/postgres";
 export async function POST(request: NextRequest) {
   try {
     const productData = await request.json();
-    const { externalProductId, name, description, price, imageUrl } =
+    const { externalProductId, name, description, price, imageUrl, email } =
       productData;
 
     if (!externalProductId) {
       return NextResponse.json({ error: "Product ID is required!" });
     }
 
-    const userEmail = "duzykox123@gmail.com";
-    const existingUser = await getUserByEmail(userEmail);
+    const existingUser = await getUserByEmail(email);
 
     if (!existingUser) {
-      return NextResponse.json({ error: "User not found!" });
+      return NextResponse.json({ productData });
     }
 
     let userCart = await getUserCart(existingUser.id);
-
     if (!userCart) {
       userCart = await postgres.cart.create({
         data: {

@@ -12,7 +12,8 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 export default function CartModalContainer() {
   const user = useCurrentUser();
   const { cartModalState, handleClose } = useWindowVisibility();
-  const { getItem } = useLocalStorage("LocalCart");
+  const { getItem, removeProduct, increaseQuantity, decreaseQuantity } =
+    useLocalStorage("LocalCart");
 
   const handleOutsideClick = () => {
     if (cartModalState) {
@@ -76,17 +77,26 @@ export default function CartModalContainer() {
                     </div>
                     <div className="flex justify-between items-center w-full text-white">
                       <div>
-                        <button className="mr-2 hover:text-modalHover">
+                        <button
+                          className="mr-2 hover:text-modalHover"
+                          onClick={() => decreaseQuantity(product.id)}
+                        >
                           -
                         </button>
                         <span className="cursor-default">
                           {product.quantity || 1}
                         </span>
-                        <button className="ml-2 hover:text-modalHover">
+                        <button
+                          className="ml-2 hover:text-modalHover"
+                          onClick={() => increaseQuantity(product.id)}
+                        >
                           +
                         </button>
                       </div>
-                      <button className="text-[14px] hover:text-modalHover">
+                      <button
+                        onClick={() => removeProduct(product.id)}
+                        className="text-[14px] hover:text-modalHover"
+                      >
                         <FaRegTrashAlt />
                       </button>
                       <div>

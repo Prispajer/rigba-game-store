@@ -2,15 +2,16 @@ import React from "react";
 import { FaCartPlus } from "react-icons/fa";
 import { ProductMixedInformations } from "@/utils/helpers/types";
 import generateRandomValue from "@/utils/classes/prices";
+import { LocalProduct } from "@/utils/helpers/types";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import useLocalStorage, { Product } from "@/hooks/useLocalStorage";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 export default function ProductBuyOrAdd({
   product,
 }: {
   product: ProductMixedInformations;
 }) {
-  const { addProduct } = useLocalStorage("LocalCart");
+  const { handleAddProduct } = useLocalStorage("LocalCart");
   const user = useCurrentUser();
 
   const handleAddToCart = async () => {
@@ -40,7 +41,7 @@ export default function ProductBuyOrAdd({
           alert(result.error || "Something went wrong");
         }
       } else {
-        const newProduct: Product = {
+        const newProduct: LocalProduct = {
           id: product.id,
           name: product.name,
           description: product.description_raw,
@@ -48,25 +49,13 @@ export default function ProductBuyOrAdd({
           imageUrl: product.background_image,
           quantity: 1,
         };
-        addProduct(newProduct);
+        handleAddProduct(newProduct);
         alert("Product added to local storage cart!");
       }
     } catch (error) {
       console.error("Error adding product to cart:", error);
       alert("Error adding product to cart");
     }
-  };
-
-  const handleIncreaseQuantity = () => {
-    increaseQuantity(product.id);
-  };
-
-  const handleDecreaseQuantity = () => {
-    decreaseQuantity(product.id);
-  };
-
-  const handleRemoveProduct = () => {
-    removeProduct(product.id);
   };
 
   return (

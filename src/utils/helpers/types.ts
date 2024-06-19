@@ -8,6 +8,14 @@ export interface User extends RowDataPacket {
   registerDate?: Date;
   lastLoggedIn?: Date;
 }
+export interface LocalProduct {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  imageUrl: string;
+  quantity: number;
+}
 
 export interface GameSearchData {
   id: number;

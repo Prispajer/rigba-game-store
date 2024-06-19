@@ -1,91 +1,57 @@
-export interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  imageUrl: string;
-  quantity: number;
-}
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addProduct,
+  increaseQuantity,
+  decreaseQuantity,
+} from "@/redux/slices/productSlice";
+import { RootState } from "../redux/store";
+import { LocalProduct } from "@/utils/helpers/types";
 
 export default function useLocalStorage(key: string) {
-  const setItem = (cart: Product[]) =>
-    localStorage.setItem(key, JSON.stringify(cart));
+  const localCartState = useSelector(
+    (state: RootState) => state.product.localCart
+  );
+  const dispatch = useDispatch();
 
-  const getItem = (): Product[] | undefined => {
-    try {
-      const product = localStorage.getItem(key);
-      return product ? JSON.parse(product) : undefined;
-    } catch (error) {
-      console.log(error);
-    }
+  const handleAddProduct = (product: LocalProduct): void => {
+    dispatch(addProduct(product));
+  };
+  const handleIncreaseQuantity = (product: number): void => {
+    dispatch(increaseQuantity(product));
+  };
+  const handleDecreaseQuantity = (product: number): void => {
+    dispatch(decreaseQuantity(product));
   };
 
-  const removeItem = () => {
-    try {
-      localStorage.removeItem(key);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const setItem = (cart: LocalProduct[]) =>
+  //   localStorage.setItem(key, JSON.stringify(cart));
 
-  const removeProduct = (productId: number) => {
-    const currentCart = getItem() || [];
-    const updatedCart = currentCart.filter((item) => item.id !== productId);
-    setItem(updatedCart);
-  };
+  // const getItem = (): Product[] | undefined => {
+  //   try {
+  //     const product = localStorage.getItem(key);
+  //     return product ? JSON.parse(product) : undefined;
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  const increaseQuantity = (productId: number) => {
-    const currentCart = getItem() || [];
-    const existingProductIndex = currentCart.findIndex(
-      (item) => item.id === productId
-    );
+  // const removeItem = () => {
+  //   try {
+  //     localStorage.removeItem(key);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-    if (existingProductIndex !== -1) {
-      currentCart[existingProductIndex].quantity += 1;
-      setItem(currentCart);
-    }
-  };
-
-  const decreaseQuantity = (productId: number) => {
-    const currentCart = getItem() || [];
-    const existingProductIndex = currentCart.findIndex(
-      (item) => item.id === productId
-    );
-
-    if (existingProductIndex !== -1) {
-      const updatedQuantity = currentCart[existingProductIndex].quantity - 1;
-      if (updatedQuantity > 0) {
-        currentCart[existingProductIndex].quantity = updatedQuantity;
-      } else {
-        currentCart.splice(existingProductIndex, 1);
-      }
-      setItem(currentCart);
-    }
-  };
-
-  const addProduct = (newProduct: Product) => {
-    const currentCart = getItem() || [];
-    const existingProductIndex = currentCart.findIndex(
-      (item) => item.id === newProduct.id
-    );
-
-    if (existingProductIndex !== -1) {
-      currentCart[existingProductIndex].quantity += 1;
-    } else {
-      newProduct.quantity = 1;
-      currentCart.push(newProduct);
-    }
-
-    setItem(currentCart);
-  };
+  // const removeProduct = (productId: number) => {
+  //   const updatedCart = currentCart.filter((item) => item.id !== productId);
+  //   setItem(updatedCart);
+  // };
 
   return {
-    setItem,
-    getItem,
-    removeItem,
-    addProduct,
-    removeProduct,
-    increaseQuantity,
-    decreaseQuantity,
+    localCartState,
+    handleAddProduct,
+    handleIncreaseQuantity,
+    handleDecreaseQuantity,
   };
 }

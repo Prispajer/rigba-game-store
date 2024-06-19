@@ -1,31 +1,53 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { LocalProduct } from "@/utils/helpers/types";
 
-type Product = {
-  id: number | undefined;
-  name: string | undefined;
-  price: number | undefined;
-  genres: string | undefined;
-  platform: string | undefined;
-};
+interface CartState {
+  localCart: LocalProduct[];
+}
 
-const initialState: Product = {
-  id: undefined,
-  name: undefined,
-  price: undefined,
-  genres: undefined,
-  platform: undefined,
+const initialState: CartState = {
+  localCart: [],
 };
 
 const productSlice = createSlice({
   name: "product",
   initialState,
   reducers: {
-    createProduct: (state, action: PayloadAction<Product>) => {
-      const { id, name, price, genres, platform } = action.payload;
-      return { ...state, id, name, price, genres, platform };
+    addProduct: (state, action: PayloadAction<LocalProduct>) => {
+      const productIndex = state.localCart.findIndex(
+        (product: LocalProduct) => product.id === action.payload.id
+      );
+
+      if (productIndex !== -1) {
+        state.localCart[productIndex].quantity += 1;
+      } else {
+        state.localCart.push({ ...action.payload, quantity: 1 });
+      }
+    },
+    increaseQuantity: (state, action: PayloadAction<number>) => {
+      const productIndex = state.localCart.findIndex(
+        (product: LocalProduct) => product.id === action.payload
+      );
+
+      if (productIndex !== -1) {
+        state.localCart[productIndex].quantity += 1;
+      }
+    },
+    decreaseQuantity: (state, action: PayloadAction<number>) => {
+      const productIndex = state.localCart.findIndex(
+        (product: LocalProduct) => product.id === action.payload
+      );
+
+      if (productIndex !== -1) {
+        state.localCart[productIndex].quantity -= 1;
+      }
+      if (state.localCart[productIndex].quantity === 0) {
+        state.localCart.splice(productIndex, 1);
+      }
     },
   },
 });
 
-export const { createProduct } = productSlice.actions;
+export const { addProduct, increaseQuantity, decreaseQuantity } =
+  productSlice.actions;
 export default productSlice.reducer;

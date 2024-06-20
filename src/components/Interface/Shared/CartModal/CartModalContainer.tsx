@@ -13,8 +13,8 @@ export default function CartModalContainer() {
   const user = useCurrentUser();
   const { cartModalState, handleClose } = useWindowVisibility();
   const {
-    getItem,
     localCartState,
+    handleRemoveProduct,
     handleDecreaseQuantity,
     handleIncreaseQuantity,
   } = useLocalStorage("LocalCart");
@@ -97,7 +97,7 @@ export default function CartModalContainer() {
                         </button>
                       </div>
                       <button
-                        onClick={() => removeProduct(product.id)}
+                        onClick={() => handleRemoveProduct(product.id)}
                         className="text-[14px] hover:text-modalHover"
                       >
                         <FaRegTrashAlt />

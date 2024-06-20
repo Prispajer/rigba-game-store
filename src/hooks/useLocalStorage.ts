@@ -1,13 +1,17 @@
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addProduct,
+  removeProduct,
   increaseQuantity,
   decreaseQuantity,
+  setLocalCart,
 } from "@/redux/slices/productSlice";
 import { RootState } from "../redux/store";
 import { LocalProduct } from "@/utils/helpers/types";
 
 export default function useLocalStorage(key: string) {
+  const [isLoaded, setIsLoaded] = React.useState(false);
   const localCartState = useSelector(
     (state: RootState) => state.product.localCart
   );
@@ -16,41 +20,39 @@ export default function useLocalStorage(key: string) {
   const handleAddProduct = (product: LocalProduct): void => {
     dispatch(addProduct(product));
   };
-  const handleIncreaseQuantity = (product: number): void => {
-    dispatch(increaseQuantity(product));
-  };
-  const handleDecreaseQuantity = (product: number): void => {
-    dispatch(decreaseQuantity(product));
+
+  const handleRemoveProduct = (productId: number): void => {
+    dispatch(removeProduct(productId));
   };
 
-  // const setItem = (cart: LocalProduct[]) =>
-  //   localStorage.setItem(key, JSON.stringify(cart));
+  const handleIncreaseQuantity = (productId: number): void => {
+    dispatch(increaseQuantity(productId));
+  };
 
-  // const getItem = (): Product[] | undefined => {
-  //   try {
-  //     const product = localStorage.getItem(key);
-  //     return product ? JSON.parse(product) : undefined;
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const handleDecreaseQuantity = (productId: number): void => {
+    dispatch(decreaseQuantity(productId));
+  };
 
-  // const removeItem = () => {
-  //   try {
-  //     localStorage.removeItem(key);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  React.useEffect(() => {
+    const savedCart = localStorage.getItem(key);
+    if (savedCart) {
+      dispatch(setLocalCart(JSON.parse(savedCart)));
+    } else {
+      dispatch(setLocalCart([]));
+    }
+    setIsLoaded(true);
+  }, [key, dispatch]);
 
-  // const removeProduct = (productId: number) => {
-  //   const updatedCart = currentCart.filter((item) => item.id !== productId);
-  //   setItem(updatedCart);
-  // };
+  React.useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem(key, JSON.stringify(localCartState));
+    }
+  }, [key, localCartState, isLoaded]);
 
   return {
     localCartState,
     handleAddProduct,
+    handleRemoveProduct,
     handleIncreaseQuantity,
     handleDecreaseQuantity,
   };

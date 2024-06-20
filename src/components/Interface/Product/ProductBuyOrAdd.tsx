@@ -50,7 +50,6 @@ export default function ProductBuyOrAdd({
           quantity: 1,
         };
         handleAddProduct(newProduct);
-        alert("Product added to local storage cart!");
       }
     } catch (error) {
       console.error("Error adding product to cart:", error);

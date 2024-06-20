@@ -24,6 +24,15 @@ const productSlice = createSlice({
         state.localCart.push({ ...action.payload, quantity: 1 });
       }
     },
+    removeProduct: (state, action: PayloadAction<number>) => {
+      const productIndex = state.localCart.findIndex(
+        (product: LocalProduct) => product.id === action.payload
+      );
+
+      if (productIndex !== -1) {
+        state.localCart.splice(productIndex, 1);
+      }
+    },
     increaseQuantity: (state, action: PayloadAction<number>) => {
       const productIndex = state.localCart.findIndex(
         (product: LocalProduct) => product.id === action.payload
@@ -40,14 +49,22 @@ const productSlice = createSlice({
 
       if (productIndex !== -1) {
         state.localCart[productIndex].quantity -= 1;
+        if (state.localCart[productIndex].quantity === 0) {
+          state.localCart.splice(productIndex, 1);
+        }
       }
-      if (state.localCart[productIndex].quantity === 0) {
-        state.localCart.splice(productIndex, 1);
-      }
+    },
+    setLocalCart: (state, action: PayloadAction<LocalProduct[]>) => {
+      state.localCart = action.payload;
     },
   },
 });
 
-export const { addProduct, increaseQuantity, decreaseQuantity } =
-  productSlice.actions;
+export const {
+  addProduct,
+  removeProduct,
+  increaseQuantity,
+  decreaseQuantity,
+  setLocalCart,
+} = productSlice.actions;
 export default productSlice.reducer;

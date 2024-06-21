@@ -34,6 +34,14 @@ export default function LoginContainer() {
     });
   };
 
+  const handleLogin = async (email: string, password: string) => {
+    await signIn("credentials", {
+      email,
+      password,
+      redirectTo: DEFAULT_LOGIN_REDIRECT,
+    });
+  };
+
   const loginObject = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -69,12 +77,12 @@ export default function LoginContainer() {
             return response.json();
           })
           .then((data) => {
-            console.log(data);
             if (data?.error) {
               setError(data.error);
             }
             if (data?.success) {
               setSuccess(data.success);
+              handleLogin(email, password);
             }
             if (data?.twoFactor) {
               setShowTwoFactor(true);

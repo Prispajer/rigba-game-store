@@ -3,9 +3,7 @@ import {
   getTwoFactorConfirmationByUserId,
   getUserByEmail,
 } from "@/data/database/publicSQL/queries";
-import { signIn } from "@/auth";
 import bcrypt from "bcryptjs";
-import { DEFAULT_LOGIN_REDIRECT } from "@/../../routes";
 import { AuthError } from "next-auth";
 import {
   generateVerificationToken,
@@ -100,11 +98,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
 
   try {
     if (existingUser) {
-      await signIn("credentials", {
-        email,
-        password,
-        redirectTo: DEFAULT_LOGIN_REDIRECT,
-      });
+      return NextResponse.json({ success: "Login was successful!" });
     }
   } catch (error) {
     if (error instanceof AuthError) {

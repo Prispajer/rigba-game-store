@@ -3,10 +3,10 @@
 import React from "react";
 import Logo from "./Logo";
 import DesktopSearchBar from "./DesktopSearchBar";
-import Icons from "./Icons";
+import UserNavigation from "./UserNavigation";
 import HamburgerMenu from "@/components/Interface/Shared/Navbar/NavbarSidebar";
 import { useDispatch, useSelector } from "react-redux";
-import { open, close, toggleScreen, toggle } from "@/redux/slices/utilitySlice";
+import { toggleScreen } from "@/redux/slices/utilitySlice";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 
 export default function Header() {
@@ -32,7 +32,7 @@ export default function Header() {
       <div className="flex items-center max-w-[1240px] w-full mx-auto md:py-2">
         <Logo />
         <DesktopSearchBar />
-        <Icons />
+        <UserNavigation />
       </div>
     </header>
   );

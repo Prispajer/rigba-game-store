@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
-import generateRandomValue from "@/utils/classes/prices";
+import generateRandomValue from "@/utils/prices";
 import AddToWishList from "./AddToWishList";
 import useFetchGameDataByLink from "@/hooks/useFetchGameDataByLink";
 

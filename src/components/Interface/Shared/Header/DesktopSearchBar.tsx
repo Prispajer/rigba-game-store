@@ -2,7 +2,7 @@
 import React, { ChangeEvent } from "react";
 import { FaSearch } from "react-icons/fa";
 import { UtilsService } from "@/utils/classes/utilsService";
-import debounce from "@/utils/classes/debounce";
+import debounce from "@/utils/debounce";
 import { useSearchParams } from "next/navigation";
 import useFetchGameDataByLink from "@/hooks/useFetchGameDataByLink";
 import { IoCloseSharp } from "react-icons/io5";

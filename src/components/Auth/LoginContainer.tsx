@@ -66,14 +66,10 @@ export default function LoginContainer() {
           }
         )
           .then((response) => {
-            // TODO LOGIN ALWAYS THROWS JSON  ERROR EVEN ON REDIRECT AND SUCCESS LOGIN
-            // if (response.status === 200) {
-            //   window.location.href = DEFAULT_LOGIN_REDIRECT;
-            // } else {
             return response.json();
-            // }
           })
           .then((data) => {
+            console.log(data);
             if (data?.error) {
               setError(data.error);
             }
@@ -158,7 +154,9 @@ export default function LoginContainer() {
                   placeholder="E-mail"
                   autoCorrect="off"
                 />
-                {errors.email && <p>{errors.email.message}</p>}
+                {errors.email && (
+                  <p>{errors.email.message as React.ReactNode}</p>
+                )}
               </div>
               <div className="py-4 text-white">
                 <input
@@ -169,7 +167,9 @@ export default function LoginContainer() {
                   placeholder="Hasło"
                   autoCorrect="off"
                 />
-                {errors.password && <p>{errors.password.message}</p>}
+                {errors.password && (
+                  <p>{errors.password.message as React.ReactNode}</p>
+                )}
               </div>
               <FormSuccess message={success} />
               <FormError message={error || urlError} />
@@ -200,7 +200,7 @@ export default function LoginContainer() {
                   placeholder="Two Factor Code"
                   autoCorrect="off"
                 />
-                {errors.code && <p>{errors.code.message}</p>}
+                {errors.code && <p>{errors.code.message as React.ReactNode}</p>}
               </div>
               <FormSuccess message={success} />
               <FormError message={error || urlError} />

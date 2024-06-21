@@ -7,7 +7,7 @@ import { UtilsService } from "@/utils/classes/utilsService";
 import { IUtilsService } from "@/utils/interfaces/iUtilsService";
 import { GameSearchData } from "@/utils/helpers/types";
 import SearchResultsContainer from "./SearchResultsContainer";
-import debounce from "@/utils/classes/debounce";
+import debounce from "@/utils/debounce";
 import useFetchGameDataByLink from "@/hooks/useFetchGameDataByLink";
 
 export default function MobileSearchModal() {

@@ -29,7 +29,7 @@
     "src/app/(pages)/api/hello.js",
     "src/data/database.js",
     "src/utils/autocomplete.js",
-    "src/utils/classes/prices.ts",
+    "src/utils/prices.ts",
     "src/app/(pages)/api/registerData.js"
   ],
   "exclude": ["node_modules"]

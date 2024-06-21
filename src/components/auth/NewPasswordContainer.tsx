@@ -99,7 +99,9 @@ export default function ResetPasswordContainer() {
                 placeholder="Hasło"
                 autoCorrect="off"
               />
-              {errors.password && <p>{errors.password.message}</p>}
+              {errors.password && (
+                <p>{errors.password.message as React.ReactNode}</p>
+              )}
             </div>
             <div className="pt-4 text-white">
               <input
@@ -111,7 +113,7 @@ export default function ResetPasswordContainer() {
                 autoCorrect="off"
               />
               {errors.confirmPassword && (
-                <p>{errors.confirmPassword.message}</p>
+                <p>{errors.confirmPassword.message as React.ReactNode}</p>
               )}
             </div>
             <div className="flex flex-col py-4 leading-[16px] cursor-default">

@@ -89,7 +89,7 @@ export default function ResetPasswordContainer() {
                 placeholder="E-mail"
                 autoCorrect="off"
               />
-              {errors.email && <p>{errors.email.message}</p>}
+              {errors.email && <p>{errors.email.message as React.ReactNode}</p>}
             </div>
             <FormSuccess message={success} />
             <FormError message={error} />

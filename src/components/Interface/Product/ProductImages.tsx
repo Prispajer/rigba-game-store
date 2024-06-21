@@ -1,8 +1,5 @@
 "use client";
 import React from "react";
-import { IoMdDoneAll } from "react-icons/io";
-import { IoKeyOutline } from "react-icons/io5";
-import { FaSteam } from "react-icons/fa";
 import useFetchGameDataByLink from "@/hooks/useFetchGameDataByLink";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import GameImageModal from "../Shared/GameImageModal/GameImageModal";
@@ -13,7 +10,6 @@ export default function ProductImages({ screenshots }) {
 
   const handleImageClick = (id) => {
     setCurrentImageId(id);
-    handleOpen("gameImageModal");
   };
 
   return (

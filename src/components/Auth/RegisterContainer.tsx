@@ -91,7 +91,7 @@ export default function RegisterContainer() {
               placeholder="E-mail"
               autoComplete="off"
             />
-            {errors.email && <p>{errors.email.message}</p>}
+            {errors.email && <p>{errors.email.message as React.ReactNode}</p>}
           </div>
           <div className="pt-4 text-white">
             <input
@@ -102,7 +102,9 @@ export default function RegisterContainer() {
               placeholder="Hasło"
               autoComplete="off"
             />
-            {errors.password && <p>{errors.password.message}</p>}
+            {errors.password && (
+              <p>{errors.password.message as React.ReactNode}</p>
+            )}
           </div>
           <div className="py-4 text-white">
             <input
@@ -113,7 +115,9 @@ export default function RegisterContainer() {
               placeholder="Powtórz hasło"
               autoComplete="off"
             />
-            {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
+            {errors.confirmPassword && (
+              <p>{errors.confirmPassword.message as React.ReactNode}</p>
+            )}
           </div>
           <FormSuccess message={success} />
           <FormError message={error} />

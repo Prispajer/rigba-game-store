@@ -6,11 +6,13 @@ import { IoCloseSharp } from "react-icons/io5";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
-import useCurrentUser from "@/hooks/useCurrentUser";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import useUserCart from "@/hooks/useUserCart";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 export default function CartModalContainer() {
   const user = useCurrentUser();
+  const userCart = useUserCart();
   const { cartModalState, handleClose } = useWindowVisibility();
   const {
     localCartState,
@@ -25,9 +27,7 @@ export default function CartModalContainer() {
     }
   };
 
-  const userProducts = user?.cart?.products || [];
-  console.log(localCartState);
-  const productsToDisplay = user ? userProducts : localCartState;
+  const productsToDisplay = user ? userCart : localCartState;
 
   return (
     <>
@@ -117,13 +117,15 @@ export default function CartModalContainer() {
               <div className="flex justify-between items-center w-full text-white">
                 <strong className="cursor-default">Łącznie</strong>
                 <strong className="text-[30px] pb-[8px] cursor-default">
-                  {productsToDisplay.reduce(
-                    (total, product) =>
-                      total +
-                      (product.productsInformations?.price || product.price) *
-                        (product.quantity || 1),
-                    0
-                  )}
+                  {productsToDisplay
+                    .reduce(
+                      (total: number, product) =>
+                        total +
+                        (product.productsInformations?.price || product.price) *
+                          (product.quantity || 1),
+                      0
+                    )
+                    .toFixed(2)}
                   zł
                 </strong>
               </div>

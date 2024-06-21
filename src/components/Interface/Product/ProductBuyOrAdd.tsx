@@ -1,7 +1,7 @@
 import React from "react";
 import { FaCartPlus } from "react-icons/fa";
 import { ProductMixedInformations } from "@/utils/helpers/types";
-import generateRandomValue from "@/utils/classes/prices";
+import generateRandomValue from "@/utils/prices";
 import { LocalProduct } from "@/utils/helpers/types";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useLocalStorage from "@/hooks/useLocalStorage";

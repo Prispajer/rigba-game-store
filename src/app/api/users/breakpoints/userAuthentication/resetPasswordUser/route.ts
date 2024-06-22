@@ -23,6 +23,6 @@ export async function POST(request: NextRequest, response: NextResponse) {
 
     return NextResponse.json({ success: "Reset email sent!" });
   } catch (error) {
-    throw new Error("An error occurred while creating a new user.");
+    return NextResponse.json({ error: "Something went wrong!" });
   }
 }

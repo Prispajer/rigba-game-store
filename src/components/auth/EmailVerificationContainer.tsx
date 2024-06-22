@@ -18,28 +18,35 @@ export default function EmailVerificationContainer() {
       return;
     }
 
-    fetch(
-      `http://localhost:3000/api/users/breakpoints/tokenManagement/emailVerification`,
-      {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify({ token }),
-      }
-    )
-      .then((response) => {
-        // TODO RESPONSE SUCCESS ERROR
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+    try {
+      fetch(
+        `http://localhost:3000/api/users/breakpoints/tokenManagement/emailVerification`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify({ token }),
         }
-        return response.json();
-      })
-      .then((data) => {
-        setSuccess(data.success);
-        setError(data.error);
-      });
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          if (data.success) {
+            setSuccess(data.success);
+          }
+          if (data.error) {
+            setError(data.error);
+          }
+        })
+        .catch(() => {
+          setError("Something went wrong!");
+        });
+    } catch (error) {
+      setError("An error occurred while verifying email address!");
+    }
   }, [token]);
 
   React.useEffect(() => {

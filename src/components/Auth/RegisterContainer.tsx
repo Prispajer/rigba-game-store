@@ -34,31 +34,32 @@ export default function RegisterContainer() {
     setSuccess("");
     startTransition(() => {
       const { email, password } = data;
-      fetch(
-        "http://localhost:3000/api/users/breakpoints/userAuthentication/registerUser",
-        {
-          method: "POST",
-          body: JSON.stringify({ email, password }),
-          headers: { "Content-Type": "application/json" },
-        }
-      )
-        .then((response) => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            console.error("Wystąpił błąd podczas rejestracji użytkownika.");
+      try {
+        fetch(
+          "http://localhost:3000/api/users/breakpoints/userAuthentication/registerUser",
+          {
+            method: "POST",
+            body: JSON.stringify({ email, password }),
+            headers: { "Content-Type": "application/json" },
           }
-        })
-        .then((data) => {
-          setSuccess(data.success);
-          setError(data.error);
-        })
-        .catch((error) => {
-          console.error(
-            "Wystąpił błąd podczas wysyłania żądania rejestracji użytkownika:",
-            error
-          );
-        });
+        )
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            if (data.success) {
+              setSuccess(data.success);
+            }
+            if (data.error) {
+              setError(data.error);
+            }
+          })
+          .catch(() => {
+            setError("Something went wrong!");
+          });
+      } catch (error) {
+        setError("An error has occured while creating account!");
+      }
     });
   }
 

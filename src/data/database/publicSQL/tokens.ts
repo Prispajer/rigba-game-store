@@ -1,5 +1,5 @@
 import {
-  getVerificationTokenByEmail,
+  getEmailVerificationTokenByEmail,
   getPasswordResetTokenByEmail,
   getTwoFactorTokenByEmail,
 } from "./queries";
@@ -7,21 +7,21 @@ import { v4 as uuid4 } from "uuid";
 import { postgres } from "./postgres";
 import crypto from "crypto";
 
-export const generateVerificationToken = async (email: string) => {
+export const generateEmailVerificationToken = async (email: string) => {
   const token = uuid4();
   const expires = new Date(new Date().getTime() + 3600 * 1000);
 
-  const existingToken = await getVerificationTokenByEmail(email);
+  const existingToken = await getEmailVerificationTokenByEmail(email);
 
   if (existingToken) {
-    await postgres.verificationToken.delete({
+    await postgres.emailVerificationToken.delete({
       where: {
         id: existingToken.id,
       },
     });
   }
 
-  const verificationToken = await postgres.verificationToken.create({
+  const verificationToken = await postgres.emailVerificationToken.create({
     data: {
       email,
       token,

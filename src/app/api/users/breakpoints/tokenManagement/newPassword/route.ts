@@ -32,6 +32,17 @@ export async function POST(request: NextRequest, response: NextResponse) {
     });
   }
 
+  const passwordMatch = await bcrypt.compare(
+    password,
+    existingUser.password as string
+  );
+
+  if (passwordMatch) {
+    return NextResponse.json({
+      error: "You must provide other password than the older one!",
+    });
+  }
+
   const hashedPassword = await bcrypt.hash(password, 10);
 
   await postgres.user.update({

@@ -6,7 +6,7 @@ import {
 import bcrypt from "bcryptjs";
 import { AuthError } from "next-auth";
 import {
-  generateVerificationToken,
+  generateEmailVerificationToken,
   generateTwoFactorToken,
 } from "@/data/database/publicSQL/tokens";
 import {
@@ -36,10 +36,10 @@ export async function POST(request: NextRequest, response: NextResponse) {
   }
 
   if (!existingUser.emailVerified) {
-    const verificationToken = await generateVerificationToken(email);
+    const emailVerificationToken = await generateEmailVerificationToken(email);
     await sendVerificationEmail(
-      verificationToken.email,
-      verificationToken.token
+      emailVerificationToken.email,
+      emailVerificationToken.token
     );
 
     return NextResponse.json({ success: "Confirmation email sent!" });
@@ -97,8 +97,11 @@ export async function POST(request: NextRequest, response: NextResponse) {
   }
 
   try {
-    if (existingUser) {
-      return NextResponse.json({ success: "Login was successful!" });
+    if (existingUser && existingUser.emailVerified) {
+      return NextResponse.json({
+        success: "Login was successful!",
+        emailVerified: true,
+      });
     }
   } catch (error) {
     if (error instanceof AuthError) {

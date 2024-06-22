@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { postgres } from "@/data/database/publicSQL/postgres";
 import { getUserByEmail } from "@/data/database/publicSQL/queries";
-import { generateVerificationToken } from "@/data/database/publicSQL/tokens";
+import { generateEmailVerificationToken } from "@/data/database/publicSQL/tokens";
 import { sendVerificationEmail } from "@/data/database/publicSQL/mail";
 import bcrypt from "bcryptjs";
 
@@ -24,10 +24,10 @@ export async function POST(request: NextRequest, response: NextResponse) {
       },
     });
 
-    const verificationToken = await generateVerificationToken(email);
+    const emailVerificationToken = await generateEmailVerificationToken(email);
     await sendVerificationEmail(
-      verificationToken.email,
-      verificationToken.token
+      emailVerificationToken.email,
+      emailVerificationToken.token
     );
 
     return NextResponse.json({ success: "Confirmation email sent!" });

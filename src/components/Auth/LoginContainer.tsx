@@ -82,17 +82,19 @@ export default function LoginContainer() {
             }
             if (data?.success) {
               setSuccess(data.success);
-              handleLogin(email, password);
+              if (data.emailVerified) {
+                handleLogin(email, password);
+              }
             }
             if (data?.twoFactor) {
               setShowTwoFactor(true);
             }
           })
           .catch(() => {
-            setError("Something went wrong");
+            setError("Something went wrong!");
           });
       } catch (error) {
-        setError("There was error while logging into user.");
+        setError("There was error while logging into user!");
       }
     });
   }

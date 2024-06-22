@@ -43,7 +43,6 @@ export default function ResetPasswordContainer() {
           }
         )
           .then((response) => {
-            // TODO LOGIN ALWAYS THROWS JSON  ERROR EVEN ON REDIRECT AND SUCCESS LOGIN
             {
               return response.json();
             }
@@ -53,11 +52,13 @@ export default function ResetPasswordContainer() {
             setError(data.error);
           })
           .catch((error) => {
-            console.error("There was error while logging into user.", error);
-            setError("There was error while logging into user.");
+            console.error(
+              "An error has occured while fetching the data.",
+              error
+            );
           });
       } catch (error) {
-        setError("There was error while logging into user.");
+        setError(data.error);
       }
     });
   }

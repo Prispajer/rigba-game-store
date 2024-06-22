@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getUserByEmail } from "@/data/database/publicSQL/queries";
-import { getVerificationTokenByToken } from "@/data/database/publicSQL/queries";
+import { getEmailVerificationTokenByToken } from "@/data/database/publicSQL/queries";
 import { postgres } from "@/data/database/publicSQL/postgres";
 
 export async function POST(request: NextRequest, response: NextResponse) {
   const tokenBody = await request.json();
   const { token } = tokenBody;
 
-  const existingToken = await getVerificationTokenByToken(token);
+  const existingToken = await getEmailVerificationTokenByToken(token);
 
   if (!existingToken) {
     return NextResponse.json({
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
     },
   });
 
-  await postgres.verificationToken.delete({
+  await postgres.emailVerificationToken.delete({
     where: {
       id: existingToken.id,
     },

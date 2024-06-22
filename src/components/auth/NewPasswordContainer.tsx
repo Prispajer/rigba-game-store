@@ -15,7 +15,6 @@ export default function ResetPasswordContainer() {
   const [isPending, startTransition] = React.useTransition();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
-  console.log(token);
 
   const resetPasswordObject = useForm<z.infer<typeof NewPasswordSchema>>({
     resolver: zodResolver(NewPasswordSchema),
@@ -52,21 +51,23 @@ export default function ResetPasswordContainer() {
           }
         )
           .then((response) => {
-            // TODO LOGIN ALWAYS THROWS JSON  ERROR EVEN ON REDIRECT AND SUCCESS LOGIN
             {
               return response.json();
             }
           })
           .then((data) => {
-            setSuccess(data.success);
-            setError(data.error);
+            if (data.success) {
+              setSuccess(data.success);
+            }
+            if (data.error) {
+              setError(data.error);
+            }
           })
-          .catch((error) => {
-            console.error("There was error while logging into user.", error);
-            setError("There was error while logging into user.");
+          .catch(() => {
+            setError("Something went wrong!");
           });
       } catch (error) {
-        setError("There was error while logging into user.");
+        setError("There was error while changing password!");
       }
     });
   }

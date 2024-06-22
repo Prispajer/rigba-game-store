@@ -18,23 +18,25 @@ export const getUserById = async (id: string) => {
   }
 };
 
-export const getVerificationTokenByToken = async (token: string) => {
+export const getEmailVerificationTokenByToken = async (token: string) => {
   try {
-    const verificationToken = await postgres.verificationToken.findUnique({
-      where: { token },
-    });
-    return verificationToken;
+    const emailVerificationToken =
+      await postgres.emailVerificationToken.findUnique({
+        where: { token },
+      });
+    return emailVerificationToken;
   } catch {
     return null;
   }
 };
 
-export const getVerificationTokenByEmail = async (email: string) => {
+export const getEmailVerificationTokenByEmail = async (email: string) => {
   try {
-    const verificationToken = await postgres.verificationToken.findFirst({
-      where: { email },
-    });
-    return verificationToken;
+    const emailVerificationToken =
+      await postgres.emailVerificationToken.findFirst({
+        where: { email },
+      });
+    return emailVerificationToken;
   } catch {
     return null;
   }

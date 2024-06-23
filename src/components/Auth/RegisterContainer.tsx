@@ -1,14 +1,17 @@
 "use client";
-import React, { use } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
+
+import React from "react";
 import Link from "next/link";
 import { FaGoogle } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
-import { FaSteamSymbol } from "react-icons/fa";
-import { useForm } from "react-hook-form";
+import { FaDiscord } from "react-icons/fa";
 import { RegisterSchema } from "@/utils/schemas/user";
-import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
+import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
+import { signInAccount } from "@/utils/actions";
+import { SignInProvider } from "@/utils/helpers/types";
 
 export default function RegisterContainer() {
   const [error, setError] = React.useState<string | undefined>("");
@@ -28,6 +31,10 @@ export default function RegisterContainer() {
     handleSubmit,
     formState: { errors },
   } = registerObject;
+
+  const handleProviderLogin = async (provider: SignInProvider) => {
+    await signInAccount(provider);
+  };
 
   function handleFormSubmit(data: z.infer<typeof RegisterSchema>) {
     setError("");
@@ -145,29 +152,32 @@ export default function RegisterContainer() {
           <div className="flex-1 border-[1px] border-[#ffffff1f]"></div>
         </div>
         <div className="">
-          <div className="social-link bg-[#FFFFFF]">
-            <Link href="/social-connect/google" className="flex items-center">
-              <FaGoogle size={20} color="black" />
-              <span className="social-link-span  text-[black]">
-                Kontynuuj jako Google
-              </span>
-            </Link>
+          <div
+            className="social-link bg-[#FFFFFF] hover:bg-[#efeded]"
+            onClick={() => handleProviderLogin("google")}
+          >
+            <FaGoogle size={20} color="black" />
+            <span className="social-link-span  text-[black]">
+              Kontynuuj jako Google
+            </span>
           </div>
-          <div className="social-link bg-[#5266fc]">
-            <Link href="/social-connect/facebook" className="flex items-center">
-              <FaFacebookF size={20} color="white" />
-              <span className="social-link-span text-[white]">
-                Kontynuuj jako Facebook
-              </span>
-            </Link>
+          <div
+            className="social-link bg-[#5266fc] hover:bg-[#5257fc]"
+            onClick={() => handleProviderLogin("facebook")}
+          >
+            <FaFacebookF size={20} color="white" />
+            <span className="social-link-span text-[white]">
+              Kontynuuj jako Facebook
+            </span>
           </div>
-          <div className="social-link bg-[#171d25]">
-            <Link href="/social-connect/steam" className="flex items-center">
-              <FaSteamSymbol size={20} color="white" />
-              <span className="social-link-span  text-[white]">
-                Kontynuuj jako Steam
-              </span>
-            </Link>
+          <div
+            className="social-link bg-[#7289da] hover:bg-[#7280da]"
+            onClick={() => handleProviderLogin("discord")}
+          >
+            <FaDiscord size={20} color="white" />
+            <span className="social-link-span  text-[white]">
+              Kontynuuj jako Discord
+            </span>
           </div>
         </div>
       </div>

@@ -44,3 +44,10 @@ export type ProductDescription = {
 };
 
 export type ProductMixedInformations = ProductInformations & ProductDescription;
+
+export enum SignInProvider {
+  Credentials = "credentials",
+  Google = "google",
+  Facebook = "facebook",
+  Discord = "discord",
+}

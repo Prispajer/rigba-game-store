@@ -22,6 +22,7 @@ export const breakpointsRoutes: string[] = [
   "/api/users/breakpoints/userAuthentication/resetPasswordUser",
   "/api/users/breakpoints/tokenManagement/newPassword",
   "/api/products/breakpoints/productManagement/addProductToCart",
+  "/api/products/breakpoints/productManagement/deleteProductFromCart",
 ];
 
 export function handleDynamicId(route: string): boolean {

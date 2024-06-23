@@ -11,6 +11,7 @@ import useUserCart from "@/hooks/useUserCart";
 import useCurrentUser from "@/hooks/useCurrentUser";
 
 export default function CartModalContainer() {
+  const [error, setError] = React.useState<string | undefined>("");
   const user = useCurrentUser();
   const userCart = useUserCart();
   const { cartModalState, handleClose } = useWindowVisibility();
@@ -28,6 +29,41 @@ export default function CartModalContainer() {
   };
 
   const productsToDisplay = user ? userCart : localCartState;
+
+  const handleDeleteProduct = (productId: number) => {
+    try {
+      const email = user?.email;
+      fetch(
+        "http://localhost:3000/api/products/breakpoints/productManagement/deleteProductFromCart",
+        {
+          headers: { "Content-Type": "application/json" },
+          method: "POST",
+          body: JSON.stringify({ email, productId }),
+        }
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data?.error) {
+            setError(data.error);
+          } else {
+            // Handle success scenario
+            console.log("Product successfully deleted");
+          }
+        })
+        .catch((error) => {
+          setError("Something went wrong!");
+          console.error("Error deleting product:", error);
+        });
+    } catch (error) {
+      setError("There was an error while deleting the product.");
+      console.error("Error deleting product:", error);
+    }
+  };
 
   return (
     <>
@@ -97,7 +133,11 @@ export default function CartModalContainer() {
                         </button>
                       </div>
                       <button
-                        onClick={() => handleRemoveProduct(product.id)}
+                        onClick={
+                          user
+                            ? () => handleDeleteProduct(product.id)
+                            : () => handleRemoveProduct(product.id)
+                        }
                         className="text-[14px] hover:text-modalHover"
                       >
                         <FaRegTrashAlt />

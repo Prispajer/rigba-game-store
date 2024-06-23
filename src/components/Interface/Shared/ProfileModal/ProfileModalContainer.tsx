@@ -5,7 +5,7 @@ import { CiHeart } from "react-icons/ci";
 import { CiLogout } from "react-icons/ci";
 import { IoReload } from "react-icons/io5";
 import { IoCloseSharp } from "react-icons/io5";
-import { logout } from "@/utils/logout";
+import { signOutAccount } from "@/utils/actions";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useCurrentUser from "@/hooks/useCurrentUser";
 
@@ -14,7 +14,7 @@ export default function ProfileModalContainer() {
   const user = useCurrentUser();
 
   const handleLogout = () => {
-    logout();
+    signOutAccount();
   };
 
   const handleOutsideClick = () => {

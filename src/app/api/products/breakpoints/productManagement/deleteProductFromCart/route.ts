@@ -2,16 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { getUserByEmail, getUserCart } from "@/data/database/publicSQL/queries";
 import { postgres } from "@/data/database/publicSQL/postgres";
 
-export async function DELETE(request: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
-    const { productId } = await request.json();
+    const { email, externalProductId } = await request.json();
 
-    if (!productId) {
+    if (!externalProductId) {
       return NextResponse.json({ error: "Product ID is required!" });
     }
 
-    const userEmail = "duzykox123@gmail.com";
-    const existingUser = await getUserByEmail(userEmail);
+    const existingUser = await getUserByEmail(email);
 
     if (!existingUser) {
       return NextResponse.json({ error: "User not found!" });
@@ -26,7 +25,7 @@ export async function DELETE(request: NextRequest) {
     const existingProductInCart = await postgres.product.findFirst({
       where: {
         cartId: userCart.id,
-        externalProductId: productId,
+        externalProductId: externalProductId,
       },
     });
 
@@ -34,16 +33,9 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Product not found in cart!" });
     }
 
-    if (existingProductInCart.quantity > 1) {
-      await postgres.product.update({
-        where: { id: existingProductInCart.id },
-        data: { quantity: existingProductInCart.quantity - 1 },
-      });
-    } else {
-      await postgres.product.delete({
-        where: { id: existingProductInCart.id },
-      });
-    }
+    await postgres.product.delete({
+      where: { id: existingProductInCart.id },
+    });
 
     userCart = await postgres.cart.findUnique({
       where: { id: userCart.id },

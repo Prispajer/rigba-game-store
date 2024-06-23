@@ -11,8 +11,8 @@ import { useForm } from "react-hook-form";
 import { useSearchParams } from "next/navigation";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
-import { signIn } from "next-auth/react";
-import { DEFAULT_LOGIN_REDIRECT } from "../../../routes";
+import { signInAccount } from "@/utils/actions";
+import { SignInProvider } from "@/utils/helpers/types";
 
 export default function LoginContainer() {
   const searchParams = useSearchParams();
@@ -26,20 +26,19 @@ export default function LoginContainer() {
   const [success, setSuccess] = React.useState<string | undefined>("");
   const [isPending, startTransition] = React.useTransition();
 
-  const handleProviderClick = async (
-    provider: "google" | "facebook" | "discord"
-  ) => {
-    await signIn(provider, {
-      callbackUrl: DEFAULT_LOGIN_REDIRECT,
-    });
+  const handleProviderLogin = async (provider: SignInProvider) => {
+    await signInAccount(provider);
   };
 
   const handleLogin = async (email: string, password: string) => {
-    await signIn("credentials", {
-      email,
-      password,
-      redirectTo: DEFAULT_LOGIN_REDIRECT,
-    });
+    try {
+      await signInAccount(SignInProvider.Credentials, {
+        email,
+        password,
+      });
+    } catch (error) {
+      setError("Failed to sign in with email and password!");
+    }
   };
 
   const loginObject = useForm<z.infer<typeof LoginSchema>>({
@@ -121,7 +120,7 @@ export default function LoginContainer() {
         <div className="">
           <div
             className="social-link bg-[#FFFFFF] hover:bg-[#efeded]"
-            onClick={() => handleProviderClick("google")}
+            onClick={() => handleProviderLogin("google")}
           >
             <FaGoogle size={20} color="black" />
             <span className="social-link-span  text-[black]">
@@ -130,7 +129,7 @@ export default function LoginContainer() {
           </div>
           <div
             className="social-link bg-[#5266fc] hover:bg-[#5257fc]"
-            onClick={() => handleProviderClick("facebook")}
+            onClick={() => handleProviderLogin("facebook")}
           >
             <FaFacebookF size={20} color="white" />
             <span className="social-link-span text-[white]">
@@ -139,7 +138,7 @@ export default function LoginContainer() {
           </div>
           <div
             className="social-link bg-[#7289da] hover:bg-[#7280da]"
-            onClick={() => handleProviderClick("discord")}
+            onClick={() => handleProviderLogin("discord")}
           >
             <FaDiscord size={20} color="white" />
             <span className="social-link-span  text-[white]">

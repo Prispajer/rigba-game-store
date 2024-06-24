@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getUserByEmail, getUserCart } from "@/data/database/publicSQL/queries";
 import { postgres } from "@/data/database/publicSQL/postgres";
 
-export async function POST(request: NextRequest) {
+export async function DELETE(request: NextRequest) {
   try {
     const { email, externalProductId } = await request.json();
 

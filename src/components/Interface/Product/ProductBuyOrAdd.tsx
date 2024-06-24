@@ -11,7 +11,7 @@ export default function ProductBuyOrAdd({
 }: {
   product: ProductMixedInformations;
 }) {
-  const { handleAddProduct } = useLocalStorage("LocalCart");
+  const { handleAddLocalProduct } = useLocalStorage("LocalCart");
   const user = useCurrentUser();
 
   const handleAddToCart = async () => {
@@ -42,14 +42,14 @@ export default function ProductBuyOrAdd({
         }
       } else {
         const newProduct: LocalProduct = {
-          id: product.id,
+          externalProductId: product.id,
           name: product.name,
           description: product.description_raw,
           price: generateRandomValue(),
           imageUrl: product.background_image,
           quantity: 1,
         };
-        handleAddProduct(newProduct);
+        handleAddLocalProduct(newProduct);
       }
     } catch (error) {
       console.error("Error adding product to cart:", error);

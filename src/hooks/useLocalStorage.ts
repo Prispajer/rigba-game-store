@@ -17,19 +17,19 @@ export default function useLocalStorage(key: string) {
   );
   const dispatch = useDispatch();
 
-  const handleAddProduct = (product: LocalProduct): void => {
+  const handleAddLocalProduct = (product: LocalProduct): void => {
     dispatch(addProduct(product));
   };
 
-  const handleRemoveProduct = (productId: number): void => {
+  const handleRemoveLocalProduct = (productId: number): void => {
     dispatch(removeProduct(productId));
   };
 
-  const handleIncreaseQuantity = (productId: number): void => {
+  const handleIncreaseLocalQuantity = (productId: number): void => {
     dispatch(increaseQuantity(productId));
   };
 
-  const handleDecreaseQuantity = (productId: number): void => {
+  const handleDecreaseLocalQuantity = (productId: number): void => {
     dispatch(decreaseQuantity(productId));
   };
 
@@ -51,9 +51,9 @@ export default function useLocalStorage(key: string) {
 
   return {
     localCartState,
-    handleAddProduct,
-    handleRemoveProduct,
-    handleIncreaseQuantity,
-    handleDecreaseQuantity,
+    handleAddLocalProduct,
+    handleRemoveLocalProduct,
+    handleIncreaseLocalQuantity,
+    handleDecreaseLocalQuantity,
   };
 }

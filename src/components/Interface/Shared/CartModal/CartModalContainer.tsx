@@ -9,6 +9,7 @@ import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useUserCart from "@/hooks/useUserCart";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import { set } from "zod";
 
 export default function CartModalContainer() {
   const [error, setError] = React.useState<string | undefined>("");
@@ -17,9 +18,9 @@ export default function CartModalContainer() {
   const { cartModalState, handleClose } = useWindowVisibility();
   const {
     localCartState,
-    handleRemoveProduct,
-    handleDecreaseQuantity,
-    handleIncreaseQuantity,
+    handleRemoveLocalProduct,
+    handleDecreaseLocalQuantity,
+    handleIncreaseLocalQuantity,
   } = useLocalStorage("LocalCart");
 
   const handleOutsideClick = () => {
@@ -29,39 +30,98 @@ export default function CartModalContainer() {
   };
 
   const productsToDisplay = user ? userCart : localCartState;
+  console.log(productsToDisplay);
 
-  const handleDeleteProduct = (productId: number) => {
+  const handleRemoveUserProduct = async (externalProductId: number) => {
     try {
       const email = user?.email;
-      fetch(
+      await fetch(
         "http://localhost:3000/api/products/breakpoints/productManagement/deleteProductFromCart",
         {
           headers: { "Content-Type": "application/json" },
-          method: "POST",
-          body: JSON.stringify({ email, productId }),
+          method: "DELETE",
+          body: JSON.stringify({ email, externalProductId }),
         }
       )
         .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
           return response.json();
         })
         .then((data) => {
+          console.log(data);
           if (data?.error) {
             setError(data.error);
-          } else {
-            // Handle success scenario
-            console.log("Product successfully deleted");
+          }
+          if (data.success) {
+            setError(data.success);
           }
         })
         .catch((error) => {
           setError("Something went wrong!");
-          console.error("Error deleting product:", error);
         });
     } catch (error) {
       setError("There was an error while deleting the product.");
-      console.error("Error deleting product:", error);
+    }
+  };
+
+  const handleIncreaseUserQuantity = async (externalProductId: number) => {
+    try {
+      const email = user?.email;
+      await fetch(
+        "http://localhost:3000/api/products/breakpoints/productManagement/increaseProductQuantity",
+        {
+          headers: { "Content-Type": "application/json" },
+          method: "PATCH",
+          body: JSON.stringify({ email, externalProductId }),
+        }
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data);
+          if (data?.error) {
+            setError(data.error);
+          }
+          if (data.success) {
+            setError(data.success);
+          }
+        })
+        .catch((error) => {
+          setError("Something went wrong!");
+        });
+    } catch (error) {
+      setError("There was an error while deleting the product.");
+    }
+  };
+
+  const handleDecreaseUserQuantity = async (externalProductId: number) => {
+    try {
+      const email = user?.email;
+      await fetch(
+        "http://localhost:3000/api/products/breakpoints/productManagement/decreaseProductQuantity",
+        {
+          headers: { "Content-Type": "application/json" },
+          method: "PATCH",
+          body: JSON.stringify({ email, externalProductId }),
+        }
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data);
+          if (data?.error) {
+            setError(data.error);
+          }
+          if (data.success) {
+            setError(data.success);
+          }
+        })
+        .catch((error) => {
+          setError("Something went wrong!");
+        });
+    } catch (error) {
+      setError("There was an error while deleting the product.");
     }
   };
 
@@ -83,7 +143,7 @@ export default function CartModalContainer() {
             <ul className="flex flex-col w-full">
               {productsToDisplay.map((product) => (
                 <li
-                  key={product.id}
+                  key={product.externalProductId}
                   className="flex w-full p-[20px] gap-2 border-b-[1px] border-[#ffffff1a]"
                 >
                   <Link
@@ -118,7 +178,17 @@ export default function CartModalContainer() {
                       <div>
                         <button
                           className="mr-2 hover:text-modalHover"
-                          onClick={() => handleDecreaseQuantity(product.id)}
+                          onClick={
+                            user
+                              ? () =>
+                                  handleDecreaseUserQuantity(
+                                    product.externalProductId
+                                  )
+                              : () =>
+                                  handleDecreaseLocalQuantity(
+                                    product.externalProductId
+                                  )
+                          }
                         >
                           -
                         </button>
@@ -127,7 +197,17 @@ export default function CartModalContainer() {
                         </span>
                         <button
                           className="ml-2 hover:text-modalHover"
-                          onClick={() => handleIncreaseQuantity(product.id)}
+                          onClick={
+                            user
+                              ? () =>
+                                  handleIncreaseUserQuantity(
+                                    product.externalProductId
+                                  )
+                              : () =>
+                                  handleIncreaseLocalQuantity(
+                                    product.externalProductId
+                                  )
+                          }
                         >
                           +
                         </button>
@@ -135,8 +215,14 @@ export default function CartModalContainer() {
                       <button
                         onClick={
                           user
-                            ? () => handleDeleteProduct(product.id)
-                            : () => handleRemoveProduct(product.id)
+                            ? () =>
+                                handleRemoveUserProduct(
+                                  product.externalProductId
+                                )
+                            : () =>
+                                handleRemoveLocalProduct(
+                                  product.externalProductId
+                                )
                         }
                         className="text-[14px] hover:text-modalHover"
                       >

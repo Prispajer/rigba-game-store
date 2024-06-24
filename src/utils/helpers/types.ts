@@ -9,7 +9,7 @@ export interface User extends RowDataPacket {
   lastLoggedIn?: Date;
 }
 export interface LocalProduct {
-  id: number;
+  externalProductId: number;
   name: string;
   description: string;
   price: number;

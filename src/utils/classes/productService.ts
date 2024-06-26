@@ -1,3 +1,3 @@
 export class ProductService {
-  private string: _name;
+  private string: name;
 }

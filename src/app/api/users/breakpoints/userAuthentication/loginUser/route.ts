@@ -15,15 +15,19 @@ import {
 } from "@/data/database/publicSQL/mail";
 import { getTwoFactorTokenByEmail } from "@/data/database/publicSQL/queries";
 import { postgres } from "@/data/database/publicSQL/postgres";
+import userService from "@/utils/classes/userService";
+import { RequestResponse, ResponseData } from "@/utils/helpers/types";
 
 export async function POST(request: NextRequest, response: NextResponse) {
   const userBody = await request.json();
   const { email, password, code } = userBody;
-
   const existingUser = await getUserByEmail(email);
 
   if (!existingUser || !existingUser.email || !existingUser.password) {
-    return NextResponse.json({ error: "Email doesn't exist!" });
+    return NextResponse.json<RequestResponse<ResponseData>>({
+      success: false,
+      message: "User doesn't exist!",
+    });
   }
 
   const isPasswordCorrect = await bcrypt.compare(

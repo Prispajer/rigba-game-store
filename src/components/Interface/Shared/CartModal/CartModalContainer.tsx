@@ -9,12 +9,11 @@ import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useUserCart from "@/hooks/useUserCart";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import { set } from "zod";
 
 export default function CartModalContainer() {
-  const [error, setError] = React.useState<string | undefined>("");
   const user = useCurrentUser();
   const userCart = useUserCart();
+  const [error, setError] = React.useState<string | undefined>("");
   const { cartModalState, handleClose } = useWindowVisibility();
   const {
     localCartState,
@@ -32,36 +31,39 @@ export default function CartModalContainer() {
   const productsToDisplay = user ? userCart : localCartState;
   console.log(productsToDisplay);
 
-  const handleRemoveUserProduct = async (externalProductId: number) => {
-    try {
-      const email = user?.email;
-      await fetch(
-        "http://localhost:3000/api/products/breakpoints/productManagement/deleteProductFromCart",
-        {
-          headers: { "Content-Type": "application/json" },
-          method: "DELETE",
-          body: JSON.stringify({ email, externalProductId }),
-        }
-      )
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          console.log(data);
-          if (data?.error) {
-            setError(data.error);
+  const handleRemoveUserProduct = React.useCallback(
+    async (externalProductId: number) => {
+      try {
+        const email = user?.email;
+        await fetch(
+          "http://localhost:3000/api/products/breakpoints/productManagement/deleteProductFromCart",
+          {
+            headers: { "Content-Type": "application/json" },
+            method: "DELETE",
+            body: JSON.stringify({ email, externalProductId }),
           }
-          if (data.success) {
-            setError(data.success);
-          }
-        })
-        .catch((error) => {
-          setError("Something went wrong!");
-        });
-    } catch (error) {
-      setError("There was an error while deleting the product.");
-    }
-  };
+        )
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            console.log(data);
+            if (data?.error) {
+              setError(data.error);
+            }
+            if (data.success) {
+              setError(data.success);
+            }
+          })
+          .catch((error) => {
+            setError("Something went wrong!");
+          });
+      } catch (error) {
+        setError("There was an error while deleting the product.");
+      }
+    },
+    [user]
+  );
 
   const handleIncreaseUserQuantity = async (externalProductId: number) => {
     try {
@@ -83,10 +85,10 @@ export default function CartModalContainer() {
             setError(data.error);
           }
           if (data.success) {
-            setError(data.success);
+            setError(data.error);
           }
         })
-        .catch((error) => {
+        .catch(() => {
           setError("Something went wrong!");
         });
     } catch (error) {

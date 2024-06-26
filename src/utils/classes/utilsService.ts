@@ -2,18 +2,18 @@ import { IUtilsService } from "../interfaces/iUtilsService";
 import { GameSearchData } from "../helpers/types";
 
 export class UtilsService implements IUtilsService {
-  private _searchText: string;
+  private searchText: string;
 
   constructor(searchText: string) {
-    this._searchText = searchText;
+    this.searchText = searchText;
   }
 
   getSearchText(): string {
-    return this._searchText;
+    return this.searchText;
   }
 
   setSearchText(searchText: string): void {
-    this._searchText = searchText;
+    this.searchText = searchText;
   }
 
   searchProducts(searchData: GameSearchData[]): GameSearchData[] {

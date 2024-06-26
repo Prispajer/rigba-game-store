@@ -12,8 +12,13 @@ import { useSearchParams } from "next/navigation";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import { signInAccount } from "@/utils/actions";
-import { SignInProvider } from "@/utils/helpers/types";
-
+import requestService from "@/utils/classes/requestService";
+import {
+  SignInProvider,
+  ResponseData,
+  RequestResponse,
+  RequestData,
+} from "@/utils/helpers/types";
 export default function LoginContainer() {
   const searchParams = useSearchParams();
   const urlError =
@@ -57,43 +62,34 @@ export default function LoginContainer() {
   } = loginObject;
 
   async function handleFormSubmit(data: z.infer<typeof LoginSchema>) {
-    startTransition(() => {
+    startTransition(async () => {
       setError("");
       setSuccess("");
 
       const { email, password, code } = data;
 
       try {
-        fetch(
-          "http://localhost:3000/api/users/breakpoints/userAuthentication/loginUser",
-          {
-            headers: { "Content-Type": "application/json" },
-            method: "POST",
-            body: JSON.stringify({ email, password, code }),
+        const response = await requestService.postMethod(
+          "users/breakpoints/userAuthentication/loginUser",
+          { email, password, code }
+        );
+
+        console.log(response);
+
+        if (!response.success) {
+          setError(response.message);
+        } else if (response.success) {
+          setSuccess(response.message);
+          if (response.data?.emailVerified) {
+            handleLogin(email, password);
           }
-        )
-          .then((response) => {
-            return response.json();
-          })
-          .then((data) => {
-            if (data?.error) {
-              setError(data.error);
-            }
-            if (data?.success) {
-              setSuccess(data.success);
-              if (data.emailVerified) {
-                handleLogin(email, password);
-              }
-            }
-            if (data?.twoFactor) {
-              setShowTwoFactor(true);
-            }
-          })
-          .catch(() => {
-            setError("Something went wrong!");
-          });
+          if (response.data?.twoFactor) {
+            setShowTwoFactor(true);
+          }
+        }
       } catch (error) {
-        setError("There was error while logging into user!");
+        setError("Something went wrong!");
+        console.error(error);
       }
     });
   }
@@ -120,7 +116,7 @@ export default function LoginContainer() {
         <div className="">
           <div
             className="social-link bg-[#FFFFFF] hover:bg-[#efeded]"
-            onClick={() => handleProviderLogin("google")}
+            onClick={() => handleProviderLogin(SignInProvider.Google)}
           >
             <FaGoogle size={20} color="black" />
             <span className="social-link-span  text-[black]">
@@ -129,7 +125,7 @@ export default function LoginContainer() {
           </div>
           <div
             className="social-link bg-[#5266fc] hover:bg-[#5257fc]"
-            onClick={() => handleProviderLogin("facebook")}
+            onClick={() => handleProviderLogin(SignInProvider.Facebook)}
           >
             <FaFacebookF size={20} color="white" />
             <span className="social-link-span text-[white]">
@@ -138,7 +134,7 @@ export default function LoginContainer() {
           </div>
           <div
             className="social-link bg-[#7289da] hover:bg-[#7280da]"
-            onClick={() => handleProviderLogin("discord")}
+            onClick={() => handleProviderLogin(SignInProvider.Discord)}
           >
             <FaDiscord size={20} color="white" />
             <span className="social-link-span  text-[white]">

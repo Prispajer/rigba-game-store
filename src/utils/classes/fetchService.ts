@@ -1,4 +1,6 @@
-export class ApiService implements IApiService {
+import { IFetchService } from "../interfaces/iFetchService";
+
+export class FetchService implements IFetchService {
   private apiKey: string = "b3c85b14e19f4d618df8debc3d5b01b6";
   private baseUrl: string = "https://api.rawg.io/api";
 

@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import ProductContainer from "@/components/Interface/Product/ProductContainer";
-import { ApiService } from "@/utils/classes/apiService";
-import { IApiService } from "@/utils/interfaces/iApiService";
+import { FetchService } from "@/utils/classes/fetchService";
+import { IFetchService } from "@/utils/interfaces/iFetchService";
 
 type Props = {
   params: {
@@ -24,7 +24,7 @@ export const generateMetadata = async ({
 };
 
 export default async function productDetails({ params }: Props) {
-  const apiService: IApiService = new ApiService();
+  const apiService: IFetchService = new FetchService();
 
   const [product, screenshots, genres, tags] = await Promise.all([
     apiService.getProduct(params.productId),

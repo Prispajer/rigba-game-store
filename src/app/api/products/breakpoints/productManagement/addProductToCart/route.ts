@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     const existingUser = await getUserByEmail(email);
 
     if (!existingUser) {
-      return NextResponse.json({ productData });
+      return NextResponse.json({ error: "User doesn't exist!" });
     }
 
     let userCart = await getUserCart(existingUser.id);

@@ -4,7 +4,7 @@ export default function ProductReview({ product }) {
       <div className="flex flex-col pt-[20px] md:px-0 pb-[15px]">
         <div className="flex items-center">
           <ul className="flex flex-col md:flex-row">
-            {product.ratings.map((rating, index) => (
+            {product.ratings?.map((rating, index) => (
               <li
                 key={index}
                 className="flex flex-col mx-[20px] mb-[5px] text-buttonTextColor"

@@ -107,4 +107,3 @@ export interface ProductDataResponse {
 
 export type RequestData = UserDataRequest & ProductDataRequest;
 export type ResponseData = UserDataResponse & ProductDataResponse;
-export type UserOptions = User & EmailVerificationToken & TwoFactorToken;

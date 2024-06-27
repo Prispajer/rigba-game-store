@@ -12,7 +12,7 @@ export class RequestService implements IRequestService {
     endpoint: string,
     method: string,
     body?: RequestData
-  ): Promise<RequestResponse<ResponseData>> {
+  ): Promise<RequestResponse<t>> {
     const response = await fetch(`${this.baseUrl}${endpoint}`, {
       method: method,
       headers: { "Content-Type": "application/json" },
@@ -23,34 +23,32 @@ export class RequestService implements IRequestService {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const data: RequestResponse<ResponseData> = await response.json();
+    const data: RequestResponse<t> = await response.json();
     return data;
   }
 
-  public async getMethod(
-    endpoint: string
-  ): Promise<RequestResponse<ResponseData>> {
+  public async getMethod(endpoint: string): Promise<RequestResponse<t>> {
     return await this.request(endpoint, "GET");
   }
 
   public async postMethod(
     endpoint: string,
     body?: RequestData
-  ): Promise<RequestResponse<ResponseData>> {
+  ): Promise<RequestResponse<t>> {
     return await this.request(endpoint, "POST", body);
   }
 
   public async deleteMethod(
     endpoint: string,
     body?: RequestData
-  ): Promise<RequestResponse<ResponseData>> {
+  ): Promise<RequestResponse<t>> {
     return await this.request(endpoint, "DELETE", body);
   }
 
   public async patchMethod(
     endpoint: string,
     body?: RequestData
-  ): Promise<RequestResponse<ResponseData>> {
+  ): Promise<RequestResponse<t>> {
     return await this.request(endpoint, "PATCH", body);
   }
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import ProductInformationsRow from "../Shared/Products/ProductInformationsRow";
+import ProductList from "../Shared/Products/ProductList";
 
 export default function HomePopularGames() {
   return (
@@ -10,7 +10,7 @@ export default function HomePopularGames() {
         <div className="flex flex-col w-full">
           <h1 className="text-[30px] text-white font-bold">Popularne gry</h1>
           <div className="flex max-w-[1240px] gap-x-[20px]  scrollbar overflow-x-auto ">
-            <ProductInformationsRow />
+            <ProductList ordering="-name" />
           </div>
           <div className="flex items-center justify-center pt-[20px]">
             <button className="py-[10px] px-[40px] text-[#ffffff] text-[16px] font-bold border border-white">

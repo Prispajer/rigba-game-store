@@ -7,10 +7,14 @@ import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
 import generateRandomValue from "@/utils/prices";
 import AddToWishList from "./AddToWishList";
+import { IFetchService } from "@/utils/interfaces/iFetchService";
+import { FetchService } from "@/utils/classes/fetchService";
 
-export default function ProductInformations() {
+export default function ProductList({ ordering }: FormErrorProps) {
   const router = useRouter();
   const [data, setData] = React.useState<Games>([]);
+
+  const apiService: IFetchService = new FetchService();
 
   function handleClick(name: string) {
     router.push(`/product/${name}`);
@@ -19,18 +23,8 @@ export default function ProductInformations() {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          "https://api.rawg.io/api/games?ordering=-rating&key=b3c85b14e19f4d618df8debc3d5b01b6",
-          {
-            headers: {
-              "User-Agent": "Mozilla/5.0",
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-          }
-        );
-        const data = await response.json();
-        setData(data.results);
+        const orderByName = await apiService.getProductByOrdering(ordering);
+        setData(orderByName);
       } catch (error) {
         console.error("Error:", error);
       }

@@ -13,12 +13,7 @@ import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import { signInAccount } from "@/utils/actions";
 import requestService from "@/utils/classes/requestService";
-import {
-  SignInProvider,
-  ResponseData,
-  RequestResponse,
-  RequestData,
-} from "@/utils/helpers/types";
+import { SignInProvider } from "@/utils/helpers/types";
 export default function LoginContainer() {
   const searchParams = useSearchParams();
   const urlError =
@@ -32,18 +27,17 @@ export default function LoginContainer() {
   const [isPending, startTransition] = React.useTransition();
 
   const handleProviderLogin = async (provider: SignInProvider) => {
-    await signInAccount(provider);
-  };
-
-  const handleLogin = async (email: string, password: string) => {
     try {
-      await signInAccount(SignInProvider.Credentials, {
-        email,
-        password,
-      });
+      await signInAccount(provider);
     } catch (error) {
-      setError("Failed to sign in with email and password!");
+      setError("Login failed. Please try again.");
     }
+  };
+  const handleLogin = async (email: string, password: string) => {
+    await signInAccount(SignInProvider.Credentials, {
+      email,
+      password,
+    });
   };
 
   const loginObject = useForm<z.infer<typeof LoginSchema>>({
@@ -61,7 +55,7 @@ export default function LoginContainer() {
     formState: { errors },
   } = loginObject;
 
-  async function handleFormSubmit(data: z.infer<typeof LoginSchema>) {
+  const handleFormSubmit = async (data: z.infer<typeof LoginSchema>) => {
     startTransition(async () => {
       setError("");
       setSuccess("");
@@ -74,26 +68,25 @@ export default function LoginContainer() {
           { email, password, code }
         );
 
-        console.log(response);
-
         if (!response.success) {
           setError(response.message);
-        } else if (response.success) {
+        } else {
           setSuccess(response.message);
+
           if (response.data?.emailVerified) {
-            handleLogin(email, password);
+            await handleLogin(email, password);
           }
-          if (response.data?.twoFactor) {
+
+          if (response.data?.token) {
             setShowTwoFactor(true);
           }
         }
       } catch (error) {
         setError("Something went wrong!");
-        console.error(error);
+        console.error("Error during form submission:", error);
       }
     });
-  }
-
+  };
   return (
     <main className="flex flex-col lg:flex-row justify-center items-center mx-auto lg:px-[100px] gap-x-[120px]">
       <h1 className="hidden lg:block text-[80px] leading-[90px] font-bold text-[white]">

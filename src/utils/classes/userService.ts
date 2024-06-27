@@ -19,38 +19,61 @@ import {
   User,
   EmailVerificationToken,
   TwoFactorToken,
-  ResponseData,
 } from "../helpers/types";
 
 export default class UserService {
-  async loginUser(
-    email: string,
-    password: string,
-    code?: string
-  ): Promise<RequestResponse<User>> {
+  private email: string;
+  private password: string;
+  private code?: string;
+
+  constructor(email: string, password: string, code: string) {
+    (this.email = email), (this.password = password), (this.code = code);
+  }
+
+  async loginUser() {
     try {
-      const user = await this.validateUser(email, password);
+      const user = await getUserByEmail(this.email);
+
+      if (!user || !user.email || !user.password) {
+        return {
+          success: false,
+          message: "User doesn't exist!",
+          data: undefined,
+        };
+      }
+
+      const isPasswordCorrect = await bcrypt.compare(
+        this.password,
+        user.password
+      );
+
+      if (!isPasswordCorrect) {
+        return {
+          success: false,
+          message: "Invalid credentials!",
+          data: undefined,
+        };
+      }
 
       const emailVerificationResponse = await this.handleEmailVerification(
         user
       );
-      if (emailVerificationResponse.success) {
-        return emailVerificationResponse; // Return the RequestResponse directly
+      if (!emailVerificationResponse.success) {
+        return {
+          success: false,
+          message: emailVerificationResponse.message,
+          data: emailVerificationResponse.data,
+        };
       }
-
       const twoFactorResponse = await this.handleTwoFactorAuthentication(
         user,
-        code
+        this.code
       );
-      if (twoFactorResponse.success) {
-        return twoFactorResponse; // Return the RequestResponse directly
-      }
-
-      if (user.emailVerified) {
+      if (!twoFactorResponse.success) {
         return {
-          success: true,
-          message: "Login was successful!",
-          data: { emailVerified: user.emailVerified },
+          success: false,
+          message: twoFactorResponse.message,
+          data: twoFactorResponse.data,
         };
       }
 
@@ -64,41 +87,15 @@ export default class UserService {
         return {
           success: false,
           message: error.message,
+          data: undefined,
         };
       }
-      console.error("Error logging in:", error);
       return {
         success: false,
         message: "Something went wrong!",
-      };
-    }
-  }
-
-  async validateUser(
-    email: string,
-    password: string
-  ): Promise<RequestResponse<User>> {
-    const user = await getUserByEmail(email);
-
-    if (!user || !user.email || !user.password) {
-      return {
-        success: false,
-        message: "User doesn't exist!",
         data: undefined,
       };
     }
-
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordCorrect) {
-      return {
-        success: false,
-        message: "Invalid credentials!",
-        data: undefined,
-      };
-    }
-
-    return { success: true, message: "User found!", data: user };
   }
 
   async handleEmailVerification(
@@ -113,14 +110,14 @@ export default class UserService {
         emailVerificationToken.token
       );
       return {
-        success: true,
+        success: false,
         message: "Confirmation email sent!",
         data: emailVerificationToken,
       };
     }
     return {
-      success: false,
-      message: "Email has been confirmed already!",
+      success: true,
+      message: "User has email confirmed!",
       data: undefined,
     };
   }
@@ -185,7 +182,7 @@ export default class UserService {
           twoFactorToken.token
         );
         return {
-          success: false,
+          success: true,
           message: "Two-Factor token has been sent!",
           data: twoFactorToken,
         };
@@ -193,7 +190,7 @@ export default class UserService {
     }
     return {
       success: true,
-      message: "Two-Factor activated!",
+      message: "Two-Factor authentication activated!",
       data: undefined,
     };
   }

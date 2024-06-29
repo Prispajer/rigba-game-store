@@ -1,8 +1,10 @@
 import bcrypt from "bcryptjs";
+import { NextResponse } from "next/server";
 import {
   getTwoFactorConfirmationByUserId,
   getUserByEmail,
   getTwoFactorTokenByEmail,
+  getEmailVerificationTokenByToken,
 } from "@/data/database/publicSQL/queries";
 import {
   generateEmailVerificationToken,
@@ -22,17 +24,28 @@ import {
 } from "../helpers/types";
 
 export default class UserService {
-  private email: string;
-  private password: string;
+  private email?: string;
+  private password?: string;
   private code?: string;
+  private token?: string;
 
-  constructor(email: string, password: string, code: string) {
-    (this.email = email), (this.password = password), (this.code = code);
+  constructor(
+    email?: string,
+    password?: string,
+    code?: string,
+    token?: string
+  ) {
+    this.email = email;
+    this.password = password;
+    this.code = code;
+    this.token = token;
   }
 
-  async loginUser() {
+  async loginUser(): Promise<RequestResponse<
+    User | EmailVerificationToken | TwoFactorToken
+  > | void> {
     try {
-      const user = await getUserByEmail(this.email);
+      const user = await getUserByEmail(this.email as string);
 
       if (!user || !user.email || !user.password) {
         return {
@@ -43,7 +56,7 @@ export default class UserService {
       }
 
       const isPasswordCorrect = await bcrypt.compare(
-        this.password,
+        this.password as string,
         user.password
       );
 
@@ -55,33 +68,36 @@ export default class UserService {
         };
       }
 
-      const emailVerificationResponse = await this.handleEmailVerification(
+      const emailVerificationResponse = await this.handleSendEmailVerification(
         user
       );
-      if (!emailVerificationResponse.success) {
+
+      if (emailVerificationResponse) {
         return {
-          success: false,
+          success: emailVerificationResponse.success,
           message: emailVerificationResponse.message,
           data: emailVerificationResponse.data,
         };
       }
+
       const twoFactorResponse = await this.handleTwoFactorAuthentication(
         user,
         this.code
       );
-      if (!twoFactorResponse.success) {
+      if (user.emailVerified) {
+        if (twoFactorResponse) {
+          return {
+            success: twoFactorResponse.success,
+            message: twoFactorResponse.message,
+            data: twoFactorResponse.data,
+          };
+        }
         return {
-          success: false,
-          message: twoFactorResponse.message,
-          data: twoFactorResponse.data,
+          success: true,
+          message: "Login was successful!",
+          data: user,
         };
       }
-
-      return {
-        success: true,
-        message: "Login was successful!",
-        data: user,
-      };
     } catch (error) {
       if (error instanceof AuthError) {
         return {
@@ -98,9 +114,65 @@ export default class UserService {
     }
   }
 
-  async handleEmailVerification(
+  async registerUser(): Promise<RequestResponse<
+    User | EmailVerificationToken
+  > | void> {
+    try {
+      const user = await getUserByEmail(this.email as string);
+      const hashedPassword = await bcrypt.hash(this.password as string, 10);
+      const isPasswordCorrect = await bcrypt.compare(
+        this.password as string,
+        user?.password as string
+      );
+
+      if (user) {
+        return {
+          success: false,
+          message: "Email in use!",
+          data: undefined,
+        };
+      }
+
+      const newUser = await postgres.user.create({
+        data: {
+          email: this.email,
+          password: hashedPassword,
+        },
+      });
+
+      if (isPasswordCorrect && !newUser.emailVerified) {
+        const emailVerificationToken = await generateEmailVerificationToken(
+          this.email as string
+        );
+        await sendVerificationEmail(
+          emailVerificationToken.email,
+          emailVerificationToken.token
+        );
+
+        return {
+          success: true,
+          message: "Confirmation email sent!",
+          data: undefined,
+        };
+      }
+
+      return {
+        success: true,
+        message: "User has been created!",
+        data: undefined,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: "An error has occurred while registering user!",
+        data: undefined,
+      };
+    }
+  }
+
+  async handleSendEmailVerification(
     user: User
-  ): Promise<RequestResponse<EmailVerificationToken>> {
+  ): Promise<RequestResponse<EmailVerificationToken> | void> {
     const emailVerificationToken = await generateEmailVerificationToken(
       user.email as string
     );
@@ -110,14 +182,67 @@ export default class UserService {
         emailVerificationToken.token
       );
       return {
-        success: false,
+        success: true,
         message: "Confirmation email sent!",
-        data: emailVerificationToken,
+        data: undefined,
       };
     }
+  }
+
+  async handleConfirmEmailVerification(): Promise<
+    RequestResponse<EmailVerificationToken>
+  > {
+    const existingToken = await getEmailVerificationTokenByToken(
+      this.token as string
+    );
+
+    if (!existingToken) {
+      return {
+        success: false,
+        message: "Token doesn't exist!",
+        data: undefined,
+      };
+    }
+
+    const tokenHasExpired = new Date(existingToken.expires) < new Date();
+
+    if (tokenHasExpired) {
+      return {
+        success: false,
+        message: "Token has expired!",
+        data: undefined,
+      };
+    }
+
+    const existingUser = await getUserByEmail(existingToken.email);
+
+    if (!existingUser) {
+      return {
+        success: false,
+        message: "Email doesn't exist!",
+        data: undefined,
+      };
+    }
+
+    await postgres.user.update({
+      where: {
+        id: existingUser.id,
+      },
+      data: {
+        emailVerified: new Date(),
+        email: existingUser.email,
+      },
+    });
+
+    await postgres.emailVerificationToken.delete({
+      where: {
+        id: existingToken.id,
+      },
+    });
+
     return {
       success: true,
-      message: "User has email confirmed!",
+      message: "Email verified!",
       data: undefined,
     };
   }
@@ -125,8 +250,8 @@ export default class UserService {
   async handleTwoFactorAuthentication(
     user: User,
     code?: string
-  ): Promise<RequestResponse<TwoFactorToken>> {
-    if (!user.isTwoFactorEnabled) {
+  ): Promise<RequestResponse<TwoFactorToken> | void> {
+    if (!user.isTwoFactorEnabled && user.email) {
       if (code) {
         const twoFactorToken = await getTwoFactorTokenByEmail(
           user.email as string
@@ -163,35 +288,24 @@ export default class UserService {
             where: { id: existingConfirmation.id },
           });
         }
-
         await postgres.twoFactorConfirmation.create({
-          data: { userId: user.id },
+          data: {
+            userId: user.id,
+          },
         });
-
-        return {
-          success: true,
-          message: "Account already has Two-Factor login activated!",
-          data: undefined,
-        };
       } else {
-        const twoFactorToken = await generateTwoFactorToken(
-          user.email as string
-        );
+        const twoFactorToken = await generateTwoFactorToken(user.email);
         await sendTwoFactorTokenEmail(
           twoFactorToken.email,
           twoFactorToken.token
         );
+
         return {
           success: true,
-          message: "Two-Factor token has been sent!",
+          message: "Two Factor token has been sent!",
           data: twoFactorToken,
         };
       }
     }
-    return {
-      success: true,
-      message: "Two-Factor authentication activated!",
-      data: undefined,
-    };
   }
 }

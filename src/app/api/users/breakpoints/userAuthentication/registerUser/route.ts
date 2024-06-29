@@ -1,37 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
-import { postgres } from "@/data/database/publicSQL/postgres";
-import { getUserByEmail } from "@/data/database/publicSQL/queries";
-import { generateEmailVerificationToken } from "@/data/database/publicSQL/tokens";
-import { sendVerificationEmail } from "@/data/database/publicSQL/mail";
-import bcrypt from "bcryptjs";
+import UserService from "@/utils/classes/userService";
+import {
+  RequestResponse,
+  User,
+  EmailVerificationToken,
+  TwoFactorToken,
+} from "@/utils/helpers/types";
 
 export async function POST(request: NextRequest, response: NextResponse) {
-  try {
-    const userBody = await request.json();
-    const { email, password } = userBody;
-    const hashedPassword = await bcrypt.hash(password, 10);
+  const { email, password } = await request.json();
 
-    const existingUser = await getUserByEmail(email);
+  const userService = new UserService(email, password);
+  const registerResponse = await userService.registerUser();
 
-    if (existingUser) {
-      return NextResponse.json({ error: "Email already in use!" });
-    }
-
-    await postgres.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-      },
-    });
-
-    const emailVerificationToken = await generateEmailVerificationToken(email);
-    await sendVerificationEmail(
-      emailVerificationToken.email,
-      emailVerificationToken.token
-    );
-
-    return NextResponse.json({ success: "Confirmation email sent!" });
-  } catch (error) {
-    throw new Error("An error occurred while creating a new user.");
-  }
+  return NextResponse.json<RequestResponse<User | EmailVerificationToken>>({
+    success: registerResponse?.success,
+    message: registerResponse?.message,
+    data: registerResponse?.data,
+  });
 }

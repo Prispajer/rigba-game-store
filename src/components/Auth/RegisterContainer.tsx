@@ -12,11 +12,18 @@ import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import { signInAccount } from "@/utils/actions";
 import { SignInProvider } from "@/utils/helpers/types";
+import requestService from "@/utils/classes/requestService";
 
 export default function RegisterContainer() {
   const [error, setError] = React.useState<string | undefined>("");
   const [success, setSuccess] = React.useState<string | undefined>("");
   const [isPending, startTransition] = React.useTransition();
+
+  const clearMessages = () => {
+    setError("");
+    setSuccess("");
+  };
+
   const registerObject = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -36,39 +43,28 @@ export default function RegisterContainer() {
     await signInAccount(provider);
   };
 
-  function handleFormSubmit(data: z.infer<typeof RegisterSchema>) {
-    setError("");
-    setSuccess("");
-    startTransition(() => {
+  const handleFormSubmit = (data: z.infer<typeof RegisterSchema>) => {
+    startTransition(async () => {
       const { email, password } = data;
       try {
-        fetch(
-          "http://localhost:3000/api/users/breakpoints/userAuthentication/registerUser",
-          {
-            method: "POST",
-            body: JSON.stringify({ email, password }),
-            headers: { "Content-Type": "application/json" },
-          }
-        )
-          .then((response) => {
-            return response.json();
-          })
-          .then((data) => {
-            if (data.success) {
-              setSuccess(data.success);
-            }
-            if (data.error) {
-              setError(data.error);
-            }
-          })
-          .catch(() => {
-            setError("Something went wrong!");
-          });
+        const response = await requestService.postMethod(
+          "users/breakpoints/userAuthentication/registerUser",
+          { email, password }
+        );
+
+        clearMessages();
+
+        if (!response.success) {
+          setError(response.message);
+        }
+        if (response.success) {
+          setSuccess(response.message);
+        }
       } catch (error) {
-        setError("An error has occured while creating account!");
+        setError("Something went wrong!");
       }
     });
-  }
+  };
 
   return (
     <main className="flex flex-col lg:flex-row justify-center items-center mx-auto lg:px-[100px] gap-x-[120px]">

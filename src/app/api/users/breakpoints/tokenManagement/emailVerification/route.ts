@@ -1,53 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getUserByEmail } from "@/data/database/publicSQL/queries";
-import { getEmailVerificationTokenByToken } from "@/data/database/publicSQL/queries";
-import { postgres } from "@/data/database/publicSQL/postgres";
+import UserService from "@/utils/classes/userService";
+import { RequestResponse, EmailVerificationToken } from "@/utils/helpers/types";
 
-export async function POST(request: NextRequest, response: NextResponse) {
-  const tokenBody = await request.json();
-  const { token } = tokenBody;
+export async function POST(request: NextRequest) {
+  const { token } = await request.json();
 
-  const existingToken = await getEmailVerificationTokenByToken(token);
+  const userService = new UserService(undefined, undefined, undefined, token);
+  const emailVerificationResponse =
+    await userService.handleConfirmEmailVerification();
 
-  if (!existingToken) {
-    return NextResponse.json({
-      error: "Token does not exist!",
-    });
-  }
-
-  const tokenHasExpired = new Date(existingToken.expires) < new Date();
-
-  if (tokenHasExpired) {
-    return NextResponse.json({
-      error: "Token has expired!",
-    });
-  }
-
-  const existingUser = await getUserByEmail(existingToken.email);
-
-  if (!existingUser) {
-    return NextResponse.json({
-      error: "Email does not exist!",
-    });
-  }
-
-  await postgres.user.update({
-    where: {
-      id: existingUser.id,
-    },
-    data: {
-      emailVerified: new Date(),
-      email: existingUser.email,
-    },
-  });
-
-  await postgres.emailVerificationToken.delete({
-    where: {
-      id: existingToken.id,
-    },
-  });
-
-  return NextResponse.json({
-    success: "Email verified!",
+  return NextResponse.json<RequestResponse<EmailVerificationToken>>({
+    success: emailVerificationResponse?.success,
+    message: emailVerificationResponse?.message,
+    data: emailVerificationResponse?.data,
   });
 }

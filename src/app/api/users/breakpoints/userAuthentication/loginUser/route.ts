@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import UserService from "@/utils/classes/userService";
-import { RequestResponse, User } from "@/utils/helpers/types";
+import {
+  RequestResponse,
+  User,
+  EmailVerificationToken,
+  TwoFactorToken,
+} from "@/utils/helpers/types";
 
 export async function POST(request: NextRequest) {
   const { email, password, code } = await request.json();
@@ -11,8 +16,8 @@ export async function POST(request: NextRequest) {
   return NextResponse.json<
     RequestResponse<User | EmailVerificationToken | TwoFactorToken>
   >({
-    success: loginResponse.success,
-    message: loginResponse.message,
-    data: loginResponse.data,
+    success: loginResponse?.success,
+    message: loginResponse?.message,
+    data: loginResponse?.data,
   });
 }

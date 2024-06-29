@@ -72,8 +72,9 @@ export enum SignInProvider {
 
 export interface RequestResponse<T> {
   data?: T;
-  success: boolean;
+  success?: boolean;
   message?: string | undefined;
+  twoFactor?: boolean;
 }
 export interface UserDataRequest {
   email: string;

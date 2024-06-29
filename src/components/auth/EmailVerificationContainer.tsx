@@ -5,6 +5,7 @@ import { MoonLoader } from "react-spinners";
 import { useSearchParams } from "next/navigation";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
+import requestService from "@/utils/classes/requestService";
 
 export default function EmailVerificationContainer() {
   const [error, setError] = React.useState<string | undefined>("");
@@ -12,40 +13,26 @@ export default function EmailVerificationContainer() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
 
-  const handleSubmit = React.useCallback(() => {
+  const handleSubmit = React.useCallback(async () => {
     if (!token) {
       setError("Missing token!");
       return;
     }
 
     try {
-      fetch(
-        `http://localhost:3000/api/users/breakpoints/tokenManagement/emailVerification`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-          body: JSON.stringify({ token }),
-        }
-      )
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          if (data.success) {
-            setSuccess(data.success);
-          }
-          if (data.error) {
-            setError(data.error);
-          }
-        })
-        .catch(() => {
-          setError("Something went wrong!");
-        });
+      const response = await requestService.postMethod(
+        "users/breakpoints/tokenManagement/emailVerification",
+        { token }
+      );
+
+      if (!response.success) {
+        setError(response.message);
+      }
+      if (response.success) {
+        setSuccess(response.message);
+      }
     } catch (error) {
-      setError("An error occurred while verifying email address!");
+      setError("Something went wrong!");
     }
   }, [token]);
 

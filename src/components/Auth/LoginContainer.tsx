@@ -12,8 +12,9 @@ import { useSearchParams } from "next/navigation";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import { signInAccount } from "@/utils/actions";
-import requestService from "@/utils/classes/requestService";
 import { SignInProvider } from "@/utils/helpers/types";
+import requestService from "@/utils/classes/requestService";
+
 export default function LoginContainer() {
   const searchParams = useSearchParams();
   const urlError =
@@ -40,6 +41,11 @@ export default function LoginContainer() {
     });
   };
 
+  const clearMessages = () => {
+    setError("");
+    setSuccess("");
+  };
+
   const loginObject = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -55,11 +61,8 @@ export default function LoginContainer() {
     formState: { errors },
   } = loginObject;
 
-  const handleFormSubmit = async (data: z.infer<typeof LoginSchema>) => {
+  const handleFormSubmit = (data: z.infer<typeof LoginSchema>) => {
     startTransition(async () => {
-      setError("");
-      setSuccess("");
-
       const { email, password, code } = data;
 
       try {
@@ -68,25 +71,28 @@ export default function LoginContainer() {
           { email, password, code }
         );
 
+        clearMessages();
+
         if (!response.success) {
           setError(response.message);
-        } else {
+        }
+        if (response.success) {
           setSuccess(response.message);
-
-          if (response.data?.emailVerified) {
-            await handleLogin(email, password);
-          }
 
           if (response.data?.token) {
             setShowTwoFactor(true);
           }
+
+          if (response.data?.emailVerified) {
+            await handleLogin(email, password);
+          }
         }
       } catch (error) {
         setError("Something went wrong!");
-        console.error("Error during form submission:", error);
       }
     });
   };
+
   return (
     <main className="flex flex-col lg:flex-row justify-center items-center mx-auto lg:px-[100px] gap-x-[120px]">
       <h1 className="hidden lg:block text-[80px] leading-[90px] font-bold text-[white]">
@@ -210,12 +216,14 @@ export default function LoginContainer() {
                 >
                   Potwierdź
                 </button>
-                <Link
+                <button
                   className="text-[14px] font-medium text-[#E2999B]"
-                  href="/login"
+                  onClick={() => {
+                    clearMessages(), setShowTwoFactor(false);
+                  }}
                 >
                   Wróć do login
-                </Link>
+                </button>
               </div>
             </form>
           )}

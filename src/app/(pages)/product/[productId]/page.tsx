@@ -24,13 +24,13 @@ export const generateMetadata = async ({
 };
 
 export default async function productDetails({ params }: Props) {
-  const apiService: IFetchService = new FetchService();
+  const fetchService: IFetchService = new FetchService();
 
   const [product, screenshots, genres, tags] = await Promise.all([
-    apiService.getProduct(params.productId),
-    apiService.getGameScreenshots(params.productId),
-    apiService.getGameGenres(),
-    apiService.getGameTags(params.productId),
+    fetchService.getProduct(params.productId),
+    fetchService.getGameScreenshots(params.productId),
+    fetchService.getGameGenres(),
+    fetchService.getGameTags(params.productId),
   ]);
 
   return (

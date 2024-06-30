@@ -48,7 +48,7 @@ export default function RegisterContainer() {
       const { email, password } = data;
       try {
         const response = await requestService.postMethod(
-          "users/breakpoints/userAuthentication/registerUser",
+          "users/endpoints/userAuthentication/registerUser",
           { email, password }
         );
 

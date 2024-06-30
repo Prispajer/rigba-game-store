@@ -1,7 +1,7 @@
-import { GameSearchData } from "../helpers/types";
+import { ProductSearchData } from "../helpers/types";
 
-export interface IUtilsService {
+export default interface IUtilsService {
   getSearchText(): string;
   setSearchText(searchText: string): void;
-  searchProducts(searchData: GameSearchData[]): GameSearchData[];
+  searchProducts(searchData: ProductSearchData[]): ProductSearchData[];
 }

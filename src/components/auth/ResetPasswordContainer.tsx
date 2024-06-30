@@ -7,6 +7,7 @@ import { ResetPasswordSchema } from "@/utils/schemas/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
+import requestService from "@/utils/classes/requestService";
 
 export default function ResetPasswordContainer() {
   const [error, setError] = React.useState<string | undefined>("");
@@ -20,6 +21,11 @@ export default function ResetPasswordContainer() {
     },
   });
 
+  const clearMessages = () => {
+    setError("");
+    setSuccess("");
+  };
+
   const {
     register,
     handleSubmit,
@@ -27,38 +33,25 @@ export default function ResetPasswordContainer() {
   } = ResetPasswordObject;
 
   async function handleFormSubmit(data: z.infer<typeof ResetPasswordObject>) {
-    startTransition(() => {
-      setError("");
-      setSuccess("");
-
+    startTransition(async () => {
       const { email } = data;
 
       try {
-        fetch(
-          "http://localhost:3000/api/users/breakpoints/userAuthentication/resetPasswordUser",
+        const response = await requestService.postMethod(
+          "users/endpoints/userAuthentication/resetPasswordUser",
           {
-            headers: { "Content-Type": "application/json" },
-            method: "POST",
-            body: JSON.stringify({ email }),
+            email,
           }
-        )
-          .then((response) => {
-            {
-              return response.json();
-            }
-          })
-          .then((data) => {
-            setSuccess(data.success);
-            setError(data.error);
-          })
-          .catch((error) => {
-            console.error(
-              "An error has occured while fetching the data.",
-              error
-            );
-          });
+        );
+
+        clearMessages();
+        if (response.success) {
+          setSuccess(response.message);
+        } else {
+          setError(response.message);
+        }
       } catch (error) {
-        setError(data.error);
+        setError("Something went wrong!");
       }
     });
   }

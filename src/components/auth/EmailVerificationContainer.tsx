@@ -21,7 +21,7 @@ export default function EmailVerificationContainer() {
 
     try {
       const response = await requestService.postMethod(
-        "users/breakpoints/tokenManagement/emailVerification",
+        "users/endpoints/tokenManagement/emailVerification",
         { token }
       );
 

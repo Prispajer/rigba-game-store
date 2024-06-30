@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearchParams } from "next/navigation";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
+import requestService from "@/utils/classes/requestService";
 
 export default function ResetPasswordContainer() {
   const [error, setError] = React.useState<string | undefined>("");
@@ -24,6 +25,11 @@ export default function ResetPasswordContainer() {
     },
   });
 
+  const clearMessages = () => {
+    setError("");
+    setSuccess("");
+  };
+
   const {
     register,
     handleSubmit,
@@ -31,9 +37,7 @@ export default function ResetPasswordContainer() {
   } = resetPasswordObject;
 
   async function handleFormSubmit(data: z.infer<typeof resetPasswordObject>) {
-    startTransition(() => {
-      setError("");
-      setSuccess("");
+    startTransition(async () => {
       const { password } = data;
 
       if (!token) {
@@ -42,32 +46,23 @@ export default function ResetPasswordContainer() {
       }
 
       try {
-        fetch(
-          "http://localhost:3000/api/users/breakpoints/tokenManagement/newPassword",
+        const response = await requestService.postMethod(
+          "users/endpoints/tokenManagement/newPassword",
           {
-            headers: { "Content-Type": "application/json" },
-            method: "POST",
-            body: JSON.stringify({ password, token }),
+            password,
+            token,
           }
-        )
-          .then((response) => {
-            {
-              return response.json();
-            }
-          })
-          .then((data) => {
-            if (data.success) {
-              setSuccess(data.success);
-            }
-            if (data.error) {
-              setError(data.error);
-            }
-          })
-          .catch(() => {
-            setError("Something went wrong!");
-          });
+        );
+
+        clearMessages();
+
+        if (response.success) {
+          setSuccess(response.message);
+        } else {
+          setError(response.message);
+        }
       } catch (error) {
-        setError("There was error while changing password!");
+        setError("Something went wrong!");
       }
     });
   }

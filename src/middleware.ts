@@ -5,7 +5,7 @@ import { handleDynamicId } from "../routes";
 
 import {
   authRoutes,
-  breakpointsRoutes,
+  endpointsRoutes,
   apiAuthPrefix,
   DEFAULT_LOGIN_REDIRECT,
 } from "../routes";
@@ -18,7 +18,7 @@ export default auth((req) => {
   const isApiRoute = req.nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = handleDynamicId(req.nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(req.nextUrl.pathname);
-  const isBreakpointRoute = breakpointsRoutes.includes(req.nextUrl.pathname);
+  const isBreakpointRoute = endpointsRoutes.includes(req.nextUrl.pathname);
 
   if (isApiRoute) {
     return;

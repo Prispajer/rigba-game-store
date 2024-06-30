@@ -14,15 +14,15 @@ export const authRoutes: string[] = [
   "/new-password",
   "/lost-password",
 ];
-export const breakpointsRoutes: string[] = [
-  "/api/users/breakpoints/userAuthentication/registerUser",
-  "/api/users/breakpoints/userAuthentication/loginUser",
-  "/api/users/breakpoints/userAuthentication/findUser",
-  "/api/users/breakpoints/tokenManagement/emailVerification",
-  "/api/users/breakpoints/userAuthentication/resetPasswordUser",
-  "/api/users/breakpoints/tokenManagement/newPassword",
-  "/api/products/breakpoints/productManagement/addProductToCart",
-  "/api/products/breakpoints/productManagement/deleteProductFromCart",
+export const endpointsRoutes: string[] = [
+  "/api/users/endpoints/userAuthentication/registerUser",
+  "/api/users/endpoints/userAuthentication/loginUser",
+  "/api/users/endpoints/userAuthentication/findUser",
+  "/api/users/endpoints/tokenManagement/emailVerification",
+  "/api/users/endpoints/userAuthentication/resetPasswordUser",
+  "/api/users/endpoints/tokenManagement/newPassword",
+  "/api/products/endpoints/productManagement/addProductToCart",
+  "/api/products/endpoints/productManagement/deleteProductFromCart",
 ];
 
 export function handleDynamicId(route: string): boolean {

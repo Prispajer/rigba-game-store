@@ -1,6 +1,5 @@
-import { IUtilsService } from "../interfaces/iUtilsService";
-import { GameSearchData } from "../helpers/types";
-
+import IUtilsService from "../interfaces/iUtilsService";
+import { ProductSearchData } from "../helpers/types";
 export class UtilsService implements IUtilsService {
   private searchText: string;
 
@@ -16,7 +15,7 @@ export class UtilsService implements IUtilsService {
     this.searchText = searchText;
   }
 
-  searchProducts(searchData: GameSearchData[]): GameSearchData[] {
+  searchProducts(searchData: ProductSearchData[]): ProductSearchData[] {
     const searchText = this.getSearchText();
     if (!searchData || !searchText) return [];
     return searchData.filter((game) =>

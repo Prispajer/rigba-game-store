@@ -1,15 +1,12 @@
-import { ResponseData, RequestResponse } from "../helpers/types";
+import { RequestResponse } from "../helpers/types";
 
-export interface IRequestService {
-  request(method: string, body?: any): Promise<RequestResponse<t>>;
-  getMethod(endpoint: string): Promise<RequestResponse<t>>;
-  postMethod(endpoint: string, body?: RequestData): Promise<RequestResponse<t>>;
-  deleteMethod(
+export default interface IRequestService {
+  request<T>(method: string, body?: unknown): Promise<RequestResponse<T>>;
+  getMethod<T>(endpoint: string): Promise<RequestResponse<T>>;
+  postMethod<T>(endpoint: string, body?: unknown): Promise<RequestResponse<T>>;
+  deleteMethod<T>(
     endpoint: string,
-    body?: RequestData
-  ): Promise<RequestResponse<t>>;
-  patchMethod(
-    endpoint: string,
-    body?: RequestData
-  ): Promise<RequestResponse<t>>;
+    body?: unknown
+  ): Promise<RequestResponse<T>>;
+  patchMethod<T>(endpoint: string, body?: unknown): Promise<RequestResponse<T>>;
 }

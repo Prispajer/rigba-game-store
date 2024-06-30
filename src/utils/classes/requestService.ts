@@ -1,5 +1,5 @@
-import { IRequestService } from "../interfaces/iRequestService";
-import { ResponseData, RequestResponse, RequestData } from "../helpers/types";
+import IRequestService from "../interfaces/iRequestService";
+import { RequestResponse } from "../helpers/types";
 
 export class RequestService implements IRequestService {
   private readonly baseUrl: string;
@@ -8,47 +8,47 @@ export class RequestService implements IRequestService {
     this.baseUrl = baseUrl;
   }
 
-  public async request(
+  public async request<T>(
     endpoint: string,
     method: string,
-    body?: RequestData
-  ): Promise<RequestResponse<t>> {
+    body?: unknown
+  ): Promise<RequestResponse<T>> {
     const response = await fetch(`${this.baseUrl}${endpoint}`, {
       method: method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
+      body: body ? JSON.stringify(body) : undefined,
     });
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const data: RequestResponse<t> = await response.json();
+    const data: RequestResponse<T> = await response.json();
     return data;
   }
 
-  public async getMethod(endpoint: string): Promise<RequestResponse<t>> {
+  public async getMethod<T>(endpoint: string): Promise<RequestResponse<T>> {
     return await this.request(endpoint, "GET");
   }
 
-  public async postMethod(
+  public async postMethod<T>(
     endpoint: string,
-    body?: RequestData
-  ): Promise<RequestResponse<t>> {
+    body?: unknown
+  ): Promise<RequestResponse<T>> {
     return await this.request(endpoint, "POST", body);
   }
 
-  public async deleteMethod(
+  public async deleteMethod<T>(
     endpoint: string,
-    body?: RequestData
-  ): Promise<RequestResponse<t>> {
+    body?: unknown
+  ): Promise<RequestResponse<T>> {
     return await this.request(endpoint, "DELETE", body);
   }
 
-  public async patchMethod(
+  public async patchMethod<T>(
     endpoint: string,
-    body?: RequestData
-  ): Promise<RequestResponse<t>> {
+    body?: unknown
+  ): Promise<RequestResponse<T>> {
     return await this.request(endpoint, "PATCH", body);
   }
 }

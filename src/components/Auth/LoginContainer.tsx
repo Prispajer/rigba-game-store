@@ -67,7 +67,7 @@ export default function LoginContainer() {
 
       try {
         const response = await requestService.postMethod(
-          "users/breakpoints/userAuthentication/loginUser",
+          "users/endpoints/userAuthentication/loginUser",
           { email, password, code }
         );
 

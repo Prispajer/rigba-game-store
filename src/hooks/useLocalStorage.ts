@@ -8,7 +8,7 @@ import {
   setLocalCart,
 } from "@/redux/slices/productSlice";
 import { RootState } from "../redux/store";
-import { LocalProduct } from "@/utils/helpers/types";
+import { LocalStorageProduct } from "@/utils/helpers/types";
 
 export default function useLocalStorage(key: string) {
   const [isLoaded, setIsLoaded] = React.useState(false);
@@ -17,7 +17,7 @@ export default function useLocalStorage(key: string) {
   );
   const dispatch = useDispatch();
 
-  const handleAddLocalProduct = (product: LocalProduct): void => {
+  const handleAddLocalProduct = (product: LocalStorageProduct): void => {
     dispatch(addProduct(product));
   };
 

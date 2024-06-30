@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import UserService from "@/utils/classes/userService";
+import IUserService from "@/utils/interfaces/iUserService";
 import {
   RequestResponse,
   User,
@@ -10,7 +11,7 @@ import {
 export async function POST(request: NextRequest) {
   const { email, password, code } = await request.json();
 
-  const userService = new UserService(email, password, code);
+  const userService: IUserService = new UserService(email, password, code);
   const loginResponse = await userService.loginUser();
 
   return NextResponse.json<

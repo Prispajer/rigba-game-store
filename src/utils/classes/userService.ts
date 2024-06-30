@@ -1,29 +1,32 @@
 import bcrypt from "bcryptjs";
-import { NextResponse } from "next/server";
+import { postgres } from "@/data/database/publicSQL/postgres";
+import IUserService from "../interfaces/iUserService";
 import {
   getTwoFactorConfirmationByUserId,
   getUserByEmail,
   getTwoFactorTokenByEmail,
   getEmailVerificationTokenByToken,
+  getPasswordResetTokenByToken,
 } from "@/data/database/publicSQL/queries";
 import {
   generateEmailVerificationToken,
   generateTwoFactorToken,
+  generatePasswordResetToken,
 } from "@/data/database/publicSQL/tokens";
 import {
   sendVerificationEmail,
   sendTwoFactorTokenEmail,
+  sendPasswordResetEmail,
 } from "@/data/database/publicSQL/mail";
-import { postgres } from "@/data/database/publicSQL/postgres";
-import { AuthError } from "next-auth";
 import {
   RequestResponse,
   User,
   EmailVerificationToken,
   TwoFactorToken,
+  ResetPasswordToken,
 } from "../helpers/types";
 
-export default class UserService {
+export default class UserService implements IUserService {
   private email?: string;
   private password?: string;
   private code?: string;
@@ -99,13 +102,6 @@ export default class UserService {
         };
       }
     } catch (error) {
-      if (error instanceof AuthError) {
-        return {
-          success: false,
-          message: error.message,
-          data: undefined,
-        };
-      }
       return {
         success: false,
         message: "Something went wrong!",
@@ -114,16 +110,12 @@ export default class UserService {
     }
   }
 
-  async registerUser(): Promise<RequestResponse<
-    User | EmailVerificationToken
-  > | void> {
+  async registerUser(): Promise<
+    RequestResponse<User | EmailVerificationToken>
+  > {
     try {
       const user = await getUserByEmail(this.email as string);
       const hashedPassword = await bcrypt.hash(this.password as string, 10);
-      const isPasswordCorrect = await bcrypt.compare(
-        this.password as string,
-        user?.password as string
-      );
 
       if (user) {
         return {
@@ -140,26 +132,18 @@ export default class UserService {
         },
       });
 
-      if (isPasswordCorrect && !newUser.emailVerified) {
-        const emailVerificationToken = await generateEmailVerificationToken(
-          this.email as string
-        );
-        await sendVerificationEmail(
-          emailVerificationToken.email,
-          emailVerificationToken.token
-        );
-
-        return {
-          success: true,
-          message: "Confirmation email sent!",
-          data: undefined,
-        };
-      }
+      const emailVerificationToken = await generateEmailVerificationToken(
+        this.email as string
+      );
+      await sendVerificationEmail(
+        emailVerificationToken.email,
+        emailVerificationToken.token
+      );
 
       return {
         success: true,
-        message: "User has been created!",
-        data: undefined,
+        message: "User has been created! Confirmation email sent!",
+        data: newUser,
       };
     } catch (error) {
       return {
@@ -307,5 +291,112 @@ export default class UserService {
         };
       }
     }
+  }
+
+  async handleSendResetPassword(): Promise<
+    RequestResponse<ResetPasswordToken>
+  > {
+    try {
+      const existingUser = await getUserByEmail(this.email as string);
+
+      if (!existingUser) {
+        return {
+          success: false,
+          message: "Invalid email!",
+          data: undefined,
+        };
+      }
+
+      const resetPasswordToken = await generatePasswordResetToken(
+        this.email as string
+      );
+
+      await sendPasswordResetEmail(
+        resetPasswordToken.email,
+        resetPasswordToken.token
+      );
+
+      return {
+        success: true,
+        message: "Reset email sent!",
+        data: undefined,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: "Something went wrong!",
+        data: undefined,
+      };
+    }
+  }
+
+  async handleSetNewPassword(): Promise<RequestResponse<ResetPasswordToken>> {
+    const existingToken = await getPasswordResetTokenByToken(
+      this.token as string
+    );
+
+    if (!existingToken) {
+      return {
+        success: false,
+        message: "Token doesn't exsist!",
+        data: undefined,
+      };
+    }
+
+    const tokenHasExpired = new Date(existingToken.expires) < new Date();
+
+    if (tokenHasExpired) {
+      return {
+        success: false,
+        message: "Token has expired!",
+        data: undefined,
+      };
+    }
+
+    const existingUser = await getUserByEmail(existingToken.email);
+
+    if (!existingUser) {
+      return {
+        success: false,
+        message: "Email doesn't exsist!",
+        data: undefined,
+      };
+    }
+
+    const passwordMatch = await bcrypt.compare(
+      this.password as string,
+      existingUser.password as string
+    );
+
+    if (passwordMatch) {
+      return {
+        success: false,
+        message: "You must provide other password than the older one!",
+        data: undefined,
+      };
+    }
+
+    const hashedPassword = await bcrypt.hash(this.password as string, 10);
+
+    await postgres.user.update({
+      where: {
+        id: existingUser.id,
+      },
+      data: {
+        password: hashedPassword,
+      },
+    });
+
+    await postgres.passwordResetToken.delete({
+      where: {
+        id: existingToken.id,
+      },
+    });
+
+    return {
+      success: true,
+      message: "Password changed successfully!",
+      data: undefined,
+    };
   }
 }

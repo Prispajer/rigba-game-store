@@ -9,10 +9,12 @@ import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useUserCart from "@/hooks/useUserCart";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import requestService from "@/utils/classes/requestService";
 
 export default function CartModalContainer() {
   const user = useCurrentUser();
   const userCart = useUserCart();
+  const [success, setSuccess] = React.useState<string | undefined>("");
   const [error, setError] = React.useState<string | undefined>("");
   const { cartModalState, handleClose } = useWindowVisibility();
   const {
@@ -29,35 +31,23 @@ export default function CartModalContainer() {
   };
 
   const productsToDisplay = user ? userCart : localCartState;
-  console.log(productsToDisplay);
 
   const handleRemoveUserProduct = React.useCallback(
     async (externalProductId: number) => {
       try {
         const email = user?.email;
-        await fetch(
-          "http://localhost:3000/api/products/breakpoints/productManagement/deleteProductFromCart",
+        const response = await requestService.deleteMethod(
+          "products/endpoints/productManagement/deleteProductFromCart",
           {
-            headers: { "Content-Type": "application/json" },
-            method: "DELETE",
-            body: JSON.stringify({ email, externalProductId }),
+            email,
+            externalProductId,
           }
-        )
-          .then((response) => {
-            return response.json();
-          })
-          .then((data) => {
-            console.log(data);
-            if (data?.error) {
-              setError(data.error);
-            }
-            if (data.success) {
-              setError(data.success);
-            }
-          })
-          .catch((error) => {
-            setError("Something went wrong!");
-          });
+        );
+        if (response.success) {
+          setSuccess(response.message);
+        } else {
+          setError(response.message);
+        }
       } catch (error) {
         setError("There was an error while deleting the product.");
       }
@@ -68,29 +58,18 @@ export default function CartModalContainer() {
   const handleIncreaseUserQuantity = async (externalProductId: number) => {
     try {
       const email = user?.email;
-      await fetch(
-        "http://localhost:3000/api/products/breakpoints/productManagement/increaseProductQuantity",
+      const response = await requestService.patchMethod(
+        "products/endpoints/productManagement/increaseProductQuantity",
         {
-          headers: { "Content-Type": "application/json" },
-          method: "PATCH",
-          body: JSON.stringify({ email, externalProductId }),
+          email,
+          externalProductId,
         }
-      )
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          console.log(data);
-          if (data?.error) {
-            setError(data.error);
-          }
-          if (data.success) {
-            setError(data.error);
-          }
-        })
-        .catch(() => {
-          setError("Something went wrong!");
-        });
+      );
+      if (response.success) {
+        setSuccess(response.message);
+      } else {
+        setError(response.message);
+      }
     } catch (error) {
       setError("There was an error while deleting the product.");
     }
@@ -99,29 +78,18 @@ export default function CartModalContainer() {
   const handleDecreaseUserQuantity = async (externalProductId: number) => {
     try {
       const email = user?.email;
-      await fetch(
-        "http://localhost:3000/api/products/breakpoints/productManagement/decreaseProductQuantity",
+      const response = await requestService.patchMethod(
+        "products/endpoints/productManagement/decreaseProductQuantity",
         {
-          headers: { "Content-Type": "application/json" },
-          method: "PATCH",
-          body: JSON.stringify({ email, externalProductId }),
+          email,
+          externalProductId,
         }
-      )
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          console.log(data);
-          if (data?.error) {
-            setError(data.error);
-          }
-          if (data.success) {
-            setError(data.success);
-          }
-        })
-        .catch((error) => {
-          setError("Something went wrong!");
-        });
+      );
+      if (response.success) {
+        setSuccess(response.message);
+      } else {
+        setError(response.message);
+      }
     } catch (error) {
       setError("There was an error while deleting the product.");
     }

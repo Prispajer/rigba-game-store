@@ -18,8 +18,14 @@ export interface EmailVerificationToken {
   token: string;
   expires: Date;
 }
-
 export interface TwoFactorToken {
+  id: string;
+  email: string;
+  token: string;
+  expires: Date;
+}
+
+export interface ResetPasswordToken {
   id: string;
   email: string;
   token: string;
@@ -52,6 +58,28 @@ export type ProductDescription = {
   description_raw: string;
 };
 
+export interface LoggedUserProduct {
+  email: string;
+  externalProductId: number;
+  name: string;
+  description?: string;
+  price: number;
+  imageUrl: string;
+}
+
+export interface LoggedUserCart {
+  id: string;
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface LoggedUserUpdatedProduct {
+  id: string;
+  externalProductId: number;
+  cartId: string;
+  quantity: number;
+}
 export interface LocalStorageProduct {
   externalProductId: number;
   name: string;
@@ -83,28 +111,4 @@ export interface UserDataRequest {
   code?: string;
 }
 
-export interface ProductDataRequest {
-  externalProductId: number;
-  name: string;
-  description?: string;
-  price: number;
-  imageUrl: string;
-  email: string;
-}
-
-export interface UserDataResponse {
-  emailVerified?: Date;
-  twoFactor?: boolean;
-}
-
-export interface ProductDataResponse {
-  externalProductId?: number;
-  name?: string;
-  description?: string;
-  price?: number;
-  imageUrl?: string;
-  email?: string;
-}
-
 export type RequestData = UserDataRequest & ProductDataRequest;
-export type ResponseData = UserDataResponse & ProductDataResponse;

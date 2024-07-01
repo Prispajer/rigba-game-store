@@ -22,6 +22,7 @@ type Props = {
   screenshots: string[];
   genres: string[];
   tags: string[];
+  requirements: any;
 };
 
 export default function ProductContainer({
@@ -29,6 +30,7 @@ export default function ProductContainer({
   screenshots,
   genres,
   tags,
+  requirements,
 }: Props) {
   return (
     <main className="pb-[100px] bg-primaryColor">
@@ -54,7 +56,7 @@ export default function ProductContainer({
           <ProductGenres tags={tags} />
           <ProductDescription product={product} />
           <ProductHeaders headerText="Wymagania systemowe" />
-          <ProductSystemRequirements product={product} genres={genres} />
+          <ProductSystemRequirements requirements={requirements} />
           <ProductHeaders headerText="Pozostałe szczegóły" />
           <ProductRemainingDetails />
         </div>

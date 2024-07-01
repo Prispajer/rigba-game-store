@@ -6,7 +6,7 @@ import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
 import generateRandomValue from "@/utils/prices";
 import AddToWishList from "./AddToWishList";
-import useFetchGameDataByLink from "@/hooks/useFetchGameDataByLink";
+import fetchService from "@/utils/classes/fetchService";
 
 export type Game = {
   id: number;
@@ -16,12 +16,25 @@ export type Game = {
 };
 
 export default function ProductInformations() {
-  const games = useFetchGameDataByLink("https://api.rawg.io/api/games");
+  const [games, setGames] = React.useState<[]>([]);
+
+  React.useEffect(() => {
+    const getGames = async () => {
+      try {
+        const gamesData = await fetchService.getGames();
+        setGames(gamesData);
+        return gamesData;
+      } catch (error) {
+        console.error("An problem has occured while fetching data!");
+      }
+    };
+    getGames();
+  }, []);
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-4 xxl:grid-cols-5 w-full gap-x-[10px]">
-      {games?.results &&
-        games?.results.map((game: Game) => (
+      {games &&
+        games?.map((game) => (
           <div
             key={game.id}
             className="relative max-h-[150px] sm:max-h-full my-[10px]"

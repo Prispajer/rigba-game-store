@@ -6,7 +6,6 @@ import { FaUser } from "react-icons/fa";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import ProfileSidebar from "./ProfileSidebar";
 import CartModalContainer from "../CartModal/CartModalContainer";
-import MobileSearchModal from "./MobileSearchModal";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useUserCart from "@/hooks/useUserCart";
@@ -20,8 +19,6 @@ export default function UserNavigation({}) {
 
   return (
     <div className="flex flex-1 justify-end items-center relative">
-      <ProfileSidebar />
-      <MobileSearchModal />
       <FaSearch
         onClick={() => handleOpen("mobileSearchModal")}
         className="nav-icon md:hidden"
@@ -39,6 +36,7 @@ export default function UserNavigation({}) {
         <strong className="flex items-center justify-center absolute top-0 right-0 w-[20px] h-[20px] text-[12px] rounded-full bg-[#E0426E] text-[#FFFFFF] cursor-default">
           {cartLength.length}
         </strong>
+        <ProfileSidebar />
       </div>
       {resolutionState ? (
         <div className="flex items-center">

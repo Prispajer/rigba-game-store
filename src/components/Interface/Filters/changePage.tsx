@@ -2,7 +2,7 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import Link from "next/link";
 
-export default function changePage() {
+export default function ChangePage() {
   return (
     <div className="flex items-center justify-center pt-[20px]">
       <ul className="flex items-center text-[#ffffff] font-medium ">

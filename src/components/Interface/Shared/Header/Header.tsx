@@ -7,6 +7,7 @@ import UserNavigation from "./UserNavigation";
 import HamburgerMenu from "@/components/Interface/Shared/Navbar/NavbarSidebar";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleScreen } from "@/redux/slices/utilitySlice";
+import SearchBar from "./SearchBar";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 
 export default function Header() {
@@ -20,7 +21,7 @@ export default function Header() {
     return () => {
       window.removeEventListener("resize", handleToggleScreen(768));
     };
-  }, [handleToggleScreen]);
+  }, [handleToggleScreen, dispatch]);
 
   return (
     <header
@@ -31,7 +32,7 @@ export default function Header() {
       {!resolutionState && <HamburgerMenu />}
       <div className="flex items-center max-w-[1240px] w-full mx-auto md:py-2">
         <Logo />
-        <DesktopSearchBar />
+        <SearchBar />
         <UserNavigation />
       </div>
     </header>

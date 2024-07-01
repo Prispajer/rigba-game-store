@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import useFetchGameDataByLink from "@/hooks/useFetchGameDataByLink";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import GameImageModal from "../Shared/GameImageModal/GameImageModal";
 import Image from "next/image";

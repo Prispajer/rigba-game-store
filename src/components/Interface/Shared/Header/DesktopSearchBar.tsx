@@ -1,25 +1,34 @@
-// Searchbar.js
 import React, { ChangeEvent } from "react";
 import { FaSearch } from "react-icons/fa";
-import { UtilsService } from "@/utils/classes/utilsService";
+import UtilsService from "@/utils/classes/utilsService";
 import debounce from "@/utils/debounce";
-import { useSearchParams } from "next/navigation";
-import useFetchGameDataByLink from "@/hooks/useFetchGameDataByLink";
 import { IoCloseSharp } from "react-icons/io5";
 import SearchResultsContainer from "./SearchResultsContainer";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
-import { IUtilsService } from "@/utils/interfaces/iUtilsService";
+import IUtilsService from "@/utils/interfaces/iUtilsService";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
+import fetchService from "@/utils/classes/fetchService";
 
 export default function DesktopSearchBar() {
   const { desktopSearchBarState, handleToggle } = useWindowVisibility();
   const [searchText, setSearchText] = React.useState("");
-  const searchParams = useSearchParams();
-  const productId = searchParams.get("/product/");
-  const games = useFetchGameDataByLink("https://api.rawg.io/api/games");
+  const [games, setGames] = React.useState<[]>([]);
 
-  let searchService: IUtilsService;
-  searchService = new UtilsService(searchText);
+  const utilsService: IUtilsService = new UtilsService(searchText);
+
+  const getGames = async () => {
+    try {
+      const games = await fetchService.getGames();
+      setGames(games);
+      return games;
+    } catch (error) {
+      console.error("An problem has occured while fetching games data!");
+    }
+  };
+
+  React.useEffect(() => {
+    getGames();
+  }, []);
 
   const handleOutsideClick = () => {
     handleToggle("desktopSearchBar");
@@ -27,11 +36,11 @@ export default function DesktopSearchBar() {
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    searchService.setSearchText(value);
+    utilsService.setSearchText(value);
     setSearchText(value);
   };
 
-  const filteredGames = searchService.searchProducts(games?.results || []);
+  const filteredGames = utilsService.searchProducts(games || []);
 
   return (
     <div className="flex-1">

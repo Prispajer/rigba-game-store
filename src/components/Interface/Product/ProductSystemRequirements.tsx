@@ -1,4 +1,5 @@
-export default function ProductSystemRequirements({ product, genres }) {
+export default function ProductSystemRequirements({ requirements }) {
+  console.log(requirements.platforms);
   return (
     <>
       <section className="flex items-center z max-w-[1240px] md:mx-auto bg-tertiaryColor">
@@ -13,25 +14,27 @@ export default function ProductSystemRequirements({ product, genres }) {
           Minimalne wymagania systemowe
         </h3>
         <ul className="mb-[25px]">
-          <li className="leading-[18px]">
-            <div className="text-[14px] text-[#C3DAC9]">
-              Wymagania systemowe:
-            </div>
-            <div className="text-[14px] text-[#DCD8E6]">
-              {/* {genres &&
-                genres.results.map((genre) => (
-                  <div key={genre.id}>
-                    <p>{genre.name}</p>
-                    <p>Liczba gier: {genre.games_count}</p>
+          <div className="text-[14px] text-[#C3DAC9]">Wymagania systemowe:</div>
+          {requirements && requirements.platforms ? (
+            requirements.platforms.map((game) => (
+              <li key={game.platform.id} className="leading-[18px]">
+                <div className="text-[14px] text-[#DCD8E6]">
+                  <p>{game.released_at}</p>
+                  <p>{game.platform.name}</p>
+                  <p>{game.requirements.minimum}</p>
+                  {game.requirements.recommended && (
                     <ul>
-                      {genre.games.map((game) => (
-                        <li key={game.id}>{game.name}</li>
-                      ))}
+                      <li>{game.requirements.recommended}</li>
                     </ul>
-                  </div>
-                ))} */}
-            </div>
-          </li>
+                  )}
+                </div>
+              </li>
+            ))
+          ) : (
+            <li className="leading-[18px] text-[14px] text-[#DCD8E6]">
+              Brak danych o wymaganiach systemowych.
+            </li>
+          )}
         </ul>
         <h3 className="mb-[10px] text-[17px] text-[#FFFFFF] font-[700]">
           Zalecane wymagania systemowe

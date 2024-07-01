@@ -7,14 +7,11 @@ import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
 import generateRandomValue from "@/utils/prices";
 import AddToWishList from "./AddToWishList";
-import { IFetchService } from "@/utils/interfaces/iFetchService";
-import { FetchService } from "@/utils/classes/fetchService";
+import fetchService from "@/utils/classes/fetchService";
 
-export default function ProductList({ ordering }: FormErrorProps) {
+export default function ProductList({ ordering }) {
   const router = useRouter();
   const [data, setData] = React.useState<Games>([]);
-
-  const apiService: IFetchService = new FetchService();
 
   function handleClick(name: string) {
     router.push(`/product/${name}`);
@@ -23,7 +20,7 @@ export default function ProductList({ ordering }: FormErrorProps) {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const orderByName = await apiService.getProductByOrdering(ordering);
+        const orderByName = await fetchService.getProductByOrdering(ordering);
         setData(orderByName);
       } catch (error) {
         console.error("Error:", error);
@@ -31,8 +28,6 @@ export default function ProductList({ ordering }: FormErrorProps) {
     };
     fetchData();
   }, []);
-
-  console.log(data);
 
   return (
     <>

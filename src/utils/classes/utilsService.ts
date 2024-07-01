@@ -1,6 +1,6 @@
 import IUtilsService from "../interfaces/iUtilsService";
 import { ProductSearchData } from "../helpers/types";
-export class UtilsService implements IUtilsService {
+export default class UtilsService implements IUtilsService {
   private searchText: string;
 
   constructor(searchText: string) {

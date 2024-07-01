@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { LocalProduct } from "@/utils/helpers/types";
+import { LocalStorageProduct } from "@/utils/helpers/types";
 
 interface CartState {
   localCart: LocalProduct[];
@@ -13,9 +13,9 @@ const productSlice = createSlice({
   name: "product",
   initialState,
   reducers: {
-    addProduct: (state, action: PayloadAction<LocalProduct>) => {
+    addProduct: (state, action: PayloadAction<LocalStorageProduct>) => {
       const productIndex = state.localCart.findIndex(
-        (product: LocalProduct) =>
+        (product: LocalStorageProduct) =>
           product.externalProductId === action.payload.externalProductId
       );
 
@@ -27,7 +27,8 @@ const productSlice = createSlice({
     },
     removeProduct: (state, action: PayloadAction<number>) => {
       const productIndex = state.localCart.findIndex(
-        (product: LocalProduct) => product.externalProductId === action.payload
+        (product: LocalStorageProduct) =>
+          product.externalProductId === action.payload
       );
 
       if (productIndex !== -1) {
@@ -36,7 +37,8 @@ const productSlice = createSlice({
     },
     increaseQuantity: (state, action: PayloadAction<number>) => {
       const productIndex = state.localCart.findIndex(
-        (product: LocalProduct) => product.externalProductId === action.payload
+        (product: LocalStorageProduct) =>
+          product.externalProductId === action.payload
       );
 
       if (productIndex !== -1) {
@@ -45,7 +47,8 @@ const productSlice = createSlice({
     },
     decreaseQuantity: (state, action: PayloadAction<number>) => {
       const productIndex = state.localCart.findIndex(
-        (product: LocalProduct) => product.externalProductId === action.payload
+        (product: LocalStorageProduct) =>
+          product.externalProductId === action.payload
       );
 
       if (productIndex !== -1) {
@@ -55,7 +58,7 @@ const productSlice = createSlice({
         }
       }
     },
-    setLocalCart: (state, action: PayloadAction<LocalProduct[]>) => {
+    setLocalCart: (state, action: PayloadAction<LocalStorageProduct[]>) => {
       state.localCart = action.payload;
     },
   },

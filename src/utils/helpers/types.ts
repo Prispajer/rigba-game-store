@@ -111,4 +111,16 @@ export interface UserDataRequest {
   code?: string;
 }
 
+export interface GameAPIResponse {
+  id: number;
+  slug?: string;
+  name: string;
+  background_image: string;
+  rating?: number;
+  added?: number;
+}
+export interface GamesAPIResponse<T = GameAPIResponse> {
+  results: T[];
+}
+
 export type RequestData = UserDataRequest & ProductDataRequest;

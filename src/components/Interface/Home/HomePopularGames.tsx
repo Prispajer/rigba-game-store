@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import ProductList from "../Shared/Products/ProductList";
+import ProductList from "./HomeProductList";
 
 export default function HomePopularGames() {
   return (

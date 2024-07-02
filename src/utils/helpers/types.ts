@@ -98,6 +98,12 @@ export enum SignInProvider {
   Discord = "discord",
 }
 
+export enum ViewType {
+  Home = "home",
+  Filters = "filters",
+  Similar = "similar",
+}
+
 export interface RequestResponse<T> {
   data?: T;
   success?: boolean;
@@ -118,9 +124,6 @@ export interface GameAPIResponse {
   background_image: string;
   rating?: number;
   added?: number;
-}
-export interface GamesAPIResponse<T = GameAPIResponse> {
-  results: T[];
 }
 
 export type RequestData = UserDataRequest & ProductDataRequest;

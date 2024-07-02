@@ -3,7 +3,7 @@
 import React from "react";
 import Profile from "./Profile";
 import WishListCounter from "./WishListCounter";
-import ProductInformationsCol from "../Shared/Products/ProductInformationsCol";
+import ProductInformationsCol from "../Filters/FilterProductList";
 import SearchBar from "./SearchBar";
 import SortBy from "./SortBy";
 

@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
-import ProductInformations from "../Shared/Products/ProductInformationsCol";
+import ProductInformations from "../Filters/FilterProductList";
 import ProductHeaders from "../Product/ProductHeaders";
 import CheckoutCart from "./CheckoutCart";
 

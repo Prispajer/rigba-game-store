@@ -6,7 +6,7 @@ import ProductBuyOrAdd from "./ProductBuyOrAdd";
 import PaymentWays from "./PaymentWays";
 import DigitalProductDetails from "./DigitalProductDetails";
 import ProductImages from "./ProductImages";
-import ProductInformationsCol from "../Shared/Products/ProductInformationsCol";
+import FilterProductList from "../Filters/FilterProductList";
 import ShowMoreButton from "../Shared/ShowMoreButton/ShowMoreButton";
 import ProductReview from "./ProductReview";
 import ProductUsersReview from "./ProductUsersReview";
@@ -44,9 +44,7 @@ export default function ProductContainer({
           <DigitalProductDetails />
           <ProductImages screenshots={screenshots} />
           <ProductHeaders headerText="Podobne tytuły" />
-          <section className="flex items-center justify-center z max-w-[1240px] md:mx-auto px-[20px] bg-primaryColor shadow-md">
-            <ProductInformationsCol />
-          </section>
+          <section className="flex items-center justify-center z max-w-[1240px] md:mx-auto px-[20px] bg-primaryColor shadow-md"></section>
           <ShowMoreButton buttonText="Wczytaj więcej" />
           <ProductHeaders headerText="Opinie: 26" />
           <ProductReview product={product} />

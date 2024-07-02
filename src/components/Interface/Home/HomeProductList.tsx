@@ -6,10 +6,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
 import generateRandomValue from "@/utils/prices";
-import AddToWishList from "./AddToWishList";
+import AddToWishList from "../Shared/Products/AddToWishList";
 import fetchService from "@/utils/classes/fetchService";
 
-export default function ProductList({ ordering }) {
+export default function HomeProductList({ ordering }) {
   const router = useRouter();
   const [data, setData] = React.useState<Games>([]);
 

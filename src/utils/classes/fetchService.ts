@@ -15,18 +15,18 @@ export class FetchService implements IFetchService {
     }
   }
 
+  async getGame(productId: string): Promise<GameAPIResponse> {
+    const url = `${this.baseUrl}/games/${productId}?key=${this.apiKey}`;
+    return this.fetchData(url);
+  }
+
   async getGames(page: number): Promise<GamesAPIResponse[]> {
     const url = `${this.baseUrl}/games?page=${page}&key=${this.apiKey}`;
     const data = await this.fetchData(url);
     return data.results || [];
   }
 
-  async getProduct(productId: string): Promise<GameAPIResponse> {
-    const url = `${this.baseUrl}/games/${productId}?key=${this.apiKey}`;
-    return this.fetchData(url);
-  }
-
-  async getProductByOrdering(ordering: string): Promise<GameAPIResponse[]> {
+  async getGameByOrdering(ordering: string): Promise<GameAPIResponse[]> {
     const url = `${this.baseUrl}/games?ordering=${ordering}&key=${this.apiKey}`;
     const data = await this.fetchData(url);
     return data.results || [];
@@ -44,7 +44,13 @@ export class FetchService implements IFetchService {
     return data.results || [];
   }
 
-  async getGameTags(productId: string): Promise<GameAPIResponse> {
+  async getGameByGenres(productId: string): Promise<GameAPIResponse> {
+    const url = `${this.baseUrl}/genres/${productId}?key=${this.apiKey}`;
+    const data = await this.fetchData(url);
+    return data.results || [];
+  }
+
+  async getGameTags(productId: number): Promise<GameAPIResponse> {
     const url = `${this.baseUrl}/tags/${productId}?key=${this.apiKey}`;
     return this.fetchData(url);
   }
@@ -53,6 +59,15 @@ export class FetchService implements IFetchService {
     const url = `${this.baseUrl}/tags?page_size=${7 * quantity}&key=${
       this.apiKey
     }`;
+    const data = await this.fetchData(url);
+    return data.results || [];
+  }
+
+  async getGamesByTagsId(
+    tagId: string,
+    page: number
+  ): Promise<GameAPIResponse[]> {
+    const url = `${this.baseUrl}/games?tags=${tagId}&page=${page}&key=${this.apiKey}`;
     const data = await this.fetchData(url);
     return data.results || [];
   }

@@ -7,11 +7,9 @@ import { GameAPIResponse } from "@/utils/helpers/types";
 export default function ChangePage({
   nextPage,
   previousPage,
-  games,
 }: {
   nextPage: () => void;
   previousPage: () => void;
-  games: GameAPIResponse[];
 }) {
   return (
     <div className="flex items-center justify-center pt-[20px]">

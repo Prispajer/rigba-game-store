@@ -20,7 +20,7 @@ export default function HomeProductList({ ordering }) {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const orderByName = await fetchService.getProductByOrdering(ordering);
+        const orderByName = await fetchService.getGameByOrdering(ordering);
         setData(orderByName);
       } catch (error) {
         console.error("Error:", error);

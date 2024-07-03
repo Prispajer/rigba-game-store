@@ -2,6 +2,10 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "@/redux/store";
+import { fetchGamesByTagsId } from "@/redux/slices/fetchSlice";
 import FilterByPrice from "./FilterByPrice";
 import FilterByType from "./FilterByType";
 import FilterByGenre from "./FilterByGenre";
@@ -11,27 +15,20 @@ import SelectedFilters from "./SelectedFilters";
 import SortBy from "./SortBy";
 import FilterProductList from "./FilterProductList";
 import ChangePage from "./ChangePage";
-import fetchService from "@/utils/classes/fetchService";
-import { GameAPIResponse } from "@/utils/helpers/types";
 
 export default function FiltersContainer() {
-  const [games, setGames] = React.useState<GameAPIResponse[]>([]);
+  const params = useSearchParams();
+  const tagId = params.get("tagId");
+  const fetchSlice = useSelector((state: RootState) => state.fetch);
+  const dispatch = useDispatch<AppDispatch>();
   const [page, setPage] = React.useState<number>(1);
   const router = useRouter();
 
   React.useEffect(() => {
-    const getGames = async () => {
-      try {
-        const data = await fetchService.getGames(page);
-        if (data) {
-          setGames(data);
-        }
-      } catch (error) {
-        console.error("A problem has occurred while fetching data!", error);
-      }
-    };
-    getGames();
-  }, [page]);
+    if (tagId) {
+      dispatch(fetchGamesByTagsId({ tagId, page }));
+    }
+  }, [tagId, page, dispatch]);
 
   const nextPage = React.useCallback(() => {
     setPage((prevState: number) => prevState + 1);
@@ -66,15 +63,17 @@ export default function FiltersContainer() {
           <section className="w-full lg:w-[calc(100%-220px)]">
             <SelectedFilters />
             <SortBy />
-            <FilterProductList
-              games={games}
-              handleClickGame={handleClickGame}
-            />
-            <ChangePage
-              nextPage={nextPage}
-              previousPage={previousPage}
-              games={games}
-            />
+            {fetchSlice.isLoading ? (
+              <p>Loading...</p>
+            ) : fetchSlice.error ? (
+              <p>Error: {fetchSlice.error}</p>
+            ) : (
+              <FilterProductList
+                games={fetchSlice.data}
+                handleClickGame={handleClickGame}
+              />
+            )}
+            <ChangePage nextPage={nextPage} previousPage={previousPage} />
           </section>
         </div>
       </section>

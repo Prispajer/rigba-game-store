@@ -1,23 +1,38 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import fetchService from "@/utils/classes/fetchService";
+import GameService from "@/utils/classes/gameService";
+import IGameService from "@/utils/interfaces/iGameService";
 
 export default function HomeCategories() {
+  const router = useRouter();
   const [categories, setCategories] = React.useState<any[]>([]);
   const [quantity, setQuantity] = React.useState<number>(1);
 
   React.useEffect(() => {
-    const getGamesByTags = async () => {
-      const fetchServiceResponse = await fetchService.getGamesByTags(quantity);
-      setCategories(fetchServiceResponse);
-    };
-    getGamesByTags();
+    handleGetGamesByTags();
   }, [quantity]);
 
-  const increaseQuantity = () => {
+  const handleGetGamesByTags = async (): Promise<void> => {
+    const fetchServiceResponse = await fetchService.getGamesByTags(quantity);
+    setCategories(fetchServiceResponse);
+  };
+
+  const loadMore = (): void => {
     setQuantity((prevQuantity) => prevQuantity + 1);
+  };
+
+  const handleGetGamesByTagId = async (tagId: string): Promise<void> => {
+    const gameService: IGameService = new GameService(tagId, 1);
+    try {
+      await gameService.getGamesByTagId();
+      router.push(`/filters?tagId=${tagId}`);
+    } catch (error) {
+      console.error("Error fetching games by tag ID:", error);
+    }
   };
 
   return (
@@ -30,17 +45,19 @@ export default function HomeCategories() {
               {categories.map((category) => (
                 <div
                   key={category.id}
+                  onClick={() => handleGetGamesByTagId(category.id)}
                   className="flex h-[140px] flex-col items-center bg-[#5389b7] text-[#ffffff] px-[5px] shadow-lg cursor-pointer"
                 >
                   <div className="flex flex-1 items-center font-medium text-[14px] ">
                     <p>{category.games_count}</p>
                   </div>
-                  <div className="relative min-w-[80px] min-h-[80px] flex flex-1 items-centers">
+                  <div className="relative min-w-[80px] min-h-[80px] flex flex-1 items-center">
                     <Image
                       alt={category.slug}
                       src={category.image_background}
                       layout="fill"
-                    ></Image>
+                      objectFit="cover"
+                    />
                   </div>
                   <div className="flex flex-1 items-center px-[4px] font-medium text-[14px] text-center leading-3">
                     <p>{category.name}</p>
@@ -49,17 +66,15 @@ export default function HomeCategories() {
               ))}
             </div>
           )}
-          {quantity <= 5 ? (
+          {quantity <= 5 && (
             <div className="flex items-center justify-center">
               <button
-                onClick={increaseQuantity}
+                onClick={loadMore}
                 className="py-[10px] px-[40px] text-[#ffffff] text-[16px] font-bold border border-white"
               >
                 Wczytaj więcej
               </button>
             </div>
-          ) : (
-            ""
           )}
         </div>
       </section>

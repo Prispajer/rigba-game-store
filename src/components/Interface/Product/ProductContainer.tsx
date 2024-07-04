@@ -6,7 +6,6 @@ import ProductBuyOrAdd from "./ProductBuyOrAdd";
 import PaymentWays from "./PaymentWays";
 import DigitalProductDetails from "./DigitalProductDetails";
 import ProductImages from "./ProductImages";
-import FilterProductList from "../Filters/FilterProductList";
 import ShowMoreButton from "../Shared/ShowMoreButton/ShowMoreButton";
 import ProductReview from "./ProductReview";
 import ProductUsersReview from "./ProductUsersReview";

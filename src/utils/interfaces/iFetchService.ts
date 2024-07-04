@@ -9,6 +9,6 @@ export default interface IFetchService {
   getGameByGenres(productId: string): Promise<GameAPIResponse>;
   getGameTags(productId: number): Promise<GameAPIResponse>;
   getGamesByTags(quantity: number): Promise<GameAPIResponse[]>;
-  getGamesByTagsId(tagId: string, page: number): Promise<GameAPIResponse[]>;
+  getGamesByTagsId(tagId: string, page: number): Promise<GameAPIResponse>;
   getGameRequirements(productId: string): Promise<GameAPIResponse>;
 }

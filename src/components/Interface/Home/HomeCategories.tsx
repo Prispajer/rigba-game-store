@@ -4,8 +4,6 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import fetchService from "@/utils/classes/fetchService";
-import GameService from "@/utils/classes/gameService";
-import IGameService from "@/utils/interfaces/iGameService";
 
 export default function HomeCategories() {
   const router = useRouter();
@@ -26,9 +24,8 @@ export default function HomeCategories() {
   };
 
   const handleGetGamesByTagId = async (tagId: string): Promise<void> => {
-    const gameService: IGameService = new GameService(tagId, 1);
     try {
-      await gameService.getGamesByTagId();
+      await fetchService.getGamesByTagsId(tagId, 1);
       router.push(`/filters?tagId=${tagId}`);
     } catch (error) {
       console.error("Error fetching games by tag ID:", error);

@@ -3,9 +3,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "@/redux/store";
-import { fetchGamesByTagsId } from "@/redux/slices/fetchSlice";
+import useFetchGameData from "@/hooks/useFetchGameData";
 import FilterByPrice from "./FilterByPrice";
 import FilterByType from "./FilterByType";
 import FilterByGenre from "./FilterByGenre";
@@ -19,24 +17,15 @@ import ChangePage from "./ChangePage";
 export default function FiltersContainer() {
   const params = useSearchParams();
   const tagId = params.get("tagId");
-  const fetchSlice = useSelector((state: RootState) => state.fetch);
-  const dispatch = useDispatch<AppDispatch>();
-  const [page, setPage] = React.useState<number>(1);
+  const { fetchSlice, handleFetchDataByTagsId } = useFetchGameData();
+
   const router = useRouter();
 
   React.useEffect(() => {
     if (tagId) {
-      dispatch(fetchGamesByTagsId({ tagId, page }));
+      handleFetchDataByTagsId(tagId, fetchSlice.page);
     }
-  }, [tagId, page, dispatch]);
-
-  const nextPage = React.useCallback(() => {
-    setPage((prevState: number) => prevState + 1);
-  }, []);
-
-  const previousPage = React.useCallback(() => {
-    setPage((prevState: number) => (prevState > 1 ? prevState - 1 : 1));
-  }, []);
+  }, [tagId, fetchSlice.page]);
 
   const handleClickGame = (gameId: string) => {
     router.push(`/product/${gameId}`);
@@ -68,12 +57,9 @@ export default function FiltersContainer() {
             ) : fetchSlice.error ? (
               <p>Error: {fetchSlice.error}</p>
             ) : (
-              <FilterProductList
-                games={fetchSlice.data}
-                handleClickGame={handleClickGame}
-              />
+              <FilterProductList handleClickGame={handleClickGame} />
             )}
-            <ChangePage nextPage={nextPage} previousPage={previousPage} />
+            <ChangePage />
           </section>
         </div>
       </section>

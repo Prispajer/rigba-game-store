@@ -20,7 +20,7 @@ export class FetchService implements IFetchService {
     return this.fetchData(url);
   }
 
-  async getGames(page: number): Promise<GamesAPIResponse[]> {
+  async getGames(page: number): Promise<GameAPIResponse[]> {
     const url = `${this.baseUrl}/games?page=${page}&key=${this.apiKey}`;
     const data = await this.fetchData(url);
     return data.results || [];
@@ -66,10 +66,10 @@ export class FetchService implements IFetchService {
   async getGamesByTagsId(
     tagId: string,
     page: number
-  ): Promise<GameAPIResponse[]> {
+  ): Promise<GameAPIResponse> {
     const url = `${this.baseUrl}/games?tags=${tagId}&page=${page}&key=${this.apiKey}`;
     const data = await this.fetchData(url);
-    return data.results || [];
+    return data;
   }
 
   async getGameRequirements(productId: string): Promise<GameAPIResponse> {

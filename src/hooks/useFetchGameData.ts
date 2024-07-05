@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchGamesByTagsId,
+  fetchGamesByTags,
   setNextPage,
   setPreviousPage,
   setPage,
@@ -11,8 +12,12 @@ export default function useFetchGameData() {
   const fetchSlice = useSelector((state: RootState) => state.fetch);
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleFetchDataByTagsId = (tagId: string, page: number) => {
+  const handleFetchGamesByTagsId = (tagId: number, page: number) => {
     dispatch(fetchGamesByTagsId({ tagId, page }));
+  };
+
+  const handleFetchGamesByTags = (page: number) => {
+    dispatch(fetchGamesByTags(page));
   };
 
   const handleSetNextPage = () => {
@@ -31,7 +36,8 @@ export default function useFetchGameData() {
 
   return {
     fetchSlice,
-    handleFetchDataByTagsId,
+    handleFetchGamesByTagsId,
+    handleFetchGamesByTags,
     handleSetNextPage,
     handleSetPreviousPage,
     handleSetPage,

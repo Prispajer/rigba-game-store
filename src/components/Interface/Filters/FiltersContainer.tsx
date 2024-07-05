@@ -17,13 +17,14 @@ import ChangePage from "./ChangePage";
 export default function FiltersContainer() {
   const params = useSearchParams();
   const tagId = params.get("tagId");
-  const { fetchSlice, handleFetchDataByTagsId } = useFetchGameData();
+  const { fetchSlice, handleFetchGamesByTagsId } = useFetchGameData();
 
+  console.log(fetchSlice);
   const router = useRouter();
 
   React.useEffect(() => {
     if (tagId) {
-      handleFetchDataByTagsId(tagId, fetchSlice.page);
+      handleFetchGamesByTagsId(tagId, fetchSlice.page);
     }
   }, [tagId, fetchSlice.page]);
 
@@ -41,7 +42,7 @@ export default function FiltersContainer() {
         </div>
         <div className="flex w-full my-[20px] gap-x-[20px]">
           <aside className="hidden lg:block lg:h-auto lg:max-w-[220px]">
-            <form className="bg-[#5389b7]">
+            <form className="bg-[#387CBD]">
               <FilterByPrice />
               <FilterByType />
               <FilterByPlatform />

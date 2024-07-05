@@ -1,16 +1,24 @@
+import React from "react";
 import { MdKeyboardArrowUp } from "react-icons/md";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { FaSearch } from "react-icons/fa";
+import fetchService from "@/utils/classes/fetchService";
+import useFetchGameData from "@/hooks/useFetchGameData";
 
 export default function FilterByGenre() {
+  const { fetchSlice, handleFetchGamesByTags } = useFetchGameData();
+
+  React.useEffect(() => {
+    handleFetchGamesByTags(1);
+  }, [fetchSlice]);
   return (
     <>
-      <div className="py-[15px] px-[20px] text-[#ffffff] text-[18px]  border-b-[2px] border-b-primaryColor">
+      <div className="py-[15px] px-[20px] text-[#ffffff] text-[16px] leading-[19px] border-b-[2px] border-b-primaryColor">
         <div className="flex items-center justify-between max-w-[300px] pb-[10px] cursor-pointer">
           <span>Gatunek</span>
           <MdKeyboardArrowUp size="25px" />
         </div>
-        <div className="flex items-center  flex-1 p-[8px] mb-[10px] border-[white]   bg-secondaryColor ">
+        <div className="flex items-center flex-1 p-[8px] mb-[10px] border-[white] bg-secondaryColor">
           <FaSearch size="25px" color="white" className="mr-3" />
           <input
             className="text-[white] border-none outline-none bg-transparent w-[100%]"
@@ -19,41 +27,43 @@ export default function FilterByGenre() {
             autoComplete="off"
           />
         </div>
-        <div className="flex items-center  ">
-          <ul className="w-full">
-            <li className="flex justify-between items-center">
+        <div className="flex items-center">
+          <ul className="">
+            <li
+              onClick={() => handleFetchGamesTags(1)}
+              className="flex justify-between items-center mb-[10px]"
+            >
               <input className="flex-0" type="checkbox" />
-              <span className="flex-1 ml-[14px]">Gra</span>
+              <span className="flex-1 mx-[10px] font-[600]">Singleplayer</span>
+              <span className="flex-0 text-[#ffffffB3] text-end">
+                {fetchSlice.count}
+              </span>
+            </li>
+            <li className="flex justify-between items-center mb-[10px]">
+              <input className="flex-0" type="checkbox" />
+              <span className="flex-1 mx-[10px] font-[600]">Singleplayer</span>
+              <span className="flex-0 text-[#ffffffB3] text-end">27070</span>
+            </li>
+            <li className="flex justify-between mb-[10px]">
+              <input className="" type="checkbox" />
+              <span className="font-[600]">Multiplayer</span>
+              <span className="text-[#ffffffB3]">27070</span>
+            </li>
+            <li className="flex justify-between items-center mb-[10px]">
+              <input className="flex-0" type="checkbox" />
+              <span className="flex-1 ml-[14px] font-[600]">
+                Full controller support
+              </span>
               <span className="flex-1 text-end">27070</span>
             </li>
-            <li className="flex justify-between items-center">
+            <li className="flex justify-between items-center mb-[10px]">
               <input className="flex-0" type="checkbox" />
-              <span className="flex-1 ml-[14px]">Gra</span>
+              <span className="flex-1 ml-[14px] font-[600]">Steam Cloud</span>
               <span className="flex-1 text-end">27070</span>
             </li>
-            <li className="flex justify-between items-center">
+            <li className="flex justify-between items-center mb-[10px]">
               <input className="flex-0" type="checkbox" />
-              <span className="flex-1 ml-[14px]">Gra</span>
-              <span className="flex-1 text-end">27070</span>
-            </li>
-            <li className="flex justify-between items-center">
-              <input className="flex-0" type="checkbox" />
-              <span className="flex-1 ml-[14px]">Gra</span>
-              <span className="flex-1 text-end">27070</span>
-            </li>
-            <li className="flex justify-between items-center">
-              <input className="flex-0" type="checkbox" />
-              <span className="flex-1 ml-[14px]">Gra</span>
-              <span className="flex-1 text-end">27070</span>
-            </li>
-            <li className="flex justify-between items-center">
-              <input className="flex-0" type="checkbox" />
-              <span className="flex-1 ml-[14px]">Gra</span>
-              <span className="flex-1 text-end">27070</span>
-            </li>
-            <li className="flex justify-between items-center">
-              <input className="flex-0" type="checkbox" />
-              <span className="flex-1 ml-[14px]">Gra</span>
+              <span className="flex-1 ml-[14px] font-[600]">Atmospheric</span>
               <span className="flex-1 text-end">27070</span>
             </li>
           </ul>

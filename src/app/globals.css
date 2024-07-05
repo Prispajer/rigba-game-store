@@ -124,11 +124,11 @@ input[type="checkbox"] {
   align-items: center;
   justify-items: center;
   appearance: none;
-  height: 20px;
-  width: 20px;
+  min-height: 18px;
+  min-width: 18px;
   background-color: transparent;
   cursor: pointer;
-  border: 2px solid #ffffff;
+  border: 2px solid #ffffffd4;
 }
 
 input[type="checkbox"]:hover::before {

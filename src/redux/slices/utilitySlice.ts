@@ -34,6 +34,10 @@ const utilitySlice = createSlice({
     toggleScreen: (state, action: PayloadAction<boolean>) => {
       state.resolution = action.payload;
     },
+    toggleFilter: (state, action: PayloadAction<string>) => {
+      const element = action.payload;
+      state[element] = !state[element];
+    },
   },
 });
 

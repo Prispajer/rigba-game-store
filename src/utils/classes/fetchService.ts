@@ -64,10 +64,20 @@ export class FetchService implements IFetchService {
   }
 
   async getGamesByTagsId(
-    tagId: string,
+    tagId: number,
     page: number
   ): Promise<GameAPIResponse> {
     const url = `${this.baseUrl}/games?tags=${tagId}&page=${page}&key=${this.apiKey}`;
+    const data = await this.fetchData(url);
+    return data;
+  }
+
+  async filterGamesByTagsId(
+    tagsId: string[],
+    page: number
+  ): Promise<GameAPIResponse> {
+    const tags = tagsId.join(",");
+    const url = `${this.baseUrl}/games?tags=${tags}&page=${page}&key=${this.apiKey}`;
     const data = await this.fetchData(url);
     return data;
   }

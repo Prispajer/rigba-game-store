@@ -23,7 +23,7 @@ export default function HomeCategories() {
     setQuantity((prevQuantity) => prevQuantity + 1);
   };
 
-  const handleGetGamesByTagId = async (tagId: string): Promise<void> => {
+  const handleGetGamesByTagId = async (tagId: number): Promise<void> => {
     try {
       await fetchService.getGamesByTagsId(tagId, 1);
       router.push(`/filters?tagId=${tagId}`);

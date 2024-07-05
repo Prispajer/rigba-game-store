@@ -1,15 +1,16 @@
 import { MdKeyboardArrowUp } from "react-icons/md";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { FaSortAmountUpAlt } from "react-icons/fa";
-
-import Link from "next/link";
+import useFetchGameData from "@/hooks/useFetchGameData";
 
 export default function SortBy() {
+  const { fetchSlice } = useFetchGameData();
   return (
     <div className="flex items-center pt-[25px]">
       <div className="flex-1">
         <span className="text-[#ffffff]">
-          Znalezione wyniki: <span className="font-bold">10000+</span>
+          Znalezione wyniki:{" "}
+          <span className="font-bold">{fetchSlice.count}</span>
         </span>
       </div>
       <div>

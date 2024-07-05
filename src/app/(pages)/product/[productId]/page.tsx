@@ -24,7 +24,7 @@ export const generateMetadata = async ({
 
 export default async function productDetails({ params }: Props) {
   const [product, screenshots, genres, tags, requirements] = await Promise.all([
-    fetchService.getProduct(params.productId),
+    fetchService.getGame(params.productId),
     fetchService.getGameScreenshots(params.productId),
     fetchService.getGameGenres(),
     fetchService.getGameTags(params.productId),

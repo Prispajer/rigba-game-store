@@ -1,45 +1,43 @@
 import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
 import {
   fetchGamesByTagsId,
-  fetchGamesByTags,
+  setPage,
   setNextPage,
   setPreviousPage,
-  setPage,
 } from "@/redux/slices/fetchSlice";
-import { RootState, AppDispatch } from "../redux/store";
 
 export default function useFetchGameData() {
-  const fetchSlice = useSelector((state: RootState) => state.fetch);
   const dispatch = useDispatch<AppDispatch>();
+  const fetchSlice = useSelector((state: RootState) => state.fetch);
 
-  const handleFetchGamesByTagsId = (tagId: number, page: number) => {
-    dispatch(fetchGamesByTagsId({ tagId, page }));
-  };
-
-  const handleFetchGamesByTags = (page: number) => {
-    dispatch(fetchGamesByTags(page));
-  };
-
-  const handleSetNextPage = () => {
-    dispatch(setNextPage());
-  };
-
-  const handleSetPreviousPage = () => {
-    dispatch(setPreviousPage());
+  const handleFetchGamesByTagsId = (tagsId: number[], page: number) => {
+    dispatch(fetchGamesByTagsId({ tagsId, page }));
   };
 
   const handleSetPage = (page: number) => {
-    const nextUrl = fetchSlice.nextUrl || null;
-    const previousUrl = fetchSlice.previousUrl || null;
-    dispatch(setPage({ page, nextUrl, previousUrl }));
+    if (page > 0 && page <= 20) {
+      dispatch(setPage({ page }));
+    }
+  };
+
+  const handleSetNextPage = () => {
+    if (fetchSlice.page < 20) {
+      dispatch(setNextPage());
+    }
+  };
+
+  const handleSetPreviousPage = () => {
+    if (fetchSlice.page > 1) {
+      dispatch(setPreviousPage());
+    }
   };
 
   return {
     fetchSlice,
     handleFetchGamesByTagsId,
-    handleFetchGamesByTags,
+    handleSetPage,
     handleSetNextPage,
     handleSetPreviousPage,
-    handleSetPage,
   };
 }

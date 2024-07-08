@@ -1,74 +1,62 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MdKeyboardArrowUp } from "react-icons/md";
-import { MdKeyboardArrowDown } from "react-icons/md";
 import { FaSearch } from "react-icons/fa";
 import fetchService from "@/utils/classes/fetchService";
-import useFetchGameData from "@/hooks/useFetchGameData";
 
-export default function FilterByGenre() {
-  const { fetchSlice, handleFetchGamesByTags } = useFetchGameData();
+export default function FilterByGenre({
+  handleTagChange,
+  selectedTags,
+}: {
+  handleTagChange: (tagId: number) => void;
+  selectedTags: number[];
+}) {
+  const [data, setData] = useState<any[]>([]);
+  console.log(data);
 
-  React.useEffect(() => {
-    handleFetchGamesByTags(1);
-  }, [fetchSlice]);
+  useEffect(() => {
+    const getGames = async () => {
+      const gamesTags = await fetchService.getGameGenres();
+      setData(gamesTags);
+    };
+    getGames();
+  }, []);
+
   return (
-    <>
-      <div className="py-[15px] px-[20px] text-[#ffffff] text-[16px] leading-[19px] border-b-[2px] border-b-primaryColor">
-        <div className="flex items-center justify-between max-w-[300px] pb-[10px] cursor-pointer">
-          <span>Gatunek</span>
-          <MdKeyboardArrowUp size="25px" />
-        </div>
-        <div className="flex items-center flex-1 p-[8px] mb-[10px] border-[white] bg-secondaryColor">
-          <FaSearch size="25px" color="white" className="mr-3" />
-          <input
-            className="text-[white] border-none outline-none bg-transparent w-[100%]"
-            type="text"
-            name="text"
-            autoComplete="off"
-          />
-        </div>
-        <div className="flex items-center">
-          <ul className="">
+    <div className="py-[15px] px-[20px] text-[#ffffff] text-[16px] leading-[19px] border-b-[2px] border-b-primaryColor">
+      <div className="flex items-center justify-between max-w-[300px] pb-[10px] cursor-pointer">
+        <span>Gatunek</span>
+        <MdKeyboardArrowUp size="25px" />
+      </div>
+      <div className="flex items-center flex-1 p-[8px] mb-[10px] border-[white] bg-secondaryColor">
+        <FaSearch size="25px" color="white" className="mr-3" />
+        <input
+          className="text-[white] border-none outline-none bg-transparent w-[100%]"
+          type="text"
+          name="text"
+          autoComplete="off"
+        />
+      </div>
+      <div className="flex items-center">
+        <ul>
+          {data.map((tag) => (
             <li
-              onClick={() => handleFetchGamesTags(1)}
+              key={tag.id}
               className="flex justify-between items-center mb-[10px]"
             >
-              <input className="flex-0" type="checkbox" />
-              <span className="flex-1 mx-[10px] font-[600]">Singleplayer</span>
+              <input
+                className="flex-0"
+                type="checkbox"
+                checked={selectedTags.includes(tag.id)}
+                onChange={() => handleTagChange(tag.id)}
+              />
+              <span className="flex-1 px-[10px] font-[600]">{tag.name}</span>
               <span className="flex-0 text-[#ffffffB3] text-end">
-                {fetchSlice.count}
+                {tag.games_count}
               </span>
             </li>
-            <li className="flex justify-between items-center mb-[10px]">
-              <input className="flex-0" type="checkbox" />
-              <span className="flex-1 mx-[10px] font-[600]">Singleplayer</span>
-              <span className="flex-0 text-[#ffffffB3] text-end">27070</span>
-            </li>
-            <li className="flex justify-between mb-[10px]">
-              <input className="" type="checkbox" />
-              <span className="font-[600]">Multiplayer</span>
-              <span className="text-[#ffffffB3]">27070</span>
-            </li>
-            <li className="flex justify-between items-center mb-[10px]">
-              <input className="flex-0" type="checkbox" />
-              <span className="flex-1 ml-[14px] font-[600]">
-                Full controller support
-              </span>
-              <span className="flex-1 text-end">27070</span>
-            </li>
-            <li className="flex justify-between items-center mb-[10px]">
-              <input className="flex-0" type="checkbox" />
-              <span className="flex-1 ml-[14px] font-[600]">Steam Cloud</span>
-              <span className="flex-1 text-end">27070</span>
-            </li>
-            <li className="flex justify-between items-center mb-[10px]">
-              <input className="flex-0" type="checkbox" />
-              <span className="flex-1 ml-[14px] font-[600]">Atmospheric</span>
-              <span className="flex-1 text-end">27070</span>
-            </li>
-          </ul>
-        </div>
+          ))}
+        </ul>
       </div>
-    </>
+    </div>
   );
 }

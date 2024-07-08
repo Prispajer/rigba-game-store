@@ -16,17 +16,25 @@ import ChangePage from "./ChangePage";
 
 export default function FiltersContainer() {
   const params = useSearchParams();
-  const tagId = params.get("tagId");
   const { fetchSlice, handleFetchGamesByTagsId } = useFetchGameData();
+  const initialTagIds = params.get("tagsId")?.split(",").map(Number) || [];
+  const [tagsId, setTagsId] = React.useState<number[]>(initialTagIds);
 
-  console.log(fetchSlice);
   const router = useRouter();
 
   React.useEffect(() => {
-    if (tagId) {
-      handleFetchGamesByTagsId(tagId, fetchSlice.page);
+    if (tagsId.length > 0) {
+      handleFetchGamesByTagsId(tagsId, fetchSlice.page);
     }
-  }, [tagId, fetchSlice.page]);
+  }, [tagsId, fetchSlice.page]);
+
+  const handleTagChange = (tagId: number) => {
+    setTagsId((prevTags) =>
+      prevTags.includes(tagId)
+        ? prevTags.filter((id) => id !== tagId)
+        : [...prevTags, tagId]
+    );
+  };
 
   const handleClickGame = (gameId: string) => {
     router.push(`/product/${gameId}`);
@@ -46,7 +54,10 @@ export default function FiltersContainer() {
               <FilterByPrice />
               <FilterByType />
               <FilterByPlatform />
-              <FilterByGenre />
+              <FilterByGenre
+                handleTagChange={handleTagChange}
+                selectedTags={tagsId}
+              />
               <FilterByRegion />
             </form>
           </aside>

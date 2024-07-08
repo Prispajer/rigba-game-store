@@ -2,7 +2,7 @@ import IFetchService from "../interfaces/iFetchService";
 import { GameAPIResponse } from "../helpers/types";
 
 export class FetchService implements IFetchService {
-  private apiKey: string = "92d091bb5323482a8f4a23d2dab67947";
+  private apiKey: string = "b3c85b14e19f4d618df8debc3d5b01b6";
   private baseUrl: string = "https://api.rawg.io/api";
 
   async fetchData(url: string): Promise<any> {
@@ -55,8 +55,11 @@ export class FetchService implements IFetchService {
     return this.fetchData(url);
   }
 
-  async getGamesByTags(quantity: number): Promise<GameAPIResponse[]> {
-    const url = `${this.baseUrl}/tags?page_size=${7 * quantity}&key=${
+  async getGamesByTags(
+    size: number,
+    quantity: number
+  ): Promise<GameAPIResponse[]> {
+    const url = `${this.baseUrl}/tags?page_size=${size * quantity}&key=${
       this.apiKey
     }`;
     const data = await this.fetchData(url);
@@ -64,20 +67,11 @@ export class FetchService implements IFetchService {
   }
 
   async getGamesByTagsId(
-    tagId: number,
+    tagIds: number[],
     page: number
   ): Promise<GameAPIResponse> {
-    const url = `${this.baseUrl}/games?tags=${tagId}&page=${page}&key=${this.apiKey}`;
-    const data = await this.fetchData(url);
-    return data;
-  }
-
-  async filterGamesByTagsId(
-    tagsId: string[],
-    page: number
-  ): Promise<GameAPIResponse> {
-    const tags = tagsId.join(",");
-    const url = `${this.baseUrl}/games?tags=${tags}&page=${page}&key=${this.apiKey}`;
+    const tagsQuery = tagIds.join(",");
+    const url = `${this.baseUrl}/games?tags=${tagsQuery}&page=${page}&key=${this.apiKey}`;
     const data = await this.fetchData(url);
     return data;
   }

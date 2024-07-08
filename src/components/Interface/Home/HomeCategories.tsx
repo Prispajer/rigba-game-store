@@ -4,19 +4,31 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import fetchService from "@/utils/classes/fetchService";
+import useFetchGameData from "@/hooks/useFetchGameData";
 
 export default function HomeCategories() {
   const router = useRouter();
   const [categories, setCategories] = React.useState<any[]>([]);
   const [quantity, setQuantity] = React.useState<number>(1);
 
+  const { fetchSlice } = useFetchGameData();
+
+  console.log(fetchSlice);
+
   React.useEffect(() => {
     handleGetGamesByTags();
   }, [quantity]);
 
   const handleGetGamesByTags = async (): Promise<void> => {
-    const fetchServiceResponse = await fetchService.getGamesByTags(quantity);
-    setCategories(fetchServiceResponse);
+    try {
+      const fetchServiceResponse = await fetchService.getGamesByTags(
+        10,
+        quantity
+      );
+      setCategories(fetchServiceResponse);
+    } catch (error) {
+      console.error("Error fetching games by tags:", error);
+    }
   };
 
   const loadMore = (): void => {
@@ -25,8 +37,8 @@ export default function HomeCategories() {
 
   const handleGetGamesByTagId = async (tagId: number): Promise<void> => {
     try {
-      await fetchService.getGamesByTagsId(tagId, 1);
-      router.push(`/filters?tagId=${tagId}`);
+      const data = await fetchService.getGamesByTagsId([tagId], 1);
+      router.push(`/filters?tagsId=${[tagId]}`);
     } catch (error) {
       console.error("Error fetching games by tag ID:", error);
     }

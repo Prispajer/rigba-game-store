@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import fetchService from "@/utils/classes/fetchService";
 import { GameAPIResponse } from "@/utils/helpers/types";
-import { create } from "domain";
 
 interface FetchState {
   data: GameAPIResponse[];
@@ -26,23 +25,11 @@ const initialState: FetchState = {
 export const fetchGamesByTagsId = createAsyncThunk(
   "fetch/fetchGamesByTagsId",
   async (
-    { tagId, page }: { tagId: number; page: number },
+    { tagsId, page = 1 }: { tagsId: number[]; page: number },
     { rejectWithValue }
   ) => {
     try {
-      const data = await fetchService.getGamesByTagsId(tagId, page);
-      return data;
-    } catch (error) {
-      return rejectWithValue((error as Error).message);
-    }
-  }
-);
-
-export const fetchGamesByTags = createAsyncThunk(
-  "fetch/fetchGamesTags",
-  async (page: number, { rejectWithValue }) => {
-    try {
-      const data = await fetchService.getGamesByTags(page);
+      const data = await fetchService.getGamesByTagsId(tagsId, page);
       return data;
     } catch (error) {
       return rejectWithValue((error as Error).message);
@@ -58,14 +45,10 @@ const fetchSlice = createSlice({
       state,
       action: PayloadAction<{
         page: number;
-        nextUrl: string | null;
-        previousUrl: string | null;
       }>
     ) => {
-      const { page, nextUrl, previousUrl } = action.payload;
+      const { page } = action.payload;
       state.page = page;
-      state.nextUrl = nextUrl;
-      state.previousUrl = previousUrl;
     },
     setNextPage: (state) => {
       if (state.page < 500) {

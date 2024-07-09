@@ -1,7 +1,6 @@
-"use client";
-
 import React from "react";
 import ProductList from "./HomeProductList";
+import HomeShowMoreButton from "./HomeShowMoreButton";
 
 export default function HomeTheLongestGames() {
   return (
@@ -12,11 +11,7 @@ export default function HomeTheLongestGames() {
           <div className="flex max-w-[1240px] gap-x-[20px]  scrollbar overflow-x-auto ">
             <ProductList ordering="-rating" />
           </div>
-          <div className="flex items-center justify-center pt-[20px]">
-            <button className="py-[10px] px-[40px] text-[#ffffff] text-[16px] font-bold border border-white">
-              Pokaż wszystko
-            </button>
-          </div>
+          <HomeShowMoreButton text="Pokaż wszystko" />
         </div>
       </section>
     </main>

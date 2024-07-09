@@ -5,26 +5,20 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import fetchService from "@/utils/classes/fetchService";
 import useFetchGameData from "@/hooks/useFetchGameData";
+import HomeShowMoreButton from "./HomeShowMoreButton";
 
 export default function HomeCategories() {
   const router = useRouter();
   const [categories, setCategories] = React.useState<any[]>([]);
   const [quantity, setQuantity] = React.useState<number>(1);
 
-  const { fetchSlice } = useFetchGameData();
-
-  console.log(fetchSlice);
-
   React.useEffect(() => {
-    handleGetGamesByTags();
+    handleGetGameGenres();
   }, [quantity]);
 
-  const handleGetGamesByTags = async (): Promise<void> => {
+  const handleGetGameGenres = async (): Promise<void> => {
     try {
-      const fetchServiceResponse = await fetchService.getGamesByTags(
-        10,
-        quantity
-      );
+      const fetchServiceResponse = await fetchService.getGamesGenres(quantity);
       setCategories(fetchServiceResponse);
     } catch (error) {
       console.error("Error fetching games by tags:", error);
@@ -35,17 +29,33 @@ export default function HomeCategories() {
     setQuantity((prevQuantity) => prevQuantity + 1);
   };
 
-  const handleGetGamesByTagId = async (tagId: number): Promise<void> => {
+  const handleGetGamesByGenresId = async (
+    genreId: number,
+    paltformId: number,
+    storeId: number,
+    publisherId: number
+  ): Promise<void> => {
     try {
-      const data = await fetchService.getGamesByTagsId([tagId], 1);
-      router.push(`/filters?tagsId=${[tagId]}`);
+      const data = await fetchService.getGamesByGenresId(
+        [genreId],
+        1,
+        [paltformId],
+        [storeId],
+        [publisherId]
+      );
+      console.log(data);
+      router.push(
+        `/filters?genres=${[genreId]}&platforms=${[
+          paltformId,
+        ]}&stores=${storeId}&publishers=${publisherId}`
+      );
     } catch (error) {
       console.error("Error fetching games by tag ID:", error);
     }
   };
 
   return (
-    <main className="bg-primaryColor py-[15px]">
+    <main className="bg-secondaryColor py-[15px]">
       <section className="flex max-w-[1240px] mx-auto px-2 py-6">
         <div className="flex flex-col w-full">
           <h1 className="text-[30px] text-white font-bold">Categories</h1>
@@ -54,8 +64,10 @@ export default function HomeCategories() {
               {categories.map((category) => (
                 <div
                   key={category.id}
-                  onClick={() => handleGetGamesByTagId(category.id)}
-                  className="flex h-[140px] flex-col items-center bg-[#5389b7] text-[#ffffff] px-[5px] shadow-lg cursor-pointer"
+                  onClick={() =>
+                    handleGetGamesByGenresId(category.id, 4, 1, 354)
+                  }
+                  className="flex h-[140px] flex-col items-center bg-[#5389b7] text-[#ffffff] hover:bg-categoryGenresHover transition ease-in-out delay-70  px-[5px] shadow-lg cursor-pointer"
                 >
                   <div className="flex flex-1 items-center font-medium text-[14px] ">
                     <p>{category.games_count}</p>
@@ -75,15 +87,8 @@ export default function HomeCategories() {
               ))}
             </div>
           )}
-          {quantity <= 5 && (
-            <div className="flex items-center justify-center">
-              <button
-                onClick={loadMore}
-                className="py-[10px] px-[40px] text-[#ffffff] text-[16px] font-bold border border-white"
-              >
-                Wczytaj więcej
-              </button>
-            </div>
+          {quantity <= 2 && (
+            <HomeShowMoreButton method={loadMore} text="Wczytaj więcej" />
           )}
         </div>
       </section>

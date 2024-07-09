@@ -1,18 +1,24 @@
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import {
-  fetchGamesByTagsId,
+  fetchGamesByGenresId,
+  setGenresId,
+  setPlatformsId,
+  setStoresId,
+  setPublishersId,
   setPage,
   setNextPage,
   setPreviousPage,
-} from "@/redux/slices/fetchSlice";
+} from "@/redux/slices/productFetchAndFilterSlice";
 
 export default function useFetchGameData() {
   const dispatch = useDispatch<AppDispatch>();
-  const fetchSlice = useSelector((state: RootState) => state.fetch);
+  const productFetchAndFilterState = useSelector(
+    (state: RootState) => state.productFetchAndFilter
+  );
 
-  const handleFetchGamesByTagsId = (tagsId: number[], page: number) => {
-    dispatch(fetchGamesByTagsId({ tagsId, page }));
+  const handleFetchGamesByGenresId = (page: number) => {
+    dispatch(fetchGamesByGenresId({ page }));
   };
 
   const handleSetPage = (page: number) => {
@@ -21,22 +27,51 @@ export default function useFetchGameData() {
     }
   };
 
+  const handleGenreFilterChange = (genreId: number) => {
+    const updatedFilters = productFetchAndFilterState.genresId.includes(genreId)
+      ? productFetchAndFilterState.genresId.filter((id) => id !== genreId)
+      : [...productFetchAndFilterState.genresId, genreId];
+
+    dispatch(setGenresId(updatedFilters));
+  };
+
+  const handleSetTagsId = (tagsId: number[]) => {
+    dispatch(setGenresId(tagsId));
+  };
+
+  const handleSetPlatformsId = (platformsId: number[]) => {
+    dispatch(setPlatformsId(platformsId));
+  };
+
+  const handleSetStoresId = (storesId: number[]) => {
+    dispatch(setStoresId(storesId));
+  };
+
+  const handleSetPublishersId = (publishersId: number[]) => {
+    dispatch(setPublishersId(publishersId));
+  };
+
   const handleSetNextPage = () => {
-    if (fetchSlice.page < 20) {
+    if (productFetchAndFilterState.page < 20) {
       dispatch(setNextPage());
     }
   };
 
   const handleSetPreviousPage = () => {
-    if (fetchSlice.page > 1) {
+    if (productFetchAndFilterState.page > 1) {
       dispatch(setPreviousPage());
     }
   };
 
   return {
-    fetchSlice,
-    handleFetchGamesByTagsId,
+    productFetchAndFilterState,
+    handleFetchGamesByGenresId,
+    handleGenreFilterChange,
+    handleSetPlatformsId,
+    handleSetStoresId,
+    handleSetPublishersId,
     handleSetPage,
+    handleSetTagsId,
     handleSetNextPage,
     handleSetPreviousPage,
   };

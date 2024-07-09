@@ -1,3 +1,4 @@
+// IFetchService.ts
 import { GameAPIResponse } from "../helpers/types";
 
 export default interface IFetchService {
@@ -6,10 +7,21 @@ export default interface IFetchService {
   getGames(page: number): Promise<GameAPIResponse[]>;
   getGameByOrdering(ordering: string): Promise<GameAPIResponse[]>;
   getGameScreenshots(productId: string): Promise<GameAPIResponse[]>;
-  getGameGenres(): Promise<GameAPIResponse[]>;
-  getGameByGenres(productId: string): Promise<GameAPIResponse>;
-  getGameTags(productId: number): Promise<GameAPIResponse>;
-  getGamesByTags(size: number, quantity: number): Promise<GameAPIResponse[]>;
-  getGamesByTagsId(tagIds: number[], page: number): Promise<GameAPIResponse>;
+  getGamesGenres(pageSize: number): Promise<GameAPIResponse[]>;
+  getGamesTypes(quantity: number): Promise<GameAPIResponse[]>;
+  getGamesPlatforms(quantity: number): Promise<GameAPIResponse[]>;
+  getGamesStores(quantity: number): Promise<GameAPIResponse[]>;
+  getGamesByGenresId(
+    genresId: number[],
+    page: number,
+    platformsId: number[],
+    storesId: number[],
+    publishersId: number[]
+  ): Promise<GameAPIResponse[]>;
+  getGamesByTagsId(
+    tagIds: number[],
+    page: number,
+    platformsId: number[]
+  ): Promise<GameAPIResponse>;
   getGameRequirements(productId: string): Promise<GameAPIResponse>;
 }

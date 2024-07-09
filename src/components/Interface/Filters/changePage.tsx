@@ -4,7 +4,7 @@ import useFetchGameData from "@/hooks/useFetchGameData";
 
 export default function ChangePage() {
   const {
-    fetchSlice,
+    productFetchAndFilterState,
     handleSetNextPage,
     handleSetPreviousPage,
     handleSetPage,
@@ -16,40 +16,45 @@ export default function ChangePage() {
 
   const renderPagination = () => {
     let pages = [];
-    if (fetchSlice.page <= 3) {
-      pages = [1, 2, 3, 4, "...", fetchSlice.data.length];
-    } else if (fetchSlice.page >= fetchSlice.data.length - 2) {
+    if (productFetchAndFilterState.page <= 3) {
+      pages = [1, 2, 3, 4, "...", productFetchAndFilterState.data.length];
+    } else if (
+      productFetchAndFilterState.page >=
+      productFetchAndFilterState.data.length - 2
+    ) {
       pages = [
         1,
         "...",
-        fetchSlice.data.length - 3,
-        fetchSlice.data.length - 2,
-        fetchSlice.data.length - 1,
-        fetchSlice.data.length,
+        productFetchAndFilterState.data.length - 3,
+        productFetchAndFilterState.data.length - 2,
+        productFetchAndFilterState.data.length - 1,
+        productFetchAndFilterState.data.length,
       ];
     } else {
       pages = [
         1,
         "...",
-        fetchSlice.page - 1,
-        fetchSlice.page,
-        fetchSlice.page + 1,
+        productFetchAndFilterState.page - 1,
+        productFetchAndFilterState.page,
+        productFetchAndFilterState.page + 1,
         "...",
-        fetchSlice.data.length,
+        productFetchAndFilterState.data.length,
       ];
     }
 
-    return pages.map((page: number | string) =>
+    return pages.map((page: number | string, index: number) =>
       page === "..." ? (
         <li key={page} className="p-[10px] text-[20px] cursor-pointer">
           {page}
         </li>
       ) : (
         <li
-          key={page}
+          key={index}
           className={`p-[10px] text-[20px] hover:text-[#e2999b]
             ${
-              fetchSlice.page === page ? " text-[#E2999B] " : " text-[#FFFFFF]"
+              productFetchAndFilterState.page === page
+                ? " text-[#E2999B] "
+                : " text-[#FFFFFF]"
             }`}
         >
           <button onClick={() => handlePageClick(page as number)}>
@@ -66,7 +71,7 @@ export default function ChangePage() {
         <li className="flex items-center p-[10px] mr-[10px] text-[20px] border border-[white] ">
           <button
             onClick={() => handleSetPreviousPage()}
-            disabled={fetchSlice.page === 1}
+            disabled={productFetchAndFilterState.page === 1}
           >
             <MdKeyboardArrowLeft />
           </button>
@@ -75,7 +80,10 @@ export default function ChangePage() {
         <li className="flex items-center p-[10px] ml-[10px] text-[20px] border border-[white] ">
           <button
             onClick={() => handleSetNextPage()}
-            disabled={fetchSlice.page === fetchSlice.data.length}
+            disabled={
+              productFetchAndFilterState.page ===
+              productFetchAndFilterState.data.length
+            }
           >
             <MdKeyboardArrowRight />
           </button>

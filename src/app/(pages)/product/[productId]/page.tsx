@@ -23,11 +23,10 @@ export const generateMetadata = async ({
 };
 
 export default async function productDetails({ params }: Props) {
-  const [product, screenshots, genres, tags, requirements] = await Promise.all([
+  const [product, screenshots, genres, requirements] = await Promise.all([
     fetchService.getGame(params.productId),
     fetchService.getGameScreenshots(params.productId),
-    fetchService.getGameGenres(),
-    fetchService.getGameTags(params.productId),
+    fetchService.getGamesGenres(30),
     fetchService.getGameRequirements(params.productId),
   ]);
 
@@ -36,7 +35,6 @@ export default async function productDetails({ params }: Props) {
       product={product}
       screenshots={screenshots}
       genres={genres}
-      tags={tags}
       requirements={requirements}
     />
   );

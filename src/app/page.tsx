@@ -15,6 +15,7 @@ export default function Home() {
       <HomePopularGames />
       <HomeBestGames />
       <HomeTheLongestGames />
+      <HomeBestGames />
       <HomeCategories />
     </>
   );

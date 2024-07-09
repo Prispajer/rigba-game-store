@@ -31,6 +31,7 @@ const config: Config = {
         modalHover: "#E2B0A5",
         buttonBackgroundHover: "#bc558e",
         buttonBackground: "#BF6597",
+        categoryGenresHover: "#213f69",
       },
     },
   },

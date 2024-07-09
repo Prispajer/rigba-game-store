@@ -8,7 +8,7 @@ import FilterByPrice from "./FilterByPrice";
 import FilterByType from "./FilterByType";
 import FilterByGenre from "./FilterByGenre";
 import FilterByPlatform from "./FilterByPlatform";
-import FilterByRegion from "./FilterByRegion";
+import FilterByStore from "./FilterByStore";
 import SelectedFilters from "./SelectedFilters";
 import SortBy from "./SortBy";
 import FilterProductList from "./FilterProductList";
@@ -16,23 +16,36 @@ import ChangePage from "./ChangePage";
 
 export default function FiltersContainer() {
   const params = useSearchParams();
-  const { fetchSlice, handleFetchGamesByTagsId } = useFetchGameData();
-  const initialTagIds = params.get("tagsId")?.split(",").map(Number) || [];
-  const [tagsId, setTagsId] = React.useState<number[]>(initialTagIds);
+  const {
+    productFetchAndFilterState,
+    handleFetchGamesByGenresId,
+    handleSetStoresId,
+    handleSetPublishersId,
+    handleSetPlatformsId,
+    handleSetTagsId,
+  } = useFetchGameData();
+  const initialGenresId = params.get("genres")?.split(",").map(Number) || [];
+  const [genresId, setGenresId] = React.useState<number[]>(initialGenresId);
+
+  console.log(productFetchAndFilterState);
 
   const router = useRouter();
 
   React.useEffect(() => {
-    if (tagsId.length > 0) {
-      handleFetchGamesByTagsId(tagsId, fetchSlice.page);
+    if (genresId.length > 0) {
+      handleSetStoresId([1]);
+      handleSetPublishersId([354]);
+      handleSetPlatformsId([4]);
+      handleSetTagsId(genresId);
+      handleFetchGamesByGenresId(productFetchAndFilterState.page);
     }
-  }, [tagsId, fetchSlice.page]);
+  }, [genresId, productFetchAndFilterState.page]);
 
-  const handleTagChange = (tagId: number) => {
-    setTagsId((prevTags) =>
-      prevTags.includes(tagId)
-        ? prevTags.filter((id) => id !== tagId)
-        : [...prevTags, tagId]
+  const handleTagChange = (genreId: number) => {
+    setGenresId((prevTags) =>
+      prevTags.includes(genreId)
+        ? prevTags.filter((id) => id !== genreId)
+        : [...prevTags, genreId]
     );
   };
 
@@ -52,22 +65,19 @@ export default function FiltersContainer() {
           <aside className="hidden lg:block lg:h-auto lg:max-w-[220px]">
             <form className="bg-[#387CBD]">
               <FilterByPrice />
-              <FilterByType />
-              <FilterByPlatform />
-              <FilterByGenre
-                handleTagChange={handleTagChange}
-                selectedTags={tagsId}
-              />
-              <FilterByRegion />
+              <FilterByType handleTagChange={handleTagChange} />
+              <FilterByPlatform handleTagChange={handleTagChange} />
+              <FilterByGenre handleTagChange={handleTagChange} />
+              <FilterByStore handleTagChange={handleTagChange} />
             </form>
           </aside>
           <section className="w-full lg:w-[calc(100%-220px)]">
             <SelectedFilters />
             <SortBy />
-            {fetchSlice.isLoading ? (
+            {productFetchAndFilterState.isLoading ? (
               <p>Loading...</p>
-            ) : fetchSlice.error ? (
-              <p>Error: {fetchSlice.error}</p>
+            ) : productFetchAndFilterState.error ? (
+              <p>Error: {productFetchAndFilterState.error}</p>
             ) : (
               <FilterProductList handleClickGame={handleClickGame} />
             )}

@@ -11,12 +11,13 @@ export default function FilterProductList({
 }: {
   handleClickGame: (gameId: string) => void;
 }) {
-  const { fetchSlice } = useFetchGameData();
+  const { productFetchAndFilterState } = useFetchGameData();
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 w-full gap-x-[10px]">
-      {fetchSlice.data && fetchSlice.data.length > 0 ? (
-        fetchSlice.data.map((game) => (
+      {productFetchAndFilterState.data &&
+      productFetchAndFilterState.data.length > 0 ? (
+        productFetchAndFilterState.data.map((game) => (
           <div
             key={game.slug}
             onClick={() => handleClickGame(game.slug as string)}

@@ -8,10 +8,14 @@ export class FetchService implements IFetchService {
   async fetchData(url: string): Promise<any> {
     try {
       const res = await fetch(url);
+      if (!res.ok) {
+        throw new Error("Network response was not ok");
+      }
       const data = await res.json();
       return data;
     } catch (error) {
       console.error("An error occurred while fetching data from API!", error);
+      throw error;
     }
   }
 
@@ -38,21 +42,52 @@ export class FetchService implements IFetchService {
     return data.results || [];
   }
 
-  async getGameGenres(): Promise<GameAPIResponse[]> {
-    const url = `${this.baseUrl}/genres?key=${this.apiKey}`;
+  async getGamesGenres(quantity: number = 1): Promise<GameAPIResponse[]> {
+    const url = `${this.baseUrl}/genres?key=${this.apiKey}&page_size=${
+      7 * quantity
+    }`;
     const data = await this.fetchData(url);
     return data.results || [];
   }
 
-  async getGameByGenres(productId: string): Promise<GameAPIResponse> {
-    const url = `${this.baseUrl}/genres/${productId}?key=${this.apiKey}`;
+  async getGamesTypes(quantity: number = 1): Promise<GameAPIResponse[]> {
+    const url = `${this.baseUrl}/publishers?key=${this.apiKey}&page_size=${
+      7 * quantity
+    }`;
+    const data = await this.fetchData(url);
+    return data.results || [];
+  }
+  async getGamesPlatforms(quantity: number = 1): Promise<GameAPIResponse[]> {
+    const url = `${this.baseUrl}/platforms?key=${this.apiKey}&page_size=${
+      7 * quantity
+    }`;
     const data = await this.fetchData(url);
     return data.results || [];
   }
 
-  async getGameTags(productId: number): Promise<GameAPIResponse> {
-    const url = `${this.baseUrl}/tags/${productId}?key=${this.apiKey}`;
-    return this.fetchData(url);
+  async getGamesStores(quantity: number = 1): Promise<GameAPIResponse[]> {
+    const url = `${this.baseUrl}/stores?key=${this.apiKey}&page_size=${
+      7 * quantity
+    }`;
+    const data = await this.fetchData(url);
+    return data.results || [];
+  }
+
+  async getGamesByGenresId(
+    genresId: number[],
+    page: number,
+    platformsId: number[],
+    storesId: number[],
+    publishersId: number[]
+  ): Promise<GameAPIResponse[]> {
+    const genresQuery = genresId.join(",");
+    const platformsQuery = platformsId.join(",");
+    const storesQuery = storesId.join(",");
+    const publishersQuery = publishersId.join(",");
+    const url = `${this.baseUrl}/games?key=${this.apiKey}&genres=${genresQuery}&page=${page}&platforms=${platformsQuery}&stores=${storesQuery}&publishers=${publishersQuery}`;
+    const data = await this.fetchData(url);
+    console.log(data);
+    return data || [];
   }
 
   async getGamesByTags(
@@ -67,11 +102,13 @@ export class FetchService implements IFetchService {
   }
 
   async getGamesByTagsId(
-    tagIds: number[],
-    page: number
+    tagsId: number[],
+    page: number,
+    platformsId: number[]
   ): Promise<GameAPIResponse> {
-    const tagsQuery = tagIds.join(",");
-    const url = `${this.baseUrl}/games?tags=${tagsQuery}&page=${page}&key=${this.apiKey}`;
+    const tagsQuery = tagsId.join(",");
+    const platformsQuery = platformsId.join(",");
+    const url = `${this.baseUrl}/games?key=${this.apiKey}&tags=${tagsQuery}&page=${page}&platforms=${platformsQuery}`;
     const data = await this.fetchData(url);
     return data;
   }

@@ -1,22 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { MdKeyboardArrowUp } from "react-icons/md";
 import { FaSearch } from "react-icons/fa";
 import fetchService from "@/utils/classes/fetchService";
+import useFetchGameData from "@/hooks/useFetchGameData";
 
 export default function FilterByGenre({
   handleTagChange,
-  selectedTags,
 }: {
-  handleTagChange: (tagId: number) => void;
-  selectedTags: number[];
+  handleTagChange: (genreId: number) => void;
 }) {
-  const [data, setData] = useState<any[]>([]);
+  const { productFetchAndFilterState, handleGenreFilterChange } =
+    useFetchGameData();
+  const [data, setData] = React.useState<any[]>([]);
   console.log(data);
+  console.log(productFetchAndFilterState);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const getGames = async () => {
-      const gamesTags = await fetchService.getGameGenres();
-      setData(gamesTags);
+      const gamesGenres = await fetchService.getGamesGenres(1);
+      setData(gamesGenres);
     };
     getGames();
   }, []);
@@ -46,7 +48,7 @@ export default function FilterByGenre({
               <input
                 className="flex-0"
                 type="checkbox"
-                checked={selectedTags.includes(tag.id)}
+                checked={productFetchAndFilterState.genresId.includes(tag.id)}
                 onChange={() => handleTagChange(tag.id)}
               />
               <span className="flex-1 px-[10px] font-[600]">{tag.name}</span>

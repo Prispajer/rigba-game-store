@@ -1,15 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./slices/userSlice";
 import productReducer from "./slices/productSlice";
 import utilityReducer from "./slices/utilitySlice";
-import fetchReducer from "./slices/fetchSlice";
+import productFetchAndFilterSliceReducer from "./slices/productFetchAndFilterSlice";
 
 export const store = configureStore({
   reducer: {
-    user: userReducer,
     product: productReducer,
     utility: utilityReducer,
-    fetch: fetchReducer,
+    productFetchAndFilter: productFetchAndFilterSliceReducer,
   },
 });
 

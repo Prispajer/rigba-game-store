@@ -2,7 +2,7 @@ import IFetchService from "../interfaces/iFetchService";
 import { GameAPIResponse } from "../helpers/types";
 
 export class FetchService implements IFetchService {
-  private apiKey: string = "b3c85b14e19f4d618df8debc3d5b01b6";
+  private apiKey: string = "29d3c3cc5a274ae79c69afde3809b498";
   private baseUrl: string = "https://api.rawg.io/api";
 
   async fetchData(url: string): Promise<any> {
@@ -76,17 +76,20 @@ export class FetchService implements IFetchService {
   async getGamesByGenresId(
     genresId: number[],
     page: number,
-    platformsId: number[],
-    storesId: number[],
-    publishersId: number[]
+    platformsId?: number[],
+    storesId?: number[],
+    publishersId?: number[]
   ): Promise<GameAPIResponse[]> {
     const genresQuery = genresId.join(",");
-    const platformsQuery = platformsId.join(",");
-    const storesQuery = storesId.join(",");
-    const publishersQuery = publishersId.join(",");
-    const url = `${this.baseUrl}/games?key=${this.apiKey}&genres=${genresQuery}&page=${page}&platforms=${platformsQuery}&stores=${storesQuery}&publishers=${publishersQuery}`;
+    const platformsQuery = platformsId?.join(",");
+    const storesQuery = storesId?.join(",");
+    const publishersQuery = publishersId?.join(",");
+    const url = `${this.baseUrl}/games?key=${this.apiKey}&${
+      genresQuery ? `&genres=${genresQuery}` : ""
+    }&page=${page}${platformsQuery ? `&platforms=${platformsQuery}` : ""}${
+      storesQuery ? `&stores=${storesQuery}` : ""
+    }${publishersQuery ? `&publishers=${publishersQuery}` : ""}`;
     const data = await this.fetchData(url);
-    console.log(data);
     return data || [];
   }
 

@@ -4,13 +4,10 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { FaSearch } from "react-icons/fa";
 import useFetchGameData from "@/hooks/useFetchGameData";
 import fetchService from "@/utils/classes/fetchService";
+import { setStoresId } from "@/redux/slices/productFetchAndFilterSlice";
 
-export default function FilterByStore({
-  handleTagChange,
-}: {
-  handleTagChange: (id: number) => void;
-}) {
-  const { productFetchAndFilterState } = useFetchGameData();
+export default function FilterByStore() {
+  const { productFetchAndFilterState, handleFilterChange } = useFetchGameData();
   const [data, setData] = React.useState<any[]>([]);
 
   React.useEffect(() => {
@@ -51,7 +48,13 @@ export default function FilterByStore({
                   checked={productFetchAndFilterState.storesId.includes(
                     store.id
                   )}
-                  onChange={() => handleTagChange(store.id)}
+                  onClick={() =>
+                    handleFilterChange(
+                      store.id,
+                      productFetchAndFilterState.storesId,
+                      setStoresId
+                    )
+                  }
                 />
                 <span className="flex-1 px-[10px] font-[600]">
                   {store.name}

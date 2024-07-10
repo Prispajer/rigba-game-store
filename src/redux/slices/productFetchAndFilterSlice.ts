@@ -20,6 +20,8 @@ const initialState: FilterState = {
   data: [],
   genresId: [],
   platformsId: [],
+  storesId: [],
+  publishersId: [],
   isLoading: false,
   error: null,
   page: 1,
@@ -29,7 +31,7 @@ const initialState: FilterState = {
 };
 
 export const fetchGamesByGenresId = createAsyncThunk(
-  "productFetchAndFilterSlice/fetchGamesByTagsId",
+  "productFetchAndFilter/fetchGamesByGenresId",
   async ({ page = 1 }: { page: number }, { rejectWithValue, getState }) => {
     const { genresId, platformsId, storesId, publishersId } = (
       getState() as { productFetchAndFilter: FilterState }
@@ -53,14 +55,8 @@ const productFetchAndFilterSlice = createSlice({
   name: "productFetchAndFilter",
   initialState,
   reducers: {
-    setPage: (
-      state,
-      action: PayloadAction<{
-        page: number;
-      }>
-    ) => {
-      const { page } = action.payload;
-      state.page = page;
+    setPage: (state, action: PayloadAction<{ page: number }>) => {
+      state.page = action.payload.page;
     },
     setGenresId: (state, action: PayloadAction<number[]>) => {
       state.genresId = action.payload;

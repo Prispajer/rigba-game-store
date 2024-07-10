@@ -1,11 +1,9 @@
 "use client";
-
 import React from "react";
-import { useRouter } from "next/navigation";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import useFetchGameData from "@/hooks/useFetchGameData";
 import FilterByPrice from "./FilterByPrice";
-import FilterByType from "./FilterByType";
+import FilterByPublisher from "./FilterByPublisher";
 import FilterByGenre from "./FilterByGenre";
 import FilterByPlatform from "./FilterByPlatform";
 import FilterByStore from "./FilterByStore";
@@ -19,35 +17,18 @@ export default function FiltersContainer() {
   const {
     productFetchAndFilterState,
     handleFetchGamesByGenresId,
-    handleSetStoresId,
-    handleSetPublishersId,
-    handleSetPlatformsId,
-    handleSetTagsId,
+    handleSetGenresId,
   } = useFetchGameData();
   const initialGenresId = params.get("genres")?.split(",").map(Number) || [];
-  const [genresId, setGenresId] = React.useState<number[]>(initialGenresId);
 
   console.log(productFetchAndFilterState);
 
   const router = useRouter();
 
   React.useEffect(() => {
-    if (genresId.length > 0) {
-      handleSetStoresId([1]);
-      handleSetPublishersId([354]);
-      handleSetPlatformsId([4]);
-      handleSetTagsId(genresId);
-      handleFetchGamesByGenresId(productFetchAndFilterState.page);
-    }
-  }, [genresId, productFetchAndFilterState.page]);
-
-  const handleTagChange = (genreId: number) => {
-    setGenresId((prevTags) =>
-      prevTags.includes(genreId)
-        ? prevTags.filter((id) => id !== genreId)
-        : [...prevTags, genreId]
-    );
-  };
+    handleSetGenresId(initialGenresId);
+    handleFetchGamesByGenresId(productFetchAndFilterState.page);
+  }, []);
 
   const handleClickGame = (gameId: string) => {
     router.push(`/product/${gameId}`);
@@ -65,10 +46,10 @@ export default function FiltersContainer() {
           <aside className="hidden lg:block lg:h-auto lg:max-w-[220px]">
             <form className="bg-[#387CBD]">
               <FilterByPrice />
-              <FilterByType handleTagChange={handleTagChange} />
-              <FilterByPlatform handleTagChange={handleTagChange} />
-              <FilterByGenre handleTagChange={handleTagChange} />
-              <FilterByStore handleTagChange={handleTagChange} />
+              <FilterByPublisher />
+              <FilterByPlatform />
+              <FilterByGenre />
+              <FilterByStore />
             </form>
           </aside>
           <section className="w-full lg:w-[calc(100%-220px)]">

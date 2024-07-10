@@ -3,13 +3,10 @@ import { MdKeyboardArrowUp } from "react-icons/md";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import fetchService from "@/utils/classes/fetchService";
 import useFetchGameData from "@/hooks/useFetchGameData";
+import { setPublishersId } from "@/redux/slices/productFetchAndFilterSlice";
 
-export default function FilterByType({
-  handleTagChange,
-}: {
-  handleTagChange: (genreId: number) => void;
-}) {
-  const { productFetchAndFilterState } = useFetchGameData();
+export default function FilterByType() {
+  const { productFetchAndFilterState, handleFilterChange } = useFetchGameData();
   const [data, setData] = React.useState<any[]>([]);
 
   console.log(data);
@@ -31,22 +28,30 @@ export default function FilterByType({
         </div>
         <div className="flex items-center">
           <ul className="w-full">
-            {data.map((tag) => (
+            {data.map((publisher) => (
               <li
-                key={tag.id}
+                key={publisher.id}
                 className="flex justify-between items-center mb-[10px]"
               >
                 <input
                   className="flex-0"
                   type="checkbox"
                   checked={productFetchAndFilterState.publishersId.includes(
-                    tag.id
+                    publisher.id
                   )}
-                  onChange={() => handleTagChange(tag.id)}
+                  onClick={() =>
+                    handleFilterChange(
+                      publisher.id,
+                      productFetchAndFilterState.publishersId,
+                      setPublishersId
+                    )
+                  }
                 />
-                <span className="flex-1 px-[10px] font-[600]">{tag.name}</span>
+                <span className="flex-1 px-[10px] font-[600]">
+                  {publisher.name}
+                </span>
                 <span className="flex-0 text-[#ffffffB3] text-end">
-                  {tag.games_count}
+                  {publisher.games_count}
                 </span>
               </li>
             ))}

@@ -1,3 +1,4 @@
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import {
@@ -17,61 +18,101 @@ export default function useFetchGameData() {
     (state: RootState) => state.productFetchAndFilter
   );
 
-  const handleFetchGamesByGenresId = (page: number) => {
-    dispatch(fetchGamesByGenresId({ page }));
-  };
+  const handleFetchGamesByGenresId = React.useCallback(
+    (page: number) => {
+      dispatch(fetchGamesByGenresId({ page }));
+    },
+    [dispatch]
+  );
 
-  const handleSetPage = (page: number) => {
-    if (page > 0 && page <= 20) {
-      dispatch(setPage({ page }));
-    }
-  };
+  const handleSetPage = React.useCallback(
+    (page: number) => {
+      if (page > 0 && page <= 20) {
+        dispatch(setPage({ page }));
+        handleFetchGamesByGenresId(page);
+      }
+    },
+    [dispatch, handleFetchGamesByGenresId]
+  );
+  const handleFilterChange = React.useCallback(
+    (
+      filterId: number,
+      array: number[],
+      callback: (updatedFilters: number[]) => any
+    ) => {
+      const updatedFilters = array.includes(filterId)
+        ? array.filter((id) => id !== filterId)
+        : [...array, filterId];
+      dispatch(callback(updatedFilters));
+      handleFetchGamesByGenresId(productFetchAndFilterState.page);
+    },
+    [dispatch, handleFetchGamesByGenresId, productFetchAndFilterState.page]
+  );
 
-  const handleGenreFilterChange = (genreId: number) => {
-    const updatedFilters = productFetchAndFilterState.genresId.includes(genreId)
-      ? productFetchAndFilterState.genresId.filter((id) => id !== genreId)
-      : [...productFetchAndFilterState.genresId, genreId];
+  const handleFilterSearch = React.useCallback(
+    (event: ChangeEvent<HTMLInputElement>, array: []) => {
+      const value = "Action" as string;
 
-    dispatch(setGenresId(updatedFilters));
-  };
+      if (array.includes(value)) {
+        array.filter((name) => name === value);
+      }
+    },
+    []
+  );
 
-  const handleSetTagsId = (tagsId: number[]) => {
-    dispatch(setGenresId(tagsId));
-  };
+  const handleSetGenresId = React.useCallback(
+    (genresId: number[]) => {
+      dispatch(setGenresId(genresId));
+      handleFetchGamesByGenresId(productFetchAndFilterState.page);
+    },
+    [dispatch, handleFetchGamesByGenresId, productFetchAndFilterState.page]
+  );
 
-  const handleSetPlatformsId = (platformsId: number[]) => {
-    dispatch(setPlatformsId(platformsId));
-  };
+  const handleSetPlatformsId = React.useCallback(
+    (platformsId: number[]) => {
+      dispatch(setPlatformsId(platformsId));
+    },
+    [dispatch]
+  );
 
-  const handleSetStoresId = (storesId: number[]) => {
-    dispatch(setStoresId(storesId));
-  };
+  const handleSetStoresId = React.useCallback(
+    (storesId: number[]) => {
+      dispatch(setStoresId(storesId));
+    },
+    [dispatch]
+  );
 
-  const handleSetPublishersId = (publishersId: number[]) => {
-    dispatch(setPublishersId(publishersId));
-  };
+  const handleSetPublishersId = React.useCallback(
+    (publishersId: number[]) => {
+      dispatch(setPublishersId(publishersId));
+    },
+    [dispatch]
+  );
 
-  const handleSetNextPage = () => {
+  const handleSetNextPage = React.useCallback(() => {
     if (productFetchAndFilterState.page < 20) {
       dispatch(setNextPage());
+      handleFetchGamesByGenresId(productFetchAndFilterState.page + 1);
     }
-  };
+  }, [dispatch, productFetchAndFilterState.page, handleFetchGamesByGenresId]);
 
-  const handleSetPreviousPage = () => {
+  const handleSetPreviousPage = React.useCallback(() => {
     if (productFetchAndFilterState.page > 1) {
       dispatch(setPreviousPage());
+      handleFetchGamesByGenresId(productFetchAndFilterState.page - 1);
     }
-  };
+  }, [dispatch, productFetchAndFilterState.page, handleFetchGamesByGenresId]);
 
   return {
     productFetchAndFilterState,
     handleFetchGamesByGenresId,
-    handleGenreFilterChange,
+    handleFilterChange,
+    handleFilterSearch,
     handleSetPlatformsId,
     handleSetStoresId,
     handleSetPublishersId,
     handleSetPage,
-    handleSetTagsId,
+    handleSetGenresId,
     handleSetNextPage,
     handleSetPreviousPage,
   };

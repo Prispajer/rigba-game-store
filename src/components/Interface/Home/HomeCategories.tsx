@@ -1,16 +1,17 @@
 "use client";
-
 import React from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import fetchService from "@/utils/classes/fetchService";
-import useFetchGameData from "@/hooks/useFetchGameData";
 import HomeShowMoreButton from "./HomeShowMoreButton";
+import useFetchGameData from "@/hooks/useFetchGameData";
 
 export default function HomeCategories() {
   const router = useRouter();
   const [categories, setCategories] = React.useState<any[]>([]);
   const [quantity, setQuantity] = React.useState<number>(1);
+
+  const { productFetchAndFilterState } = useFetchGameData();
 
   React.useEffect(() => {
     handleGetGameGenres();
@@ -29,26 +30,11 @@ export default function HomeCategories() {
     setQuantity((prevQuantity) => prevQuantity + 1);
   };
 
-  const handleGetGamesByGenresId = async (
-    genreId: number,
-    paltformId: number,
-    storeId: number,
-    publisherId: number
-  ): Promise<void> => {
+  const handleGetGamesByGenresId = async (genreId: number): Promise<void> => {
     try {
-      const data = await fetchService.getGamesByGenresId(
-        [genreId],
-        1,
-        [paltformId],
-        [storeId],
-        [publisherId]
-      );
+      const data = await fetchService.getGamesByGenresId([genreId], 1);
       console.log(data);
-      router.push(
-        `/filters?genres=${[genreId]}&platforms=${[
-          paltformId,
-        ]}&stores=${storeId}&publishers=${publisherId}`
-      );
+      router.push(`/filters?genres=${[genreId]}`);
     } catch (error) {
       console.error("Error fetching games by tag ID:", error);
     }
@@ -64,9 +50,7 @@ export default function HomeCategories() {
               {categories.map((category) => (
                 <div
                   key={category.id}
-                  onClick={() =>
-                    handleGetGamesByGenresId(category.id, 4, 1, 354)
-                  }
+                  onClick={() => handleGetGamesByGenresId(category.id)}
                   className="flex h-[140px] flex-col items-center bg-[#5389b7] text-[#ffffff] hover:bg-categoryGenresHover transition ease-in-out delay-70  px-[5px] shadow-lg cursor-pointer"
                 >
                   <div className="flex flex-1 items-center font-medium text-[14px] ">

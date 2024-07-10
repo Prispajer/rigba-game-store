@@ -4,13 +4,10 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { FaSearch } from "react-icons/fa";
 import useFetchGameData from "@/hooks/useFetchGameData";
 import fetchService from "@/utils/classes/fetchService";
+import { setPlatformsId } from "@/redux/slices/productFetchAndFilterSlice";
 
-export default function FilterByPlatform({
-  handleTagChange,
-}: {
-  handleTagChange: (id: number) => void;
-}) {
-  const { productFetchAndFilterState } = useFetchGameData();
+export default function FilterByPlatform() {
+  const { productFetchAndFilterState, handleFilterChange } = useFetchGameData();
   const [data, setData] = React.useState<any[]>([]);
 
   React.useEffect(() => {
@@ -40,22 +37,30 @@ export default function FilterByPlatform({
         </div>
         <div className="flex items-center">
           <ul className="w-full">
-            {data.map((tag) => (
+            {data.map((platform) => (
               <li
-                key={tag.id}
+                key={platform.id}
                 className="flex justify-between items-center mb-[10px]"
               >
                 <input
                   className="flex-0"
                   type="checkbox"
                   checked={productFetchAndFilterState.platformsId.includes(
-                    tag.id
+                    platform.id
                   )}
-                  onChange={() => handleTagChange(tag.id)}
+                  onClick={() =>
+                    handleFilterChange(
+                      platform.id,
+                      productFetchAndFilterState.platformsId,
+                      setPlatformsId
+                    )
+                  }
                 />
-                <span className="flex-1 px-[10px] font-[600]">{tag.name}</span>
+                <span className="flex-1 px-[10px] font-[600]">
+                  {platform.name}
+                </span>
                 <span className="flex-0 text-[#ffffffB3] text-end">
-                  {tag.games_count}
+                  {platform.games_count}
                 </span>
               </li>
             ))}

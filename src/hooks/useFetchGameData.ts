@@ -1,26 +1,25 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { PayloadAction } from "@reduxjs/toolkit";
 import { AppDispatch, RootState } from "@/redux/store";
 import {
-  fetchGamesByGenresId,
-  setGenresId,
-  setPlatformsId,
-  setStoresId,
-  setPublishersId,
+  fetchGamesWithFilters,
+  setGenresIdArray,
+  setPlatformsIdArray,
+  setStoresIdArray,
+  setPublishersIdArray,
   setPage,
   setNextPage,
   setPreviousPage,
-} from "@/redux/slices/productFetchAndFilterSlice";
+} from "@/redux/slices/gamesFilterSlice";
 
 export default function useFetchGameData() {
   const dispatch = useDispatch<AppDispatch>();
-  const productFetchAndFilterState = useSelector(
-    (state: RootState) => state.productFetchAndFilter
-  );
+  const gamesFilterState = useSelector((state: RootState) => state.gamesFilter);
 
-  const handleFetchGamesByGenresId = React.useCallback(
+  const handleFetchGamesWithFilters = React.useCallback(
     (page: number) => {
-      dispatch(fetchGamesByGenresId({ page }));
+      dispatch(fetchGamesWithFilters({ page }));
     },
     [dispatch]
   );
@@ -29,90 +28,77 @@ export default function useFetchGameData() {
     (page: number) => {
       if (page > 0 && page <= 20) {
         dispatch(setPage({ page }));
-        handleFetchGamesByGenresId(page);
+        handleFetchGamesWithFilters(page);
       }
     },
-    [dispatch, handleFetchGamesByGenresId]
+    [dispatch, handleFetchGamesWithFilters]
   );
+
   const handleFilterChange = React.useCallback(
     (
       filterId: number,
       array: number[],
-      callback: (updatedFilters: number[]) => any
-    ) => {
+      callback: (updatedFilters: number[]) => PayloadAction
+    ): void => {
       const updatedFilters = array.includes(filterId)
         ? array.filter((id) => id !== filterId)
         : [...array, filterId];
       dispatch(callback(updatedFilters));
-      handleFetchGamesByGenresId(productFetchAndFilterState.page);
+      handleFetchGamesWithFilters(gamesFilterState.page);
     },
-    [dispatch, handleFetchGamesByGenresId, productFetchAndFilterState.page]
+    [dispatch, handleFetchGamesWithFilters, gamesFilterState.page]
   );
 
-  const handleFilterSearch = React.useCallback(
-    (event: ChangeEvent<HTMLInputElement>, array: []) => {
-      const value = "Action" as string;
-
-      if (array.includes(value)) {
-        array.filter((name) => name === value);
-      }
-    },
-    []
-  );
-
-  const handleSetGenresId = React.useCallback(
+  const handleSetGenresIdArray = React.useCallback(
     (genresId: number[]) => {
-      dispatch(setGenresId(genresId));
-      handleFetchGamesByGenresId(productFetchAndFilterState.page);
+      dispatch(setGenresIdArray(genresId));
+      handleFetchGamesWithFilters(gamesFilterState.page);
     },
-    [dispatch, handleFetchGamesByGenresId, productFetchAndFilterState.page]
+    [dispatch, handleFetchGamesWithFilters, gamesFilterState.page]
   );
 
-  const handleSetPlatformsId = React.useCallback(
+  const handleSetPlatformsIdArray = React.useCallback(
     (platformsId: number[]) => {
-      dispatch(setPlatformsId(platformsId));
+      dispatch(setPlatformsIdArray(platformsId));
     },
     [dispatch]
   );
 
-  const handleSetStoresId = React.useCallback(
+  const handleSetStoresIdArray = React.useCallback(
     (storesId: number[]) => {
-      dispatch(setStoresId(storesId));
+      dispatch(setStoresIdArray(storesId));
     },
     [dispatch]
   );
 
-  const handleSetPublishersId = React.useCallback(
+  const handleSetPublishersIdArray = React.useCallback(
     (publishersId: number[]) => {
-      dispatch(setPublishersId(publishersId));
+      dispatch(setPublishersIdArray(publishersId));
     },
     [dispatch]
   );
 
   const handleSetNextPage = React.useCallback(() => {
-    if (productFetchAndFilterState.page < 20) {
+    if (gamesFilterState.page < 20) {
       dispatch(setNextPage());
-      handleFetchGamesByGenresId(productFetchAndFilterState.page + 1);
     }
-  }, [dispatch, productFetchAndFilterState.page, handleFetchGamesByGenresId]);
+  }, [dispatch, gamesFilterState.page]);
 
   const handleSetPreviousPage = React.useCallback(() => {
-    if (productFetchAndFilterState.page > 1) {
+    if (gamesFilterState.page > 1) {
       dispatch(setPreviousPage());
-      handleFetchGamesByGenresId(productFetchAndFilterState.page - 1);
     }
-  }, [dispatch, productFetchAndFilterState.page, handleFetchGamesByGenresId]);
+  }, [dispatch, gamesFilterState.page]);
 
   return {
-    productFetchAndFilterState,
-    handleFetchGamesByGenresId,
+    gamesFilterState,
+    handleFetchGamesWithFilters,
     handleFilterChange,
-    handleFilterSearch,
-    handleSetPlatformsId,
-    handleSetStoresId,
-    handleSetPublishersId,
+    handleSetGenresIdArray,
+    handleSetStoresIdArray,
+    handleSetPublishersIdArray,
     handleSetPage,
-    handleSetGenresId,
+    handleSetPlatformsIdArray,
     handleSetNextPage,
     handleSetPreviousPage,
   };

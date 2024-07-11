@@ -1,5 +1,6 @@
+import { SearchData } from "../helpers/types";
 import IUtilsService from "../interfaces/iUtilsService";
-import { ProductSearchData } from "../helpers/types";
+
 export default class UtilsService implements IUtilsService {
   private searchText: string;
 
@@ -15,9 +16,8 @@ export default class UtilsService implements IUtilsService {
     this.searchText = searchText;
   }
 
-  searchProducts(searchData: ProductSearchData[]): ProductSearchData[] {
+  searchByString(searchData: SearchData[]): SearchData[] {
     const searchText = this.getSearchText();
-    if (!searchData || !searchText) return [];
     return searchData.filter((game) =>
       game.name.toLowerCase().includes(searchText.toLowerCase())
     );

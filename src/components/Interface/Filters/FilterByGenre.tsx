@@ -3,19 +3,23 @@ import { MdKeyboardArrowUp } from "react-icons/md";
 import { FaSearch } from "react-icons/fa";
 import fetchService from "@/utils/classes/fetchService";
 import useFetchGameData from "@/hooks/useFetchGameData";
-import { setGenresId } from "@/redux/slices/productFetchAndFilterSlice";
+import { setGenresIdArray } from "@/redux/slices/gamesFilterSlice";
+import UtilsService from "@/utils/classes/utilsService";
+import IUtilsService from "@/utils/interfaces/iUtilsService";
+import useSearchText from "@/hooks/useSearchText";
 
 export default function FilterByGenre() {
-  const { productFetchAndFilterState, handleFilterChange, handleFilterSearch } =
-    useFetchGameData();
-  const [data, setData] = React.useState<any[]>([]);
-  console.log(data);
+  const { gamesFilterState, handleFilterChange } = useFetchGameData();
+  const { handleSetSearchText, searchGenreTextState } = useSearchText();
+  const [gameGenres, setGameGenres] = React.useState<any[]>([]);
+  const utilsService: IUtilsService = new UtilsService(
+    searchGenreTextState as string
+  );
+
   React.useEffect(() => {
-    const getGames = async () => {
-      const gamesGenres = await fetchService.getGamesGenres(1);
-      setData(gamesGenres);
-    };
-    getGames();
+    (async () => {
+      setGameGenres(await fetchService.getGamesGenres(1));
+    })();
   }, []);
 
   return (
@@ -28,7 +32,7 @@ export default function FilterByGenre() {
         <FaSearch size="25px" color="white" className="mr-3" />
         <input
           className="text-[white] border-none outline-none bg-transparent w-[100%]"
-          onChange={handleFilterSearch("Action", data)}
+          onChange={(event) => handleSetSearchText("searchGenreText", event)}
           type="text"
           name="text"
           autoComplete="off"
@@ -36,7 +40,7 @@ export default function FilterByGenre() {
       </div>
       <div className="flex items-center">
         <ul>
-          {data.map((genre) => (
+          {utilsService.searchByString(gameGenres).map((genre) => (
             <li
               key={genre.id}
               className="flex justify-between items-center mb-[10px]"
@@ -44,12 +48,12 @@ export default function FilterByGenre() {
               <input
                 className="flex-0"
                 type="checkbox"
-                checked={productFetchAndFilterState.genresId.includes(genre.id)}
+                checked={gamesFilterState.genresIdArray.includes(genre.id)}
                 onChange={() =>
                   handleFilterChange(
                     genre.id,
-                    productFetchAndFilterState.genresId,
-                    setGenresId
+                    gamesFilterState.genresIdArray,
+                    setGenresIdArray
                   )
                 }
               />

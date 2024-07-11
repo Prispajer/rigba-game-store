@@ -1,13 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import productReducer from "./slices/productSlice";
 import utilityReducer from "./slices/utilitySlice";
-import productFetchAndFilterSliceReducer from "./slices/productFetchAndFilterSlice";
+import gamesFilterReducer from "./slices/gamesFilterSlice";
 
 export const store = configureStore({
   reducer: {
     product: productReducer,
     utility: utilityReducer,
-    productFetchAndFilter: productFetchAndFilterSliceReducer,
+    gamesFilter: gamesFilterReducer,
   },
 });
 

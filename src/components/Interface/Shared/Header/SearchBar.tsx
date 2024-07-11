@@ -8,7 +8,7 @@ import SearchResultsContainer from "./SearchResultsContainer";
 import debounce from "@/utils/debounce";
 import fetchService from "@/utils/classes/fetchService";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
-import { ProductSearchData } from "@/utils/helpers/types";
+import { SearchData } from "@/utils/helpers/types";
 
 export default function SearchBar() {
   const {
@@ -20,7 +20,7 @@ export default function SearchBar() {
   } = useWindowVisibility();
 
   const [searchText, setSearchText] = React.useState("");
-  const [games, setGames] = React.useState<ProductSearchData[]>([]);
+  const [games, setGames] = React.useState<SearchData[]>([]);
   const utilsService: IUtilsService = new UtilsService(searchText);
 
   const getGames = async () => {
@@ -45,7 +45,7 @@ export default function SearchBar() {
     setSearchText(value);
   };
 
-  const filteredGames = utilsService.searchProducts(games);
+  const filteredGames = utilsService.searchByString(games);
 
   const handleOutsideClick = () => {
     handleCloseMobileSearchModal("mobileSearchModal");

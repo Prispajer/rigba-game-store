@@ -15,19 +15,17 @@ import ChangePage from "./ChangePage";
 export default function FiltersContainer() {
   const params = useSearchParams();
   const {
-    productFetchAndFilterState,
-    handleFetchGamesByGenresId,
-    handleSetGenresId,
+    gamesFilterState,
+    handleFetchGamesWithFilters,
+    handleSetGenresIdArray,
   } = useFetchGameData();
   const initialGenresId = params.get("genres")?.split(",").map(Number) || [];
-
-  console.log(productFetchAndFilterState);
 
   const router = useRouter();
 
   React.useEffect(() => {
-    handleSetGenresId(initialGenresId);
-    handleFetchGamesByGenresId(productFetchAndFilterState.page);
+    handleSetGenresIdArray(initialGenresId);
+    handleFetchGamesWithFilters(gamesFilterState.page);
   }, []);
 
   const handleClickGame = (gameId: string) => {
@@ -55,10 +53,10 @@ export default function FiltersContainer() {
           <section className="w-full lg:w-[calc(100%-220px)]">
             <SelectedFilters />
             <SortBy />
-            {productFetchAndFilterState.isLoading ? (
+            {gamesFilterState.isLoading ? (
               <p>Loading...</p>
-            ) : productFetchAndFilterState.error ? (
-              <p>Error: {productFetchAndFilterState.error}</p>
+            ) : gamesFilterState.error ? (
+              <p>Error: {gamesFilterState.error}</p>
             ) : (
               <FilterProductList handleClickGame={handleClickGame} />
             )}

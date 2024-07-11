@@ -4,13 +4,13 @@ import { FaSortAmountUpAlt } from "react-icons/fa";
 import useFetchGameData from "@/hooks/useFetchGameData";
 
 export default function SortBy() {
-  const { productFetchAndFilterState } = useFetchGameData();
+  const { gamesFilterState } = useFetchGameData();
   return (
     <div className="flex items-center pt-[25px]">
       <div className="flex-1">
         <span className="text-[#ffffff]">
           Znalezione wyniki:{" "}
-          <span className="font-bold">{productFetchAndFilterState.count}</span>
+          <span className="font-bold">{gamesFilterState.gamesCount}</span>
         </span>
       </div>
       <div>

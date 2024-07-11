@@ -1,7 +1,7 @@
-import { ProductSearchData } from "../helpers/types";
+import { SearchData } from "../helpers/types";
 
 export default interface IUtilsService {
   getSearchText(): string;
   setSearchText(searchText: string): void;
-  searchProducts(searchData: ProductSearchData[]): ProductSearchData[];
+  searchByString(searchData: SearchData[]): SearchData[];
 }

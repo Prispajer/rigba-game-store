@@ -4,6 +4,8 @@ import { open, close, toggleScreen, toggle } from "@/redux/slices/utilitySlice";
 import { RootState } from "../redux/store";
 
 export default function useWindowVisibility() {
+  const dispatch = useDispatch();
+
   const userSidebarState = useSelector(
     (state: RootState) => state.utility.userSidebar
   );
@@ -29,16 +31,18 @@ export default function useWindowVisibility() {
     (state: RootState) => state.utility.desktopSearchBar
   );
 
-  const dispatch = useDispatch();
   const handleOpen = (element: string): void => {
     dispatch(open(element));
   };
+
   const handleClose = (element: string): void => {
     dispatch(close(element));
   };
+
   const handleToggle = (element: string): void => {
     dispatch(toggle(element));
   };
+
   const handleToggleScreen = React.useCallback(
     (resolution: number) => {
       return () => {

@@ -4,21 +4,25 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { FaSearch } from "react-icons/fa";
 import useFetchGameData from "@/hooks/useFetchGameData";
 import fetchService from "@/utils/classes/fetchService";
-import { setStoresId } from "@/redux/slices/productFetchAndFilterSlice";
+import { setStoresIdArray } from "@/redux/slices/gamesFilterSlice";
+import useSearchText from "@/hooks/useSearchText";
+import UtilsService from "@/utils/classes/utilsService";
+import IUtilsService from "@/utils/interfaces/iUtilsService";
 
 export default function FilterByStore() {
-  const { productFetchAndFilterState, handleFilterChange } = useFetchGameData();
-  const [data, setData] = React.useState<any[]>([]);
+  const { gamesFilterState, handleFilterChange } = useFetchGameData();
+  const { handleSetSearchText, searchStoreTextState } = useSearchText();
+  const [gameStores, setGameStores] = React.useState<any[]>([]);
+  const utilsService: IUtilsService = new UtilsService(
+    searchStoreTextState as string
+  );
 
   React.useEffect(() => {
-    const getGames = async () => {
-      const gamesStores = await fetchService.getGamesStores(4);
-      setData(gamesStores);
-    };
-    getGames();
+    (async () => {
+      setGameStores(await fetchService.getGamesStores(4));
+    })();
   }, []);
 
-  console.log(data);
   return (
     <>
       <div className="py-[15px] px-[20px] text-[#ffffff] text-[16px]  border-b-[2px] border-b-primaryColor">
@@ -30,6 +34,7 @@ export default function FilterByStore() {
           <FaSearch size="25px" color="white" className="mr-3" />
           <input
             className="text-[white] border-none outline-none bg-transparent w-[100%]"
+            onChange={(event) => handleSetSearchText("searchStoreText", event)}
             type="text"
             name="text"
             autoComplete="off"
@@ -37,7 +42,7 @@ export default function FilterByStore() {
         </div>
         <div className="flex items-center">
           <ul className="w-full">
-            {data.map((store) => (
+            {utilsService.searchByString(gameStores).map((store) => (
               <li
                 key={store.id}
                 className="flex justify-between items-center mb-[10px]"
@@ -45,14 +50,12 @@ export default function FilterByStore() {
                 <input
                   className="flex-0"
                   type="checkbox"
-                  checked={productFetchAndFilterState.storesId.includes(
-                    store.id
-                  )}
+                  checked={gamesFilterState.storesIdArray.includes(store.id)}
                   onClick={() =>
                     handleFilterChange(
                       store.id,
-                      productFetchAndFilterState.storesId,
-                      setStoresId
+                      gamesFilterState.storesIdArray,
+                      setStoresIdArray
                     )
                   }
                 />

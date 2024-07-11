@@ -4,7 +4,7 @@ import useFetchGameData from "@/hooks/useFetchGameData";
 
 export default function ChangePage() {
   const {
-    productFetchAndFilterState,
+    gamesFilterState,
     handleSetNextPage,
     handleSetPreviousPage,
     handleSetPage,
@@ -16,29 +16,29 @@ export default function ChangePage() {
 
   const renderPagination = () => {
     let pages = [];
-    if (productFetchAndFilterState.page <= 3) {
-      pages = [1, 2, 3, 4, "...", productFetchAndFilterState.data.length];
+    if (gamesFilterState.page <= 3) {
+      pages = [1, 2, 3, 4, "...", gamesFilterState.gamesWithFilters.length];
     } else if (
-      productFetchAndFilterState.page >=
-      productFetchAndFilterState.data.length - 2
+      gamesFilterState.page >=
+      gamesFilterState.gamesWithFilters.length - 2
     ) {
       pages = [
         1,
         "...",
-        productFetchAndFilterState.data.length - 3,
-        productFetchAndFilterState.data.length - 2,
-        productFetchAndFilterState.data.length - 1,
-        productFetchAndFilterState.data.length,
+        gamesFilterState.gamesWithFilters.length - 3,
+        gamesFilterState.gamesWithFilters.length - 2,
+        gamesFilterState.gamesWithFilters.length - 1,
+        gamesFilterState.gamesWithFilters.length,
       ];
     } else {
       pages = [
         1,
         "...",
-        productFetchAndFilterState.page - 1,
-        productFetchAndFilterState.page,
-        productFetchAndFilterState.page + 1,
+        gamesFilterState.page - 1,
+        gamesFilterState.page,
+        gamesFilterState.page + 1,
         "...",
-        productFetchAndFilterState.data.length,
+        gamesFilterState.gamesWithFilters.length,
       ];
     }
 
@@ -52,7 +52,7 @@ export default function ChangePage() {
           key={index}
           className={`p-[10px] text-[20px] hover:text-[#e2999b]
             ${
-              productFetchAndFilterState.page === page
+              gamesFilterState.page === page
                 ? " text-[#E2999B] "
                 : " text-[#FFFFFF]"
             }`}
@@ -71,7 +71,7 @@ export default function ChangePage() {
         <li className="flex items-center p-[10px] mr-[10px] text-[20px] border border-[white] ">
           <button
             onClick={() => handleSetPreviousPage()}
-            disabled={productFetchAndFilterState.page === 1}
+            disabled={gamesFilterState.page === 1}
           >
             <MdKeyboardArrowLeft />
           </button>
@@ -81,8 +81,7 @@ export default function ChangePage() {
           <button
             onClick={() => handleSetNextPage()}
             disabled={
-              productFetchAndFilterState.page ===
-              productFetchAndFilterState.data.length
+              gamesFilterState.page === gamesFilterState.gamesWithFilters.length
             }
           >
             <MdKeyboardArrowRight />

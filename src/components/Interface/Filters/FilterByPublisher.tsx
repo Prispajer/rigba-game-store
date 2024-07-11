@@ -1,23 +1,26 @@
 import React from "react";
 import { MdKeyboardArrowUp } from "react-icons/md";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { FaSearch } from "react-icons/fa";
 import fetchService from "@/utils/classes/fetchService";
 import useFetchGameData from "@/hooks/useFetchGameData";
-import { setPublishersId } from "@/redux/slices/productFetchAndFilterSlice";
+import { setPublishersIdArray } from "@/redux/slices/gamesFilterSlice";
+import useSearchText from "@/hooks/useSearchText";
+import UtilsService from "@/utils/classes/utilsService";
+import IUtilsService from "@/utils/interfaces/iUtilsService";
 
 export default function FilterByType() {
-  const { productFetchAndFilterState, handleFilterChange } = useFetchGameData();
-  const [data, setData] = React.useState<any[]>([]);
-
-  console.log(data);
+  const { gamesFilterState, handleFilterChange } = useFetchGameData();
+  const { handleSetSearchText, searchPublisherTextState } = useSearchText();
+  const [gamePublishers, setGamePublishers] = React.useState<any[]>([]);
+  const utilsService: IUtilsService = new UtilsService(
+    searchPublisherTextState as string
+  );
 
   React.useEffect(() => {
-    const getGamesType = async () => {
-      const gamesTypes = await fetchService.getGamesTypes(1);
-      console.log("Fetched games types:", gamesTypes); // Dodaj ten log
-      setData(gamesTypes);
-    };
-    getGamesType();
+    (async () => {
+      setGamePublishers(await fetchService.getGamesTypes(1));
+    })();
   }, []);
   return (
     <>
@@ -26,9 +29,21 @@ export default function FilterByType() {
           <span>Publisher</span>
           <MdKeyboardArrowUp size="25px" />
         </div>
+        <div className="flex items-center  flex-1 p-[8px] mb-[10px] border-[white]   bg-secondaryColor ">
+          <FaSearch size="25px" color="white" className="mr-3" />
+          <input
+            className="text-[white] border-none outline-none bg-transparent w-[100%]"
+            onChange={(event) =>
+              handleSetSearchText("searchPublisherText", event)
+            }
+            type="text"
+            name="text"
+            autoComplete="off"
+          />
+        </div>
         <div className="flex items-center">
           <ul className="w-full">
-            {data.map((publisher) => (
+            {utilsService.searchByString(gamePublishers).map((publisher) => (
               <li
                 key={publisher.id}
                 className="flex justify-between items-center mb-[10px]"
@@ -36,14 +51,14 @@ export default function FilterByType() {
                 <input
                   className="flex-0"
                   type="checkbox"
-                  checked={productFetchAndFilterState.publishersId.includes(
+                  checked={gamesFilterState.publishersIdArray.includes(
                     publisher.id
                   )}
                   onClick={() =>
                     handleFilterChange(
                       publisher.id,
-                      productFetchAndFilterState.publishersId,
-                      setPublishersId
+                      gamesFilterState.publishersIdArray,
+                      setPublishersIdArray
                     )
                   }
                 />

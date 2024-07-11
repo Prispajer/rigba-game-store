@@ -1,7 +1,7 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type UIElementState = {
-  [key: string]: boolean;
+  [key: string]: boolean | string;
 };
 
 const initialState: UIElementState = {
@@ -13,6 +13,10 @@ const initialState: UIElementState = {
   gameImageModal: false,
   resolution: true,
   desktopSearchBar: false,
+  searchGenreText: "",
+  searchPlatformText: "",
+  searchPublisherText: "",
+  searchStoreText: "",
 };
 
 const utilitySlice = createSlice({
@@ -34,12 +38,16 @@ const utilitySlice = createSlice({
     toggleScreen: (state, action: PayloadAction<boolean>) => {
       state.resolution = action.payload;
     },
-    toggleFilter: (state, action: PayloadAction<string>) => {
-      const element = action.payload;
-      state[element] = !state[element];
+    setSearchText: (
+      state,
+      action: PayloadAction<{ key: string; value: string }>
+    ) => {
+      const { key, value } = action.payload;
+      state[key] = value;
     },
   },
 });
 
-export const { close, open, toggle, toggleScreen } = utilitySlice.actions;
+export const { close, open, toggle, toggleScreen, setSearchText } =
+  utilitySlice.actions;
 export default utilitySlice.reducer;

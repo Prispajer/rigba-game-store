@@ -32,13 +32,6 @@ export interface ResetPasswordToken {
   expires: Date;
 }
 
-export interface ProductSearchData {
-  id: number;
-  slug: string;
-  background_image: string;
-  name: string;
-}
-
 export type ProductDetails = {
   id: number;
   name: string;
@@ -124,6 +117,14 @@ export interface GameAPIResponse {
   background_image: string;
   rating?: number;
   added?: number;
+}
+
+export interface SearchData {
+  id: number;
+  name: string;
+  slug?: string;
+  background_image?: string;
+  games_count?: number;
 }
 
 export type RequestData = UserDataRequest & ProductDataRequest;

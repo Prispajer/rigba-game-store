@@ -11,8 +11,6 @@ export default function HomeCategories() {
   const [categories, setCategories] = React.useState<any[]>([]);
   const [quantity, setQuantity] = React.useState<number>(1);
 
-  const { productFetchAndFilterState } = useFetchGameData();
-
   React.useEffect(() => {
     handleGetGameGenres();
   }, [quantity]);

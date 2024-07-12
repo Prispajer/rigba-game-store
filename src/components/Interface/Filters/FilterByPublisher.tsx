@@ -22,6 +22,7 @@ export default function FilterByType() {
       setGamePublishers(await fetchService.getGamesTypes(1));
     })();
   }, []);
+
   return (
     <>
       <div className="py-[15px] px-[20px] text-[#ffffff] text-[16px]  border-b-[2px] border-b-primaryColor">

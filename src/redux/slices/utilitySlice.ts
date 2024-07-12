@@ -5,14 +5,13 @@ type UIElementState = {
 };
 
 const initialState: UIElementState = {
-  userSidebar: false,
+  authSidebar: false,
   profileModal: false,
   cartModal: false,
   navSidebar: false,
-  mobileSearchModal: false,
+  searchBarModal: false,
   gameImageModal: false,
   resolution: true,
-  desktopSearchBar: false,
   searchGenreText: "",
   searchPlatformText: "",
   searchPublisherText: "",

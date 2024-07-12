@@ -24,14 +24,21 @@ export class FetchService implements IFetchService {
     return this.fetchData(url);
   }
 
-  async getGames(page: number): Promise<GameAPIResponse[]> {
-    const url = `${this.baseUrl}/games?page=${page}&key=${this.apiKey}`;
+  async getGames(searchQuery?: string): Promise<GameAPIResponse[]> {
+    const url = `${this.baseUrl}/games?key=${this.apiKey}${
+      searchQuery ? `&search=${searchQuery}` : ""
+    }`;
     const data = await this.fetchData(url);
-    return data.results || [];
+
+    if (searchQuery && data.results) {
+      return data.results;
+    }
+
+    return [];
   }
 
   async getGameByOrdering(ordering: string): Promise<GameAPIResponse[]> {
-    const url = `${this.baseUrl}/games?ordering=${ordering}&key=${this.apiKey}`;
+    const url = `${this.baseUrl}/games?key=${this.apiKey}&ordering=${ordering}`;
     const data = await this.fetchData(url);
     return data.results || [];
   }
@@ -73,7 +80,7 @@ export class FetchService implements IFetchService {
     return data.results || [];
   }
 
-  async getGamesByGenresId(
+  async getGamesWithFilters(
     genresId: number[],
     page: number,
     platformsId?: number[],

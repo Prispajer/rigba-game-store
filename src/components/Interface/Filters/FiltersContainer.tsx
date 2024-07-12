@@ -1,36 +1,36 @@
 "use client";
 import React from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 import useFetchGameData from "@/hooks/useFetchGameData";
+import useCustomRouter from "@/hooks/useCustomRouter";
 import FilterByPrice from "./FilterByPrice";
 import FilterByPublisher from "./FilterByPublisher";
 import FilterByGenre from "./FilterByGenre";
 import FilterByPlatform from "./FilterByPlatform";
 import FilterByStore from "./FilterByStore";
-import SelectedFilters from "./SelectedFilters";
-import SortBy from "./SortBy";
+import FilterSelectedFilters from "./FilterSelectedFilters";
+import FilterSortBy from "./FilterSortBy";
 import FilterProductList from "./FilterProductList";
-import ChangePage from "./ChangePage";
+import FilterChangePage from "./FilterChangePage";
+import { MoonLoader } from "react-spinners";
 
 export default function FiltersContainer() {
-  const params = useSearchParams();
   const {
     gamesFilterState,
     handleFetchGamesWithFilters,
     handleSetGenresIdArray,
+    handleSetPlatformsIdArray,
+    handleSetPublishersIdArray,
+    handleSetStoresIdArray,
   } = useFetchGameData();
-  const initialGenresId = params.get("genres")?.split(",").map(Number) || [];
-
-  const router = useRouter();
+  const { getUrlParams } = useCustomRouter();
 
   React.useEffect(() => {
-    handleSetGenresIdArray(initialGenresId);
+    handleSetGenresIdArray(getUrlParams("genres"));
+    handleSetPlatformsIdArray(getUrlParams("platforms"));
+    handleSetPublishersIdArray(getUrlParams("publishers"));
+    handleSetStoresIdArray(getUrlParams("stores"));
     handleFetchGamesWithFilters(gamesFilterState.page);
   }, []);
-
-  const handleClickGame = (gameId: string) => {
-    router.push(`/product/${gameId}`);
-  };
 
   return (
     <main className="flex items-center w-full h-full bg-primaryColor mx-auto">
@@ -51,16 +51,20 @@ export default function FiltersContainer() {
             </form>
           </aside>
           <section className="w-full lg:w-[calc(100%-220px)]">
-            <SelectedFilters />
-            <SortBy />
+            <FilterSelectedFilters />
+            <FilterSortBy />
             {gamesFilterState.isLoading ? (
-              <p>Loading...</p>
+              <div className="flex items-center justify-center">
+                <MoonLoader color="pink" />
+              </div>
             ) : gamesFilterState.error ? (
-              <p>Error: {gamesFilterState.error}</p>
+              <div className="flex items-center justify-center">
+                Error: {gamesFilterState.error}
+              </div>
             ) : (
-              <FilterProductList handleClickGame={handleClickGame} />
+              <FilterProductList />
             )}
-            <ChangePage />
+            <FilterChangePage />
           </section>
         </div>
       </section>

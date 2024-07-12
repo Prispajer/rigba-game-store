@@ -1,17 +1,16 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { CiHeart } from "react-icons/ci";
 import generateRandomValue from "@/utils/prices";
 import AddToWishList from "../Shared/Products/AddToWishList";
 import useFetchGameData from "@/hooks/useFetchGameData";
+import useCustomRouter from "@/hooks/useCustomRouter";
+import { CiHeart } from "react-icons/ci";
+import { MoonLoader } from "react-spinners";
 
-export default function FilterProductList({
-  handleClickGame,
-}: {
-  handleClickGame: (gameId: string) => void;
-}) {
+export default function FilterProductList() {
   const { gamesFilterState } = useFetchGameData();
+  const { redirectToGame } = useCustomRouter();
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 w-full gap-x-[10px]">
@@ -20,7 +19,7 @@ export default function FilterProductList({
         gamesFilterState.gamesWithFilters.map((game) => (
           <div
             key={game.slug}
-            onClick={() => handleClickGame(game.slug as string)}
+            onClick={() => redirectToGame(game.slug as string)}
             className="relative h-full my-[10px]"
           >
             <Link
@@ -30,7 +29,7 @@ export default function FilterProductList({
               <div className="relative min-w-[95px] sm:h-[250px]">
                 <Image
                   className=""
-                  src={game.background_image}
+                  src={game.background_image ?? ""}
                   layout="fill"
                   alt="game"
                 />
@@ -70,7 +69,9 @@ export default function FilterProductList({
           </div>
         ))
       ) : (
-        <div className="text-center text-white">Loading...</div>
+        <div className="flex items-center justify-center text-center text-white">
+          <MoonLoader />
+        </div>
       )}
     </div>
   );

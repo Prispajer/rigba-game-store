@@ -16,7 +16,6 @@ export default function useLocalStorage(key: string) {
     (state: RootState) => state.product.localCart
   );
   const dispatch = useDispatch();
-  console.log(localCartState);
 
   const handleAddLocalProduct = (product: LocalStorageProduct): void => {
     dispatch(addProduct(product));

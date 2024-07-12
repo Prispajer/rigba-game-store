@@ -26,7 +26,7 @@ export default function ProductImages({ screenshots }) {
                 className="relative w-[176px] h-[100px]"
               >
                 <Image
-                  src={screenshot.image}
+                  src={screenshot.image ?? "/icons/logo.png"}
                   alt={screenshot.image}
                   layout="fill"
                 />

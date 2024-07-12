@@ -14,9 +14,9 @@ export default function ProductInformations({ product }) {
         <div className="flex flex-0 w-full py-[20px] px-[20px]">
           <div className="relative min-w-[72px] lg:min-w-[150px] lg:h-[225px] xl:min-w-[200px] xl:h-[300px] xxl:min-w-[225px] xxl:min-h-[315px]">
             <Image
-              src={product.background_image}
+              src={product.background_image ?? "/icons/logo.png"}
               layout="fill"
-              alt="game-image"
+              alt={product.image}
             />
           </div>
           <div className="flex flex-1 flex-col pl-[15px] lg:pl-[30px] leading-[28px]">

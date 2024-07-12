@@ -11,17 +11,15 @@ import useSearchText from "@/hooks/useSearchText";
 export default function FilterByPlatform() {
   const { gamesFilterState, handleFilterChange } = useFetchGameData();
   const { handleSetSearchText, searchPlatformTextState } = useSearchText();
-  const [data, setData] = React.useState<any[]>([]);
+  const [gamePlatforms, setGamePlatforms] = React.useState<any[]>([]);
   const utilsService: IUtilsService = new UtilsService(
     searchPlatformTextState as string
   );
 
   React.useEffect(() => {
-    const getGames = async () => {
-      const gamesPlatforms = await fetchService.getGamesPlatforms(4);
-      setData(gamesPlatforms);
-    };
-    getGames();
+    (async () => {
+      setGamePlatforms(await fetchService.getGamesPlatforms(4));
+    })();
   }, []);
 
   return (
@@ -42,7 +40,7 @@ export default function FilterByPlatform() {
       </div>
       <div className="flex items-center">
         <ul className="w-full">
-          {utilsService.searchByString(data).map((platform) => (
+          {utilsService.searchByString(gamePlatforms).map((platform) => (
             <li
               key={platform.id}
               className="flex justify-between items-center mb-[10px]"

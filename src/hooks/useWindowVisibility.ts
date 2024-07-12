@@ -6,8 +6,10 @@ import { RootState } from "../redux/store";
 export default function useWindowVisibility() {
   const dispatch = useDispatch();
 
-  const userSidebarState = useSelector(
-    (state: RootState) => state.utility.userSidebar
+  console.log(useSelector((state: RootState) => state.utility));
+
+  const authSidebarState = useSelector(
+    (state: RootState) => state.utility.authSidebar
   );
   const profileModalState = useSelector(
     (state: RootState) => state.utility.profileModal
@@ -18,17 +20,14 @@ export default function useWindowVisibility() {
   const navSidebarState = useSelector(
     (state: RootState) => state.utility.navSidebar
   );
-  const mobileSearchModalState = useSelector(
-    (state: RootState) => state.utility.mobileSearchModal
+  const searchBarState = useSelector(
+    (state: RootState) => state.utility.searchBarModal
   );
-  const gameImageModalState = useSelector(
+  const imageModalState = useSelector(
     (state: RootState) => state.utility.gameImageModal
   );
   const resolutionState = useSelector(
     (state: RootState) => state.utility.resolution
-  );
-  const desktopSearchBarState = useSelector(
-    (state: RootState) => state.utility.desktopSearchBar
   );
 
   const handleOpen = (element: string): void => {
@@ -54,14 +53,13 @@ export default function useWindowVisibility() {
   );
 
   return {
-    userSidebarState,
+    authSidebarState,
     profileModalState,
     cartModalState,
     navSidebarState,
-    mobileSearchModalState,
-    gameImageModalState,
+    searchBarState,
+    imageModalState,
     resolutionState,
-    desktopSearchBarState,
     handleOpen,
     handleClose,
     handleToggle,

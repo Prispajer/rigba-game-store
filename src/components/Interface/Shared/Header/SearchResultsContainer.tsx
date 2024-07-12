@@ -1,37 +1,36 @@
 import { FaCartPlus } from "react-icons/fa";
-import { ProductSearchData } from "@/utils/helpers/types";
+import { SearchData } from "@/utils/helpers/types";
 import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
+import useCustomRouter from "@/hooks/useCustomRouter";
 
 export default function SearchResultsContainer({ filteredGames }) {
-  const router = useRouter();
-
+  const { redirectToGame } = useCustomRouter();
   const { handleClose } = useWindowVisibility();
-
-  function handleClick(name: string) {
-    handleClose("mobileSearchModal");
-    handleClose("desktopSearchBar");
-    router.push(`/product/${name}`);
-  }
 
   return (
     <div className="absolute top-[67px] left-0 w-full bg-primaryColor">
-      {filteredGames ? (
-        filteredGames.map((game: ProductSearchData) => (
+      {filteredGames && filteredGames.length > 0 ? (
+        filteredGames.map((game: SearchData) => (
           <ul key={game.id}>
             <li
               className="my-[10px] py-[5px] cursor-pointer hover:bg-secondaryColor"
-              onClick={() => handleClick(game.slug)}
+              onClick={() =>
+                redirectToGame(
+                  game?.slug as string,
+                  handleClose("searchBarModal")
+                )
+              }
             >
               <div className="flex justify-between px-[15px]">
                 <div className="flex">
                   <div className="relative min-w-[72px] min-h-[100px]">
                     <Image
-                      src={game.background_image}
+                      src={game?.background_image ?? ""}
                       layout="fill"
-                      alt={game.name}
+                      alt={game?.name}
                     />
                   </div>
                   <div className="ml-[10px]">
@@ -40,7 +39,7 @@ export default function SearchResultsContainer({ filteredGames }) {
                     </span>
                     <div className="mt-[6px]">
                       <span className="text-[#FFFFFF] font-bold">
-                        {game.name}
+                        {game?.name}
                       </span>
                     </div>
                   </div>
@@ -61,7 +60,9 @@ export default function SearchResultsContainer({ filteredGames }) {
           </ul>
         ))
       ) : (
-        <div className="text-center text-[#FFFFFF]">Brak wyników</div>
+        <div className="px-[15px] py-[10px] text-white">
+          <span>Brak wyników wyszukiwania</span>
+        </div>
       )}
     </div>
   );

@@ -3,7 +3,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { FaSortAmountUpAlt } from "react-icons/fa";
 import useFetchGameData from "@/hooks/useFetchGameData";
 
-export default function SortBy() {
+export default function FilterSortBy() {
   const { gamesFilterState } = useFetchGameData();
   return (
     <div className="flex items-center pt-[25px]">

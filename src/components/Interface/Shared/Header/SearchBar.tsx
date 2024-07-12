@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
@@ -11,35 +11,38 @@ import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import { SearchData } from "@/utils/helpers/types";
 
 export default function SearchBar() {
-  const {
-    mobileSearchModalState,
-    resolutionState,
-    handleClose: handleCloseMobileSearchModal,
-    desktopSearchBarState,
-    handleToggle: handleToggleDesktopSearchBar,
-  } = useWindowVisibility();
+  const { searchBarState, resolutionState, handleClose, handleToggle } =
+    useWindowVisibility();
 
-  const [searchText, setSearchText] = React.useState("");
-  const [games, setGames] = React.useState<SearchData[]>([]);
-  const utilsService: IUtilsService = new UtilsService(searchText);
+  const [searchText, setSearchText] = useState("");
+  const [games, setGames] = useState<SearchData[]>([]);
+  const utilsService: IUtilsService = new UtilsService(searchText.trim());
 
-  const getGames = async () => {
+  const getGames = useCallback(async (searchText: string) => {
     try {
-      const gamesData = await fetchService.getGames();
-      setGames(gamesData);
+      if (searchText.trim() !== "") {
+        const gamesData = await fetchService.getGames(searchText);
+        setGames(gamesData);
+      } else {
+        setGames([]);
+      }
     } catch (error) {
       console.error(
         "An problem has occurred while fetching games data!",
         error
       );
     }
-  };
-
-  React.useEffect(() => {
-    getGames();
   }, []);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    if (searchText.trim() !== "") {
+      getGames(searchText);
+    } else {
+      setGames([]);
+    }
+  }, [searchText]);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     utilsService.setSearchText(value);
     setSearchText(value);
@@ -48,13 +51,12 @@ export default function SearchBar() {
   const filteredGames = utilsService.searchByString(games);
 
   const handleOutsideClick = () => {
-    handleCloseMobileSearchModal("mobileSearchModal");
-    handleToggleDesktopSearchBar("desktopSearchBar");
+    handleToggle("searchBarModal");
   };
 
   return (
     <div className="flex-1">
-      {mobileSearchModalState && !resolutionState && (
+      {searchBarState && !resolutionState && (
         <div className="fixed top-0 right-0 bottom-0 h-full w-full z-10 bg-primaryColor">
           <div className="flex items-center gap-y-[10px] py-[20px] bg-primaryColor font-medium border-b-secondaryColor border-b-2">
             <FaSearch size="30px" color="white" className="mx-2" />
@@ -70,14 +72,13 @@ export default function SearchBar() {
               size="30px"
               color="white"
               className="mx-2"
-              onClick={() => handleCloseMobileSearchModal("mobileSearchModal")}
+              onClick={() => handleClose("searchBarModal")}
             />
           </div>
           <SearchResultsContainer filteredGames={filteredGames} />
         </div>
       )}
-      {desktopSearchBarState ? (
-        // TODO DOUBLE CLICK SEARCH PROBLEM
+      {searchBarState ? (
         <OutsideClickHandler handleOutsideClick={handleOutsideClick}>
           <div className="relative hidden md:flex items-center flex-1 p-[20px] border-[white] border-[2px] z-20">
             <FaSearch size="25px" color="white" className="mr-3" />
@@ -89,14 +90,15 @@ export default function SearchBar() {
               placeholder="Szukaj"
               autoComplete="off"
             />
-            {desktopSearchBarState && (
+            {searchBarState && (
               <IoCloseSharp
                 size="25px"
                 color="white"
                 className="cursor-pointer"
+                onClick={() => handleToggle("searchBarModal")}
               />
             )}
-            {desktopSearchBarState && (
+            {searchBarState && (
               <SearchResultsContainer filteredGames={filteredGames} />
             )}
           </div>

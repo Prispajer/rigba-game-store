@@ -11,7 +11,7 @@ export default function useCustomRouter() {
   ): void => {
     router.push(`/product/${name}`);
     if (callback) {
-      callback(element ? element : "");
+      callback(element || "");
     }
   };
 

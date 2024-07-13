@@ -40,7 +40,7 @@ export const fetchGamesWithFilters = createAsyncThunk(
       publishersIdArray,
     } = (getState() as { gamesFilter: FilterState }).gamesFilter;
     try {
-      const gamesByGenresId = await fetchService.getGamesByGenresId(
+      const gamesByGenresId = await fetchService.getGamesWithFilters(
         genresIdArray,
         page,
         platformsIdArray,

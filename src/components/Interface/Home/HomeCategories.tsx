@@ -30,7 +30,7 @@ export default function HomeCategories() {
 
   const handleGetGamesByGenresId = async (genreId: number): Promise<void> => {
     try {
-      const data = await fetchService.getGamesByGenresId([genreId], 1);
+      const data = await fetchService.getGamesWithFilters([genreId], 1);
       console.log(data);
       router.push(`/filters?genres=${[genreId]}`);
     } catch (error) {

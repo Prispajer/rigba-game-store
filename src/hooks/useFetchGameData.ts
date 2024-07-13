@@ -38,7 +38,7 @@ export default function useFetchGameData() {
     (
       filterId: number,
       array: number[],
-      callback: (updatedFilters: number[]) => PayloadAction
+      callback: (updatedFilters: number[]) => PayloadAction<number[]>
     ): void => {
       const updatedFilters = array.includes(filterId)
         ? array.filter((id) => id !== filterId)

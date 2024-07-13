@@ -20,7 +20,7 @@ export default function UserNavigation({}) {
   return (
     <div className="flex flex-1 justify-end items-center relative">
       <FaSearch
-        onClick={() => handleOpen("mobileSearchModal")}
+        onClick={() => handleOpen("searchBarModal")}
         className="nav-icon md:hidden"
         size="35px"
       />

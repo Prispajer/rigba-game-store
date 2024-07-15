@@ -29,7 +29,7 @@ export default function Navbar() {
             onMouseEnter={() => handleMouseEnter(element.title)}
             onMouseLeave={handleMouseLeave}
           >
-            <Link href="/">{element.title}</Link>
+            <Link href={element.link}>{element.title}</Link>
             {isOpen === element.title && (
               <div className="absolute left-0 top-[60px] w-full mx-auto bg-tertiaryColor">
                 <div

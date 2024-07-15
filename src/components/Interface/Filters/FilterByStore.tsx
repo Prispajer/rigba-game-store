@@ -19,7 +19,7 @@ export default function FilterByStore() {
 
   React.useEffect(() => {
     (async () => {
-      setGameStores(await fetchService.getGamesStores(4));
+      setGameStores(await fetchService.getGamesStores(10));
     })();
   }, []);
 

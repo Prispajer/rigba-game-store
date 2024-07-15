@@ -9,7 +9,8 @@ import IUtilsService from "@/utils/interfaces/iUtilsService";
 import useSearchText from "@/hooks/useSearchText";
 
 export default function FilterByPlatform() {
-  const { gamesFilterState, handleFilterChange } = useFetchGameData();
+  const { gamesFilterState, handleFilterChange, handleFetchPlatforms } =
+    useFetchGameData();
   const { handleSetSearchText, searchPlatformTextState } = useSearchText();
   const [gamePlatforms, setGamePlatforms] = React.useState<any[]>([]);
   const utilsService: IUtilsService = new UtilsService(
@@ -17,9 +18,7 @@ export default function FilterByPlatform() {
   );
 
   React.useEffect(() => {
-    (async () => {
-      setGamePlatforms(await fetchService.getGamesPlatforms(4));
-    })();
+    handleFetchPlatforms(10);
   }, []);
 
   return (
@@ -28,7 +27,7 @@ export default function FilterByPlatform() {
         <span>Platform</span>
         <MdKeyboardArrowUp size="25px" />
       </div>
-      <div className="flex items-center  flex-1 p-[8px] mb-[10px] border-[white]   bg-secondaryColor ">
+      <div className="flex items-center  flex-1 p-[8px] mb-[10px] border-[white] bg-secondaryColor ">
         <FaSearch size="25px" color="white" className="mr-3" />
         <input
           className="text-[white] border-none outline-none bg-transparent w-[100%]"

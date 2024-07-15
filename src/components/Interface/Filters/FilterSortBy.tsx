@@ -6,7 +6,7 @@ import useFetchGameData from "@/hooks/useFetchGameData";
 export default function FilterSortBy() {
   const { gamesFilterState } = useFetchGameData();
   return (
-    <div className="flex items-center pt-[25px]">
+    <div className="flex items-center">
       <div className="flex-1">
         <span className="text-[#ffffff]">
           Znalezione wyniki:{" "}

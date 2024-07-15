@@ -18,7 +18,7 @@ export default function FilterByGenre() {
 
   React.useEffect(() => {
     (async () => {
-      setGameGenres(await fetchService.getGamesGenres(1));
+      setGameGenres(await fetchService.getGamesGenres(10));
     })();
   }, []);
 

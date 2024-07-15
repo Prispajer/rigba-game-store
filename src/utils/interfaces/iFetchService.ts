@@ -7,7 +7,7 @@ export default interface IFetchService {
   getGameByOrdering(ordering: string): Promise<GameAPIResponse[]>;
   getGameScreenshots(productId: string): Promise<GameAPIResponse[]>;
   getGamesGenres(pageSize: number): Promise<GameAPIResponse[]>;
-  getGamesTypes(quantity: number): Promise<GameAPIResponse[]>;
+  getGamesPublishers(quantity: number): Promise<GameAPIResponse[]>;
   getGamesPlatforms(quantity: number): Promise<GameAPIResponse[]>;
   getGamesStores(quantity: number): Promise<GameAPIResponse[]>;
   getGamesWithFilters(

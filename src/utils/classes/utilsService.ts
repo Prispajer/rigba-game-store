@@ -17,6 +17,9 @@ export default class UtilsService implements IUtilsService {
   }
 
   searchByString(searchData: SearchData[]): SearchData[] {
+    if (!searchData) {
+      return [];
+    }
     const searchText = this.getSearchText();
     return searchData.filter((game) =>
       game.name.toLowerCase().includes(searchText.toLowerCase())

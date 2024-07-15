@@ -6,8 +6,6 @@ import { RootState } from "../redux/store";
 export default function useWindowVisibility() {
   const dispatch = useDispatch();
 
-  console.log(useSelector((state: RootState) => state.utility));
-
   const authSidebarState = useSelector(
     (state: RootState) => state.utility.authSidebar
   );

@@ -10,17 +10,19 @@ import UtilsService from "@/utils/classes/utilsService";
 import IUtilsService from "@/utils/interfaces/iUtilsService";
 
 export default function FilterByType() {
-  const { gamesFilterState, handleFilterChange } = useFetchGameData();
+  const {
+    gamesFilterState,
+    gamesPublishersState,
+    handleFilterChange,
+    handleFetchPublishers,
+  } = useFetchGameData();
   const { handleSetSearchText, searchPublisherTextState } = useSearchText();
-  const [gamePublishers, setGamePublishers] = React.useState<any[]>([]);
   const utilsService: IUtilsService = new UtilsService(
     searchPublisherTextState as string
   );
 
   React.useEffect(() => {
-    (async () => {
-      setGamePublishers(await fetchService.getGamesTypes(1));
-    })();
+    handleFetchPublishers(10);
   }, []);
 
   return (
@@ -44,33 +46,35 @@ export default function FilterByType() {
         </div>
         <div className="flex items-center">
           <ul className="w-full">
-            {utilsService.searchByString(gamePublishers).map((publisher) => (
-              <li
-                key={publisher.id}
-                className="flex justify-between items-center mb-[10px]"
-              >
-                <input
-                  className="flex-0"
-                  type="checkbox"
-                  checked={gamesFilterState.publishersIdArray.includes(
-                    publisher.id
-                  )}
-                  onClick={() =>
-                    handleFilterChange(
-                      publisher.id,
-                      gamesFilterState.publishersIdArray,
-                      setPublishersIdArray
-                    )
-                  }
-                />
-                <span className="flex-1 px-[10px] font-[600]">
-                  {publisher.name}
-                </span>
-                <span className="flex-0 text-[#ffffffB3] text-end">
-                  {publisher.games_count}
-                </span>
-              </li>
-            ))}
+            {utilsService
+              .searchByString(gamesPublishersState.data)
+              .map((publisher) => (
+                <li
+                  key={publisher.id}
+                  className="flex justify-between items-center mb-[10px]"
+                >
+                  <input
+                    className="flex-0"
+                    type="checkbox"
+                    checked={gamesFilterState.publishersIdArray.includes(
+                      publisher.id
+                    )}
+                    onClick={() =>
+                      handleFilterChange(
+                        publisher.id,
+                        gamesFilterState.publishersIdArray,
+                        setPublishersIdArray
+                      )
+                    }
+                  />
+                  <span className="flex-1 px-[10px] font-[600]">
+                    {publisher.name}
+                  </span>
+                  <span className="flex-0 text-[#ffffffB3] text-end">
+                    {publisher.games_count}
+                  </span>
+                </li>
+              ))}
           </ul>
         </div>
       </div>

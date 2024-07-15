@@ -1,256 +1,172 @@
 export type NavLinks = {
   title: string;
+  link: string;
   links: { category: string; items: { name: string; url: string }[] }[];
 };
 
 export const navLinks: NavLinks[] = [
   {
-    title: "Gry",
+    title: "Games",
+    link: "/filters",
     links: [
       {
-        category: "Platforma",
+        category: "Platforms",
         items: [
-          { name: "Steam Gry", url: "/steam-games" },
-          { name: "Xbox Gry", url: "/xbox-games" },
-          { name: "PSN Gry", url: "/psn-games" },
-          { name: "Nintendo Switch Gry", url: "/switch-games" },
-          { name: "Origin Gry", url: "/origin-games" },
-          { name: "Ubisoft Connect Gry", url: "/ubisoft-games" },
-          { name: "Epic Games Gry", url: "/epic-games" },
-          { name: "GOG Gry", url: "/gog-games" },
-          { name: "Battle.net Gry", url: "/battle-games" },
-          { name: "Przedsprzedaż", url: "/presale-games" },
-          { name: "DLC", url: "/DLC" },
-          { name: "Wszystkie", url: "/all-games" },
+          { name: "PC Games", url: "/filters?platforms=4%2C6%2C5" },
+          {
+            name: "PlayStation Games",
+            url: "/filters?platforms=187%2C18%2C16%2C15%2C27%2C19%2C17",
+          },
+          { name: "Xbox Games", url: "/filters?platforms=186%2C1%2C14%2C80" },
+          {
+            name: "Nintendo Games",
+            url: "/filters?platforms=7%2C8%2C9%2C13%2C83%2C10%2C11%2C105%2C24%2C43%2C26%2C79%2C49",
+          },
+          { name: "iOS Games", url: "/filters?platforms=3" },
+          { name: "Android Games", url: "/filters?platforms=21" },
+          {
+            name: "Atari Games",
+            url: "/filters?platforms=28%2C23%2C31%2C25%2C22%2C34%2C46%2C50",
+          },
+          {
+            name: "Classic Macintosh Games",
+            url: "/filters?platforms=55",
+          },
+          { name: "Apple II Games", url: "/filters?platforms=41" },
+          { name: "Commodore / Amiga Games", url: "/filters?platforms=166" },
         ],
       },
       {
-        category: "Popularne gatunki",
+        category: "Popular Genres",
         items: [
-          { name: "Singleplayer", url: "/singleplayer-games" },
-          { name: "Multiplayer", url: "/multiplayer-games" },
-          { name: "Akcji", url: "/action-games" },
-          { name: "Pierwsza osoba", url: "/firstview-games" },
-          { name: "Trzecia osoba", url: "/thirdperson-games" },
-          { name: "Symulatory", url: "/simulators-games" },
-          { name: "Sportowe", url: "/sport-games" },
-          { name: "Co-op", url: "/coop-games" },
-          { name: "Przygodowe", url: "/adventure-games" },
-          { name: "Strategiczne", url: "/strategic-games" },
-          { name: "FPS", url: "/fps-games" },
-          { name: "Wyścigowe", url: "/racing-games" },
+          { name: "Action", url: "/filters?genres=4" },
+          { name: "Simulation", url: "/filters?genres=14" },
+          { name: "Adventure", url: "/filters?genres=3" },
+          { name: "Strategy", url: "/filters?genres=10" },
+          { name: "Shooter", url: "/filters?genres=2" },
+          { name: "Racing", url: "/filters?genres=1" },
+          { name: "Massively Multiplayer", url: "/filters?genres=59" },
+          { name: "Sports", url: "/filters?genres=15" },
         ],
       },
       {
-        category: "Niszowe gatunki",
+        category: "Niche Genres",
         items: [
-          { name: "Niezależne", url: "/indie-games" },
-          { name: "RPG", url: "/rpg-games" },
-          { name: "Horror", url: "/horror-games" },
-          { name: "Wirtualna rzeczywistość", url: "/vr-games" },
-          { name: "Platformowe", url: "/platformers-games" },
-          { name: "Hack Slash", url: "/hackslash-games" },
-          { name: "Bijatyki", url: "/battle-games" },
-          { name: "MMO", url: "/mmo-games" },
-          { name: "Przygodowe", url: "/adventure-games" },
-          { name: "Łamigłówka", url: "/puzzle-games" },
-          { name: "Point-CLick", url: "/point-games" },
-          { name: "Arcade", url: "/arcade-games" },
+          { name: "Indie", url: "/filters?genres=51" },
+          { name: "RPG", url: "/filters?genres=5" },
+          { name: "Casual", url: "/filters?genres=40" },
+          { name: "Puzzle", url: "/filters?genres=7" },
+          { name: "Arcade", url: "/filters?genres=11" },
+          { name: "Platformer", url: "/filters?genres=83" },
+          { name: "Fighting", url: "/filters?genres=6" },
+          { name: "Family", url: "/filters?genres=19" },
+          { name: "Board Games", url: "/filters?genres=28" },
+          { name: "Card", url: "/filters?genres=17" },
+          { name: "Educational", url: "/filters?genres=34" },
         ],
       },
       {
-        category: "Przeglądaj po cenach",
+        category: "Browse By Prices",
         items: [
-          { name: "Gry poniżej PLN 4", url: "/games-under-4" },
-          { name: "Gry poniżej PLN 8", url: "/games-under-8" },
-          { name: "Gry poniżej PLN 10", url: "/games-under-10" },
-          { name: "Gry poniżej PLN 20", url: "/games-under-20" },
-          { name: "Gry poniżej PLN 50", url: "/games-under-50" },
-          { name: "Gry poniżej PLN 100", url: "/games-under-100" },
-          { name: "Gry powyżej PLN 100", url: "/games-above-100" },
+          { name: "Games Under 4", url: "/games-under-4" },
+          { name: "Games Under 8", url: "/games-under-8" },
+          { name: "Games Under 10", url: "/games-under-10" },
+          { name: "Games Under 20", url: "/games-under-20" },
+          { name: "Games Under 50", url: "/games-under-50" },
+          { name: "Games Under 100", url: "/games-under-100" },
+          { name: "Games Above 100", url: "/games-above-100" },
         ],
       },
     ],
   },
   {
-    title: "Karty do gier",
+    title: "PlayStation",
+    link: "/filters?platforms=187%2C18%2C16%2C15%2C27%2C19%2C17",
     links: [
       {
-        category: "PC Gift Cards",
+        category: "PlayStation Platforms",
         items: [
-          { name: "Steam Karty", url: "/steam-cards" },
-          { name: "Fortnite V-Bucks", url: "/fortnite-vbucks" },
-          { name: "Roblox Robux", url: "/roblox-robux" },
-          { name: "Google Play Karty", url: "/google-play-cards" },
-          { name: "Karty Razer Gold", url: "/razer-gold-cards" },
-          { name: "Blizzard Karty", url: "/blizzard-cards" },
-          { name: "Twitch Gift Cards", url: "/twitch-gift-cards" },
-          { name: "Karty Discord", url: "/discord-cards" },
-          { name: "Karty Karma Koin", url: "/karma-koin-cards" },
-          { name: "IMVU Gift Cards", url: "/imvu-gift-cards" },
-          { name: "Wszystkie", url: "/all-cards" },
-        ],
-      },
-      {
-        category: "Karty podarunkowe według ceny",
-        items: [
+          { name: "PlayStation", url: "/filters?platforms=27" },
           {
-            name: "Karty podarunkowe poniżej PLN 20",
-            url: "/gift-cards-below-20",
+            name: "PlayStation 2",
+            url: "/filters?platforms=15",
           },
           {
-            name: "Karty podarunkowe poniżej PLN 50",
-            url: "/gift-cards-below-50",
+            name: "PlayStation 3",
+            url: "/filters?platforms=16",
           },
           {
-            name: "Karty podarunkowe poniżej PLN 100",
-            url: "/gift-cards-below-100",
+            name: "PlayStation 4",
+            url: "/filters?platforms=18",
           },
           {
-            name: "Karty podarunkowe za PLN 100 i więcej",
-            url: "/gift-cards-above-100",
+            name: "PlayStation 5",
+            url: "/filters?platforms=187",
+          },
+          {
+            name: "PS Vita",
+            url: "/filters?platforms=19",
+          },
+          {
+            name: "PSP",
+            url: "/filters?platforms=17",
           },
         ],
       },
       {
-        category: "Console Gift Cards",
+        category: "Browse By Prices",
         items: [
-          { name: "PSN Karty", url: "/psn-cards" },
-          { name: "Xbox Live Karty", url: "/xbox-cards" },
-          { name: "Nintendo eShop Karty", url: "/nintendo-cards" },
+          {
+            name: "PlayStation Games Under 20",
+            url: "/filters?platforms=17",
+          },
+          {
+            name: "PlayStation Games Under 50",
+            url: "/filters?platforms=17",
+          },
+          {
+            name: "PlayStation Games Under 100",
+            url: "/filters?platforms=17",
+          },
+          {
+            name: "PlayStation Games Above 100",
+            url: "/filters?platforms=17",
+          },
         ],
       },
     ],
   },
   {
     title: "Xbox",
+    link: "/filters?platforms=186%2C1%2C14%2C80",
     links: [
       {
-        category: "Xbox Gry",
+        category: "Xbox Platforms",
         items: [
-          { name: "Xbox Live Karty", url: "/xbox-cards" },
-          { name: "Xbox Live Gold", url: "/xbox-live-gold" },
-          { name: "Xbox Game Pass", url: "/xbox-game-pass" },
-          { name: "Xbox Live subskrypcje", url: "/xbox-live-subscriptions" },
-          { name: "Xbox Live DLCs", url: "/xbox-live-dlcs" },
-          { name: "Wszystkie", url: "/all-xbox-games" },
+          { name: "Xbox", url: "/filters?platforms=80" },
+          { name: "Xbox 360", url: "/filters?platforms=14" },
+          { name: "Xbox One", url: "/filters?platforms=1" },
+          { name: "Xbox Series X/S", url: "/filters?platforms=186" },
         ],
       },
       {
-        category: "Subskrypcje",
-        items: [
-          { name: "Game Pass 30", url: "/xbox-game-pass-30" },
-          { name: "Game Pass 90", url: "/xbox-game-pass-90" },
-          { name: "Game Pass 180", url: "/xbox-game-pass-180" },
-          { name: "Game Pass PC 90", url: "/xbox-game-pass-pc-90" },
-          { name: "Game Pass Core 30", url: "/xbox-game-pass-core-30" },
-          { name: "Game Pass Core 90", url: "/xbox-game-pass-core-90" },
-          { name: "Game Pass Core 180", url: "/xbox-game-pass-core-180" },
-          { name: "Game Pass Core 365", url: "/xbox-game-pass-core-365" },
-          { name: "Game Pass Ult. 30", url: "/xbox-game-pass-ult-30" },
-          { name: "Game Pass Ult. 90", url: "/xbox-game-pass-ult-90" },
-        ],
-      },
-      {
-        category: "Karty podarunkowe wg krajów",
-        items: [
-          { name: "Xbox Live Polska", url: "/xbox-live-polska" },
-          { name: "Xbox Live Europa", url: "/xbox-live-europa" },
-          { name: "Xbox Live Stany Zjednoczone", url: "/xbox-live-usa" },
-          { name: "Xbox Live Wielka Brytania", url: "/xbox-live-uk" },
-        ],
-      },
-      {
-        category: "Karty podarunkowe według ceny",
+        category: "Browse By Prices",
         items: [
           {
-            name: "Karty podarunkowe poniżej PLN 20",
-            url: "/xbox-gift-cards-below-20",
+            name: "Xbox Games Under 20",
+            url: "/filters?platforms=186%2C1%2C14%2C80",
           },
           {
-            name: "Karty podarunkowe poniżej PLN 50",
-            url: "/xbox-gift-cards-below-50",
+            name: "Xbox Games Under 50",
+            url: "/filters?platforms=186%2C1%2C14%2C80",
           },
           {
-            name: "Karty podarunkowe poniżej PLN 100",
-            url: "/xbox-gift-cards-below-100",
+            name: "Xbox Games Under 100",
+            url: "/filters?platforms=186%2C1%2C14%2C80",
           },
           {
-            name: "Karty podarunkowe za PLN 100 i więcej",
-            url: "/xbox-gift-cards-above-100",
-          },
-        ],
-      },
-      {
-        category: "Gry po cenach",
-        items: [
-          { name: "Gry poniżej PLN 20", url: "/xbox-games-below-20" },
-          { name: "Gry poniżej PLN 50", url: "/xbox-games-below-50" },
-          { name: "Gry poniżej PLN 100", url: "/xbox-games-below-100" },
-          { name: "Gry za PLN 100 i więcej", url: "/xbox-games-above-100" },
-        ],
-      },
-    ],
-  },
-  {
-    title: "PSN",
-    links: [
-      {
-        category: "Lista PSN",
-        items: [
-          { name: "PSN Gry", url: "/psn-games" },
-          { name: "PSN Karty", url: "/psn-cards" },
-          { name: "PS Plus subskrypcje", url: "/ps-plus-subscriptions" },
-          { name: "PSN DLCs", url: "/psn-dlcs" },
-          { name: "Wszystkie", url: "/all-psn-games" },
-        ],
-      },
-      {
-        category: "Karty podarunkowe wg krajów",
-        items: [
-          {
-            name: "PlayStation karty podarunkowe Polska",
-            url: "/psn-gift-cards-poland",
-          },
-          {
-            name: "PlayStation karty podarunkowe US",
-            url: "/psn-gift-cards-usa",
-          },
-          {
-            name: "PlayStation karty podarunkowe UK",
-            url: "/psn-gift-cards-uk",
-          },
-        ],
-      },
-      {
-        category: "Subskrypcje po region",
-        items: [
-          {
-            name: "PS Plus subskrypcje Polska",
-            url: "/ps-plus-subscriptions-poland",
-          },
-          { name: "PS Plus subskrypcje US", url: "/ps-plus-subscriptions-usa" },
-          { name: "PS Plus subskrypcje UK", url: "/ps-plus-subscriptions-uk" },
-        ],
-      },
-      {
-        category: "Gift cards by price",
-        items: [
-          {
-            name: "Karty podarunkowe poniżej PLN 20",
-            url: "/psn-gift-cards-below-20",
-          },
-          {
-            name: "Karty podarunkowe poniżej PLN 50",
-            url: "/psn-gift-cards-below-50",
-          },
-          {
-            name: "Karty podarunkowe poniżej PLN 100",
-            url: "/psn-gift-cards-below-100",
-          },
-          {
-            name: "Karty podarunkowe za PLN 100 i więcej",
-            url: "/psn-gift-cards-above-100",
+            name: "Xbox Games Above 100",
+            url: "/filters?platforms=186%2C1%2C14%2C80",
           },
         ],
       },
@@ -258,57 +174,82 @@ export const navLinks: NavLinks[] = [
   },
   {
     title: "Nintendo",
+    link: "/filters?platforms=7%2C8%2C9%2C13%2C83%2C10%2C11%2C105%2C24%2C43%2C26%2C79%2C49",
     links: [
       {
-        category: "Lista Nintendo",
+        category: "Nintendo Platforms",
         items: [
-          { name: "Nintendo Switch Gry", url: "/nintendo-games" },
           {
-            name: "Nintendo eShop Karty",
-            url: "/nintendo-gift-cards",
+            name: "Nintendo Switch",
+            url: "/filters?platforms=7",
+          },
+          { name: "Nintendo 3DS", url: "/filters?platforms=8" },
+          {
+            name: "Nintendo DS",
+            url: "/filters?platforms=9",
           },
           {
-            name: "Nintendo Online subskrypcje",
-            url: "/nintendo-subscritpions",
+            name: "Nintendo DSi",
+            url: "/filters?platforms=13",
           },
-
-          { name: "Wszystkie", url: "/all-nintendo-switch-games" },
+          { name: "Nintendo 64", url: "/filters?platforms=83" },
+          { name: "Nintendo Wii", url: "/filters?platforms=11" },
+          { name: "Nintendo Wii U", url: "/filters?platforms=10" },
+          { name: "GameCube", url: "/filters?platforms=105" },
+          { name: "Game Boy Advance", url: "/filters?platforms=24" },
+          { name: "Game Boy Color", url: "/filters?platforms=43" },
+          { name: "Game Boy", url: "/filters?platforms=26" },
+          { name: "SNES", url: "/filters?platforms=79" },
+          { name: "NES", url: "/filters?platforms=49" },
         ],
       },
       {
-        category: "Karty podarunkowe według regionu",
+        category: "Browse By Prices",
         items: [
           {
-            name: "Nintendo karty podarunkowe Polska",
-            url: "/nintendo-gift-cards-poland",
+            name: "Nintendo Games Under 20",
+            url: "/filters?platforms=186%2C1%2C14%2C80",
           },
           {
-            name: "Nintendo eShop karty Europe",
-            url: "/nintendo-eshop-cards-europe",
-          },
-          { name: "Nintendo eShop karty UK", url: "/nintendo-eshop-cards-uk" },
-          { name: "Nintendo eShop karty NA", url: "/nintendo-eshop-cards-na" },
-        ],
-      },
-      {
-        category: "Subskrypcje po region",
-        items: [
-          {
-            name: "Nintendo Online subskrypcje Europe",
-            url: "/nintendo-online-subscriptions-europe",
+            name: "Nintendo Games Under 50",
+            url: "/filters?platforms=7%2C8%2C9%2C13%2C83%2C10%2C11%2C105%2C24%2C43%2C26%2C79%2C49",
           },
           {
-            name: "Nintendo Online subskrypcje US",
-            url: "/nintendo-online-subscriptions-usa",
+            name: "Nintendo Games Under 100",
+            url: "/filters?platforms=7%2C8%2C9%2C13%2C83%2C10%2C11%2C105%2C24%2C43%2C26%2C79%2C49",
+          },
+          {
+            name: "Nintendo Games Above 100",
+            url: "/filters?platforms=7%2C8%2C9%2C13%2C83%2C10%2C11%2C105%2C24%2C43%2C26%2C79%2C49",
           },
         ],
       },
+    ],
+  },
+  {
+    title: "Atari",
+    link: "/filters?platforms=28%2C23%2C31%2C25%2C22%2C34%2C46%2C50",
+    links: [
       {
-        category: "Przegadaj po cenach",
+        category: "Atari Platforms",
         items: [
-          { name: "Gry poniżej PLN 50", url: "/nintendo-games-below-50" },
-          { name: "Gry poniżej PLN 100", url: "/nintendo-games-below-100" },
-          { name: "Gry za PLN 100 i więcej", url: "/nintendo-games-above-100" },
+          { name: "Atari 7800", url: "/filters?platforms=28" },
+          { name: "Atari 5200", url: "/filters?platforms=31" },
+          { name: "Atari 2600", url: "/filters?platforms=23" },
+          { name: "Atari Flashback", url: "/filters?platforms=22" },
+          { name: "Atari 8-bit", url: "/filters?platforms=25" },
+          { name: "Atari ST", url: "/filters?platforms=34" },
+          { name: "Atari Lynx", url: "/filters?platforms=46" },
+          { name: "Atari XEGS", url: "/filters?platforms=50" },
+        ],
+      },
+      {
+        category: "Browse By Prices",
+        items: [
+          { name: "Atari Games Under 20", url: "/filters?platforms=286" },
+          { name: "Atari Games Under 50", url: "/filters?platforms=286" },
+          { name: "Atari Games Under 100", url: "/filters?platforms=286" },
+          { name: "Atari Games Above 100", url: "/filters?platforms=286" },
         ],
       },
     ],

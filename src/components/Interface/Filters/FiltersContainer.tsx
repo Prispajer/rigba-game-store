@@ -42,7 +42,7 @@ export default function FiltersContainer() {
         </div>
         <div className="flex w-full my-[20px] gap-x-[20px]">
           <aside className="hidden lg:block lg:h-auto lg:max-w-[220px]">
-            <form className="bg-[#387CBD]">
+            <form className="bg-filtersBackgroundColor">
               <FilterByPrice />
               <FilterByPublisher />
               <FilterByPlatform />

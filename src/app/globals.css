@@ -119,6 +119,16 @@ body {
   border-radius: 14px;
 }
 
+.scrollbar-filters::-webkit-scrollbar {
+  overflow-y: scroll;
+  width: 6px;
+}
+
+.scrollbar-filters::-webkit-scrollbar-thumb {
+  overflow-y: scroll;
+  background-color: #ffffff;
+}
+
 input[type="checkbox"] {
   display: flex;
   align-items: center;

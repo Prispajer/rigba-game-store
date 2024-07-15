@@ -57,7 +57,7 @@ export class FetchService implements IFetchService {
     return data.results || [];
   }
 
-  async getGamesTypes(quantity: number = 1): Promise<GameAPIResponse[]> {
+  async getGamesPublishers(quantity: number = 1): Promise<GameAPIResponse[]> {
     const url = `${this.baseUrl}/publishers?key=${this.apiKey}&page_size=${
       7 * quantity
     }`;

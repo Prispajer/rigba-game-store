@@ -30,7 +30,11 @@ const initialState: FilterState = {
   previousPage: null,
 };
 
-export const fetchGamesWithFilters = createAsyncThunk(
+export const fetchGamesWithFilters = createAsyncThunk<
+  GameAPIResponse[],
+  { page: number },
+  { rejectValue: string; getState: () => unknown }
+>(
   "gamesFilter/fetchGamesWithFilters",
   async ({ page = 1 }: { page: number }, { rejectWithValue, getState }) => {
     const {

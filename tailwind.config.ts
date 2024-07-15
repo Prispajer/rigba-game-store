@@ -32,6 +32,7 @@ const config: Config = {
         buttonBackgroundHover: "#bc558e",
         buttonBackground: "#BF6597",
         categoryGenresHover: "#213f69",
+        filtersBackgroundColor: "#387CBD",
       },
     },
   },

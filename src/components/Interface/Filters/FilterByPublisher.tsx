@@ -47,7 +47,7 @@ export default function FilterByType() {
         <div className="flex items-center">
           <ul className="w-full">
             {utilsService
-              .searchByString(gamesPublishersState.data)
+              .searchByString(gamesPublishersState.publishersArray)
               .map((publisher) => (
                 <li
                   key={publisher.id}

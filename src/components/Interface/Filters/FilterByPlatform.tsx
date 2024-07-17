@@ -9,16 +9,19 @@ import IUtilsService from "@/utils/interfaces/iUtilsService";
 import useSearchText from "@/hooks/useSearchText";
 
 export default function FilterByPlatform() {
-  const { gamesFilterState, handleFilterChange, handleFetchPlatforms } =
-    useFetchGameData();
+  const {
+    gamesFilterState,
+    gamesPlatformsState,
+    handleFilterChange,
+    handleFetchPlatforms,
+  } = useFetchGameData();
   const { handleSetSearchText, searchPlatformTextState } = useSearchText();
-  const [gamePlatforms, setGamePlatforms] = React.useState<any[]>([]);
   const utilsService: IUtilsService = new UtilsService(
     searchPlatformTextState as string
   );
 
   React.useEffect(() => {
-    handleFetchPlatforms(10);
+    handleFetchPlatforms(1);
   }, []);
 
   return (
@@ -39,33 +42,35 @@ export default function FilterByPlatform() {
       </div>
       <div className="flex items-center">
         <ul className="w-full">
-          {utilsService.searchByString(gamePlatforms).map((platform) => (
-            <li
-              key={platform.id}
-              className="flex justify-between items-center mb-[10px]"
-            >
-              <input
-                className="flex-0"
-                type="checkbox"
-                checked={gamesFilterState.platformsIdArray.includes(
-                  platform.id
-                )}
-                onClick={() =>
-                  handleFilterChange(
-                    platform.id,
-                    gamesFilterState.platformsIdArray,
-                    setPlatformsIdArray
-                  )
-                }
-              />
-              <span className="flex-1 px-[10px] font-[600]">
-                {platform.name}
-              </span>
-              <span className="flex-0 text-[#ffffffB3] text-end">
-                {platform.games_count}
-              </span>
-            </li>
-          ))}
+          {utilsService
+            .searchByString(gamesPlatformsState.platformsArray)
+            .map((platform) => (
+              <li
+                key={platform.id}
+                className="flex justify-between items-center mb-[10px]"
+              >
+                <input
+                  className="flex-0"
+                  type="checkbox"
+                  checked={gamesFilterState.platformsIdArray.includes(
+                    platform.id
+                  )}
+                  onClick={() =>
+                    handleFilterChange(
+                      platform.id,
+                      gamesFilterState.platformsIdArray,
+                      setPlatformsIdArray
+                    )
+                  }
+                />
+                <span className="flex-1 px-[10px] font-[600]">
+                  {platform.name}
+                </span>
+                <span className="flex-0 text-[#ffffffB3] text-end">
+                  {platform.games_count}
+                </span>
+              </li>
+            ))}
         </ul>
       </div>
     </div>

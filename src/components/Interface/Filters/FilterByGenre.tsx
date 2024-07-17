@@ -9,17 +9,19 @@ import IUtilsService from "@/utils/interfaces/iUtilsService";
 import useSearchText from "@/hooks/useSearchText";
 
 export default function FilterByGenre() {
-  const { gamesFilterState, handleFilterChange } = useFetchGameData();
+  const {
+    gamesFilterState,
+    gamesGenresState,
+    handleFilterChange,
+    handleFetchGenres,
+  } = useFetchGameData();
   const { handleSetSearchText, searchGenreTextState } = useSearchText();
-  const [gameGenres, setGameGenres] = React.useState<any[]>([]);
   const utilsService: IUtilsService = new UtilsService(
     searchGenreTextState as string
   );
 
   React.useEffect(() => {
-    (async () => {
-      setGameGenres(await fetchService.getGamesGenres(10));
-    })();
+    handleFetchGenres(1);
   }, []);
 
   return (
@@ -40,29 +42,33 @@ export default function FilterByGenre() {
       </div>
       <div className="flex items-center">
         <ul>
-          {utilsService.searchByString(gameGenres).map((genre) => (
-            <li
-              key={genre.id}
-              className="flex justify-between items-center mb-[10px]"
-            >
-              <input
-                className="flex-0"
-                type="checkbox"
-                checked={gamesFilterState.genresIdArray.includes(genre.id)}
-                onChange={() =>
-                  handleFilterChange(
-                    genre.id,
-                    gamesFilterState.genresIdArray,
-                    setGenresIdArray
-                  )
-                }
-              />
-              <span className="flex-1 px-[10px] font-[600]">{genre.name}</span>
-              <span className="flex-0 text-[#ffffffB3] text-end">
-                {genre.games_count}
-              </span>
-            </li>
-          ))}
+          {utilsService
+            .searchByString(gamesGenresState.genresArray)
+            .map((genre) => (
+              <li
+                key={genre.id}
+                className="flex justify-between items-center mb-[10px]"
+              >
+                <input
+                  className="flex-0"
+                  type="checkbox"
+                  checked={gamesFilterState.genresIdArray.includes(genre.id)}
+                  onChange={() =>
+                    handleFilterChange(
+                      genre.id,
+                      gamesFilterState.genresIdArray,
+                      setGenresIdArray
+                    )
+                  }
+                />
+                <span className="flex-1 px-[10px] font-[600]">
+                  {genre.name}
+                </span>
+                <span className="flex-0 text-[#ffffffB3] text-end">
+                  {genre.games_count}
+                </span>
+              </li>
+            ))}
         </ul>
       </div>
     </div>

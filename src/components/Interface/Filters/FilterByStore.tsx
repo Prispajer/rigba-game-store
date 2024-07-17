@@ -10,7 +10,12 @@ import UtilsService from "@/utils/classes/utilsService";
 import IUtilsService from "@/utils/interfaces/iUtilsService";
 
 export default function FilterByStore() {
-  const { gamesFilterState, handleFilterChange } = useFetchGameData();
+  const {
+    gamesFilterState,
+    gamesStoresState,
+    handleFilterChange,
+    handleFetchStores,
+  } = useFetchGameData();
   const { handleSetSearchText, searchStoreTextState } = useSearchText();
   const [gameStores, setGameStores] = React.useState<any[]>([]);
   const utilsService: IUtilsService = new UtilsService(
@@ -18,9 +23,7 @@ export default function FilterByStore() {
   );
 
   React.useEffect(() => {
-    (async () => {
-      setGameStores(await fetchService.getGamesStores(10));
-    })();
+    handleFetchStores(1);
   }, []);
 
   return (
@@ -42,31 +45,33 @@ export default function FilterByStore() {
         </div>
         <div className="flex items-center">
           <ul className="w-full">
-            {utilsService.searchByString(gameStores).map((store) => (
-              <li
-                key={store.id}
-                className="flex justify-between items-center mb-[10px]"
-              >
-                <input
-                  className="flex-0"
-                  type="checkbox"
-                  checked={gamesFilterState.storesIdArray.includes(store.id)}
-                  onClick={() =>
-                    handleFilterChange(
-                      store.id,
-                      gamesFilterState.storesIdArray,
-                      setStoresIdArray
-                    )
-                  }
-                />
-                <span className="flex-1 px-[10px] font-[600]">
-                  {store.name}
-                </span>
-                <span className="flex-0 text-[#ffffffB3] text-end">
-                  {store.games_count}
-                </span>
-              </li>
-            ))}
+            {utilsService
+              .searchByString(gamesStoresState.storesArray)
+              .map((store) => (
+                <li
+                  key={store.id}
+                  className="flex justify-between items-center mb-[10px]"
+                >
+                  <input
+                    className="flex-0"
+                    type="checkbox"
+                    checked={gamesFilterState.storesIdArray.includes(store.id)}
+                    onClick={() =>
+                      handleFilterChange(
+                        store.id,
+                        gamesFilterState.storesIdArray,
+                        setStoresIdArray
+                      )
+                    }
+                  />
+                  <span className="flex-1 px-[10px] font-[600]">
+                    {store.name}
+                  </span>
+                  <span className="flex-0 text-[#ffffffB3] text-end">
+                    {store.games_count}
+                  </span>
+                </li>
+              ))}
           </ul>
         </div>
       </div>

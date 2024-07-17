@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { GameAPIResponse } from "@/utils/helpers/types";
+import fetchService from "@/utils/classes/fetchService";
 
 interface ResourceState {
   data: GameAPIResponse[];
@@ -13,21 +14,20 @@ const initialState: ResourceState = {
   error: null,
 };
 
-const createExternalResourceSlice = (
+const createResourceSlice = (
   name: string,
-  fetchName: string,
-  fetchFunction: (page: number) => Promise<GameAPIResponse[]>
+  fetchFunction: (quantity: number) => Promise<GameAPIResponse[]>
 ) => {
-  const fetchResources = createAsyncThunk<
+  const fetchResource = createAsyncThunk<
     GameAPIResponse[],
-    { page: number },
+    { quantity: number },
     { rejectValue: string }
   >(
-    `${name}/${fetchName}`,
-    async ({ page = 1 }: { page: number }, { rejectWithValue }) => {
+    `${name}/fetch${name.charAt(0).toUpperCase() + name.slice(1)}`,
+    async ({ quantity = 1 }, { rejectWithValue }) => {
       try {
-        const externalResource = await fetchFunction(page);
-        return externalResource;
+        const response = await fetchFunction(quantity);
+        return response;
       } catch (error) {
         return rejectWithValue((error as Error).message);
       }
@@ -40,15 +40,15 @@ const createExternalResourceSlice = (
     reducers: {},
     extraReducers: (builder) => {
       builder
-        .addCase(fetchResources.pending, (state) => {
+        .addCase(fetchResource.pending, (state) => {
           state.isLoading = true;
           state.error = null;
         })
-        .addCase(fetchResources.fulfilled, (state, action) => {
+        .addCase(fetchResource.fulfilled, (state, action) => {
           state.isLoading = false;
           state.data = action.payload;
         })
-        .addCase(fetchResources.rejected, (state, action) => {
+        .addCase(fetchResource.rejected, (state, action) => {
           state.isLoading = false;
           state.error = action.payload as string | null;
         });
@@ -57,9 +57,8 @@ const createExternalResourceSlice = (
 
   return {
     reducer: slice.reducer,
-    actions: slice.actions,
-    fetchResources,
+    fetchResource,
   };
 };
 
-export default createExternalResourceSlice;
+export default createResourceSlice;

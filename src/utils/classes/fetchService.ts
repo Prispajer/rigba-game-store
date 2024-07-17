@@ -2,8 +2,8 @@ import IFetchService from "../interfaces/iFetchService";
 import { GameAPIResponse } from "../helpers/types";
 
 export class FetchService implements IFetchService {
-  private apiKey: string = "29d3c3cc5a274ae79c69afde3809b498";
-  private baseUrl: string = "https://api.rawg.io/api";
+  public apiKey: string = process.env.NEXT_PUBLIC_RAWG_API_KEY || "";
+  public baseUrl: string = process.env.NEXT_PUBLIC_RAWG_BASE_URL || "";
 
   async fetchData(url: string): Promise<any> {
     try {
@@ -64,6 +64,7 @@ export class FetchService implements IFetchService {
     const data = await this.fetchData(url);
     return data.results || [];
   }
+
   async getGamesPlatforms(quantity: number = 1): Promise<GameAPIResponse[]> {
     const url = `${this.baseUrl}/platforms?key=${this.apiKey}&page_size=${
       7 * quantity

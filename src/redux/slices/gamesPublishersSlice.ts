@@ -1,30 +1,34 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import fetchService from "@/utils/classes/fetchService"; // Adjust import path as per your project structure
+import fetchService from "@/utils/classes/fetchService";
+import { GameAPIResponse } from "@/utils/helpers/types";
 
 interface PublishersState {
-  data: GameAPIResponse[];
+  publishersArray: GameAPIResponse[];
   isLoading: boolean;
   error: string | null;
 }
 
 const initialState: PublishersState = {
-  data: [],
+  publishersArray: [],
   isLoading: false,
   error: null,
 };
 
 export const fetchPublishers = createAsyncThunk<
   GameAPIResponse[],
-  { page: number },
+  { quantity: number },
   { rejectValue: string }
->("publishers/fetchPublishers", async ({ page = 1 }, { rejectWithValue }) => {
-  try {
-    const response = await fetchService.getGamesPublishers(page); // Example fetch function
-    return response;
-  } catch (error) {
-    return rejectWithValue((error as Error).message);
+>(
+  "publishers/fetchPublishers",
+  async ({ quantity = 1 }, { rejectWithValue }) => {
+    try {
+      const response = await fetchService.getGamesPublishers(quantity);
+      return response;
+    } catch (error) {
+      return rejectWithValue((error as Error).message);
+    }
   }
-});
+);
 
 const publishersSlice = createSlice({
   name: "publishers",
@@ -38,7 +42,7 @@ const publishersSlice = createSlice({
       })
       .addCase(fetchPublishers.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.data = action.payload;
+        state.publishersArray = action.payload;
       })
       .addCase(fetchPublishers.rejected, (state, action) => {
         state.isLoading = false;
@@ -48,3 +52,12 @@ const publishersSlice = createSlice({
 });
 
 export default publishersSlice.reducer;
+
+// import createResourceSlice from "./createResourceSlice";
+// import fetchService from "@/utils/classes/fetchService";
+
+// const { reducer: publishersReducer, fetchResource: fetchPublishers } =
+//   createResourceSlice("publishers", fetchService.getGamesPublishers);
+
+// export { fetchPublishers };
+// export default publishersReducer;

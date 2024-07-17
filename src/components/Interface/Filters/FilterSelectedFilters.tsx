@@ -9,6 +9,7 @@ import {
   setPlatformsIdArray,
   setStoresIdArray,
 } from "@/redux/slices/gamesFilterSlice";
+import useWindowVisibility from "@/hooks/useWindowVisibility";
 
 export default function FilterSelectedFilters() {
   const {
@@ -25,6 +26,13 @@ export default function FilterSelectedFilters() {
     searchPublisherTextState,
     searchStoreTextState,
   } = useSearchText();
+  const {
+    publishersModalState,
+    platformsModalState,
+    genresModalState,
+    storesModalState,
+    handleSetVisibleModal,
+  } = useWindowVisibility();
 
   const hasFilters =
     gamesFilterState.genresIdArray.length > 0 ||
@@ -41,70 +49,90 @@ export default function FilterSelectedFilters() {
       <ul className="relative flex items-center gap-[10px] pb-[25px]">
         {gamesFilterState.publishersIdArray.length > 0 && (
           <li>
-            <button className="flex items-center py-[4px] pl-[16px] pr-[8px] rounded-full font-medium bg-tertiaryColor text-[#ffffff]">
+            <button
+              onClick={() => handleSetVisibleModal("publishersModal")}
+              className="flex items-center py-[4px] pl-[16px] pr-[8px] rounded-full font-medium bg-tertiaryColor text-[#ffffff]"
+            >
               <span className="mr-[2px]">
                 Publishers ({gamesFilterState.publishersIdArray.length})
               </span>
               <MdKeyboardArrowDown size="25px" className="mt-[3px]" />
             </button>
-            <FilterModal
-              searchText="searchPublisherText"
-              searchState={searchPublisherTextState}
-              apiFiltersArray={gamesPublishersState.data}
-              selectedFiltersId={gamesFilterState.publishersIdArray}
-              setSelectedFiltersId={setPublishersIdArray}
-            />
+            {publishersModalState && (
+              <FilterModal
+                searchText="searchPublisherText"
+                searchState={searchPublisherTextState}
+                apiFiltersArray={gamesPublishersState.publishersArray}
+                selectedFiltersId={gamesFilterState.publishersIdArray}
+                setSelectedFiltersId={setPublishersIdArray}
+              />
+            )}
           </li>
         )}
         {gamesFilterState.platformsIdArray.length > 0 && (
           <li>
-            <button className="flex items-center py-[4px] pl-[16px] pr-[8px] rounded-full font-medium bg-tertiaryColor text-[#ffffff]">
+            <button
+              onClick={() => handleSetVisibleModal("platformsModal")}
+              className="flex items-center py-[4px] pl-[16px] pr-[8px] rounded-full font-medium bg-tertiaryColor text-[#ffffff]"
+            >
               <span className="mr-[2px]">
                 Platforms ({gamesFilterState.platformsIdArray.length})
               </span>
               <MdKeyboardArrowDown size="25px" className="mt-[3px]" />
             </button>
-            <FilterModal
-              searchText="searchPlatformText"
-              searchState={searchPlatformTextState}
-              apiFiltersArray={gamesPlatformsState.data}
-              selectedFiltersId={gamesFilterState.platformsIdArray}
-              setSelectedFiltersId={setPlatformsIdArray}
-            />
+            {platformsModalState && (
+              <FilterModal
+                searchText="searchPlatformText"
+                searchState={searchPlatformTextState}
+                apiFiltersArray={gamesPlatformsState.platformsArray}
+                selectedFiltersId={gamesFilterState.platformsIdArray}
+                setSelectedFiltersId={setPlatformsIdArray}
+              />
+            )}
           </li>
         )}
         {gamesFilterState.genresIdArray.length > 0 && (
           <li>
-            <button className="flex items-center py-[4px] pl-[16px] pr-[8px] rounded-full font-medium bg-tertiaryColor text-[#ffffff]">
+            <button
+              onClick={() => handleSetVisibleModal("genresModal")}
+              className="flex items-center py-[4px] pl-[16px] pr-[8px] rounded-full font-medium bg-tertiaryColor text-[#ffffff]"
+            >
               <span className="mr-[2px]">
                 Genres ({gamesFilterState.genresIdArray.length})
               </span>
               <MdKeyboardArrowDown size="25px" className="mt-[3px]" />
             </button>
-            <FilterModal
-              searchText="searchGenreText"
-              searchState={searchGenreTextState}
-              apiFiltersArray={gamesGenresState.data}
-              selectedFiltersId={gamesFilterState.genresIdArray}
-              setSelectedFiltersId={setGenresIdArray}
-            />
+            {genresModalState && (
+              <FilterModal
+                searchText="searchGenreText"
+                searchState={searchGenreTextState}
+                apiFiltersArray={gamesGenresState.genresArray}
+                selectedFiltersId={gamesFilterState.genresIdArray}
+                setSelectedFiltersId={setGenresIdArray}
+              />
+            )}
           </li>
         )}
         {gamesFilterState.storesIdArray.length > 0 && (
           <li>
-            <button className="flex items-center py-[4px] pl-[16px] pr-[8px] rounded-full font-medium bg-tertiaryColor text-[#ffffff]">
+            <button
+              onClick={() => handleSetVisibleModal("storesModal")}
+              className="flex items-center py-[4px] pl-[16px] pr-[8px] rounded-full font-medium bg-tertiaryColor text-[#ffffff]"
+            >
               <span className="mr-[2px]">
                 Stores ({gamesFilterState.storesIdArray.length})
               </span>
               <MdKeyboardArrowDown size="25px" className="mt-[3px]" />
             </button>
-            <FilterModal
-              searchText="searchStoreText"
-              searchState={searchStoreTextState}
-              apiFiltersArray={gamesStoresState.data}
-              selectedFiltersId={gamesFilterState.storesIdArray}
-              setSelectedFiltersId={setStoresIdArray}
-            />
+            {storesModalState && (
+              <FilterModal
+                searchText="searchStoreText"
+                searchState={searchStoreTextState}
+                apiFiltersArray={gamesStoresState.storesArray}
+                selectedFiltersId={gamesFilterState.storesIdArray}
+                setSelectedFiltersId={setStoresIdArray}
+              />
+            )}
           </li>
         )}
         <li>

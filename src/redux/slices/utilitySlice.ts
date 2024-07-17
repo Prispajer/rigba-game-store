@@ -16,6 +16,11 @@ const initialState: UIElementState = {
   searchPlatformText: "",
   searchPublisherText: "",
   searchStoreText: "",
+  publishersModal: false,
+  platformsModal: false,
+  genresModal: false,
+  storesModal: false,
+  visibleModal: "",
 };
 
 const utilitySlice = createSlice({
@@ -44,9 +49,25 @@ const utilitySlice = createSlice({
       const { key, value } = action.payload;
       state[key] = value;
     },
+    setVisibleModal: (state, action: PayloadAction<string>) => {
+      const visibleModal = action.payload;
+      Object.keys(state).forEach((key) => {
+        if (key.endsWith("Modal")) {
+          state[key] = false;
+        }
+      });
+      state[visibleModal] = true;
+      state.visibleModal = visibleModal;
+    },
   },
 });
 
-export const { close, open, toggle, toggleScreen, setSearchText } =
-  utilitySlice.actions;
+export const {
+  close,
+  open,
+  toggle,
+  toggleScreen,
+  setSearchText,
+  setVisibleModal,
+} = utilitySlice.actions;
 export default utilitySlice.reducer;

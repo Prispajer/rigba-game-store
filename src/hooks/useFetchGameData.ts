@@ -29,40 +29,33 @@ export default function useFetchGameData() {
   const gamesGenresState = useSelector((state: RootState) => state.gamesGenres);
   const gamesStoresState = useSelector((state: RootState) => state.gamesStores);
 
-  console.log(
-    gamesPublishersState,
-    gamesPlatformsState,
-    gamesGenresState,
-    gamesStoresState
-  );
   const handleFetchGamesWithFilters = React.useCallback(
     (page: number) => {
       dispatch(fetchGamesWithFilters({ page }));
     },
     [dispatch]
   );
-
   const handleFetchPublishers = React.useCallback(
-    (page: number) => {
-      dispatch(fetchPublishers({ page }));
+    (quantity: number) => {
+      dispatch(fetchPublishers({ quantity }));
     },
     [dispatch]
   );
   const handleFetchGenres = React.useCallback(
-    (page: number) => {
-      dispatch(fetchGenres({ page }));
+    (quantity: number) => {
+      dispatch(fetchGenres({ quantity }));
     },
     [dispatch]
   );
   const handleFetchPlatforms = React.useCallback(
-    (page: number) => {
-      dispatch(fetchPlatforms({ page }));
+    (quantity: number) => {
+      dispatch(fetchPlatforms({ quantity }));
     },
     [dispatch]
   );
   const handleFetchStores = React.useCallback(
-    (page: number) => {
-      dispatch(fetchStores({ page }));
+    (quantity: number) => {
+      dispatch(fetchStores({ quantity }));
     },
     [dispatch]
   );

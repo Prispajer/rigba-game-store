@@ -1,6 +1,12 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { open, close, toggleScreen, toggle } from "@/redux/slices/utilitySlice";
+import {
+  open,
+  close,
+  toggleScreen,
+  toggle,
+  setVisibleModal,
+} from "@/redux/slices/utilitySlice";
 import { RootState } from "../redux/store";
 
 export default function useWindowVisibility() {
@@ -27,6 +33,21 @@ export default function useWindowVisibility() {
   const resolutionState = useSelector(
     (state: RootState) => state.utility.resolution
   );
+  const publishersModalState = useSelector(
+    (state: RootState) => state.utility.publishersModal
+  );
+  const platformsModalState = useSelector(
+    (state: RootState) => state.utility.platformsModal
+  );
+  const genresModalState = useSelector(
+    (state: RootState) => state.utility.genresModal
+  );
+  const storesModalState = useSelector(
+    (state: RootState) => state.utility.storesModal
+  );
+  const visibleModalState = useSelector((state: RootState) => {
+    state.utility.visibleModal;
+  });
 
   const handleOpen = (element: string): void => {
     dispatch(open(element));
@@ -38,6 +59,10 @@ export default function useWindowVisibility() {
 
   const handleToggle = (element: string): void => {
     dispatch(toggle(element));
+  };
+
+  const handleSetVisibleModal = (element: string): void => {
+    dispatch(setVisibleModal(element));
   };
 
   const handleToggleScreen = React.useCallback(
@@ -58,9 +83,15 @@ export default function useWindowVisibility() {
     searchBarState,
     imageModalState,
     resolutionState,
+    publishersModalState,
+    platformsModalState,
+    genresModalState,
+    storesModalState,
+    visibleModalState,
     handleOpen,
     handleClose,
     handleToggle,
     handleToggleScreen,
+    handleSetVisibleModal,
   };
 }

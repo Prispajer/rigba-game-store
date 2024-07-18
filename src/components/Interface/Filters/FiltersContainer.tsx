@@ -1,34 +1,43 @@
 "use client";
 import React from "react";
-import useFetchGameData from "@/hooks/useFetchGameData";
-import useCustomRouter from "@/hooks/useCustomRouter";
-import FilterByPrice from "./FilterByPrice";
-import FilterByPublisher from "./FilterByPublisher";
-import FilterByGenre from "./FilterByGenre";
-import FilterByPlatform from "./FilterByPlatform";
-import FilterByStore from "./FilterByStore";
+import FilterByCategory from "./FilterByCategory";
 import FilterSelectedFilters from "./FilterSelectedFilters";
 import FilterSortBy from "./FilterSortBy";
 import FilterProductList from "./FilterProductList";
 import FilterChangePage from "./FilterChangePage";
+import useFetchGameData from "@/hooks/useFetchGameData";
+import {
+  setGenresIdArray,
+  setPlatformsIdArray,
+  setStoresIdArray,
+  setPublishersIdArray,
+} from "@/redux/slices/gamesFilterSlice";
+import useSearchText from "@/hooks/useSearchText";
 import { MoonLoader } from "react-spinners";
+import FilterByPrice from "./FilterByPrice";
 
 export default function FiltersContainer() {
   const {
     gamesFilterState,
+    gamesGenresState,
+    gamesPlatformsState,
+    gamesStoresState,
+    gamesPublishersState,
     handleFetchGamesWithFilters,
-    handleSetGenresIdArray,
-    handleSetPlatformsIdArray,
-    handleSetPublishersIdArray,
-    handleSetStoresIdArray,
+    handleFetchPublishers,
+    handleFetchPlatforms,
+    handleFetchGenres,
+    handleFetchStores,
   } = useFetchGameData();
-  const { getUrlParams } = useCustomRouter();
+
+  const {
+    searchGenreTextState,
+    searchPlatformTextState,
+    searchPublisherTextState,
+    searchStoreTextState,
+  } = useSearchText();
 
   React.useEffect(() => {
-    handleSetGenresIdArray(getUrlParams("genres"));
-    handleSetPlatformsIdArray(getUrlParams("platforms"));
-    handleSetPublishersIdArray(getUrlParams("publishers"));
-    handleSetStoresIdArray(getUrlParams("stores"));
     handleFetchGamesWithFilters(gamesFilterState.page);
   }, []);
 
@@ -44,10 +53,42 @@ export default function FiltersContainer() {
           <aside className="hidden lg:block lg:h-auto lg:max-w-[220px]">
             <form className="bg-filtersBackgroundColor">
               <FilterByPrice />
-              <FilterByPublisher />
-              <FilterByPlatform />
-              <FilterByGenre />
-              <FilterByStore />
+              <FilterByCategory
+                filterLabel="Publisher"
+                searchText="searchPublisherText"
+                searchTextState={searchPublisherTextState}
+                apiFiltersArray={gamesPublishersState.publishersArray}
+                selectedFiltersId={gamesFilterState.publishersIdArray}
+                setSelectedFiltersId={setPublishersIdArray}
+                handleFetchApiFilters={handleFetchPublishers}
+              />
+              <FilterByCategory
+                filterLabel="Platform"
+                searchText="searchPlatformText"
+                searchTextState={searchPlatformTextState}
+                apiFiltersArray={gamesPlatformsState.platformsArray}
+                selectedFiltersId={gamesFilterState.platformsIdArray}
+                setSelectedFiltersId={setPlatformsIdArray}
+                handleFetchApiFilters={handleFetchPlatforms}
+              />
+              <FilterByCategory
+                filterLabel="Genre"
+                searchText="searchGenreText"
+                searchTextState={searchGenreTextState}
+                apiFiltersArray={gamesGenresState.genresArray}
+                selectedFiltersId={gamesFilterState.genresIdArray}
+                setSelectedFiltersId={setGenresIdArray}
+                handleFetchApiFilters={handleFetchGenres}
+              />
+              <FilterByCategory
+                filterLabel="Store"
+                searchText="searchStoreText"
+                searchTextState={searchStoreTextState}
+                apiFiltersArray={gamesStoresState.storesArray}
+                selectedFiltersId={gamesFilterState.storesIdArray}
+                setSelectedFiltersId={setStoresIdArray}
+                handleFetchApiFilters={handleFetchStores}
+              />
             </form>
           </aside>
           <section className="w-full lg:w-[calc(100%-220px)]">

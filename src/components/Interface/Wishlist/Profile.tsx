@@ -1,14 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import { LuPencil } from "react-icons/lu";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 export default function Profile() {
+  const session = useCurrentUser();
   return (
     <div className="flex items-center w-full mb-[40px]">
       <div className="relative h-[64px] w-[64px]">
         <Image
           className="rounded-full"
-          src="/images/RE4.jpg"
+          src={session?.image ?? "/icons/logo.png"}
           objectFit="cover"
           layout="fill"
           alt="avatar"
@@ -16,7 +18,7 @@ export default function Profile() {
       </div>
       <div className="flex flex-1 items-center h-[64px] ml-[20px] text-white">
         <span className="font-medium text-[28px] cursor-default">
-          Prispajer
+          {session?.name ?? "Set Nickname"}
         </span>
         <Link href="/login">
           <button className="mt-3 ml-[10px]">

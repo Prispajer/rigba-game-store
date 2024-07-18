@@ -33,7 +33,7 @@ body {
 }
 
 .nav-icon {
-  @apply m-[6px] py-1 cursor-pointer transition duration-300 text-white hover:text-headerHover;
+  @apply h-[35px] w-[35px] m-[6px] py-1 cursor-pointer transition duration-300 text-white hover:text-headerHover;
 }
 
 .nav-li {

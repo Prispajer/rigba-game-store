@@ -2,7 +2,7 @@ import { SearchData } from "../helpers/types";
 import IUtilsService from "../interfaces/iUtilsService";
 
 export default class UtilsService implements IUtilsService {
-  private searchText: string;
+  private searchText: string = "";
 
   constructor(searchText: string) {
     this.searchText = searchText;
@@ -17,12 +17,12 @@ export default class UtilsService implements IUtilsService {
   }
 
   searchByString(searchData: SearchData[]): SearchData[] {
+    const searchText = this.getSearchText();
     if (!searchData) {
       return [];
     }
-    const searchText = this.getSearchText();
     return searchData.filter((game) =>
-      game.name.toLowerCase().includes(searchText.toLowerCase())
+      game.name.toLowerCase().includes(searchText?.toLowerCase())
     );
   }
 }

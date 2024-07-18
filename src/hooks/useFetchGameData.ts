@@ -1,3 +1,4 @@
+"use client";
 import React, { use } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { PayloadAction } from "@reduxjs/toolkit";
@@ -16,6 +17,7 @@ import { fetchPublishers } from "@/redux/slices/gamesPublishersSlice";
 import { fetchGenres } from "@/redux/slices/gamesGenresSlice";
 import { fetchStores } from "@/redux/slices/gamesStoresSlice";
 import { fetchPlatforms } from "@/redux/slices/gamesPlatformsSlice";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
 export default function useFetchGameData() {
   const dispatch = useDispatch<AppDispatch>();
@@ -113,7 +115,7 @@ export default function useFetchGameData() {
     [dispatch, handleFetchGamesWithFilters, gamesFilterState.page]
   );
 
-  const handleRemoveAllFilters = React.useCallback(() => {
+  const handleClearAllFilters = React.useCallback(() => {
     handleSetPublishersIdArray([]);
     handleSetPlatformsIdArray([]);
     handleSetGenresIdArray([]);
@@ -127,6 +129,14 @@ export default function useFetchGameData() {
     handleFetchGamesWithFilters,
     gamesFilterState.page,
   ]);
+
+  const handleClearSelectedFilter = React.useCallback(
+    (callback: ActionCreatorWithPayload<number[]>) => {
+      dispatch(callback([]));
+      handleFetchGamesWithFilters(gamesFilterState.page);
+    },
+    [dispatch, handleFetchGamesWithFilters, gamesFilterState.page]
+  );
 
   const handleSetNextPage = React.useCallback(() => {
     if (gamesFilterState.page < 20) {
@@ -156,7 +166,8 @@ export default function useFetchGameData() {
     handleSetStoresIdArray,
     handleSetPublishersIdArray,
     handleSetPage,
-    handleRemoveAllFilters,
+    handleClearAllFilters,
+    handleClearSelectedFilter,
     handleSetPlatformsIdArray,
     handleSetNextPage,
     handleSetPreviousPage,

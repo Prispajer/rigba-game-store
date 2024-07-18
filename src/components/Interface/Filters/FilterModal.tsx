@@ -4,8 +4,8 @@ import { FaSearch } from "react-icons/fa";
 import UtilsService from "@/utils/classes/utilsService";
 import IUtilsService from "@/utils/interfaces/iUtilsService";
 import useSearchText from "@/hooks/useSearchText";
+import useWindowVisibility from "@/hooks/useWindowVisibility";
 import { GameAPIResponse } from "@/utils/helpers/types";
-import { PayloadAction } from "@reduxjs/toolkit";
 
 export default function FilterModal({
   searchText,
@@ -13,19 +13,40 @@ export default function FilterModal({
   apiFiltersArray,
   selectedFiltersId,
   setSelectedFiltersId,
+  clickedModal,
 }: {
   searchText: string;
   searchState: string | boolean;
   apiFiltersArray: GameAPIResponse[];
   selectedFiltersId: number[];
-  setSelectedFiltersId: () => PayloadAction<number[]>;
+  setSelectedFiltersId: ActionCreatorWithPayload<number[]>;
+  clickedModal: string;
 }) {
-  const { handleFilterChange, handleRemoveAllFilters } = useFetchGameData();
+  const modalRef = React.useRef<HTMLDivElement>(null);
+  const { handleFilterChange, handleClearSelectedFilter } = useFetchGameData();
   const { handleSetSearchText } = useSearchText();
+  const { handleClose } = useWindowVisibility();
   const utilsService: IUtilsService = new UtilsService(searchState as string);
 
+  React.useEffect(() => {
+    const handleRef = (event: MouseEvent) => {
+      if (!modalRef.current?.contains(event.target as Node)) {
+        handleClose(clickedModal);
+      }
+    };
+
+    document.addEventListener("click", handleRef);
+
+    return () => {
+      document.removeEventListener("click", handleRef);
+    };
+  }, [handleClose, clickedModal]);
+
   return (
-    <div className="absolute top-10 w-[320px] pt-[20px] pr-[12px] pb-[5px] pl-[15px] bg-filtersBackgroundColor text-[#FFFFFF] z-10 ">
+    <div
+      ref={modalRef}
+      className="absolute top-10 w-[320px] pt-[20px] pr-[12px] pb-[5px] pl-[15px] bg-filtersBackgroundColor text-[#FFFFFF] z-10 "
+    >
       <div className="flex items-center flex-1 p-[8px] mb-[10px] border-[white] bg-secondaryColor ">
         <FaSearch size="25px" color="white" className="mr-3" />
         <input
@@ -64,7 +85,7 @@ export default function FilterModal({
       </ul>
       <div className="flex items-center justify-center py-[10px] border-t-[2px] border-[#ffffff1a]">
         <button
-          onClick={handleRemoveAllFilters}
+          onClick={() => handleClearSelectedFilter(setSelectedFiltersId)}
           className="text-[18px] text-modalHover"
         >
           Wyczyść wszystko

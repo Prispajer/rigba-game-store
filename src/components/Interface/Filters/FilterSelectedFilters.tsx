@@ -18,7 +18,7 @@ export default function FilterSelectedFilters() {
     gamesPlatformsState,
     gamesGenresState,
     gamesStoresState,
-    handleRemoveAllFilters,
+    handleClearAllFilters,
   } = useFetchGameData();
   const {
     searchGenreTextState,
@@ -31,8 +31,10 @@ export default function FilterSelectedFilters() {
     platformsModalState,
     genresModalState,
     storesModalState,
-    handleSetVisibleModal,
+    handleToggle,
   } = useWindowVisibility();
+
+  console.log(gamesFilterState);
 
   const hasFilters =
     gamesFilterState.genresIdArray.length > 0 ||
@@ -43,14 +45,13 @@ export default function FilterSelectedFilters() {
   if (!hasFilters) {
     return null;
   }
-
   return (
     <div>
       <ul className="relative flex items-center gap-[10px] pb-[25px]">
         {gamesFilterState.publishersIdArray.length > 0 && (
           <li>
             <button
-              onClick={() => handleSetVisibleModal("publishersModal")}
+              onClick={() => handleToggle("publishersModal")}
               className="flex items-center py-[4px] pl-[16px] pr-[8px] rounded-full font-medium bg-tertiaryColor text-[#ffffff]"
             >
               <span className="mr-[2px]">
@@ -65,6 +66,7 @@ export default function FilterSelectedFilters() {
                 apiFiltersArray={gamesPublishersState.publishersArray}
                 selectedFiltersId={gamesFilterState.publishersIdArray}
                 setSelectedFiltersId={setPublishersIdArray}
+                clickedModal="publishersModal"
               />
             )}
           </li>
@@ -72,7 +74,7 @@ export default function FilterSelectedFilters() {
         {gamesFilterState.platformsIdArray.length > 0 && (
           <li>
             <button
-              onClick={() => handleSetVisibleModal("platformsModal")}
+              onClick={() => handleToggle("platformsModal")}
               className="flex items-center py-[4px] pl-[16px] pr-[8px] rounded-full font-medium bg-tertiaryColor text-[#ffffff]"
             >
               <span className="mr-[2px]">
@@ -87,6 +89,7 @@ export default function FilterSelectedFilters() {
                 apiFiltersArray={gamesPlatformsState.platformsArray}
                 selectedFiltersId={gamesFilterState.platformsIdArray}
                 setSelectedFiltersId={setPlatformsIdArray}
+                clickedModal="platformsModal"
               />
             )}
           </li>
@@ -94,7 +97,7 @@ export default function FilterSelectedFilters() {
         {gamesFilterState.genresIdArray.length > 0 && (
           <li>
             <button
-              onClick={() => handleSetVisibleModal("genresModal")}
+              onClick={() => handleToggle("genresModal")}
               className="flex items-center py-[4px] pl-[16px] pr-[8px] rounded-full font-medium bg-tertiaryColor text-[#ffffff]"
             >
               <span className="mr-[2px]">
@@ -109,6 +112,7 @@ export default function FilterSelectedFilters() {
                 apiFiltersArray={gamesGenresState.genresArray}
                 selectedFiltersId={gamesFilterState.genresIdArray}
                 setSelectedFiltersId={setGenresIdArray}
+                clickedModal="genresModal"
               />
             )}
           </li>
@@ -116,7 +120,7 @@ export default function FilterSelectedFilters() {
         {gamesFilterState.storesIdArray.length > 0 && (
           <li>
             <button
-              onClick={() => handleSetVisibleModal("storesModal")}
+              onClick={() => handleToggle("storesModal")}
               className="flex items-center py-[4px] pl-[16px] pr-[8px] rounded-full font-medium bg-tertiaryColor text-[#ffffff]"
             >
               <span className="mr-[2px]">
@@ -131,13 +135,14 @@ export default function FilterSelectedFilters() {
                 apiFiltersArray={gamesStoresState.storesArray}
                 selectedFiltersId={gamesFilterState.storesIdArray}
                 setSelectedFiltersId={setStoresIdArray}
+                clickedModal="storesModal"
               />
             )}
           </li>
         )}
         <li>
           <button
-            onClick={handleRemoveAllFilters}
+            onClick={handleClearAllFilters}
             className="text-[18px] text-modalHover"
           >
             Wyczyść wszystko

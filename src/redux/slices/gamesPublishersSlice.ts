@@ -6,12 +6,14 @@ interface PublishersState {
   publishersArray: GameAPIResponse[];
   isLoading: boolean;
   error: string | null;
+  page_size: number;
 }
 
 const initialState: PublishersState = {
   publishersArray: [],
   isLoading: false,
   error: null,
+  page_size: 1,
 };
 
 export const fetchPublishers = createAsyncThunk<

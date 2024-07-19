@@ -6,12 +6,14 @@ interface PlatformsState {
   platformsArray: GameAPIResponse[];
   isLoading: boolean;
   error: string | null;
+  page_size: number;
 }
 
 const initialState: PlatformsState = {
   platformsArray: [],
   isLoading: false,
   error: null,
+  page_size: 1,
 };
 
 export const fetchPlatforms = createAsyncThunk<

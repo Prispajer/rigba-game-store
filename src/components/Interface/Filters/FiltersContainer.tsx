@@ -5,6 +5,7 @@ import FilterSelectedFilters from "./FilterSelectedFilters";
 import FilterSortBy from "./FilterSortBy";
 import FilterProductList from "./FilterProductList";
 import FilterChangePage from "./FilterChangePage";
+import FilterByPrice from "./FilterByPrice";
 import useFetchGameData from "@/hooks/useFetchGameData";
 import {
   setGenresIdArray,
@@ -14,9 +15,10 @@ import {
 } from "@/redux/slices/gamesFilterSlice";
 import useSearchText from "@/hooks/useSearchText";
 import { MoonLoader } from "react-spinners";
-import FilterByPrice from "./FilterByPrice";
+import useCustomRouter from "@/hooks/useCustomRouter";
 
 export default function FiltersContainer() {
+  const { getUrlParams } = useCustomRouter();
   const {
     gamesFilterState,
     gamesGenresState,
@@ -28,6 +30,10 @@ export default function FiltersContainer() {
     handleFetchPlatforms,
     handleFetchGenres,
     handleFetchStores,
+    handleSetGenresIdArray,
+    handleSetPlatformsIdArray,
+    handleSetPublishersIdArray,
+    handleSetStoresIdArray,
   } = useFetchGameData();
 
   const {
@@ -38,6 +44,10 @@ export default function FiltersContainer() {
   } = useSearchText();
 
   React.useEffect(() => {
+    handleSetGenresIdArray(getUrlParams("genres"));
+    handleSetPlatformsIdArray(getUrlParams("platforms"));
+    handleSetStoresIdArray(getUrlParams("stores"));
+    handleSetPublishersIdArray(getUrlParams("publishers"));
     handleFetchGamesWithFilters(gamesFilterState.page);
   }, []);
 

@@ -7,7 +7,6 @@ import UtilsService from "@/utils/classes/utilsService";
 import IUtilsService from "@/utils/interfaces/iUtilsService";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { GameAPIResponse } from "@/utils/helpers/types";
-import { PayloadAction } from "@reduxjs/toolkit";
 
 export default function FilterByCategory({
   filterLabel,

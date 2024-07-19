@@ -16,9 +16,13 @@ export default function useCustomRouter() {
     }
   };
 
+  const pushGenresToUrl = (genresId: number[]): void => {
+    return router.push(`/filters?genres=${[genresId]}`);
+  };
+
   const getUrlParams = (filterCategory: string): number[] => {
     return params.get(filterCategory)?.split(",").map(Number) || [];
   };
 
-  return { redirectToGame, getUrlParams };
+  return { redirectToGame, getUrlParams, pushGenresToUrl };
 }

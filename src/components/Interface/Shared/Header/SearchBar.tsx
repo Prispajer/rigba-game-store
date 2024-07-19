@@ -51,7 +51,13 @@ export default function SearchBar() {
   };
 
   return (
-    <div className="flex-1">
+    <div
+      className={`flex-1 ${
+        searchBarState
+          ? "absolute w-[100%] bg-primaryColor px-[20px] z-[10] xl:static xl:px-0"
+          : "flex-1"
+      }`}
+    >
       {searchBarState && !resolutionState && (
         <div className="fixed top-0 right-0 bottom-0 h-full w-full z-10 bg-primaryColor overflow-scroll">
           <div className="flex items-center gap-y-[10px] py-[20px] bg-primaryColor font-medium border-b-secondaryColor border-b-2">
@@ -71,7 +77,7 @@ export default function SearchBar() {
               onClick={() => handleClose("searchBarModal")}
             />
           </div>
-          {isLoading && searchText && (
+          {searchText && (
             <SearchResultsContainer
               isLoading={isLoading}
               filteredGames={games}
@@ -99,7 +105,7 @@ export default function SearchBar() {
                 onClick={() => handleToggle("searchBarModal")}
               />
             )}
-            {searchBarState && searchText && (
+            {searchText && (
               <SearchResultsContainer
                 isLoading={isLoading}
                 filteredGames={games}

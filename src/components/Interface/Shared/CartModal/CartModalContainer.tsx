@@ -99,7 +99,11 @@ export default function CartModalContainer() {
     <>
       {cartModalState && (
         <OutsideClickHandler handleOutsideClick={handleOutsideClick}>
-          <div className="cart-modal">
+          <div
+            className={`cart-modal ${
+              user ? "md:translate-x-[-33px]" : "md:translate-x-[-149px]"
+            }`}
+          >
             <div className="flex justify-between items-center text-white border-b-[1px] border-[#ffffff1a] p-[20px]">
               <strong className="text-[20px] cursor-default">Mój koszyk</strong>
               <button>

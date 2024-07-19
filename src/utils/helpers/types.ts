@@ -117,6 +117,8 @@ export interface GameAPIResponse {
   background_image: string;
   rating?: number;
   added?: number;
+  games_count?: number;
+  image_background?: string;
 }
 
 export interface SearchData {
@@ -126,5 +128,11 @@ export interface SearchData {
   background_image?: string;
   games_count?: number;
 }
+
+export type ProfileModalContainerProps = {
+  navItems?: { href: string; icon: IconType; label: string }[];
+  translateX?: string;
+  translateY?: string;
+};
 
 export type RequestData = UserDataRequest & ProductDataRequest;

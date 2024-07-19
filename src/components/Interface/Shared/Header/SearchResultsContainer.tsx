@@ -16,6 +16,8 @@ export default function SearchResultsContainer({
   const { redirectToGame } = useCustomRouter();
   const { handleClose } = useWindowVisibility();
 
+  console.log(filteredGames);
+
   return (
     <div className="absolute top-[67px] left-0 w-full bg-primaryColor ">
       {isLoading ? (

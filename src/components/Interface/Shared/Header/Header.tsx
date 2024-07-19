@@ -2,7 +2,6 @@
 
 import React from "react";
 import Logo from "./Logo";
-import DesktopSearchBar from "./DesktopSearchBar";
 import UserNavigation from "./UserNavigation";
 import HamburgerMenu from "@/components/Interface/Shared/Navbar/NavbarSidebar";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,7 +29,7 @@ export default function Header() {
       }`}
     >
       {!resolutionState && <HamburgerMenu />}
-      <div className="flex items-center max-w-[1240px] w-full mx-auto md:py-2">
+      <div className="relative flex items-center max-w-[1240px] w-full mx-auto md:py-2">
         <Logo />
         <SearchBar />
         <UserNavigation />

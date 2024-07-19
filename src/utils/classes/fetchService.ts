@@ -54,6 +54,7 @@ export class FetchService implements IFetchService {
       7 * quantity
     }`;
     const data = await this.fetchData(url);
+    console.log(data);
     return data.results || [];
   }
 

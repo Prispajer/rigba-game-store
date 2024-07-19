@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import fetchService from "@/utils/classes/fetchService";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
@@ -6,12 +6,14 @@ interface GenresState {
   genresArray: GameAPIResponse[];
   isLoading: boolean;
   error: string | null;
+  page_size: number;
 }
 
 const initialState: GenresState = {
   genresArray: [],
   isLoading: false,
   error: null,
+  page_size: 1,
 };
 
 export const fetchGenres = createAsyncThunk<
@@ -30,7 +32,11 @@ export const fetchGenres = createAsyncThunk<
 const genresSlice = createSlice({
   name: "genres",
   initialState,
-  reducers: {},
+  reducers: {
+    loadMore: (state) => {
+      state.page_size += 1;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchGenres.pending, (state) => {
@@ -49,6 +55,7 @@ const genresSlice = createSlice({
 });
 
 export default genresSlice.reducer;
+export const { loadMore } = genresSlice.actions;
 
 // import createResourceSlice from "./createResourceSlice";
 // import fetchService from "@/utils/classes/fetchService";

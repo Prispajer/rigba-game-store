@@ -34,8 +34,6 @@ export default function FilterSelectedFilters() {
     handleToggle,
   } = useWindowVisibility();
 
-  console.log(gamesFilterState);
-
   const hasFilters =
     gamesFilterState.genresIdArray.length > 0 ||
     gamesFilterState.platformsIdArray.length > 0 ||

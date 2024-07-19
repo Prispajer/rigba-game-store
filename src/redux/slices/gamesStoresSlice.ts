@@ -6,12 +6,14 @@ interface StoresState {
   storesArray: GameAPIResponse[];
   isLoading: boolean;
   error: string | null;
+  page_size: number;
 }
 
 const initialState: StoresState = {
   storesArray: [],
   isLoading: false,
   error: null,
+  page_size: 1,
 };
 
 export const fetchStores = createAsyncThunk<

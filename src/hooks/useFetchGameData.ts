@@ -13,6 +13,7 @@ import {
   setNextPage,
   setPreviousPage,
 } from "@/redux/slices/gamesFilterSlice";
+import { loadMore } from "@/redux/slices/gamesGenresSlice";
 import { fetchPublishers } from "@/redux/slices/gamesPublishersSlice";
 import { fetchGenres } from "@/redux/slices/gamesGenresSlice";
 import { fetchStores } from "@/redux/slices/gamesStoresSlice";
@@ -150,6 +151,10 @@ export default function useFetchGameData() {
     }
   }, [dispatch, gamesFilterState.page]);
 
+  const handleLoadMore = React.useCallback(() => {
+    dispatch(loadMore());
+  }, [dispatch]);
+
   return {
     gamesFilterState,
     gamesPublishersState,
@@ -171,5 +176,6 @@ export default function useFetchGameData() {
     handleSetPlatformsIdArray,
     handleSetNextPage,
     handleSetPreviousPage,
+    handleLoadMore,
   };
 }

@@ -1,15 +1,33 @@
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
-import { CiHeart } from "react-icons/ci";
-import { CiLogout } from "react-icons/ci";
-import { IoReload } from "react-icons/io5";
-import { IoCloseSharp } from "react-icons/io5";
+import { CiHeart, CiLogout } from "react-icons/ci";
+import { IoReload, IoCloseSharp, IoPersonOutline } from "react-icons/io5";
+import { TbShoppingCartCopy } from "react-icons/tb";
+import { LuGamepad2 } from "react-icons/lu";
 import { signOutAccount } from "@/utils/actions";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import { ProfileModalContainerProps } from "@/utils/helpers/types";
 
-export default function ProfileModalContainer() {
+export const defaultNavItems = [
+  { href: "/wishlist", icon: CiHeart, label: "Wishlist" },
+  { href: "/", icon: IoReload, label: "Back to shop" },
+];
+
+export const extendedNavItems = [
+  ...defaultNavItems,
+  { href: "/account", icon: IoPersonOutline, label: "My account" },
+  { href: "/orders", icon: TbShoppingCartCopy, label: "Orders" },
+  { href: "/keys", icon: LuGamepad2, label: "Key library" },
+];
+
+export default function ProfileModalContainer({
+  navItems = defaultNavItems,
+  translateX = "md:translate-x-[-2px]",
+  translateY = "md:translate-y-[80px]",
+}: ProfileModalContainerProps) {
   const { profileModalState, handleClose } = useWindowVisibility();
   const user = useCurrentUser();
 
@@ -27,8 +45,12 @@ export default function ProfileModalContainer() {
     <>
       {profileModalState && (
         <OutsideClickHandler handleOutsideClick={handleOutsideClick}>
-          <div className="profile-modal">
-            <div className="flex md:hidden  items-center py-[10px] relative px-[20px]">
+          <div
+            className={`profile-modal ${
+              profileModalState && `${translateX} ${translateY}`
+            }`}
+          >
+            <div className="flex md:hidden items-center py-[10px] relative px-[20px]">
               <div className="flex items-center flex-0">
                 <Link className="flex items-center max-w-[200px]" href="/">
                   <Image
@@ -67,31 +89,28 @@ export default function ProfileModalContainer() {
                 </span>
               </div>
             </div>
-            <div className="text-[#544D60] text-left border-b-[1px] px-[20px] py-[10px]">
-              <Link
-                className="flex items-center  text-[15px] text-[#544D60]"
-                href="/wishlist"
+            {navItems.map((item) => (
+              <div
+                key={item.href}
+                className="text-[#544D60] text-left border-b-[1px] px-[20px] py-[10px]"
               >
-                <CiHeart size="15px" className="mr-[8px]" />
-                Lista życzeń
-              </Link>
-            </div>
-            <div className="text-[#544D60] text-left border-b-[1px] px-[20px] py-[10px]">
-              <Link
-                className="flex items-center text-[15px] text-[#544D60]"
-                href="/"
-              >
-                <IoReload size="15px" className="mr-[8px]" />
-                Powrót do sklepu
-              </Link>
-            </div>
+                <Link
+                  onClick={() => handleClose("profileModal")}
+                  className="flex items-center text-[15px] text-[#544D60]"
+                  href={item.href}
+                >
+                  <item.icon size="15px" className="mr-[8px]" />
+                  {item.label}
+                </Link>
+              </div>
+            ))}
             <div
               onClick={handleLogout}
               className="text-[#544D60] text-left border-b-[1px] px-[20px] py-[10px] cursor-pointer"
             >
               <div className="flex items-center text-[15px] text-[#544D60]">
                 <CiLogout size="15px" className="mr-[8px]" />
-                Wyloguj
+                Logout
               </div>
             </div>
           </div>

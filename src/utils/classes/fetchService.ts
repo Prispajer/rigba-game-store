@@ -54,7 +54,6 @@ export class FetchService implements IFetchService {
       7 * quantity
     }`;
     const data = await this.fetchData(url);
-    console.log(data);
     return data.results || [];
   }
 
@@ -87,7 +86,8 @@ export class FetchService implements IFetchService {
     page: number,
     platformsId?: number[],
     storesId?: number[],
-    publishersId?: number[]
+    publishersId?: number[],
+    ordering?: string
   ): Promise<GameAPIResponse[]> {
     const genresQuery = genresId.join(",");
     const platformsQuery = platformsId?.join(",");
@@ -97,7 +97,9 @@ export class FetchService implements IFetchService {
       genresQuery ? `&genres=${genresQuery}` : ""
     }&page=${page}${platformsQuery ? `&platforms=${platformsQuery}` : ""}${
       storesQuery ? `&stores=${storesQuery}` : ""
-    }${publishersQuery ? `&publishers=${publishersQuery}` : ""}`;
+    }${
+      publishersQuery ? `&publishers=${publishersQuery}` : ""
+    }&ordering=${ordering}`;
     const data = await this.fetchData(url);
     return data || [];
   }

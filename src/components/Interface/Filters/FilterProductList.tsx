@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import generateRandomValue from "@/utils/prices";
+import { generateRandomValue } from "@/utils/prices";
 import AddToWishList from "../Shared/Products/AddToWishList";
 import LoadingAnimation from "../Shared/LoadingAnimation/LoadingAnimation";
 import useFetchGameData from "@/hooks/useFetchGameData";

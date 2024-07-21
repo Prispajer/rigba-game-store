@@ -39,6 +39,10 @@ export default function useWindowVisibility() {
   const storesModalState = useSelector(
     (state: RootState) => state.utility.storesModal
   );
+  const sortModalState = useSelector(
+    (state: RootState) => state.utility.sortModal
+  );
+
   const handleOpen = (element: string): void => {
     dispatch(open(element));
   };
@@ -73,6 +77,7 @@ export default function useWindowVisibility() {
     platformsModalState,
     genresModalState,
     storesModalState,
+    sortModalState,
     handleOpen,
     handleClose,
     handleToggle,

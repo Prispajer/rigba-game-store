@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import generateRandomValue from "@/utils/prices";
+import { generateRandomValue } from "@/utils/prices";
 import AddToWishList from "../Shared/Products/AddToWishList";
 import LoadingAnimation from "../Shared/LoadingAnimation/LoadingAnimation";
 import fetchService from "@/utils/classes/fetchService";

@@ -20,6 +20,7 @@ const initialState: UIElementState = {
   platformsModal: false,
   genresModal: false,
   storesModal: false,
+  sortModal: false,
 };
 
 const utilitySlice = createSlice({

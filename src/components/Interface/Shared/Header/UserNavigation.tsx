@@ -2,27 +2,18 @@ import Link from "next/link";
 import Image from "next/image";
 import { FaRegHeart, FaShoppingCart, FaSearch, FaUser } from "react-icons/fa";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
-import ProfileSidebar from "./ProfileSidebar";
+import AuthSidebar from "./AuthSidebar";
 import CartModalContainer from "../CartModal/CartModalContainer";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useUserCart from "@/hooks/useUserCart";
-import { IoPersonOutline } from "react-icons/io5";
-import { CiHeart } from "react-icons/ci";
-import { CiLogout } from "react-icons/ci";
-import { LuGamepad2 } from "react-icons/lu";
-import { TbShoppingCartCopy } from "react-icons/tb";
-import { IoReload } from "react-icons/io5";
-import { IoCloseSharp } from "react-icons/io5";
-import { signOutAccount } from "@/utils/actions";
 import ProfileModalContainer from "../ProfileModal/ProfileModalContainer";
 import { extendedNavItems } from "../ProfileModal/ProfileModalContainer";
 
 export default function UserNavigation({}) {
   const user = useCurrentUser();
   const userCart = useUserCart();
-  const { resolutionState, profileModalState, handleOpen } =
-    useWindowVisibility();
+  const { resolutionState, handleOpen } = useWindowVisibility();
   const { localCartState } = useLocalStorage("LocalCart");
   const cartLength = user ? userCart : localCartState;
 
@@ -43,7 +34,7 @@ export default function UserNavigation({}) {
         <strong className="flex items-center justify-center absolute top-0 right-0 w-[20px] h-[20px] text-[12px] rounded-full bg-[#E0426E] text-[#FFFFFF] cursor-default">
           {cartLength.length}
         </strong>
-        <ProfileSidebar />
+        <AuthSidebar />
       </div>
       {resolutionState ? (
         <div className="flex items-center">
@@ -76,7 +67,7 @@ export default function UserNavigation({}) {
         <div className="relative">
           {!user ? (
             <FaUser
-              onClick={() => handleOpen("userSidebar")}
+              onClick={() => handleOpen("authSidebar")}
               className="nav-icon"
             />
           ) : (

@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import fetchService from "@/utils/classes/fetchService";
 import { GameAPIResponse } from "@/utils/helpers/types";
+import { getGamesWithRandomPrices } from "@/utils/prices";
 
 interface FilterState {
   gamesWithFilters: GameAPIResponse[];
@@ -8,6 +9,7 @@ interface FilterState {
   platformsIdArray: number[];
   storesIdArray: number[];
   publishersIdArray: number[];
+  ordering: string;
   isLoading: boolean;
   error: string | null;
   page: number;
@@ -22,6 +24,7 @@ const initialState: FilterState = {
   platformsIdArray: [],
   storesIdArray: [],
   publishersIdArray: [],
+  ordering: "",
   isLoading: false,
   error: null,
   page: 1,
@@ -42,16 +45,24 @@ export const fetchGamesWithFilters = createAsyncThunk<
       platformsIdArray,
       storesIdArray,
       publishersIdArray,
+      ordering,
     } = (getState() as { gamesFilter: FilterState }).gamesFilter;
     try {
-      const gamesByGenresId = await fetchService.getGamesWithFilters(
+      const getGamesWithFilters = await fetchService.getGamesWithFilters(
         genresIdArray,
         page,
         platformsIdArray,
         storesIdArray,
-        publishersIdArray
+        publishersIdArray,
+        ordering
       );
-      return gamesByGenresId;
+      const gamesWithPrices = await getGamesWithRandomPrices(
+        getGamesWithFilters.results
+      );
+      return {
+        ...getGamesWithFilters,
+        results: gamesWithPrices,
+      };
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
@@ -76,6 +87,9 @@ const gamesFilterSlice = createSlice({
     },
     setPublishersIdArray: (state, action: PayloadAction<number[]>) => {
       state.publishersIdArray = action.payload;
+    },
+    setOrdering: (state, action: PayloadAction<string>) => {
+      state.ordering = action.payload;
     },
     setNextPage: (state) => {
       if (state.page < 500) {
@@ -117,6 +131,7 @@ export const {
   setPlatformsIdArray,
   setStoresIdArray,
   setPublishersIdArray,
+  setOrdering,
   setNextPage,
   setPreviousPage,
 } = gamesFilterSlice.actions;

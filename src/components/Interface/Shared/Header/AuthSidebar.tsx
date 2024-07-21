@@ -3,18 +3,18 @@ import { IoCloseSharp } from "react-icons/io5";
 import useSharedGeneralActions from "@/hooks/useWindowVisibility";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 
-export default function ProfileSidebar() {
-  const { userSidebarState, handleClose } = useSharedGeneralActions();
+export default function AuthSidebar() {
+  const { authSidebarState, handleClose } = useSharedGeneralActions();
 
   const handleOutsideClick = () => {
-    if (userSidebarState) {
-      handleClose("userSidebar");
+    if (authSidebarState) {
+      handleClose("authSidebar");
     }
   };
 
   return (
     <>
-      {userSidebarState && (
+      {authSidebarState && (
         <OutsideClickHandler handleOutsideClick={handleOutsideClick}>
           <div className="fixed top-0 right-0 bottom-0 h-full w-[300px] z-10 bg-primaryColor">
             <div className="relative flex flex-col items-center justify-center gap-y-[10px] py-[20px] bg-secondaryColor font-medium">
@@ -31,7 +31,7 @@ export default function ProfileSidebar() {
                 Zarejestruj
               </Link>
               <IoCloseSharp
-                onClick={() => handleClose("userSidebar")}
+                onClick={() => handleClose("authSidebar")}
                 size="25px"
                 className="absolute right-4 top-4 text-[#ffffff] cursor-pointer"
               />

@@ -9,6 +9,7 @@ import {
   setPlatformsIdArray,
   setStoresIdArray,
   setPublishersIdArray,
+  setOrdering,
   setPage,
   setNextPage,
   setPreviousPage,
@@ -101,6 +102,22 @@ export default function useFetchGameData() {
     [dispatch]
   );
 
+  const handleSortChange = React.useCallback(
+    (ordering: string) => {
+      dispatch(setOrdering(ordering));
+      handleFetchGamesWithFilters(gamesFilterState.page);
+
+      if (ordering === "price") {
+        gamesFilterState.gamesWithFilters.sort(
+          (a, b) => a.gamesFilterState.gamesWithFilters.price - b.price
+        );
+      } else if (ordering === "-price") {
+        gamesFilterState.gamesWithFilters.sort((a, b) => a.price - b.price);
+      }
+    },
+    [dispatch, gamesFilterState.page, handleFetchGamesWithFilters]
+  );
+
   const handleFilterChange = React.useCallback(
     (
       filterId: number,
@@ -170,6 +187,7 @@ export default function useFetchGameData() {
     handleSetGenresIdArray,
     handleSetStoresIdArray,
     handleSetPublishersIdArray,
+    handleSortChange,
     handleSetPage,
     handleClearAllFilters,
     handleClearSelectedFilter,

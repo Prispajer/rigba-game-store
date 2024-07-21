@@ -15,7 +15,8 @@ export default interface IFetchService {
     page: number,
     platformsId?: number[],
     storesId?: number[],
-    publishersId?: number[]
+    publishersId?: number[],
+    ordering?: string
   ): Promise<GameAPIResponse[]>;
   getGamesByTagsId(
     tagIds: number[],

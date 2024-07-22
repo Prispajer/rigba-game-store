@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type UIElementState = {
-  [key: string]: boolean | string;
+  [key: string]: boolean | string | null | number;
 };
 
 const initialState: UIElementState = {
@@ -16,6 +16,8 @@ const initialState: UIElementState = {
   searchPlatformText: "",
   searchPublisherText: "",
   searchStoreText: "",
+  compartmentNumberOne: null,
+  compartmentNumberTwo: null,
   publishersModal: false,
   platformsModal: false,
   genresModal: false,
@@ -44,7 +46,7 @@ const utilitySlice = createSlice({
     },
     setSearchText: (
       state,
-      action: PayloadAction<{ key: string; value: string }>
+      action: PayloadAction<{ key: string; value: string | number }>
     ) => {
       const { key, value } = action.payload;
       state[key] = value;

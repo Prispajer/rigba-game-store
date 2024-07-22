@@ -119,6 +119,7 @@ export interface GameAPIResponse {
   added?: number;
   games_count?: number;
   image_background?: string;
+  price: number;
 }
 
 export interface SearchData {

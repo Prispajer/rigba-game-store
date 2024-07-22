@@ -12,10 +12,17 @@ export function generateRandomValue(): number {
 }
 
 export async function getGamesWithRandomPrices(
-  games: GameAPIResponse[]
+  games: GameAPIResponse[],
+  existingGames: GameAPIResponse[]
 ): Promise<GameAPIResponse[]> {
+  const existingGamesMap = new Map<number, number>(
+    existingGames.map((game) => [game.id, game.price ?? generateRandomValue()])
+  );
+
+  console.log(existingGamesMap);
+
   return games.map((game) => ({
     ...game,
-    price: generateRandomValue(),
+    price: existingGamesMap.get(game.id) ?? generateRandomValue(),
   }));
 }

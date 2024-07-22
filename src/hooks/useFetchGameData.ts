@@ -20,6 +20,7 @@ import { fetchGenres } from "@/redux/slices/gamesGenresSlice";
 import { fetchStores } from "@/redux/slices/gamesStoresSlice";
 import { fetchPlatforms } from "@/redux/slices/gamesPlatformsSlice";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import { GameAPIResponse } from "@/utils/helpers/types";
 
 export default function useFetchGameData() {
   const dispatch = useDispatch<AppDispatch>();
@@ -39,6 +40,7 @@ export default function useFetchGameData() {
     },
     [dispatch]
   );
+
   const handleFetchPublishers = React.useCallback(
     (quantity: number) => {
       dispatch(fetchPublishers({ quantity }));
@@ -62,16 +64,6 @@ export default function useFetchGameData() {
       dispatch(fetchStores({ quantity }));
     },
     [dispatch]
-  );
-
-  const handleSetPage = React.useCallback(
-    (page: number) => {
-      if (page > 0 && page <= 20) {
-        dispatch(setPage({ page }));
-        handleFetchGamesWithFilters(page);
-      }
-    },
-    [dispatch, handleFetchGamesWithFilters]
   );
 
   const handleSetGenresIdArray = React.useCallback(
@@ -106,14 +98,6 @@ export default function useFetchGameData() {
     (ordering: string) => {
       dispatch(setOrdering(ordering));
       handleFetchGamesWithFilters(gamesFilterState.page);
-
-      if (ordering === "price") {
-        gamesFilterState.gamesWithFilters.sort(
-          (a, b) => a.gamesFilterState.gamesWithFilters.price - b.price
-        );
-      } else if (ordering === "-price") {
-        gamesFilterState.gamesWithFilters.sort((a, b) => a.price - b.price);
-      }
     },
     [dispatch, gamesFilterState.page, handleFetchGamesWithFilters]
   );
@@ -154,6 +138,16 @@ export default function useFetchGameData() {
       handleFetchGamesWithFilters(gamesFilterState.page);
     },
     [dispatch, handleFetchGamesWithFilters, gamesFilterState.page]
+  );
+
+  const handleSetPage = React.useCallback(
+    (page: number) => {
+      if (page > 0 && page <= 20) {
+        dispatch(setPage({ page }));
+        handleFetchGamesWithFilters(page);
+      }
+    },
+    [dispatch, handleFetchGamesWithFilters]
   );
 
   const handleSetNextPage = React.useCallback(() => {

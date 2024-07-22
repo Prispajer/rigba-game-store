@@ -36,8 +36,6 @@ export default function FilterSortBy() {
   const { gamesFilterState, handleSortChange } = useFetchGameData();
   const [currentSort, setCurrentSort] = useState(SortByElements[0]);
 
-  console.log(gamesFilterState);
-
   const handleSortSelection = (sortOption: {
     title: string;
     icon: IconType;
@@ -58,7 +56,7 @@ export default function FilterSortBy() {
       </div>
       <div className="relative">
         <button
-          className="flex flex-start items-center text-[18px] hover:text-headerHover text-[#FFFFFF]"
+          className="flex items-center text-[18px] hover:text-headerHover text-[#FFFFFF]"
           onClick={() => handleToggle("sortModal")}
         >
           <currentSort.icon />
@@ -82,7 +80,6 @@ export default function FilterSortBy() {
                 >
                   <button className="py-[5px] px-[15px] flex w-full text-[14px] font-bold text-[#000000] hover:text-headerHover">
                     {element.title}
-                    <span className="ml-auto"></span>
                   </button>
                 </li>
               ))}

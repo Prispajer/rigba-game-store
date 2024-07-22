@@ -36,17 +36,19 @@ const initialState: FilterState = {
 export const fetchGamesWithFilters = createAsyncThunk<
   GameAPIResponse[],
   { page: number },
-  { rejectValue: string; getState: () => unknown }
+  { rejectValue: string; getState: () => FilterState }
 >(
   "gamesFilter/fetchGamesWithFilters",
   async ({ page = 1 }: { page: number }, { rejectWithValue, getState }) => {
     const {
+      gamesWithFilters,
       genresIdArray,
       platformsIdArray,
       storesIdArray,
       publishersIdArray,
       ordering,
     } = (getState() as { gamesFilter: FilterState }).gamesFilter;
+
     try {
       const getGamesWithFilters = await fetchService.getGamesWithFilters(
         genresIdArray,
@@ -56,9 +58,18 @@ export const fetchGamesWithFilters = createAsyncThunk<
         publishersIdArray,
         ordering
       );
+
       const gamesWithPrices = await getGamesWithRandomPrices(
-        getGamesWithFilters.results
+        getGamesWithFilters.results,
+        gamesWithFilters
       );
+
+      if (ordering === "price") {
+        gamesWithPrices.sort((a, b) => (a.price ?? 0) - (b.price ?? 0));
+      } else if (ordering === "-price") {
+        gamesWithPrices.sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
+      }
+
       return {
         ...getGamesWithFilters,
         results: gamesWithPrices,
@@ -73,9 +84,6 @@ const gamesFilterSlice = createSlice({
   name: "gamesFilter",
   initialState,
   reducers: {
-    setPage: (state, action: PayloadAction<{ page: number }>) => {
-      state.page = action.payload.page;
-    },
     setGenresIdArray: (state, action: PayloadAction<number[]>) => {
       state.genresIdArray = action.payload;
     },
@@ -90,6 +98,9 @@ const gamesFilterSlice = createSlice({
     },
     setOrdering: (state, action: PayloadAction<string>) => {
       state.ordering = action.payload;
+    },
+    setPage: (state, action: PayloadAction<{ page: number }>) => {
+      state.page = action.payload.page;
     },
     setNextPage: (state) => {
       if (state.page < 500) {
@@ -126,12 +137,12 @@ const gamesFilterSlice = createSlice({
 });
 
 export const {
-  setPage,
   setGenresIdArray,
   setPlatformsIdArray,
   setStoresIdArray,
   setPublishersIdArray,
   setOrdering,
+  setPage,
   setNextPage,
   setPreviousPage,
 } = gamesFilterSlice.actions;

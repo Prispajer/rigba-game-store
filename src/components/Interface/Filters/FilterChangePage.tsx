@@ -10,21 +10,34 @@ export default function ChangePage() {
     handleSetPage,
   } = useFetchGameData();
 
-  const handlePageClick = (page: number) => {
-    handleSetPage(page);
+  const handlePageClick = (page: number | string) => {
+    if (typeof page === "number") {
+      handleSetPage(page);
+    } else if (page === "nextPage") {
+      handleSetPage(gamesFilterState.page + 3);
+    } else if (page === "previousPage") {
+      handleSetPage(gamesFilterState.page - 3);
+    }
   };
 
   const renderPagination = () => {
     let pages = [];
     if (gamesFilterState.page <= 3) {
-      pages = [1, 2, 3, 4, "...", gamesFilterState.gamesWithFilters.length];
+      pages = [
+        1,
+        2,
+        3,
+        4,
+        "nextPage",
+        gamesFilterState.gamesWithFilters.length,
+      ];
     } else if (
       gamesFilterState.page >=
       gamesFilterState.gamesWithFilters.length - 2
     ) {
       pages = [
         1,
-        "...",
+        "previousPage",
         gamesFilterState.gamesWithFilters.length - 3,
         gamesFilterState.gamesWithFilters.length - 2,
         gamesFilterState.gamesWithFilters.length - 1,
@@ -33,19 +46,23 @@ export default function ChangePage() {
     } else {
       pages = [
         1,
-        "...",
+        "previousPage",
         gamesFilterState.page - 1,
         gamesFilterState.page,
         gamesFilterState.page + 1,
-        "...",
+        "nextPage",
         gamesFilterState.gamesWithFilters.length,
       ];
     }
 
     return pages.map((page: number | string, index: number) =>
-      page === "..." ? (
-        <li key={page} className="p-[10px] text-[20px] cursor-pointer">
-          {page}
+      typeof page === "string" ? (
+        <li
+          onClick={() => handlePageClick(page)}
+          key={page}
+          className="p-[10px] text-[20px] cursor-pointer"
+        >
+          {page === "previousPage" ? "..." : "nextPage" ? "..." : page}
         </li>
       ) : (
         <li

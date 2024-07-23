@@ -153,14 +153,16 @@ export default function useFetchGameData() {
   const handleSetNextPage = React.useCallback(() => {
     if (gamesFilterState.page < 20) {
       dispatch(setNextPage());
+      handleFetchGamesWithFilters(gamesFilterState.page);
     }
-  }, [dispatch, gamesFilterState.page]);
+  }, [dispatch, gamesFilterState.page, handleFetchGamesWithFilters]);
 
   const handleSetPreviousPage = React.useCallback(() => {
     if (gamesFilterState.page > 1) {
       dispatch(setPreviousPage());
+      handleFetchGamesWithFilters(gamesFilterState.page);
     }
-  }, [dispatch, gamesFilterState.page]);
+  }, [dispatch, gamesFilterState.page, handleFetchGamesWithFilters]);
 
   const handleLoadMore = React.useCallback(() => {
     dispatch(loadMore());

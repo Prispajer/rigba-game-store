@@ -60,7 +60,7 @@ export default function FilterSelectedFilters() {
             {publishersModalState && (
               <FilterModal
                 searchText="searchPublisherText"
-                searchState={searchPublisherTextState}
+                searchState={searchPublisherTextState as string}
                 apiFiltersArray={gamesPublishersState.publishersArray}
                 selectedFiltersId={gamesFilterState.publishersIdArray}
                 setSelectedFiltersId={setPublishersIdArray}
@@ -83,7 +83,7 @@ export default function FilterSelectedFilters() {
             {platformsModalState && (
               <FilterModal
                 searchText="searchPlatformText"
-                searchState={searchPlatformTextState}
+                searchState={searchPlatformTextState as string}
                 apiFiltersArray={gamesPlatformsState.platformsArray}
                 selectedFiltersId={gamesFilterState.platformsIdArray}
                 setSelectedFiltersId={setPlatformsIdArray}
@@ -106,7 +106,7 @@ export default function FilterSelectedFilters() {
             {genresModalState && (
               <FilterModal
                 searchText="searchGenreText"
-                searchState={searchGenreTextState}
+                searchState={searchGenreTextState as string}
                 apiFiltersArray={gamesGenresState.genresArray}
                 selectedFiltersId={gamesFilterState.genresIdArray}
                 setSelectedFiltersId={setGenresIdArray}
@@ -129,7 +129,7 @@ export default function FilterSelectedFilters() {
             {storesModalState && (
               <FilterModal
                 searchText="searchStoreText"
-                searchState={searchStoreTextState}
+                searchState={searchStoreTextState as string}
                 apiFiltersArray={gamesStoresState.storesArray}
                 selectedFiltersId={gamesFilterState.storesIdArray}
                 setSelectedFiltersId={setStoresIdArray}

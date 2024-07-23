@@ -10,9 +10,16 @@ import useSearchText from "@/hooks/useSearchText";
 
 export default function FilterProductList() {
   const { gamesFilterState } = useFetchGameData();
+  const [isLoading, setIsLoading] = React.useState(true);
   const { compartmentNumberOne, compartmentNumberTwo, handleComparePrices } =
     useSearchText();
   const { redirectToGame } = useCustomRouter();
+
+  React.useEffect(() => {
+    if (gamesFilterState) {
+      setIsLoading(false);
+    }
+  }, [gamesFilterState]);
 
   const displayByCondition =
     compartmentNumberOne && compartmentNumberTwo
@@ -21,6 +28,10 @@ export default function FilterProductList() {
           (compartmentNumberTwo as number) ?? 0
         )
       : gamesFilterState.gamesWithFilters;
+
+  if (isLoading) {
+    return <LoadingAnimation />;
+  }
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 w-full gap-x-[10px]">
@@ -77,7 +88,9 @@ export default function FilterProductList() {
           </div>
         ))
       ) : (
-        <LoadingAnimation />
+        <div className="col-span-full text-center text-white">
+          No games found.
+        </div>
       )}
     </div>
   );

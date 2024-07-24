@@ -66,7 +66,7 @@ export default function FiltersContainer() {
               <FilterByCategory
                 filterLabel="Publisher"
                 searchText="searchPublisherText"
-                searchTextState={searchPublisherTextState}
+                searchTextState={searchPublisherTextState as string}
                 apiFiltersArray={gamesPublishersState.publishersArray}
                 selectedFiltersId={gamesFilterState.publishersIdArray}
                 setSelectedFiltersId={setPublishersIdArray}
@@ -75,7 +75,7 @@ export default function FiltersContainer() {
               <FilterByCategory
                 filterLabel="Platform"
                 searchText="searchPlatformText"
-                searchTextState={searchPlatformTextState}
+                searchTextState={searchPlatformTextState as string}
                 apiFiltersArray={gamesPlatformsState.platformsArray}
                 selectedFiltersId={gamesFilterState.platformsIdArray}
                 setSelectedFiltersId={setPlatformsIdArray}
@@ -84,7 +84,7 @@ export default function FiltersContainer() {
               <FilterByCategory
                 filterLabel="Genre"
                 searchText="searchGenreText"
-                searchTextState={searchGenreTextState}
+                searchTextState={searchGenreTextState as string}
                 apiFiltersArray={gamesGenresState.genresArray}
                 selectedFiltersId={gamesFilterState.genresIdArray}
                 setSelectedFiltersId={setGenresIdArray}
@@ -93,7 +93,7 @@ export default function FiltersContainer() {
               <FilterByCategory
                 filterLabel="Store"
                 searchText="searchStoreText"
-                searchTextState={searchStoreTextState}
+                searchTextState={searchStoreTextState as string}
                 apiFiltersArray={gamesStoresState.storesArray}
                 selectedFiltersId={gamesFilterState.storesIdArray}
                 setSelectedFiltersId={setStoresIdArray}

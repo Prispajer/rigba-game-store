@@ -1,24 +1,34 @@
+"use client";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addProduct,
+  addProductWishList,
   removeProduct,
   increaseQuantity,
   decreaseQuantity,
   setLocalCart,
-} from "@/redux/slices/productSlice";
-import { RootState } from "../redux/store";
+  setWishList,
+} from "@/redux/slices/localStorageSlice";
+import { RootState } from "@/redux/store";
 import { LocalStorageProduct } from "@/utils/helpers/types";
 
 export default function useLocalStorage(key: string) {
   const [isLoaded, setIsLoaded] = React.useState(false);
   const localCartState = useSelector(
-    (state: RootState) => state.product.localCart
+    (state: RootState) => state.localStorage.localCart
+  );
+  const localWishListState = useSelector(
+    (state: RootState) => state.localStorage.wishList
   );
   const dispatch = useDispatch();
 
   const handleAddLocalProduct = (product: LocalStorageProduct): void => {
     dispatch(addProduct(product));
+  };
+
+  const handleAddLocalWishList = (product: LocalStorageProduct): void => {
+    dispatch(addProductWishList(product));
   };
 
   const handleRemoveLocalProduct = (productId: number): void => {
@@ -34,24 +44,39 @@ export default function useLocalStorage(key: string) {
   };
 
   React.useEffect(() => {
-    const savedCart = localStorage.getItem(key);
-    if (savedCart) {
-      dispatch(setLocalCart(JSON.parse(savedCart)));
+    const getLocalArray = localStorage.getItem(key);
+    if (getLocalArray) {
+      const parsedArray = JSON.parse(getLocalArray);
+      if (key === "localCart") {
+        dispatch(setLocalCart(parsedArray));
+      } else if (key === "localWishList") {
+        dispatch(setWishList(parsedArray));
+      }
     } else {
-      dispatch(setLocalCart([]));
+      if (key === "localCart") {
+        dispatch(setLocalCart([]));
+      } else if (key === "localWishList") {
+        dispatch(setWishList([]));
+      }
     }
     setIsLoaded(true);
   }, [key, dispatch]);
 
   React.useEffect(() => {
     if (isLoaded) {
-      localStorage.setItem(key, JSON.stringify(localCartState));
+      if (key === "localCart") {
+        localStorage.setItem(key, JSON.stringify(localCartState));
+      } else if (key === "localWishList") {
+        localStorage.setItem(key, JSON.stringify(localWishListState));
+      }
     }
-  }, [key, localCartState, isLoaded]);
+  }, [key, localCartState, localWishListState, isLoaded]);
 
   return {
     localCartState,
+    localWishListState,
     handleAddLocalProduct,
+    handleAddLocalWishList,
     handleRemoveLocalProduct,
     handleIncreaseLocalQuantity,
     handleDecreaseLocalQuantity,

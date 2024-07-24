@@ -103,6 +103,13 @@ export const getUserCart = async (userId: string) => {
   try {
     const userCart = await postgres.cart.findUnique({
       where: { userId },
+      include: {
+        products: {
+          include: {
+            productsInformations: true,
+          },
+        },
+      },
     });
 
     return userCart;
@@ -118,6 +125,25 @@ export const getProductInformations = async (productId: string) => {
     });
 
     return productInformations;
+  } catch {
+    return null;
+  }
+};
+
+export const getUserWishList = async (userId: string) => {
+  try {
+    const userWishList = await postgres.wishlist.findUnique({
+      where: { userId },
+      include: {
+        products: {
+          include: {
+            productsInformations: true,
+          },
+        },
+      },
+    });
+
+    return userWishList;
   } catch {
     return null;
   }

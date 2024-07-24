@@ -19,8 +19,6 @@ export async function getGamesWithRandomPrices(
     existingGames.map((game) => [game.id, game.price ?? generateRandomValue()])
   );
 
-  console.log(existingGamesMap);
-
   return games.map((game) => ({
     ...game,
     price: existingGamesMap.get(game.id) ?? generateRandomValue(),

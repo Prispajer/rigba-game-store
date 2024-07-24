@@ -1,14 +1,13 @@
 "use client";
-
 import React from "react";
 import Image from "next/image";
 import { generateRandomValue } from "@/utils/prices";
+import { CiHeart } from "react-icons/ci";
 import AddToWishList from "../Shared/Products/AddToWishList";
 import LoadingAnimation from "../Shared/LoadingAnimation/LoadingAnimation";
 import fetchService from "@/utils/classes/fetchService";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import { MdOutlineSignalCellularNodata } from "react-icons/md";
-import { CiHeart } from "react-icons/ci";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
 export default function HomeProductList({ ordering }: { ordering: string }) {
@@ -27,11 +26,13 @@ export default function HomeProductList({ ordering }: { ordering: string }) {
     setNewLoadingArray(new Array(20).fill(true));
   }, [ordering]);
 
+  console.log(newLoadingArray);
+
   return (
     <>
       {newLoadingArray.map((value, index) => (
         <div
-          key={index}
+          key={gamesWithOrdering[index]?.id}
           onClick={() => {
             if (gamesWithOrdering[index]) {
               redirectToGame(gamesWithOrdering[index].slug as string);
@@ -93,10 +94,10 @@ export default function HomeProductList({ ordering }: { ordering: string }) {
                     {gamesWithOrdering[index]?.rating}
                   </span>
                 </div>
-                <AddToWishList />
               </div>
             </>
           )}
+          <AddToWishList game={gamesWithOrdering[index]} />
         </div>
       ))}
     </>

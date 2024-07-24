@@ -76,10 +76,13 @@ export interface LoggedUserUpdatedProduct {
 export interface LocalStorageProduct {
   externalProductId: number;
   name: string;
-  description: string;
+  slug?: string;
+  description?: string;
   price: number;
   imageUrl: string;
-  quantity: number;
+  quantity?: number;
+  isInWishList?: boolean;
+  rating?: number;
 }
 
 export type Product = ProductDetails & ProductDescription;
@@ -97,6 +100,11 @@ export enum ViewType {
   Similar = "similar",
 }
 
+export interface LoggedUserWishlist {
+  id: string;
+  userId: string;
+  products: LoggedUserProduct[];
+}
 export interface RequestResponse<T> {
   data?: T;
   success?: boolean;

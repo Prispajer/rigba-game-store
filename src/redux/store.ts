@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import productReducer from "./slices/productSlice";
+import localStorageReducer from "./slices/localStorageSlice";
 import utilityReducer from "./slices/utilitySlice";
 import gamesFilterReducer from "./slices/gamesFilterSlice";
 import gamesPublishersReducer from "./slices/gamesPublishersSlice";
@@ -9,7 +9,7 @@ import gamesPlatformsReducer from "./slices/gamesPlatformsSlice";
 
 export const store = configureStore({
   reducer: {
-    product: productReducer,
+    localStorage: localStorageReducer,
     utility: utilityReducer,
     gamesFilter: gamesFilterReducer,
     gamesPublishers: gamesPublishersReducer,

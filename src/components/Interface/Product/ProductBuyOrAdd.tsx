@@ -3,7 +3,7 @@ import { LocalStorageProduct, Product } from "@/utils/helpers/types";
 import { FaCartPlus } from "react-icons/fa";
 import { FormSuccess } from "../Shared/FormsNotifications/FormSuccess";
 import { FormError } from "../Shared/FormsNotifications/FormError";
-import generateRandomValue from "@/utils/prices";
+import { generateRandomValue } from "@/utils/prices";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import requestService from "@/utils/classes/requestService";
@@ -28,9 +28,7 @@ export default function ProductBuyOrAdd({ product }: { product: Product }) {
             imageUrl: product?.background_image,
           }
         );
-
         if (response.success) {
-          console.log(success, error);
           setSuccess(response.message);
         } else {
           setError(response.message);

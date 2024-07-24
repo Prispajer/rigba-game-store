@@ -1,14 +1,19 @@
 import NextAuth, { DefaultSession } from "next-auth";
 import authConfig from "./auth.config";
-import { getUserById } from "@/data/database/publicSQL/queries";
+import {
+  getUserById,
+  getUserCart,
+  getUserWishList,
+} from "@/data/database/publicSQL/queries";
 import { getTwoFactorConfirmationByUserId } from "@/data/database/publicSQL/queries";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { postgres } from "@/data/database/publicSQL/postgres";
-import { UserRole, Cart } from "@prisma/client";
+import { UserRole, Cart, Wishlist } from "@prisma/client";
 
 export type ExtentedUser = DefaultSession["user"] & {
   role: UserRole;
   cart: Cart | null;
+  wishlist: Wishlist | null;
 };
 
 declare module "next-auth" {
@@ -74,6 +79,9 @@ export const {
       if (token.cart && session.user) {
         session.user.cart = token.cart as Cart;
       }
+      if (token.wishlist && session.user) {
+        session.user.wishlist = token.wishlist as Wishlist;
+      }
       return session;
     },
     async jwt({ token }) {
@@ -89,18 +97,13 @@ export const {
 
       token.role = existingUser.role;
 
-      const userCart = await postgres.cart.findUnique({
-        where: { userId: existingUser.id },
-        include: {
-          products: {
-            include: {
-              productsInformations: true,
-            },
-          },
-        },
-      });
+      const userCart = await getUserCart(existingUser.id);
 
       token.cart = userCart;
+
+      const userWishList = await getUserWishList(existingUser.id);
+
+      token.wishlist = userWishList;
 
       return token;
     },

@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import ProductContainer from "@/components/Interface/Product/ProductContainer";
+import AddToWishList from "@/components/Interface/Shared/Products/AddToWishList";
 import fetchService from "@/utils/classes/fetchService";
 
 type Props = {
@@ -31,11 +32,13 @@ export default async function productDetails({ params }: Props) {
   ]);
 
   return (
-    <ProductContainer
-      product={product}
-      screenshots={screenshots}
-      genres={genres}
-      requirements={requirements}
-    />
+    <>
+      <ProductContainer
+        product={product}
+        screenshots={screenshots}
+        genres={genres}
+        requirements={requirements}
+      />
+    </>
   );
 }

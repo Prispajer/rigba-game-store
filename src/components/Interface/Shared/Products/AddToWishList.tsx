@@ -1,28 +1,41 @@
 "use client";
 import React from "react";
 import { CiHeart } from "react-icons/ci";
-import { LocalStorageProduct, GameAPIResponse } from "@/utils/helpers/types";
+import { Product } from "@/utils/helpers/types";
 import { generateRandomValue } from "@/utils/prices";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import requestService from "@/utils/classes/requestService";
+import useUserWishList from "@/hooks/useUserWishList";
 
-export default function AddToWishList({ game }: { game: GameAPIResponse }) {
-  const [error, setError] = React.useState<string | undefined>();
-  const [success, setSuccess] = React.useState<string | undefined>();
+export default function AddToWishList({ game }: { game: Product }) {
+  const [error, setError] = React.useState<string | undefined>("");
+  const [success, setSuccess] = React.useState<string | undefined>("");
+  const user = useCurrentUser();
+  const userWishList = useUserWishList();
+
   const {
     localWishListState,
     handleAddLocalWishList,
-    handleRemoveLocalProduct,
+    handleRemoveLocalWishList,
   } = useLocalStorage("localWishList");
-  const user = useCurrentUser();
 
   const isInWishList = localWishListState.some(
-    (product) => product.externalProductId === game?.id
+    (product) =>
+      product.externalProductId === game?.id || game?.externalProductId
   );
 
-  const handleAddToWishList = async (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const isInWishListDataBase = userWishList.some(
+    (product) =>
+      product.externalProductId === game?.id || game?.externalProductId
+  );
+
+  const displayByCondition = user ? isInWishListDataBase : isInWishList;
+
+  React.useEffect(() => {}, [user]);
+
+  const handleAddToWishList = async (event: React.MouseEvent) => {
+    event.stopPropagation();
     try {
       if (user) {
         const response = await requestService.postMethod(
@@ -32,8 +45,10 @@ export default function AddToWishList({ game }: { game: GameAPIResponse }) {
             externalProductId: game.id,
             name: game.name,
             price: generateRandomValue(),
-            imageUrl: game.background_image,
+            description: game.description_raw,
+            background_image: game.background_image,
             rating: game.rating,
+            slug: game.slug,
           }
         );
         if (response.success) {
@@ -46,28 +61,59 @@ export default function AddToWishList({ game }: { game: GameAPIResponse }) {
           externalProductId: game.id,
           name: game.name,
           price: generateRandomValue(),
-          imageUrl: game.background_image,
+          description: game.description_raw,
+          background_image: game.background_image,
           rating: game.rating,
+          slug: game.slug,
         };
         handleAddLocalWishList(localProduct);
       }
     } catch (error) {
       console.error("Failed to add to wish list", error);
-      setError("An unexpected error occurred.");
+    }
+  };
+
+  const handleRemoveFromWishList = async (event: React.MouseEvent) => {
+    event.stopPropagation();
+    try {
+      if (user) {
+        const response = await requestService.deleteMethod(
+          "products/endpoints/productManagement/deleteProductFromWishList",
+          {
+            email: user.email,
+            externalProductId: game.externalProductId || game?.id,
+          }
+        );
+        if (response.success) {
+          setSuccess(response.message);
+        } else {
+          setError(response.message);
+        }
+      } else {
+        handleRemoveLocalWishList({
+          externalProductId: game.id || game?.externalProductId,
+        });
+      }
+    } catch (error) {
+      console.error("Failed to fetch to wish list", error);
     }
   };
 
   return (
     <>
-      {error && <p className="text-red-500">{error}</p>}
-      {success && <p className="text-green-500">{success}</p>}
+      {success}
+      {error}
       <button
-        onClick={handleAddToWishList}
+        onClick={(event) =>
+          displayByCondition
+            ? handleRemoveFromWishList(event)
+            : handleAddToWishList(event)
+        }
         className={`absolute top-0 right-[10px] p-[6px] md:p-[10px] border-[1px] transition duration-300 cursor-pointer hover:bg-[#ffffff80] hover:border-[#ffffff] ${
-          isInWishList ? "border-[#FFFA84] bg-[#FFFA84]" : ""
+          displayByCondition ? "border-[#FFFA84] bg-[#FFFA84]" : ""
         }`}
       >
-        <CiHeart size="30px" color="white" />
+        <CiHeart size="30px" color={"white"} />
       </button>
     </>
   );

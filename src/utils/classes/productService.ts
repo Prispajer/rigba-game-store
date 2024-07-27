@@ -18,7 +18,9 @@ export default class ProductService implements IProductService {
   private name?: string;
   private description?: string;
   private price?: number;
-  private imageUrl?: string;
+  private background_image?: string;
+  private rating?: number;
+  private slug?: string;
 
   constructor(
     email: string,
@@ -26,14 +28,18 @@ export default class ProductService implements IProductService {
     name?: string,
     description?: string,
     price?: number,
-    imageUrl?: string
+    background_image?: string,
+    rating?: number,
+    slug?: string
   ) {
     this.email = email;
     this.externalProductId = externalProductId;
     this.name = name;
     this.description = description;
     this.price = price;
-    this.imageUrl = imageUrl;
+    this.background_image = background_image;
+    this.rating = rating;
+    this.slug = slug;
   }
 
   async addProductToCart(): Promise<RequestResponse<LoggedUserCart>> {
@@ -70,7 +76,8 @@ export default class ProductService implements IProductService {
                     name: this.name as string,
                     description: this.description as string,
                     price: this.price as number,
-                    imageUrl: this.imageUrl as string,
+                    background_image: this.background_image as string,
+                    slug: this.slug as string,
                   },
                 },
               },
@@ -101,7 +108,8 @@ export default class ProductService implements IProductService {
                   name: this.name as string,
                   description: this.description as string,
                   price: this.price as number,
-                  imageUrl: this.imageUrl as string,
+                  background_image: this.background_image as string,
+                  slug: this.slug as string,
                 },
               },
             },
@@ -350,7 +358,9 @@ export default class ProductService implements IProductService {
                     name: this.name as string,
                     description: this.description as string,
                     price: this.price as number,
-                    imageUrl: this.imageUrl as string,
+                    background_image: this.background_image as string,
+                    rating: this.rating as number,
+                    slug: this.slug as string,
                   },
                 },
               },
@@ -381,7 +391,9 @@ export default class ProductService implements IProductService {
                   name: this.name as string,
                   description: this.description as string,
                   price: this.price as number,
-                  imageUrl: this.imageUrl as string,
+                  background_image: this.background_image as string,
+                  rating: this.rating as number,
+                  slug: this.slug as string,
                 },
               },
             },

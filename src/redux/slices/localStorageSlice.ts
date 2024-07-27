@@ -1,9 +1,9 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { LocalStorageProduct } from "@/utils/helpers/types";
+import { Product } from "@/utils/helpers/types";
 
 interface CartState {
-  localCart: LocalStorageProduct[];
-  wishList: LocalStorageProduct[];
+  localCart: Product[];
+  wishList: Product[];
 }
 
 const initialState: CartState = {
@@ -15,38 +15,52 @@ const localStorageSlice = createSlice({
   name: "localStorage",
   initialState,
   reducers: {
-    setLocalCart: (state, action: PayloadAction<LocalStorageProduct[]>) => {
+    setLocalCart: (state, action: PayloadAction<Product[]>) => {
       state.localCart = action.payload;
     },
-    setWishList: (state, action: PayloadAction<LocalStorageProduct[]>) => {
+    setWishList: (state, action: PayloadAction<Product[]>) => {
       state.wishList = action.payload;
     },
-    addProduct: (state, action: PayloadAction<LocalStorageProduct>) => {
+    addProduct: (state, action: PayloadAction<Product>) => {
       const productIndex = state.localCart.findIndex(
-        (product: LocalStorageProduct) =>
+        (product) =>
           product.externalProductId === action.payload.externalProductId
       );
 
       if (productIndex !== -1) {
         state.localCart[productIndex].quantity += 1;
       } else {
-        state.localCart.push({ ...action.payload, quantity: 1 });
+        state.localCart.push({ ...action.payload });
       }
     },
     addProductWishList: (state, action: PayloadAction<LocalStorageProduct>) => {
-      const productIndex = state.wishList.findIndex(
-        (product: LocalStorageProduct) =>
+      const isProductInWishList = state.wishList.some(
+        (product) =>
           product.externalProductId === action.payload.externalProductId
       );
 
-      if (productIndex === -1) {
-        state.wishList.push(action.payload);
+      if (isProductInWishList) {
+        return;
+      }
+
+      state.wishList.push(action.payload);
+    },
+    removeProductWishList: (
+      state,
+      action: PayloadAction<LocalStorageProduct>
+    ) => {
+      const productIndex = state.wishList.findIndex(
+        (product) =>
+          product.externalProductId === action.payload.externalProductId
+      );
+
+      if (productIndex !== -1) {
+        state.wishList.splice(productIndex, 1);
       }
     },
     removeProduct: (state, action: PayloadAction<number>) => {
       const productIndex = state.localCart.findIndex(
-        (product: LocalStorageProduct) =>
-          product.externalProductId === action.payload
+        (product) => product.externalProductId === action.payload
       );
 
       if (productIndex !== -1) {
@@ -55,8 +69,7 @@ const localStorageSlice = createSlice({
     },
     increaseQuantity: (state, action: PayloadAction<number>) => {
       const productIndex = state.localCart.findIndex(
-        (product: LocalStorageProduct) =>
-          product.externalProductId === action.payload
+        (product) => product.externalProductId === action.payload
       );
 
       if (productIndex !== -1) {
@@ -65,8 +78,7 @@ const localStorageSlice = createSlice({
     },
     decreaseQuantity: (state, action: PayloadAction<number>) => {
       const productIndex = state.localCart.findIndex(
-        (product: LocalStorageProduct) =>
-          product.externalProductId === action.payload
+        (product) => product.externalProductId === action.payload
       );
 
       if (productIndex !== -1) {
@@ -82,6 +94,7 @@ const localStorageSlice = createSlice({
 export const {
   addProduct,
   addProductWishList,
+  removeProductWishList,
   removeProduct,
   increaseQuantity,
   decreaseQuantity,

@@ -22,7 +22,7 @@ export default function CartModalContainer() {
     handleRemoveLocalProduct,
     handleDecreaseLocalQuantity,
     handleIncreaseLocalQuantity,
-  } = useLocalStorage("LocalCart");
+  } = useLocalStorage("localCart");
 
   const handleOutsideClick = () => {
     if (cartModalState) {

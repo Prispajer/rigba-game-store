@@ -19,24 +19,10 @@ export class FetchService implements IFetchService {
     }
   }
 
-  async getGame(productId: string): Promise<GameAPIResponse> {
-    const url = `${this.baseUrl}/games/${productId}?key=${this.apiKey}`;
+  async getGame(productSlug: string): Promise<GameAPIResponse> {
+    const url = `${this.baseUrl}/games/${productSlug}?key=${this.apiKey}`;
     return this.fetchData(url);
   }
-
-  async getGames(searchQuery?: string): Promise<GameAPIResponse[]> {
-    const url = `${this.baseUrl}/games?key=${this.apiKey}${
-      searchQuery ? `&search=${searchQuery}` : ""
-    }`;
-    const data = await this.fetchData(url);
-
-    if (searchQuery && data.results) {
-      return data.results;
-    }
-
-    return [];
-  }
-
   async getGameByOrdering(ordering: string): Promise<GameAPIResponse[]> {
     const url = `${this.baseUrl}/games?key=${this.apiKey}&ordering=${ordering}`;
     const data = await this.fetchData(url);
@@ -102,6 +88,19 @@ export class FetchService implements IFetchService {
     }&ordering=${ordering}`;
     const data = await this.fetchData(url);
     return data || [];
+  }
+
+  async getGames(searchQuery?: string): Promise<GameAPIResponse[]> {
+    const url = `${this.baseUrl}/games?key=${this.apiKey}${
+      searchQuery ? `&search=${searchQuery}` : ""
+    }`;
+    const data = await this.fetchData(url);
+
+    if (searchQuery && data.results) {
+      return data.results;
+    }
+
+    return [];
   }
 
   async getGamesByTags(

@@ -1,5 +1,5 @@
 import React from "react";
-import { LocalStorageProduct, Product } from "@/utils/helpers/types";
+import { Product } from "@/utils/helpers/types";
 import { FaCartPlus } from "react-icons/fa";
 import { FormSuccess } from "../Shared/FormsNotifications/FormSuccess";
 import { FormError } from "../Shared/FormsNotifications/FormError";
@@ -11,7 +11,7 @@ import requestService from "@/utils/classes/requestService";
 export default function ProductBuyOrAdd({ product }: { product: Product }) {
   const [error, setError] = React.useState<string | undefined>("");
   const [success, setSuccess] = React.useState<string | undefined>("");
-  const { handleAddLocalProduct } = useLocalStorage("LocalCart");
+  const { handleAddLocalProduct } = useLocalStorage("localCart");
   const user = useCurrentUser();
 
   const handleAddToCart = async () => {
@@ -25,7 +25,9 @@ export default function ProductBuyOrAdd({ product }: { product: Product }) {
             name: product?.name,
             description: product?.description_raw,
             price: generateRandomValue(),
-            imageUrl: product?.background_image,
+            background_image: product?.background_image,
+            rating: product?.rating,
+            slug: product?.slug,
           }
         );
         if (response.success) {
@@ -39,7 +41,9 @@ export default function ProductBuyOrAdd({ product }: { product: Product }) {
           name: product.name,
           description: product.description_raw,
           price: generateRandomValue(),
-          imageUrl: product.background_image,
+          background_image: product.background_image,
+          rating: product?.rating,
+          slug: product?.slug,
           quantity: 1,
         };
         handleAddLocalProduct(localProduct);

@@ -1,6 +1,3 @@
-import ProductDescription from "@/components/Interface/Product/ProductDescription";
-// import { RowDataPacket } from "mysql2";
-// extends RowDataPacket
 export interface User {
   id: string;
   name?: string | null;
@@ -11,53 +8,32 @@ export interface User {
   image?: string | null;
   isTwoFactorEnabled: boolean;
 }
-
-export interface EmailVerificationToken {
-  id: string;
-  email: string;
-  token: string;
-  expires: Date;
-}
-export interface TwoFactorToken {
+export interface Token {
   id: string;
   email: string;
   token: string;
   expires: Date;
 }
 
-export interface ResetPasswordToken {
-  id: string;
-  email: string;
-  token: string;
-  expires: Date;
-}
+export type EmailVerificationToken = Token;
+export type TwoFactorToken = Token;
+export type ResetPasswordToken = Token;
 
-export type ProductDetails = {
-  id: number;
+export interface Product {
+  id?: number;
+  externalProductId?: number;
   name: string;
-  background_image: string;
-  rating: number;
-  ratings_count: number;
-};
-
-export type ProductRatings = {
-  id: number;
-  count: number;
-  percent: number;
-  title: string;
-}[];
-
-export type ProductDescription = {
-  description_raw: string;
-};
-
-export interface LoggedUserProduct {
-  email: string;
-  externalProductId: number;
-  name: string;
-  description?: string;
   price: number;
-  imageUrl: string;
+  background_image: string;
+  quantity?: number;
+  rating?: number;
+  slug?: string;
+  description?: string;
+  description_raw?: string;
+}
+
+export interface LoggedUserProduct extends Product {
+  email: string;
 }
 
 export interface LoggedUserCart {
@@ -73,44 +49,20 @@ export interface LoggedUserUpdatedProduct {
   cartId: string;
   quantity: number;
 }
-export interface LocalStorageProduct {
-  externalProductId: number;
-  name: string;
-  slug?: string;
-  description?: string;
-  price: number;
-  imageUrl: string;
-  quantity?: number;
-  isInWishList?: boolean;
-  rating?: number;
-}
-
-export type Product = ProductDetails & ProductDescription;
-
-export enum SignInProvider {
-  Credentials = "credentials",
-  Google = "google",
-  Facebook = "facebook",
-  Discord = "discord",
-}
-
-export enum ViewType {
-  Home = "home",
-  Filters = "filters",
-  Similar = "similar",
-}
 
 export interface LoggedUserWishlist {
   id: string;
   userId: string;
   products: LoggedUserProduct[];
 }
+
 export interface RequestResponse<T> {
   data?: T;
   success?: boolean;
-  message?: string | undefined;
+  message?: string;
   twoFactor?: boolean;
 }
+
 export interface UserDataRequest {
   email: string;
   password: string;
@@ -118,16 +70,20 @@ export interface UserDataRequest {
   code?: string;
 }
 
-export interface GameAPIResponse {
-  id: number;
+export interface ProductDataRequest {
+  externalProductId: number;
+  quantity: number;
+}
+
+export type RequestData = UserDataRequest & ProductDataRequest;
+
+export interface GameAPIResponse extends Product {
   slug?: string;
-  name: string;
   background_image: string;
   rating?: number;
   added?: number;
-  games_count?: number;
   image_background?: string;
-  price: number;
+  games_count?: number;
 }
 
 export interface SearchData {
@@ -144,4 +100,15 @@ export type ProfileModalContainerProps = {
   translateY?: string;
 };
 
-export type RequestData = UserDataRequest & ProductDataRequest;
+export enum SignInProvider {
+  Credentials = "credentials",
+  Google = "google",
+  Facebook = "facebook",
+  Discord = "discord",
+}
+
+export enum ViewType {
+  Home = "home",
+  Filters = "filters",
+  Similar = "similar",
+}

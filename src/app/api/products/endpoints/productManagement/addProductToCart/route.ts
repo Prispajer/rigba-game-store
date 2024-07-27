@@ -4,8 +4,16 @@ import IProductService from "@/utils/interfaces/iProductsService";
 import { RequestResponse, LoggedUserProduct } from "@/utils/helpers/types";
 
 export async function POST(request: NextRequest) {
-  const { externalProductId, name, description, price, imageUrl, email } =
-    await request.json();
+  const {
+    email,
+    externalProductId,
+    name,
+    description,
+    price,
+    background_image,
+    rating,
+    slug,
+  } = await request.json();
 
   const productService: IProductService = new ProductService(
     email,
@@ -13,7 +21,9 @@ export async function POST(request: NextRequest) {
     name,
     description,
     price,
-    imageUrl
+    background_image,
+    rating,
+    slug
   );
   const addProductToCartResponse = await productService.addProductToCart();
 

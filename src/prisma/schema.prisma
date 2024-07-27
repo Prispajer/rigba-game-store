@@ -101,7 +101,7 @@ model Wishlist {
 
 model Product {
   id                   String                @id @default(cuid())
-  externalProductId    Int
+  externalProductId    Int                   @unique
   cartId               String?     
   wishListId           String?
   quantity             Int?
@@ -114,10 +114,11 @@ model ProductInformations {
   id              String         @id @default(cuid())
   productId       String?
   name            String
+  slug            String
   description     String?
-  rating          Int?
+  rating          Float?
   price           Float
-  imageUrl        String?
+  background_image    String?
   product         Product?       @relation(fields: [productId], references: [id])
 
   @@unique([productId])

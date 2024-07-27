@@ -26,8 +26,6 @@ export default function HomeProductList({ ordering }: { ordering: string }) {
     setNewLoadingArray(new Array(20).fill(true));
   }, [ordering]);
 
-  console.log(newLoadingArray);
-
   return (
     <>
       {newLoadingArray.map((value, index) => (

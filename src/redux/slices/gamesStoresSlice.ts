@@ -51,12 +51,3 @@ const storesSlice = createSlice({
 });
 
 export default storesSlice.reducer;
-
-// import createResourceSlice from "./createResourceSlice";
-// import fetchService from "@/utils/classes/fetchService";
-
-// const { reducer: storesReducer, fetchResource: fetchStores } =
-//   createResourceSlice("stores", fetchService.getGamesStores);
-
-// export { fetchStores };
-// export default storesReducer;

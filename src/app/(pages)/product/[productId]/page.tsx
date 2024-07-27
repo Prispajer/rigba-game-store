@@ -29,6 +29,7 @@ export default async function productDetails({ params }: Props) {
     fetchService.getGameScreenshots(params.productId),
     fetchService.getGamesGenres(30),
     fetchService.getGameRequirements(params.productId),
+    console.log(params.productId),
   ]);
 
   return (

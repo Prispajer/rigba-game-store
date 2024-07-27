@@ -51,12 +51,3 @@ const platformsSlice = createSlice({
 });
 
 export default platformsSlice.reducer;
-
-// import createResourceSlice from "./createResourceSlice";
-// import fetchService from "@/utils/classes/fetchService";
-
-// const { reducer: platformsReducer, fetchResource: fetchPlatforms } =
-//   createResourceSlice("platforms", fetchService.getGamesPlatforms);
-
-// export { fetchPlatforms };
-// export default platformsReducer;

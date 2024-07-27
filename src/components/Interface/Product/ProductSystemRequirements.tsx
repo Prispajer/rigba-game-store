@@ -1,5 +1,4 @@
 export default function ProductSystemRequirements({ requirements }) {
-  console.log(requirements.platforms);
   return (
     <>
       <section className="flex items-center z max-w-[1240px] md:mx-auto bg-tertiaryColor">

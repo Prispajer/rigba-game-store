@@ -56,12 +56,3 @@ const genresSlice = createSlice({
 
 export default genresSlice.reducer;
 export const { loadMore } = genresSlice.actions;
-
-// import createResourceSlice from "./createResourceSlice";
-// import fetchService from "@/utils/classes/fetchService";
-
-// const { reducer: genresReducer, fetchResource: fetchGenres } =
-//   createResourceSlice("genres", fetchService.getGamesGenres);
-
-// export { fetchGenres };
-// export default genresReducer;

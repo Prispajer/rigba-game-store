@@ -54,12 +54,3 @@ const publishersSlice = createSlice({
 });
 
 export default publishersSlice.reducer;
-
-// import createResourceSlice from "./createResourceSlice";
-// import fetchService from "@/utils/classes/fetchService";
-
-// const { reducer: publishersReducer, fetchResource: fetchPublishers } =
-//   createResourceSlice("publishers", fetchService.getGamesPublishers);
-
-// export { fetchPublishers };
-// export default publishersReducer;

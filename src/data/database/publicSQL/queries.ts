@@ -118,18 +118,6 @@ export const getUserCart = async (userId: string) => {
   }
 };
 
-export const getProductInformations = async (productId: string) => {
-  try {
-    const productInformations = await postgres.productInformations.findUnique({
-      where: { productId },
-    });
-
-    return productInformations;
-  } catch {
-    return null;
-  }
-};
-
 export const getUserWishList = async (userId: string) => {
   try {
     const userWishList = await postgres.wishlist.findUnique({

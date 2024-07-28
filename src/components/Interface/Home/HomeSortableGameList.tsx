@@ -1,6 +1,8 @@
+"use client";
 import React from "react";
 import ProductList from "./HomeProductList";
 import HomeShowMoreButton from "./HomeShowMoreButton";
+import useFetchGameData from "@/hooks/useFetchGameData";
 
 export default function HomeSortableGameList({
   header,
@@ -11,6 +13,12 @@ export default function HomeSortableGameList({
   ordering: string;
   background: string;
 }) {
+  const { handleSetOrdering } = useFetchGameData();
+
+  const handleShowAll = () => {
+    handleSetOrdering(ordering);
+  };
+
   return (
     <main className={`${background} py-[15px]`}>
       <section className="flex max-w-[1240px] mx-auto px-2 py-6">
@@ -20,7 +28,7 @@ export default function HomeSortableGameList({
             <ProductList ordering={ordering} />
           </div>
           <div className="flex items-center justify-center pt-[20px]">
-            <HomeShowMoreButton text="Show all" />
+            <HomeShowMoreButton text="Show all" method={handleShowAll} />
           </div>
         </div>
       </section>

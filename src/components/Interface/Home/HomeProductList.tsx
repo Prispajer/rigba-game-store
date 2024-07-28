@@ -9,12 +9,14 @@ import fetchService from "@/utils/classes/fetchService";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import { MdOutlineSignalCellularNodata } from "react-icons/md";
 import { GameAPIResponse } from "@/utils/helpers/types";
+import useFetchGameData from "@/hooks/useFetchGameData";
 
 export default function HomeProductList({ ordering }: { ordering: string }) {
   const { redirectToGame } = useCustomRouter();
   const [gamesWithOrdering, setGamesWithOrdering] = React.useState<
     GameAPIResponse[]
   >([]);
+  const { gamesFilterState } = useFetchGameData();
   const [newLoadingArray, setNewLoadingArray] = React.useState<boolean[]>([]);
 
   React.useEffect(() => {

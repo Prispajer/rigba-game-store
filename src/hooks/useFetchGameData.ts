@@ -1,7 +1,6 @@
 "use client";
-import React, { use } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { PayloadAction } from "@reduxjs/toolkit";
 import { AppDispatch, RootState } from "@/redux/store";
 import {
   fetchGamesWithFilters,
@@ -19,8 +18,7 @@ import { fetchPublishers } from "@/redux/slices/gamesPublishersSlice";
 import { fetchGenres } from "@/redux/slices/gamesGenresSlice";
 import { fetchStores } from "@/redux/slices/gamesStoresSlice";
 import { fetchPlatforms } from "@/redux/slices/gamesPlatformsSlice";
-import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
-import { GameAPIResponse } from "@/utils/helpers/types";
+import useCustomRouter from "./useCustomRouter";
 
 export default function useFetchGameData() {
   const dispatch = useDispatch<AppDispatch>();
@@ -33,6 +31,7 @@ export default function useFetchGameData() {
   );
   const gamesGenresState = useSelector((state: RootState) => state.gamesGenres);
   const gamesStoresState = useSelector((state: RootState) => state.gamesStores);
+  const { pushOrderingToUrl } = useCustomRouter();
 
   const handleFetchGamesWithFilters = React.useCallback(
     (page: number) => {
@@ -47,18 +46,21 @@ export default function useFetchGameData() {
     },
     [dispatch]
   );
+
   const handleFetchGenres = React.useCallback(
     (quantity: number) => {
       dispatch(fetchGenres({ quantity }));
     },
     [dispatch]
   );
+
   const handleFetchPlatforms = React.useCallback(
     (quantity: number) => {
       dispatch(fetchPlatforms({ quantity }));
     },
     [dispatch]
   );
+
   const handleFetchStores = React.useCallback(
     (quantity: number) => {
       dispatch(fetchStores({ quantity }));
@@ -100,6 +102,14 @@ export default function useFetchGameData() {
       handleFetchGamesWithFilters(gamesFilterState.page);
     },
     [dispatch, gamesFilterState.page, handleFetchGamesWithFilters]
+  );
+
+  const handleSetOrdering = React.useCallback(
+    (ordering: string): void => {
+      dispatch(setOrdering(ordering));
+      pushOrderingToUrl(gamesFilterState.ordering);
+    },
+    [dispatch, pushOrderingToUrl, gamesFilterState.ordering]
   );
 
   const handleFilterChange = React.useCallback(
@@ -184,6 +194,7 @@ export default function useFetchGameData() {
     handleSetStoresIdArray,
     handleSetPublishersIdArray,
     handleSortChange,
+    handleSetOrdering,
     handleSetPage,
     handleClearAllFilters,
     handleClearSelectedFilter,

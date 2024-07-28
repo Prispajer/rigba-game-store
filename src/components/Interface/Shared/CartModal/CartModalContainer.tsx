@@ -126,8 +126,8 @@ export default function CartModalContainer() {
                   >
                     <Image
                       src={
-                        product.productsInformations?.imageUrl ||
-                        product.imageUrl
+                        product.productsInformations?.background_image ||
+                        product.background_image
                       }
                       layout="fill"
                       alt={product.productsInformations?.name || product.name}

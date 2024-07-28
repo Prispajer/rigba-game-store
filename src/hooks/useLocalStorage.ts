@@ -4,14 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addProduct,
   addProductWishList,
-  addSelectedItem,
   removeProductWishList,
   removeProduct,
   increaseQuantity,
   decreaseQuantity,
   setLocalCart,
   setWishList,
-  setSelectedItems,
 } from "@/redux/slices/localStorageSlice";
 import { RootState } from "@/redux/store";
 import { Product } from "@/utils/helpers/types";
@@ -33,10 +31,6 @@ export default function useLocalStorage(key: string) {
 
   const handleAddLocalWishList = (product: Product): void => {
     dispatch(addProductWishList(product));
-  };
-
-  const handleAddSelectedItem = (product: Product): void => {
-    dispatch(addSelectedItem(product));
   };
 
   const handleRemoveLocalWishList = (product: Product): void => {
@@ -89,7 +83,6 @@ export default function useLocalStorage(key: string) {
     localWishListState,
     handleAddLocalProduct,
     handleAddLocalWishList,
-    handleAddSelectedItem,
     handleRemoveLocalWishList,
     handleRemoveLocalProduct,
     handleIncreaseLocalQuantity,

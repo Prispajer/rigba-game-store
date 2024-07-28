@@ -9,6 +9,7 @@ import requestService from "@/utils/classes/requestService";
 import useUserWishList from "@/hooks/useUserWishList";
 
 export default function AddToWishList({ game }: { game: Product }) {
+  const [wishList, setWishList] = React.useState([]);
   const [error, setError] = React.useState<string | undefined>("");
   const [success, setSuccess] = React.useState<string | undefined>("");
   const user = useCurrentUser();
@@ -30,9 +31,12 @@ export default function AddToWishList({ game }: { game: Product }) {
       product.externalProductId === game?.id || game?.externalProductId
   );
 
-  const displayByCondition = user ? isInWishListDataBase : isInWishList;
+  React.useEffect(() => {
+    setWishList(isInWishListDataBase);
+    console.log(`wishlist: ${wishList}`);
+  }, [user, isInWishListDataBase]);
 
-  React.useEffect(() => {}, [user]);
+  const displayByCondition = user ? isInWishListDataBase : isInWishList;
 
   const handleAddToWishList = async (event: React.MouseEvent) => {
     event.stopPropagation();

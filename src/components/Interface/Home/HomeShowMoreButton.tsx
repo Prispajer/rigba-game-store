@@ -1,3 +1,6 @@
+"use client";
+import React from "react";
+
 export default function HomeShowMoreButton({
   text,
   method,
@@ -9,7 +12,7 @@ export default function HomeShowMoreButton({
     <div className="flex items-center justify-center pt-[10px]">
       <button
         onClick={method}
-        className="py-[10px] px-[40px] text-[#ffffff] text-[16px] font-bold border border-white  hover:bg-tertiaryColor hover:border-headerHover transition ease-in-out"
+        className="py-[10px] px-[40px] text-[#ffffff] text-[16px] font-bold border border-white hover:bg-tertiaryColor hover:border-headerHover transition ease-in-out"
       >
         {text}
       </button>

@@ -17,12 +17,16 @@ export default function useCustomRouter() {
   };
 
   const pushGenresToUrl = (genresId: number[]): void => {
-    return router.push(`/filters?genres=${[genresId]}`);
+    return router.push(`/filters?genres=${genresId.join(",")}`);
+  };
+
+  const pushOrderingToUrl = (ordering: string): void => {
+    return router.push(`/filters?ordering=${ordering}`);
   };
 
   const getUrlParams = (filterCategory: string): number[] => {
     return params.get(filterCategory)?.split(",").map(Number) || [];
   };
 
-  return { redirectToGame, getUrlParams, pushGenresToUrl };
+  return { redirectToGame, getUrlParams, pushGenresToUrl, pushOrderingToUrl };
 }

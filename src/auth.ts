@@ -8,17 +8,20 @@ import {
 import { getTwoFactorConfirmationByUserId } from "@/data/database/publicSQL/queries";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { postgres } from "@/data/database/publicSQL/postgres";
-import { UserRole, Cart, Wishlist } from "@prisma/client";
+import { Cart, UserRole, Wishlist } from "@prisma/client";
 
-export type ExtentedUser = DefaultSession["user"] & {
+export type ExtendedUser = DefaultSession["user"] & {
+  id: string;
   role: UserRole;
+  cartId: string | null;
+  wishlistId: string | null;
   cart: Cart | null;
   wishlist: Wishlist | null;
 };
 
 declare module "next-auth" {
   interface Session {
-    user: ExtentedUser;
+    user: ExtendedUser;
   }
 }
 
@@ -41,7 +44,7 @@ export const {
     },
   },
   callbacks: {
-    async signIn({ user, account }): Promise<T> {
+    async signIn({ user, account }) {
       if (account?.provider !== "credentials") {
         return true;
       }
@@ -51,7 +54,7 @@ export const {
       if (!existingUser?.emailVerified) {
         return false;
       }
-      if (!existingUser?.isTwoFactorEnabled) {
+      if (existingUser?.isTwoFactorEnabled) {
         const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
           existingUser.id
         );
@@ -72,15 +75,18 @@ export const {
     async session({ token, session }) {
       if (token.sub && session.user) {
         session.user.id = token.sub;
-      }
-      if (token.role && session.user) {
         session.user.role = token.role as UserRole;
-      }
-      if (token.cart && session.user) {
+        session.user.cartId = token.cartId as string;
+        session.user.wishlistId = token.wishlistId as string;
         session.user.cart = token.cart as Cart;
-      }
-      if (token.wishlist && session.user) {
         session.user.wishlist = token.wishlist as Wishlist;
+
+        if (session.user.cartId) {
+          session.user.cart = await getUserCart(session.user.id);
+        }
+        if (session.user.wishlistId) {
+          session.user.wishlist = await getUserWishList(session.user.id);
+        }
       }
       return session;
     },
@@ -95,15 +101,12 @@ export const {
         return token;
       }
 
-      token.role = existingUser.role;
-
       const userCart = await getUserCart(existingUser.id);
-
-      token.cart = userCart;
-
       const userWishList = await getUserWishList(existingUser.id);
 
-      token.wishlist = userWishList;
+      token.role = existingUser.role;
+      token.cartId = userCart?.id || null;
+      token.wishlistId = userWishList?.id || null;
 
       return token;
     },

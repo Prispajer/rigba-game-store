@@ -7,9 +7,8 @@ import {
 } from "@/data/database/publicSQL/queries";
 import {
   RequestResponse,
-  LoggedUserProduct,
-  LoggedUserUpdatedProduct,
   LoggedUserCart,
+  LoggedUserWishList,
 } from "../helpers/types";
 
 export default class ProductService implements IProductService {
@@ -42,13 +41,13 @@ export default class ProductService implements IProductService {
     this.slug = slug;
   }
 
-  async addProductToCart(): Promise<RequestResponse<LoggedUserCart>> {
+  async addProductToCart(): Promise<RequestResponse<LoggedUserCart | null>> {
     try {
       if (!this.externalProductId) {
         return {
           success: false,
           message: "Product ID is required!",
-          data: undefined,
+          data: null,
         };
       }
 
@@ -58,11 +57,12 @@ export default class ProductService implements IProductService {
         return {
           success: false,
           message: "User doesn't exist!",
-          data: undefined,
+          data: null,
         };
       }
 
       let userCart = await getUserCart(user.id);
+
       if (!userCart) {
         userCart = await postgres.cart.create({
           data: {
@@ -83,6 +83,9 @@ export default class ProductService implements IProductService {
               },
             },
           },
+          include: {
+            products: true,
+          },
         });
       } else {
         const productInCart = await postgres.product.findFirst({
@@ -95,7 +98,7 @@ export default class ProductService implements IProductService {
         if (productInCart) {
           await postgres.product.update({
             where: { id: productInCart.id },
-            data: { quantity: productInCart.quantity + 1 },
+            data: { quantity: (productInCart.quantity ?? 0) + 1 },
           });
         } else {
           await postgres.product.create({
@@ -115,33 +118,36 @@ export default class ProductService implements IProductService {
             },
           });
         }
-
-        userCart = await postgres.cart.findUnique({
-          where: { id: userCart.id },
-          include: { products: true },
-        });
       }
+
+      const updatedUserCart = await postgres.cart.findUnique({
+        where: { id: userCart.id },
+        include: { products: true },
+      });
+
       return {
         success: true,
         message: "Product added to cart successfully!",
-        data: userCart,
+        data: updatedUserCart,
       };
     } catch (error) {
       return {
         success: false,
         message: "Error while adding product to the cart!",
-        data: undefined,
+        data: null,
       };
     }
   }
 
-  async deleteProductFromCart(): Promise<RequestResponse<LoggedUserCart>> {
+  async deleteProductFromCart(): Promise<
+    RequestResponse<LoggedUserCart | null>
+  > {
     try {
       if (!this.externalProductId) {
         return {
           success: false,
           message: "Product ID is required!",
-          data: undefined,
+          data: null,
         };
       }
 
@@ -151,7 +157,7 @@ export default class ProductService implements IProductService {
         return {
           success: false,
           message: "User doesn't exist!",
-          data: undefined,
+          data: null,
         };
       }
 
@@ -161,7 +167,7 @@ export default class ProductService implements IProductService {
         return {
           success: false,
           message: "Cart doesn't exist!",
-          data: undefined,
+          data: null,
         };
       }
 
@@ -176,7 +182,7 @@ export default class ProductService implements IProductService {
         return {
           success: false,
           message: "Product not found in cart!",
-          data: undefined,
+          data: null,
         };
       }
 
@@ -184,27 +190,27 @@ export default class ProductService implements IProductService {
         where: { id: productInCart.id },
       });
 
-      userCart = await postgres.cart.findUnique({
+      const updatedUserCart = await postgres.cart.findUnique({
         where: { id: userCart.id },
         include: { products: true },
       });
 
       return {
         success: true,
-        message: "Product removed from cart successfully!",
-        data: userCart,
+        message: "Product added to cart successfully!",
+        data: updatedUserCart,
       };
     } catch (error) {
       return {
         success: false,
         message: "Error while removing product from cart!",
-        data: undefined,
+        data: null,
       };
     }
   }
 
   async decreaseProductQuantity(): Promise<
-    RequestResponse<LoggedUserUpdatedProduct>
+    RequestResponse<LoggedUserCart | null>
   > {
     try {
       const user = await getUserByEmail(this.email as string);
@@ -213,7 +219,7 @@ export default class ProductService implements IProductService {
         return {
           success: false,
           message: "User doesn't exist!",
-          data: undefined,
+          data: null,
         };
       }
 
@@ -223,7 +229,7 @@ export default class ProductService implements IProductService {
         return {
           success: false,
           message: "Cart not found!",
-          data: undefined,
+          data: null,
         };
       }
 
@@ -238,7 +244,7 @@ export default class ProductService implements IProductService {
         return {
           success: false,
           message: "Product not found in cart!",
-          data: undefined,
+          data: null,
         };
       }
 
@@ -253,22 +259,27 @@ export default class ProductService implements IProductService {
         });
       }
 
+      const updatedUserCart = await postgres.cart.findUnique({
+        where: { id: userCart.id },
+        include: { products: true },
+      });
+
       return {
         success: true,
-        message: "Product quantity updated successfully!",
-        data: updatedProduct,
+        message: "Product added to cart successfully!",
+        data: updatedUserCart,
       };
     } catch (error) {
       return {
         success: false,
         message: "Something went wrong!",
-        data: undefined,
+        data: null,
       };
     }
   }
 
   async increaseProductQuantity(): Promise<
-    RequestResponse<LoggedUserUpdatedProduct>
+    RequestResponse<LoggedUserCart | null>
   > {
     try {
       const user = await getUserByEmail(this.email as string);
@@ -277,7 +288,7 @@ export default class ProductService implements IProductService {
         return {
           success: false,
           message: "User doesn't exist!",
-          data: undefined,
+          data: null,
         };
       }
 
@@ -287,7 +298,7 @@ export default class ProductService implements IProductService {
         return {
           success: false,
           message: "Cart not found!",
-          data: undefined,
+          data: null,
         };
       }
 
@@ -302,36 +313,43 @@ export default class ProductService implements IProductService {
         return {
           success: false,
           message: "Product not found in cart!",
-          data: undefined,
+          data: null,
         };
       }
 
-      const updatedProduct = await postgres.product.update({
+      await postgres.product.update({
         where: { id: productInCart.id },
-        data: { quantity: productInCart.quantity + 1 },
+        data: { quantity: (productInCart.quantity ?? 0) + 1 },
+      });
+
+      const updatedUserCart = await postgres.cart.findUnique({
+        where: { id: userCart.id },
+        include: { products: true },
       });
 
       return {
         success: true,
-        message: "Product quantity updated successfully!",
-        data: updatedProduct,
+        message: "Product added to cart successfully!",
+        data: updatedUserCart,
       };
     } catch (error) {
       return {
         success: false,
         message: "Something went wrong!",
-        data: undefined,
+        data: null,
       };
     }
   }
 
-  async addProductToWishlist(): Promise<RequestResponse<LoggedUserWishlist>> {
+  async addProductToWishlist(): Promise<
+    RequestResponse<LoggedUserWishList | null>
+  > {
     try {
       if (!this.externalProductId) {
         return {
           success: false,
           message: "Product ID is required!",
-          data: undefined,
+          data: null,
         };
       }
 
@@ -341,11 +359,12 @@ export default class ProductService implements IProductService {
         return {
           success: false,
           message: "User doesn't exist!",
-          data: undefined,
+          data: null,
         };
       }
 
       let userWishList = await getUserWishList(user.id);
+
       if (!userWishList) {
         userWishList = await postgres.wishlist.create({
           data: {
@@ -366,6 +385,9 @@ export default class ProductService implements IProductService {
               },
             },
           },
+          include: {
+            products: true,
+          },
         });
       } else {
         const productInWishlist = await postgres.product.findFirst({
@@ -379,7 +401,7 @@ export default class ProductService implements IProductService {
           return {
             success: false,
             message: "Product already in wishlist!",
-            data: undefined,
+            data: null,
           };
         } else {
           await postgres.product.create({
@@ -399,34 +421,37 @@ export default class ProductService implements IProductService {
             },
           });
         }
-
-        userWishList = await postgres.wishlist.findUnique({
-          where: { id: userWishList.id },
-          include: { products: true },
-        });
       }
+
+      const updatedUserWishList = await postgres.wishlist.findUnique({
+        where: { id: userWishList.id },
+        include: { products: true },
+      });
+
       return {
         success: true,
         message: "Product added to wishlist successfully!",
-        data: userWishList,
+        data: updatedUserWishList,
       };
     } catch (error) {
       console.error("Error in addProductToWishlist:", error);
       return {
         success: false,
         message: "Error while adding product to the wishlist!",
-        data: undefined,
+        data: null,
       };
     }
   }
 
-  async deleteProductFromWishList(): Promise<RequestResponse<LoggedUserCart>> {
+  async deleteProductFromWishList(): Promise<
+    RequestResponse<LoggedUserWishList | null>
+  > {
     try {
       if (!this.externalProductId) {
         return {
           success: false,
           message: "Product ID is required!",
-          data: undefined,
+          data: null,
         };
       }
 
@@ -436,7 +461,7 @@ export default class ProductService implements IProductService {
         return {
           success: false,
           message: "User doesn't exist!",
-          data: undefined,
+          data: null,
         };
       }
 
@@ -446,7 +471,7 @@ export default class ProductService implements IProductService {
         return {
           success: false,
           message: "Wishlist doesn't exist!",
-          data: undefined,
+          data: null,
         };
       }
 
@@ -461,7 +486,7 @@ export default class ProductService implements IProductService {
         return {
           success: false,
           message: "Product not found in wishlist!",
-          data: undefined,
+          data: null,
         };
       }
 
@@ -469,7 +494,7 @@ export default class ProductService implements IProductService {
         where: { id: productInWishlist.id },
       });
 
-      userWishList = await postgres.cart.findUnique({
+      const updatedUserWishList = await postgres.cart.findUnique({
         where: { id: userWishList.id },
         include: { products: true },
       });
@@ -477,13 +502,13 @@ export default class ProductService implements IProductService {
       return {
         success: true,
         message: "Product removed from wishlist successfully!",
-        data: userWishList,
+        data: updatedUserWishList,
       };
     } catch (error) {
       return {
         success: false,
         message: "Error while removing product from wishlist!",
-        data: undefined,
+        data: null,
       };
     }
   }

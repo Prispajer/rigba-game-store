@@ -1,3 +1,5 @@
+import { Product as LoggedUserProduct } from "@prisma/client";
+
 export interface User {
   id: string;
   name?: string | null;
@@ -20,7 +22,7 @@ export type TwoFactorToken = Token;
 export type ResetPasswordToken = Token;
 
 export interface Product {
-  id?: number;
+  id?: string;
   externalProductId?: number;
   name: string;
   price: number;
@@ -32,32 +34,34 @@ export interface Product {
   description_raw?: string;
 }
 
-export interface LoggedUserProduct extends Product {
-  email: string;
+export interface ProductInformations {
+  id: string;
+  productId: string | null;
+  name: string;
+  slug: string;
+  description: string | null;
+  rating: number | null;
+  price: number;
+  background_image: string | null;
 }
 
+export interface LoggedUserWishList {
+  id: string;
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  products: LoggedUserProduct[];
+}
 export interface LoggedUserCart {
   id: string;
   userId: string;
   createdAt: Date;
   updatedAt: Date;
-}
-
-export interface LoggedUserUpdatedProduct {
-  id: string;
-  externalProductId: number;
-  cartId: string;
-  quantity: number;
-}
-
-export interface LoggedUserWishlist {
-  id: string;
-  userId: string;
   products: LoggedUserProduct[];
 }
 
 export interface RequestResponse<T> {
-  data?: T;
+  data?: T | null;
   success?: boolean;
   message?: string;
   twoFactor?: boolean;
@@ -105,10 +109,4 @@ export enum SignInProvider {
   Google = "google",
   Facebook = "facebook",
   Discord = "discord",
-}
-
-export enum ViewType {
-  Home = "home",
-  Filters = "filters",
-  Similar = "similar",
 }

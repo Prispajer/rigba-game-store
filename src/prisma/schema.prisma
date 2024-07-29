@@ -101,7 +101,7 @@ model Wishlist {
 
 model Product {
   id                   String                @id @default(cuid())
-  externalProductId    Int                   @unique
+  externalProductId    Int                   
   cartId               String?     
   wishListId           String?
   quantity             Int?

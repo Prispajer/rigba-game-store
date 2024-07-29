@@ -1,6 +1,14 @@
+import { LoggedUserWishList, LoggedUserCart } from "@/utils/helpers/types";
+import {
+  User,
+  EmailVerificationToken,
+  PasswordResetToken,
+  TwoFactorToken,
+  TwoFactorConfirmation,
+} from "@prisma/client";
 import { postgres } from "./postgres";
 
-export const getUserByEmail = async (email: string) => {
+export const getUserByEmail = async (email: string): Promise<User | null> => {
   try {
     const user = await postgres.user.findUnique({ where: { email } });
     return user;
@@ -9,7 +17,7 @@ export const getUserByEmail = async (email: string) => {
   }
 };
 
-export const getUserById = async (id: string) => {
+export const getUserById = async (id: string): Promise<User | null> => {
   try {
     const user = await postgres.user.findUnique({ where: { id } });
     return user;
@@ -18,7 +26,9 @@ export const getUserById = async (id: string) => {
   }
 };
 
-export const getEmailVerificationTokenByToken = async (token: string) => {
+export const getEmailVerificationTokenByToken = async (
+  token: string
+): Promise<EmailVerificationToken | null> => {
   try {
     const emailVerificationToken =
       await postgres.emailVerificationToken.findUnique({
@@ -30,7 +40,9 @@ export const getEmailVerificationTokenByToken = async (token: string) => {
   }
 };
 
-export const getEmailVerificationTokenByEmail = async (email: string) => {
+export const getEmailVerificationTokenByEmail = async (
+  email: string
+): Promise<EmailVerificationToken | null> => {
   try {
     const emailVerificationToken =
       await postgres.emailVerificationToken.findFirst({
@@ -42,7 +54,9 @@ export const getEmailVerificationTokenByEmail = async (email: string) => {
   }
 };
 
-export const getPasswordResetTokenByToken = async (token: string) => {
+export const getPasswordResetTokenByToken = async (
+  token: string
+): Promise<PasswordResetToken | null> => {
   try {
     const passwordResetToken = await postgres.passwordResetToken.findUnique({
       where: { token },
@@ -53,7 +67,9 @@ export const getPasswordResetTokenByToken = async (token: string) => {
   }
 };
 
-export const getPasswordResetTokenByEmail = async (email: string) => {
+export const getPasswordResetTokenByEmail = async (
+  email: string
+): Promise<PasswordResetToken | null> => {
   try {
     const passwordResetToken = await postgres.passwordResetToken.findFirst({
       where: { email },
@@ -64,7 +80,9 @@ export const getPasswordResetTokenByEmail = async (email: string) => {
   }
 };
 
-export const getTwoFactorTokenByToken = async (token: string) => {
+export const getTwoFactorTokenByToken = async (
+  token: string
+): Promise<TwoFactorToken | null> => {
   try {
     const twoFactorToken = await postgres.twoFactorToken.findUnique({
       where: { token },
@@ -75,7 +93,9 @@ export const getTwoFactorTokenByToken = async (token: string) => {
   }
 };
 
-export const getTwoFactorTokenByEmail = async (email: string) => {
+export const getTwoFactorTokenByEmail = async (
+  email: string
+): Promise<TwoFactorToken | null> => {
   try {
     const twoFactorToken = await postgres.twoFactorToken.findFirst({
       where: { email },
@@ -86,7 +106,9 @@ export const getTwoFactorTokenByEmail = async (email: string) => {
   }
 };
 
-export const getTwoFactorConfirmationByUserId = async (userId: string) => {
+export const getTwoFactorConfirmationByUserId = async (
+  userId: string
+): Promise<TwoFactorConfirmation | null> => {
   try {
     const twoFactorConfirmation =
       await postgres.twoFactorConfirmation.findUnique({
@@ -99,7 +121,9 @@ export const getTwoFactorConfirmationByUserId = async (userId: string) => {
   }
 };
 
-export const getUserCart = async (userId: string) => {
+export const getUserCart = async (
+  userId: string
+): Promise<LoggedUserCart | null> => {
   try {
     const userCart = await postgres.cart.findUnique({
       where: { userId },
@@ -118,7 +142,9 @@ export const getUserCart = async (userId: string) => {
   }
 };
 
-export const getUserWishList = async (userId: string) => {
+export const getUserWishList = async (
+  userId: string
+): Promise<LoggedUserWishList | null> => {
   try {
     const userWishList = await postgres.wishlist.findUnique({
       where: { userId },

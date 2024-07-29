@@ -17,7 +17,6 @@ export const authRoutes: string[] = [
 export const endpointsRoutes: string[] = [
   "/api/users/endpoints/userAuthentication/registerUser",
   "/api/users/endpoints/userAuthentication/loginUser",
-  "/api/users/endpoints/userAuthentication/findUser",
   "/api/users/endpoints/tokenManagement/emailVerification",
   "/api/users/endpoints/userAuthentication/resetPasswordUser",
   "/api/users/endpoints/tokenManagement/newPassword",
@@ -25,6 +24,8 @@ export const endpointsRoutes: string[] = [
   "/api/products/endpoints/productManagement/deleteProductFromCart",
   "/api/products/endpoints/productManagement/addProductToWishList",
   "/api/products/endpoints/productManagement/deleteProductFromWishList",
+  "/api/products/endpoints/productManagement/decreaseProductQuantity",
+  "/api/products/endpoints/productManagement/increaseProductQuantity",
 ];
 
 export function handleDynamicId(route: string): boolean {

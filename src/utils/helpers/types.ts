@@ -22,8 +22,8 @@ export type TwoFactorToken = Token;
 export type ResetPasswordToken = Token;
 
 export interface Product {
-  id?: string;
-  externalProductId?: number;
+  id?: string | number;
+  externalProductId?: number | string;
   name: string;
   price: number;
   background_image: string;

@@ -20,6 +20,7 @@ export const endpointsRoutes: string[] = [
   "/api/users/endpoints/tokenManagement/emailVerification",
   "/api/users/endpoints/userAuthentication/resetPasswordUser",
   "/api/users/endpoints/tokenManagement/newPassword",
+  "/api/products/endpoints/productManagement/getCart",
   "/api/products/endpoints/productManagement/addProductToCart",
   "/api/products/endpoints/productManagement/deleteProductFromCart",
   "/api/products/endpoints/productManagement/addProductToWishList",

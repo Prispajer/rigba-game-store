@@ -21,19 +21,20 @@ const localStorageSlice = createSlice({
     setWishList: (state, action: PayloadAction<Product[]>) => {
       state.wishList = action.payload;
     },
-    addProduct: (state, action: PayloadAction<Product>) => {
+    addLocalProductToCart: (state, action: PayloadAction<Product>) => {
       const productIndex = state.localCart.findIndex(
         (product) =>
           product.externalProductId === action.payload.externalProductId
       );
 
       if (productIndex !== -1) {
-        state.localCart[productIndex].quantity += 1;
+        state.localCart[productIndex].quantity =
+          (state.localCart[productIndex].quantity ?? 0) + 1;
       } else {
-        state.localCart.push({ ...action.payload });
+        state.localCart = [...state.localCart, action.payload];
       }
     },
-    addProductWishList: (state, action: PayloadAction<LocalStorageProduct>) => {
+    addLocalProductToWishList: (state, action: PayloadAction<Product>) => {
       const isProductInWishList = state.wishList.some(
         (product) =>
           product.externalProductId === action.payload.externalProductId
@@ -43,48 +44,46 @@ const localStorageSlice = createSlice({
         return;
       }
 
-      state.wishList.push(action.payload);
+      state.wishList = [...state.wishList, action.payload];
     },
-    removeProductWishList: (
+    deleteLocalProductFromCart: (state, action: PayloadAction<number>) => {
+      state.localCart = state.localCart.filter(
+        (product) => product.externalProductId !== action.payload
+      );
+    },
+    deleteLocalProductFromWishList: (state, action: PayloadAction<number>) => {
+      state.wishList = state.wishList.filter(
+        (product) => product.externalProductId !== action.payload
+      );
+    },
+    increaseQuantityLocalProductFromCart: (
       state,
-      action: PayloadAction<LocalStorageProduct>
+      action: PayloadAction<number>
     ) => {
-      const productIndex = state.wishList.findIndex(
-        (product) =>
-          product.externalProductId === action.payload.externalProductId
-      );
-
-      if (productIndex !== -1) {
-        state.wishList.splice(productIndex, 1);
-      }
-    },
-    removeProduct: (state, action: PayloadAction<number>) => {
       const productIndex = state.localCart.findIndex(
         (product) => product.externalProductId === action.payload
       );
 
       if (productIndex !== -1) {
-        state.localCart.splice(productIndex, 1);
+        state.localCart[productIndex].quantity =
+          (state.localCart[productIndex].quantity ?? 0) + 1;
       }
     },
-    increaseQuantity: (state, action: PayloadAction<number>) => {
+    decreaseQuantityLocalProductFromCart: (
+      state,
+      action: PayloadAction<number>
+    ) => {
       const productIndex = state.localCart.findIndex(
         (product) => product.externalProductId === action.payload
       );
 
       if (productIndex !== -1) {
-        state.localCart[productIndex].quantity += 1;
-      }
-    },
-    decreaseQuantity: (state, action: PayloadAction<number>) => {
-      const productIndex = state.localCart.findIndex(
-        (product) => product.externalProductId === action.payload
-      );
-
-      if (productIndex !== -1) {
-        state.localCart[productIndex].quantity -= 1;
+        state.localCart[productIndex].quantity =
+          (state.localCart[productIndex].quantity ?? 0) - 1;
         if (state.localCart[productIndex].quantity === 0) {
-          state.localCart.splice(productIndex, 1);
+          state.localCart = state.localCart.filter(
+            (product) => product.externalProductId !== action.payload
+          );
         }
       }
     },
@@ -92,14 +91,14 @@ const localStorageSlice = createSlice({
 });
 
 export const {
-  addProduct,
-  addProductWishList,
-  removeProductWishList,
-  removeProduct,
-  increaseQuantity,
-  decreaseQuantity,
   setLocalCart,
   setWishList,
+  addLocalProductToCart,
+  addLocalProductToWishList,
+  deleteLocalProductFromCart,
+  deleteLocalProductFromWishList,
+  increaseQuantityLocalProductFromCart,
+  decreaseQuantityLocalProductFromCart,
 } = localStorageSlice.actions;
 
 export default localStorageSlice.reducer;

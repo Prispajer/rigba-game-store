@@ -5,6 +5,7 @@ import {
   getUserCart,
   getUserWishList,
 } from "@/data/database/publicSQL/queries";
+import { fetchUserCart } from "./redux/slices/userCartSlice";
 import { getTwoFactorConfirmationByUserId } from "@/data/database/publicSQL/queries";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { postgres } from "@/data/database/publicSQL/postgres";
@@ -72,25 +73,7 @@ export const {
 
       return true;
     },
-    async session({ token, session }) {
-      if (token.sub && session.user) {
-        session.user.id = token.sub;
-        session.user.role = token.role as UserRole;
-        session.user.cartId = token.cartId as string;
-        session.user.wishlistId = token.wishlistId as string;
-        session.user.cart = token.cart as Cart;
-        session.user.wishlist = token.wishlist as Wishlist;
-
-        if (session.user.cartId) {
-          session.user.cart = await getUserCart(session.user.id);
-        }
-        if (session.user.wishlistId) {
-          session.user.wishlist = await getUserWishList(session.user.id);
-        }
-      }
-      return session;
-    },
-    async jwt({ token }) {
+    async jwt({ token, trigger, session }) {
       if (!token.sub) {
         return token;
       }
@@ -109,6 +92,22 @@ export const {
       token.wishlistId = userWishList?.id || null;
 
       return token;
+    },
+    async session({ token, session }) {
+      if (token.sub && session.user) {
+        session.user.id = token.sub;
+        session.user.role = token.role as UserRole;
+        session.user.cartId = token.cartId as string;
+        session.user.wishlistId = token.wishlistId as string;
+
+        if (session.user.cartId) {
+          session.user.cart = await getUserCart(session.user.id);
+        }
+        if (session.user.wishlistId) {
+          session.user.wishlist = await getUserWishList(session.user.id);
+        }
+      }
+      return session;
     },
   },
   adapter: PrismaAdapter(postgres),

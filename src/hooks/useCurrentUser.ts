@@ -1,6 +1,12 @@
+import { stat } from "fs";
 import { useSession } from "next-auth/react";
 
 export default function useCurrentUser() {
-  const session = useSession();
-  return session.data?.user;
+  const { data, status, update } = useSession();
+
+  return {
+    user: data?.user,
+    status,
+    update,
+  };
 }

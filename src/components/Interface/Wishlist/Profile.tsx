@@ -16,7 +16,7 @@ export default function Profile() {
           alt="avatar"
         />
       </div>
-      <div className="flex flex-1 items-center h-[64px] ml-[20px] text-white">
+      <div className="flex flex-1 items-center h-[64px] ml-[10px] text-white">
         <span className="font-medium text-[28px] cursor-default">
           {session?.name ?? "Set Nickname"}
         </span>

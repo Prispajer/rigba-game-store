@@ -23,7 +23,7 @@ export default class ProductService implements IProductService {
 
   constructor(
     email: string,
-    externalProductId: number,
+    externalProductId?: number,
     name?: string,
     description?: string,
     price?: number,
@@ -39,6 +39,72 @@ export default class ProductService implements IProductService {
     this.background_image = background_image;
     this.rating = rating;
     this.slug = slug;
+  }
+
+  async getCart(): Promise<RequestResponse<LoggedUserCart | null>> {
+    try {
+      const user = await getUserByEmail(this.email as string);
+      if (!user) {
+        return {
+          success: false,
+          message: "User doesn't exist!",
+          data: null,
+        };
+      }
+
+      let userCart = await getUserCart(user.id);
+      if (!userCart) {
+        userCart = await postgres.cart.create({
+          data: { userId: user.id, products: {} },
+          include: { products: true },
+        });
+      }
+
+      return {
+        success: true,
+        message: "Cart retrieved successfully!",
+        data: userCart,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: "Error while retrieving cart!",
+        data: null,
+      };
+    }
+  }
+
+  async getWishList(): Promise<RequestResponse<LoggedUserWishList | null>> {
+    try {
+      const user = await getUserByEmail(this.email as string);
+      if (!user) {
+        return {
+          success: false,
+          message: "User doesn't exist!",
+          data: null,
+        };
+      }
+
+      let userWishList = await getUserWishList(user.id);
+      if (!userWishList) {
+        userWishList = await postgres.cart.create({
+          data: { userId: user.id, products: {} },
+          include: { products: true },
+        });
+      }
+
+      return {
+        success: true,
+        message: "Wishlist retrieved successfully!",
+        data: userWishList,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: "Error while retrieving wishlist!",
+        data: null,
+      };
+    }
   }
 
   async addProductToCart(): Promise<RequestResponse<LoggedUserCart | null>> {
@@ -122,7 +188,7 @@ export default class ProductService implements IProductService {
 
       const updatedUserCart = await postgres.cart.findUnique({
         where: { id: userCart.id },
-        include: { products: true },
+        include: { products: { include: { productsInformations: true } } },
       });
 
       return {
@@ -192,7 +258,7 @@ export default class ProductService implements IProductService {
 
       const updatedUserCart = await postgres.cart.findUnique({
         where: { id: userCart.id },
-        include: { products: true },
+        include: { products: { include: { productsInformations: true } } },
       });
 
       return {
@@ -261,7 +327,7 @@ export default class ProductService implements IProductService {
 
       const updatedUserCart = await postgres.cart.findUnique({
         where: { id: userCart.id },
-        include: { products: true },
+        include: { products: { include: { productsInformations: true } } },
       });
 
       return {
@@ -324,7 +390,7 @@ export default class ProductService implements IProductService {
 
       const updatedUserCart = await postgres.cart.findUnique({
         where: { id: userCart.id },
-        include: { products: true },
+        include: { products: { include: { productsInformations: true } } },
       });
 
       return {
@@ -425,7 +491,7 @@ export default class ProductService implements IProductService {
 
       const updatedUserWishList = await postgres.wishlist.findUnique({
         where: { id: userWishList.id },
-        include: { products: true },
+        include: { products: { include: { productsInformations: true } } },
       });
 
       return {
@@ -496,7 +562,7 @@ export default class ProductService implements IProductService {
 
       const updatedUserWishList = await postgres.cart.findUnique({
         where: { id: userWishList.id },
-        include: { products: true },
+        include: { products: { include: { productsInformations: true } } },
       });
 
       return {

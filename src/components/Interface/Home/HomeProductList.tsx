@@ -16,7 +16,6 @@ export default function HomeProductList({ ordering }: { ordering: string }) {
   const [gamesWithOrdering, setGamesWithOrdering] = React.useState<
     GameAPIResponse[]
   >([]);
-  const { gamesFilterState } = useFetchGameData();
   const [newLoadingArray, setNewLoadingArray] = React.useState<boolean[]>([]);
 
   React.useEffect(() => {

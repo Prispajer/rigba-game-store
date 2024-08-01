@@ -1,57 +1,16 @@
 import React from "react";
 import { Product } from "@/utils/helpers/types";
 import { FaCartPlus } from "react-icons/fa";
-import { FormSuccess } from "../Shared/FormsNotifications/FormSuccess";
-import { FormError } from "../Shared/FormsNotifications/FormError";
 import { generateRandomValue } from "@/utils/prices";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import requestService from "@/utils/classes/requestService";
+import useUserCart from "@/hooks/useUserCart";
+import debounce from "@/utils/debounce";
 
 export default function ProductBuyOrAdd({ product }: { product: Product }) {
-  const [error, setError] = React.useState<string | undefined>("");
-  const [success, setSuccess] = React.useState<string | undefined>("");
-  const { handleAddLocalProduct } = useLocalStorage("localCart");
-  const user = useCurrentUser();
-
-  const handleAddToCart = async () => {
-    try {
-      if (user) {
-        const response = await requestService.postMethod(
-          "products/endpoints/productManagement/addProductToCart",
-          {
-            email: user?.email,
-            externalProductId: product?.id,
-            name: product?.name,
-            description: product?.description_raw,
-            price: generateRandomValue(),
-            background_image: product?.background_image,
-            rating: product?.rating,
-            slug: product?.slug,
-          }
-        );
-        if (response.success) {
-          setSuccess(response.message);
-        } else {
-          setError(response.message);
-        }
-      } else {
-        const localProduct: LocalStorageProduct = {
-          externalProductId: product.id,
-          name: product.name,
-          description: product.description_raw,
-          price: generateRandomValue(),
-          background_image: product.background_image,
-          rating: product?.rating,
-          slug: product?.slug,
-          quantity: 1,
-        };
-        handleAddLocalProduct(localProduct);
-      }
-    } catch (error) {
-      setError("Error adding product to cart");
-    }
-  };
+  const { handleAddUserProductToCart } = useUserCart();
+  const { handleAddLocalProductToCart } = useLocalStorage("localCart");
+  const { user } = useCurrentUser();
 
   return (
     <>
@@ -59,9 +18,9 @@ export default function ProductBuyOrAdd({ product }: { product: Product }) {
         <div className="max-w-[350px]">
           <div className="flex w-[70px]">
             <div className="absolute top-[100px]"></div>
-            <div>
-              <span className="font-[700] text-[18px] text-[#ffffff]">
-                47,43zł
+            <div className="flex min-w-[200px] mb-[10px]">
+              <span className="w-full font-[700] text-[18px] text-[#ffffff]">
+                {`${generateRandomValue()} zł`}
               </span>
             </div>
           </div>
@@ -73,16 +32,35 @@ export default function ProductBuyOrAdd({ product }: { product: Product }) {
             </div>
             <div
               className="flex items-center min-h-[35px] px-[10px] bg-transparent border-[2px] cursor-pointer"
-              onClick={handleAddToCart}
+              onClick={
+                user
+                  ? () =>
+                      handleAddUserProductToCart(
+                        product.id as string,
+                        product?.name,
+                        product?.description_raw as string,
+                        product?.background_image,
+                        product?.rating as number,
+                        product?.slug as string
+                      )
+                  : () =>
+                      handleAddLocalProductToCart({
+                        externalProductId: product.id,
+                        name: product.name,
+                        description: product.description_raw,
+                        price: generateRandomValue(),
+                        background_image: product.background_image,
+                        rating: product?.rating,
+                        slug: product?.slug,
+                        quantity: 1,
+                      })
+              }
             >
               <FaCartPlus size="20px" color="#ffffff" />
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-center">
-          <FormSuccess message={success} />
-          <FormError message={error} />
-        </div>
+        <div className="flex items-center justify-center"></div>
       </div>
     </>
   );

@@ -6,6 +6,8 @@ import gamesPublishersReducer from "./slices/gamesPublishersSlice";
 import gamesGenresReducer from "./slices/gamesGenresSlice";
 import gamesStoresReducer from "./slices/gamesStoresSlice";
 import gamesPlatformsReducer from "./slices/gamesPlatformsSlice";
+import userCartReducer from "./slices/userCartSlice";
+import wishListReducer from "./slices/wishListSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +18,8 @@ export const store = configureStore({
     gamesGenres: gamesGenresReducer,
     gamesStores: gamesStoresReducer,
     gamesPlatforms: gamesPlatformsReducer,
+    userCart: userCartReducer,
+    userWishList: wishListReducer,
   },
 });
 

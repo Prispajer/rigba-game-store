@@ -2,27 +2,33 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
+import { Product, LoggedUserCart } from "@/utils/helpers/types";
 import { IoCloseSharp } from "react-icons/io5";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
+import { VscWorkspaceUnknown } from "react-icons/vsc";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useUserCart from "@/hooks/useUserCart";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import requestService from "@/utils/classes/requestService";
+import useCustomRouter from "@/hooks/useCustomRouter";
 
 export default function CartModalContainer() {
-  const user = useCurrentUser();
-  const userCart = useUserCart();
-  const [success, setSuccess] = React.useState<string | undefined>("");
-  const [error, setError] = React.useState<string | undefined>("");
+  const { user } = useCurrentUser();
   const { cartModalState, handleClose } = useWindowVisibility();
   const {
+    userCartState,
+    handleDeleteUserProductFromCart,
+    handleDecreaseQuantityUserProductFromCart,
+    handleIncreaseQuantityUserProductFromCart,
+  } = useUserCart();
+  const {
     localCartState,
-    handleRemoveLocalProduct,
-    handleDecreaseLocalQuantity,
-    handleIncreaseLocalQuantity,
+    handleDeleteLocalProductFromCart,
+    handleDecreaseQuantityLocalProductFromCart,
+    handleIncreaseQuantityLocalProductFromCart,
   } = useLocalStorage("localCart");
+  const { redirectToGame } = useCustomRouter();
 
   const handleOutsideClick = () => {
     if (cartModalState) {
@@ -30,70 +36,9 @@ export default function CartModalContainer() {
     }
   };
 
-  const productsToDisplay = user ? userCart : localCartState;
-
-  const handleRemoveUserProduct = React.useCallback(
-    async (externalProductId: number) => {
-      try {
-        const email = user?.email;
-        const response = await requestService.deleteMethod(
-          "products/endpoints/productManagement/deleteProductFromCart",
-          {
-            email,
-            externalProductId,
-          }
-        );
-        if (response.success) {
-          setSuccess(response.message);
-        } else {
-          setError(response.message);
-        }
-      } catch (error) {
-        setError("There was an error while deleting the product.");
-      }
-    },
-    [user]
-  );
-
-  const handleIncreaseUserQuantity = async (externalProductId: number) => {
-    try {
-      const email = user?.email;
-      const response = await requestService.patchMethod(
-        "products/endpoints/productManagement/increaseProductQuantity",
-        {
-          email,
-          externalProductId,
-        }
-      );
-      if (response.success) {
-        setSuccess(response.message);
-      } else {
-        setError(response.message);
-      }
-    } catch (error) {
-      setError("There was an error while deleting the product.");
-    }
-  };
-
-  const handleDecreaseUserQuantity = async (externalProductId: number) => {
-    try {
-      const email = user?.email;
-      const response = await requestService.patchMethod(
-        "products/endpoints/productManagement/decreaseProductQuantity",
-        {
-          email,
-          externalProductId,
-        }
-      );
-      if (response.success) {
-        setSuccess(response.message);
-      } else {
-        setError(response.message);
-      }
-    } catch (error) {
-      setError("There was an error while deleting the product.");
-    }
-  };
+  const productsByRole: Product[] & LoggedUserCart[] = user
+    ? userCartState.products
+    : localCartState;
 
   return (
     <>
@@ -106,25 +51,25 @@ export default function CartModalContainer() {
           >
             <div className="flex justify-between items-center text-white border-b-[1px] border-[#ffffff1a] p-[20px]">
               <strong className="text-[20px] cursor-default">Mój koszyk</strong>
-              <button>
-                <IoCloseSharp
-                  onClick={() => handleClose("cartModal")}
-                  className="hover:text-modalHover"
-                  size="25px"
-                />
+              <button onClick={() => handleClose("cartModal")}>
+                <IoCloseSharp className="hover:text-modalHover" size="25px" />
               </button>
             </div>
             <ul className="flex flex-col w-full">
-              {productsToDisplay.map((product) => (
+              {productsByRole.map((product) => (
                 <li
                   key={product.externalProductId}
                   className="flex w-full p-[20px] gap-2 border-b-[1px] border-[#ffffff1a]"
                 >
-                  <Link
-                    href="/"
-                    className="relative flex flex-0 min-w-[50px] items-center h-[100px]"
-                  >
+                  <div className="relative flex flex-0 min-w-[50px] items-center h-[100px]">
                     <Image
+                      onClick={() =>
+                        redirectToGame(
+                          product.productsInformations?.slug || product.slug,
+                          handleClose,
+                          "cartModal"
+                        )
+                      }
                       src={
                         product.productsInformations?.background_image ||
                         product.background_image
@@ -132,14 +77,20 @@ export default function CartModalContainer() {
                       layout="fill"
                       alt={product.productsInformations?.name || product.name}
                     />
-                  </Link>
+                  </div>
                   <div className="flex flex-1 flex-col px-2 gap-y-[10px] text-white">
-                    <Link
-                      href="/"
+                    <div
+                      onClick={() =>
+                        redirectToGame(
+                          product.productsInformations?.slug || product.slug,
+                          handleClose,
+                          "cartModal"
+                        )
+                      }
                       className="flex w-full font-medium hover:text-modalHover"
                     >
                       {product.productsInformations?.name || product.name}
-                    </Link>
+                    </div>
                     <div className="flex items-center text-[#ffffffb3] text-[16px]">
                       <span className="mr-1 cursor-default">
                         Produkt cyfrowy
@@ -155,11 +106,11 @@ export default function CartModalContainer() {
                           onClick={
                             user
                               ? () =>
-                                  handleDecreaseUserQuantity(
+                                  handleDecreaseQuantityUserProductFromCart(
                                     product.externalProductId
                                   )
                               : () =>
-                                  handleDecreaseLocalQuantity(
+                                  handleDecreaseQuantityLocalProductFromCart(
                                     product.externalProductId
                                   )
                           }
@@ -174,11 +125,11 @@ export default function CartModalContainer() {
                           onClick={
                             user
                               ? () =>
-                                  handleIncreaseUserQuantity(
+                                  handleIncreaseQuantityUserProductFromCart(
                                     product.externalProductId
                                   )
                               : () =>
-                                  handleIncreaseLocalQuantity(
+                                  handleIncreaseQuantityLocalProductFromCart(
                                     product.externalProductId
                                   )
                           }
@@ -190,11 +141,11 @@ export default function CartModalContainer() {
                         onClick={
                           user
                             ? () =>
-                                handleRemoveUserProduct(
+                                handleDeleteUserProductFromCart(
                                   product.externalProductId
                                 )
                             : () =>
-                                handleRemoveLocalProduct(
+                                handleDeleteLocalProductFromCart(
                                   product.externalProductId
                                 )
                         }
@@ -202,6 +153,7 @@ export default function CartModalContainer() {
                       >
                         <FaRegTrashAlt />
                       </button>
+
                       <div>
                         <strong className="cursor-default">
                           {product.productsInformations?.price || product.price}
@@ -213,28 +165,43 @@ export default function CartModalContainer() {
                 </li>
               ))}
             </ul>
-            <div className="p-[20px]">
-              <div className="flex justify-between items-center w-full text-white">
-                <strong className="cursor-default">Łącznie</strong>
-                <strong className="text-[30px] pb-[8px] cursor-default">
-                  {productsToDisplay
-                    .reduce(
-                      (total: number, product) =>
-                        total +
-                        (product.productsInformations?.price || product.price) *
-                          (product.quantity || 1),
-                      0
-                    )
-                    .toFixed(2)}
-                  zł
-                </strong>
+            {productsByRole.length ? (
+              <div className="p-[20px]">
+                <div className="flex justify-between items-center w-full text-white">
+                  <strong className="cursor-default">Łącznie</strong>
+                  <strong className="text-[30px] pb-[8px] cursor-default">
+                    {productsByRole
+                      .reduce(
+                        (total: number, product) =>
+                          total +
+                          (product.productsInformations?.price ||
+                            product.price) *
+                            (product.quantity || 1),
+                        0
+                      )
+                      .toFixed(2)}
+                    zł
+                  </strong>
+                </div>
+                <div className="w-full">
+                  <button className="w-[100%] min-h-[35px] transition duration-300 font-medium text-buttonTextColor bg-buttonBackground hover:bg-buttonBackgroundHover">
+                    Zobacz Koszyk
+                  </button>
+                </div>
               </div>
-              <div className="w-full">
-                <button className="w-[100%] min-h-[35px] transition duration-300 font-medium text-buttonTextColor bg-buttonBackground hover:bg-buttonBackgroundHover">
-                  Zobacz Koszyk
-                </button>
+            ) : (
+              <div className="pt-[30px] px-[20px] pb-[20px]">
+                <div className="flex flex-col justify-between items-center text-center text-white">
+                  <VscWorkspaceUnknown size="40" />
+                  <strong className="text-[20px] cursor-default">
+                    Your cart is empty!
+                  </strong>
+                  <strong className="text-[#ffffff80] text-[14px] pb-[8px] cursor-default">
+                    looks like you haven&apos;t selected any products yet.
+                  </strong>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </OutsideClickHandler>
       )}

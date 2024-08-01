@@ -7,21 +7,18 @@ import { CiHeart } from "react-icons/ci";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useUserWishList from "@/hooks/useUserWishList";
-import { Product } from "@/utils/helpers/types";
 
 export default function WishListProductList() {
-  const user = useCurrentUser();
-  const userWishList = useUserWishList();
+  const { user } = useCurrentUser();
+  const { userWishListState } = useUserWishList();
   const { localWishListState } = useLocalStorage("localWishList");
   const { redirectToGame } = useCustomRouter();
-  const displayWishList: Product[] = user ? userWishList : localWishListState;
-
-  console.log(displayWishList);
+  const displayByRole = user ? userWishListState.products : localWishListState;
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 w-full gap-x-[10px]">
-      {displayWishList && displayWishList.length > 0 ? (
-        displayWishList.map((game) => (
+      {displayByRole && displayByRole.length > 0 ? (
+        displayByRole.map((game) => (
           <div
             key={game.externalProductId}
             onClick={() =>

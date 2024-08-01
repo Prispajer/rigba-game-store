@@ -11,11 +11,11 @@ import ProfileModalContainer from "../ProfileModal/ProfileModalContainer";
 import { extendedNavItems } from "../ProfileModal/ProfileModalContainer";
 
 export default function UserNavigation({}) {
-  const user = useCurrentUser();
-  const userCart = useUserCart();
+  const { user } = useCurrentUser();
+  const { userCartState } = useUserCart();
   const { resolutionState, handleOpen } = useWindowVisibility();
   const { localCartState } = useLocalStorage("LocalCart");
-  const cartLength = user ? userCart : localCartState;
+  const cartLength = user ? userCartState.products : localCartState;
 
   return (
     <div className="flex flex-1 justify-end items-center relative">

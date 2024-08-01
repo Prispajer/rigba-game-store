@@ -2,51 +2,58 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  addProduct,
-  addProductWishList,
-  removeProductWishList,
-  removeProduct,
-  increaseQuantity,
-  decreaseQuantity,
   setLocalCart,
   setWishList,
+  addLocalProductToCart,
+  addLocalProductToWishList,
+  deleteLocalProductFromCart,
+  deleteLocalProductFromWishList,
+  increaseQuantityLocalProductFromCart,
+  decreaseQuantityLocalProductFromCart,
 } from "@/redux/slices/localStorageSlice";
 import { RootState } from "@/redux/store";
 import { Product } from "@/utils/helpers/types";
-import { setSearchText } from "@/redux/slices/utilitySlice";
 
 export default function useLocalStorage(key: string) {
   const [isLoaded, setIsLoaded] = React.useState(false);
+  const dispatch = useDispatch();
   const localCartState = useSelector(
     (state: RootState) => state.localStorage.localCart
   );
   const localWishListState = useSelector(
     (state: RootState) => state.localStorage.wishList
   );
-  const dispatch = useDispatch();
 
-  const handleAddLocalProduct = (product: Product): void => {
-    dispatch(addProduct(product));
+  const handleAddLocalProductToCart = (product: Product): void => {
+    dispatch(addLocalProductToCart(product));
   };
 
-  const handleAddLocalWishList = (product: Product): void => {
-    dispatch(addProductWishList(product));
+  const handleAddLocalProductToWishList = (product: Product): void => {
+    dispatch(addLocalProductToWishList(product));
   };
 
-  const handleRemoveLocalWishList = (product: Product): void => {
-    dispatch(removeProductWishList(product));
+  const handleDeleteLocalProductFromCart = (
+    externalProductId: number
+  ): void => {
+    dispatch(deleteLocalProductFromCart(externalProductId));
   };
 
-  const handleRemoveLocalProduct = (productId: number): void => {
-    dispatch(removeProduct(productId));
+  const handleDeleteLocalProductFromWishList = (
+    externalProductId: number
+  ): void => {
+    dispatch(deleteLocalProductFromWishList(externalProductId));
   };
 
-  const handleIncreaseLocalQuantity = (productId: number): void => {
-    dispatch(increaseQuantity(productId));
+  const handleIncreaseQuantityLocalProductFromCart = (
+    externalProductId: number
+  ): void => {
+    dispatch(increaseQuantityLocalProductFromCart(externalProductId));
   };
 
-  const handleDecreaseLocalQuantity = (productId: number): void => {
-    dispatch(decreaseQuantity(productId));
+  const handleDecreaseQuantityLocalProductFromCart = (
+    externalProductId: number
+  ): void => {
+    dispatch(decreaseQuantityLocalProductFromCart(externalProductId));
   };
 
   React.useEffect(() => {
@@ -81,11 +88,11 @@ export default function useLocalStorage(key: string) {
   return {
     localCartState,
     localWishListState,
-    handleAddLocalProduct,
-    handleAddLocalWishList,
-    handleRemoveLocalWishList,
-    handleRemoveLocalProduct,
-    handleIncreaseLocalQuantity,
-    handleDecreaseLocalQuantity,
+    handleAddLocalProductToCart,
+    handleAddLocalProductToWishList,
+    handleDeleteLocalProductFromCart,
+    handleDeleteLocalProductFromWishList,
+    handleIncreaseQuantityLocalProductFromCart,
+    handleDecreaseQuantityLocalProductFromCart,
   };
 }

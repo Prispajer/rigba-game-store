@@ -29,7 +29,7 @@ export default function ProfileModalContainer({
   translateY = "md:translate-y-[80px]",
 }: ProfileModalContainerProps) {
   const { profileModalState, handleClose } = useWindowVisibility();
-  const user = useCurrentUser();
+  const { user } = useCurrentUser();
 
   const handleLogout = () => {
     signOutAccount();

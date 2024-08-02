@@ -2,6 +2,7 @@ import React from "react";
 import useCurrentUser from "./useCurrentUser";
 import {
   setProducts,
+  setOrdering,
   fetchAddUserProductToWishList,
   fetchDeleteUserProductFromWishList,
 } from "@/redux/slices/wishListSlice";
@@ -18,9 +19,16 @@ export default function useUserWishList() {
 
   const handleSetUserWishList = React.useCallback(() => {
     if (user?.wishlist?.products) {
-      dispatch(setProducts(user?.wishlist?.products));
+      dispatch(setProducts(user.wishlist.products));
     }
   }, [dispatch, user?.wishlist?.products]);
+
+  const handleSetUserWishListOrdering = React.useCallback(
+    (ordering: string) => {
+      dispatch(setOrdering(ordering));
+    },
+    [dispatch]
+  );
 
   const handleAddUserProductToWishList = React.useCallback(
     (
@@ -29,7 +37,9 @@ export default function useUserWishList() {
       productDescription: string,
       image: string,
       rating: number,
-      slug: string
+      slug: string,
+      released: string,
+      added: number
     ) => {
       if (user?.email) {
         dispatch(
@@ -42,6 +52,8 @@ export default function useUserWishList() {
             background_image: image,
             rating,
             slug,
+            released,
+            added,
           })
         );
         update();
@@ -67,10 +79,11 @@ export default function useUserWishList() {
 
   React.useEffect(() => {
     handleSetUserWishList();
-  }, [handleSetUserWishList]);
+  }, [handleSetUserWishList, userWishListState.ordering]);
 
   return {
     userWishListState,
+    handleSetUserWishListOrdering,
     handleAddUserProductToWishList,
     handleRemoveUserProductFromWishList,
   };

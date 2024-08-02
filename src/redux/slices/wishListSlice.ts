@@ -7,6 +7,7 @@ interface WishListState {
   status: string;
   error: string | null;
   success: string | null;
+  ordering: string | null;
 }
 
 const initialState: WishListState = {
@@ -14,6 +15,7 @@ const initialState: WishListState = {
   status: "idle",
   error: null,
   success: null,
+  ordering: null,
 };
 
 export const fetchAddUserProductToWishList = createAsyncThunk<
@@ -27,6 +29,8 @@ export const fetchAddUserProductToWishList = createAsyncThunk<
     background_image: string;
     rating: number | undefined;
     slug: string | undefined;
+    released: string | undefined;
+    added: number | undefined;
   },
   { rejectValue: string }
 >(
@@ -41,6 +45,8 @@ export const fetchAddUserProductToWishList = createAsyncThunk<
       background_image,
       rating,
       slug,
+      released,
+      added,
     },
     { rejectWithValue }
   ) => {
@@ -56,11 +62,13 @@ export const fetchAddUserProductToWishList = createAsyncThunk<
           background_image,
           rating,
           slug,
+          released,
+          added,
         }
       );
 
-      if (response.success) {
-        return response.data.products;
+      if (response.success && response.data && response.data.products) {
+        return response.data?.products;
       } else {
         return rejectWithValue(
           response.message || "Failed to add product to wishlist"
@@ -89,7 +97,7 @@ export const fetchDeleteUserProductFromWishList = createAsyncThunk<
         { email, externalProductId }
       );
       if (response.success) {
-        return response.data.products;
+        return response.data?.products;
       } else {
         return rejectWithValue(
           response.message || "Failed to delete product from wishlist"
@@ -107,7 +115,69 @@ const userWishListSlice = createSlice({
   initialState,
   reducers: {
     setProducts: (state, action: PayloadAction<LoggedUserWishList[]>) => {
-      state.products = action.payload;
+      switch (state.ordering) {
+        case "price": {
+          state.products = [...action.payload].sort((a, b) => {
+            const priceA = a.productsInformations?.price || 0;
+            const priceB = b.productsInformations?.price || 0;
+            return priceA - priceB;
+          });
+          break;
+        }
+        case "-price": {
+          state.products = [...action.payload].sort((a, b) => {
+            const priceA = a.productsInformations?.price || 0;
+            const priceB = b.productsInformations?.price || 0;
+            return priceB - priceA;
+          });
+          break;
+        }
+        case "-released": {
+          state.products = [...action.payload].sort((a, b) => {
+            const nameA = a.productsInformations?.released || "";
+            const nameB = b.productsInformations?.released || "";
+            return nameA.localeCompare(nameB);
+          });
+          break;
+        }
+        case "released": {
+          state.products = [...action.payload].sort((a, b) => {
+            const nameA = a.productsInformations?.released || "";
+            const nameB = b.productsInformations?.released || "";
+            return nameB.localeCompare(nameA);
+          });
+          break;
+        }
+        case "-added": {
+          state.products = [...action.payload].sort((a, b) => {
+            const nameA = a.productsInformations?.added || 0;
+            const nameB = b.productsInformations?.added || 0;
+            return nameB - nameA;
+          });
+          break;
+        }
+        case "name": {
+          state.products = [...action.payload].sort((a, b) => {
+            const nameA = a.productsInformations?.name || "";
+            const nameB = b.productsInformations?.name || "";
+            return nameA.localeCompare(nameB);
+          });
+          break;
+        }
+        case "-name": {
+          state.products = [...action.payload].sort((a, b) => {
+            const nameA = a.productsInformations?.name || "";
+            const nameB = b.productsInformations?.name || "";
+            return nameB.localeCompare(nameA);
+          });
+          break;
+        }
+        default:
+          state.products = [...action.payload];
+      }
+    },
+    setOrdering: (state, action: PayloadAction<string>) => {
+      state.ordering = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -118,13 +188,12 @@ const userWishListSlice = createSlice({
       })
       .addCase(fetchAddUserProductToWishList.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.products = action.payload.sort((a, b) =>
-          a.id.localeCompare(b.id)
-        );
+        state.products = action.payload || [];
       })
       .addCase(fetchAddUserProductToWishList.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
+        state.products = []; // Reset to empty array in case of failure
       })
       .addCase(fetchDeleteUserProductFromWishList.pending, (state) => {
         state.status = "loading";
@@ -134,9 +203,7 @@ const userWishListSlice = createSlice({
         fetchDeleteUserProductFromWishList.fulfilled,
         (state, action) => {
           state.status = "succeeded";
-          state.products = action.payload.sort((a, b) =>
-            a.id.localeCompare(b.id)
-          );
+          state.products = action.payload;
         }
       )
       .addCase(fetchDeleteUserProductFromWishList.rejected, (state, action) => {
@@ -146,6 +213,5 @@ const userWishListSlice = createSlice({
   },
 });
 
-export const { setProducts } = userWishListSlice.actions;
-
+export const { setProducts, setOrdering } = userWishListSlice.actions;
 export default userWishListSlice.reducer;

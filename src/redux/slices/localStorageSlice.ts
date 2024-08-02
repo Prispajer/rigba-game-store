@@ -3,12 +3,14 @@ import { Product } from "@/utils/helpers/types";
 
 interface CartState {
   localCart: Product[];
-  wishList: Product[];
+  localWishList: Product[];
+  ordering: string | null;
 }
 
 const initialState: CartState = {
   localCart: [],
-  wishList: [],
+  localWishList: [],
+  ordering: null,
 };
 
 const localStorageSlice = createSlice({
@@ -18,8 +20,15 @@ const localStorageSlice = createSlice({
     setLocalCart: (state, action: PayloadAction<Product[]>) => {
       state.localCart = action.payload;
     },
-    setWishList: (state, action: PayloadAction<Product[]>) => {
-      state.wishList = action.payload;
+    setLocalWishList: (state, action: PayloadAction<Product[]>) => {
+      state.localWishList = [...action.payload];
+      if (state.ordering) {
+        state.localWishList = sortWishList(state.localWishList, state.ordering);
+      }
+    },
+    setLocalOrdering: (state, action: PayloadAction<string>) => {
+      state.ordering = action.payload;
+      state.localWishList = sortWishList(state.localWishList, state.ordering);
     },
     addLocalProductToCart: (state, action: PayloadAction<Product>) => {
       const productIndex = state.localCart.findIndex(
@@ -35,7 +44,7 @@ const localStorageSlice = createSlice({
       }
     },
     addLocalProductToWishList: (state, action: PayloadAction<Product>) => {
-      const isProductInWishList = state.wishList.some(
+      const isProductInWishList = state.localWishList.some(
         (product) =>
           product.externalProductId === action.payload.externalProductId
       );
@@ -44,7 +53,8 @@ const localStorageSlice = createSlice({
         return;
       }
 
-      state.wishList = [...state.wishList, action.payload];
+      state.localWishList = [...state.localWishList, action.payload];
+      state.localWishList = sortWishList(state.localWishList, state.ordering);
     },
     deleteLocalProductFromCart: (state, action: PayloadAction<number>) => {
       state.localCart = state.localCart.filter(
@@ -52,7 +62,7 @@ const localStorageSlice = createSlice({
       );
     },
     deleteLocalProductFromWishList: (state, action: PayloadAction<number>) => {
-      state.wishList = state.wishList.filter(
+      state.localWishList = state.localWishList.filter(
         (product) => product.externalProductId !== action.payload
       );
     },
@@ -90,9 +100,48 @@ const localStorageSlice = createSlice({
   },
 });
 
+const sortWishList = (
+  wishList: Product[],
+  ordering: string | null
+): Product[] => {
+  switch (ordering) {
+    case "price":
+      return [...wishList].sort((a, b) => (a.price || 0) - (b.price || 0));
+    case "-price":
+      return [...wishList].sort((a, b) => (b.price || 0) - (a.price || 0));
+    case "released":
+      return [...wishList].sort(
+        (a, b) =>
+          new Date(a.released || "").getTime() -
+          new Date(b.released || "").getTime()
+      );
+    case "-released":
+      return [...wishList].sort(
+        (a, b) =>
+          new Date(b.released || "").getTime() -
+          new Date(a.released || "").getTime()
+      );
+    case "added":
+      return [...wishList].sort((a, b) => (a.added || 0) - (b.added || 0));
+    case "-added":
+      return [...wishList].sort((a, b) => (b.added || 0) - (a.added || 0));
+    case "name":
+      return [...wishList].sort((a, b) =>
+        (a.name || "").localeCompare(b.name || "")
+      );
+    case "-name":
+      return [...wishList].sort((a, b) =>
+        (b.name || "").localeCompare(a.name || "")
+      );
+    default:
+      return [...wishList].sort((a, b) => (a.price || 0) - (b.price || 0));
+  }
+};
+
 export const {
   setLocalCart,
-  setWishList,
+  setLocalWishList,
+  setLocalOrdering,
   addLocalProductToCart,
   addLocalProductToWishList,
   deleteLocalProductFromCart,

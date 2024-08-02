@@ -3,12 +3,18 @@ import React from "react";
 import Profile from "./Profile";
 import WishListCounter from "./WishListCounter";
 import SearchBar from "./SearchBar";
-import SortBy from "./SortBy";
-import useCurrentUser from "@/hooks/useCurrentUser";
+import SortBy from "../Shared/SortBy/SortBy";
 import WishListProductList from "./WishListProductList";
+import useCurrentUser from "@/hooks/useCurrentUser";
+import useUserWishList from "@/hooks/useUserWishList";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 export default function WishListContainer() {
   const { user } = useCurrentUser();
+  const { localWishListState, handleSetLocalOrdering } =
+    useLocalStorage("localWishList");
+  const { userWishListState, handleSetUserWishListOrdering } =
+    useUserWishList();
 
   return (
     <main className="flex items-center justify-center w-full bg-primaryColor">
@@ -20,7 +26,17 @@ export default function WishListContainer() {
             <SearchBar />
           </aside>
           <div className="flex flex-col w-full px-[15px] text-white">
-            <SortBy />
+            {user ? (
+              <SortBy
+                handleSortChange={handleSetUserWishListOrdering}
+                sortArrayLength={userWishListState.products}
+              />
+            ) : (
+              <SortBy
+                handleSortChange={handleSetLocalOrdering}
+                sortArrayLength={localWishListState}
+              />
+            )}
             <WishListProductList />
           </div>
         </div>

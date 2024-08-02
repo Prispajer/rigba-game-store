@@ -3,13 +3,14 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setLocalCart,
-  setWishList,
+  setLocalWishList,
   addLocalProductToCart,
   addLocalProductToWishList,
   deleteLocalProductFromCart,
   deleteLocalProductFromWishList,
   increaseQuantityLocalProductFromCart,
   decreaseQuantityLocalProductFromCart,
+  setLocalOrdering,
 } from "@/redux/slices/localStorageSlice";
 import { RootState } from "@/redux/store";
 import { Product } from "@/utils/helpers/types";
@@ -21,7 +22,7 @@ export default function useLocalStorage(key: string) {
     (state: RootState) => state.localStorage.localCart
   );
   const localWishListState = useSelector(
-    (state: RootState) => state.localStorage.wishList
+    (state: RootState) => state.localStorage.localWishList
   );
 
   const handleAddLocalProductToCart = (product: Product): void => {
@@ -56,6 +57,10 @@ export default function useLocalStorage(key: string) {
     dispatch(decreaseQuantityLocalProductFromCart(externalProductId));
   };
 
+  const handleSetLocalOrdering = (ordering: string): void => {
+    dispatch(setLocalOrdering(ordering));
+  };
+
   React.useEffect(() => {
     const getLocalArray = localStorage.getItem(key);
     if (getLocalArray) {
@@ -63,13 +68,13 @@ export default function useLocalStorage(key: string) {
       if (key === "localCart") {
         dispatch(setLocalCart(parsedArray));
       } else if (key === "localWishList") {
-        dispatch(setWishList(parsedArray));
+        dispatch(setLocalWishList(parsedArray));
       }
     } else {
       if (key === "localCart") {
         dispatch(setLocalCart([]));
       } else if (key === "localWishList") {
-        dispatch(setWishList([]));
+        dispatch(setLocalWishList([]));
       }
     }
     setIsLoaded(true);
@@ -94,5 +99,6 @@ export default function useLocalStorage(key: string) {
     handleDeleteLocalProductFromWishList,
     handleIncreaseQuantityLocalProductFromCart,
     handleDecreaseQuantityLocalProductFromCart,
+    handleSetLocalOrdering,
   };
 }

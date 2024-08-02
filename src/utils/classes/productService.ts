@@ -20,6 +20,8 @@ export default class ProductService implements IProductService {
   private background_image?: string;
   private rating?: number;
   private slug?: string;
+  private released?: string;
+  private added?: number;
 
   constructor(
     email: string,
@@ -29,7 +31,9 @@ export default class ProductService implements IProductService {
     price?: number,
     background_image?: string,
     rating?: number,
-    slug?: string
+    slug?: string,
+    released?: string,
+    added?: number
   ) {
     this.email = email;
     this.externalProductId = externalProductId;
@@ -39,6 +43,8 @@ export default class ProductService implements IProductService {
     this.background_image = background_image;
     this.rating = rating;
     this.slug = slug;
+    this.released = released;
+    this.added = added;
   }
 
   async getCart(): Promise<RequestResponse<LoggedUserCart | null>> {
@@ -144,6 +150,8 @@ export default class ProductService implements IProductService {
                     price: this.price as number,
                     background_image: this.background_image as string,
                     slug: this.slug as string,
+                    released: this.released as string,
+                    added: this.added as number,
                   },
                 },
               },
@@ -179,6 +187,8 @@ export default class ProductService implements IProductService {
                   price: this.price as number,
                   background_image: this.background_image as string,
                   slug: this.slug as string,
+                  released: this.released as string,
+                  added: this.added as number,
                 },
               },
             },
@@ -446,6 +456,8 @@ export default class ProductService implements IProductService {
                     background_image: this.background_image as string,
                     rating: this.rating as number,
                     slug: this.slug as string,
+                    released: this.released as string,
+                    added: this.added as number,
                   },
                 },
               },
@@ -482,6 +494,8 @@ export default class ProductService implements IProductService {
                   background_image: this.background_image as string,
                   rating: this.rating as number,
                   slug: this.slug as string,
+                  released: this.released as string,
+                  added: this.added as number,
                 },
               },
             },
@@ -560,10 +574,18 @@ export default class ProductService implements IProductService {
         where: { id: productInWishlist.id },
       });
 
-      const updatedUserWishList = await postgres.cart.findUnique({
+      const updatedUserWishList = await postgres.wishlist.findUnique({
         where: { id: userWishList.id },
         include: { products: { include: { productsInformations: true } } },
       });
+
+      if (!updatedUserWishList) {
+        return {
+          success: false,
+          message: "Error retrieving updated wishlist!",
+          data: null,
+        };
+      }
 
       return {
         success: true,
@@ -571,6 +593,7 @@ export default class ProductService implements IProductService {
         data: updatedUserWishList,
       };
     } catch (error) {
+      console.error("Error in deleteProductFromWishList:", error);
       return {
         success: false,
         message: "Error while removing product from wishlist!",

@@ -30,6 +30,8 @@ export interface Product {
   quantity?: number;
   rating?: number;
   slug?: string;
+  added?: number;
+  released?: string;
   description?: string;
   description_raw?: string;
 }

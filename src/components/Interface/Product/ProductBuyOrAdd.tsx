@@ -11,7 +11,7 @@ export default function ProductBuyOrAdd({ product }: { product: Product }) {
   const { handleAddUserProductToCart } = useUserCart();
   const { handleAddLocalProductToCart } = useLocalStorage("localCart");
   const { user } = useCurrentUser();
-
+  console.log(product);
   return (
     <>
       <div className="flex flex-col sm:mx-[20px] my-[20px] py-[15px] px-[20px] bg-[#387CBD] shadow-md">
@@ -41,7 +41,9 @@ export default function ProductBuyOrAdd({ product }: { product: Product }) {
                         product?.description_raw as string,
                         product?.background_image,
                         product?.rating as number,
-                        product?.slug as string
+                        product?.slug as string,
+                        product?.released as string,
+                        product?.added as number
                       )
                   : () =>
                       handleAddLocalProductToCart({
@@ -52,6 +54,8 @@ export default function ProductBuyOrAdd({ product }: { product: Product }) {
                         background_image: product.background_image,
                         rating: product?.rating,
                         slug: product?.slug,
+                        released: product?.released,
+                        added: product?.added,
                         quantity: 1,
                       })
               }

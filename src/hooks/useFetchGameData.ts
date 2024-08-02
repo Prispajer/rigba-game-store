@@ -96,7 +96,7 @@ export default function useFetchGameData() {
     [dispatch]
   );
 
-  const handleSortChange = React.useCallback(
+  const handleFilterSortChange = React.useCallback(
     (ordering: string) => {
       dispatch(setOrdering(ordering));
       handleFetchGamesWithFilters(gamesFilterState.page);
@@ -193,7 +193,7 @@ export default function useFetchGameData() {
     handleSetGenresIdArray,
     handleSetStoresIdArray,
     handleSetPublishersIdArray,
-    handleSortChange,
+    handleFilterSortChange,
     handleSetOrdering,
     handleSetPage,
     handleClearAllFilters,

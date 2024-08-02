@@ -53,6 +53,8 @@ export const fetchAddUserProductToCart = createAsyncThunk<
     background_image: string;
     rating: number | undefined;
     slug: string | undefined;
+    released: string | undefined;
+    added: number | undefined;
   },
   { rejectValue: string }
 >(
@@ -67,6 +69,8 @@ export const fetchAddUserProductToCart = createAsyncThunk<
       background_image,
       rating,
       slug,
+      released,
+      added,
     },
     { rejectWithValue }
   ) => {
@@ -82,6 +86,8 @@ export const fetchAddUserProductToCart = createAsyncThunk<
           background_image,
           rating,
           slug,
+          released,
+          added,
         }
       );
 

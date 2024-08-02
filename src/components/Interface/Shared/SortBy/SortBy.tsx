@@ -4,6 +4,8 @@ import { FaSortAmountUpAlt, FaSortAmountDownAlt } from "react-icons/fa";
 import useFetchGameData from "@/hooks/useFetchGameData";
 import { IconType } from "react-icons/lib";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
+import useUserWishList from "@/hooks/useUserWishList";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 const SortByElements = [
   { title: "Price: Low to High", icon: FaSortAmountUpAlt, ordering: "price" },
@@ -25,15 +27,20 @@ const SortByElements = [
   {
     title: "Popularity: Most Popular",
     icon: FaSortAmountDownAlt,
-    ordering: "popularity",
+    ordering: "-added",
   },
   { title: "Alphabet: A-Z", icon: FaSortAmountUpAlt, ordering: "name" },
   { title: "Alphabet: Z-A", icon: FaSortAmountDownAlt, ordering: "-name" },
 ];
 
-export default function FilterSortBy() {
+export default function SortBy({
+  handleSortChange,
+  sortArrayLength,
+}: {
+  handleSortChange: (ordering: string) => void;
+  sortArrayLength: any[];
+}) {
   const { sortModalState, handleToggle, handleClose } = useWindowVisibility();
-  const { gamesFilterState, handleSortChange } = useFetchGameData();
   const [currentSort, setCurrentSort] = useState(SortByElements[0]);
 
   const handleSortSelection = (sortOption: {
@@ -51,7 +58,7 @@ export default function FilterSortBy() {
       <div className="flex-1">
         <span className="text-[#FFFFFF]">
           Results found:{" "}
-          <span className="font-bold">{gamesFilterState.gamesCount}</span>
+          <span className="font-bold">{sortArrayLength.length}</span>
         </span>
       </div>
       <div className="relative">

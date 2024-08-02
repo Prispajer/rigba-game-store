@@ -32,7 +32,9 @@ export default function useUserCart() {
         productDescription: string,
         image: string,
         rating: number,
-        slug: string
+        slug: string,
+        released: string,
+        added: number
       ) => {
         if (user?.email) {
           await dispatch(
@@ -45,6 +47,8 @@ export default function useUserCart() {
               background_image: image,
               rating,
               slug,
+              released,
+              added,
             })
           );
         }

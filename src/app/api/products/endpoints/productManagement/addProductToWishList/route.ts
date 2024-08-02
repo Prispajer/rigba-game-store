@@ -13,6 +13,8 @@ export async function POST(request: NextRequest) {
     background_image,
     rating,
     slug,
+    released,
+    added,
   } = await request.json();
 
   const productService: IProductService = new ProductService(
@@ -23,7 +25,9 @@ export async function POST(request: NextRequest) {
     price,
     background_image,
     rating,
-    slug
+    slug,
+    released,
+    added
   );
   const addProductToWishlistResponse =
     await productService.addProductToWishlist();

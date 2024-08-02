@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { workbench } from "../utils/helpers/fonts";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import "./globals.css";

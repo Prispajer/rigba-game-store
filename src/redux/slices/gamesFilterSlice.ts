@@ -3,7 +3,7 @@ import fetchService from "@/utils/classes/fetchService";
 import { GameAPIResponse } from "@/utils/helpers/types";
 import { getGamesWithRandomPrices } from "@/utils/prices";
 
-interface FilterState {
+export interface FilterState {
   gamesWithFilters: GameAPIResponse[];
   genresIdArray: number[];
   platformsIdArray: number[];

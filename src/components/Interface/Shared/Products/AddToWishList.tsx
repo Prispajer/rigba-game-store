@@ -6,7 +6,7 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useUserWishList from "@/hooks/useUserWishList";
 import { generateRandomValue } from "@/utils/prices";
-
+import { useDispatch, useSelector } from "react-redux";
 export default function AddToWishList({ game }: { game: Product }) {
   const { user } = useCurrentUser();
   const {
@@ -47,7 +47,9 @@ export default function AddToWishList({ game }: { game: Product }) {
           game.description_raw as string,
           game.background_image,
           game.rating as number,
-          game.slug as string
+          game.slug as string,
+          game.released as string,
+          game.added as number
         );
       }
     } else {
@@ -64,6 +66,8 @@ export default function AddToWishList({ game }: { game: Product }) {
           background_image: game.background_image,
           rating: game.rating,
           slug: game.slug,
+          released: game.released,
+          added: game.added,
         });
       }
     }

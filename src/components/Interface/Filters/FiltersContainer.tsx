@@ -2,7 +2,7 @@
 import React from "react";
 import FilterByCategory from "./FilterByCategory";
 import FilterSelectedFilters from "./FilterSelectedFilters";
-import FilterSortBy from "./FilterSortBy";
+import SortBy from "../Shared/SortBy/SortBy";
 import FilterProductList from "./FilterProductList";
 import FilterChangePage from "./FilterChangePage";
 import FilterByPrice from "./FilterByPrice";
@@ -36,7 +36,6 @@ export default function FiltersContainer() {
     handleSetStoresIdArray,
   } = useFetchGameData();
 
-  console.log(gamesFilterState);
   const {
     searchGenreTextState,
     searchPlatformTextState,
@@ -104,7 +103,7 @@ export default function FiltersContainer() {
           </aside>
           <section className="w-full lg:w-[calc(100%-220px)]">
             <FilterSelectedFilters />
-            <FilterSortBy />
+            <SortBy />
             {gamesFilterState.isLoading ? (
               <div className="flex items-center justify-center">
                 <MoonLoader color="pink" />

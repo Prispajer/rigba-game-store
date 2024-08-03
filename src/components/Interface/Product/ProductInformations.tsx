@@ -1,18 +1,18 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { CiHeart } from "react-icons/ci";
-import { CiShare1 } from "react-icons/ci";
+import { Product } from "@/utils/helpers/types";
 import { IoMdDoneAll } from "react-icons/io";
 import { IoKeyOutline } from "react-icons/io5";
 import { FaSteam } from "react-icons/fa";
+import AddToWishList from "../Shared/Products/AddToWishList";
 
-export default function ProductInformations({ product }) {
+export default function ProductInformations({ product }: { product: Product }) {
   return (
     <>
       {product && (
-        <div className="flex flex-0 w-full py-[20px] px-[20px]">
-          <div className="relative min-w-[72px] lg:min-w-[150px] lg:h-[225px] xl:min-w-[200px] xl:h-[300px] xxl:min-w-[225px] xxl:min-h-[315px]">
+        <div className=" flex flex-0 w-full py-[20px] ">
+          <div className="relative min-w-[72px] lg:min-w-[150px] lg:h-[225px] xl:min-w-[200px] xl:h-[300px] xxl:min-w-[225px] xxl:min-h-[315px] ">
             <Image
               src={product.background_image ?? "/icons/logo.png"}
               layout="fill"
@@ -26,9 +26,13 @@ export default function ProductInformations({ product }) {
                   {product.name}
                 </h1>
               </div>
-              <div className="">
-                <button className="p-[6px] md:p-[10px] border-[1px] transition duration-300  cursor-pointer bg-[#487CBD] hover:bg-[#ffffff80] border-[#3A83D4] hover:border-[1px] hover:border-[#ffffff]">
-                  <CiHeart size="30px" color="white" />
+              <div className="relative">
+                <button className="p-[6px] md:p-[10px] transition duration-300 cursor-pointer ">
+                  <AddToWishList
+                    game={product}
+                    position="absolute top-0 right-0"
+                    added="border-[#FFFA84] bg-[#FFFA84]"
+                  />
                 </button>
               </div>
             </div>
@@ -41,8 +45,8 @@ export default function ProductInformations({ product }) {
                 {product.ratings_count} ocen
               </span>
             </div>
-            <div className="hidden xl:flex flex-col">
-              <ul className="grid grid-cols-2 xxl:grid-cols-3">
+            <div className="hidden xl:flex flex-col xxl:mt-[50px]">
+              <ul className="grid w-[100%] grid-cols-auto-fit pb-[15px] gap-y-[16px] gap-x-[24px] border-b-[1px] border-[#1c4c74]">
                 <li className="flex items-center pb-[15px] pr-[15px] leading-[18px]">
                   <div className="w-[35px] h-[35px]">
                     <IoMdDoneAll size="35px" color="#ffffff" />
@@ -101,9 +105,7 @@ export default function ProductInformations({ product }) {
             <div className="lg:hidden">
               <button className="flex items-center p-[6px] bg-[#487CBD] ">
                 <span className="text-[14px] text-[#FFFFFF]">Udostępnij</span>
-                <span className="text-[14px] text-[#FFFFFF] ml-[6px]">
-                  <CiShare1 />
-                </span>
+                <span className="text-[14px] text-[#FFFFFF] ml-[6px]"></span>
               </button>
             </div>
           </div>

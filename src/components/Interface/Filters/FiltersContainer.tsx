@@ -6,16 +6,16 @@ import SortBy from "../Shared/SortBy/SortBy";
 import FilterProductList from "./FilterProductList";
 import FilterChangePage from "./FilterChangePage";
 import FilterByPrice from "./FilterByPrice";
-import useFetchGameData from "@/hooks/useFetchGameData";
 import {
   setGenresIdArray,
   setPlatformsIdArray,
   setStoresIdArray,
   setPublishersIdArray,
 } from "@/redux/slices/gamesFilterSlice";
-import useSearchText from "@/hooks/useSearchText";
 import { MoonLoader } from "react-spinners";
 import useCustomRouter from "@/hooks/useCustomRouter";
+import useFetchGameData from "@/hooks/useFetchGameData";
+import useSearchText from "@/hooks/useSearchText";
 
 export default function FiltersContainer() {
   const { getUrlParams } = useCustomRouter();
@@ -34,6 +34,7 @@ export default function FiltersContainer() {
     handleSetPlatformsIdArray,
     handleSetPublishersIdArray,
     handleSetStoresIdArray,
+    handleFilterSortChange,
   } = useFetchGameData();
 
   const {
@@ -42,6 +43,8 @@ export default function FiltersContainer() {
     searchPublisherTextState,
     searchStoreTextState,
   } = useSearchText();
+
+  console.log(gamesFilterState);
 
   React.useEffect(() => {
     handleSetGenresIdArray(getUrlParams("genres"));
@@ -103,7 +106,10 @@ export default function FiltersContainer() {
           </aside>
           <section className="w-full lg:w-[calc(100%-220px)]">
             <FilterSelectedFilters />
-            <SortBy />
+            <SortBy
+              handleSortChange={handleFilterSortChange}
+              sortedGamesCount={gamesFilterState.gamesCount}
+            />
             {gamesFilterState.isLoading ? (
               <div className="flex items-center justify-center">
                 <MoonLoader color="pink" />

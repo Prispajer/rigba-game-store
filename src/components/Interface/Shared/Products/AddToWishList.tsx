@@ -7,7 +7,17 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import useUserWishList from "@/hooks/useUserWishList";
 import { generateRandomValue } from "@/utils/prices";
 import { useDispatch, useSelector } from "react-redux";
-export default function AddToWishList({ game }: { game: Product }) {
+export default function AddToWishList({
+  game,
+  position,
+  added,
+  deleted,
+}: {
+  game: Product;
+  position: string;
+  added: string;
+  deleted: string;
+}) {
   const { user } = useCurrentUser();
   const {
     userWishListState,
@@ -76,8 +86,8 @@ export default function AddToWishList({ game }: { game: Product }) {
   return (
     <button
       onClick={(event) => handleClick(event)}
-      className={`absolute top-0 right-[10px] p-[6px] md:p-[10px] border transition duration-300 cursor-pointer hover:bg-[#ffffff80] hover:border-[#ffffff] ${
-        isInWishList ? "border-[#FFFA84] bg-[#FFFA84]" : ""
+      className={`${position} p-[6px] md:p-[10px] border transition duration-300 cursor-pointer hover:bg-[#ffffff80] hover:border-[#ffffff] ${
+        isInWishList ? `${added}` : `${deleted}`
       }`}
     >
       <CiHeart size="30px" color={"white"} />

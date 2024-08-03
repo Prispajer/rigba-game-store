@@ -34,6 +34,9 @@ const config: Config = {
         categoryGenresHover: "#213f69",
         filtersBackgroundColor: "#387CBD",
       },
+      gridTemplateColumns: {
+        "auto-fit": "repeat(auto-fit, minmax(230px, 1fr))",
+      },
     },
   },
   plugins: [],

@@ -4,10 +4,10 @@ import { FaSteam } from "react-icons/fa";
 
 export default function DigitalProductDetails() {
   return (
-    <section className="flex max-w-[1240px] md:mx-auto xl:hidden pb-[15px] px-[20px] pt-4 bg-primaryColor">
-      <div className="flex flex-col">
-        <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2  shadow-sm">
-          <li className="flex items-center w-full pb-[15px] pr-[15px]">
+    <section className="flex w-[100%] md:mx-auto xl:hidden pb-[15px] pt-4 bg-primaryColor">
+      <div className="flex flex-col w-full">
+        <ul className="grid w-[100%] grid-cols-auto-fit pb-[15px] gap-y-[16px] gap-x-[24px] border-b-[1px] border-[#1c4c74]">
+          <li className="flex items-center w-full ">
             <div className="w-[35px] h-[35px]">
               <IoMdDoneAll size="35px" color="#ffffff" />
             </div>
@@ -21,7 +21,7 @@ export default function DigitalProductDetails() {
               </span>
             </div>
           </li>
-          <li className="flex w-full items-center pb-[15px] pr-[15px]">
+          <li className="flex w-full items-center">
             <div className="w-[35px] h-[35px]">
               <FaSteam size="35px" color="#ffffff" />
             </div>
@@ -35,11 +35,11 @@ export default function DigitalProductDetails() {
               </span>
             </div>
           </li>
-          <li className="flex w-full items-center pb-[15px] pr-[15px]">
+          <li className="flex w-full items-center">
             <div className="flex-0 w-[35px] h-[35px]">
               <IoKeyOutline size="35px" color="#ffffff" />
             </div>
-            <div className="flex  flex-col ml-[15px]">
+            <div className="flex flex-col ml-[15px]">
               <strong className="text-[18px] text-[#ffffff]">
                 Klucz cyfrowy
               </strong>
@@ -52,7 +52,7 @@ export default function DigitalProductDetails() {
             </div>
           </li>
         </ul>
-        <div>
+        <div className="pt-[10px]">
           <span className="text-[#FFFFFF96] text-[14px]">
             Działa na: <span className="text-[#ffffff]">Windows</span>
           </span>

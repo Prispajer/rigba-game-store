@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { MdKeyboardArrowUp, MdKeyboardArrowDown } from "react-icons/md";
 import { FaSortAmountUpAlt, FaSortAmountDownAlt } from "react-icons/fa";
-import useFetchGameData from "@/hooks/useFetchGameData";
 import { IconType } from "react-icons/lib";
+import { FilterState } from "@/redux/slices/gamesFilterSlice";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
-import useUserWishList from "@/hooks/useUserWishList";
-import useLocalStorage from "@/hooks/useLocalStorage";
 
 const SortByElements = [
   { title: "Price: Low to High", icon: FaSortAmountUpAlt, ordering: "price" },
@@ -35,10 +33,10 @@ const SortByElements = [
 
 export default function SortBy({
   handleSortChange,
-  sortArrayLength,
+  sortedGamesCount,
 }: {
   handleSortChange: (ordering: string) => void;
-  sortArrayLength: any[];
+  sortedGamesCount: number | any[];
 }) {
   const { sortModalState, handleToggle, handleClose } = useWindowVisibility();
   const [currentSort, setCurrentSort] = useState(SortByElements[0]);
@@ -57,8 +55,7 @@ export default function SortBy({
     <div className="flex items-center">
       <div className="flex-1">
         <span className="text-[#FFFFFF]">
-          Results found:{" "}
-          <span className="font-bold">{sortArrayLength.length}</span>
+          Results found: <span className="font-bold">{sortedGamesCount}</span>
         </span>
       </div>
       <div className="relative">

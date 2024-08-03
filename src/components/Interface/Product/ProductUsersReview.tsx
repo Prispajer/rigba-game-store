@@ -8,7 +8,7 @@ export default function ProductUsersReview() {
   const user = useCurrentUser();
 
   return (
-    <section className="flex flex-col max-w-[1240px] md:mx-auto px-[20px] py-[15px] border-t-[2px] border-primaryColor bg-secondaryColor ">
+    <section className="flex flex-col max-w-[1240px] md:mx-auto mx-[-20px] px-[20px] py-[15px] border-t-[2px] border-primaryColor bg-secondaryColor ">
       <div className="flex flex-col justify-center">
         <div className="flex justify-between">
           <ul>

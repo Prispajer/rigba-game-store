@@ -33,10 +33,10 @@ export default function ProductContainer({
 }: Props) {
   return (
     <main className="pb-[100px] bg-primaryColor">
-      <section className="grid grid-cols-1 lg:grid-cols-[calc(100%-380px),380px] max-w-[1600px] mx-auto">
-        <div>
+      <section className="grid grid-cols-1 lg:grid-cols-[calc(100%-380px),380px] max-w-[1600px] mx-auto px-[20px]">
+        <div className="max-w-[1240px]">
           <ProductInformations product={product} />
-          <div className="lg:hidden">
+          <div className="mx-[-20px] lg:hidden">
             <ProductBuyOrAdd product={product} />
             <PaymentWays />
           </div>

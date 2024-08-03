@@ -29,12 +29,12 @@ export default function WishListContainer() {
             {user ? (
               <SortBy
                 handleSortChange={handleSetUserWishListOrdering}
-                sortArrayLength={userWishListState.products}
+                sortedGamesCount={userWishListState.products}
               />
             ) : (
               <SortBy
                 handleSortChange={handleSetLocalOrdering}
-                sortArrayLength={localWishListState}
+                sortedGamesCount={localWishListState.length}
               />
             )}
             <WishListProductList />

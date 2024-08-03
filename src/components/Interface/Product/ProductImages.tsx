@@ -12,7 +12,7 @@ export default function ProductImages({ screenshots }) {
   };
 
   return (
-    <section className="flex max-w-[1240px] md:mx-auto pb-[15px] px-[20px] pt-4 bg-primaryColor">
+    <section className="flex max-w-[1240px] md:mx-auto pb-[15px] pt-4 bg-primaryColor">
       <div className="flex w-full overflow-x-auto scrollbar">
         {screenshots ? (
           screenshots.map((screenshot) => (

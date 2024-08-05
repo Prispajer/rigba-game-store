@@ -3,8 +3,8 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { FaSearch } from "react-icons/fa";
 import useFetchGameData from "@/hooks/useFetchGameData";
 import useSearchText from "@/hooks/useSearchText";
-import UtilsService from "@/utils/classes/utilsService";
-import IUtilsService from "@/utils/interfaces/iUtilsService";
+import UtilsService from "@/utils/classes/UtilsService";
+import IUtilsService from "@/utils/interfaces/IUtilsService";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
@@ -33,7 +33,7 @@ export default function FilterByCategory({
   );
 
   React.useEffect(() => {
-    handleFetchApiFilters(1);
+    handleFetchApiFilters(30);
   }, []);
 
   return (

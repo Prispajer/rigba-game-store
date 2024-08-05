@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import ProfileModalContainer from "@/components/Interface/Shared/ProfileModal/ProfileModalContainer";
+import ProfileModalContainer from "@/components/Interface/Shared/Modals/ProfileModalContainer";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useCurrentUser from "@/hooks/useCurrentUser";
 

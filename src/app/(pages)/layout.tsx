@@ -1,6 +1,6 @@
 import { Metadata } from "next";
-import Header from "@/components/Interface/Shared/Header/Header";
-import Navbar from "@/components/Interface/Shared/Navbar/Navbar";
+import HeaderContainer from "@/components/Interface/Header/HeaderContainer";
+import NavbarContainer from "@/components/Interface/Navbar/NavbarContainer";
 
 export const metadata: Metadata = {
   title: "Buy, browse, learn everything about games | RIGBA",
@@ -15,8 +15,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Header />
-        <Navbar />
+        <HeaderContainer />
+        <NavbarContainer />
         {children}
       </body>
     </html>

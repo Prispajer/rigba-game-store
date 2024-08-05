@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/redux/store";
 import {
   fetchGamesWithFilters,
   setGenresIdArray,
@@ -19,6 +18,7 @@ import { fetchGenres } from "@/redux/slices/gamesGenresSlice";
 import { fetchStores } from "@/redux/slices/gamesStoresSlice";
 import { fetchPlatforms } from "@/redux/slices/gamesPlatformsSlice";
 import useCustomRouter from "./useCustomRouter";
+import { AppDispatch, RootState } from "@/redux/store";
 
 export default function useFetchGameData() {
   const dispatch = useDispatch<AppDispatch>();
@@ -31,6 +31,7 @@ export default function useFetchGameData() {
   );
   const gamesGenresState = useSelector((state: RootState) => state.gamesGenres);
   const gamesStoresState = useSelector((state: RootState) => state.gamesStores);
+
   const { pushOrderingToUrl } = useCustomRouter();
 
   const handleFetchGamesWithFilters = React.useCallback(
@@ -128,18 +129,15 @@ export default function useFetchGameData() {
   );
 
   const handleClearAllFilters = React.useCallback(() => {
-    handleSetPublishersIdArray([]);
-    handleSetPlatformsIdArray([]);
     handleSetGenresIdArray([]);
+    handleSetPlatformsIdArray([]);
     handleSetStoresIdArray([]);
-    handleFetchGamesWithFilters(gamesFilterState.page);
+    handleSetPublishersIdArray([]);
   }, [
-    handleSetPublishersIdArray,
-    handleSetPlatformsIdArray,
     handleSetGenresIdArray,
+    handleSetPlatformsIdArray,
     handleSetStoresIdArray,
-    handleFetchGamesWithFilters,
-    gamesFilterState.page,
+    handleSetPublishersIdArray,
   ]);
 
   const handleClearSelectedFilter = React.useCallback(

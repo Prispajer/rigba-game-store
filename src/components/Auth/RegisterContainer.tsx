@@ -12,7 +12,7 @@ import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import { signInAccount } from "@/utils/actions";
 import { SignInProvider } from "@/utils/helpers/types";
-import requestService from "@/utils/classes/requestService";
+import requestService from "@/utils/classes/RequestService";
 
 export default function RegisterContainer() {
   const [error, setError] = React.useState<string | undefined>("");

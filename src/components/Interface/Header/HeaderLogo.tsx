@@ -1,9 +1,9 @@
-import { RxHamburgerMenu } from "react-icons/rx";
 import Image from "next/image";
 import Link from "next/link";
+import { RxHamburgerMenu } from "react-icons/rx";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 
-export default function Logo() {
+export default function HeaderLogo() {
   const { handleOpen } = useWindowVisibility();
 
   return (

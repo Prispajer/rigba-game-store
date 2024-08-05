@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import fetchService from "@/utils/classes/fetchService";
-import { GameAPIResponse } from "@/utils/helpers/types";
+import FetchService from "@/utils/classes/FetchService";
 import { getGamesWithRandomPrices } from "@/utils/prices";
+import { GameAPIResponse } from "@/utils/helpers/types";
 
 export interface FilterState {
   gamesWithFilters: GameAPIResponse[];
@@ -50,7 +50,7 @@ export const fetchGamesWithFilters = createAsyncThunk<
     } = (getState() as { gamesFilter: FilterState }).gamesFilter;
 
     try {
-      const getGamesWithFilters = await fetchService.getGamesWithFilters(
+      const getGamesWithFilters = await FetchService.getGamesWithFilters(
         genresIdArray,
         page,
         platformsIdArray,

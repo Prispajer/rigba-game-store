@@ -1,5 +1,5 @@
 import { postgres } from "@/data/database/publicSQL/postgres";
-import IProductService from "../interfaces/iProductsService";
+import IProductService from "../interfaces/IProductsService";
 import {
   getUserByEmail,
   getUserCart,

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import HomeShowMoreButton from "./HomeShowMoreButton";
+import ShowMoreButton from "../Shared/Buttons/ShowMoreButton";
 import useFetchGameData from "@/hooks/useFetchGameData";
 import useCustomRouter from "@/hooks/useCustomRouter";
 
@@ -21,32 +21,32 @@ export default function HomeCategories() {
           <h1 className="text-[30px] text-white font-bold">Categories</h1>
           {gamesGenresState && (
             <div className="grid grid-cols-2 ty:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 max-w-[1240px] my-6 gap-[20px]">
-              {gamesGenresState.genresArray.map((property) => (
+              {gamesGenresState.genresArray.map((genre) => (
                 <div
-                  key={property.id}
-                  onClick={() => pushGenresToUrl([property.id])}
+                  key={genre.id}
+                  onClick={() => pushGenresToUrl([genre.id as number])}
                   className="flex h-[140px] flex-col items-center bg-[#5389b7] text-[#ffffff] hover:bg-categoryGenresHover transition ease-in-out delay-70  px-[5px] shadow-lg cursor-pointer"
                 >
                   <div className="flex flex-1 items-center font-medium text-[14px] ">
-                    <p>{property.games_count}</p>
+                    <p>{genre.games_count}</p>
                   </div>
                   <div className="relative min-w-[80px] min-h-[80px] flex flex-1 items-center">
                     <Image
-                      alt={property.slug as string}
-                      src={property.image_background as string}
+                      alt={genre.slug as string}
+                      src={genre.image_background as string}
                       layout="fill"
                       objectFit="cover"
                     />
                   </div>
                   <div className="flex flex-1 items-center px-[4px] font-medium text-[14px] text-center leading-3">
-                    <p>{property.name}</p>
+                    <p>{genre.name}</p>
                   </div>
                 </div>
               ))}
             </div>
           )}
           {gamesGenresState.page_size <= 2 && (
-            <HomeShowMoreButton method={handleLoadMore} text="Wczytaj więcej" />
+            <ShowMoreButton method={handleLoadMore} text="Load more" />
           )}
         </div>
       </section>

@@ -1,5 +1,5 @@
 import { SearchData } from "../helpers/types";
-import IUtilsService from "../interfaces/iUtilsService";
+import IUtilsService from "../interfaces/IUtilsService";
 
 export default class UtilsService implements IUtilsService {
   private searchText: string = "";

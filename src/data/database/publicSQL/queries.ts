@@ -1,4 +1,4 @@
-import { LoggedUserWishList, LoggedUserCart } from "@/utils/helpers/types";
+import { postgres } from "./postgres";
 import {
   User,
   EmailVerificationToken,
@@ -6,7 +6,7 @@ import {
   TwoFactorToken,
   TwoFactorConfirmation,
 } from "@prisma/client";
-import { postgres } from "./postgres";
+import { LoggedUserWishList, LoggedUserCart } from "@/utils/helpers/types";
 
 export const getUserByEmail = async (email: string): Promise<User | null> => {
   try {

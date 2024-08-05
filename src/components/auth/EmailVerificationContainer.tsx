@@ -5,7 +5,7 @@ import { MoonLoader } from "react-spinners";
 import { useSearchParams } from "next/navigation";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
-import requestService from "@/utils/classes/requestService";
+import requestService from "@/utils/classes/RequestService";
 
 export default function EmailVerificationContainer() {
   const [error, setError] = React.useState<string | undefined>("");

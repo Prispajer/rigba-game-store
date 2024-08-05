@@ -1,25 +1,16 @@
 import React from "react";
-import Link from "next/link";
 import Image from "next/image";
-import AddToWishList from "../Shared/Products/AddToWishList";
-import LoadingAnimation from "../Shared/LoadingAnimation/LoadingAnimation";
+import { CiHeart } from "react-icons/ci";
+import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
 import useFetchGameData from "@/hooks/useFetchGameData";
 import useCustomRouter from "@/hooks/useCustomRouter";
-import { CiHeart } from "react-icons/ci";
 import useSearchText from "@/hooks/useSearchText";
 
 export default function FilterProductList() {
   const { gamesFilterState } = useFetchGameData();
-  const [isLoading, setIsLoading] = React.useState(true);
   const { compartmentNumberOne, compartmentNumberTwo, handleComparePrices } =
     useSearchText();
   const { redirectToGame } = useCustomRouter();
-
-  React.useEffect(() => {
-    if (gamesFilterState) {
-      setIsLoading(false);
-    }
-  }, [gamesFilterState]);
 
   const displayByCondition =
     compartmentNumberOne && compartmentNumberTwo
@@ -29,12 +20,8 @@ export default function FilterProductList() {
         )
       : gamesFilterState.gamesWithFilters;
 
-  if (isLoading) {
-    return <LoadingAnimation />;
-  }
-
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 w-full gap-x-[10px]">
+    <div className="grid grid-cols-1 sm:grid-cols-product-list-auto-fit gap-x-[10px]">
       {displayByCondition && displayByCondition.length > 0 ? (
         displayByCondition.map((game) => (
           <div
@@ -42,7 +29,7 @@ export default function FilterProductList() {
             onClick={() => redirectToGame(game.slug as string)}
             className="relative my-[10px] flex flex-row sm:flex-col bg-tertiaryColor"
           >
-            <div className="relative min-w-[95px] sm:h-[250px]">
+            <div className="relative m-[5px] sm:m-[0px] min-w-[95px] sm:min-h-[250px]">
               <Image
                 src={game.background_image ?? ""}
                 layout="fill"
@@ -79,7 +66,12 @@ export default function FilterProductList() {
                 </div>
               </div>
             </div>
-            <AddToWishList game={game} />
+            <AddToWishList
+              game={game}
+              position="absolute right-[10px] top-0"
+              added="border-[#FFFA84] bg-[#FFFA84]"
+              deleted="bg-[##d3d3d3]"
+            />
           </div>
         ))
       ) : (

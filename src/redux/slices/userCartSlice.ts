@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import RequestService from "@/utils/classes/RequestService";
 import { LoggedUserCart } from "@/utils/helpers/types";
-import requestService from "@/utils/classes/requestService";
 
 interface userCartState {
   products: LoggedUserCart[];
@@ -24,7 +24,7 @@ export const fetchUserCart = createAsyncThunk<
   { rejectValue: string }
 >("userCart/fetchUserCart", async ({ email }, { rejectWithValue }) => {
   try {
-    const response = await requestService.postMethod(
+    const response = await RequestService.postMethod(
       "products/endpoints/productManagement/getCart",
       {
         email,
@@ -32,7 +32,7 @@ export const fetchUserCart = createAsyncThunk<
     );
 
     if (response.success) {
-      return response.data.products;
+      return response.data?.products;
     } else {
       throw new Error(response.message || "Unknown error");
     }
@@ -75,7 +75,7 @@ export const fetchAddUserProductToCart = createAsyncThunk<
     { rejectWithValue }
   ) => {
     try {
-      const response = await requestService.postMethod(
+      const response = await RequestService.postMethod(
         "products/endpoints/productManagement/addProductToCart",
         {
           email,
@@ -92,7 +92,7 @@ export const fetchAddUserProductToCart = createAsyncThunk<
       );
 
       if (response.success) {
-        return response.data.products;
+        return response.data?.products;
       } else {
         throw new Error(response.message || "Unknown error");
       }
@@ -111,12 +111,12 @@ export const fetchDeleteUserProductFromCart = createAsyncThunk<
   "userCart/fetchDeleteUserProductFromCart",
   async ({ email, externalProductId }, { rejectWithValue }) => {
     try {
-      const response = await requestService.deleteMethod(
+      const response = await RequestService.deleteMethod(
         "products/endpoints/productManagement/deleteProductFromCart",
         { email, externalProductId }
       );
       if (response.success) {
-        return response.data.products;
+        return response.data?.products;
       }
       throw new Error("Failed to remove product");
     } catch (error) {
@@ -133,12 +133,12 @@ export const fetchIncreaseQuantityUserProductFromCart = createAsyncThunk<
   "userCart/fetchIncreaseQuantityUserProductFromCart",
   async ({ email, externalProductId }, { rejectWithValue }) => {
     try {
-      const response = await requestService.patchMethod(
+      const response = await RequestService.patchMethod(
         "products/endpoints/productManagement/increaseProductQuantity",
         { email, externalProductId }
       );
       if (response.success) {
-        return response.data.products;
+        return response.data?.products;
       }
       throw new Error("Failed to increase product quantity");
     } catch (error) {
@@ -155,12 +155,12 @@ export const fetchDecreaseQuantityUserProductFromCart = createAsyncThunk<
   "userCart/fetchDecreaseQuantityUserProductFromCart",
   async ({ email, externalProductId }, { rejectWithValue }) => {
     try {
-      const response = await requestService.patchMethod(
+      const response = await RequestService.patchMethod(
         "products/endpoints/productManagement/decreaseProductQuantity",
         { email, externalProductId }
       );
       if (response.success) {
-        return response.data.products;
+        return response.data?.products;
       }
       throw new Error("Failed to decrease product quantity");
     } catch (error) {

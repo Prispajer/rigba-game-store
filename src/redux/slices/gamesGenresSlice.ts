@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import fetchService from "@/utils/classes/fetchService";
+import FetchService from "@/utils/classes/FetchService";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
 interface GenresState {
@@ -22,7 +22,7 @@ export const fetchGenres = createAsyncThunk<
   { rejectValue: string }
 >("genres/fetchGenres", async ({ quantity = 1 }, { rejectWithValue }) => {
   try {
-    const response = await fetchService.getGamesGenres(quantity);
+    const response = await FetchService.getGamesGenres(quantity);
     return response;
   } catch (error) {
     return rejectWithValue((error as Error).message);

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import fetchService from "@/utils/classes/fetchService";
+import FetchService from "@/utils/classes/FetchService";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
 interface PlatformsState {
@@ -22,7 +22,7 @@ export const fetchPlatforms = createAsyncThunk<
   { rejectValue: string }
 >("platforms/fetchPlatforms", async ({ quantity = 1 }, { rejectWithValue }) => {
   try {
-    const response = await fetchService.getGamesPlatforms(quantity);
+    const response = await FetchService.getGamesPlatforms(quantity);
     return response;
   } catch (error) {
     return rejectWithValue((error as Error).message);

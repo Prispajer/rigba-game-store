@@ -1,11 +1,11 @@
+import { v4 as uuid4 } from "uuid";
+import { postgres } from "./postgres";
+import crypto from "crypto";
 import {
   getEmailVerificationTokenByEmail,
   getPasswordResetTokenByEmail,
   getTwoFactorTokenByEmail,
 } from "./queries";
-import { v4 as uuid4 } from "uuid";
-import { postgres } from "./postgres";
-import crypto from "crypto";
 
 export const generateEmailVerificationToken = async (email: string) => {
   const token = uuid4();

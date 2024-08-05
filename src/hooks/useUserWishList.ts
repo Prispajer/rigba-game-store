@@ -1,14 +1,14 @@
 import React from "react";
-import useCurrentUser from "./useCurrentUser";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setProducts,
   setOrdering,
   fetchAddUserProductToWishList,
   fetchDeleteUserProductFromWishList,
 } from "@/redux/slices/wishListSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/redux/store";
+import useCurrentUser from "./useCurrentUser";
 import { generateRandomValue } from "@/utils/prices";
+import { AppDispatch, RootState } from "@/redux/store";
 
 export default function useUserWishList() {
   const { user, update } = useCurrentUser();

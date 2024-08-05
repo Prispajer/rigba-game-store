@@ -1,40 +1,40 @@
 import React from "react";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
-import UtilsService from "@/utils/classes/utilsService";
-import IUtilsService from "@/utils/interfaces/iUtilsService";
-import SearchResultsContainer from "./SearchResultsContainer";
-import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
-import debounce from "@/utils/debounce";
-import fetchService from "@/utils/classes/fetchService";
 import { FaSearch } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
+import SearchResultsModalContainer from "../Shared/Modals/SearchResultsModalContainer";
+import OutsideClickHandler from "../Shared/Backdrop/OutsideCLickHandler";
+import useWindowVisibility from "@/hooks/useWindowVisibility";
+import FetchService from "@/utils/classes/FetchService";
+import UtilsService from "@/utils/classes/UtilsService";
+import IUtilsService from "@/utils/interfaces/IUtilsService";
+import debounce from "@/utils/debounce";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
-export default function SearchBar() {
+export default function HeaderSearchBar() {
+  const [searchText, setSearchText] = React.useState("");
+  const [gamesArray, setGamesArray] = React.useState<GameAPIResponse[]>([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+
   const { searchBarState, resolutionState, handleClose, handleToggle } =
     useWindowVisibility();
 
-  const [searchText, setSearchText] = React.useState("");
-  const [games, setGames] = React.useState<GameAPIResponse[]>([]);
-  const [isLoading, setIsLoading] = React.useState(false);
-
   const utilsService: IUtilsService = new UtilsService(searchText.trim());
 
-  const getGames = React.useCallback(async (searchText: string) => {
+  const fetchGames = React.useCallback(async (searchText: string) => {
     setIsLoading(true);
     if (searchText.trim() !== "") {
-      setGames(await fetchService.getGames(searchText));
+      setGamesArray(await FetchService.getGames(searchText));
     } else {
-      setGames([]);
+      setGamesArray([]);
     }
     setIsLoading(false);
   }, []);
 
   React.useEffect(() => {
     if (searchText.trim() !== "") {
-      getGames(searchText);
+      fetchGames(searchText);
     } else {
-      setGames([]);
+      setGamesArray([]);
     }
   }, [searchText]);
 
@@ -47,7 +47,7 @@ export default function SearchBar() {
   const handleOutsideClick = () => {
     handleToggle("searchBarModal");
     setSearchText("");
-    setGames([]);
+    setGamesArray([]);
   };
 
   return (
@@ -78,9 +78,9 @@ export default function SearchBar() {
             />
           </div>
           {searchText && (
-            <SearchResultsContainer
-              isLoading={isLoading}
-              filteredGames={games}
+            <SearchResultsModalContainer
+              gamesArray={gamesArray}
+              loadingState={isLoading}
             />
           )}
         </div>
@@ -106,9 +106,9 @@ export default function SearchBar() {
               />
             )}
             {searchText && (
-              <SearchResultsContainer
-                isLoading={isLoading}
-                filteredGames={games}
+              <SearchResultsModalContainer
+                gamesArray={gamesArray}
+                loadingState={isLoading}
               />
             )}
           </div>

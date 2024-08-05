@@ -32,6 +32,7 @@ export interface Product {
   slug?: string;
   added?: number;
   released?: string;
+  ratings_count?: number;
   description?: string;
   description_raw?: string;
 }
@@ -84,19 +85,7 @@ export interface ProductDataRequest {
 export type RequestData = UserDataRequest & ProductDataRequest;
 
 export interface GameAPIResponse extends Product {
-  slug?: string;
-  background_image: string;
-  rating?: number;
-  added?: number;
   image_background?: string;
-  games_count?: number;
-}
-
-export interface SearchData {
-  id: number;
-  name: string;
-  slug?: string;
-  background_image?: string;
   games_count?: number;
 }
 

@@ -1,17 +1,16 @@
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
-import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
-import { Product, LoggedUserCart } from "@/utils/helpers/types";
 import { IoCloseSharp } from "react-icons/io5";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
 import { VscWorkspaceUnknown } from "react-icons/vsc";
+import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useUserCart from "@/hooks/useUserCart";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useCustomRouter from "@/hooks/useCustomRouter";
+import { Product, LoggedUserCart } from "@/utils/helpers/types";
 
 export default function CartModalContainer() {
   const { user } = useCurrentUser();

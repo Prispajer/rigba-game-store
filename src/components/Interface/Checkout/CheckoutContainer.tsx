@@ -6,7 +6,7 @@ import Image from "next/image";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
 import ProductInformations from "../Filters/FilterProductList";
-import ProductHeaders from "../Product/ProductHeaders";
+import ProductHeaders from "../Shared/ReusableComponents/ProductHeaders";
 import CheckoutCart from "./CheckoutCart";
 
 export default function CheckoutContainer() {

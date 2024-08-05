@@ -6,7 +6,7 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useUserWishList from "@/hooks/useUserWishList";
 import { generateRandomValue } from "@/utils/prices";
-import { useDispatch, useSelector } from "react-redux";
+
 export default function AddToWishList({
   game,
   position,

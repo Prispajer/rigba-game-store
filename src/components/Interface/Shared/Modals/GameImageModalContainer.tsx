@@ -1,12 +1,15 @@
 import React from "react";
-import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
+import Image from "next/image";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { MdKeyboardArrowLeft } from "react-icons/md";
-import Image from "next/image";
+import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
+import useWindowVisibility from "@/hooks/useWindowVisibility";
 import { IoCloseSharp } from "react-icons/io5";
 
-export default function GameImageModal({ currentImageId, screenshots }) {
+export default function GameImageModalContainer({
+  currentImageId,
+  screenshots,
+}) {
   const { gameImageModalState, handleClose } = useWindowVisibility();
   const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
 

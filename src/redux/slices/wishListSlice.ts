@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import RequestService from "@/utils/classes/RequestService";
 import { LoggedUserWishList } from "@/utils/helpers/types";
-import requestService from "@/utils/classes/requestService";
 
 interface WishListState {
   products: LoggedUserWishList[];
@@ -51,7 +51,7 @@ export const fetchAddUserProductToWishList = createAsyncThunk<
     { rejectWithValue }
   ) => {
     try {
-      const response = await requestService.postMethod(
+      const response = await RequestService.postMethod(
         "products/endpoints/productManagement/addProductToWishList",
         {
           email,
@@ -92,7 +92,7 @@ export const fetchDeleteUserProductFromWishList = createAsyncThunk<
   "userWishList/fetchDeleteUserProductFromWishList",
   async ({ email, externalProductId }, { rejectWithValue }) => {
     try {
-      const response = await requestService.deleteMethod(
+      const response = await RequestService.deleteMethod(
         "products/endpoints/productManagement/deleteProductFromWishList",
         { email, externalProductId }
       );

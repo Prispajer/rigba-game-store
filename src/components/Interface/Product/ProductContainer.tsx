@@ -1,56 +1,51 @@
-"use client";
-
 import React from "react";
+import { CiShare1 } from "react-icons/ci";
 import ProductInformations from "./ProductInformations";
 import ProductBuyOrAdd from "./ProductBuyOrAdd";
-import PaymentWays from "./PaymentWays";
-import DigitalProductDetails from "./DigitalProductDetails";
+import ProductPaymentWays from "./ProductPaymentWays";
+import ProductDigitalProductDetails from "./ProductDigitalProductDetails";
 import ProductImages from "./ProductImages";
-import ShowMoreButton from "../Shared/ShowMoreButton/ShowMoreButton";
 import ProductReview from "./ProductReview";
 import ProductUsersReview from "./ProductUsersReview";
 import ProductGenres from "./ProductGenres";
 import ProductDescription from "./ProductDescription";
 import ProductSystemRequirements from "./ProductSystemRequirements";
-import ProductHeaders from "./ProductHeaders";
+import ProductHeaders from "../Shared/ReusableComponents/ProductHeaders";
 import ProductRemainingDetails from "./ProductRemainingDetails";
-import { CiShare1 } from "react-icons/ci";
-
-type Props = {
-  product: any;
-  screenshots: string[];
-  genres: string[];
-  tags: string[];
-  requirements: any;
-};
+import ShowMoreButton from "../Shared/Buttons/ShowMoreButton";
+import { GameAPIResponse } from "@/utils/helpers/types";
 
 export default function ProductContainer({
   product,
   screenshots,
   genres,
-  tags,
   requirements,
-}: Props) {
+  gameGenres,
+}: {
+  product: any;
+  screenshots: string[];
+  genres: string[];
+  requirements: any;
+  gameGenres: GameAPIResponse;
+}) {
   return (
     <main className="pb-[100px] bg-primaryColor">
       <section className="grid grid-cols-1 lg:grid-cols-[calc(100%-380px),380px] max-w-[1600px] mx-auto px-[20px]">
-        <div className="max-w-[1240px]">
+        <div>
           <ProductInformations product={product} />
           <div className="mx-[-20px] lg:hidden">
             <ProductBuyOrAdd product={product} />
-            <PaymentWays />
+            <ProductPaymentWays />
           </div>
-          <DigitalProductDetails />
+          <ProductDigitalProductDetails display="xl:hidden w-full" />
           <ProductImages screenshots={screenshots} />
-          <ProductHeaders headerText="Podobne tytuły" />
-          <section className="flex items-center justify-center z max-w-[1240px] md:mx-auto px-[20px] bg-primaryColor shadow-md"></section>
-          <ShowMoreButton buttonText="Wczytaj więcej" />
-          <ProductHeaders headerText="Opinie: 26" />
+          <ProductHeaders headerText="Gamers also viewed" />
+          <ProductHeaders headerText="Reviews: 26" />
           <ProductReview product={product} />
           <ProductUsersReview />
-          <ShowMoreButton buttonText="Załaduj więcej recenzji" />
-          <ProductHeaders headerText="Opis produktu" />
-          <ProductGenres tags={tags} />
+          <ShowMoreButton text="Load more reviews" />
+          <ProductHeaders headerText="Product description" />
+          <ProductGenres genres={gameGenres} />
           <ProductDescription product={product} />
           <ProductHeaders headerText="Wymagania systemowe" />
           <ProductSystemRequirements requirements={requirements} />
@@ -71,7 +66,7 @@ export default function ProductContainer({
               </button>
             </div>
             <ProductBuyOrAdd product={product} />
-            <PaymentWays />
+            <ProductPaymentWays />
           </div>
         </div>
       </section>

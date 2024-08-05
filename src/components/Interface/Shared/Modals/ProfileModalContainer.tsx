@@ -1,14 +1,14 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import { CiHeart, CiLogout } from "react-icons/ci";
 import { IoReload, IoCloseSharp, IoPersonOutline } from "react-icons/io5";
 import { TbShoppingCartCopy } from "react-icons/tb";
 import { LuGamepad2 } from "react-icons/lu";
-import { signOutAccount } from "@/utils/actions";
+import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import { signOutAccount } from "@/utils/actions";
 import { ProfileModalContainerProps } from "@/utils/helpers/types";
 
 export const defaultNavItems = [

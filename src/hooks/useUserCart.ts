@@ -1,17 +1,16 @@
 import React from "react";
-import useCurrentUser from "./useCurrentUser";
+import { useDispatch, useSelector } from "react-redux";
 import {
   fetchUserCart,
   fetchAddUserProductToCart,
   fetchDeleteUserProductFromCart,
   fetchDecreaseQuantityUserProductFromCart,
   fetchIncreaseQuantityUserProductFromCart,
-  setProducts,
 } from "@/redux/slices/userCartSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/redux/store";
+import useCurrentUser from "./useCurrentUser";
 import { generateRandomValue } from "@/utils/prices";
 import debounce from "@/utils/debounce";
+import { AppDispatch, RootState } from "@/redux/store";
 
 export default function useUserCart() {
   const { user, update } = useCurrentUser();

@@ -1,15 +1,14 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { generateRandomValue } from "@/utils/prices";
 import { CiHeart } from "react-icons/ci";
-import AddToWishList from "../Shared/Products/AddToWishList";
-import LoadingAnimation from "../Shared/LoadingAnimation/LoadingAnimation";
-import fetchService from "@/utils/classes/fetchService";
-import useCustomRouter from "@/hooks/useCustomRouter";
 import { MdOutlineSignalCellularNodata } from "react-icons/md";
+import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
+import LoadingAnimation from "../Shared/Animations/LoadingAnimation";
+import useCustomRouter from "@/hooks/useCustomRouter";
+import FetchService from "@/utils/classes/FetchService";
+import { generateRandomValue } from "@/utils/prices";
 import { GameAPIResponse } from "@/utils/helpers/types";
-import useFetchGameData from "@/hooks/useFetchGameData";
 
 export default function HomeProductList({ ordering }: { ordering: string }) {
   const { redirectToGame } = useCustomRouter();
@@ -18,9 +17,11 @@ export default function HomeProductList({ ordering }: { ordering: string }) {
   >([]);
   const [newLoadingArray, setNewLoadingArray] = React.useState<boolean[]>([]);
 
+  console.log(gamesWithOrdering);
+
   React.useEffect(() => {
     (async () => {
-      const gamesWithOrdering = await fetchService.getGameByOrdering(ordering);
+      const gamesWithOrdering = await FetchService.getGamesByOrdering(ordering);
       setGamesWithOrdering(gamesWithOrdering);
       setNewLoadingArray(new Array(gamesWithOrdering.length).fill(false));
     })();
@@ -43,7 +44,7 @@ export default function HomeProductList({ ordering }: { ordering: string }) {
             <LoadingAnimation />
           ) : (
             <>
-              <div className="relative w-full min-h-[220px]">
+              <div className="relative m-[5px] sm:m-[0px] min-w-[95px] sm:min-h-[250px]">
                 {gamesWithOrdering[index]?.background_image ? (
                   <Image
                     src={gamesWithOrdering[index].background_image}
@@ -96,7 +97,12 @@ export default function HomeProductList({ ordering }: { ordering: string }) {
               </div>
             </>
           )}
-          <AddToWishList game={gamesWithOrdering[index]} />
+          <AddToWishList
+            game={gamesWithOrdering[index]}
+            position="absolute right-[10px] top-0"
+            added="border-[#FFFA84] bg-[#FFFA84]"
+            deleted="bg-[##d3d3d3]"
+          />
         </div>
       ))}
     </>

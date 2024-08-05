@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import fetchService from "@/utils/classes/fetchService";
+import FetchService from "@/utils/classes/FetchService";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
 interface PublishersState {
@@ -24,7 +24,7 @@ export const fetchPublishers = createAsyncThunk<
   "publishers/fetchPublishers",
   async ({ quantity = 1 }, { rejectWithValue }) => {
     try {
-      const response = await fetchService.getGamesPublishers(quantity);
+      const response = await FetchService.getGamesPublishers(quantity);
       return response;
     } catch (error) {
       return rejectWithValue((error as Error).message);

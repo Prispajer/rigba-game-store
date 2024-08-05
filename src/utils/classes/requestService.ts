@@ -1,4 +1,4 @@
-import IRequestService from "../interfaces/iRequestService";
+import IRequestService from "../interfaces/IRequestService";
 import { RequestResponse } from "../helpers/types";
 
 export class RequestService implements IRequestService {

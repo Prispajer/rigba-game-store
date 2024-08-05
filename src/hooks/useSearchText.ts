@@ -1,8 +1,8 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setSearchText } from "@/redux/slices/utilitySlice";
-import { RootState } from "../redux/store";
 import useFetchGameData from "./useFetchGameData";
+import { RootState } from "../redux/store";
 
 export default function useSearchText() {
   const { gamesFilterState } = useFetchGameData();

@@ -1,8 +1,9 @@
 "use client";
 import React from "react";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
-import GameImageModal from "../Shared/GameImageModal/GameImageModal";
 import Image from "next/image";
+import GameImageModalContainer from "../Shared/Modals/GameImageModalContainer";
+import useWindowVisibility from "@/hooks/useWindowVisibility";
+
 export default function ProductImages({ screenshots }) {
   const { handleOpen } = useWindowVisibility();
   const [currentImageId, setCurrentImageId] = React.useState(null);
@@ -37,7 +38,7 @@ export default function ProductImages({ screenshots }) {
           <div>Brak zrzutów ekranu</div>
         )}
       </div>
-      <GameImageModal
+      <GameImageModalContainer
         screenshots={screenshots}
         currentImageId={currentImageId}
       />

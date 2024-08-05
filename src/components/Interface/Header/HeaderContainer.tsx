@@ -1,15 +1,15 @@
 "use client";
 
 import React from "react";
-import Logo from "./Logo";
-import UserNavigation from "./UserNavigation";
-import HamburgerMenu from "@/components/Interface/Shared/Navbar/NavbarSidebar";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { toggleScreen } from "@/redux/slices/utilitySlice";
-import SearchBar from "./SearchBar";
+import HeaderLogo from "./HeaderLogo";
+import HeaderUserNavigation from "./HeaderUserNavigation";
+import NavbarSidebar from "../Navbar/NavbarSidebar";
+import HeaderSearchBar from "./HeaderSearchBar";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 
-export default function Header() {
+export default function HeaderContainer() {
   const { resolutionState, handleToggleScreen } = useWindowVisibility();
   const dispatch = useDispatch();
 
@@ -28,11 +28,11 @@ export default function Header() {
         !resolutionState ? "sticky top-0" : "flex"
       }`}
     >
-      {!resolutionState && <HamburgerMenu />}
-      <div className="relative flex items-center max-w-[1240px] w-full mx-auto md:py-2">
-        <Logo />
-        <SearchBar />
-        <UserNavigation />
+      {!resolutionState && <NavbarSidebar />}
+      <div className="relative flex flex-wrap items-center max-w-[1240px] w-full mx-auto md:py-2">
+        <HeaderLogo />
+        <HeaderSearchBar />
+        <HeaderUserNavigation />
       </div>
     </header>
   );

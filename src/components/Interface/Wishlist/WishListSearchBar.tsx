@@ -1,6 +1,6 @@
 import { FiSearch } from "react-icons/fi";
 
-export default function SearchBar() {
+export default function WishListSearchBar() {
   return (
     <form className="pb-[20px]">
       <div className="pt-[15px] px-[20px] pb-[10px]">

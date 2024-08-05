@@ -1,14 +1,13 @@
 import NextAuth, { DefaultSession } from "next-auth";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { postgres } from "@/data/database/publicSQL/postgres";
+import { getTwoFactorConfirmationByUserId } from "@/data/database/publicSQL/queries";
 import authConfig from "./auth.config";
 import {
   getUserById,
   getUserCart,
   getUserWishList,
 } from "@/data/database/publicSQL/queries";
-import { fetchUserCart } from "./redux/slices/userCartSlice";
-import { getTwoFactorConfirmationByUserId } from "@/data/database/publicSQL/queries";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import { postgres } from "@/data/database/publicSQL/postgres";
 import { Cart, UserRole, Wishlist } from "@prisma/client";
 
 export type ExtendedUser = DefaultSession["user"] & {

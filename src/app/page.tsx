@@ -1,13 +1,13 @@
-import Header from "@/components/Interface/Shared/Header/Header";
-import Navbar from "@/components/Interface/Shared/Navbar/Navbar";
+import HeaderContainer from "@/components/Interface/Header/HeaderContainer";
+import NavbarContainer from "@/components/Interface/Navbar/NavbarContainer";
 import HomeSortableGameList from "@/components/Interface/Home/HomeSortableGameList";
 import HomeCategories from "@/components/Interface/Home/HomeCategories";
 
 export default function Home() {
   return (
     <>
-      <Header />
-      <Navbar />
+      <HeaderContainer />
+      <NavbarContainer />
       <HomeSortableGameList
         header="Top rated games"
         ordering="-rating"

@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { navLinks, NavLinks } from "@/utils/helpers/links";
 
-export default function Navbar() {
+export default function NavbarContainer() {
   const [isOpen, setIsOpen] = React.useState<string | null>(null);
 
   const handleMouseEnter = (title: string) => {

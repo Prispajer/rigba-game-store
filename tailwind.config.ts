@@ -35,7 +35,9 @@ const config: Config = {
         filtersBackgroundColor: "#387CBD",
       },
       gridTemplateColumns: {
-        "auto-fit": "repeat(auto-fit, minmax(230px, 1fr))",
+        "product-digital-products-details-auto-fit":
+          "repeat(auto-fit, minmax(230px, 1fr))",
+        "product-list-auto-fit": "repeat(auto-fit, minmax(200px, 1fr))",
       },
     },
   },

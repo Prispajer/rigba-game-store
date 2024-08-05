@@ -1,14 +1,15 @@
 import React from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import useFetchGameData from "@/hooks/useFetchGameData";
-import FilterModal from "./FilterModal";
-import useSearchText from "@/hooks/useSearchText";
+import { IoFilterSharp } from "react-icons/io5";
 import {
   setPublishersIdArray,
   setGenresIdArray,
   setPlatformsIdArray,
   setStoresIdArray,
 } from "@/redux/slices/gamesFilterSlice";
+import FilterModalContainer from "../Shared/Modals/FilterModalContainer";
+import useFetchGameData from "@/hooks/useFetchGameData";
+import useSearchText from "@/hooks/useSearchText";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 
 export default function FilterSelectedFilters() {
@@ -31,7 +32,7 @@ export default function FilterSelectedFilters() {
     platformsModalState,
     genresModalState,
     storesModalState,
-    handleToggle,
+    handleOpen,
   } = useWindowVisibility();
 
   const hasFilters =
@@ -40,25 +41,76 @@ export default function FilterSelectedFilters() {
     gamesFilterState.publishersIdArray.length > 0 ||
     gamesFilterState.storesIdArray.length > 0;
 
+  const genreMatch = gamesFilterState.genresIdArray.includes(
+    gamesGenresState.genresArray.find((id) => id)
+  );
+  const publishersMatch = gamesFilterState.genresIdArray.includes(
+    gamesPublishersState.publishersArray.find((id) => id)
+  );
+  const platformsMatch = gamesFilterState.genresIdArray.includes(
+    gamesPlatformsState.platformsArray.find((id) => id)
+  );
+  const storesMatch = gamesFilterState.genresIdArray.includes(
+    gamesStoresState.storesArray.find((id) => id)
+  );
+
+  const includesId = genreMatch
+    ? 1
+    : hasFilters
+    ? publishersMatch
+      ? 2
+      : platformsMatch
+      ? 3
+      : storesMatch
+      ? 4
+      : 0
+    : 0;
+
   if (!hasFilters) {
     return null;
   }
   return (
-    <div>
-      <ul className="relative flex items-center gap-[10px] pb-[25px]">
+    <div className="relative overflow-x-auto md:overflow-visible">
+      <ul className="relative flex items-center flex-nowrap  gap-[10px] pb-[25px]">
+        <li className="shrink-0">
+          <button
+            onClick={() => handleOpen("storesModal")}
+            className="flex items-center py-[4px] pl-[16px] pr-[8px] rounded-full font-medium bg-tertiaryColor text-[#ffffff]"
+          >
+            <span className="flex items-center gap-x-[5px] mr-[2px]">
+              <IoFilterSharp /> Sort and filter ({includesId})
+            </span>
+            <MdKeyboardArrowDown size="25px" className="mt-[3px]" />
+          </button>
+          {storesModalState && (
+            <FilterModalContainer
+              filterLabel="Stores"
+              searchText="searchStoreText"
+              searchState={searchStoreTextState as string}
+              apiFiltersArray={gamesStoresState.storesArray}
+              selectedFiltersId={gamesFilterState.storesIdArray}
+              setSelectedFiltersId={setStoresIdArray}
+              clickedModal="storesModal"
+            />
+          )}
+        </li>
+        <div className="h-[30px] mx-[6px]">
+          <span className="h-[30px] text-[#FFFFFF]">|</span>
+        </div>
         {gamesFilterState.publishersIdArray.length > 0 && (
-          <li>
+          <li className="shrink-0">
             <button
-              onClick={() => handleToggle("publishersModal")}
-              className="flex items-center py-[4px] pl-[16px] pr-[8px] rounded-full font-medium bg-tertiaryColor text-[#ffffff]"
+              onClick={() => handleOpen("publishersModal")}
+              className="flex items-center  py-[4px] pl-[16px] pr-[8px] rounded-full font-medium bg-tertiaryColor text-[#ffffff]"
             >
-              <span className="mr-[2px]">
+              <span className=" mr-[2px]">
                 Publishers ({gamesFilterState.publishersIdArray.length})
               </span>
               <MdKeyboardArrowDown size="25px" className="mt-[3px]" />
             </button>
             {publishersModalState && (
-              <FilterModal
+              <FilterModalContainer
+                filterLabel="Publisher"
                 searchText="searchPublisherText"
                 searchState={searchPublisherTextState as string}
                 apiFiltersArray={gamesPublishersState.publishersArray}
@@ -70,9 +122,9 @@ export default function FilterSelectedFilters() {
           </li>
         )}
         {gamesFilterState.platformsIdArray.length > 0 && (
-          <li>
+          <li className="shrink-0">
             <button
-              onClick={() => handleToggle("platformsModal")}
+              onClick={() => handleOpen("platformsModal")}
               className="flex items-center py-[4px] pl-[16px] pr-[8px] rounded-full font-medium bg-tertiaryColor text-[#ffffff]"
             >
               <span className="mr-[2px]">
@@ -81,7 +133,8 @@ export default function FilterSelectedFilters() {
               <MdKeyboardArrowDown size="25px" className="mt-[3px]" />
             </button>
             {platformsModalState && (
-              <FilterModal
+              <FilterModalContainer
+                filterLabel="Platforms"
                 searchText="searchPlatformText"
                 searchState={searchPlatformTextState as string}
                 apiFiltersArray={gamesPlatformsState.platformsArray}
@@ -93,9 +146,9 @@ export default function FilterSelectedFilters() {
           </li>
         )}
         {gamesFilterState.genresIdArray.length > 0 && (
-          <li>
+          <li className="shrink-0">
             <button
-              onClick={() => handleToggle("genresModal")}
+              onClick={() => handleOpen("genresModal")}
               className="flex items-center py-[4px] pl-[16px] pr-[8px] rounded-full font-medium bg-tertiaryColor text-[#ffffff]"
             >
               <span className="mr-[2px]">
@@ -104,7 +157,8 @@ export default function FilterSelectedFilters() {
               <MdKeyboardArrowDown size="25px" className="mt-[3px]" />
             </button>
             {genresModalState && (
-              <FilterModal
+              <FilterModalContainer
+                filterLabel="Genres"
                 searchText="searchGenreText"
                 searchState={searchGenreTextState as string}
                 apiFiltersArray={gamesGenresState.genresArray}
@@ -116,9 +170,9 @@ export default function FilterSelectedFilters() {
           </li>
         )}
         {gamesFilterState.storesIdArray.length > 0 && (
-          <li>
+          <li className="shrink-0">
             <button
-              onClick={() => handleToggle("storesModal")}
+              onClick={() => handleOpen("storesModal")}
               className="flex items-center py-[4px] pl-[16px] pr-[8px] rounded-full font-medium bg-tertiaryColor text-[#ffffff]"
             >
               <span className="mr-[2px]">
@@ -127,7 +181,8 @@ export default function FilterSelectedFilters() {
               <MdKeyboardArrowDown size="25px" className="mt-[3px]" />
             </button>
             {storesModalState && (
-              <FilterModal
+              <FilterModalContainer
+                filterLabel="Stores"
                 searchText="searchStoreText"
                 searchState={searchStoreTextState as string}
                 apiFiltersArray={gamesStoresState.storesArray}
@@ -138,12 +193,12 @@ export default function FilterSelectedFilters() {
             )}
           </li>
         )}
-        <li>
+        <li className="shrink-0 mx-[6px]">
           <button
             onClick={handleClearAllFilters}
             className="text-[18px] text-modalHover"
           >
-            Wyczyść wszystko
+            Clear all
           </button>
         </li>
       </ul>

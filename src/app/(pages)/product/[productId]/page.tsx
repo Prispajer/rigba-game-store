@@ -1,7 +1,6 @@
+import fetchService from "@/utils/classes/FetchService";
 import { Metadata } from "next";
 import ProductContainer from "@/components/Interface/Product/ProductContainer";
-import AddToWishList from "@/components/Interface/Shared/Products/AddToWishList";
-import fetchService from "@/utils/classes/fetchService";
 
 type Props = {
   params: {
@@ -24,22 +23,37 @@ export const generateMetadata = async ({
 };
 
 export default async function productDetails({ params }: Props) {
-  const [product, screenshots, genres, requirements] = await Promise.all([
-    fetchService.getGame(params.productId),
-    fetchService.getGameScreenshots(params.productId),
-    fetchService.getGamesGenres(30),
-    fetchService.getGameRequirements(params.productId),
-    console.log(params.productId),
-  ]);
+  try {
+    const [product, screenshots, genres, requirements, gameGenres] =
+      await Promise.all([
+        fetchService.getGame(params.productId),
+        fetchService.getGameScreenshots(params.productId),
+        fetchService.getGamesGenres(30),
+        fetchService.getGameRequirements(params.productId),
+        fetchService.getGameGenres("Soulcalibur (1998)"),
+      ]);
 
-  return (
-    <>
+    console.log(params.productId);
+
+    return (
       <ProductContainer
         product={product}
         screenshots={screenshots}
         genres={genres}
         requirements={requirements}
+        gameGenres={gameGenres}
       />
-    </>
-  );
+    );
+  } catch (error) {
+    console.error("An error occurred while fetching product details:", error);
+    return (
+      <div>
+        <h1>Error loading product details</h1>
+        <p>
+          There was a problem loading the product details. Please try again
+          later.
+        </p>
+      </div>
+    );
+  }
 }

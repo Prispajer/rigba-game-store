@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { MdKeyboardArrowUp, MdKeyboardArrowDown } from "react-icons/md";
 import { FaSortAmountUpAlt, FaSortAmountDownAlt } from "react-icons/fa";
 import { IconType } from "react-icons/lib";
-import { FilterState } from "@/redux/slices/gamesFilterSlice";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 
 const SortByElements = [
@@ -39,7 +38,7 @@ export default function SortBy({
   sortedGamesCount: number | any[];
 }) {
   const { sortModalState, handleToggle, handleClose } = useWindowVisibility();
-  const [currentSort, setCurrentSort] = useState(SortByElements[0]);
+  const [currentSort, setCurrentSort] = React.useState(SortByElements[0]);
 
   const handleSortSelection = (sortOption: {
     title: string;

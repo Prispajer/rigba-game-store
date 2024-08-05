@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import AddToWishList from "../Shared/Products/AddToWishList";
+import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import { CiHeart } from "react-icons/ci";
 import useLocalStorage from "@/hooks/useLocalStorage";

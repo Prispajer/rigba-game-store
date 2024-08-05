@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import ProductList from "./HomeProductList";
-import HomeShowMoreButton from "./HomeShowMoreButton";
+import ShowMoreButton from "../Shared/Buttons/ShowMoreButton";
 import useFetchGameData from "@/hooks/useFetchGameData";
 
 export default function HomeSortableGameList({
@@ -28,7 +28,7 @@ export default function HomeSortableGameList({
             <ProductList ordering={ordering} />
           </div>
           <div className="flex items-center justify-center pt-[20px]">
-            <HomeShowMoreButton text="Show all" method={handleShowAll} />
+            <ShowMoreButton text="Show all" method={handleShowAll} />
           </div>
         </div>
       </section>

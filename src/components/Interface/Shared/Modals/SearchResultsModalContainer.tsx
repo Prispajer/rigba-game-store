@@ -1,29 +1,27 @@
 import React from "react";
 import Image from "next/image";
+import { FaCartPlus } from "react-icons/fa";
+import LoadingAnimation from "../Animations/LoadingAnimation";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useCustomRouter from "@/hooks/useCustomRouter";
-import { FaCartPlus } from "react-icons/fa";
-import { SearchData } from "@/utils/helpers/types";
-import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
+import { GameAPIResponse } from "@/utils/helpers/types";
 
-export default function SearchResultsContainer({
-  filteredGames,
-  isLoading,
+export default function SearchResultsModalContainer({
+  gamesArray,
+  loadingState,
 }: {
-  filteredGames: SearchData[];
-  isLoading: boolean;
+  gamesArray: GameAPIResponse[];
+  loadingState: boolean;
 }) {
   const { redirectToGame } = useCustomRouter();
   const { handleClose } = useWindowVisibility();
 
-  console.log(filteredGames);
-
   return (
     <div className="absolute top-[67px] left-0 w-full bg-primaryColor ">
-      {isLoading ? (
+      {loadingState ? (
         <LoadingAnimation />
-      ) : filteredGames && filteredGames.length > 0 ? (
-        filteredGames.map((game) => (
+      ) : gamesArray && gamesArray.length > 0 ? (
+        gamesArray.map((game) => (
           <ul key={game.id}>
             <li
               className="my-[10px] py-[5px] cursor-pointer hover:bg-secondaryColor"

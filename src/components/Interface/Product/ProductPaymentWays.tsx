@@ -1,7 +1,7 @@
 import { FaCcVisa } from "react-icons/fa";
 import { FaCcMastercard } from "react-icons/fa";
 
-export default function PaymentWays() {
+export default function ProductPaymentWays() {
   return (
     <div className="flex flex-col sm:mx-[20px] my-[20px] py-[15px] px-[20px] bg-[#387CBD] shadow-md">
       <div className="flex">

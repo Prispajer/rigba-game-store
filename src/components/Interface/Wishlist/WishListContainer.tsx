@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
-import Profile from "./Profile";
+import Profile from "./WishListProfile";
 import WishListCounter from "./WishListCounter";
-import SearchBar from "./SearchBar";
-import SortBy from "../Shared/SortBy/SortBy";
+import SearchBar from "./WishListSearchBar";
+import SortBy from "../Shared/ReusableComponents/SortBy";
 import WishListProductList from "./WishListProductList";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useUserWishList from "@/hooks/useUserWishList";

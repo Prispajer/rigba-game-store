@@ -3,7 +3,7 @@ import Link from "next/link";
 import { LuPencil } from "react-icons/lu";
 import useCurrentUser from "@/hooks/useCurrentUser";
 
-export default function Profile() {
+export default function WishListProfile() {
   const session = useCurrentUser();
   return (
     <div className="flex items-center w-full mb-[40px]">

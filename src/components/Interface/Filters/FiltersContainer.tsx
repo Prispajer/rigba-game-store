@@ -1,18 +1,18 @@
 "use client";
 import React from "react";
-import FilterByCategory from "./FilterByCategory";
-import FilterSelectedFilters from "./FilterSelectedFilters";
-import SortBy from "../Shared/SortBy/SortBy";
-import FilterProductList from "./FilterProductList";
-import FilterChangePage from "./FilterChangePage";
-import FilterByPrice from "./FilterByPrice";
+import { MoonLoader } from "react-spinners";
 import {
   setGenresIdArray,
   setPlatformsIdArray,
   setStoresIdArray,
   setPublishersIdArray,
 } from "@/redux/slices/gamesFilterSlice";
-import { MoonLoader } from "react-spinners";
+import FilterByCategory from "./FilterByCategory";
+import FilterSelectedFilters from "./FilterSelectedFilters";
+import FilterProductList from "./FilterProductList";
+import FilterChangePage from "./FilterChangePage";
+import FilterByPrice from "./FilterByPrice";
+import SortBy from "../Shared/ReusableComponents/SortBy";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import useFetchGameData from "@/hooks/useFetchGameData";
 import useSearchText from "@/hooks/useSearchText";
@@ -44,8 +44,6 @@ export default function FiltersContainer() {
     searchStoreTextState,
   } = useSearchText();
 
-  console.log(gamesFilterState);
-
   React.useEffect(() => {
     handleSetGenresIdArray(getUrlParams("genres"));
     handleSetPlatformsIdArray(getUrlParams("platforms"));
@@ -67,7 +65,7 @@ export default function FiltersContainer() {
             <form className="bg-filtersBackgroundColor">
               <FilterByPrice />
               <FilterByCategory
-                filterLabel="Publisher"
+                filterLabel="Publishers"
                 searchText="searchPublisherText"
                 searchTextState={searchPublisherTextState as string}
                 apiFiltersArray={gamesPublishersState.publishersArray}
@@ -76,7 +74,7 @@ export default function FiltersContainer() {
                 handleFetchApiFilters={handleFetchPublishers}
               />
               <FilterByCategory
-                filterLabel="Platform"
+                filterLabel="Platforms"
                 searchText="searchPlatformText"
                 searchTextState={searchPlatformTextState as string}
                 apiFiltersArray={gamesPlatformsState.platformsArray}
@@ -85,7 +83,7 @@ export default function FiltersContainer() {
                 handleFetchApiFilters={handleFetchPlatforms}
               />
               <FilterByCategory
-                filterLabel="Genre"
+                filterLabel="Genres"
                 searchText="searchGenreText"
                 searchTextState={searchGenreTextState as string}
                 apiFiltersArray={gamesGenresState.genresArray}
@@ -94,7 +92,7 @@ export default function FiltersContainer() {
                 handleFetchApiFilters={handleFetchGenres}
               />
               <FilterByCategory
-                filterLabel="Store"
+                filterLabel="Stores"
                 searchText="searchStoreText"
                 searchTextState={searchStoreTextState as string}
                 apiFiltersArray={gamesStoresState.storesArray}

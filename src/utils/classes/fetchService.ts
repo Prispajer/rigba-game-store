@@ -1,4 +1,4 @@
-import IFetchService from "../interfaces/iFetchService";
+import IFetchService from "../interfaces/IFetchService";
 import { GameAPIResponse } from "../helpers/types";
 
 export class FetchService implements IFetchService {
@@ -23,8 +23,13 @@ export class FetchService implements IFetchService {
     const url = `${this.baseUrl}/games/${productSlug}?key=${this.apiKey}`;
     return this.fetchData(url);
   }
-  async getGameByOrdering(ordering: string): Promise<GameAPIResponse[]> {
-    const url = `${this.baseUrl}/games?key=${this.apiKey}&ordering=${ordering}`;
+  async getGamesByOrdering(
+    ordering: string,
+    quantity?: number
+  ): Promise<GameAPIResponse[]> {
+    const url = `${this.baseUrl}/games?key=${
+      this.apiKey
+    }&ordering=${ordering}&page_size=${5 * quantity}`;
     const data = await this.fetchData(url);
     return data.results || [];
   }
@@ -41,6 +46,12 @@ export class FetchService implements IFetchService {
     }`;
     const data = await this.fetchData(url);
     return data.results || [];
+  }
+
+  async getGameGenres(productId: string): Promise<GameAPIResponse> {
+    const url = `${this.baseUrl}/genres/${productId}?key=${this.apiKey}`;
+    const data = await this.fetchData(url);
+    return data || {};
   }
 
   async getGamesPublishers(quantity: number = 1): Promise<GameAPIResponse[]> {

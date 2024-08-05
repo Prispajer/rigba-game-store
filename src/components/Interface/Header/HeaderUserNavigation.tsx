@@ -1,16 +1,16 @@
 import Link from "next/link";
 import Image from "next/image";
 import { FaRegHeart, FaShoppingCart, FaSearch, FaUser } from "react-icons/fa";
+import AuthSidebar from "../Shared/Sidebars/AuthSidebar";
+import CartModalContainer from "../Shared/Modals/CartModalContainer";
+import { extendedNavItems } from "../Shared/Modals/ProfileModalContainer";
+import ProfileModalContainer from "../Shared/Modals/ProfileModalContainer";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
-import AuthSidebar from "./AuthSidebar";
-import CartModalContainer from "../CartModal/CartModalContainer";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useUserCart from "@/hooks/useUserCart";
-import ProfileModalContainer from "../ProfileModal/ProfileModalContainer";
-import { extendedNavItems } from "../ProfileModal/ProfileModalContainer";
 
-export default function UserNavigation({}) {
+export default function HeaderUserNavigation({}) {
   const { user } = useCurrentUser();
   const { userCartState } = useUserCart();
   const { resolutionState, handleOpen } = useWindowVisibility();

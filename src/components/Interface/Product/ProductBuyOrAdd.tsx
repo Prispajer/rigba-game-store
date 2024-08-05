@@ -1,17 +1,16 @@
 import React from "react";
-import { Product } from "@/utils/helpers/types";
 import { FaCartPlus } from "react-icons/fa";
-import { generateRandomValue } from "@/utils/prices";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useUserCart from "@/hooks/useUserCart";
-import debounce from "@/utils/debounce";
+import { generateRandomValue } from "@/utils/prices";
+import { Product } from "@/utils/helpers/types";
 
 export default function ProductBuyOrAdd({ product }: { product: Product }) {
   const { handleAddUserProductToCart } = useUserCart();
   const { handleAddLocalProductToCart } = useLocalStorage("localCart");
   const { user } = useCurrentUser();
-  console.log(product);
+
   return (
     <>
       <div className="flex flex-col sm:mx-[20px] my-[20px] py-[15px] px-[20px] bg-[#387CBD] shadow-md">

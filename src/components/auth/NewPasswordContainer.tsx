@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearchParams } from "next/navigation";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
-import requestService from "@/utils/classes/requestService";
+import requestService from "@/utils/classes/RequestService";
 
 export default function ResetPasswordContainer() {
   const [error, setError] = React.useState<string | undefined>("");

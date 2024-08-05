@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import { postgres } from "@/data/database/publicSQL/postgres";
-import IUserService from "../interfaces/iUserService";
+import IUserService from "../interfaces/IUserService";
 import {
   getTwoFactorConfirmationByUserId,
   getUserByEmail,

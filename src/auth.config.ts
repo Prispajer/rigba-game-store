@@ -1,11 +1,11 @@
 import bcrypt from "bcryptjs";
-import type { NextAuthConfig } from "next-auth";
-import { LoginSchema } from "@/utils/schemas/user";
-import { getUserByEmail } from "@/data/database/publicSQL/queries";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import Facebook from "next-auth/providers/facebook";
 import Discord from "@auth/core/providers/discord";
+import { getUserByEmail } from "@/data/database/publicSQL/queries";
+import type { NextAuthConfig } from "next-auth";
+import { LoginSchema } from "@/utils/schemas/user";
 
 export default {
   providers: [

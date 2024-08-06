@@ -9,9 +9,9 @@ export default function FilterByPrice() {
 
   return (
     <div>
-      <div className="py-[15px] px-[20px] text-[#FFFFFF] text-[18px] border-b-[2px] border-b-primaryColor">
+      <div className="py-[15px] px-[20px] text-[#FFFFFF] text-[18px] border-b-2 border-secondaryColor">
         <div className="flex items-center justify-between max-w-[300px] pb-[10px] cursor-pointer">
-          <span>Cena</span>
+          <span className="text-[18px] text-[#FFFFFF] font-bold">Cena</span>
           <MdKeyboardArrowUp size="25px" />
         </div>
         <div className="flex items-center">

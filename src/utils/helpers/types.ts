@@ -101,3 +101,9 @@ export enum SignInProvider {
   Facebook = "facebook",
   Discord = "discord",
 }
+
+export enum NavCurrentElement {
+  Category = "category",
+  SubCategory = "subcategory",
+  Link = "link",
+}

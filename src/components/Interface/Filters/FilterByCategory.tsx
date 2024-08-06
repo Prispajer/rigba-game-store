@@ -38,9 +38,11 @@ export default function FilterByCategory({
 
   return (
     <>
-      <div className="py-[15px] px-[20px] text-[#ffffff] text-[16px]  border-b-[2px] border-b-primaryColor">
+      <div className="py-[15px] px-[20px] text-[#ffffff] text-[16px] border-b-2 border-secondaryColor">
         <div className="flex items-center justify-between max-w-[300px] pb-[10px] cursor-pointer">
-          <span>{filterLabel}</span>
+          <span className="text-[18px] text-[#FFFFFF] font-bold">
+            {filterLabel}
+          </span>
           <MdKeyboardArrowDown size="25px" />
         </div>
         <div className="flex items-center  flex-1 p-[8px] mb-[10px] border-[white]   bg-secondaryColor ">

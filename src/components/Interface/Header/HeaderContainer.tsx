@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { toggleScreen } from "@/redux/slices/utilitySlice";
 import HeaderLogo from "./HeaderLogo";
 import HeaderUserNavigation from "./HeaderUserNavigation";
-import NavbarSidebar from "../Navbar/NavbarSidebar";
+import NavbarSidebar from "../Shared/Sidebars/NavbarSidebar";
 import HeaderSearchBar from "./HeaderSearchBar";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 
@@ -24,7 +24,7 @@ export default function HeaderContainer() {
 
   return (
     <header
-      className={`md:border-b-0  border-b-2 z-[1] border-secondaryColor bg-primaryColor ${
+      className={`md:border-b-0 border-b-2 border-secondaryColor bg-primaryColor z-[10] ${
         !resolutionState ? "sticky top-0" : "flex"
       }`}
     >

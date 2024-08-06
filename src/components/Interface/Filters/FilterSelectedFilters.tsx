@@ -8,6 +8,7 @@ import {
   setStoresIdArray,
 } from "@/redux/slices/gamesFilterSlice";
 import FilterModalContainer from "../Shared/Modals/FilterModalContainer";
+import SortAndFilterSidebar from "../Shared/Sidebars/SortAndFilterSidebar";
 import useFetchGameData from "@/hooks/useFetchGameData";
 import useSearchText from "@/hooks/useSearchText";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
@@ -32,6 +33,8 @@ export default function FilterSelectedFilters() {
     platformsModalState,
     genresModalState,
     storesModalState,
+    resolutionState,
+    sortAndFilterModalState,
     handleOpen,
   } = useWindowVisibility();
 
@@ -69,34 +72,29 @@ export default function FilterSelectedFilters() {
   if (!hasFilters) {
     return null;
   }
+
   return (
     <div className="relative overflow-x-auto md:overflow-visible">
       <ul className="relative flex items-center flex-nowrap  gap-[10px] pb-[25px]">
-        <li className="shrink-0">
-          <button
-            onClick={() => handleOpen("storesModal")}
-            className="flex items-center py-[4px] pl-[16px] pr-[8px] rounded-full font-medium bg-tertiaryColor text-[#ffffff]"
-          >
-            <span className="flex items-center gap-x-[5px] mr-[2px]">
-              <IoFilterSharp /> Sort and filter ({includesId})
-            </span>
-            <MdKeyboardArrowDown size="25px" className="mt-[3px]" />
-          </button>
-          {storesModalState && (
-            <FilterModalContainer
-              filterLabel="Stores"
-              searchText="searchStoreText"
-              searchState={searchStoreTextState as string}
-              apiFiltersArray={gamesStoresState.storesArray}
-              selectedFiltersId={gamesFilterState.storesIdArray}
-              setSelectedFiltersId={setStoresIdArray}
-              clickedModal="storesModal"
-            />
-          )}
-        </li>
-        <div className="h-[30px] mx-[6px]">
-          <span className="h-[30px] text-[#FFFFFF]">|</span>
-        </div>
+        {!resolutionState && (
+          <>
+            <li className="shrink-0">
+              <button
+                onClick={() => handleOpen("sortAndFilterModal")}
+                className="flex items-center py-[4px] pl-[16px] pr-[8px] rounded-full font-medium bg-tertiaryColor text-[#ffffff]"
+              >
+                <span className="flex items-center gap-x-[5px] mr-[2px]">
+                  <IoFilterSharp /> Sort and filter ({includesId})
+                </span>
+                <MdKeyboardArrowDown size="25px" className="mt-[3px]" />
+              </button>
+              {sortAndFilterModalState && <SortAndFilterSidebar />}
+            </li>
+            <div className="h-[30px] mx-[6px]">
+              <span className="h-[30px] text-[#FFFFFF]">|</span>
+            </div>
+          </>
+        )}
         {gamesFilterState.publishersIdArray.length > 0 && (
           <li className="shrink-0">
             <button

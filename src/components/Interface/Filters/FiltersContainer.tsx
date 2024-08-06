@@ -1,48 +1,25 @@
 "use client";
 import React from "react";
 import { MoonLoader } from "react-spinners";
-import {
-  setGenresIdArray,
-  setPlatformsIdArray,
-  setStoresIdArray,
-  setPublishersIdArray,
-} from "@/redux/slices/gamesFilterSlice";
-import FilterByCategory from "./FilterByCategory";
+import FilterFilters from "./FilterFilters";
 import FilterSelectedFilters from "./FilterSelectedFilters";
 import FilterProductList from "./FilterProductList";
 import FilterChangePage from "./FilterChangePage";
-import FilterByPrice from "./FilterByPrice";
 import SortBy from "../Shared/ReusableComponents/SortBy";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import useFetchGameData from "@/hooks/useFetchGameData";
-import useSearchText from "@/hooks/useSearchText";
 
 export default function FiltersContainer() {
   const { getUrlParams } = useCustomRouter();
   const {
     gamesFilterState,
-    gamesGenresState,
-    gamesPlatformsState,
-    gamesStoresState,
-    gamesPublishersState,
     handleFetchGamesWithFilters,
-    handleFetchPublishers,
-    handleFetchPlatforms,
-    handleFetchGenres,
-    handleFetchStores,
     handleSetGenresIdArray,
     handleSetPlatformsIdArray,
     handleSetPublishersIdArray,
     handleSetStoresIdArray,
     handleFilterSortChange,
   } = useFetchGameData();
-
-  const {
-    searchGenreTextState,
-    searchPlatformTextState,
-    searchPublisherTextState,
-    searchStoreTextState,
-  } = useSearchText();
 
   React.useEffect(() => {
     handleSetGenresIdArray(getUrlParams("genres"));
@@ -61,47 +38,7 @@ export default function FiltersContainer() {
           </h2>
         </div>
         <div className="flex w-full my-[20px] gap-x-[20px]">
-          <aside className="hidden lg:block lg:h-auto lg:max-w-[220px]">
-            <form className="bg-filtersBackgroundColor">
-              <FilterByPrice />
-              <FilterByCategory
-                filterLabel="Publishers"
-                searchText="searchPublisherText"
-                searchTextState={searchPublisherTextState as string}
-                apiFiltersArray={gamesPublishersState.publishersArray}
-                selectedFiltersId={gamesFilterState.publishersIdArray}
-                setSelectedFiltersId={setPublishersIdArray}
-                handleFetchApiFilters={handleFetchPublishers}
-              />
-              <FilterByCategory
-                filterLabel="Platforms"
-                searchText="searchPlatformText"
-                searchTextState={searchPlatformTextState as string}
-                apiFiltersArray={gamesPlatformsState.platformsArray}
-                selectedFiltersId={gamesFilterState.platformsIdArray}
-                setSelectedFiltersId={setPlatformsIdArray}
-                handleFetchApiFilters={handleFetchPlatforms}
-              />
-              <FilterByCategory
-                filterLabel="Genres"
-                searchText="searchGenreText"
-                searchTextState={searchGenreTextState as string}
-                apiFiltersArray={gamesGenresState.genresArray}
-                selectedFiltersId={gamesFilterState.genresIdArray}
-                setSelectedFiltersId={setGenresIdArray}
-                handleFetchApiFilters={handleFetchGenres}
-              />
-              <FilterByCategory
-                filterLabel="Stores"
-                searchText="searchStoreText"
-                searchTextState={searchStoreTextState as string}
-                apiFiltersArray={gamesStoresState.storesArray}
-                selectedFiltersId={gamesFilterState.storesIdArray}
-                setSelectedFiltersId={setStoresIdArray}
-                handleFetchApiFilters={handleFetchStores}
-              />
-            </form>
-          </aside>
+          <FilterFilters position="hidden md:flex md:max-w-[220px] h-auto z-10 bg-filtersBackgroundColor" />
           <section className="w-full lg:w-[calc(100%-220px)]">
             <FilterSelectedFilters />
             <SortBy

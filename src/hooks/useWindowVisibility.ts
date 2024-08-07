@@ -45,6 +45,24 @@ export default function useWindowVisibility() {
   const sortAndFilterModalState = useSelector(
     (state: RootState) => state.utility.sortAndFilterModal
   );
+  const sortMenuState = useSelector(
+    (state: RootState) => state.utility.sortMenu
+  );
+  const priceMenuState = useSelector(
+    (state: RootState) => state.utility.priceMenu
+  );
+  const publishersMenuState = useSelector(
+    (state: RootState) => state.utility.publishersMenu
+  );
+  const platformsMenuState = useSelector(
+    (state: RootState) => state.utility.platformsMenu
+  );
+  const genresMenuState = useSelector(
+    (state: RootState) => state.utility.genresMenu
+  );
+  const storesMenuState = useSelector(
+    (state: RootState) => state.utility.storesMenu
+  );
 
   const handleOpen = (element: string): void => {
     dispatch(open(element));
@@ -82,6 +100,12 @@ export default function useWindowVisibility() {
     storesModalState,
     sortModalState,
     sortAndFilterModalState,
+    sortMenuState,
+    priceMenuState,
+    publishersMenuState,
+    platformsMenuState,
+    genresMenuState,
+    storesMenuState,
     handleOpen,
     handleClose,
     handleToggle,

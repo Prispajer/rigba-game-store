@@ -38,12 +38,14 @@ export default function FiltersContainer() {
           </h2>
         </div>
         <div className="flex w-full my-[20px] gap-x-[20px]">
-          <FilterFilters position="hidden md:flex md:max-w-[220px] h-auto z-10 bg-filtersBackgroundColor" />
+          <FilterFilters position="hidden md:flex flex-col md:max-w-[220px] min-w-[220px]" />
           <section className="w-full lg:w-[calc(100%-220px)]">
             <FilterSelectedFilters />
             <SortBy
               handleSortChange={handleFilterSortChange}
               sortedGamesCount={gamesFilterState.gamesCount}
+              position="hidden md:flex relative"
+              display="flex-1"
             />
             {gamesFilterState.isLoading ? (
               <div className="flex items-center justify-center">

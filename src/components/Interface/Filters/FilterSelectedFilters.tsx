@@ -14,6 +14,9 @@ import useSearchText from "@/hooks/useSearchText";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 
 export default function FilterSelectedFilters() {
+  const [hasFiltersNumber, setHasFiltersNumber] = React.useState<number | null>(
+    null
+  );
   const {
     gamesFilterState,
     gamesPublishersState,
@@ -38,40 +41,23 @@ export default function FilterSelectedFilters() {
     handleOpen,
   } = useWindowVisibility();
 
-  const hasFilters =
-    gamesFilterState.genresIdArray.length > 0 ||
-    gamesFilterState.platformsIdArray.length > 0 ||
-    gamesFilterState.publishersIdArray.length > 0 ||
-    gamesFilterState.storesIdArray.length > 0;
+  const hasFilters = (array: number[]): number => {
+    return array.some((value) => value > 0) ? 1 : 0;
+  };
 
-  const genreMatch = gamesFilterState.genresIdArray.includes(
-    gamesGenresState.genresArray.find((id) => id)
-  );
-  const publishersMatch = gamesFilterState.genresIdArray.includes(
-    gamesPublishersState.publishersArray.find((id) => id)
-  );
-  const platformsMatch = gamesFilterState.genresIdArray.includes(
-    gamesPlatformsState.platformsArray.find((id) => id)
-  );
-  const storesMatch = gamesFilterState.genresIdArray.includes(
-    gamesStoresState.storesArray.find((id) => id)
-  );
-
-  const includesId = genreMatch
-    ? 1
-    : hasFilters
-    ? publishersMatch
-      ? 2
-      : platformsMatch
-      ? 3
-      : storesMatch
-      ? 4
-      : 0
-    : 0;
-
-  if (!hasFilters) {
-    return null;
-  }
+  React.useEffect(() => {
+    const totalFilters =
+      hasFilters(gamesFilterState.publishersIdArray) +
+      hasFilters(gamesFilterState.genresIdArray) +
+      hasFilters(gamesFilterState.platformsIdArray) +
+      hasFilters(gamesFilterState.storesIdArray);
+    setHasFiltersNumber(totalFilters);
+  }, [
+    gamesFilterState.genresIdArray,
+    gamesFilterState.platformsIdArray,
+    gamesFilterState.publishersIdArray,
+    gamesFilterState.storesIdArray,
+  ]);
 
   return (
     <div className="relative overflow-x-auto md:overflow-visible">
@@ -84,7 +70,7 @@ export default function FilterSelectedFilters() {
                 className="flex items-center py-[4px] pl-[16px] pr-[8px] rounded-full font-medium bg-tertiaryColor text-[#ffffff]"
               >
                 <span className="flex items-center gap-x-[5px] mr-[2px]">
-                  <IoFilterSharp /> Sort and filter ({includesId})
+                  <IoFilterSharp /> Sort and filter ({hasFiltersNumber})
                 </span>
                 <MdKeyboardArrowDown size="25px" className="mt-[3px]" />
               </button>
@@ -191,14 +177,16 @@ export default function FilterSelectedFilters() {
             )}
           </li>
         )}
-        <li className="shrink-0 mx-[6px]">
-          <button
-            onClick={handleClearAllFilters}
-            className="text-[18px] text-modalHover"
-          >
-            Clear all
-          </button>
-        </li>
+        {!resolutionState && (
+          <li className="shrink-0 mx-[6px]">
+            <button
+              onClick={handleClearAllFilters}
+              className="text-[18px] text-modalHover"
+            >
+              Clear all
+            </button>
+          </li>
+        )}
       </ul>
     </div>
   );

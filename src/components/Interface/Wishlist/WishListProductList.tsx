@@ -68,7 +68,12 @@ export default function WishListProductList() {
                 </div>
               </div>
             </div>
-            <AddToWishList game={game} />
+            <AddToWishList
+              game={game}
+              position="absolute right-[10px] top-0"
+              added="border-[#FFFA84] bg-[#FFFA84]"
+              deleted="bg-[##d3d3d3]"
+            />
           </div>
         ))
       ) : (

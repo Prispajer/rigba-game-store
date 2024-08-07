@@ -5,25 +5,31 @@ type UIElementState = {
 };
 
 const initialState: UIElementState = {
-  authSidebar: false,
-  profileModal: false,
-  cartModal: false,
-  navSidebar: false,
-  searchBarModal: false,
-  gameImageModal: false,
-  resolution: true,
   searchGenreText: "",
   searchPlatformText: "",
   searchPublisherText: "",
   searchStoreText: "",
   compartmentNumberOne: null,
   compartmentNumberTwo: null,
+  resolution: true,
+  authSidebar: false,
+  navSidebar: false,
+  profileModal: false,
+  cartModal: false,
+  searchBarModal: false,
+  gameImageModal: false,
   publishersModal: false,
   platformsModal: false,
   genresModal: false,
   storesModal: false,
   sortModal: false,
   sortAndFilterModal: false,
+  sortMenu: true,
+  priceMenu: true,
+  publishersMenu: true,
+  platformsMenu: true,
+  genresMenu: true,
+  storesMenu: true,
 };
 
 const utilitySlice = createSlice({

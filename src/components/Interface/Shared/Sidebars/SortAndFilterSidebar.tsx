@@ -1,9 +1,13 @@
 import { IoCloseSharp } from "react-icons/io5";
+import { MdKeyboardArrowUp, MdKeyboardArrowDown } from "react-icons/md";
 import FilterFilters from "../../Filters/FilterFilters";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
+import SortBy from "../ReusableComponents/SortBy";
 import useSharedGeneralActions from "@/hooks/useWindowVisibility";
+import useFetchGameData from "@/hooks/useFetchGameData";
 
 export default function SortAndFilterSidebar() {
+  const { gamesFilterState, handleFilterSortChange } = useFetchGameData();
   const { sortAndFilterModalState, handleClose } = useSharedGeneralActions();
 
   const handleOutsideClick = () => {
@@ -16,7 +20,7 @@ export default function SortAndFilterSidebar() {
     <>
       {sortAndFilterModalState && (
         <OutsideClickHandler handleOutsideClick={handleOutsideClick}>
-          <div className="fixed top-0 left-0 bottom-0 h-full w-[300px] z-10 bg-primaryColor flex flex-col">
+          <div className="fixed top-0 left-0 bottom-0 flex flex-col h-full w-full max-w-[300px] z-10 bg-filtersBackgroundColor">
             <div className="flex items-center justify-between py-[15px] px-[20px] border-b-2 border-secondaryColor">
               <span className="text-[18px] text-[#FFFFFF] font-bold">
                 Sort and filter
@@ -28,7 +32,13 @@ export default function SortAndFilterSidebar() {
               />
             </div>
             <div className="flex-1 overflow-y-auto">
-              <FilterFilters position="w-full h-full bg-transparent" />
+              <SortBy
+                handleSortChange={handleFilterSortChange}
+                sortedGamesCount={gamesFilterState.gamesCount}
+                position="flex flex-col flex-1 py-[15px] px-[20px] md:hidden relative border-b-2 border-secondaryColor"
+                display="hidden"
+              />
+              <FilterFilters position="w-full bg-transparent" />
             </div>
             <div className="py-[15px] px-[20px] border-t-2 border-secondaryColor">
               <button

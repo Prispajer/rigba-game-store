@@ -33,11 +33,21 @@ const SortByElements = [
 export default function SortBy({
   handleSortChange,
   sortedGamesCount,
+  position,
+  display,
 }: {
   handleSortChange: (ordering: string) => void;
   sortedGamesCount: number | any[];
+  position: string;
+  display: string;
 }) {
-  const { sortModalState, handleToggle, handleClose } = useWindowVisibility();
+  const {
+    sortModalState,
+    resolutionState,
+    sortMenuState,
+    handleToggle,
+    handleClose,
+  } = useWindowVisibility();
   const [currentSort, setCurrentSort] = React.useState(SortByElements[0]);
 
   const handleSortSelection = (sortOption: {
@@ -47,47 +57,96 @@ export default function SortBy({
   }) => {
     setCurrentSort(sortOption);
     handleSortChange(sortOption.ordering);
-    handleClose("sortModal");
   };
 
   return (
     <div className="flex items-center">
-      <div className="flex-1">
+      <div className={display}>
         <span className="text-[#FFFFFF]">
           Results found: <span className="font-bold">{sortedGamesCount}</span>
         </span>
       </div>
-      <div className="relative">
-        <button
-          className="flex items-center text-[18px] hover:text-headerHover text-[#FFFFFF]"
-          onClick={() => handleToggle("sortModal")}
-        >
-          <currentSort.icon />
-          <span className="ml-[8px] mr-[4px] font-bold">
-            {currentSort.title}
-          </span>
-          {sortModalState ? (
-            <MdKeyboardArrowUp size="25" />
-          ) : (
-            <MdKeyboardArrowDown size="25" />
-          )}
-        </button>
-        {sortModalState && (
-          <div className="absolute w-[250px] top-[35px] right-0 z-10 bg-[#FFFFFF]">
-            <ul className="sort-modal">
-              {SortByElements.map((element) => (
-                <li
-                  key={element.title}
-                  className="w-full hover:bg-[#DCDCDC] hover:text-headerHover cursor-pointer"
-                  onClick={() => handleSortSelection(element)}
-                >
-                  <button className="py-[5px] px-[15px] flex w-full text-[14px] font-bold text-[#000000] hover:text-headerHover">
-                    {element.title}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
+      <div className={position}>
+        {resolutionState ? (
+          <>
+            <button
+              className="flex items-center text-[18px] hover:text-headerHover text-[#FFFFFF]"
+              onClick={() => handleToggle("sortModal")}
+            >
+              <currentSort.icon />
+              <span className="ml-[8px] mr-[4px] font-bold">
+                {currentSort.title}
+              </span>
+              {sortModalState ? (
+                <MdKeyboardArrowUp size="25" />
+              ) : (
+                <MdKeyboardArrowDown size="25" />
+              )}
+            </button>
+            {sortModalState && (
+              <div className="absolute w-[250px] top-[35px] right-0 z-10 bg-[#FFFFFF]">
+                <ul className="sort-modal">
+                  {SortByElements.map((element) => (
+                    <li
+                      key={element.title}
+                      className="w-full hover:bg-[#DCDCDC] hover:text-headerHover cursor-pointer"
+                      onClick={() => {
+                        handleSortSelection(element), handleClose("sortModal");
+                      }}
+                    >
+                      <button className="py-[5px] px-[15px] flex w-full text-[14px] font-bold text-[#000000] hover:text-headerHover">
+                        {element.title}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            <button
+              className="flex items-center justify-between"
+              onClick={() => handleToggle("sortMenu")}
+            >
+              <span className="text-[18px] text-[#FFFFFF] font-bold">
+                Sort elements
+              </span>
+              {sortMenuState ? (
+                <MdKeyboardArrowUp
+                  size="25"
+                  className="text-[#ffffff] cursor-pointer"
+                />
+              ) : (
+                <MdKeyboardArrowDown
+                  size="25"
+                  className="text-[#ffffff] cursor-pointer"
+                />
+              )}
+            </button>
+            {sortMenuState && (
+              <div className="flex">
+                <ul className="flex flex-col pt-[10px] gap-y-[10px]">
+                  {SortByElements.map((element) => (
+                    <li
+                      key={element.title}
+                      className="flex items-center cursor-pointer"
+                      onClick={() => handleSortSelection(element)}
+                    >
+                      <input
+                        className="flex-0 rounded-full"
+                        type="checkbox"
+                        checked={currentSort.ordering === element.ordering}
+                      />
+                      <span className="flex-1 px-[10px] font-[600] text-[#FFFFFF]">
+                        {element.title}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

@@ -6,10 +6,17 @@ import {
 } from "@/redux/slices/gamesFilterSlice";
 import FilterByPrice from "./FilterByPrice";
 import FilterByCategory from "./FilterByCategory";
+import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useFetchGameData from "@/hooks/useFetchGameData";
 import useSearchText from "@/hooks/useSearchText";
 
 export default function FilterFilters({ position }: { position: string }) {
+  const {
+    publishersMenuState,
+    platformsMenuState,
+    genresMenuState,
+    storesMenuState,
+  } = useWindowVisibility();
   const {
     gamesFilterState,
     gamesGenresState,
@@ -21,7 +28,6 @@ export default function FilterFilters({ position }: { position: string }) {
     handleFetchGenres,
     handleFetchStores,
   } = useFetchGameData();
-
   const {
     searchGenreTextState,
     searchPlatformTextState,
@@ -34,6 +40,9 @@ export default function FilterFilters({ position }: { position: string }) {
       <form>
         <FilterByPrice />
         <FilterByCategory
+          menuElement="publishersMenu"
+          menuElementState={publishersMenuState as boolean}
+          borderStyle="border-b-2 border-secondaryColor"
           filterLabel="Publishers"
           searchText="searchPublisherText"
           searchTextState={searchPublisherTextState as string}
@@ -43,6 +52,9 @@ export default function FilterFilters({ position }: { position: string }) {
           handleFetchApiFilters={handleFetchPublishers}
         />
         <FilterByCategory
+          menuElement="platformsMenu"
+          menuElementState={platformsMenuState as boolean}
+          borderStyle="border-b-2 border-secondaryColor"
           filterLabel="Platforms"
           searchText="searchPlatformText"
           searchTextState={searchPlatformTextState as string}
@@ -52,6 +64,9 @@ export default function FilterFilters({ position }: { position: string }) {
           handleFetchApiFilters={handleFetchPlatforms}
         />
         <FilterByCategory
+          menuElement="genresMenu"
+          menuElementState={genresMenuState as boolean}
+          borderStyle="border-b-2 border-secondaryColor"
           filterLabel="Genres"
           searchText="searchGenreText"
           searchTextState={searchGenreTextState as string}
@@ -61,6 +76,9 @@ export default function FilterFilters({ position }: { position: string }) {
           handleFetchApiFilters={handleFetchGenres}
         />
         <FilterByCategory
+          menuElement="storesMenu"
+          menuElementState={storesMenuState as boolean}
+          borderStyle=""
           filterLabel="Stores"
           searchText="searchStoreText"
           searchTextState={searchStoreTextState as string}

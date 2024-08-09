@@ -87,6 +87,7 @@ export type RequestData = UserDataRequest & ProductDataRequest;
 export interface GameAPIResponse extends Product {
   image_background?: string;
   games_count?: number;
+  genres: { id: number; name: string }[];
 }
 
 export type ProfileModalContainerProps = {

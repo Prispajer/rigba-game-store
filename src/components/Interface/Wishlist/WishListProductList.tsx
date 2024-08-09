@@ -16,7 +16,7 @@ export default function WishListProductList() {
   const displayByRole = user ? userWishListState.products : localWishListState;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4 w-full gap-x-[10px]">
+    <div className="grid grid-cols-1 sm:grid-cols-product-list-auto-fit gap-x-[10px]">
       {displayByRole && displayByRole.length > 0 ? (
         displayByRole.map((game) => (
           <div

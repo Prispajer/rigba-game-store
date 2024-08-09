@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
@@ -8,6 +9,7 @@ import useSearchText from "@/hooks/useSearchText";
 
 export default function FilterProductList() {
   const { gamesFilterState } = useFetchGameData();
+  console.log(gamesFilterState);
   const { compartmentNumberOne, compartmentNumberTwo, handleComparePrices } =
     useSearchText();
   const { redirectToGame } = useCustomRouter();
@@ -27,7 +29,7 @@ export default function FilterProductList() {
           <div
             key={game.slug}
             onClick={() => redirectToGame(game.slug as string)}
-            className="relative my-[10px] flex flex-row sm:flex-col bg-tertiaryColor"
+            className="relative my-[10px] flex flex-row sm:flex-col bg-tertiaryColor cursor-pointer"
           >
             <div className="relative m-[5px] sm:m-[0px] min-w-[95px] sm:min-h-[250px]">
               <Image

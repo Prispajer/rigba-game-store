@@ -17,11 +17,11 @@ export default function HomeProductList({ ordering }: { ordering: string }) {
   >([]);
   const [newLoadingArray, setNewLoadingArray] = React.useState<boolean[]>([]);
 
-  console.log(gamesWithOrdering);
-
   React.useEffect(() => {
     (async () => {
-      const gamesWithOrdering = await FetchService.getGamesByOrdering(ordering);
+      const gamesWithOrdering = await FetchService.getProductsByOrdering(
+        ordering
+      );
       setGamesWithOrdering(gamesWithOrdering);
       setNewLoadingArray(new Array(gamesWithOrdering.length).fill(false));
     })();

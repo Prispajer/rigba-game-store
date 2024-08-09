@@ -22,7 +22,7 @@ export const fetchPlatforms = createAsyncThunk<
   { rejectValue: string }
 >("platforms/fetchPlatforms", async ({ quantity = 1 }, { rejectWithValue }) => {
   try {
-    const response = await FetchService.getGamesPlatforms(quantity);
+    const response = await FetchService.getPlatformsForProducts(quantity);
     return response;
   } catch (error) {
     return rejectWithValue((error as Error).message);

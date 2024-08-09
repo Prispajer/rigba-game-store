@@ -24,7 +24,7 @@ export const fetchPublishers = createAsyncThunk<
   "publishers/fetchPublishers",
   async ({ quantity = 1 }, { rejectWithValue }) => {
     try {
-      const response = await FetchService.getGamesPublishers(quantity);
+      const response = await FetchService.getPublishersForProducts(quantity);
       return response;
     } catch (error) {
       return rejectWithValue((error as Error).message);

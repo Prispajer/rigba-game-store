@@ -37,8 +37,6 @@ export default function FilterByCategory({
   const { handleFilterChange } = useFetchGameData();
   const { handleSetSearchText } = useSearchText();
 
-  console.log(visibleItemsCount);
-
   const utilsService: IUtilsService = new UtilsService(
     searchTextState as string
   );

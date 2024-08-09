@@ -24,6 +24,10 @@ body {
   @apply bg-inputBackgroundColor w-[100%] p-[15px];
 }
 
+.transition-animation {
+  @apply transition duration-300;
+}
+
 .input:hover {
   @apply bg-secondaryColor cursor-pointer;
 }
@@ -33,19 +37,23 @@ body {
 }
 
 .nav-icon {
-  @apply h-[35px] w-[35px] m-[6px] py-1 cursor-pointer transition duration-300 text-white hover:text-headerHover;
+  @apply h-[35px] w-[35px] m-[6px] py-1 cursor-pointer transition-animation text-white hover:text-headerHover;
 }
 
 .nav-li {
-  @apply flex items-center h-[60px] px-4  transition duration-300 hover:text-headerHover hover:bg-tertiaryColor;
+  @apply flex items-center h-[60px] px-4 transition-animation hover:text-headerHover hover:bg-tertiaryColor;
+}
+
+.nav-link {
+  @apply m-2 transition-animation;
+}
+
+.social-link {
+  @apply flex items-center p-[15px] my-4 cursor-pointer transition-animation;
 }
 
 .sidebar-li {
   @apply flex items-center justify-between h-[50px] w-full px-[20px] text-[16px] font-[600] border-b-[2px] border-secondaryColor cursor-pointer;
-}
-
-.nav-link {
-  @apply m-2 transition duration-300;
 }
 
 .ul-li {
@@ -54,10 +62,6 @@ body {
 
 .ul-span {
   @apply block mb-3 text-[14px] font-bold text-[white] cursor-default;
-}
-
-.social-link {
-  @apply flex items-center p-[15px] my-4 cursor-pointer transition duration-300;
 }
 
 .social-link-span {
@@ -130,14 +134,18 @@ body {
   border-radius: 14px;
 }
 
-.scrollbar-filters::-webkit-scrollbar {
+.scrollbar-filters-modal::-webkit-scrollbar {
   overflow-y: scroll;
   width: 6px;
 }
 
-.scrollbar-filters::-webkit-scrollbar-thumb {
+.scrollbar-filters-modal::-webkit-scrollbar-thumb {
   overflow-y: scroll;
   background-color: #ffffff;
+}
+
+.scrollbar-filters-selected-filters::-webkit-scrollbar {
+  display: none;
 }
 
 input[type="checkbox"] {

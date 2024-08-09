@@ -60,8 +60,8 @@ export default function FilterSelectedFilters() {
   ]);
 
   return (
-    <div className="relative overflow-x-auto md:overflow-visible">
-      <ul className="relative flex items-center flex-nowrap  gap-[10px] pb-[25px]">
+    <div className="scrollbar-filters-selected-filters relative overflow-x-auto md:overflow-visible">
+      <ul className="relative flex items-center flex-nowrap gap-[10px] pb-[25px]">
         {!resolutionState && (
           <>
             <li className="shrink-0">

@@ -30,15 +30,15 @@ export default function WishListContainer() {
               <SortBy
                 handleSortChange={handleSetUserWishListOrdering}
                 sortedGamesCount={userWishListState.products}
-                position="flex items-center justify-between w-full"
-                display="flex items-center justify-between"
+                position="relative"
+                display="flex-1"
               />
             ) : (
               <SortBy
                 handleSortChange={handleSetLocalOrdering}
                 sortedGamesCount={localWishListState.length}
-                position="flex items-center justify-between"
-                display="flex items-center justify-between"
+                position="relative"
+                display="flex-1"
               />
             )}
             <WishListProductList />

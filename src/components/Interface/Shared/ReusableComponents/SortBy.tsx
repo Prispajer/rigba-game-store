@@ -60,7 +60,7 @@ export default function SortBy({
   };
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center ">
       <div className={display}>
         <span className="text-[#FFFFFF]">
           Results found: <span className="font-bold">{sortedGamesCount}</span>

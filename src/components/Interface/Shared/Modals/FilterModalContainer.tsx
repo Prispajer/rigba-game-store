@@ -66,7 +66,7 @@ export default function FilterModalContainer({
           autoComplete="off"
         />
       </div>
-      <ul className="scrollbar-filters md:max-h-[210px] pr-[8px] overflow-y-auto">
+      <ul className="scrollbar-filters-modal md:max-h-[210px] pr-[8px] overflow-y-auto">
         {utilsService.searchByString(apiFiltersArray).map((filter) => (
           <li
             key={filter.id}
@@ -127,7 +127,7 @@ export default function FilterModalContainer({
             autoComplete="off"
           />
         </div>
-        <ul className="scrollbar-filters max-h-[500px] sm:max-h-[210px] pr-[8px] overflow-y-auto">
+        <ul className="scrollbar-filters-modal max-h-[500px] sm:max-h-[210px] pr-[8px] overflow-y-auto">
           {utilsService.searchByString(apiFiltersArray).map((filter) => (
             <li
               key={filter.id}

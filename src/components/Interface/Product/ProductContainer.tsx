@@ -9,7 +9,7 @@ import ProductReview from "./ProductReview";
 import ProductUsersReview from "./ProductUsersReview";
 import ProductGenres from "./ProductGenres";
 import ProductDescription from "./ProductDescription";
-import ProductSystemRequirements from "./ProductSystemRequirements";
+import ProductRequirements from "./ProductRequirements";
 import ProductHeaders from "../Shared/ReusableComponents/ProductHeaders";
 import ProductRemainingDetails from "./ProductRemainingDetails";
 import ShowMoreButton from "../Shared/Buttons/ShowMoreButton";
@@ -18,15 +18,9 @@ import { GameAPIResponse } from "@/utils/helpers/types";
 export default function ProductContainer({
   product,
   screenshots,
-  genres,
-  requirements,
-  gameGenres,
 }: {
-  product: any;
-  screenshots: string[];
-  genres: string[];
-  requirements: any;
-  gameGenres: GameAPIResponse;
+  product: GameAPIResponse;
+  screenshots: GameAPIResponse[];
 }) {
   return (
     <main className="pb-[100px] bg-primaryColor">
@@ -45,11 +39,11 @@ export default function ProductContainer({
           <ProductUsersReview />
           <ShowMoreButton text="Load more reviews" />
           <ProductHeaders headerText="Product description" />
-          <ProductGenres genres={gameGenres} />
+          <ProductGenres product={product} />
           <ProductDescription product={product} />
-          <ProductHeaders headerText="Wymagania systemowe" />
-          <ProductSystemRequirements requirements={requirements} />
-          <ProductHeaders headerText="Pozostałe szczegóły" />
+          <ProductHeaders headerText="System requirements" />
+          <ProductRequirements product={product} />
+          <ProductHeaders headerText="Other details" />
           <ProductRemainingDetails />
         </div>
         <div className="hidden lg:flex flex-col">

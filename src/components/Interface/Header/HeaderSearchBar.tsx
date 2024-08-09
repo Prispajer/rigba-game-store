@@ -23,7 +23,7 @@ export default function HeaderSearchBar() {
   const fetchGames = React.useCallback(async (searchText: string) => {
     setIsLoading(true);
     if (searchText.trim() !== "") {
-      setGamesArray(await FetchService.getGames(searchText));
+      setGamesArray(await FetchService.getProducts(searchText));
     } else {
       setGamesArray([]);
     }

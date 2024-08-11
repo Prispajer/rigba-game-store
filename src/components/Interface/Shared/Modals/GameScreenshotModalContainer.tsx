@@ -5,46 +5,62 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import { IoCloseSharp } from "react-icons/io5";
+import { GameAPIResponse } from "@/utils/helpers/types";
 
-export default function GameImageModalContainer({
+export default function GameScreenshotModalContainer({
   currentImageId,
   screenshots,
+}: {
+  currentImageId: number | null;
+  screenshots: GameAPIResponse["screenshots"];
 }) {
-  const { gameImageModalState, handleClose } = useWindowVisibility();
-  const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
+  const { gameScreenshotModalState, handleClose } = useWindowVisibility();
+  const [currentImageIndex, setCurrentImageIndex] = React.useState<number>(0);
 
   React.useEffect(() => {
-    const index = screenshots?.findIndex(
+    const screenshotIndex = screenshots?.findIndex(
       (image) => image.id === currentImageId
     );
-    if (index !== -1) {
-      setCurrentImageIndex(index);
+    if (screenshotIndex !== -1) {
+      setCurrentImageIndex(screenshotIndex);
+    } else {
+      setCurrentImageIndex(0);
     }
   }, [currentImageId, screenshots]);
 
   const handleOutsideClick = () => {
-    if (gameImageModalState) {
-      handleClose("gameImageModal");
+    if (gameScreenshotModalState) {
+      handleClose("gameScreenshotModal");
     }
   };
 
   const handleNextImage = () => {
-    setCurrentImageIndex((prevIndex) => prevIndex + 1);
+    setCurrentImageIndex((prevIndex) => {
+      if (prevIndex < screenshots.length - 1) {
+        return prevIndex + 1;
+      }
+      return prevIndex;
+    });
   };
 
   const handlePreviousImage = () => {
-    setCurrentImageIndex((prevIndex) => prevIndex - 1);
+    setCurrentImageIndex((prevIndex) => {
+      if (prevIndex > 0) {
+        return prevIndex - 1;
+      }
+      return prevIndex;
+    });
   };
 
   return (
     <>
-      {gameImageModalState && screenshots && (
+      {gameScreenshotModalState && screenshots && (
         <OutsideClickHandler handleOutsideClick={handleOutsideClick}>
           <div className="fixed top-[50%] left-[50%] w-full p-[10px] xxl:w-[80%] translate-y-[-50%] translate-x-[-50%] z-20">
             <div className="relative w-full flex justify-center items-center">
               <button
                 className="text-[#FFFFFF] absolute top-2 right-2"
-                onClick={() => handleClose("gameImageModal")}
+                onClick={() => handleClose("gameScreenshotModal")}
               >
                 <IoCloseSharp
                   className="transition duration-300 ease-in-out hover:text-modalHover"
@@ -53,7 +69,7 @@ export default function GameImageModalContainer({
               </button>
               <div className="flex items-center justify-center w-full">
                 <button
-                  className={`absolute left-0 transition duration-300 ease-in-out z-[20] text-[#FFFFFF] hover:bg-[#FFFFFF20]  ${
+                  className={`absolute left-0 h-[45px] sm:h-[60px] md:h-[80px] transition duration-300 ease-in-out z-[20] text-[#FFFFFF] hover:bg-[#FFFFFF20]  ${
                     currentImageIndex === 0
                       ? "bg-[#FFFFFF20]"
                       : "bg-[#FFFFFF44]"
@@ -61,7 +77,7 @@ export default function GameImageModalContainer({
                   onClick={handlePreviousImage}
                   disabled={currentImageIndex === 0}
                 >
-                  <MdKeyboardArrowLeft size="60" />
+                  <MdKeyboardArrowLeft size="fill" />
                 </button>
                 <Image
                   src={screenshots[currentImageIndex]?.image}
@@ -70,7 +86,7 @@ export default function GameImageModalContainer({
                   height={1800}
                 />
                 <button
-                  className={`absolute right-0 transition duration-300 ease-in-out z-[20] text-[#FFFFFF] hover:bg-[#FFFFFF20]  ${
+                  className={`absolute right-0 h-[45px] sm:h-[60px] md:h-[80px] transition duration-300 ease-in-out z-[20] text-[#FFFFFF] hover:bg-[#FFFFFF20]  ${
                     currentImageIndex === screenshots.length - 1
                       ? "bg-[#FFFFFF20]"
                       : "bg-[#FFFFFF44]"
@@ -78,7 +94,7 @@ export default function GameImageModalContainer({
                   onClick={handleNextImage}
                   disabled={currentImageIndex === screenshots.length - 1}
                 >
-                  <MdKeyboardArrowRight size="60" />
+                  <MdKeyboardArrowRight size="fill" />
                 </button>
               </div>
             </div>

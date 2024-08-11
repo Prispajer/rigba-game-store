@@ -148,6 +148,31 @@ body {
   display: none;
 }
 
+.star {
+  font-size: 24px;
+  color: gold;
+  margin-right: 2px;
+  position: relative;
+  -webkit-background-clip: text;
+  -webkit-text-stroke: 1px gold;
+}
+
+.filled {
+  background: linear-gradient(to right, gold 100%, transparent 100%);
+  -webkit-text-stroke: 1px gold;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.empty {
+  color: transparent;
+  -webkit-text-stroke: 1px gold;
+}
+
+.star::before {
+  content: "\2605";
+}
+
 input[type="checkbox"] {
   display: flex;
   align-items: center;

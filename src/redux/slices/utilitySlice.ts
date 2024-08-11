@@ -17,7 +17,7 @@ const initialState: UIElementState = {
   profileModal: false,
   cartModal: false,
   searchBarModal: false,
-  gameImageModal: false,
+  gameScreenshotModal: false,
   publishersModal: false,
   platformsModal: false,
   genresModal: false,

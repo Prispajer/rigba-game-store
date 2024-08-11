@@ -3,13 +3,13 @@ import { IoKeyOutline } from "react-icons/io5";
 import { FaSteam } from "react-icons/fa";
 
 export default function DigitalProductDetails({
-  display = "xl:hidden  flex-col w-full",
+  display = "xl:hidden flex-col w-full",
 }: {
   display: string;
 }) {
   return (
     <div className={display}>
-      <ul className="grid w-[100%] grid-cols-product-digital-products-details-fit pb-[15px] gap-y-[16px] gap-x-[24px] border-b-[1px] border-[#1c4c74] tracking-tighter">
+      <ul className="grid grid-cols-product-digital-products-details-auto-fit pb-[15px] gap-y-[16px] gap-x-[24px] border-b-[1px] border-[#1c4c74] tracking-tighter">
         <li className="flex items-center w-full ">
           <div className="w-[35px] h-[35px]">
             <IoMdDoneAll size="35px" color="#ffffff" />

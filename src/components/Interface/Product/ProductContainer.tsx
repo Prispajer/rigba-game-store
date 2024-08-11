@@ -4,7 +4,7 @@ import ProductInformations from "./ProductInformations";
 import ProductBuyOrAdd from "./ProductBuyOrAdd";
 import ProductPaymentWays from "./ProductPaymentWays";
 import ProductDigitalProductDetails from "./ProductDigitalProductDetails";
-import ProductImages from "./ProductImages";
+import ProductScreenshots from "./ProductScreenshots";
 import ProductReview from "./ProductReview";
 import ProductUsersReview from "./ProductUsersReview";
 import ProductGenres from "./ProductGenres";
@@ -20,7 +20,7 @@ export default function ProductContainer({
   screenshots,
 }: {
   product: GameAPIResponse;
-  screenshots: GameAPIResponse[];
+  screenshots: GameAPIResponse["screenshots"];
 }) {
   return (
     <main className="pb-[100px] bg-primaryColor">
@@ -32,7 +32,7 @@ export default function ProductContainer({
             <ProductPaymentWays />
           </div>
           <ProductDigitalProductDetails display="xl:hidden w-full" />
-          <ProductImages screenshots={screenshots} />
+          <ProductScreenshots screenshots={screenshots} />
           <ProductHeaders headerText="Gamers also viewed" />
           <ProductHeaders headerText="Reviews: 26" />
           <ProductReview product={product} />
@@ -44,7 +44,7 @@ export default function ProductContainer({
           <ProductHeaders headerText="System requirements" />
           <ProductRequirements product={product} />
           <ProductHeaders headerText="Other details" />
-          <ProductRemainingDetails />
+          <ProductRemainingDetails product={product} />
         </div>
         <div className="hidden lg:flex flex-col">
           <div className="lg:sticky top-[20px]">

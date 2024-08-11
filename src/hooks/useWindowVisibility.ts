@@ -21,8 +21,8 @@ export default function useWindowVisibility() {
   const searchBarState = useSelector(
     (state: RootState) => state.utility.searchBarModal
   );
-  const imageModalState = useSelector(
-    (state: RootState) => state.utility.gameImageModal
+  const gameScreenshotModalState = useSelector(
+    (state: RootState) => state.utility.gameScreenshotModal
   );
   const resolutionState = useSelector(
     (state: RootState) => state.utility.resolution
@@ -92,7 +92,7 @@ export default function useWindowVisibility() {
     cartModalState,
     navSidebarState,
     searchBarState,
-    imageModalState,
+    gameScreenshotModalState,
     resolutionState,
     publishersModalState,
     platformsModalState,

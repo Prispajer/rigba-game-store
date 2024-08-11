@@ -1,23 +1,34 @@
+"use client";
 import { Product } from "@/utils/helpers/types";
+import { generateStars } from "./ProductInformations";
 
 export default function ProductReview({ product }: { product: Product }) {
   return (
-    <section className="flex flex-col md:flex-row justify-between md:items-center md:mx-auto mx-[-20px] px-[20px] pb-[15px] bg-secondaryColor shadow-md">
-      <div className="flex flex-col pt-[20px] md:px-0 pb-[15px]">
-        <div className="flex items-center">
-          <ul className="flex flex-col md:flex-row">
-            {product.ratings?.map((rating, index) => (
-              <li key={index} className="flex   mb-[5px] text-buttonTextColor">
-                <span className="text-[#DCD8D6] mx-[20px]">{rating.title}</span>
-                <span>{rating.percent}</span>
-              </li>
-            ))}
+    <div className="flex flex-col md:flex-row justify-between md:items-center md:mx-auto mx-[-20px] pt-[20px] px-[20px] pb-[15px] md:px-0 lg:px-[20px] xxl:px-0 bg-secondaryColor md:bg-transparent lg:bg-secondaryColor xxl:bg-transparent">
+      <div className="sm:flex sm:flex-row  w-full gap-4 ">
+        <div className="flex flex-wrap justify-between items-center w-full">
+          <ul className="flex flex-col md:flex-row lg:flex-col xxl:flex-row">
+            {product.ratings
+              ?.sort((a: number, b: number) => a.percent - b.percent)
+              .map((rating) => (
+                <li
+                  key={rating.id}
+                  className="flex md:flex-col flex-row-reverse justify-between items-center md:items-start mx-[20px] md:ml-[0px] lg:mx-[20px] xxl:ml-[0px] lg:flex-row-reverse lg:items-center xxl:mx-[20px] xxl:flex-col xxl:items-start text-buttonTextColor"
+                >
+                  <span className="flex grow mt-[4px] lg:mt-[4px] mx-[20px] md:m-0 lg:mx-[20px] xxl:m-0 text-[15px] text-[#DCD8D6] capitalize">
+                    {rating.title}
+                  </span>
+                  {generateStars((5 * rating.percent) / 100)}
+                </li>
+              ))}
           </ul>
         </div>
+        <div className="flex items-end justify-end">
+          <button className="w-full sm:w-[130px] min-w-[130px] min-h-[35px] max-h-[35px] my-[5px] px-[10px] text-[15px] font-[700] text-[#FFFFFF] border-[1px] border-[#FFFFFF]">
+            Review now
+          </button>
+        </div>
       </div>
-      <button className="w-auto min-h-[35px] max-h-[35px] px-[10px] text-[15px] font-[700] text-[#FFFFFF] border-[1px] border-[#FFFFFF]">
-        Review now
-      </button>
-    </section>
+    </div>
   );
 }

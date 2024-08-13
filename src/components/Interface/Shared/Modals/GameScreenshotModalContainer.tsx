@@ -7,7 +7,7 @@ import useWindowVisibility from "@/hooks/useWindowVisibility";
 import { IoCloseSharp } from "react-icons/io5";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
-export default function GameScreenshotModalContainer({
+export default function ProductScreenshotModalContainer({
   currentImageId,
   screenshots,
 }: {

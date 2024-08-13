@@ -102,6 +102,7 @@ export interface GameAPIResponse extends Product {
   publishers: { name: string }[];
   developers: { name: string }[];
   screenshots: { id: number; image: string }[];
+  ratings: { id: number; title: string; percent: number }[];
 }
 
 export type ProfileModalContainerProps = {

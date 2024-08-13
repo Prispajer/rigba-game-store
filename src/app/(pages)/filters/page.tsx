@@ -4,6 +4,6 @@ export const metadata = {
   title: "Filter Games | RIGBA",
 };
 
-export default function Filters() {
+export default function FiltersPage() {
   return <FiltersContainer />;
 }

@@ -4,6 +4,7 @@ export const publicRoutes: string[] = [
   "/wishlist",
   "/email-verification",
   "/product/[productId]",
+  "/review/[productId]",
   "/checkout",
 ];
 export const authRoutes: string[] = [

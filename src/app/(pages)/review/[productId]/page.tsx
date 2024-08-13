@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import ProductContainer from "@/components/Interface/Product/ProductContainer";
+import ReviewContainer from "@/components/Interface/Review/ReviewContainer";
 import fetchService from "@/utils/classes/FetchService";
 
 export const generateMetadata = async ({
@@ -16,15 +16,12 @@ export const generateMetadata = async ({
   };
 };
 
-export default async function ProductPage({
+export default async function ReviewPage({
   params,
 }: {
   params: { productId: string };
 }) {
-  const [product, screenshots] = await Promise.all([
-    fetchService.getProduct(params.productId),
-    fetchService.getScreenshotsForProduct(params.productId),
-  ]);
+  const product = await fetchService.getProduct(params.productId);
 
-  return <ProductContainer product={product} screenshots={screenshots} />;
+  return <ReviewContainer product={product} />;
 }

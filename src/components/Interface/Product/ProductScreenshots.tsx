@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import GameScreenshotModalContainer from "../Shared/Modals/GameScreenshotModalContainer";
+import ProductScreenshotModalContainer from "../Shared/Modals/GameScreenshotModalContainer";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
@@ -45,7 +45,7 @@ export default function ProductScreenshots({
           <div>Brak zrzutów ekranu</div>
         )}
       </div>
-      <GameScreenshotModalContainer
+      <ProductScreenshotModalContainer
         screenshots={screenshots}
         currentImageId={currentImageId}
       />

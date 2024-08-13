@@ -12,13 +12,13 @@ export const generateStars = (rating: number) => {
   const fullStar = Array(fullStars)
     .fill(0)
     .map((_, index) => (
-      <div key={`full-${index}`} className="star filled"></div>
+      <div key={`full-${index}`} className="rating-star filled"></div>
     ));
 
   const partialStar =
     decimalPart > 0 ? (
       <div
-        className="star"
+        className="rating-star"
         style={{
           background: `linear-gradient(to right, gold ${
             decimalPart * 100
@@ -32,7 +32,7 @@ export const generateStars = (rating: number) => {
   const emptyStar = Array(5 - fullStars - (decimalPart > 0 ? 1 : 0))
     .fill(0)
     .map((_, index) => (
-      <div key={`empty-${index}`} className="star empty"></div>
+      <div key={`empty-${index}`} className="rating-star empty"></div>
     ));
 
   return (

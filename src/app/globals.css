@@ -148,7 +148,7 @@ body {
   display: none;
 }
 
-.star {
+.rating-star {
   font-size: 24px;
   color: gold;
   margin-right: 2px;
@@ -169,8 +169,40 @@ body {
   -webkit-text-stroke: 1px gold;
 }
 
-.star::before {
+.rating-star::before {
   content: "\2605";
+}
+
+.rating-container {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  gap: 6px;
+  margin: -12px 0 0 0;
+}
+
+.rating-label {
+  font-size: 38px;
+  color: #d3d3d3;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.rating-label:hover,
+.rating-label:hover ~ .rating-label {
+  color: gold;
+}
+
+input::placeholder {
+  margin-left: 10px;
+}
+
+input[type="radio"]:checked ~ .rating-label {
+  color: gold;
+}
+
+input[type="radio"] {
+  display: none; /* Ukryj radio buttony */
 }
 
 input[type="checkbox"] {

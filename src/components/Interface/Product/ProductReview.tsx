@@ -1,15 +1,19 @@
 "use client";
-import { Product } from "@/utils/helpers/types";
 import { generateStars } from "./ProductInformations";
+import { GameAPIResponse } from "@/utils/helpers/types";
 
-export default function ProductReview({ product }: { product: Product }) {
+export default function ProductReview({
+  product,
+}: {
+  product: GameAPIResponse;
+}) {
   return (
-    <div className="flex flex-col md:flex-row justify-between md:items-center md:mx-auto mx-[-20px] pt-[20px] px-[20px] pb-[15px] md:px-0 lg:px-[20px] xxl:px-0 bg-secondaryColor md:bg-transparent lg:bg-secondaryColor xxl:bg-transparent">
-      <div className="sm:flex sm:flex-row  w-full gap-4 ">
+    <div className="md:mx-auto mx-[-20px] pt-[20px] px-[20px] pb-[15px] md:px-0 lg:px-[20px] xxl:px-0 bg-secondaryColor md:bg-transparent lg:bg-secondaryColor xxl:bg-transparent">
+      <div className="sm:flex sm:flex-row w-full gap-4">
         <div className="flex flex-wrap justify-between items-center w-full">
           <ul className="flex flex-col md:flex-row lg:flex-col xxl:flex-row">
             {product.ratings
-              ?.sort((a: number, b: number) => a.percent - b.percent)
+              ?.sort((a, b) => a.percent - b.percent)
               .map((rating) => (
                 <li
                   key={rating.id}
@@ -24,7 +28,7 @@ export default function ProductReview({ product }: { product: Product }) {
           </ul>
         </div>
         <div className="flex items-end justify-end">
-          <button className="w-full sm:w-[130px] min-w-[130px] min-h-[35px] max-h-[35px] my-[5px] px-[10px] text-[15px] font-[700] text-[#FFFFFF] border-[1px] border-[#FFFFFF]">
+          <button className="w-full sm:w-[130px] min-w-[130px] min-h-[35px] max-h-[35px] my-[5px] px-[10px] text-[15px] text-[#FFFFFF] font-bold border border-white hover:bg-tertiaryColor hover:border-headerHover transition ease-in-out">
             Review now
           </button>
         </div>

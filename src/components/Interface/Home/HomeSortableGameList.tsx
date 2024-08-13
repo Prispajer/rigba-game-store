@@ -20,8 +20,8 @@ export default function HomeSortableGameList({
   };
 
   return (
-    <main className={`${background} py-[15px]`}>
-      <section className="flex max-w-[1240px] mx-auto px-2 py-6">
+    <section className={`${background} py-[15px]`}>
+      <div className="flex max-w-[1240px] mx-auto px-2 py-6">
         <div className="flex flex-col w-full">
           <h1 className="text-[30px] text-white font-bold">{header}</h1>
           <div className="flex max-w-[1240px] gap-x-[20px] scrollbar overflow-x-auto">
@@ -31,7 +31,7 @@ export default function HomeSortableGameList({
             <ShowMoreButton text="Show all" method={handleShowAll} />
           </div>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
   );
 }

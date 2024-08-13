@@ -24,7 +24,7 @@ export default function ProductContainer({
 }) {
   return (
     <main className="pb-[100px] bg-primaryColor">
-      <section className="grid grid-cols-1 lg:grid-cols-[calc(100%-380px),380px] max-w-[1600px] mx-auto px-[20px]">
+      <div className="grid grid-cols-1 lg:grid-cols-[calc(100%-380px),380px] max-w-[1600px] mx-auto px-[20px]">
         <div>
           <ProductInformations product={product} />
           <div className="mx-[-20px] lg:hidden">
@@ -63,7 +63,7 @@ export default function ProductContainer({
             <ProductPaymentWays />
           </div>
         </div>
-      </section>
+      </div>
     </main>
   );
 }

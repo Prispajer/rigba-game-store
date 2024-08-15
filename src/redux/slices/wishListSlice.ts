@@ -193,7 +193,7 @@ const userWishListSlice = createSlice({
       .addCase(fetchAddUserProductToWishList.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
-        state.products = []; // Reset to empty array in case of failure
+        state.products = [];
       })
       .addCase(fetchDeleteUserProductFromWishList.pending, (state) => {
         state.status = "loading";

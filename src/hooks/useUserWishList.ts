@@ -16,6 +16,9 @@ export default function useUserWishList() {
   const userWishListState = useSelector(
     (state: RootState) => state.userWishList
   );
+  const userWishListStateProducts = useSelector(
+    (state: RootState) => state.userWishList.products
+  );
 
   const handleSetUserWishList = React.useCallback(() => {
     if (user?.wishlist?.products) {
@@ -83,6 +86,7 @@ export default function useUserWishList() {
 
   return {
     userWishListState,
+    userWishListStateProducts,
     handleSetUserWishListOrdering,
     handleAddUserProductToWishList,
     handleRemoveUserProductFromWishList,

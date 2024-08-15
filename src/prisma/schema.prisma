@@ -13,6 +13,14 @@ enum UserRole {
   USER
 }
 
+enum RatingTitle {
+  RECOMMENDED
+  MEH
+  EXCEPTIONAL
+  SKIP
+}
+
+
 model User {
   id                    String                 @id @default(cuid())
   name                  String?
@@ -24,6 +32,7 @@ model User {
   accounts              Account[]
   cart                  Cart?
   wishlist              Wishlist?
+  review                Review[]
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
 }
@@ -99,6 +108,27 @@ model Wishlist {
   user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model Review {
+  id         String     @id @default(cuid())
+  userId     String     
+  productId  String     
+  createdAt  DateTime   @default(now()) 
+  updatedAt  DateTime   @updatedAt   
+  rating     Rating?   
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product    Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+}
+
+model Rating {
+  id        Int      @id
+  reviewId  String   @unique
+  title     RatingTitle
+  count     Int
+  percent   Float
+  review    Review   @relation(fields: [reviewId], references: [id])
+}
+
 model Product {
   id                   String                @id @default(cuid())
   externalProductId    Int                   
@@ -106,13 +136,15 @@ model Product {
   wishListId           String?
   quantity             Int?
   productsInformations ProductInformations?
+  review               Review[]             
   cart                 Cart?                 @relation(fields: [cartId], references: [id], onDelete: Cascade)
   wishlist             Wishlist?             @relation(fields: [wishListId], references: [id], onDelete: Cascade)
 }
 
+
 model ProductInformations {
   id              String         @id @default(cuid())
-  productId       String?
+  productId       String       
   name            String
   slug            String
   description     String?
@@ -121,7 +153,10 @@ model ProductInformations {
   added           Float?
   price           Float
   background_image    String?
-  product         Product?       @relation(fields: [productId], references: [id])
+  product         Product       @relation(fields: [productId], references: [id])
 
   @@unique([productId])
 }
+
+
+

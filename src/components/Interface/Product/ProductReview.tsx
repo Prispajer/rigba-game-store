@@ -1,4 +1,5 @@
 "use client";
+import useCustomRouter from "@/hooks/useCustomRouter";
 import { generateStars } from "./ProductInformations";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
@@ -7,6 +8,7 @@ export default function ProductReview({
 }: {
   product: GameAPIResponse;
 }) {
+  const { redirectToReview } = useCustomRouter();
   return (
     <div className="md:mx-auto mx-[-20px] pt-[20px] px-[20px] pb-[15px] md:px-0 lg:px-[20px] xxl:px-0 bg-secondaryColor md:bg-transparent lg:bg-secondaryColor xxl:bg-transparent">
       <div className="sm:flex sm:flex-row w-full gap-4">
@@ -28,7 +30,10 @@ export default function ProductReview({
           </ul>
         </div>
         <div className="flex items-end justify-end">
-          <button className="w-full sm:w-[130px] min-w-[130px] min-h-[35px] max-h-[35px] my-[5px] px-[10px] text-[15px] text-[#FFFFFF] font-bold border border-white hover:bg-tertiaryColor hover:border-headerHover transition ease-in-out">
+          <button
+            onClick={() => redirectToReview(product.slug as string)}
+            className="w-full sm:w-[130px] min-w-[130px] min-h-[35px] max-h-[35px] my-[5px] px-[10px] text-[15px] text-[#FFFFFF] font-bold border border-white hover:bg-tertiaryColor hover:border-headerHover transition ease-in-out"
+          >
             Review now
           </button>
         </div>

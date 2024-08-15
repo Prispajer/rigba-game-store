@@ -16,6 +16,10 @@ export default function useCustomRouter() {
     }
   };
 
+  const redirectToReview = (name: string): void => {
+    router.push(`/review/${name}`);
+  };
+
   const pushGenresToUrl = (genresId: number[]): void => {
     return router.push(`/filters?genres=${genresId.join(",")}`);
   };
@@ -28,5 +32,11 @@ export default function useCustomRouter() {
     return params.get(filterCategory)?.split(",").map(Number) || [];
   };
 
-  return { redirectToGame, getUrlParams, pushGenresToUrl, pushOrderingToUrl };
+  return {
+    redirectToReview,
+    redirectToGame,
+    getUrlParams,
+    pushGenresToUrl,
+    pushOrderingToUrl,
+  };
 }

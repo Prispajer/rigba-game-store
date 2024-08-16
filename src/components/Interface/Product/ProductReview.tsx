@@ -1,14 +1,14 @@
 "use client";
-import useCustomRouter from "@/hooks/useCustomRouter";
 import { generateStars } from "./ProductInformations";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
 export default function ProductReview({
   product,
+  redirectToReview,
 }: {
   product: GameAPIResponse;
+  redirectToReview: (name: string) => void;
 }) {
-  const { redirectToReview } = useCustomRouter();
   return (
     <div className="md:mx-auto mx-[-20px] pt-[20px] px-[20px] pb-[15px] md:px-0 lg:px-[20px] xxl:px-0 bg-secondaryColor md:bg-transparent lg:bg-secondaryColor xxl:bg-transparent">
       <div className="sm:flex sm:flex-row w-full gap-4">

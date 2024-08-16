@@ -5,10 +5,12 @@ import { CiHeart } from "react-icons/ci";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
+import requestService from "@/utils/classes/RequestService";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import { generateRandomValue } from "@/utils/prices";
 import { GameAPIResponse } from "@/utils/helpers/types";
 import { ReviewSchema } from "@/utils/schemas/product";
+import { RatingTitle } from "@prisma/client";
 
 export default function ReviewContainer({
   product,
@@ -16,15 +18,21 @@ export default function ReviewContainer({
   product: GameAPIResponse;
 }) {
   const { redirectToGame } = useCustomRouter();
-
   const reviewObject = useForm<z.infer<typeof ReviewSchema>>({
     resolver: zodResolver(ReviewSchema),
     defaultValues: {
-      nickname: "",
       review: "",
-      rating: "",
+      rating: null,
     },
   });
+
+  const ratingTitles = {
+    5: "Exceptional",
+    4: "Recommended",
+    3: "Meh",
+    2: "Skip",
+    1: "Skip",
+  };
 
   const {
     register,
@@ -32,8 +40,39 @@ export default function ReviewContainer({
     formState: { errors },
   } = reviewObject;
 
-  const handleReviewSubmit = (data: z.infer<typeof ReviewSchema>) => {
-    console.log("Form submitted with data:", data);
+  const handleReviewSubmit = async (data: z.infer<typeof ReviewSchema>) => {
+    const { review, rating } = data;
+    const title = ratingTitles[rating as keyof typeof ratingTitles];
+
+    try {
+      const response = await requestService.postMethod(
+        "products/endpoints/productManagement/addReviewToProduct",
+        {
+          email: user.email,
+          externalProductId: product.id,
+          name: product.name,
+          description: review,
+          background_image: product.background_image,
+          price: generateRandomValue(),
+          rating: parseInt(rating),
+          title: title as RatingTitle,
+          slug: product.slug,
+          released: product.released,
+          added: product.added,
+          likes: 0,
+        }
+      );
+
+      console.log(response);
+
+      if (response.success) {
+        return response.data;
+      } else {
+        throw new Error(response.message || "Unknown error");
+      }
+    } catch (error) {
+      console.error("Error adding review:", error);
+    }
   };
 
   return (
@@ -161,15 +200,15 @@ export default function ReviewContainer({
                       <span className="overflow-hidden overflow-ellipsis line-clamp-1 text-[14px] text-[#ffffff80]">
                         {product.rating}
                       </span>
+                      <AddToWishList
+                        game={product}
+                        position="absolute right-[10px] top-0"
+                        added="border-[#FFFA84] bg-[#FFFA84]"
+                        deleted="bg-[#d3d3d3]"
+                      />
                     </div>
                   </div>
                 </div>
-                <AddToWishList
-                  game={product}
-                  position="absolute right-[10px] top-0"
-                  added="border-[#FFFA84] bg-[#FFFA84]"
-                  deleted="bg-[#d3d3d3]"
-                />
               </>
             </div>
           </div>

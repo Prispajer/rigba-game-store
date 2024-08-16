@@ -162,3 +162,24 @@ export const getUserWishList = async (
     return null;
   }
 };
+
+export const getProductReviews = async (
+  externalProductId: number
+): Promise<any | null> => {
+  try {
+    const productReviews = await postgres.product.findFirst({
+      where: { externalProductId: externalProductId },
+      include: {
+        reviews: {
+          include: {
+            rating: true,
+            user: true,
+          },
+        },
+      },
+    });
+    return productReviews;
+  } catch {
+    return null;
+  }
+};

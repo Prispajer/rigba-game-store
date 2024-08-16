@@ -14,10 +14,10 @@ enum UserRole {
 }
 
 enum RatingTitle {
-  RECOMMENDED
-  MEH
-  EXCEPTIONAL
-  SKIP
+  Recommended
+  Meh
+  Exceptional
+  Skip
 }
 
 
@@ -32,7 +32,7 @@ model User {
   accounts              Account[]
   cart                  Cart?
   wishlist              Wishlist?
-  review                Review[]
+  reviews               Review[]
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
 }
@@ -117,46 +117,46 @@ model Review {
   rating     Rating?   
   user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   product    Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
-
 }
 
 model Rating {
-  id        Int      @id
-  reviewId  String   @unique
-  title     RatingTitle
-  count     Int
-  percent   Float
-  review    Review   @relation(fields: [reviewId], references: [id])
+  id          String   @id @default(cuid())
+  reviewId    String   @unique
+  title       RatingTitle
+  description String
+  rating      Int
+  percent     Float
+  likes       Int      @default(0) 
+  review      Review   @relation(fields: [reviewId], references: [id])
 }
-
 model Product {
   id                   String                @id @default(cuid())
   externalProductId    Int                   
   cartId               String?     
   wishListId           String?
   quantity             Int?
-  productsInformations ProductInformations?
-  review               Review[]             
+  productsInformations ProductInformations? 
+  reviews              Review[]             
   cart                 Cart?                 @relation(fields: [cartId], references: [id], onDelete: Cascade)
   wishlist             Wishlist?             @relation(fields: [wishListId], references: [id], onDelete: Cascade)
 }
 
-
 model ProductInformations {
-  id              String         @id @default(cuid())
-  productId       String       
-  name            String
-  slug            String
-  description     String?
-  rating          Float?
-  released        String?
-  added           Float?
-  price           Float
-  background_image    String?
-  product         Product       @relation(fields: [productId], references: [id])
+  id                   String       @id @default(cuid())
+  productId            String       
+  name                 String
+  slug                 String
+  description          String?
+  rating               Float?
+  released             String?
+  added                Float?
+  price                Float
+  background_image     String?
+  product              Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@unique([productId])
 }
+
 
 
 

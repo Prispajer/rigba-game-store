@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import ProductService from "@/utils/classes/ProductService";
 import IProductService from "@/utils/interfaces/IProductsService";
-import { RequestResponse, LoggedUserProduct } from "@/utils/helpers/types";
+import { RequestResponse } from "@/utils/helpers/types";
 
 export async function POST(request: NextRequest) {
   const {

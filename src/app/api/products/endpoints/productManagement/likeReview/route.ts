@@ -6,16 +6,12 @@ import { RequestResponse } from "@/utils/helpers/types";
 export async function PATCH(request: NextRequest) {
   const { email, externalProductId } = await request.json();
 
-  const productService: IProductService = new ProductService(
-    email,
-    externalProductId
-  );
-  const increaseProductQuantityResponse =
-    await productService.increaseProductQuantity();
+  const productService: IProductService = new ProductService();
+  const likeReviewResponse = await productService.likeReview();
 
   return NextResponse.json<RequestResponse<LoggedUserUpdatedProduct>>({
-    success: increaseProductQuantityResponse.success,
-    message: increaseProductQuantityResponse.message,
-    data: increaseProductQuantityResponse.data,
+    success: likeReviewResponse.success,
+    message: likeReviewResponse.message,
+    data: likeReviewResponse.data,
   });
 }

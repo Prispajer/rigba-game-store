@@ -28,6 +28,8 @@ export const endpointsRoutes: string[] = [
   "/api/products/endpoints/productManagement/deleteProductFromWishList",
   "/api/products/endpoints/productManagement/decreaseProductQuantity",
   "/api/products/endpoints/productManagement/increaseProductQuantity",
+  "/api/products/endpoints/productManagement/addReviewToProduct",
+  "/api/products/endpoints/productManagement/getReviews",
 ];
 
 export function handleDynamicId(route: string): boolean {

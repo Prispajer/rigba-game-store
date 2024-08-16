@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { CiShare1 } from "react-icons/ci";
 import ProductInformations from "./ProductInformations";
@@ -13,6 +14,8 @@ import ProductRequirements from "./ProductRequirements";
 import ProductHeaders from "../Shared/ReusableComponents/ProductHeaders";
 import ProductRemainingDetails from "./ProductRemainingDetails";
 import ShowMoreButton from "../Shared/Buttons/ShowMoreButton";
+import useCustomRouter from "@/hooks/useCustomRouter";
+import useCurrentUser from "@/hooks/useCurrentUser";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
 export default function ProductContainer({
@@ -22,6 +25,9 @@ export default function ProductContainer({
   product: GameAPIResponse;
   screenshots: GameAPIResponse["screenshots"];
 }) {
+  const { user } = useCurrentUser();
+  const { redirectToGame, redirectToReview } = useCustomRouter();
+
   return (
     <main className="pb-[100px] bg-primaryColor">
       <div className="grid grid-cols-1 lg:grid-cols-[calc(100%-380px),380px] max-w-[1600px] mx-auto px-[20px]">
@@ -35,8 +41,11 @@ export default function ProductContainer({
           <ProductScreenshots screenshots={screenshots} />
           <ProductHeaders headerText="Gamers also viewed" />
           <ProductHeaders headerText="Reviews: 26" />
-          <ProductReview product={product} />
-          <ProductUsersReview />
+          <ProductReview
+            product={product}
+            redirectToReview={redirectToReview}
+          />
+          <ProductUsersReview product={product} />
           <ShowMoreButton text="Load more reviews" />
           <ProductHeaders headerText="Product description" />
           <ProductGenres product={product} />

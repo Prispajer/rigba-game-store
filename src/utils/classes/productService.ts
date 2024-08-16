@@ -4,12 +4,14 @@ import {
   getUserByEmail,
   getUserCart,
   getUserWishList,
+  getProductReviews,
 } from "@/data/database/publicSQL/queries";
 import {
   RequestResponse,
   LoggedUserCart,
   LoggedUserWishList,
 } from "../helpers/types";
+import { RatingTitle } from "@prisma/client";
 
 export default class ProductService implements IProductService {
   private email?: string;
@@ -22,9 +24,11 @@ export default class ProductService implements IProductService {
   private slug?: string;
   private released?: string;
   private added?: number;
+  private title?: string;
+  private likes?: number;
 
   constructor(
-    email: string,
+    email?: string,
     externalProductId?: number,
     name?: string,
     description?: string,
@@ -33,7 +37,9 @@ export default class ProductService implements IProductService {
     rating?: number,
     slug?: string,
     released?: string,
-    added?: number
+    added?: number,
+    title?: string,
+    likes?: number
   ) {
     this.email = email;
     this.externalProductId = externalProductId;
@@ -45,6 +51,8 @@ export default class ProductService implements IProductService {
     this.slug = slug;
     this.released = released;
     this.added = added;
+    this.title = title;
+    this.likes = likes;
   }
 
   async getCart(): Promise<RequestResponse<LoggedUserCart | null>> {
@@ -108,6 +116,106 @@ export default class ProductService implements IProductService {
       return {
         success: false,
         message: "Error while retrieving wishlist!",
+        data: null,
+      };
+    }
+  }
+
+  async getReviews(): Promise<RequestResponse<any | null>> {
+    try {
+      const existingProduct = await postgres.product.findFirst({
+        where: { externalProductId: this.externalProductId },
+      });
+
+      if (!existingProduct) {
+        return {
+          success: false,
+          message: "Product not found!",
+          data: null,
+        };
+      }
+
+      const productReviews = await getProductReviews(
+        existingProduct.externalProductId
+      );
+
+      if (!productReviews) {
+        return {
+          success: false,
+          message: "This product doesn't have any reviews!",
+          data: null,
+        };
+      }
+
+      return {
+        success: true,
+        message: "Reviews retrieved successfully!",
+        data: productReviews,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: "Error while retrieving reviews!",
+        data: null,
+      };
+    }
+  }
+
+  async addProductToDatabase(): Promise<RequestResponse<Product | null>> {
+    try {
+      if (!this.externalProductId || !this.name || !this.price) {
+        console.error("Missing required fields:", {
+          externalProductId: this.externalProductId,
+          name: this.name,
+          price: this.price,
+        });
+        return {
+          success: false,
+          message: "Product ID, name, and price are required!",
+          data: null,
+        };
+      }
+
+      const existingProduct = await postgres.product.findFirst({
+        where: { externalProductId: this.externalProductId },
+      });
+
+      if (existingProduct) {
+        return {
+          success: false,
+          message: "Product already exists in the database!",
+          data: existingProduct,
+        };
+      }
+
+      const newProduct = await postgres.product.create({
+        data: {
+          externalProductId: this.externalProductId,
+          quantity: 1,
+          productsInformations: {
+            create: {
+              name: this.name as string,
+              description: this.description as string,
+              price: this.price as number,
+              background_image: this.background_image as string,
+              slug: this.slug as string,
+              released: this.released as string,
+              added: this.added as number,
+            },
+          },
+        },
+      });
+
+      return {
+        success: true,
+        message: "Product added to database successfully!",
+        data: newProduct,
+      };
+    } catch (error) {
+      console.error("Error while adding product to database:", error);
+      return {
+        success: false,
+        message: "Error while adding product to database!",
         data: null,
       };
     }
@@ -597,6 +705,174 @@ export default class ProductService implements IProductService {
       return {
         success: false,
         message: "Error while removing product from wishlist!",
+        data: null,
+      };
+    }
+  }
+
+  async addReviewToProduct(): Promise<RequestResponse<any | null>> {
+    try {
+      if (!this.externalProductId || !this.rating) {
+        return {
+          success: false,
+          message: "Product ID and rating are required!",
+          data: null,
+        };
+      }
+
+      if (!this.email) {
+        return {
+          success: false,
+          message: "User email is required!",
+          data: null,
+        };
+      }
+
+      const user = await getUserByEmail(this.email);
+      if (!user) {
+        return {
+          success: false,
+          message: "User doesn't exist!",
+          data: null,
+        };
+      }
+
+      let product = await postgres.product.findFirst({
+        where: { externalProductId: this.externalProductId },
+      });
+
+      if (!product) {
+        const addedProduct = await this.addProductToDatabase();
+        if (!addedProduct.success) {
+          return {
+            success: false,
+            message: "Error adding product to database!",
+            data: null,
+          };
+        }
+        product = addedProduct.data;
+      }
+
+      const sameReview = await postgres.review.findFirst({
+        where: { productId: product?.id, userId: user.id },
+      });
+
+      if (sameReview) {
+        return {
+          success: false,
+          message: "User has already written a review for this game!",
+          data: null,
+        };
+      }
+
+      const createdReview = await postgres.review.create({
+        data: {
+          userId: user.id,
+          productId: product?.id as string,
+        },
+      });
+
+      await postgres.rating.create({
+        data: {
+          rating: this.rating,
+          reviewId: createdReview.id,
+          title: this.title as RatingTitle,
+          percent: this.rating * 20,
+          likes: this.likes,
+          description: this.description as string,
+        },
+      });
+
+      return {
+        success: true,
+        message: "Review added successfully!",
+        data: null,
+      };
+    } catch (error) {
+      console.error("Error while adding review:", error);
+      return {
+        success: false,
+        message: "Error while adding review!",
+        data: null,
+      };
+    }
+  }
+
+  async likeReview(reviewId: string): Promise<RequestResponse<any | null>> {
+    try {
+      const user = await getUserByEmail(this.email as string);
+      const review = await postgres.review.findFirst({
+        where: { userId: user?.email as string },
+      });
+
+      const review = await postgres.review.findUnique({
+        where: { id: rating?.reviewId },
+      });
+
+      if (!review) {
+        return {
+          success: false,
+          message: "Review not found!",
+          data: null,
+        };
+      }
+
+      const updatedReview = await postgres.rating.update({
+        where: { reviewId: review.id },
+        data: {
+          likes: (review?.likes ?? 0) + 1,
+        },
+      });
+
+      return {
+        success: true,
+        message: "Review liked successfully!",
+        data: updatedReview,
+      };
+    } catch (error) {
+      console.error("Error while liking review:", error);
+      return {
+        success: false,
+        message: "Error while liking review!",
+        data: null,
+      };
+    }
+  }
+
+  async unlikeReview(): Promise<RequestResponse<any | null>> {
+    try {
+      const rating = await postgres.rating.findUnique({
+        where: { reviewId },
+      });
+
+      const review = await postgres.review.findUnique({
+        where: { id: rating?.reviewId },
+      });
+      if (!review) {
+        return {
+          success: false,
+          message: "Review not found!",
+          data: null,
+        };
+      }
+
+      const updatedReview = await postgres.rating.update({
+        where: { reviewId: review.id },
+        data: {
+          likes: (review?.likes ?? 0) - 1,
+        },
+      });
+
+      return {
+        success: true,
+        message: "Review unliked successfully!",
+        data: updatedReview,
+      };
+    } catch (error) {
+      console.error("Error while unliking review:", error);
+      return {
+        success: false,
+        message: "Error while unliking review!",
         data: null,
       };
     }

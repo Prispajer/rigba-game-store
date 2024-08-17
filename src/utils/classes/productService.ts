@@ -800,13 +800,28 @@ export default class ProductService implements IProductService {
 
   async likeReview(reviewId: string): Promise<RequestResponse<any | null>> {
     try {
-      const user = await getUserByEmail(this.email as string);
-      const review = await postgres.review.findFirst({
-        where: { userId: user?.email as string },
+      if (!this.email || !reviewId) {
+        return {
+          success: false,
+          message: "Email and review ID are required!",
+          data: null,
+        };
+      }
+
+      const user = await postgres.user.findUnique({
+        where: { email: this.email },
       });
 
+      if (!user) {
+        return {
+          success: false,
+          message: "User not found!",
+          data: null,
+        };
+      }
+
       const review = await postgres.review.findUnique({
-        where: { id: rating?.reviewId },
+        where: { id: reviewId },
       });
 
       if (!review) {
@@ -817,17 +832,61 @@ export default class ProductService implements IProductService {
         };
       }
 
-      const updatedReview = await postgres.rating.update({
-        where: { reviewId: review.id },
+      const existingLiker = await postgres.reviewLikers.findUnique({
+        where: {
+          userId_reviewId: {
+            userId: user.id,
+            reviewId: reviewId,
+          },
+        },
+      });
+
+      if (existingLiker) {
+        if (existingLiker.isLiked) {
+          return {
+            success: false,
+            message: "You have already liked this review!",
+            data: null,
+          };
+        } else {
+          await postgres.reviewLikers.delete({
+            where: { id: existingLiker.id },
+          });
+
+          await postgres.review.update({
+            where: { id: reviewId },
+            data: {
+              likes: (review.likes ?? 0) + 1,
+            },
+          });
+
+          return {
+            success: true,
+            message: "Review like updated successfully!",
+            data: null,
+          };
+        }
+      }
+
+      await postgres.reviewLikers.create({
         data: {
-          likes: (review?.likes ?? 0) + 1,
+          userId: user.id,
+          reviewId: reviewId,
+          isLiked: true,
+        },
+      });
+
+      await postgres.review.update({
+        where: { id: reviewId },
+        data: {
+          likes: (review.likes ?? 0) + 1,
         },
       });
 
       return {
         success: true,
         message: "Review liked successfully!",
-        data: updatedReview,
+        data: null,
       };
     } catch (error) {
       console.error("Error while liking review:", error);
@@ -839,15 +898,32 @@ export default class ProductService implements IProductService {
     }
   }
 
-  async unlikeReview(): Promise<RequestResponse<any | null>> {
+  async dislikeReview(reviewId: string): Promise<RequestResponse<any | null>> {
     try {
-      const rating = await postgres.rating.findUnique({
-        where: { reviewId },
+      if (!this.email || !reviewId) {
+        return {
+          success: false,
+          message: "Email and review ID are required!",
+          data: null,
+        };
+      }
+
+      const user = await postgres.user.findUnique({
+        where: { email: this.email },
       });
 
+      if (!user) {
+        return {
+          success: false,
+          message: "User not found!",
+          data: null,
+        };
+      }
+
       const review = await postgres.review.findUnique({
-        where: { id: rating?.reviewId },
+        where: { id: reviewId },
       });
+
       if (!review) {
         return {
           success: false,
@@ -856,23 +932,67 @@ export default class ProductService implements IProductService {
         };
       }
 
-      const updatedReview = await postgres.rating.update({
-        where: { reviewId: review.id },
+      const existingLiker = await postgres.reviewLikers.findUnique({
+        where: {
+          userId_reviewId: {
+            userId: user.id,
+            reviewId: reviewId,
+          },
+        },
+      });
+
+      if (existingLiker) {
+        if (!existingLiker.isLiked) {
+          return {
+            success: false,
+            message: "You have already disliked this review!",
+            data: null,
+          };
+        } else {
+          await postgres.reviewLikers.delete({
+            where: { id: existingLiker.id },
+          });
+
+          await postgres.review.update({
+            where: { id: reviewId },
+            data: {
+              likes: Math.max((review.likes ?? 0) - 1, 0),
+            },
+          });
+
+          return {
+            success: true,
+            message: "Review dislike updated successfully!",
+            data: null,
+          };
+        }
+      }
+
+      await postgres.reviewLikers.create({
         data: {
-          likes: (review?.likes ?? 0) - 1,
+          userId: user.id,
+          reviewId: reviewId,
+          isLiked: false,
+        },
+      });
+
+      await postgres.review.update({
+        where: { id: reviewId },
+        data: {
+          likes: Math.max((review.likes ?? 0) - 1, 0),
         },
       });
 
       return {
         success: true,
-        message: "Review unliked successfully!",
-        data: updatedReview,
+        message: "Review disliked successfully!",
+        data: null,
       };
     } catch (error) {
-      console.error("Error while unliking review:", error);
+      console.error("Error while disliking review:", error);
       return {
         success: false,
-        message: "Error while unliking review!",
+        message: "Error while disliking review!",
         data: null,
       };
     }

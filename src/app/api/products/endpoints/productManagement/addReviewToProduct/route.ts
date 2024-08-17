@@ -18,14 +18,6 @@ export async function POST(request: NextRequest) {
     likes,
   } = await request.json();
 
-  if (!email || !externalProductId || !rating) {
-    return NextResponse.json<RequestResponse<any | null>>({
-      success: false,
-      message: "Email, Product ID, and rating are required!",
-      data: null,
-    });
-  }
-
   const productService = new ProductService(
     email,
     externalProductId,
@@ -41,11 +33,11 @@ export async function POST(request: NextRequest) {
     likes
   );
 
-  const response = await productService.addReviewToProduct();
+  const addReviewToProductResponse = await productService.addReviewToProduct();
 
   return NextResponse.json<RequestResponse<any | null>>({
-    success: response.success,
-    message: response.message,
-    data: response.data,
+    success: addReviewToProductResponse.success,
+    message: addReviewToProductResponse.message,
+    data: addReviewToProductResponse.data,
   });
 }

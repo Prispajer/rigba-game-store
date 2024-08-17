@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import ProductService from "@/utils/classes/ProductService";
-import IProductService from "@/utils/interfaces/IProductsService";
 import { RequestResponse } from "@/utils/helpers/types";
 
 export async function PATCH(request: NextRequest) {
-  const { email, externalProductId } = await request.json();
+  const { email, reviewId } = await request.json();
 
-  const productService: IProductService = new ProductService();
-  const likeReviewResponse = await productService.likeReview();
+  const productService = new ProductService(email);
+  const likeReviewResponse = await productService.likeReview(reviewId);
 
-  return NextResponse.json<RequestResponse<LoggedUserUpdatedProduct>>({
+  return NextResponse.json<RequestResponse<any | null>>({
     success: likeReviewResponse.success,
     message: likeReviewResponse.message,
     data: likeReviewResponse.data,

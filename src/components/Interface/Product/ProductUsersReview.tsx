@@ -31,6 +31,44 @@ export default function ProductUsersReview({
     }
   };
 
+  const reviewId = productReviews.find((review) => review.id);
+
+  console.log(reviewId);
+
+  const likeReview = async () => {
+    try {
+      const response = await requestService.patchMethod(
+        "products/endpoints/productManagement/likeReview",
+        { reviewId: reviewId }
+      );
+
+      if (response.success) {
+        setProductReviews(response.data?.reviews || []);
+      } else {
+        throw new Error(response.message || "Unknown error");
+      }
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+    }
+  };
+
+  const unlikeReview = async () => {
+    try {
+      const response = await requestService.patchMethod(
+        "products/endpoints/productManagement/unlikeReview",
+        { reviewId: reviewId }
+      );
+
+      if (response.success) {
+        setProductReviews(response.data?.reviews || []);
+      } else {
+        throw new Error(response.message || "Unknown error");
+      }
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+    }
+  };
+
   React.useEffect(() => {
     getReviewsFromDatabase();
   }, []);

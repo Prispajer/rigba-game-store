@@ -33,6 +33,7 @@ model User {
   cart                  Cart?
   wishlist              Wishlist?
   reviews               Review[]
+  reviewsLikers         ReviewLikers[]
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
 }
@@ -117,6 +118,21 @@ model Review {
   rating     Rating?   
   user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   product    Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  likes      Int        @default(0)
+  reviewLikers     ReviewLikers[]  
+}
+
+model ReviewLikers {
+  id        String   @id @default(cuid())
+  userId    String
+  reviewId  String
+  isLiked   Boolean
+  createdAt DateTime @default(now())
+
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  review   Review  @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, reviewId])
 }
 
 model Rating {

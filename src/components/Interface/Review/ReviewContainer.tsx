@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
 import requestService from "@/utils/classes/RequestService";
 import useCustomRouter from "@/hooks/useCustomRouter";
+import useCurrentUser from "@/hooks/useCurrentUser";
 import { generateRandomValue } from "@/utils/prices";
 import { GameAPIResponse } from "@/utils/helpers/types";
 import { ReviewSchema } from "@/utils/schemas/product";
@@ -17,6 +18,7 @@ export default function ReviewContainer({
 }: {
   product: GameAPIResponse;
 }) {
+  const { user } = useCurrentUser();
   const { redirectToGame } = useCustomRouter();
   const reviewObject = useForm<z.infer<typeof ReviewSchema>>({
     resolver: zodResolver(ReviewSchema),
@@ -62,10 +64,9 @@ export default function ReviewContainer({
           likes: 0,
         }
       );
-
-      console.log(response);
-
       if (response.success) {
+        console.log(response);
+
         return response.data;
       } else {
         throw new Error(response.message || "Unknown error");

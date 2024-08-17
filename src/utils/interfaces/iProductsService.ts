@@ -18,6 +18,6 @@ export default interface IProductService {
   >;
   addProductToDatabase(): Promise<RequestResponse<Product | null>>;
   addReviewToProduct(): Promise<RequestResponse<any | null>>;
-  likeReview(): Promise<RequestResponse<any | null>>;
-  unlikeReview(): Promise<RequestResponse<any | null>>;
+  likeReview(reviewId: string): Promise<RequestResponse<any | null>>;
+  dislikeReview(reviewId: string): Promise<RequestResponse<any | null>>;
 }

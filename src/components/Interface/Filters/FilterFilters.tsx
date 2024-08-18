@@ -3,7 +3,7 @@ import {
   setPlatformsIdArray,
   setStoresIdArray,
   setPublishersIdArray,
-} from "@/redux/slices/gamesFilterSlice";
+} from "@/redux/slices/productFiltersSlice";
 import FilterByPrice from "./FilterByPrice";
 import FilterByCategory from "./FilterByCategory";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
@@ -18,11 +18,11 @@ export default function FilterFilters({ position }: { position: string }) {
     storesMenuState,
   } = useWindowVisibility();
   const {
-    gamesFilterState,
-    gamesGenresState,
-    gamesPlatformsState,
-    gamesStoresState,
-    gamesPublishersState,
+    productFilterState,
+    productGenresState,
+    productPlatformsState,
+    productStoresState,
+    productPublishersState,
     handleFetchPublishers,
     handleFetchPlatforms,
     handleFetchGenres,
@@ -46,8 +46,8 @@ export default function FilterFilters({ position }: { position: string }) {
           filterLabel="Publishers"
           searchText="searchPublisherText"
           searchTextState={searchPublisherTextState as string}
-          apiFiltersArray={gamesPublishersState.publishersArray}
-          selectedFiltersId={gamesFilterState.publishersIdArray}
+          apiFiltersArray={productPublishersState.publishersArray}
+          selectedFiltersId={productFilterState.publishersIdArray}
           setSelectedFiltersId={setPublishersIdArray}
           handleFetchApiFilters={handleFetchPublishers}
         />
@@ -58,8 +58,8 @@ export default function FilterFilters({ position }: { position: string }) {
           filterLabel="Platforms"
           searchText="searchPlatformText"
           searchTextState={searchPlatformTextState as string}
-          apiFiltersArray={gamesPlatformsState.platformsArray}
-          selectedFiltersId={gamesFilterState.platformsIdArray}
+          apiFiltersArray={productPlatformsState.platformsArray}
+          selectedFiltersId={productFilterState.platformsIdArray}
           setSelectedFiltersId={setPlatformsIdArray}
           handleFetchApiFilters={handleFetchPlatforms}
         />
@@ -70,8 +70,8 @@ export default function FilterFilters({ position }: { position: string }) {
           filterLabel="Genres"
           searchText="searchGenreText"
           searchTextState={searchGenreTextState as string}
-          apiFiltersArray={gamesGenresState.genresArray}
-          selectedFiltersId={gamesFilterState.genresIdArray}
+          apiFiltersArray={productGenresState.genresArray}
+          selectedFiltersId={productFilterState.genresIdArray}
           setSelectedFiltersId={setGenresIdArray}
           handleFetchApiFilters={handleFetchGenres}
         />
@@ -82,8 +82,8 @@ export default function FilterFilters({ position }: { position: string }) {
           filterLabel="Stores"
           searchText="searchStoreText"
           searchTextState={searchStoreTextState as string}
-          apiFiltersArray={gamesStoresState.storesArray}
-          selectedFiltersId={gamesFilterState.storesIdArray}
+          apiFiltersArray={productStoresState.storesArray}
+          selectedFiltersId={productFilterState.storesIdArray}
           setSelectedFiltersId={setStoresIdArray}
           handleFetchApiFilters={handleFetchStores}
         />

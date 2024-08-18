@@ -4,7 +4,7 @@ import useFetchGameData from "@/hooks/useFetchGameData";
 
 export default function ChangePage() {
   const {
-    gamesFilterState,
+    productFilterState,
     handleSetNextPage,
     handleSetPreviousPage,
     handleSetPage,
@@ -14,44 +14,44 @@ export default function ChangePage() {
     if (typeof page === "number") {
       handleSetPage(page);
     } else if (page === "nextPage") {
-      handleSetPage(gamesFilterState.page + 3);
+      handleSetPage(productFilterState.page + 3);
     } else if (page === "previousPage") {
-      handleSetPage(gamesFilterState.page - 3);
+      handleSetPage(productFilterState.page - 3);
     }
   };
 
   const renderPagination = () => {
     let pages = [];
-    if (gamesFilterState.page <= 3) {
+    if (productFilterState.page <= 3) {
       pages = [
         1,
         2,
         3,
         4,
         "nextPage",
-        gamesFilterState.gamesWithFilters.length,
+        productFilterState.productsWithFilters.length,
       ];
     } else if (
-      gamesFilterState.page >=
-      gamesFilterState.gamesWithFilters.length - 2
+      productFilterState.page >=
+      productFilterState.productsWithFilters.length - 2
     ) {
       pages = [
         1,
         "previousPage",
-        gamesFilterState.gamesWithFilters.length - 3,
-        gamesFilterState.gamesWithFilters.length - 2,
-        gamesFilterState.gamesWithFilters.length - 1,
-        gamesFilterState.gamesWithFilters.length,
+        productFilterState.productsWithFilters.length - 3,
+        productFilterState.productsWithFilters.length - 2,
+        productFilterState.productsWithFilters.length - 1,
+        productFilterState.productsWithFilters.length,
       ];
     } else {
       pages = [
         1,
         "previousPage",
-        gamesFilterState.page - 1,
-        gamesFilterState.page,
-        gamesFilterState.page + 1,
+        productFilterState.page - 1,
+        productFilterState.page,
+        productFilterState.page + 1,
         "nextPage",
-        gamesFilterState.gamesWithFilters.length,
+        productFilterState.productsWithFilters.length,
       ];
     }
 
@@ -69,7 +69,7 @@ export default function ChangePage() {
           key={index}
           className={`p-[10px] text-[20px] hover:text-[#e2999b]
             ${
-              gamesFilterState.page === page
+              productFilterState.page === page
                 ? " text-[#E2999B] "
                 : " text-[#FFFFFF]"
             }`}
@@ -88,7 +88,7 @@ export default function ChangePage() {
         <li className="flex items-center p-[10px] mr-[10px] text-[20px] border border-[white] ">
           <button
             onClick={() => handleSetPreviousPage()}
-            disabled={gamesFilterState.page === 1}
+            disabled={productFilterState.page === 1}
           >
             <MdKeyboardArrowLeft />
           </button>
@@ -98,7 +98,8 @@ export default function ChangePage() {
           <button
             onClick={() => handleSetNextPage()}
             disabled={
-              gamesFilterState.page === gamesFilterState.gamesWithFilters.length
+              productFilterState.page ===
+              productFilterState.productsWithFilters.length
             }
           >
             <MdKeyboardArrowRight />

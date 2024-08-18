@@ -8,8 +8,8 @@ import useCustomRouter from "@/hooks/useCustomRouter";
 import useSearchText from "@/hooks/useSearchText";
 
 export default function FilterProductList() {
-  const { gamesFilterState } = useFetchGameData();
-  console.log(gamesFilterState);
+  const { productFilterState } = useFetchGameData();
+
   const { compartmentNumberOne, compartmentNumberTwo, handleComparePrices } =
     useSearchText();
   const { redirectToGame } = useCustomRouter();
@@ -20,7 +20,7 @@ export default function FilterProductList() {
           (compartmentNumberOne as number) ?? 0,
           (compartmentNumberTwo as number) ?? 0
         )
-      : gamesFilterState.gamesWithFilters;
+      : productFilterState.productsWithFilters;
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-product-list-auto-fit gap-x-[10px]">

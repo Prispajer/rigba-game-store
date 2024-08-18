@@ -2,14 +2,14 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import RequestService from "@/utils/classes/RequestService";
 import { LoggedUserCart } from "@/utils/helpers/types";
 
-interface userCartState {
+interface UserCartState {
   products: LoggedUserCart[];
   status: string;
   error: string | null;
   success: string | null;
 }
 
-const initialState: userCartState = {
+const initialState: UserCartState = {
   products: [],
   status: "idle",
   error: null,

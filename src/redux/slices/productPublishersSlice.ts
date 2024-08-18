@@ -2,14 +2,14 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import FetchService from "@/utils/classes/FetchService";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
-interface PublishersState {
+interface ProductPublishersSlice {
   publishersArray: GameAPIResponse[];
   isLoading: boolean;
   error: string | null;
   page_size: number;
 }
 
-const initialState: PublishersState = {
+const initialState: ProductPublishersSlice = {
   publishersArray: [],
   isLoading: false,
   error: null,
@@ -32,7 +32,7 @@ export const fetchPublishers = createAsyncThunk<
   }
 );
 
-const publishersSlice = createSlice({
+const productPublishersSlice = createSlice({
   name: "publishers",
   initialState,
   reducers: {},
@@ -53,4 +53,4 @@ const publishersSlice = createSlice({
   },
 });
 
-export default publishersSlice.reducer;
+export default productPublishersSlice.reducer;

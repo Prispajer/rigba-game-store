@@ -2,14 +2,14 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import FetchService from "@/utils/classes/FetchService";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
-interface GenresState {
+interface ProductGenresState {
   genresArray: GameAPIResponse[];
   isLoading: boolean;
   error: string | null;
   page_size: number;
 }
 
-const initialState: GenresState = {
+const initialState: ProductGenresState = {
   genresArray: [],
   isLoading: false,
   error: null,
@@ -29,7 +29,7 @@ export const fetchGenres = createAsyncThunk<
   }
 });
 
-const genresSlice = createSlice({
+const productGenresSlice = createSlice({
   name: "genres",
   initialState,
   reducers: {
@@ -54,5 +54,5 @@ const genresSlice = createSlice({
   },
 });
 
-export default genresSlice.reducer;
-export const { loadMore } = genresSlice.actions;
+export default productGenresSlice.reducer;
+export const { loadMore } = productGenresSlice.actions;

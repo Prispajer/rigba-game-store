@@ -5,7 +5,7 @@ import {
   setOrdering,
   fetchAddUserProductToWishList,
   fetchDeleteUserProductFromWishList,
-} from "@/redux/slices/wishListSlice";
+} from "@/redux/slices/userWishListSlice";
 import useCurrentUser from "./useCurrentUser";
 import { generateRandomValue } from "@/utils/prices";
 import { AppDispatch, RootState } from "@/redux/store";

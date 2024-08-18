@@ -2,7 +2,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchGamesWithFilters,
+  fetchProductsWithFilters,
   setGenresIdArray,
   setPlatformsIdArray,
   setStoresIdArray,
@@ -11,32 +11,38 @@ import {
   setPage,
   setNextPage,
   setPreviousPage,
-} from "@/redux/slices/gamesFilterSlice";
-import { loadMore } from "@/redux/slices/gamesGenresSlice";
-import { fetchPublishers } from "@/redux/slices/gamesPublishersSlice";
-import { fetchGenres } from "@/redux/slices/gamesGenresSlice";
-import { fetchStores } from "@/redux/slices/gamesStoresSlice";
-import { fetchPlatforms } from "@/redux/slices/gamesPlatformsSlice";
+} from "@/redux/slices/productFiltersSlice";
+import { loadMore } from "@/redux/slices/productGenresSlice";
+import { fetchPublishers } from "@/redux/slices/productPublishersSlice";
+import { fetchGenres } from "@/redux/slices/productGenresSlice";
+import { fetchStores } from "@/redux/slices/productStoresSlice";
+import { fetchPlatforms } from "@/redux/slices/productPlatformsSlice";
 import useCustomRouter from "./useCustomRouter";
 import { AppDispatch, RootState } from "@/redux/store";
 
 export default function useFetchGameData() {
   const dispatch = useDispatch<AppDispatch>();
-  const gamesFilterState = useSelector((state: RootState) => state.gamesFilter);
-  const gamesPublishersState = useSelector(
-    (state: RootState) => state.gamesPublishers
+  const productFilterState = useSelector(
+    (state: RootState) => state.productFilter
   );
-  const gamesPlatformsState = useSelector(
-    (state: RootState) => state.gamesPlatforms
+  const productPublishersState = useSelector(
+    (state: RootState) => state.productPublishers
   );
-  const gamesGenresState = useSelector((state: RootState) => state.gamesGenres);
-  const gamesStoresState = useSelector((state: RootState) => state.gamesStores);
+  const productPlatformsState = useSelector(
+    (state: RootState) => state.productPlatforms
+  );
+  const productGenresState = useSelector(
+    (state: RootState) => state.productGenres
+  );
+  const productStoresState = useSelector(
+    (state: RootState) => state.productStores
+  );
 
   const { pushOrderingToUrl } = useCustomRouter();
 
-  const handleFetchGamesWithFilters = React.useCallback(
+  const handleFetchProductsWithFilters = React.useCallback(
     (page: number) => {
-      dispatch(fetchGamesWithFilters({ page }));
+      dispatch(fetchProductsWithFilters({ page }));
     },
     [dispatch]
   );
@@ -100,17 +106,17 @@ export default function useFetchGameData() {
   const handleFilterSortChange = React.useCallback(
     (ordering: string) => {
       dispatch(setOrdering(ordering));
-      handleFetchGamesWithFilters(gamesFilterState.page);
+      handleFetchProductsWithFilters(productFilterState.page);
     },
-    [dispatch, gamesFilterState.page, handleFetchGamesWithFilters]
+    [dispatch, productFilterState.page, handleFetchProductsWithFilters]
   );
 
   const handleSetOrdering = React.useCallback(
     (ordering: string): void => {
       dispatch(setOrdering(ordering));
-      pushOrderingToUrl(gamesFilterState.ordering);
+      pushOrderingToUrl(productFilterState.ordering);
     },
-    [dispatch, pushOrderingToUrl, gamesFilterState.ordering]
+    [dispatch, pushOrderingToUrl, productFilterState.ordering]
   );
 
   const handleFilterChange = React.useCallback(
@@ -123,9 +129,9 @@ export default function useFetchGameData() {
         ? array.filter((id) => id !== filterId)
         : [...array, filterId];
       dispatch(callback(updatedFilters));
-      handleFetchGamesWithFilters(gamesFilterState.page);
+      handleFetchProductsWithFilters(productFilterState.page);
     },
-    [dispatch, handleFetchGamesWithFilters, gamesFilterState.page]
+    [dispatch, handleFetchProductsWithFilters, productFilterState.page]
   );
 
   const handleClearAllFilters = React.useCallback(() => {
@@ -143,46 +149,46 @@ export default function useFetchGameData() {
   const handleClearSelectedFilter = React.useCallback(
     (callback: ActionCreatorWithPayload<number[]>) => {
       dispatch(callback([]));
-      handleFetchGamesWithFilters(gamesFilterState.page);
+      handleFetchProductsWithFilters(productFilterState.page);
     },
-    [dispatch, handleFetchGamesWithFilters, gamesFilterState.page]
+    [dispatch, handleFetchProductsWithFilters, productFilterState.page]
   );
 
   const handleSetPage = React.useCallback(
     (page: number) => {
       if (page > 0 && page <= 20) {
         dispatch(setPage({ page }));
-        handleFetchGamesWithFilters(page);
+        handleFetchProductsWithFilters(page);
       }
     },
-    [dispatch, handleFetchGamesWithFilters]
+    [dispatch, handleFetchProductsWithFilters]
   );
 
   const handleSetNextPage = React.useCallback(() => {
-    if (gamesFilterState.page < 20) {
+    if (productFilterState.page < 20) {
       dispatch(setNextPage());
-      handleFetchGamesWithFilters(gamesFilterState.page);
+      handleFetchProductsWithFilters(productFilterState.page);
     }
-  }, [dispatch, gamesFilterState.page, handleFetchGamesWithFilters]);
+  }, [dispatch, productFilterState.page, handleFetchProductsWithFilters]);
 
   const handleSetPreviousPage = React.useCallback(() => {
-    if (gamesFilterState.page > 1) {
+    if (productFilterState.page > 1) {
       dispatch(setPreviousPage());
-      handleFetchGamesWithFilters(gamesFilterState.page);
+      handleFetchProductsWithFilters(productFilterState.page);
     }
-  }, [dispatch, gamesFilterState.page, handleFetchGamesWithFilters]);
+  }, [dispatch, productFilterState.page, handleFetchProductsWithFilters]);
 
   const handleLoadMore = React.useCallback(() => {
     dispatch(loadMore());
   }, [dispatch]);
 
   return {
-    gamesFilterState,
-    gamesPublishersState,
-    gamesPlatformsState,
-    gamesGenresState,
-    gamesStoresState,
-    handleFetchGamesWithFilters,
+    productFilterState,
+    productPublishersState,
+    productPlatformsState,
+    productGenresState,
+    productStoresState,
+    handleFetchProductsWithFilters,
     handleFetchPublishers,
     handleFetchGenres,
     handleFetchPlatforms,

@@ -12,8 +12,8 @@ import useFetchGameData from "@/hooks/useFetchGameData";
 export default function FiltersContainer() {
   const { getUrlParams } = useCustomRouter();
   const {
-    gamesFilterState,
-    handleFetchGamesWithFilters,
+    productFilterState,
+    handleFetchProductsWithFilters,
     handleSetGenresIdArray,
     handleSetPlatformsIdArray,
     handleSetPublishersIdArray,
@@ -26,7 +26,7 @@ export default function FiltersContainer() {
     handleSetPlatformsIdArray(getUrlParams("platforms"));
     handleSetStoresIdArray(getUrlParams("stores"));
     handleSetPublishersIdArray(getUrlParams("publishers"));
-    handleFetchGamesWithFilters(gamesFilterState.page);
+    handleFetchProductsWithFilters(productFilterState.page);
   }, []);
 
   return (
@@ -43,17 +43,17 @@ export default function FiltersContainer() {
             <FilterSelectedFilters />
             <SortBy
               handleSortChange={handleFilterSortChange}
-              sortedGamesCount={gamesFilterState.gamesCount}
+              sortedGamesCount={productFilterState.gamesCount}
               position="hidden md:flex relative"
               display="flex-1"
             />
-            {gamesFilterState.isLoading ? (
+            {productFilterState.isLoading ? (
               <div className="flex items-center justify-center">
                 <MoonLoader color="pink" />
               </div>
-            ) : gamesFilterState.error ? (
+            ) : productFilterState.error ? (
               <div className="flex items-center justify-center">
-                Error: {gamesFilterState.error}
+                Error: {productFilterState.error}
               </div>
             ) : (
               <FilterProductList />

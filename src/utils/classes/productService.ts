@@ -161,14 +161,9 @@ export default class ProductService implements IProductService {
     }
   }
 
-  async addProductToDatabase(): Promise<RequestResponse<Product | null>> {
+  async addProduct(): Promise<RequestResponse<Product | null>> {
     try {
       if (!this.externalProductId || !this.name || !this.price) {
-        console.error("Missing required fields:", {
-          externalProductId: this.externalProductId,
-          name: this.name,
-          price: this.price,
-        });
         return {
           success: false,
           message: "Product ID, name, and price are required!",
@@ -232,7 +227,6 @@ export default class ProductService implements IProductService {
       }
 
       const user = await getUserByEmail(this.email as string);
-
       if (!user) {
         return {
           success: false,
@@ -242,67 +236,29 @@ export default class ProductService implements IProductService {
       }
 
       let userCart = await getUserCart(user.id);
-
       if (!userCart) {
         userCart = await postgres.cart.create({
-          data: {
-            userId: user.id,
-            products: {
-              create: {
-                externalProductId: this.externalProductId as number,
-                quantity: 1,
-                productsInformations: {
-                  create: {
-                    name: this.name as string,
-                    description: this.description as string,
-                    price: this.price as number,
-                    background_image: this.background_image as string,
-                    slug: this.slug as string,
-                    released: this.released as string,
-                    added: this.added as number,
-                  },
-                },
-              },
-            },
-          },
-          include: {
-            products: true,
-          },
+          data: { userId: user.id },
+          include: { products: true },
         });
-      } else {
-        const productInCart = await postgres.product.findFirst({
-          where: {
-            cartId: userCart.id,
-            externalProductId: this.externalProductId,
-          },
-        });
-
-        if (productInCart) {
-          await postgres.product.update({
-            where: { id: productInCart.id },
-            data: { quantity: (productInCart.quantity ?? 0) + 1 },
-          });
-        } else {
-          await postgres.product.create({
-            data: {
-              cartId: userCart.id as string,
-              externalProductId: this.externalProductId as number,
-              quantity: 1,
-              productsInformations: {
-                create: {
-                  name: this.name as string,
-                  description: this.description as string,
-                  price: this.price as number,
-                  background_image: this.background_image as string,
-                  slug: this.slug as string,
-                  released: this.released as string,
-                  added: this.added as number,
-                },
-              },
-            },
-          });
-        }
       }
+
+      let product = await postgres.product.findFirst({
+        where: { externalProductId: this.externalProductId },
+      });
+
+      if (!product) {
+        return {
+          success: false,
+          message: "Product not found in database!",
+          data: null,
+        };
+      }
+
+      product = await postgres.product.update({
+        where: { id: product.id },
+        data: { cartId: userCart.id as string },
+      });
 
       const updatedUserCart = await postgres.cart.findUnique({
         where: { id: userCart.id },
@@ -336,7 +292,6 @@ export default class ProductService implements IProductService {
       }
 
       const user = await getUserByEmail(this.email as string);
-
       if (!user) {
         return {
           success: false,
@@ -346,7 +301,6 @@ export default class ProductService implements IProductService {
       }
 
       let userCart = await getUserCart(user.id);
-
       if (!userCart) {
         return {
           success: false,
@@ -370,8 +324,9 @@ export default class ProductService implements IProductService {
         };
       }
 
-      await postgres.product.delete({
+      await postgres.product.update({
         where: { id: productInCart.id },
+        data: { cartId: null },
       });
 
       const updatedUserCart = await postgres.cart.findUnique({
@@ -381,10 +336,11 @@ export default class ProductService implements IProductService {
 
       return {
         success: true,
-        message: "Product added to cart successfully!",
+        message: "Product removed from cart successfully!",
         data: updatedUserCart,
       };
     } catch (error) {
+      console.error("Error while removing product from cart:", error);
       return {
         success: false,
         message: "Error while removing product from cart!",
@@ -538,7 +494,6 @@ export default class ProductService implements IProductService {
       }
 
       const user = await getUserByEmail(this.email as string);
-
       if (!user) {
         return {
           success: false,
@@ -548,68 +503,29 @@ export default class ProductService implements IProductService {
       }
 
       let userWishList = await getUserWishList(user.id);
-
       if (!userWishList) {
         userWishList = await postgres.wishlist.create({
-          data: {
-            userId: user.id,
-            products: {
-              create: {
-                externalProductId: this.externalProductId as number,
-                productsInformations: {
-                  create: {
-                    name: this.name as string,
-                    description: this.description as string,
-                    price: this.price as number,
-                    background_image: this.background_image as string,
-                    rating: this.rating as number,
-                    slug: this.slug as string,
-                    released: this.released as string,
-                    added: this.added as number,
-                  },
-                },
-              },
-            },
-          },
-          include: {
-            products: true,
-          },
+          data: { userId: user.id },
+          include: { products: true },
         });
-      } else {
-        const productInWishlist = await postgres.product.findFirst({
-          where: {
-            wishListId: userWishList.id,
-            externalProductId: this.externalProductId,
-          },
-        });
-
-        if (productInWishlist) {
-          return {
-            success: false,
-            message: "Product already in wishlist!",
-            data: null,
-          };
-        } else {
-          await postgres.product.create({
-            data: {
-              wishListId: userWishList.id as string,
-              externalProductId: this.externalProductId as number,
-              productsInformations: {
-                create: {
-                  name: this.name as string,
-                  description: this.description as string,
-                  price: this.price as number,
-                  background_image: this.background_image as string,
-                  rating: this.rating as number,
-                  slug: this.slug as string,
-                  released: this.released as string,
-                  added: this.added as number,
-                },
-              },
-            },
-          });
-        }
       }
+
+      let product = await postgres.product.findFirst({
+        where: { externalProductId: this.externalProductId },
+      });
+
+      if (!product) {
+        return {
+          success: false,
+          message: "Product not found in database!",
+          data: null,
+        };
+      }
+
+      product = await postgres.product.update({
+        where: { id: product.id },
+        data: { wishListId: userWishList.id as string },
+      });
 
       const updatedUserWishList = await postgres.wishlist.findUnique({
         where: { id: userWishList.id },
@@ -644,7 +560,6 @@ export default class ProductService implements IProductService {
       }
 
       const user = await getUserByEmail(this.email as string);
-
       if (!user) {
         return {
           success: false,
@@ -654,7 +569,6 @@ export default class ProductService implements IProductService {
       }
 
       let userWishList = await getUserWishList(user.id);
-
       if (!userWishList) {
         return {
           success: false,
@@ -678,8 +592,9 @@ export default class ProductService implements IProductService {
         };
       }
 
-      await postgres.product.delete({
+      await postgres.product.update({
         where: { id: productInWishlist.id },
+        data: { wishListId: null },
       });
 
       const updatedUserWishList = await postgres.wishlist.findUnique({
@@ -687,21 +602,13 @@ export default class ProductService implements IProductService {
         include: { products: { include: { productsInformations: true } } },
       });
 
-      if (!updatedUserWishList) {
-        return {
-          success: false,
-          message: "Error retrieving updated wishlist!",
-          data: null,
-        };
-      }
-
       return {
         success: true,
         message: "Product removed from wishlist successfully!",
         data: updatedUserWishList,
       };
     } catch (error) {
-      console.error("Error in deleteProductFromWishList:", error);
+      console.error("Error while removing product from wishlist:", error);
       return {
         success: false,
         message: "Error while removing product from wishlist!",
@@ -742,7 +649,7 @@ export default class ProductService implements IProductService {
       });
 
       if (!product) {
-        const addedProduct = await this.addProductToDatabase();
+        const addedProduct = await this.addProduct();
         if (!addedProduct.success) {
           return {
             success: false,
@@ -769,6 +676,7 @@ export default class ProductService implements IProductService {
         data: {
           userId: user.id,
           productId: product?.id as string,
+          likes: this.likes,
         },
       });
 
@@ -778,7 +686,6 @@ export default class ProductService implements IProductService {
           reviewId: createdReview.id,
           title: this.title as RatingTitle,
           percent: this.rating * 20,
-          likes: this.likes,
           description: this.description as string,
         },
       });
@@ -798,45 +705,46 @@ export default class ProductService implements IProductService {
     }
   }
 
-  async likeReview(reviewId: string): Promise<RequestResponse<any | null>> {
+  async likeReview(): Promise<RequestResponse<any | null>> {
     try {
-      if (!this.email || !reviewId) {
+      if (!this.email || this.externalProductId) {
         return {
           success: false,
-          message: "Email and review ID are required!",
+          message: "Email and product ID are required!",
           data: null,
         };
       }
 
       const user = await postgres.user.findUnique({
         where: { email: this.email },
+        include: { reviewsLikers: true, reviews: true },
       });
 
       if (!user) {
-        return {
-          success: false,
-          message: "User not found!",
-          data: null,
-        };
+        return { success: false, message: "User not found!", data: null };
       }
 
-      const review = await postgres.review.findUnique({
-        where: { id: reviewId },
+      const product = await postgres.product.findFirst({
+        where: { externalProductId: this.externalProductId },
       });
 
-      if (!review) {
-        return {
-          success: false,
-          message: "Review not found!",
-          data: null,
-        };
+      if (!product) {
+        return { success: false, message: "Product not found!", data: null };
       }
+
+      const existingReview = await postgres.review.findFirst({
+        where: {
+          userId: user.id,
+          productId: product.id,
+        },
+      });
 
       const existingLiker = await postgres.reviewLikers.findUnique({
         where: {
-          userId_reviewId: {
+          userId_productId_reviewId: {
             userId: user.id,
-            reviewId: reviewId,
+            productId: product.id,
+            reviewId: existingReview?.id as string,
           },
         },
       });
@@ -849,20 +757,19 @@ export default class ProductService implements IProductService {
             data: null,
           };
         } else {
-          await postgres.reviewLikers.delete({
+          await postgres.reviewLikers.update({
             where: { id: existingLiker.id },
+            data: { isLiked: true },
           });
 
           await postgres.review.update({
-            where: { id: reviewId },
-            data: {
-              likes: (review.likes ?? 0) + 1,
-            },
+            where: { id: existingReview?.id },
+            data: { likes: (existingReview?.likes ?? 0) + 1 },
           });
 
           return {
             success: true,
-            message: "Review like updated successfully!",
+            message: "Review liked successfully!",
             data: null,
           };
         }
@@ -871,16 +778,15 @@ export default class ProductService implements IProductService {
       await postgres.reviewLikers.create({
         data: {
           userId: user.id,
-          reviewId: reviewId,
+          productId: product.id,
+          reviewId: existingReview?.id as string,
           isLiked: true,
         },
       });
 
       await postgres.review.update({
-        where: { id: reviewId },
-        data: {
-          likes: (review.likes ?? 0) + 1,
-        },
+        where: { id: existingReview?.id as string },
+        data: { likes: (existingReview?.likes ?? 0) + 1 },
       });
 
       return {
@@ -889,7 +795,6 @@ export default class ProductService implements IProductService {
         data: null,
       };
     } catch (error) {
-      console.error("Error while liking review:", error);
       return {
         success: false,
         message: "Error while liking review!",
@@ -898,9 +803,9 @@ export default class ProductService implements IProductService {
     }
   }
 
-  async dislikeReview(reviewId: string): Promise<RequestResponse<any | null>> {
+  async dislikeReview(): Promise<RequestResponse<any | null>> {
     try {
-      if (!this.email || !reviewId) {
+      if (!this.email || !"clzzyy4os000etkux2w0ajvb0") {
         return {
           success: false,
           message: "Email and review ID are required!",
@@ -908,35 +813,36 @@ export default class ProductService implements IProductService {
         };
       }
 
-      const user = await postgres.user.findUnique({
-        where: { email: this.email },
-      });
+      const user = await getUserByEmail(this.email);
 
       if (!user) {
-        return {
-          success: false,
-          message: "User not found!",
-          data: null,
-        };
+        return { success: false, message: "User not found!", data: null };
       }
 
-      const review = await postgres.review.findUnique({
-        where: { id: reviewId },
+      const product = await postgres.product.findFirst({
+        where: { externalProductId: this.externalProductId },
+        include: {
+          reviews: true,
+        },
       });
 
-      if (!review) {
-        return {
-          success: false,
-          message: "Review not found!",
-          data: null,
-        };
+      if (!product) {
+        return { success: false, message: "Product not found!", data: null };
       }
+
+      const existingReview = await postgres.review.findFirst({
+        where: {
+          userId: user.id,
+          productId: product.id,
+        },
+      });
 
       const existingLiker = await postgres.reviewLikers.findUnique({
         where: {
-          userId_reviewId: {
+          userId_productId_reviewId: {
             userId: user.id,
-            reviewId: reviewId,
+            productId: product.id,
+            reviewId: existingReview?.id as string,
           },
         },
       });
@@ -949,15 +855,14 @@ export default class ProductService implements IProductService {
             data: null,
           };
         } else {
-          await postgres.reviewLikers.delete({
+          await postgres.reviewLikers.update({
             where: { id: existingLiker.id },
+            data: { isLiked: false },
           });
 
           await postgres.review.update({
-            where: { id: reviewId },
-            data: {
-              likes: Math.max((review.likes ?? 0) - 1, 0),
-            },
+            where: { id: existingReview?.id },
+            data: { likes: (existingReview?.likes ?? 0) - 1 },
           });
 
           return {
@@ -971,16 +876,15 @@ export default class ProductService implements IProductService {
       await postgres.reviewLikers.create({
         data: {
           userId: user.id,
-          reviewId: reviewId,
+          productId: product.id,
+          reviewId: existingReview?.id as string,
           isLiked: false,
         },
       });
 
       await postgres.review.update({
-        where: { id: reviewId },
-        data: {
-          likes: Math.max((review.likes ?? 0) - 1, 0),
-        },
+        where: { id: existingReview?.id },
+        data: { likes: (existingReview?.likes ?? 0) - 1 },
       });
 
       return {
@@ -989,7 +893,6 @@ export default class ProductService implements IProductService {
         data: null,
       };
     } catch (error) {
-      console.error("Error while disliking review:", error);
       return {
         success: false,
         message: "Error while disliking review!",

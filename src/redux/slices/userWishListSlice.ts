@@ -1,16 +1,16 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import RequestService from "@/utils/classes/RequestService";
-import { LoggedUserWishList } from "@/utils/helpers/types";
+import { UserWishList } from "@/utils/helpers/types";
 
-interface WishListState {
-  products: LoggedUserWishList[];
+interface UserWishListSlice {
+  products: UserWishList[];
   status: string;
   error: string | null;
   success: string | null;
   ordering: string | null;
 }
 
-const initialState: WishListState = {
+const initialState: UserWishListSlice = {
   products: [],
   status: "idle",
   error: null,

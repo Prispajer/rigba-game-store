@@ -2,52 +2,52 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import FetchService from "@/utils/classes/FetchService";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
-interface StoresState {
-  storesArray: GameAPIResponse[];
+interface ProductPlatformsState {
+  platformsArray: GameAPIResponse[];
   isLoading: boolean;
   error: string | null;
   page_size: number;
 }
 
-const initialState: StoresState = {
-  storesArray: [],
+const initialState: ProductPlatformsState = {
+  platformsArray: [],
   isLoading: false,
   error: null,
   page_size: 1,
 };
 
-export const fetchStores = createAsyncThunk<
+export const fetchPlatforms = createAsyncThunk<
   GameAPIResponse[],
   { quantity: number },
   { rejectValue: string }
->("stores/fetchStores", async ({ quantity = 1 }, { rejectWithValue }) => {
+>("platforms/fetchPlatforms", async ({ quantity = 1 }, { rejectWithValue }) => {
   try {
-    const response = await FetchService.getStoresForProducts(quantity);
+    const response = await FetchService.getPlatformsForProducts(quantity);
     return response;
   } catch (error) {
     return rejectWithValue((error as Error).message);
   }
 });
 
-const storesSlice = createSlice({
-  name: "stores",
+const productPlatformsSlice = createSlice({
+  name: "platforms",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchStores.pending, (state) => {
+      .addCase(fetchPlatforms.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchStores.fulfilled, (state, action) => {
+      .addCase(fetchPlatforms.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.storesArray = action.payload;
+        state.platformsArray = action.payload;
       })
-      .addCase(fetchStores.rejected, (state, action) => {
+      .addCase(fetchPlatforms.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string | null;
       });
   },
 });
 
-export default storesSlice.reducer;
+export default productPlatformsSlice.reducer;

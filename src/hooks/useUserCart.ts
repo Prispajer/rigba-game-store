@@ -18,9 +18,9 @@ export default function useUserCart() {
   const dispatch = useDispatch<AppDispatch>();
   const userCartState = useSelector((state: RootState) => state.userCart);
 
-  const handleFetchUserCart = React.useCallback(async () => {
+  const handleFetchUserCart = React.useCallback(() => {
     if (user?.email) {
-      await dispatch(fetchUserCart({ email: user.email }));
+      dispatch(fetchUserCart({ email: user.email }));
     }
   }, [dispatch, user?.email]);
 

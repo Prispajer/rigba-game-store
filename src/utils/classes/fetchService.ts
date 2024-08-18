@@ -95,6 +95,8 @@ export class FetchService implements IFetchService {
     publishersId?: number[],
     ordering?: string
   ): Promise<GameAPIResponse> {
+    console.log("getProductsWithFilters called"); // This should log if the function is called
+
     const genresQuery = genresId.join(",");
     const platformsQuery = platformsId?.join(",");
     const storesQuery = storesId?.join(",");
@@ -106,7 +108,9 @@ export class FetchService implements IFetchService {
     }${
       publishersQuery ? `&publishers=${publishersQuery}` : ""
     }&ordering=${ordering}`;
+
     const data = await this.fetchData<GameAPIResponse>(url);
+    console.log("Fetched Data:", data); // This should log the fetched data
     return data || {};
   }
 }

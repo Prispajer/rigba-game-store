@@ -17,7 +17,7 @@ export default function ProductRequirements({
     const platform = product.platforms?.find(
       (p) => p.platform.name.toLowerCase() === platformName.toLowerCase()
     );
-    return platform ? platform.requirements : null;
+    return platform ? platform.requirements : [];
   };
 
   const renderRequirements = (platformName: string) => {

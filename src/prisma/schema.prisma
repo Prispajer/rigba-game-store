@@ -116,23 +116,25 @@ model Review {
   createdAt  DateTime   @default(now()) 
   updatedAt  DateTime   @updatedAt   
   rating     Rating?   
+  likes      Int        @default(0)
   user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   product    Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
-  likes      Int        @default(0)
   reviewLikers     ReviewLikers[]  
 }
 
 model ReviewLikers {
   id        String   @id @default(cuid())
   userId    String
+  productId String
   reviewId  String
   isLiked   Boolean
   createdAt DateTime @default(now())
 
   user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product  Product @relation(fields: [productId], references:[id])
   review   Review  @relation(fields: [reviewId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, reviewId])
+  @@unique([userId, productId, reviewId])
 }
 
 model Rating {
@@ -142,7 +144,6 @@ model Rating {
   description String
   rating      Int
   percent     Float
-  likes       Int      @default(0) 
   review      Review   @relation(fields: [reviewId], references: [id])
 }
 model Product {
@@ -152,6 +153,7 @@ model Product {
   wishListId           String?
   quantity             Int?
   productsInformations ProductInformations? 
+  reviewLikers         ReviewLikers[]
   reviews              Review[]             
   cart                 Cart?                 @relation(fields: [cartId], references: [id], onDelete: Cascade)
   wishlist             Wishlist?             @relation(fields: [wishListId], references: [id], onDelete: Cascade)

@@ -45,7 +45,7 @@ export default function ProductContainer({
             product={product}
             redirectToReview={redirectToReview}
           />
-          <ProductUsersReview product={product} />
+          <ProductUsersReview product={product} user={user} />
           <ShowMoreButton text="Load more reviews" />
           <ProductHeaders headerText="Product description" />
           <ProductGenres product={product} />

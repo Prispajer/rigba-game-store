@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import FetchService from "@/utils/classes/FetchService";
+import fetchService from "@/utils/classes/FetchService";
 import { getGamesWithRandomPrices } from "@/utils/prices";
-import { GameAPIResponse } from "@/utils/helpers/types";
+import { GameAPIResponse, RequestResponse } from "@/utils/helpers/types";
 
-export interface FilterState {
-  gamesWithFilters: GameAPIResponse[];
+export interface ProductFilterState {
+  productsWithFilters: GameAPIResponse[];
   genresIdArray: number[];
   platformsIdArray: number[];
   storesIdArray: number[];
@@ -18,8 +18,8 @@ export interface FilterState {
   previousPage: string | null;
 }
 
-const initialState: FilterState = {
-  gamesWithFilters: [],
+const initialState: ProductFilterState = {
+  productsWithFilters: [],
   genresIdArray: [],
   platformsIdArray: [],
   storesIdArray: [],
@@ -33,15 +33,20 @@ const initialState: FilterState = {
   previousPage: null,
 };
 
-export const fetchGamesWithFilters = createAsyncThunk<
-  GameAPIResponse[],
+export const fetchProductsWithFilters = createAsyncThunk<
+  {
+    results: GameAPIResponse[];
+    count: number;
+    next: string | null;
+    previous: string | null;
+  },
   { page: number },
-  { rejectValue: string; getState: () => FilterState }
+  { rejectValue: string; getState: () => { gamesFilter: ProductFilterState } }
 >(
-  "gamesFilter/fetchGamesWithFilters",
-  async ({ page = 1 }: { page: number }, { rejectWithValue, getState }) => {
+  "productFilter/fetchProductsWithFilters",
+  async ({ page = 1 }, { rejectWithValue, getState }) => {
     const {
-      gamesWithFilters,
+      productsWithFilters,
       genresIdArray,
       platformsIdArray,
       storesIdArray,
@@ -50,7 +55,7 @@ export const fetchGamesWithFilters = createAsyncThunk<
     } = (getState() as { gamesFilter: FilterState }).gamesFilter;
 
     try {
-      const getGamesWithFilters = await FetchService.getProductsWithFilters(
+      const getProductsWithFilters = await fetchService.getProductsWithFilters(
         genresIdArray,
         page,
         platformsIdArray,
@@ -60,8 +65,8 @@ export const fetchGamesWithFilters = createAsyncThunk<
       );
 
       const gamesWithPrices = await getGamesWithRandomPrices(
-        getGamesWithFilters.results,
-        gamesWithFilters
+        getProductsWithFilters.results,
+        productsWithFilters
       );
 
       if (ordering === "price") {
@@ -71,16 +76,18 @@ export const fetchGamesWithFilters = createAsyncThunk<
       }
 
       return {
-        ...getGamesWithFilters,
+        ...getProductsWithFilters,
         results: gamesWithPrices,
       };
     } catch (error) {
-      return rejectWithValue((error as Error).message);
+      return rejectWithValue(
+        error instanceof Error ? error.message : "An unknown error occurred"
+      );
     }
   }
 );
 
-const gamesFilterSlice = createSlice({
+const productFiltersSlice = createSlice({
   name: "gamesFilter",
   initialState,
   reducers: {
@@ -115,21 +122,29 @@ const gamesFilterSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchGamesWithFilters.pending, (state) => {
+      .addCase(fetchProductsWithFilters.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
       .addCase(
-        fetchGamesWithFilters.fulfilled,
-        (state, action: PayloadAction<any>) => {
+        fetchProductsWithFilters.fulfilled,
+        (
+          state,
+          action: PayloadAction<{
+            results: GameAPIResponse[];
+            count: number;
+            next: string | null;
+            previous: string | null;
+          }>
+        ) => {
           state.isLoading = false;
-          state.gamesWithFilters = action.payload.results;
+          state.productsWithFilters = action.payload.results;
           state.gamesCount = action.payload.count;
           state.nextPage = action.payload.next;
           state.previousPage = action.payload.previous;
         }
       )
-      .addCase(fetchGamesWithFilters.rejected, (state, action) => {
+      .addCase(fetchProductsWithFilters.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       });
@@ -145,5 +160,5 @@ export const {
   setPage,
   setNextPage,
   setPreviousPage,
-} = gamesFilterSlice.actions;
-export default gamesFilterSlice.reducer;
+} = productFiltersSlice.actions;
+export default productFiltersSlice.reducer;

@@ -50,7 +50,7 @@ export default function ReviewContainer({
       const response = await requestService.postMethod(
         "products/endpoints/productManagement/addReviewToProduct",
         {
-          email: user.email,
+          email: user.email as string,
           externalProductId: product.id,
           name: product.name,
           description: review,

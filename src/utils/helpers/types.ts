@@ -1,5 +1,3 @@
-import { Product as LoggedUserProduct } from "@prisma/client";
-
 export interface User {
   id: string;
   name?: string | null;
@@ -48,21 +46,35 @@ export interface ProductInformations {
   background_image: string | null;
 }
 
-export interface LoggedUserWishList {
+export interface UserWishList {
   id: string;
   userId: string;
   createdAt: Date;
   updatedAt: Date;
-  products: LoggedUserProduct[];
+  products: UserProduct[];
 }
-export interface LoggedUserCart {
+export interface UserCart {
   id: string;
   userId: string;
   createdAt: Date;
   updatedAt: Date;
-  products: LoggedUserProduct[];
+  products: UserProduct[];
 }
 
+export interface UserReviews {
+  id: string;
+  createdAt: Date;
+  likes: number;
+  rating: {
+    description: string;
+    rating: number;
+  };
+  user: {
+    email: string;
+    image: string;
+    name: string;
+  };
+}
 export interface RequestResponse<T> {
   data?: T | null;
   success?: boolean;

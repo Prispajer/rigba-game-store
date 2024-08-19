@@ -7,6 +7,7 @@ interface UserReviewsSlice {
   status: string;
   error: string | null;
   success: string | null;
+  message: string | null;
 }
 
 const initialState: UserReviewsSlice = {
@@ -14,10 +15,11 @@ const initialState: UserReviewsSlice = {
   status: "Idle",
   error: null,
   success: null,
+  message: null,
 };
 
 export const fetchUserReviews = createAsyncThunk<
-  UserReviews[],
+  { reviews: UserReviews[]; message?: string },
   { externalProductId: number },
   { rejectValue: string }
 >(
@@ -27,13 +29,14 @@ export const fetchUserReviews = createAsyncThunk<
       const getReviewsResponse: RequestResponse<{ reviews: UserReviews[] }> =
         await requestService.postMethod(
           "products/endpoints/productManagement/getReviews",
-          {
-            externalProductId,
-          }
+          { externalProductId }
         );
 
       if (getReviewsResponse.success) {
-        return getReviewsResponse.data?.reviews ?? [];
+        return {
+          reviews: getReviewsResponse.data?.reviews ?? [],
+          message: getReviewsResponse.message,
+        };
       } else {
         throw new Error(getReviewsResponse.message || "Unknown error");
       }
@@ -44,22 +47,25 @@ export const fetchUserReviews = createAsyncThunk<
 );
 
 export const fetchLikeUserReview = createAsyncThunk<
-  UserReviews[],
-  { email: string; reviewId: string },
+  { reviews: UserReviews[]; message?: string },
+  { email: string; externalProductId: number },
   { rejectValue: string }
 >(
   "userReviews/fetchLikeUserReview",
-  async ({ email, reviewId }, { rejectWithValue }) => {
+  async ({ email, externalProductId }, { rejectWithValue }) => {
     try {
       const likeUserReviewResponse: RequestResponse<{
         reviews: UserReviews[];
       }> = await requestService.patchMethod(
         "products/endpoints/productManagement/likeReview",
-        { email, reviewId }
+        { email, externalProductId }
       );
 
       if (likeUserReviewResponse.success) {
-        return likeUserReviewResponse.data?.reviews ?? [];
+        return {
+          reviews: likeUserReviewResponse.data?.reviews ?? [],
+          message: likeUserReviewResponse.message,
+        };
       } else {
         throw new Error(likeUserReviewResponse.message || "Unknown error");
       }
@@ -70,22 +76,25 @@ export const fetchLikeUserReview = createAsyncThunk<
 );
 
 export const fetchUnLikeUserReview = createAsyncThunk<
-  UserReviews[],
-  { email: string; reviewId: string },
+  { reviews: UserReviews[]; message?: string },
+  { email: string; externalProductId: number },
   { rejectValue: string }
 >(
   "userReviews/fetchUnLikeUserReview",
-  async ({ email, reviewId }, { rejectWithValue }) => {
+  async ({ email, externalProductId }, { rejectWithValue }) => {
     try {
       const unLikeUserReviewResponse: RequestResponse<{
         reviews: UserReviews[];
       }> = await requestService.patchMethod(
         "products/endpoints/productManagement/unLikeReview",
-        { email, reviewId }
+        { email, externalProductId }
       );
 
       if (unLikeUserReviewResponse.success) {
-        return unLikeUserReviewResponse.data?.reviews ?? [];
+        return {
+          reviews: unLikeUserReviewResponse.data?.reviews ?? [],
+          message: unLikeUserReviewResponse.message,
+        };
       } else {
         throw new Error(unLikeUserReviewResponse.message || "Unknown error");
       }
@@ -103,45 +112,56 @@ const userReviewsSlice = createSlice({
     builder
       .addCase(fetchUserReviews.pending, (state) => {
         state.status = "loading";
+        state.message = "Loading...";
       })
       .addCase(fetchUserReviews.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.reviews = action.payload.sort(
+        state.reviews = action.payload.reviews.sort(
           (a, b) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
-      })
-      .addCase(fetchLikeUserReview.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.payload as string;
-      })
-      .addCase(fetchLikeUserReview.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(fetchLikeUserReview.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.reviews = action.payload.sort(
-          (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-      })
-      .addCase(fetchUnLikeUserReview.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.payload as string;
-      })
-      .addCase(fetchUnLikeUserReview.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(fetchUnLikeUserReview.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.reviews = action.payload.sort(
-          (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
+        state.message =
+          action.payload.message || "User reviews fetched successfully.";
       })
       .addCase(fetchUserReviews.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
+        state.message = action.payload as string;
+      })
+      .addCase(fetchLikeUserReview.pending, (state) => {
+        state.status = "loading";
+        state.message = "Liking the review...";
+      })
+      .addCase(fetchLikeUserReview.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.reviews = action.payload.reviews.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        state.message = action.payload.message || "Review liked successfully.";
+      })
+      .addCase(fetchLikeUserReview.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+        state.message = action.payload as string;
+      })
+      .addCase(fetchUnLikeUserReview.pending, (state) => {
+        state.status = "loading";
+        state.message = "Unliking the review...";
+      })
+      .addCase(fetchUnLikeUserReview.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.reviews = action.payload.reviews.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        state.message =
+          action.payload.message || "Review unliked successfully.";
+      })
+      .addCase(fetchUnLikeUserReview.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload as string;
+        state.message = action.payload as string;
       });
   },
 });

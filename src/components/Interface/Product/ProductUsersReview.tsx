@@ -44,7 +44,7 @@ export default function ProductUsersReview({
                     onClick={() =>
                       handleFetchLikeUserReview(
                         user.email as string,
-                        "clzx1bgpa000axz76o6gv3u42"
+                        product.id as number
                       )
                     }
                     className="ml-[10px]"
@@ -55,7 +55,7 @@ export default function ProductUsersReview({
                     onClick={() =>
                       handleFetchUnLikeUserReview(
                         user.email as string,
-                        "clzx1bgpa000axz76o6gv3u42"
+                        product.id as number
                       )
                     }
                     className="ml-[10px] mt-[2px]"

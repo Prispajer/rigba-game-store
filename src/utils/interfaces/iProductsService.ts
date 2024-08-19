@@ -19,5 +19,5 @@ export default interface IProductService {
   addProductToDatabase(): Promise<RequestResponse<Product | null>>;
   addReviewToProduct(): Promise<RequestResponse<any | null>>;
   likeReview(): Promise<RequestResponse<UserReviews | null> | undefined>;
-  dislikeReview(reviewId: string): Promise<RequestResponse<any | null>>;
+  unLikeReview(): Promise<RequestResponse<any | null>>;
 }

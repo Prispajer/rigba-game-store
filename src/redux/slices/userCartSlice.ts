@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import RequestService from "@/utils/classes/RequestService";
-import { LoggedUserCart } from "@/utils/helpers/types";
+import { UserWishList } from "@/utils/helpers/types";
 
 interface UserCartState {
-  products: LoggedUserCart[];
+  products: UserWishList[];
   status: string;
   error: string | null;
   success: string | null;

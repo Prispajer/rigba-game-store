@@ -20,6 +20,8 @@ export default function useUserWishList() {
     (state: RootState) => state.userWishList.products
   );
 
+  console.log(userWishListState);
+
   const handleSetUserWishList = React.useCallback(() => {
     if (user?.wishlist?.products) {
       dispatch(setProducts(user.wishlist.products));

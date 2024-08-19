@@ -11,24 +11,26 @@ export default function useUserReviews() {
   const dispatch = useDispatch<AppDispatch>();
   const userReviewsState = useSelector((state: RootState) => state.userReviews);
 
+  console.log(userReviewsState);
+
   const handleFetchUserReviews = React.useCallback(
-    (externalProductId: number) => {
-      dispatch(fetchUserReviews({ externalProductId }));
+    async (externalProductId: number) => {
+      await dispatch(fetchUserReviews({ externalProductId }));
     },
     [dispatch]
   );
 
   const handleFetchLikeUserReview = React.useCallback(
-    (email: string, reviewId: string, externalProductId: number) => {
-      dispatch(fetchLikeUserReview({ email, reviewId }));
+    async (email: string, externalProductId: number) => {
+      await dispatch(fetchLikeUserReview({ email, externalProductId }));
       handleFetchUserReviews(externalProductId);
     },
     [dispatch, handleFetchUserReviews]
   );
 
   const handleFetchUnLikeUserReview = React.useCallback(
-    (email: string, reviewId: string, externalProductId: number) => {
-      dispatch(fetchUnLikeUserReview({ email, reviewId }));
+    async (email: string, externalProductId: number) => {
+      await dispatch(fetchUnLikeUserReview({ email, externalProductId }));
       handleFetchUserReviews(externalProductId);
     },
     [dispatch, handleFetchUserReviews]

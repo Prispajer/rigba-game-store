@@ -21,11 +21,17 @@ export default function WishListProductList() {
         displayByRole.map((game) => (
           <div
             key={game.externalProductId}
-            onClick={() =>
-              redirectToGame(
-                (game.slug as string) || game.productsInformations?.slug
-              )
-            }
+            onClick={() => {
+              const redirectTo = user
+                ? game.productsInformations?.slug
+                : game.slug;
+
+              if (redirectTo) {
+                redirectToGame(redirectTo);
+              } else {
+                console.warn("Redirect URL is not available");
+              }
+            }}
             className={`relative my-[10px] flex sm:flex-col bg-tertiaryColor 
              cursor-pointer`}
           >

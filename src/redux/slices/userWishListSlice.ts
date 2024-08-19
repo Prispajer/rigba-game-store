@@ -8,6 +8,7 @@ interface UserWishListSlice {
   error: string | null;
   success: string | null;
   ordering: string | null;
+  message: string | null;
 }
 
 const initialState: UserWishListSlice = {
@@ -16,10 +17,11 @@ const initialState: UserWishListSlice = {
   error: null,
   success: null,
   ordering: null,
+  message: null,
 };
 
 export const fetchAddUserProductToWishList = createAsyncThunk<
-  LoggedUserWishList[],
+  { products: UserWishList[]; message: string },
   {
     email: string | null | undefined;
     externalProductId: string | undefined;
@@ -51,7 +53,10 @@ export const fetchAddUserProductToWishList = createAsyncThunk<
     { rejectWithValue }
   ) => {
     try {
-      const response = await RequestService.postMethod(
+      const fetchAddUserProductToWishListResponse: RequestService<{
+        message: string;
+        products: UserWishList[];
+      }> = await RequestService.postMethod(
         "products/endpoints/productManagement/addProductToWishList",
         {
           email,
@@ -67,11 +72,19 @@ export const fetchAddUserProductToWishList = createAsyncThunk<
         }
       );
 
-      if (response.success && response.data && response.data.products) {
-        return response.data?.products;
+      if (
+        fetchAddUserProductToWishListResponse.success &&
+        fetchAddUserProductToWishListResponse.data &&
+        fetchAddUserProductToWishListResponse.data.products
+      ) {
+        return {
+          products: fetchAddUserProductToWishListResponse.data.products,
+          message: fetchAddUserProductToWishListResponse.message,
+        };
       } else {
         return rejectWithValue(
-          response.message || "Failed to add product to wishlist"
+          fetchAddUserProductToWishListResponse.message ||
+            "Failed to add product to wishlist"
         );
       }
     } catch (error) {
@@ -82,7 +95,7 @@ export const fetchAddUserProductToWishList = createAsyncThunk<
 );
 
 export const fetchDeleteUserProductFromWishList = createAsyncThunk<
-  LoggedUserWishList[],
+  { products: UserWishList[]; message: string },
   {
     email: string | null | undefined;
     externalProductId: number;
@@ -92,15 +105,22 @@ export const fetchDeleteUserProductFromWishList = createAsyncThunk<
   "userWishList/fetchDeleteUserProductFromWishList",
   async ({ email, externalProductId }, { rejectWithValue }) => {
     try {
-      const response = await RequestService.deleteMethod(
+      const fetchDeleteUserProductFromWishListResponse: RequestService<{
+        message: string;
+        products: UserWishList[];
+      }> = await RequestService.deleteMethod(
         "products/endpoints/productManagement/deleteProductFromWishList",
         { email, externalProductId }
       );
-      if (response.success) {
-        return response.data?.products;
+      if (fetchDeleteUserProductFromWishListResponse.success) {
+        return {
+          products: fetchDeleteUserProductFromWishListResponse.data.products,
+          message: fetchDeleteUserProductFromWishListResponse.message,
+        };
       } else {
         return rejectWithValue(
-          response.message || "Failed to delete product from wishlist"
+          fetchDeleteUserProductFromWishListResponse.message ||
+            "Failed to delete product from wishlist"
         );
       }
     } catch (error) {
@@ -183,31 +203,37 @@ const userWishListSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchAddUserProductToWishList.pending, (state) => {
-        state.status = "loading";
+        state.status = "Loading";
         state.error = null;
+        state.message = "Loading...";
       })
       .addCase(fetchAddUserProductToWishList.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.products = action.payload || [];
+        state.status = "Succeded";
+        state.message = action.payload.message;
+        state.products = action.payload.products || [];
       })
       .addCase(fetchAddUserProductToWishList.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = "Failed";
+        state.message = action.payload as string;
         state.error = action.payload as string;
         state.products = [];
       })
       .addCase(fetchDeleteUserProductFromWishList.pending, (state) => {
-        state.status = "loading";
+        state.status = "Loading";
         state.error = null;
+        state.message = "Loading...";
       })
       .addCase(
         fetchDeleteUserProductFromWishList.fulfilled,
         (state, action) => {
-          state.status = "succeeded";
-          state.products = action.payload;
+          state.status = "Succeeded";
+          state.products = action.payload.products;
+          state.message = action.payload.message;
         }
       )
       .addCase(fetchDeleteUserProductFromWishList.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = "Failed";
+        state.message = action.payload as string;
         state.error = action.payload as string;
       });
   },

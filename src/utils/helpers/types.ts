@@ -47,18 +47,15 @@ export interface ProductInformations {
 }
 
 export interface UserWishList {
-  id: string;
-  userId: string;
-  createdAt: Date;
-  updatedAt: Date;
-  products: UserProduct[];
+  externalProductId: number;
+  productsInformations: Product;
 }
 export interface UserCart {
   id: string;
   userId: string;
   createdAt: Date;
   updatedAt: Date;
-  products: UserProduct[];
+  products: Product[];
 }
 
 export interface UserReviews {

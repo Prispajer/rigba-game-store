@@ -41,7 +41,7 @@ export const fetchProductsWithFilters = createAsyncThunk<
     previous: string | null;
   },
   { page: number },
-  { rejectValue: string; getState: () => { gamesFilter: ProductFilterState } }
+  { rejectValue: string }
 >(
   "productFilter/fetchProductsWithFilters",
   async ({ page = 1 }, { rejectWithValue, getState }) => {
@@ -52,7 +52,7 @@ export const fetchProductsWithFilters = createAsyncThunk<
       storesIdArray,
       publishersIdArray,
       ordering,
-    } = (getState() as { gamesFilter: FilterState }).gamesFilter;
+    } = (getState() as { productFilter: ProductFilterState }).productFilter;
 
     try {
       const getProductsWithFilters = await fetchService.getProductsWithFilters(

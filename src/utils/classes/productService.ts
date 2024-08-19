@@ -227,6 +227,7 @@ export default class ProductService implements IProductService {
       }
 
       const user = await getUserByEmail(this.email as string);
+
       if (!user) {
         return {
           success: false,
@@ -236,29 +237,67 @@ export default class ProductService implements IProductService {
       }
 
       let userCart = await getUserCart(user.id);
+
       if (!userCart) {
         userCart = await postgres.cart.create({
-          data: { userId: user.id },
-          include: { products: true },
+          data: {
+            userId: user.id,
+            products: {
+              create: {
+                externalProductId: this.externalProductId as number,
+                quantity: 1,
+                productsInformations: {
+                  create: {
+                    name: this.name as string,
+                    description: this.description as string,
+                    price: this.price as number,
+                    background_image: this.background_image as string,
+                    slug: this.slug as string,
+                    released: this.released as string,
+                    added: this.added as number,
+                  },
+                },
+              },
+            },
+          },
+          include: {
+            products: true,
+          },
         });
+      } else {
+        const productInCart = await postgres.product.findFirst({
+          where: {
+            cartId: userCart.id,
+            externalProductId: this.externalProductId,
+          },
+        });
+
+        if (productInCart) {
+          await postgres.product.update({
+            where: { id: productInCart.id },
+            data: { quantity: (productInCart.quantity ?? 0) + 1 },
+          });
+        } else {
+          await postgres.product.create({
+            data: {
+              cartId: userCart.id as string,
+              externalProductId: this.externalProductId as number,
+              quantity: 1,
+              productsInformations: {
+                create: {
+                  name: this.name as string,
+                  description: this.description as string,
+                  price: this.price as number,
+                  background_image: this.background_image as string,
+                  slug: this.slug as string,
+                  released: this.released as string,
+                  added: this.added as number,
+                },
+              },
+            },
+          });
+        }
       }
-
-      let product = await postgres.product.findFirst({
-        where: { externalProductId: this.externalProductId },
-      });
-
-      if (!product) {
-        return {
-          success: false,
-          message: "Product not found in database!",
-          data: null,
-        };
-      }
-
-      product = await postgres.product.update({
-        where: { id: product.id },
-        data: { cartId: userCart.id as string },
-      });
 
       const updatedUserCart = await postgres.cart.findUnique({
         where: { id: userCart.id },
@@ -279,208 +318,6 @@ export default class ProductService implements IProductService {
     }
   }
 
-  async deleteProductFromCart(): Promise<
-    RequestResponse<LoggedUserCart | null>
-  > {
-    try {
-      if (!this.externalProductId) {
-        return {
-          success: false,
-          message: "Product ID is required!",
-          data: null,
-        };
-      }
-
-      const user = await getUserByEmail(this.email as string);
-      if (!user) {
-        return {
-          success: false,
-          message: "User doesn't exist!",
-          data: null,
-        };
-      }
-
-      let userCart = await getUserCart(user.id);
-      if (!userCart) {
-        return {
-          success: false,
-          message: "Cart doesn't exist!",
-          data: null,
-        };
-      }
-
-      const productInCart = await postgres.product.findFirst({
-        where: {
-          cartId: userCart.id,
-          externalProductId: this.externalProductId,
-        },
-      });
-
-      if (!productInCart) {
-        return {
-          success: false,
-          message: "Product not found in cart!",
-          data: null,
-        };
-      }
-
-      await postgres.product.update({
-        where: { id: productInCart.id },
-        data: { cartId: null },
-      });
-
-      const updatedUserCart = await postgres.cart.findUnique({
-        where: { id: userCart.id },
-        include: { products: { include: { productsInformations: true } } },
-      });
-
-      return {
-        success: true,
-        message: "Product removed from cart successfully!",
-        data: updatedUserCart,
-      };
-    } catch (error) {
-      console.error("Error while removing product from cart:", error);
-      return {
-        success: false,
-        message: "Error while removing product from cart!",
-        data: null,
-      };
-    }
-  }
-
-  async decreaseProductQuantity(): Promise<
-    RequestResponse<LoggedUserCart | null>
-  > {
-    try {
-      const user = await getUserByEmail(this.email as string);
-
-      if (!user) {
-        return {
-          success: false,
-          message: "User doesn't exist!",
-          data: null,
-        };
-      }
-
-      let userCart = await getUserCart(user?.id);
-
-      if (!userCart) {
-        return {
-          success: false,
-          message: "Cart not found!",
-          data: null,
-        };
-      }
-
-      const productInCart = await postgres.product.findFirst({
-        where: {
-          cartId: userCart.id,
-          externalProductId: this.externalProductId,
-        },
-      });
-
-      if (!productInCart) {
-        return {
-          success: false,
-          message: "Product not found in cart!",
-          data: null,
-        };
-      }
-
-      const updatedProduct = await postgres.product.update({
-        where: { id: productInCart.id },
-        data: { quantity: (productInCart.quantity as number) - 1 },
-      });
-
-      if ((updatedProduct.quantity as number) <= 0) {
-        await postgres.product.delete({
-          where: { id: productInCart.id },
-        });
-      }
-
-      const updatedUserCart = await postgres.cart.findUnique({
-        where: { id: userCart.id },
-        include: { products: { include: { productsInformations: true } } },
-      });
-
-      return {
-        success: true,
-        message: "Product added to cart successfully!",
-        data: updatedUserCart,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        message: "Something went wrong!",
-        data: null,
-      };
-    }
-  }
-
-  async increaseProductQuantity(): Promise<
-    RequestResponse<LoggedUserCart | null>
-  > {
-    try {
-      const user = await getUserByEmail(this.email as string);
-
-      if (!user) {
-        return {
-          success: false,
-          message: "User doesn't exist!",
-          data: null,
-        };
-      }
-
-      let userCart = await getUserCart(user?.id);
-
-      if (!userCart) {
-        return {
-          success: false,
-          message: "Cart not found!",
-          data: null,
-        };
-      }
-
-      const productInCart = await postgres.product.findFirst({
-        where: {
-          cartId: userCart.id,
-          externalProductId: this.externalProductId,
-        },
-      });
-
-      if (!productInCart) {
-        return {
-          success: false,
-          message: "Product not found in cart!",
-          data: null,
-        };
-      }
-
-      await postgres.product.update({
-        where: { id: productInCart.id },
-        data: { quantity: (productInCart.quantity ?? 0) + 1 },
-      });
-
-      const updatedUserCart = await postgres.cart.findUnique({
-        where: { id: userCart.id },
-        include: { products: { include: { productsInformations: true } } },
-      });
-
-      return {
-        success: true,
-        message: "Product added to cart successfully!",
-        data: updatedUserCart,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        message: "Something went wrong!",
-        data: null,
-      };
-    }
-  }
-
   async addProductToWishlist(): Promise<
     RequestResponse<LoggedUserWishList | null>
   > {
@@ -494,6 +331,7 @@ export default class ProductService implements IProductService {
       }
 
       const user = await getUserByEmail(this.email as string);
+
       if (!user) {
         return {
           success: false,
@@ -503,29 +341,68 @@ export default class ProductService implements IProductService {
       }
 
       let userWishList = await getUserWishList(user.id);
+
       if (!userWishList) {
         userWishList = await postgres.wishlist.create({
-          data: { userId: user.id },
-          include: { products: true },
+          data: {
+            userId: user.id,
+            products: {
+              create: {
+                externalProductId: this.externalProductId as number,
+                productsInformations: {
+                  create: {
+                    name: this.name as string,
+                    description: this.description as string,
+                    price: this.price as number,
+                    background_image: this.background_image as string,
+                    rating: this.rating as number,
+                    slug: this.slug as string,
+                    released: this.released as string,
+                    added: this.added as number,
+                  },
+                },
+              },
+            },
+          },
+          include: {
+            products: true,
+          },
         });
+      } else {
+        const productInWishlist = await postgres.product.findFirst({
+          where: {
+            wishListId: userWishList.id,
+            externalProductId: this.externalProductId,
+          },
+        });
+
+        if (productInWishlist) {
+          return {
+            success: false,
+            message: "Product already in wishlist!",
+            data: null,
+          };
+        } else {
+          await postgres.product.create({
+            data: {
+              wishListId: userWishList.id as string,
+              externalProductId: this.externalProductId as number,
+              productsInformations: {
+                create: {
+                  name: this.name as string,
+                  description: this.description as string,
+                  price: this.price as number,
+                  background_image: this.background_image as string,
+                  rating: this.rating as number,
+                  slug: this.slug as string,
+                  released: this.released as string,
+                  added: this.added as number,
+                },
+              },
+            },
+          });
+        }
       }
-
-      let product = await postgres.product.findFirst({
-        where: { externalProductId: this.externalProductId },
-      });
-
-      if (!product) {
-        return {
-          success: false,
-          message: "Product not found in database!",
-          data: null,
-        };
-      }
-
-      product = await postgres.product.update({
-        where: { id: product.id },
-        data: { wishListId: userWishList.id as string },
-      });
 
       const updatedUserWishList = await postgres.wishlist.findUnique({
         where: { id: userWishList.id },
@@ -542,76 +419,6 @@ export default class ProductService implements IProductService {
       return {
         success: false,
         message: "Error while adding product to the wishlist!",
-        data: null,
-      };
-    }
-  }
-
-  async deleteProductFromWishList(): Promise<
-    RequestResponse<LoggedUserWishList | null>
-  > {
-    try {
-      if (!this.externalProductId) {
-        return {
-          success: false,
-          message: "Product ID is required!",
-          data: null,
-        };
-      }
-
-      const user = await getUserByEmail(this.email as string);
-      if (!user) {
-        return {
-          success: false,
-          message: "User doesn't exist!",
-          data: null,
-        };
-      }
-
-      let userWishList = await getUserWishList(user.id);
-      if (!userWishList) {
-        return {
-          success: false,
-          message: "Wishlist doesn't exist!",
-          data: null,
-        };
-      }
-
-      const productInWishlist = await postgres.product.findFirst({
-        where: {
-          wishListId: userWishList.id,
-          externalProductId: this.externalProductId,
-        },
-      });
-
-      if (!productInWishlist) {
-        return {
-          success: false,
-          message: "Product not found in wishlist!",
-          data: null,
-        };
-      }
-
-      await postgres.product.update({
-        where: { id: productInWishlist.id },
-        data: { wishListId: null },
-      });
-
-      const updatedUserWishList = await postgres.wishlist.findUnique({
-        where: { id: userWishList.id },
-        include: { products: { include: { productsInformations: true } } },
-      });
-
-      return {
-        success: true,
-        message: "Product removed from wishlist successfully!",
-        data: updatedUserWishList,
-      };
-    } catch (error) {
-      console.error("Error while removing product from wishlist:", error);
-      return {
-        success: false,
-        message: "Error while removing product from wishlist!",
         data: null,
       };
     }
@@ -705,9 +512,289 @@ export default class ProductService implements IProductService {
     }
   }
 
+  async deleteProductFromCart(): Promise<
+    RequestResponse<LoggedUserCart | null>
+  > {
+    try {
+      if (!this.externalProductId) {
+        return {
+          success: false,
+          message: "Product ID is required!",
+          data: null,
+        };
+      }
+
+      const user = await getUserByEmail(this.email as string);
+
+      if (!user) {
+        return {
+          success: false,
+          message: "User doesn't exist!",
+          data: null,
+        };
+      }
+
+      let userCart = await getUserCart(user.id);
+
+      if (!userCart) {
+        return {
+          success: false,
+          message: "Cart doesn't exist!",
+          data: null,
+        };
+      }
+
+      const productInCart = await postgres.product.findFirst({
+        where: {
+          cartId: userCart.id,
+          externalProductId: this.externalProductId,
+        },
+      });
+
+      if (!productInCart) {
+        return {
+          success: false,
+          message: "Product not found in cart!",
+          data: null,
+        };
+      }
+
+      await postgres.product.delete({
+        where: { id: productInCart.id },
+      });
+
+      const updatedUserCart = await postgres.cart.findUnique({
+        where: { id: userCart.id },
+        include: { products: { include: { productsInformations: true } } },
+      });
+
+      return {
+        success: true,
+        message: "Product added to cart successfully!",
+        data: updatedUserCart,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: "Error while removing product from cart!",
+        data: null,
+      };
+    }
+  }
+
+  async deleteProductFromWishList(): Promise<
+    RequestResponse<LoggedUserWishList | null>
+  > {
+    try {
+      if (!this.externalProductId) {
+        return {
+          success: false,
+          message: "Product ID is required!",
+          data: null,
+        };
+      }
+
+      const user = await getUserByEmail(this.email as string);
+
+      if (!user) {
+        return {
+          success: false,
+          message: "User doesn't exist!",
+          data: null,
+        };
+      }
+
+      let userWishList = await getUserWishList(user.id);
+
+      if (!userWishList) {
+        return {
+          success: false,
+          message: "Wishlist doesn't exist!",
+          data: null,
+        };
+      }
+
+      const productInWishlist = await postgres.product.findFirst({
+        where: {
+          wishListId: userWishList.id,
+          externalProductId: this.externalProductId,
+        },
+      });
+
+      if (!productInWishlist) {
+        return {
+          success: false,
+          message: "Product not found in wishlist!",
+          data: null,
+        };
+      }
+
+      await postgres.product.delete({
+        where: { id: productInWishlist.id },
+      });
+
+      const updatedUserWishList = await postgres.wishlist.findUnique({
+        where: { id: userWishList.id },
+        include: { products: { include: { productsInformations: true } } },
+      });
+
+      if (!updatedUserWishList) {
+        return {
+          success: false,
+          message: "Error retrieving updated wishlist!",
+          data: null,
+        };
+      }
+
+      return {
+        success: true,
+        message: "Product removed from wishlist successfully!",
+        data: updatedUserWishList,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: "Error while removing product from wishlist!",
+        data: null,
+      };
+    }
+  }
+
+  async increaseProductQuantity(): Promise<
+    RequestResponse<LoggedUserCart | null>
+  > {
+    try {
+      const user = await getUserByEmail(this.email as string);
+
+      if (!user) {
+        return {
+          success: false,
+          message: "User doesn't exist!",
+          data: null,
+        };
+      }
+
+      let userCart = await getUserCart(user?.id);
+
+      if (!userCart) {
+        return {
+          success: false,
+          message: "Cart not found!",
+          data: null,
+        };
+      }
+
+      const productInCart = await postgres.product.findFirst({
+        where: {
+          cartId: userCart.id,
+          externalProductId: this.externalProductId,
+        },
+      });
+
+      if (!productInCart) {
+        return {
+          success: false,
+          message: "Product not found in cart!",
+          data: null,
+        };
+      }
+
+      await postgres.product.update({
+        where: { id: productInCart.id },
+        data: { quantity: (productInCart.quantity ?? 0) + 1 },
+      });
+
+      const updatedUserCart = await postgres.cart.findUnique({
+        where: { id: userCart.id },
+        include: { products: { include: { productsInformations: true } } },
+      });
+
+      return {
+        success: true,
+        message: "Product added to cart successfully!",
+        data: updatedUserCart,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: "Something went wrong!",
+        data: null,
+      };
+    }
+  }
+
+  async decreaseProductQuantity(): Promise<
+    RequestResponse<LoggedUserCart | null>
+  > {
+    try {
+      const user = await getUserByEmail(this.email as string);
+
+      if (!user) {
+        return {
+          success: false,
+          message: "User doesn't exist!",
+          data: null,
+        };
+      }
+
+      let userCart = await getUserCart(user?.id);
+
+      if (!userCart) {
+        return {
+          success: false,
+          message: "Cart not found!",
+          data: null,
+        };
+      }
+
+      const productInCart = await postgres.product.findFirst({
+        where: {
+          cartId: userCart.id,
+          externalProductId: this.externalProductId,
+        },
+      });
+
+      if (!productInCart) {
+        return {
+          success: false,
+          message: "Product not found in cart!",
+          data: null,
+        };
+      }
+
+      const updatedProduct = await postgres.product.update({
+        where: { id: productInCart.id },
+        data: { quantity: (productInCart.quantity as number) - 1 },
+      });
+
+      if ((updatedProduct.quantity as number) <= 0) {
+        await postgres.product.delete({
+          where: { id: productInCart.id },
+        });
+      }
+
+      const updatedUserCart = await postgres.cart.findUnique({
+        where: { id: userCart.id },
+        include: { products: { include: { productsInformations: true } } },
+      });
+
+      return {
+        success: true,
+        message: "Product added to cart successfully!",
+        data: updatedUserCart,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: "Something went wrong!",
+        data: null,
+      };
+    }
+  }
+
   async likeReview(): Promise<RequestResponse<any | null>> {
     try {
-      if (!this.email || this.externalProductId) {
+      if (!this.email || !this.externalProductId) {
         return {
           success: false,
           message: "Email and product ID are required!",
@@ -731,6 +818,9 @@ export default class ProductService implements IProductService {
       if (!product) {
         return { success: false, message: "Product not found!", data: null };
       }
+
+      console.log(this.externalProductId);
+      console.log(product);
 
       const existingReview = await postgres.review.findFirst({
         where: {
@@ -803,12 +893,12 @@ export default class ProductService implements IProductService {
     }
   }
 
-  async dislikeReview(): Promise<RequestResponse<any | null>> {
+  async unLikeReview(): Promise<RequestResponse<any | null>> {
     try {
-      if (!this.email || !"clzzyy4os000etkux2w0ajvb0") {
+      if (!this.email || !this.externalProductId) {
         return {
           success: false,
-          message: "Email and review ID are required!",
+          message: "Email and product ID are required!",
           data: null,
         };
       }

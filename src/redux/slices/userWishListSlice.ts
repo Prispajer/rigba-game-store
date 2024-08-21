@@ -88,7 +88,6 @@ export const fetchAddUserProductToWishList = createAsyncThunk<
         );
       }
     } catch (error) {
-      console.error("Error adding product to wishlist:", error);
       return rejectWithValue((error as Error).message);
     }
   }

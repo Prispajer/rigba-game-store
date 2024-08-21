@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import { useSearchParams } from "next/navigation";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
-import { signInAccount } from "@/utils/actions";
+import { signInAccount } from "@/hooks/useCurrentUser";
 import { SignInProvider } from "@/utils/helpers/types";
 import requestService from "@/utils/classes/RequestService";
 
@@ -34,6 +34,7 @@ export default function LoginContainer() {
       setError("Login failed. Please try again.");
     }
   };
+
   const handleLogin = async (email: string, password: string) => {
     await signInAccount(SignInProvider.Credentials, {
       email,

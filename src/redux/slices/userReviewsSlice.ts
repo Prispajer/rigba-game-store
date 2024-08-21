@@ -111,11 +111,11 @@ const userReviewsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchUserReviews.pending, (state) => {
-        state.status = "loading";
+        state.status = "Loading";
         state.message = "Loading...";
       })
       .addCase(fetchUserReviews.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.status = "Succeeded";
         state.reviews = action.payload.reviews.sort(
           (a, b) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -124,16 +124,16 @@ const userReviewsSlice = createSlice({
           action.payload.message || "User reviews fetched successfully.";
       })
       .addCase(fetchUserReviews.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = "Failed";
         state.error = action.payload as string;
         state.message = action.payload as string;
       })
       .addCase(fetchLikeUserReview.pending, (state) => {
-        state.status = "loading";
+        state.status = "Loading";
         state.message = "Liking the review...";
       })
       .addCase(fetchLikeUserReview.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.status = "Succeeded";
         state.reviews = action.payload.reviews.sort(
           (a, b) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -141,16 +141,16 @@ const userReviewsSlice = createSlice({
         state.message = action.payload.message || "Review liked successfully.";
       })
       .addCase(fetchLikeUserReview.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = "Failed";
         state.error = action.payload as string;
         state.message = action.payload as string;
       })
       .addCase(fetchUnLikeUserReview.pending, (state) => {
-        state.status = "loading";
+        state.status = "Loading";
         state.message = "Unliking the review...";
       })
       .addCase(fetchUnLikeUserReview.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.status = "Succeeded";
         state.reviews = action.payload.reviews.sort(
           (a, b) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -159,7 +159,7 @@ const userReviewsSlice = createSlice({
           action.payload.message || "Review unliked successfully.";
       })
       .addCase(fetchUnLikeUserReview.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = "Failed";
         state.error = action.payload as string;
         state.message = action.payload as string;
       });

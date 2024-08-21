@@ -1,11 +1,9 @@
-"use client";
-
 import React from "react";
 import Image from "next/image";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import useUserReviews from "@/hooks/useUserReviews";
-import requestService from "@/utils/classes/RequestService";
 import { generateStars } from "./ProductInformations";
+import { processReviews, mergeReviewData } from "@/utils/prices";
 import { GameAPIResponse, User } from "@/utils/helpers/types";
 
 export default function ProductUsersReview({
@@ -24,7 +22,20 @@ export default function ProductUsersReview({
 
   React.useEffect(() => {
     handleFetchUserReviews(product.id as number);
-  }, []);
+  }, [product.id, handleFetchUserReviews]);
+
+  const processedReviews = processReviews(userReviewsState.reviews);
+
+  const mergedData = mergeReviewData(
+    processedReviews,
+    product.ratings.reduce((acc, rating) => {
+      acc[rating.id.toString()] = rating;
+      return acc;
+    }, {} as Record<string, { id: number; title: string; count: number; percent: number }>)
+  );
+
+  console.log("Processed Reviews:", processedReviews);
+  console.log("Merged Data:", mergedData);
 
   return (
     <div className="flex flex-col max-w-[1240px] md:mx-auto mx-[-20px]  border-t-[2px] border-primaryColor bg-secondaryColor ">
@@ -37,7 +48,7 @@ export default function ProductUsersReview({
             >
               <div className="flex justify-between items-center mb-[10px]">
                 <ul>
-                  <li>{generateStars(review.rating?.rating)}</li>
+                  <li>{generateStars([mergedData.id])}</li>
                 </ul>
                 <div className="flex">
                   <button

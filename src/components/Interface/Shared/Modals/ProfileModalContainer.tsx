@@ -8,7 +8,7 @@ import { LuGamepad2 } from "react-icons/lu";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import { signOutAccount } from "@/utils/actions";
+import { signOut } from "next-auth/react";
 import { ProfileModalContainerProps } from "@/utils/helpers/types";
 
 export const defaultNavItems = [
@@ -32,7 +32,7 @@ export default function ProfileModalContainer({
   const { user } = useCurrentUser();
 
   const handleLogout = () => {
-    signOutAccount();
+    signOut();
   };
 
   const handleOutsideClick = () => {

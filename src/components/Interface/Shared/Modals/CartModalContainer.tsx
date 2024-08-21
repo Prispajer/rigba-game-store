@@ -10,7 +10,6 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 import useUserCart from "@/hooks/useUserCart";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useCustomRouter from "@/hooks/useCustomRouter";
-import { Product, LoggedUserCart } from "@/utils/helpers/types";
 
 export default function CartModalContainer() {
   const { user } = useCurrentUser();
@@ -35,9 +34,7 @@ export default function CartModalContainer() {
     }
   };
 
-  const productsByRole: Product[] & LoggedUserCart[] = user
-    ? userCartState.products
-    : localCartState;
+  const productsByRole = user ? userCartState.products : localCartState;
 
   return (
     <>

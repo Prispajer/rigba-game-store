@@ -7,40 +7,46 @@ import { CiHeart } from "react-icons/ci";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useUserWishList from "@/hooks/useUserWishList";
+import { UserWishList, Product } from "@/utils/helpers/types";
 
 export default function WishListProductList() {
   const { user } = useCurrentUser();
   const { userWishListState } = useUserWishList();
   const { localWishListState } = useLocalStorage("localWishList");
   const { redirectToGame } = useCustomRouter();
-  const displayByRole = user ? userWishListState.products : localWishListState;
+
+  const displayByCondition: UserWishList[] | Product[] = user
+    ? userWishListState.products
+    : localWishListState;
+
+  const isUserProduct = (
+    product: UserWishList | Product
+  ): product is UserWishList => {
+    return (product as UserWishList).productsInformations.slug !== undefined;
+  };
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-product-list-auto-fit gap-x-[10px]">
-      {displayByRole && displayByRole.length > 0 ? (
-        displayByRole.map((game) => (
+      {displayByCondition && displayByCondition.length > 0 ? (
+        displayByCondition.map((game) => (
           <div
             key={game.externalProductId}
-            onClick={() => {
-              const redirectTo = user
-                ? game.productsInformations?.slug
-                : game.slug;
-
-              if (redirectTo) {
-                redirectToGame(redirectTo);
-              } else {
-                console.warn("Redirect URL is not available");
-              }
-            }}
+            onClick={() =>
+              redirectToGame(
+                isUserProduct(game)
+                  ? (game.productsInformations?.slug as string)
+                  : (game.slug as string)
+              )
+            }
             className={`relative my-[10px] flex sm:flex-col bg-tertiaryColor 
              cursor-pointer`}
           >
             <div className="relative min-w-[95px] sm:h-[250px]">
               <Image
                 src={
-                  game.background_image ||
-                  game.productsInformations?.background_image ||
-                  ""
+                  isUserProduct(game)
+                    ? (game.productsInformations?.background_image as string)
+                    : (game.background_image as string)
                 }
                 layout="fill"
                 alt="game"
@@ -50,7 +56,9 @@ export default function WishListProductList() {
               <div className="flex flex-col justify-between min-h-[60px]">
                 <div className="leading-none line-clamp-1 text-[#ffffff]">
                   <span className="font-bold text-[14px]">
-                    {game.name || game.productsInformations?.name}
+                    {isUserProduct(game)
+                      ? game.productsInformations?.name
+                      : game.name}
                   </span>
                 </div>
                 <div>
@@ -64,12 +72,17 @@ export default function WishListProductList() {
                   Od
                 </div>
                 <div className="overflow-hidden overflow-ellipsis line-clamp-1 text-[20px] text-[#ffffff] font-bold">
-                  {game.price || game.productsInformations?.price} zł
+                  {isUserProduct(game)
+                    ? game.productsInformations?.price
+                    : game.price}{" "}
+                  zł
                 </div>
                 <div className="flex items-center">
                   <CiHeart className="ml-[-3px] mr-[3px]" size="20px" />
                   <span className="overflow-hidden overflow-ellipsis line-clamp-1 text-[14px] text-[#ffffff80]">
-                    {game.rating || game.productsInformations?.rating}
+                    {isUserProduct(game)
+                      ? game.productsInformations?.rating
+                      : game.rating}
                   </span>
                 </div>
               </div>

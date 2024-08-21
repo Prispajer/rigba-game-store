@@ -11,7 +11,7 @@ import { getGamesWithRandomPrices } from "@/utils/prices";
 
 export default function ProductList() {
   const { redirectToGame } = useCustomRouter();
-  const [gamesWithOrdering, setGamesWithOrdering] = React.useState<
+  const [productsByOrdering, setProductsByOrdering] = React.useState<
     GameAPIResponse[]
   >([]);
   const [quantity, setQuantity] = React.useState(1);
@@ -23,16 +23,15 @@ export default function ProductList() {
 
   React.useEffect(() => {
     (async () => {
-      const response = await FetchService.getGamesByOrdering(
+      const response = await FetchService.getProductsByOrdering(
         "-rating",
         quantity
       );
-      console.log(response);
       const updatedGames = await getGamesWithRandomPrices(
         response,
-        gamesWithOrdering
+        productsByOrdering
       );
-      setGamesWithOrdering(updatedGames);
+      setProductsByOrdering(updatedGames);
       setNewLoadingArray(new Array(5 * quantity).fill(false));
     })();
     setNewLoadingArray(new Array(5 * quantity).fill(true));
@@ -43,10 +42,10 @@ export default function ProductList() {
       <div className="grid grid-cols-1 sm:grid-cols-product-list-auto-fit gap-x-[10px]">
         {newLoadingArray.map((value, index) => (
           <div
-            key={gamesWithOrdering[index]?.id}
+            key={productsByOrdering[index]?.id}
             onClick={() => {
-              if (gamesWithOrdering[index]) {
-                redirectToGame(gamesWithOrdering[index].slug as string);
+              if (productsByOrdering[index]) {
+                redirectToGame(productsByOrdering[index].slug as string);
               }
             }}
             className={`relative min-w-[200px] min-h-[150px] sm:min-h-[360px] my-[10px] flex sm:flex-col bg-tertiaryColor 
@@ -59,8 +58,8 @@ export default function ProductList() {
                 <div className="relative m-[5px] sm:m-[0px] min-w-[95px] sm:min-h-[250px]">
                   <Image
                     src={
-                      gamesWithOrdering[index].background_image ||
-                      gamesWithOrdering[index].productsInformations
+                      productsByOrdering[index].background_image ||
+                      productsByOrdering[index].productsInformations
                         ?.background_image ||
                       ""
                     }
@@ -72,8 +71,8 @@ export default function ProductList() {
                   <div className="flex flex-col justify-between min-h-[60px]">
                     <div className="leading-none line-clamp-1 text-[#ffffff]">
                       <span className="font-bold text-[14px]">
-                        {gamesWithOrdering[index].name ||
-                          gamesWithOrdering[index].productsInformations?.name}
+                        {productsByOrdering[index].name ||
+                          productsByOrdering[index].productsInformations?.name}
                       </span>
                     </div>
                     <div>
@@ -87,8 +86,8 @@ export default function ProductList() {
                       Od
                     </div>
                     <div className="overflow-hidden overflow-ellipsis line-clamp-1 text-[20px] text-[#ffffff] font-bold">
-                      {gamesWithOrdering[index].price ||
-                        gamesWithOrdering[index].productsInformations
+                      {productsByOrdering[index].price ||
+                        productsByOrdering[index].productsInformations
                           ?.price}{" "}
                       zł
                     </div>
@@ -99,14 +98,15 @@ export default function ProductList() {
                         color="#ffffff80"
                       />
                       <span className="overflow-hidden overflow-ellipsis line-clamp-1 text-[14px] text-[#ffffff80]">
-                        {gamesWithOrdering[index].rating ||
-                          gamesWithOrdering[index].productsInformations?.rating}
+                        {productsByOrdering[index].rating ||
+                          productsByOrdering[index].productsInformations
+                            ?.rating}
                       </span>
                     </div>
                   </div>
                 </div>
                 <AddToWishList
-                  game={gamesWithOrdering[index]}
+                  game={productsByOrdering[index]}
                   position="absolute right-[10px] top-0"
                   added="border-[#FFFA84] bg-[#FFFA84]"
                   deleted="bg-[##d3d3d3]"

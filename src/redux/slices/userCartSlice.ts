@@ -1,12 +1,13 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import RequestService from "@/utils/classes/RequestService";
-import { UserWishList } from "@/utils/helpers/types";
+import { RequestResponse, UserCart } from "@/utils/helpers/types";
 
 interface UserCartState {
-  products: UserWishList[];
+  products: UserCart[];
   status: string;
   error: string | null;
   success: string | null;
+  message: string | null;
 }
 
 const initialState: UserCartState = {
@@ -14,30 +15,36 @@ const initialState: UserCartState = {
   status: "idle",
   error: null,
   success: null,
+  message: null,
 };
 
 export const fetchUserCart = createAsyncThunk<
-  LoggedUserCart[],
+  { products: UserCart[]; message: string },
   {
     email: string | null | undefined;
   },
   { rejectValue: string }
 >("userCart/fetchUserCart", async ({ email }, { rejectWithValue }) => {
   try {
-    const response = await RequestService.postMethod(
+    const fetchUserCartResponse: RequestResponse<{
+      products: UserCart[];
+      message: string;
+    }> = await RequestService.postMethod(
       "products/endpoints/productManagement/getCart",
       {
         email,
       }
     );
 
-    if (response.success) {
-      return response.data?.products;
+    if (fetchUserCartResponse.success) {
+      return {
+        products: fetchUserCartResponse.data?.products,
+        message: fetchUserCartResponse.message,
+      };
     } else {
-      throw new Error(response.message || "Unknown error");
+      throw new Error(fetchUserCartResponse.message || "Unknown error");
     }
   } catch (error) {
-    console.error("Error adding product to cart:", error);
     return rejectWithValue((error as Error).message);
   }
 });
@@ -184,11 +191,11 @@ const userCartSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchUserCart.pending, (state) => {
-        state.status = "loading";
+        state.status = "Loading";
       })
       .addCase(fetchUserCart.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.products = action.payload.sort((a, b) =>
+        state.status = "Succeeded";
+        state.products = action.payload.products.sort((a, b) =>
           a.id.localeCompare(b.id)
         );
       })

@@ -17,6 +17,7 @@ import ShowMoreButton from "../Shared/Buttons/ShowMoreButton";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { GameAPIResponse } from "@/utils/helpers/types";
+import ProductList from "./ProductList";
 
 export default function ProductContainer({
   product,
@@ -40,6 +41,7 @@ export default function ProductContainer({
           <ProductDigitalProductDetails display="xl:hidden w-full" />
           <ProductScreenshots screenshots={screenshots} />
           <ProductHeaders headerText="Gamers also viewed" />
+          <ProductList />
           <ProductHeaders headerText="Reviews: 26" />
           <ProductReview
             product={product}

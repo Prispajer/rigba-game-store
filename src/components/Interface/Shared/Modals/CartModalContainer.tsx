@@ -57,7 +57,7 @@ export default function CartModalContainer() {
                   key={product.externalProductId}
                   className="flex w-full p-[20px] gap-2 border-b-[1px] border-[#ffffff1a]"
                 >
-                  <div className="relative flex flex-0 min-w-[50px] items-center h-[100px]">
+                  <div className="relative flex flex-0 min-w-[50px] items-center h-[100px] cursor-pointer">
                     <Image
                       onClick={() =>
                         redirectToGame(
@@ -83,7 +83,7 @@ export default function CartModalContainer() {
                           "cartModal"
                         )
                       }
-                      className="flex w-full font-medium hover:text-modalHover"
+                      className="flex flex-0  font-medium hover:text-modalHover cursor-pointer"
                     >
                       {product.productsInformations?.name || product.name}
                     </div>

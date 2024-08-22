@@ -3,6 +3,8 @@ import React from "react";
 import Image from "next/image";
 import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
 import DigitalProductDetails from "./ProductDigitalProductDetails";
+import useUserReviews from "@/hooks/useUserReviews";
+import { processReviews, mergeReviewData } from "@/utils/prices";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
 export const generateStars = (rating: number) => {
@@ -49,6 +51,22 @@ export default function ProductInformations({
 }: {
   product: GameAPIResponse;
 }) {
+  const { userReviewsState } = useUserReviews();
+  const processedReviews = processReviews(userReviewsState.reviews);
+  const mergedData = mergeReviewData(processedReviews, product.ratings);
+
+  console.log(mergedData);
+
+  const averageRating = mergedData.reduce(
+    (acc, review) => acc + review.percent * (review.count / 100),
+    0
+  );
+
+  console.log(averageRating);
+
+  let mergedRatingsCount =
+    userReviewsState.reviews.length + (product.ratings_count || 0);
+
   return (
     <>
       {product && (
@@ -80,18 +98,16 @@ export default function ProductInformations({
             </div>
             <div className="flex items-center flex-wrap gap-x-[5px] mb-[15px] cursor-default">
               <div>
-                <span className="">
-                  {generateStars(product.rating as number)}
-                </span>
+                <span className="">{generateStars(averageRating)}</span>
               </div>
               <div className="flex-wrap mt-[5px]">
                 <span className="text-[15px] text-buttonBackground font-[800]">
-                  {product.rating}
+                  {averageRating.toFixed(1)}
                 </span>
                 <span className="text-[14px] text-[#FFFFFF]">/ 5</span>
                 <span className="text-[14px] text-[#FFFFFF]"> z </span>
                 <span className="text-[14px] text-[#FFFFFF]">
-                  {product.ratings_count} ocen
+                  {mergedRatingsCount} ocen
                 </span>
               </div>
             </div>

@@ -16,22 +16,22 @@ export async function getGamesWithRandomPrices(
   existingGames: GameAPIResponse[]
 ): Promise<GameAPIResponse[]> {
   const existingGamesMap = new Map<number, number>(
-    existingGames.map((game) => [game.id, game.price ?? generateRandomValue()])
+    existingGames.map((game) => [
+      game.id as number,
+      (game.price as number) ?? generateRandomValue(),
+    ])
   );
 
   return games.map((game) => ({
     ...game,
-    price: existingGamesMap.get(game.id) ?? generateRandomValue(),
+    price: existingGamesMap.get(game.id as number) ?? generateRandomValue(),
   }));
 }
 
 export const processReviews = (
   reviews: UserReview[]
-): Record<
-  string,
-  { count: number; id: number; percent: number; title: string }
-> => {
-  let groupedReviews: Record<
+): Array<{ count: number; id: number; percent: number; title: string }> => {
+  const groupedReviews: Record<
     string,
     { count: number; id: number; percent: number; title: string }
   > = {};
@@ -56,42 +56,64 @@ export const processReviews = (
     reviewData.percent = Math.floor((reviewData.count / reviews.length) * 100);
   });
 
-  return groupedReviews;
+  return Object.values(groupedReviews);
 };
 
 export const mergeReviewData = (
-  reviewData: Record<
-    string,
+  processedReviews: Array<{
+    count: number;
+    id: number;
+    title: string;
+    percent: number;
+  }>,
+  apiReviews: Array<{
+    id: number;
+    title: string;
+    count: number;
+    percent: number;
+  }>
+): Array<{ count: number; id: number; title: string; percent: number }> => {
+  const processedReviewsMap = new Map<
+    number,
     { count: number; id: number; title: string; percent: number }
-  >,
-  percentData: Record<
-    string,
-    { id: number; title: string; count: number; percent: number }
-  >
-): Record<
-  string,
-  { count: number; id: number; title: string; percent: number }
-> => {
-  const myReviews = { ...reviewData };
+  >();
 
-  Object.keys(percentData).forEach((key) => {
-    const percentItem = percentData[key];
-    const reviewItem = myReviews[key];
+  processedReviews.forEach((review) => {
+    processedReviewsMap.set(review.id, { ...review });
+  });
 
-    if (reviewItem) {
-      reviewItem.count = percentItem.count + reviewItem.count;
-      reviewItem.percent = Math.floor(reviewItem.count);
+  const processedReviewsCountSummary = processedReviews.reduce(
+    (acc, review) => acc + review.count,
+    0
+  );
+
+  const apiReviewsCountSummary = apiReviews.reduce(
+    (acc, review) => acc + review.count,
+    0
+  );
+
+  apiReviews.forEach((apiReview) => {
+    const existingReview = processedReviewsMap.get(apiReview.id);
+
+    if (existingReview) {
+      existingReview.count += apiReview.count;
     } else {
-      myReviews[key] = {
-        count: percentItem.count,
-        id: percentItem.id,
+      processedReviewsMap.set(apiReview.id, {
+        count: apiReview.count,
+        id: apiReview.id,
         title:
-          percentItem.title.charAt(0).toUpperCase() +
-          percentItem.title.slice(1),
-        percent: percentItem.percent,
-      };
+          apiReview.title.charAt(0).toUpperCase() + apiReview.title.slice(1),
+        percent: apiReview.percent,
+      });
     }
   });
 
-  return myReviews;
+  processedReviewsMap.forEach((review) => {
+    review.percent = Math.floor(
+      (review.count / (processedReviewsCountSummary + apiReviewsCountSummary)) *
+        100
+    );
+  });
+
+  return Array.from(processedReviewsMap.values());
 };

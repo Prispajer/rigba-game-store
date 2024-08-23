@@ -46,6 +46,35 @@ export const generateStars = (rating: number) => {
   );
 };
 
+const calculateAverageRating = (
+  data: {
+    count: number;
+    id: number;
+    title: string;
+    percent: number;
+  }[]
+): number => {
+  const starRatings: { [key: number]: number } = {
+    5: 5,
+    4: 4,
+    3: 3,
+    2: 2,
+    1: 1,
+  };
+
+  const totalWeightedRating = data.reduce(
+    (acc, review) => acc + starRatings[review.id] * review.count,
+    0
+  );
+
+  const totalRatingsCount = data.reduce((acc, review) => acc + review.count, 0);
+
+  const averageRating =
+    totalRatingsCount > 0 ? totalWeightedRating / totalRatingsCount : 0;
+
+  return Number(averageRating.toFixed(2));
+};
+
 export default function ProductInformations({
   product,
 }: {
@@ -55,17 +84,10 @@ export default function ProductInformations({
   const processedReviews = processReviews(userReviewsState.reviews);
   const mergedData = mergeReviewData(processedReviews, product.ratings);
 
-  console.log(mergedData);
+  const averageRating = calculateAverageRating(mergedData);
 
-  const averageRating = mergedData.reduce(
-    (acc, review) => acc + review.percent * (review.count / 100),
-    0
-  );
-
-  console.log(averageRating);
-
-  let mergedRatingsCount =
-    userReviewsState.reviews.length + (product.ratings_count || 0);
+  const mergedRatingsCount =
+    mergedData.reduce((acc, review) => acc + review.count, 0) || 0;
 
   return (
     <>
@@ -102,7 +124,7 @@ export default function ProductInformations({
               </div>
               <div className="flex-wrap mt-[5px]">
                 <span className="text-[15px] text-buttonBackground font-[800]">
-                  {averageRating.toFixed(1)}
+                  {averageRating}
                 </span>
                 <span className="text-[14px] text-[#FFFFFF]">/ 5</span>
                 <span className="text-[14px] text-[#FFFFFF]"> z </span>

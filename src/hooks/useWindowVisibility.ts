@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { open, close, toggleScreen, toggle } from "@/redux/slices/utilitySlice";
 import { RootState } from "../redux/store";
+import { Root } from "postcss";
 
 export default function useWindowVisibility() {
   const dispatch = useDispatch();
@@ -20,6 +21,9 @@ export default function useWindowVisibility() {
   );
   const searchBarState = useSelector(
     (state: RootState) => state.utility.searchBarModal
+  );
+  const accountSidebarState = useSelector(
+    (state: RootState) => state.utility.accountSidebar
   );
   const gameScreenshotModalState = useSelector(
     (state: RootState) => state.utility.gameScreenshotModal
@@ -92,6 +96,7 @@ export default function useWindowVisibility() {
     cartModalState,
     navSidebarState,
     searchBarState,
+    accountSidebarState,
     gameScreenshotModalState,
     resolutionState,
     publishersModalState,

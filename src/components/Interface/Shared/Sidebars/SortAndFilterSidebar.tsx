@@ -3,12 +3,12 @@ import { MdKeyboardArrowUp, MdKeyboardArrowDown } from "react-icons/md";
 import FilterFilters from "../../Filters/FilterFilters";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import SortBy from "../ReusableComponents/SortBy";
-import useSharedGeneralActions from "@/hooks/useWindowVisibility";
+import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useFetchGameData from "@/hooks/useFetchGameData";
 
 export default function SortAndFilterSidebar() {
-  const { gamesFilterState, handleFilterSortChange } = useFetchGameData();
-  const { sortAndFilterModalState, handleClose } = useSharedGeneralActions();
+  const { productFilterState, handleFilterSortChange } = useFetchGameData();
+  const { sortAndFilterModalState, handleClose } = useWindowVisibility();
 
   const handleOutsideClick = () => {
     if (sortAndFilterModalState) {
@@ -34,7 +34,7 @@ export default function SortAndFilterSidebar() {
             <div className="flex-1 overflow-y-auto">
               <SortBy
                 handleSortChange={handleFilterSortChange}
-                sortedGamesCount={gamesFilterState.gamesCount}
+                sortedGamesCount={productFilterState.gamesCount}
                 position="flex flex-col flex-1 py-[15px] px-[20px] md:hidden relative border-b-2 border-secondaryColor"
                 display="hidden"
               />

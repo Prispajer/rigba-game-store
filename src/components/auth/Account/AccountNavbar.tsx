@@ -10,7 +10,7 @@ export default function AccountNavbar() {
   const { handleOpen } = useWindowVisibility();
   const { user } = useCurrentUser();
   return (
-    <header className="flex justify-between items-center py-2 px-4 bg-secondaryColor">
+    <header className="flex justify-between items-center py-2 px-4 bg-primaryColor">
       <div>
         <Link className="flex items-center max-w-[200px]" href="/">
           <Image

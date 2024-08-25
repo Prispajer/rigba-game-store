@@ -38,6 +38,7 @@ const config: Config = {
         "product-digital-products-details-auto-fit":
           "repeat(auto-fit, minmax(230px, 1fr))",
         "product-list-auto-fit": "repeat(auto-fit, minmax(200px, 1fr))",
+        "account-orders-auto-fit": "repeat(auto-fit, minmax(50px, 1fr))",
       },
     },
   },

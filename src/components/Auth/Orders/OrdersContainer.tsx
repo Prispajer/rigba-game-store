@@ -1,11 +1,11 @@
 export default function OrdersContainer() {
   return (
-    <div className="flex-col justify-center items-center pt-[40px] px-[40px] pb-[80px] bg-[#F1FDFF]">
+    <div className="flex-col justify-center items-center pt-[40px] px-[40px] pb-[80px] bg-[#e9eff4]">
       <h1 className="flex justify-start text-[#1A396E] text-[20px] font-[700] cursor-default ">
-        Orders
+        ORDERS
       </h1>
-      <div className="grid grid-cols-1 max-w-[1840px] mt-[30px]">
-        <div className="grid grid-cols-account-orders-auto-fit py-[10px] px-[20px] gap-x-[20px] bg-[#d8f9ff]">
+      <div className="grid grid-cols-1 max-w-[1840px] mt-[20px]">
+        <div className="grid grid-cols-account-orders-auto-fit py-[10px] px-[20px] gap-x-[20px] bg-[#d3dfe9]">
           <div className="text-[12px] font-bold">DATE</div>
           <div className="text-[12px] font-bold">STATUS</div>
           <div className="text-[12px] font-bold">ORDER TITLE</div>
@@ -14,7 +14,7 @@ export default function OrdersContainer() {
           <div className="text-[12px] font-bold">TOTAL AMOUNT</div>
           <div></div>
         </div>
-        <div className="grid grid-cols-account-orders-auto-fit items-center py-[10px] px-[20px] gap-x-[20px] border border-b-[3px] border-[#d8f9ff] bg-[#FFFFFF]">
+        <div className="grid grid-cols-account-orders-auto-fit items-center py-[10px] px-[20px] gap-x-[20px] border border-b-[3px] border-[#d3dfe9] bg-[#FFFFFF]">
           <div className="text-[12px] font-bold cursor-default">
             4.06.2024, 13:45
           </div>
@@ -27,11 +27,11 @@ export default function OrdersContainer() {
           <div className="text-[12px] font-bold cursor-default">o-yx6ssoo</div>
           <div className="text-[12px] font-bold cursor-default">BLIK</div>
           <div className="text-[14px] font-bold cursor-default">59,69 zł</div>
-          <div className="text-[14px] font-bold text-[#daabb3] hover:underline cursor-pointer">
+          <div className="text-[14px] font-bold text-[#658fb2] hover:underline cursor-pointer">
             Details
           </div>
         </div>
-        <div className="grid grid-cols-account-orders-auto-fit items-center py-[10px] px-[20px] gap-x-[20px] border border-b-[3px] border-[#d8f9ff] bg-[#FFFFFF]">
+        <div className="grid grid-cols-account-orders-auto-fit items-center py-[10px] px-[20px] gap-x-[20px] border border-b-[3px] border-[#d3dfe9] bg-[#FFFFFF]">
           <div className="text-[12px] font-bold cursor-default">
             4.06.2024, 13:45
           </div>
@@ -44,7 +44,7 @@ export default function OrdersContainer() {
           <div className="text-[12px] font-bold cursor-default">o-yx6ssoo</div>
           <div className="text-[12px] font-bold cursor-default">BLIK</div>
           <div className="text-[14px] font-bold cursor-default">59,69 zł</div>
-          <div className="text-[14px] font-bold text-[#daabb3] hover:underline cursor-pointer">
+          <div className="text-[14px] font-bold text-[#658fb2] hover:underline cursor-pointer">
             Details
           </div>
         </div>

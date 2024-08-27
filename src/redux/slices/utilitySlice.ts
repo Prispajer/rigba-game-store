@@ -14,7 +14,7 @@ const initialState: UIElementState = {
   resolution: true,
   authSidebar: false,
   navSidebar: false,
-  accountSidebar: true,
+  accountSidebar: false,
   profileModal: false,
   cartModal: false,
   searchBarModal: false,

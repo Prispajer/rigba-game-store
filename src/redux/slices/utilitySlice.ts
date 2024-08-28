@@ -25,6 +25,7 @@ const initialState: UIElementState = {
   storesModal: false,
   sortModal: false,
   sortAndFilterModal: false,
+  twoFactorModal: false,
   sortMenu: true,
   priceMenu: true,
   publishersMenu: true,

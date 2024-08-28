@@ -64,10 +64,10 @@ export default function PersonalDataContainer() {
             value="Świętokrzyskie"
           />
         </label>
-        <div className="flex">
+        <div className="flex flex-col sm:flex-row">
           <label
             htmlFor="zipCode"
-            className="flex flex-col max-w-[100px] mr-[20px] mb-[20px] font-[600]"
+            className="flex flex-col w-full sm:max-w-[100px] mr-[20px] mb-[20px] font-[600]"
           >
             <span className="mb-[15px] text-[14px] text-[#797189]">
               Zip code
@@ -134,7 +134,7 @@ export default function PersonalDataContainer() {
         </label>
         <div className="max-w-[180px] pt-[20px]">
           <button className="flex items-center justify-center w-full min-h-[36px] px-[10px] bg-buttonBackground hover:bg-buttonBackgroundHover">
-            <span className="text-[#000000] font-bold">Save</span>
+            <span className="text-buttonTextColor font-bold">Save</span>
           </button>
         </div>
       </form>

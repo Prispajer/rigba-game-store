@@ -49,6 +49,9 @@ export default function useWindowVisibility() {
   const sortAndFilterModalState = useSelector(
     (state: RootState) => state.utility.sortAndFilterModal
   );
+  const twoFactorModalState = useSelector(
+    (state: RootState) => state.utility.twoFactorModal
+  );
   const sortMenuState = useSelector(
     (state: RootState) => state.utility.sortMenu
   );
@@ -105,6 +108,7 @@ export default function useWindowVisibility() {
     storesModalState,
     sortModalState,
     sortAndFilterModalState,
+    twoFactorModalState,
     sortMenuState,
     priceMenuState,
     publishersMenuState,

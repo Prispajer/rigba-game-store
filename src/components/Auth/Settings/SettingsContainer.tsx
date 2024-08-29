@@ -7,7 +7,7 @@ import useWindowVisibility from "@/hooks/useWindowVisibility";
 import TwoFactorModalContainer from "@/components/Interface/Shared/Modals/TwoFactorModalContainer";
 
 export default function SettingsContainer() {
-  const { handleOpen, twoFactorModalState } = useWindowVisibility();
+  const { handleOpen } = useWindowVisibility();
 
   return (
     <div className="flex-col justify-center items-center pt-[40px] px-[40px] pb-[80px] bg-[#e9eff4]">

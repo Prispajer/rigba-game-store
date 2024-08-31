@@ -7,15 +7,17 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
 import ProductInformations from "../Filters/FilterProductList";
 import ProductHeaders from "../Shared/ReusableComponents/ProductHeaders";
+import ProductList from "../Product/ProductList";
 import CheckoutCart from "./CheckoutCart";
+import useWindowVisibility from "@/hooks/useWindowVisibility";
 
 export default function CheckoutContainer() {
   return (
-    <main className="flex items-center w-full  h-full md:py-[20px] bg-secondaryColor mx-auto">
+    <main className="flex items-center w-full h-full md:py-[20px] bg-secondaryColor mx-auto">
       <section className="grid grid-cols-1 lg:grid-cols-2 w-full lg:max-w-[1040px] mx-auto p-[20px] md:bg-primaryColor">
         <div className="lg:max-w-[560px] w-full md:bg-secondaryColor md:p-[20px]">
           <h2 className="hidden md:flex text-[18px] mb-[20px] font-bold text-[#ffffff] cursor-default">
-            Mój koszyk
+            My cart
           </h2>
           <ul className="flex flex-col">
             <li className="bg-tertiaryColor relative flex p-[20px] md:mb-[10px] gap-x-[10px]">
@@ -42,7 +44,7 @@ export default function CheckoutContainer() {
                 <div className="flex justify-between">
                   <div className="md:hidden flex items-center text-[#ffffffb3] text-[16px]">
                     <span className="text-[14px] mr-1 cursor-default">
-                      Produkt cyfrowy
+                      Digital product
                     </span>
                     <span className="mt-1 hover:text-modalHover">
                       <HiMiniQuestionMarkCircle />
@@ -52,7 +54,7 @@ export default function CheckoutContainer() {
                 <div className="flex justify-between gap-x-10">
                   <div className="hidden md:flex flex-1 items-center text-[#ffffffb3] text-[16px]">
                     <span className="text-[14px] mr-1 cursor-default">
-                      Produkt cyfrowy
+                      Digital product
                     </span>
                     <span className="mt-1 hover:text-modalHover">
                       <HiMiniQuestionMarkCircle />
@@ -82,8 +84,8 @@ export default function CheckoutContainer() {
           </aside>
           <section className="w-[calc(100%-220px)]"></section>
         </div>
-        <ProductHeaders headerText="Podobne tytuły" />
-        <ProductInformations />
+        <ProductHeaders headerText="You may like" />
+        <ProductList />
       </section>
     </main>
   );

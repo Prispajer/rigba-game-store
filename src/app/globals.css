@@ -68,6 +68,19 @@ body {
   @apply ml-5 font-bold;
 }
 
+.checkout-status-step {
+  @apply w-[24px] h-[24px] mr-[8px] rounded-full;
+}
+
+.checkout-status:nth-of-type(1),
+.checkout-status:nth-of-type(2) {
+  @apply flex items-center flex-1 px-[4px];
+}
+
+.checkout-status:nth-of-type(3) {
+  @apply flex items-center px-[4px];
+}
+
 .cart-modal {
   @apply fixed md:absolute w-full sm:w-[360px] h-full md:h-auto top-0 right-0 z-20 transform md:translate-y-[65px] bg-primaryColor;
 }

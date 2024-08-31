@@ -10,7 +10,7 @@ import ProductHeaders from "../../Shared/ReusableComponents/ProductHeaders";
 
 export default function RedeemContainer() {
   return (
-    <section className="flex flex-col items-center w-full  h-full md:py-[20px] bg-primaryColor mx-auto">
+    <section className="flex flex-col items-center w-full  h-[calc(100vh-96px)] md:py-[20px] bg-primaryColor mx-auto">
       <h1 className="mt-[10px] mb-[30px] text-[30px] text-[#FFFFFF] font-bold">
         Redeem your product
       </h1>

@@ -3,12 +3,16 @@ import Image from "next/image";
 import Link from "next/link";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 
-export default function CheckoutLogo() {
+export default function CheckoutLogo({
+  mobileLogoTitle,
+}: {
+  mobileLogoTitle: string;
+}) {
   const { resolutionState } = useWindowVisibility();
 
   return (
-    <div className="flex items-center flex-1">
-      <Link className="flex items-center mr-[20px]" href="/">
+    <div className="flex items-center ">
+      <Link className="flex items-center" href="/">
         <div className="relative w-[60px] h-[55px] md:w-[80px] md:h-[80px]">
           <Image
             src="/icons/logo.png"
@@ -18,7 +22,7 @@ export default function CheckoutLogo() {
           />
         </div>
         <span className="text-white text-[20px] md:text-[35px] font-[600]">
-          {resolutionState ? "RIGBA" : "Koszyk"}
+          {resolutionState ? "RIGBA" : `${mobileLogoTitle}`}
         </span>
       </Link>
     </div>

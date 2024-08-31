@@ -1,5 +1,27 @@
+import { IoCheckmarkCircleSharp } from "react-icons/io5";
+import CheckoutHeader from "@/components/Interface/Checkout/CheckoutHeader";
 import RedeemContainer from "@/components/Interface/Checkout/Redeem/RedeemContainer";
 
 export default function RedeemPage() {
-  return <RedeemContainer />;
+  return (
+    <>
+      <CheckoutHeader
+        mobileLogoTitle="Redeem your product"
+        stepOneElementStyles="font-[500] text-[16px] text-[#FFFFFF] after:block after:h-[1px] after:flex-1 after:ml-[8px] after:bg-[#00cf9f]"
+        stepTwoElementStyles="font-[500] text-[16px] text-[#FFFFFF] after:block after:h-[1px] after:flex-1 after:ml-[8px] after:bg-[#00cf9f]"
+        stepThreeElementStyles="font-[500] text-[16px] text-[#00cf9f] after:block after:h-[1px] after:flex-1 after:ml-[8px] after:bg-[#ffffff66]"
+        stepOneContent={
+          <IoCheckmarkCircleSharp className="text-[24px] mr-[8px] text-secondaryColor" />
+        }
+        stepTwoContent={
+          <IoCheckmarkCircleSharp className="text-[24px] mr-[8px] text-secondaryColor" />
+        }
+        stepThreeContent="3"
+        stepOneContentStyles="text-[#FFFFFF] bg-[#00cf9f]"
+        stepTwoContentStyles="text-secondaryColor bg-[#00cf9f]"
+        stepThreeContentStyles="text-[#FFFFFF] bg-[#00cf9f]"
+      />
+      <RedeemContainer />
+    </>
+  );
 }

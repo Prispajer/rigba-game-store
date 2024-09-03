@@ -2,18 +2,17 @@
 
 import React from "react";
 import Image from "next/image";
+import { PaymentElement } from "@stripe/react-stripe-js";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
-import ProductHeaders from "../Shared/ReusableComponents/ProductHeaders";
-import ProductList from "../Product/ProductList";
-import CheckoutCart from "./CheckoutCart";
+import CheckoutCart from "../../Checkout/CheckoutCart";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useUserCart from "@/hooks/useUserCart";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useCustomRouter from "@/hooks/useCustomRouter";
 
-export default function CheckoutContainer() {
+export default function PaymentContainer() {
   const { user } = useCurrentUser();
   const {
     userCartState,
@@ -33,7 +32,7 @@ export default function CheckoutContainer() {
 
   return (
     <section className="flex flex-col items-center w-full h-min md:py-[20px] md:px-[15px] bg-primaryColor mx-auto">
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr,350px] w-full lg:max-w-[1040px] mx-auto p-[15px] gap-x-[20px] bg-secondaryColor md:bg-primaryColor">
+      <div className="grid grid-cols-1 lg:grid-cols-[60%,40%] w-full lg:max-w-[1040px] mx-auto p-[15px] gap-x-[20px] bg-secondaryColor md:bg-primaryColor">
         <div className="w-full bg-secondaryColor md:p-[20px]">
           <h2 className="hidden md:flex text-[18px] mb-[20px] font-bold text-[#ffffff] cursor-default">
             My cart
@@ -147,11 +146,7 @@ export default function CheckoutContainer() {
             ))}
           </ul>
         </div>
-        <CheckoutCart />
-      </div>
-      <div className="grid grid-cols-1 w-full max-w-[1040px] px-[15px] bg-secondaryColor md:bg-primaryColor">
-        <ProductHeaders headerText="You may like" />
-        <ProductList />
+        <PaymentElement />
       </div>
     </section>
   );

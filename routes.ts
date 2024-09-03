@@ -32,6 +32,9 @@ export const endpointsRoutes: string[] = [
   "/api/products/endpoints/productManagement/getReviews",
   "/api/products/endpoints/productManagement/likeReview",
   "/api/products/endpoints/productManagement/unLikeReview",
+  "/api/stripe/create-checkout-session",
+  "/api/stripe/config",
+  "/api/stripe/create-payment-intent",
 ];
 
 export function handleDynamicId(route: string): boolean {

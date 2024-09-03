@@ -45,7 +45,7 @@ export default function CheckoutHeader({
 
   return (
     <header
-      className={`px-[8px] z-[1] border-secondaryColor bg-primaryColor md:bg-secondaryColor ${
+      className={`px-[8px] border-secondaryColor bg-primaryColor md:bg-secondaryColor z-[1] ${
         !resolutionState ? "sticky top-0" : "flex"
       }`}
     >

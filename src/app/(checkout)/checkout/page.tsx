@@ -16,7 +16,7 @@ export default function CheckoutPage() {
         stepTwoContentStyles="text-secondaryColor bg-[#ffffff66]"
         stepThreeContentStyles="text-secondaryColor bg-[#ffffff66]"
       />
-      <CheckoutContainer />;
+      <CheckoutContainer />
     </>
   );
 }

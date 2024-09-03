@@ -1,8 +1,33 @@
+"use client";
+import React from "react";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 import CheckoutHeader from "@/components/Interface/Checkout/CheckoutHeader";
-import CheckoutContainer from "@/components/Interface/Checkout/CheckoutContainer";
+import PaymentContainer from "@/components/Interface/Checkout/Payment/PaymentContainer";
 
 export default function PaymentPage() {
+  const [stripePromise, setStripePromise] = React.useState<any>(null);
+  const [clientSecret, setClientSecret] = React.useState("");
+
+  React.useEffect(() => {
+    fetch("/config").then(async (response) => {
+      const { publishableKey } = await response.json();
+      setStripePromise(loadStripe(publishableKey));
+    });
+  }, []);
+
+  React.useEffect(() => {
+    fetch("/create-payment-intent", {
+      method: "POST",
+      body: JSON.stringify({}),
+    }).then(async (response) => {
+      const { clientSecret } = await response.json();
+
+      setClientSecret(clientSecret);
+    });
+  }, []);
+
   return (
     <>
       <CheckoutHeader
@@ -19,7 +44,9 @@ export default function PaymentPage() {
         stepTwoContentStyles="text-[#FFFFFF] bg-[#00cf9f]"
         stepThreeContentStyles="text-secondaryColor bg-[#ffffff66]"
       />
-      <CheckoutContainer />
+      <Elements stripe={stripePromise} options={{ clientSecret }}>
+        <PaymentContainer />
+      </Elements>
     </>
   );
 }

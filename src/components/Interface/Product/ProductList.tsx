@@ -39,7 +39,7 @@ export default function ProductList() {
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-product-list-auto-fit gap-x-[10px]">
+      <div className="grid grid-cols-1 sm:grid-cols-product-list-auto-fit  gap-x-[10px]">
         {newLoadingArray.map((value, index) => (
           <div
             key={productsByOrdering[index]?.id}

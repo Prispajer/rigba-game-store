@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import Image from "next/image";
 import { IoCloseSharp } from "react-icons/io5";
 import { FaRegTrashAlt } from "react-icons/fa";
@@ -89,7 +90,7 @@ export default function CartModalContainer() {
                     </div>
                     <div className="flex items-center text-[#ffffffb3] text-[16px]">
                       <span className="mr-1 cursor-default">
-                        Produkt cyfrowy
+                        Digital product
                       </span>
                       <span className="mt-1 hover:text-modalHover">
                         <HiMiniQuestionMarkCircle />
@@ -164,7 +165,7 @@ export default function CartModalContainer() {
             {productsByRole.length ? (
               <div className="p-[20px]">
                 <div className="flex justify-between items-center w-full text-white">
-                  <strong className="cursor-default">Łącznie</strong>
+                  <strong className="cursor-default">Summary</strong>
                   <strong className="text-[30px] pb-[8px] cursor-default">
                     {productsByRole
                       .reduce(
@@ -180,9 +181,11 @@ export default function CartModalContainer() {
                   </strong>
                 </div>
                 <div className="w-full">
-                  <button className="w-[100%] min-h-[35px] transition duration-300 font-medium text-buttonTextColor bg-buttonBackground hover:bg-buttonBackgroundHover">
-                    Zobacz Koszyk
-                  </button>
+                  <Link href="/checkout">
+                    <button className="w-[100%] min-h-[35px] transition duration-300 font-medium text-buttonTextColor bg-buttonBackground hover:bg-buttonBackgroundHover">
+                      Show cart
+                    </button>
+                  </Link>
                 </div>
               </div>
             ) : (

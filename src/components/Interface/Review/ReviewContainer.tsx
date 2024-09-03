@@ -5,6 +5,8 @@ import { CiHeart } from "react-icons/ci";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
+import ProductHeaders from "../Shared/ReusableComponents/ProductHeaders";
+import ProductList from "../Product/ProductList";
 import requestService from "@/utils/classes/RequestService";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import useCurrentUser from "@/hooks/useCurrentUser";
@@ -77,12 +79,12 @@ export default function ReviewContainer({
   };
 
   return (
-    <main className="pt-[10px] bg-primaryColor">
-      <div className="flex flex-col items-start w-full max-w-[1240px] mx-auto px-[20px] ">
-        <div className="grid grid-cols-1 sm:grid-cols-[1fr,200px] mt-[15px] sm:mt-[40px] mb-[60px] gap-x-[20px]">
+    <section className="sm:py-[20px] sm:px-[15px] bg-primaryColor">
+      <div className="flex flex-col w-full max-w-[1240px] mx-auto sm:px-[20px]">
+        <div className="grid grid-cols-1 sm:grid-cols-[1fr,200px] mt-[15px] md:mt-[40px] mx-[-20px] sm:mx-0 sm:mb-[60px] px-[20px] sm:px-0 gap-x-[20px]">
           <form
             onSubmit={handleSubmit(handleReviewSubmit)}
-            className="grid grid-cols-1 md:grid-cols-[180px,1fr] md:gap-x-[40px] mx-[-20px] sm:mx-0 p-[20px] lg:py-[30px] lg:px-[40px] bg-secondaryColor"
+            className="grid grid-cols-1 md:grid-cols-[180px,1fr] md:gap-x-[40px] sm:mx-0 p-[20px] lg:py-[30px] lg:px-[40px] bg-secondaryColor"
           >
             <div className="sm:mb-[55px] mb-[20px]">
               <h2 className="mb-[20px] text-[26px] text-[#FFFFFF] font-bold leading-[30px]">
@@ -214,7 +216,11 @@ export default function ReviewContainer({
             </div>
           </div>
         </div>
+        <div className="grid grid-cols-1 items-center w-full sm:mx-0 px-[20px] pb-[20px] md:p-[0px] bg-secondaryColor md:bg-primaryColor">
+          <ProductHeaders headerText="You may like" />
+          <ProductList />
+        </div>
       </div>
-    </main>
+    </section>
   );
 }

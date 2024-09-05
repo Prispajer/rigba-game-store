@@ -81,10 +81,10 @@ export default function ReviewContainer({
   return (
     <section className="sm:py-[20px] sm:px-[15px] bg-primaryColor">
       <div className="flex flex-col w-full max-w-[1240px] mx-auto sm:px-[20px]">
-        <div className="grid grid-cols-1 sm:grid-cols-[1fr,200px] mt-[15px] md:mt-[40px] mx-[-20px] sm:mx-0 sm:mb-[60px] px-[20px] sm:px-0 gap-x-[20px]">
+        <div className="grid grid-cols-1 sm:grid-cols-[1fr,200px] mt-[15px] md:mt-[40px] sm:mb-[60px] px-[20px] sm:px-0 gap-x-[20px]">
           <form
             onSubmit={handleSubmit(handleReviewSubmit)}
-            className="grid grid-cols-1 md:grid-cols-[180px,1fr] md:gap-x-[40px] sm:mx-0 p-[20px] lg:py-[30px] lg:px-[40px] bg-secondaryColor"
+            className="grid grid-cols-1 md:grid-cols-[180px,1fr] md:gap-x-[40px] mx-[-20px] sm:mx-[0px] p-[20px] lg:py-[30px] lg:px-[40px] bg-secondaryColor"
           >
             <div className="sm:mb-[55px] mb-[20px]">
               <h2 className="mb-[20px] text-[26px] text-[#FFFFFF] font-bold leading-[30px]">
@@ -183,16 +183,16 @@ export default function ReviewContainer({
                     </div>
                     <div>
                       <span className="overflow-hidden overflow-ellipsis line-clamp-1 text-[12px] text-[#fffa84] font-bold">
-                        CAŁY ŚWIAT
+                        Global
                       </span>
                     </div>
                   </div>
                   <div className="h-[50%] md:h-[75px]">
                     <div className="text-[14px] text-[#ffffff80] font-medium">
-                      Od
+                      From
                     </div>
                     <div className="overflow-hidden overflow-ellipsis line-clamp-1 text-[20px] text-[#ffffff] font-bold">
-                      {generateRandomValue()}
+                      ${generateRandomValue()}
                     </div>
                     <div className="flex items-center">
                       <CiHeart
@@ -216,7 +216,7 @@ export default function ReviewContainer({
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-1 items-center w-full sm:mx-0 px-[20px] pb-[20px] md:p-[0px] bg-secondaryColor md:bg-primaryColor">
+        <div className="grid grid-cols-1 items-start w-full px-[20px] pb-[20px] bg-secondaryColor ">
           <ProductHeaders headerText="You may like" />
           <ProductList />
         </div>

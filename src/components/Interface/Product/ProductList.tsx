@@ -77,19 +77,18 @@ export default function ProductList() {
                     </div>
                     <div>
                       <span className="overflow-hidden overflow-ellipsis line-clamp-1 text-[12px] text-[#fffa84] font-bold">
-                        CAŁY ŚWIAT
+                        GLOBAL
                       </span>
                     </div>
                   </div>
                   <div className="h-[50%] md:h-[75px]">
                     <div className="text-[14px] text-[#ffffff80] font-medium">
-                      Od
+                      From
                     </div>
                     <div className="overflow-hidden overflow-ellipsis line-clamp-1 text-[20px] text-[#ffffff] font-bold">
+                      $
                       {productsByOrdering[index].price ||
-                        productsByOrdering[index].productsInformations
-                          ?.price}{" "}
-                      zł
+                        productsByOrdering[index].productsInformations?.price}
                     </div>
                     <div className="flex items-center">
                       <CiHeart

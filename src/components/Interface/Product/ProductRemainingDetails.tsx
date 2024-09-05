@@ -12,8 +12,6 @@ export default function ProductRemainingDetails({
     return publisher ?? { name: "No data available" };
   };
 
-  console.log(product);
-
   return (
     <section className="flex flex-col z max-w-[1240px] md:mx-auto pb-[15px] mx-[-20px] px-[20px] pt-4 bg-secondaryColor">
       <ul className="flex flex-col gap-y-[8px]">

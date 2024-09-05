@@ -21,14 +21,14 @@ export default function ProductBuyOrAdd({ product }: { product: Product }) {
             <div className="absolute top-[100px]"></div>
             <div className="flex min-w-[200px] mb-[10px]">
               <span className="w-full font-[700] text-[18px] text-[#ffffff]">
-                {`${generateRandomValue()} zł`}
+                {`$${generateRandomValue()}`}
               </span>
             </div>
           </div>
           <div className="flex">
             <div className="flex-1 pr-[20px] bg-transparent">
               <button className="w-full min-h-[35px] bg-buttonBackground text-buttonTextColor">
-                Kup Teraz
+                Buy now
               </button>
             </div>
             <div

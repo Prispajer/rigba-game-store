@@ -11,6 +11,7 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 import useUserCart from "@/hooks/useUserCart";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useCustomRouter from "@/hooks/useCustomRouter";
+import { calculateTotalPrice } from "@/utils/prices";
 
 export default function CartModalContainer() {
   const { user } = useCurrentUser();
@@ -153,8 +154,8 @@ export default function CartModalContainer() {
 
                       <div>
                         <strong className="cursor-default">
+                          $
                           {product.productsInformations?.price || product.price}
-                          zł
                         </strong>
                       </div>
                     </div>
@@ -167,17 +168,7 @@ export default function CartModalContainer() {
                 <div className="flex justify-between items-center w-full text-white">
                   <strong className="cursor-default">Summary</strong>
                   <strong className="text-[30px] pb-[8px] cursor-default">
-                    {productsByRole
-                      .reduce(
-                        (total: number, product) =>
-                          total +
-                          (product.productsInformations?.price ||
-                            product.price) *
-                            (product.quantity || 1),
-                        0
-                      )
-                      .toFixed(2)}
-                    zł
+                    ${calculateTotalPrice(productsByRole)}
                   </strong>
                 </div>
                 <div className="w-full">

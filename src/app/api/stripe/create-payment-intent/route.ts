@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY || "");
+const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY || "", {
+  apiVersion: "2024-06-20",
+});
 
 export async function POST(request: NextRequest, response: NextResponse) {
+  const { amount } = await request.json();
+
   try {
     const paymentIntent = await stripe.paymentIntents.create({
       currency: "usd",
-      amount: 1999,
+      amount: Math.round(amount),
       automatic_payment_methods: {
         enabled: true,
       },

@@ -15,12 +15,12 @@ export default function DigitalProductDetails({
             <IoMdDoneAll size="35px" color="#ffffff" />
           </div>
           <div className="flex flex-col ml-[15px]">
-            <strong className="text-[18px] text-[#ffffff] ">Cały świat</strong>
+            <strong className="text-[18px] text-[#ffffff] ">Global</strong>
             <span className=" text-[#FFFFFF96] text-[14px]">
-              Może być aktywowany na całym świecie
+              Can be activated globally
             </span>
             <span className="text-buttonTextColor text-[14px]">
-              Sprawdź ograniczenia regionalne
+              Check region restrictions
             </span>
           </div>
         </li>
@@ -31,10 +31,10 @@ export default function DigitalProductDetails({
           <div className="flex flex-col ml-[15px]">
             <strong className="text-[18px] text-[#ffffff]">Steam</strong>
             <span className="text-[#FFFFFF96] text-[14px]">
-              Może być aktywowany na platformie Steam
+              Activate/redeem on Steam
             </span>
             <span className="text-buttonTextColor text-[14px]">
-              Przewodnik do aktywacji
+              Check activation guide
             </span>
           </div>
         </li>
@@ -43,21 +43,19 @@ export default function DigitalProductDetails({
             <IoKeyOutline size="35px" color="#ffffff" />
           </div>
           <div className="flex flex-col ml-[15px]">
-            <strong className="text-[18px] text-[#ffffff]">
-              Klucz cyfrowy
-            </strong>
+            <strong className="text-[18px] text-[#ffffff]">Digital key</strong>
             <span className="text-[#FFFFFF96] text-[14px]">
-              To jest cyfrowa wersja produktu (CD-KEY)
+              This is a digital edition of the product (CD-KEY)
             </span>
             <span className="text-buttonTextColor text-[14px]">
-              Natychmiastowa dostawa
+              Instant delivery
             </span>
           </div>
         </li>
       </ul>
       <div className="pt-[10px]">
         <span className="text-[#FFFFFF96] text-[14px]">
-          Działa na: <span className="text-[#ffffff]">Windows</span>
+          Works on: <span className="text-[#ffffff]">Windows</span>
         </span>
       </div>
     </div>

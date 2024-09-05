@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
+import { CiShare1 } from "react-icons/ci";
 import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
 import DigitalProductDetails from "./ProductDigitalProductDetails";
 import useUserReviews from "@/hooks/useUserReviews";
@@ -127,17 +128,19 @@ export default function ProductInformations({
                   {averageRating}
                 </span>
                 <span className="text-[14px] text-[#FFFFFF]">/ 5</span>
-                <span className="text-[14px] text-[#FFFFFF]"> z </span>
+                <span className="text-[14px] text-[#FFFFFF]"> from </span>
                 <span className="text-[14px] text-[#FFFFFF]">
-                  {mergedRatingsCount} ocen
+                  {mergedRatingsCount} ratings
                 </span>
               </div>
             </div>
             <DigitalProductDetails display="hidden xl:flex flex-col" />
             <div className="lg:hidden">
               <button className="flex items-center p-[6px] bg-[#487CBD]">
-                <span className="text-[14px] text-[#FFFFFF]">Udostępnij</span>
-                <span className="text-[14px] text-[#FFFFFF] ml-[6px]"></span>
+                <span className="text-[14px] text-[#FFFFFF]">Share</span>
+                <span className="text-[14px] text-[#FFFFFF] ml-[6px]">
+                  <CiShare1 />
+                </span>
               </button>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import { GameAPIResponse } from "./helpers/types";
+import { GameAPIResponse, Product, UserCart } from "./helpers/types";
 
 export function generateRandomValue(): number {
   const minValue = 0;
@@ -116,4 +116,14 @@ export const mergeReviewData = (
   });
 
   return Array.from(processedReviewsMap.values());
+};
+
+export const calculateTotalPrice = (productsArray: Product[] | UserCart[]) => {
+  return productsArray
+    .reduce((total: number, product) => {
+      const price = product.productsInformations?.price || product.price;
+      const quantity = product.quantity || 1;
+      return total + price * quantity;
+    }, 0)
+    .toFixed(2);
 };

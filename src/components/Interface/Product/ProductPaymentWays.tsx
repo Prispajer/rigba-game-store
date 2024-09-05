@@ -6,7 +6,7 @@ export default function ProductPaymentWays() {
     <div className="flex flex-col sm:mx-[20px] my-[20px] py-[15px] px-[20px] bg-[#387CBD] shadow-md">
       <div className="flex">
         <span className="mb-[6px] font-[600] text-[16px] text-[#ffffff] cursor-default">
-          Dostępne przy płatności:
+          Available upon payment
         </span>
       </div>
       <div className="flex gap-x-2">

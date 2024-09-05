@@ -30,7 +30,7 @@ export default function HomeProductList({ ordering }: { ordering: string }) {
 
   return (
     <>
-      {newLoadingArray.map((value, index) => (
+      {newLoadingArray.map((_, index) => (
         <div
           key={gamesWithOrdering[index]?.id}
           onClick={() => {
@@ -79,10 +79,10 @@ export default function HomeProductList({ ordering }: { ordering: string }) {
               </div>
               <div className="h-[80px] px-[15px]">
                 <div className="text-[14px] text-[#ffffff80] font-medium">
-                  Od
+                  From
                 </div>
                 <div className="text-[20px] text-[#ffffff] font-bold">
-                  {generateRandomValue()}
+                  ${generateRandomValue()}
                 </div>
                 <div className="flex items-center">
                   <CiHeart

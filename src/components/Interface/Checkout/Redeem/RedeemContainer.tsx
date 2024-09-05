@@ -17,9 +17,9 @@ export default function RedeemContainer() {
       <div className="grid grid-cols-1 sm:grid-cols-[100px,1fr] w-full lg:max-w-[1040px] mx-auto p-[20px] ">
         <ul className="flex flex-col">
           <li className="relative flex p-[20px] md:mb-[10px] gap-x-[10px] bg-secondaryColor ">
-            <div className="flex-0 h-[70px] w-[50px] md:h-[120px] max-w-[60px] md:w-[90px] md:max-w-[90px]">
+            <div className="flex-0 h-[70px] w-[50px] md:h-[80px] max-w-[60px] md:w-[90px] md:max-w-[90px]">
               <Link href="/">
-                <div className="relative  h-full w-full">
+                <div className="relative h-full w-full">
                   <Image
                     src="/images/RE4.jpg"
                     alt="gameLogo"

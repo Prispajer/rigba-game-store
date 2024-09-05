@@ -1,14 +1,11 @@
 "use client";
 
 import React from "react";
-import { loadStripe } from "@stripe/stripe-js";
-import { StripePaymentElement } from "@stripe/stripe-js";
+import Link from "next/link";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useUserCart from "@/hooks/useUserCart";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import useCustomRouter from "@/hooks/useCustomRouter";
-import CheckoutContainer from "./CheckoutContainer";
 
 export default function CheckoutSummary() {
   const { resolutionState } = useWindowVisibility();
@@ -18,24 +15,24 @@ export default function CheckoutSummary() {
 
   const productsByRole = user ? userCartState.products : localCartState;
 
-  const handleCheckout = async () => {
-    try {
-      const response = await fetch("/api/create-checkout-session", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          cart: productsByRole,
-        }),
-      });
-      if (response) {
-        return response.json();
-      }
-    } catch (error: any) {
-      console.error(error.error);
-    }
-  };
+  // const handleCheckout = async () => {
+  //   try {
+  //     const response = await fetch("/api/create-checkout-session", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         cart: productsByRole,
+  //       }),
+  //     });
+  //     if (response) {
+  //       return response.json();
+  //     }
+  //   } catch (error: any) {
+  //     console.error(error.error);
+  //   }
+  // };
 
   return (
     <>
@@ -90,18 +87,15 @@ export default function CheckoutSummary() {
             </span>
           </div>
           <div className="flex justify-center items-center mb-[15px] bg-buttonBackground">
-            <button
-              onClick={() => handleCheckout}
-              className="p-[5px] text-buttonTextColor text-[16px] font-[700] "
-            >
-              Go to the payment
-            </button>
+            <Link href="/checkout/payment">
+              <button className="p-[5px] text-buttonTextColor text-[16px] font-[700] ">
+                Go to the payment
+              </button>
+            </Link>
           </div>
         </div>
       </div>
-      <div>
-        <CheckoutContainer />
-      </div>
+      <div></div>
     </>
   );
 }

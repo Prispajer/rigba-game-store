@@ -27,7 +27,7 @@ export default function ProductContainer({
   screenshots: GameAPIResponse["screenshots"];
 }) {
   const { user } = useCurrentUser();
-  const { redirectToGame, redirectToReview } = useCustomRouter();
+  const { redirectToReview } = useCustomRouter();
 
   return (
     <main className="pb-[100px] bg-primaryColor">
@@ -61,10 +61,10 @@ export default function ProductContainer({
           <div className="lg:sticky top-[20px]">
             <div className="flex items-center justify-between my-[15px] px-[20px]">
               <span className="text-[#FFFFFF] font-[700] text-[13px]">
-                Udostępnij komuś, komu się podoba!
+                Share with someone who would like this!
               </span>
               <button className="flex items-center p-[6px] bg-[#487CBD]">
-                <span className="text-[14px] text-[#FFFFFF]">Udostępnij</span>
+                <span className="text-[14px] text-[#FFFFFF]">Share</span>
                 <span className="text-[14px] text-[#FFFFFF] ml-[6px]">
                   <CiShare1 />
                 </span>

@@ -15,25 +15,6 @@ export default function CheckoutSummary() {
 
   const productsByRole = user ? userCartState.products : localCartState;
 
-  // const handleCheckout = async () => {
-  //   try {
-  //     const response = await fetch("/api/create-checkout-session", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         cart: productsByRole,
-  //       }),
-  //     });
-  //     if (response) {
-  //       return response.json();
-  //     }
-  //   } catch (error: any) {
-  //     console.error(error.error);
-  //   }
-  // };
-
   return (
     <>
       <div
@@ -55,7 +36,7 @@ export default function CheckoutSummary() {
                 {"products"}
               </span>
               <strong className="text-[14px] text-[#FFFFFF]">
-                {" "}
+                $
                 {productsByRole
                   .reduce(
                     (total: number, product) =>
@@ -64,8 +45,7 @@ export default function CheckoutSummary() {
                         (product.quantity || 1),
                     0
                   )
-                  .toFixed(2)}{" "}
-                zł
+                  .toFixed(2)}
               </strong>
             </li>
           </ul>
@@ -74,6 +54,7 @@ export default function CheckoutSummary() {
               Summary:
             </span>
             <span className="font-[700] text-[24px] text-[#FFFFFF]">
+              $
               {productsByRole
                 .reduce(
                   (total: number, product) =>
@@ -82,12 +63,14 @@ export default function CheckoutSummary() {
                       (product.quantity || 1),
                   0
                 )
-                .toFixed(2)}{" "}
-              zł
+                .toFixed(2)}
             </span>
           </div>
           <div className="flex justify-center items-center mb-[15px] bg-buttonBackground">
-            <Link href="/checkout/payment">
+            <Link
+              className="flex items-center justify-center w-full"
+              href="/checkout/payment"
+            >
               <button className="p-[5px] text-buttonTextColor text-[16px] font-[700] ">
                 Go to the payment
               </button>

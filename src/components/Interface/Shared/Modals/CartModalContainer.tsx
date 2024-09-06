@@ -48,7 +48,7 @@ export default function CartModalContainer() {
             }`}
           >
             <div className="flex justify-between items-center text-white border-b-[1px] border-[#ffffff1a] p-[20px]">
-              <strong className="text-[20px] cursor-default">Mój koszyk</strong>
+              <strong className="text-[20px] cursor-default">My cart</strong>
               <button onClick={() => handleClose("cartModal")}>
                 <IoCloseSharp className="hover:text-modalHover" size="25px" />
               </button>

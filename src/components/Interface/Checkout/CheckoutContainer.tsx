@@ -137,8 +137,7 @@ export default function CheckoutContainer() {
                     </div>
                     <div className="flex-0 text-[#FFFFFF] font-[700]">
                       <span>
-                        {product.productsInformations?.price || product.price}
-                        zł
+                        ${product.productsInformations?.price || product.price}
                       </span>
                     </div>
                   </div>

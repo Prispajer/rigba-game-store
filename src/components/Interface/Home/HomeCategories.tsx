@@ -16,7 +16,7 @@ export default function HomeCategories() {
 
   return (
     <main className="bg-secondaryColor py-[15px]">
-      <section className="flex max-w-[1240px] mx-auto px-2 py-6">
+      <section className="flex max-w-[1240px] mx-auto px-[20px] py-6">
         <div className="flex flex-col w-full">
           <h1 className="text-[30px] text-white font-bold">Categories</h1>
           {productGenresState && (

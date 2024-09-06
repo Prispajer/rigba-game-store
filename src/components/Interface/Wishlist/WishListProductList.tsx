@@ -63,19 +63,19 @@ export default function WishListProductList() {
                 </div>
                 <div>
                   <span className="overflow-hidden overflow-ellipsis line-clamp-1 text-[12px] text-[#fffa84] font-bold">
-                    CAŁY ŚWIAT
+                    GLOBAL
                   </span>
                 </div>
               </div>
               <div className="h-[50%] md:h-[75px]">
                 <div className="text-[14px] text-[#ffffff80] font-medium">
-                  Od
+                  From
                 </div>
                 <div className="overflow-hidden overflow-ellipsis line-clamp-1 text-[20px] text-[#ffffff] font-bold">
+                  $
                   {isUserProduct(game)
                     ? game.productsInformations?.price
                     : game.price}{" "}
-                  zł
                 </div>
                 <div className="flex items-center">
                   <CiHeart className="ml-[-3px] mr-[3px]" size="20px" />

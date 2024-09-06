@@ -21,10 +21,10 @@ export default function HomeSortableGameList({
 
   return (
     <section className={`${background} py-[15px]`}>
-      <div className="flex max-w-[1240px] mx-auto px-2 py-6">
+      <div className="flex max-w-[1240px] mx-auto px-[20px] py-6">
         <div className="flex flex-col w-full">
           <h1 className="text-[30px] text-white font-bold">{header}</h1>
-          <div className="flex max-w-[1240px] gap-x-[20px] scrollbar overflow-x-auto">
+          <div className="flex flex-col sm:flex-row max-w-[1240px] gap-x-[20px] scrollbar overflow-auto">
             <ProductList ordering={ordering} />
           </div>
           <div className="flex items-center justify-center pt-[20px]">

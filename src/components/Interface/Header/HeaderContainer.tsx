@@ -29,7 +29,7 @@ export default function HeaderContainer() {
       }`}
     >
       {!resolutionState && <NavbarSidebar />}
-      <div className="relative flex flex-wrap items-center max-w-[1240px] w-full mx-auto md:py-2">
+      <div className="relative flex flex-wrap items-center max-w-[1240px] w-full mx-auto  md:py-2">
         <HeaderLogo />
         <HeaderSearchBar />
         <HeaderUserNavigation />

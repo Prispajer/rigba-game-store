@@ -137,6 +137,37 @@ model ReviewLikers {
   @@unique([userId, productId, reviewId])
 }
 
+model Orders {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  reviewId  String
+  isLiked   Boolean
+  createdAt DateTime @default(now())
+
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product  Product @relation(fields: [productId], references:[id])
+  review   Review  @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId, reviewId])
+}
+
+model Keys {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  reviewId  String
+  isLiked   Boolean
+  createdAt DateTime @default(now())
+
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product  Product @relation(fields: [productId], references:[id])
+  review   Review  @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId, reviewId])
+}
+
+
 model Rating {
   id          String   @id @default(cuid())
   reviewId    String   @unique

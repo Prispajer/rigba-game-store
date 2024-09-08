@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     likes,
   } = await request.json();
 
-  const productService = new ProductService(
+  const productService = new ProductService({
     email,
     externalProductId,
     name,
@@ -30,8 +30,8 @@ export async function POST(request: NextRequest) {
     released,
     added,
     title,
-    likes
-  );
+    likes,
+  });
 
   const addReviewToProductResponse = await productService.addReviewToProduct();
 

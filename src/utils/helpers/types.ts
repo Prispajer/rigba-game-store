@@ -129,3 +129,26 @@ export enum NavCurrentElement {
   SubCategory = "subcategory",
   Link = "link",
 }
+
+export type UserConstructor = {
+  email?: string;
+  password?: string;
+  newPassword?: string;
+  code?: string;
+  token?: string;
+};
+
+export type ProductConstructor = {
+  email?: string;
+  externalProductId?: number;
+  name?: string;
+  description?: string;
+  price?: number;
+  background_image?: string;
+  rating?: number;
+  slug?: string;
+  released?: string;
+  added?: number;
+  title?: string;
+  likes?: number;
+};

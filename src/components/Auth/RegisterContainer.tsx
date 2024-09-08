@@ -24,7 +24,7 @@ export default function RegisterContainer() {
     setSuccess("");
   };
 
-  const registerObject = useForm<z.infer<typeof RegisterSchema>>({
+  const registerForm = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
       email: "",
@@ -37,7 +37,7 @@ export default function RegisterContainer() {
     register,
     handleSubmit,
     formState: { errors },
-  } = registerObject;
+  } = registerForm;
 
   const handleProviderLogin = async (provider: SignInProvider) => {
     await signInAccount(provider);
@@ -69,19 +69,19 @@ export default function RegisterContainer() {
   return (
     <main className="flex flex-col lg:flex-row justify-center items-center mx-auto lg:px-[100px] gap-x-[120px]">
       <h1 className="hidden lg:block text-[80px] leading-[90px] font-bold text-[white]">
-        Witaj!
+        Welcome!
         <br />
-        Miło Cię widzieć!
+        Good to see you!
       </h1>
       <div className="min-w-[300px] lg:min-w-[400px] py-[30px] px-[20px] lg:px-[40px] lg:bg-primaryColor">
         <div>
           <h2 className="text-[22px] font-bold tracking-wide text-[white] cursor-default">
-            Stwórz konto
+            Create account
           </h2>
           <h3 className="cursor-default font-normal text-[#DFEDF2]">
-            Masz już konto?
+            Already have an account?
             <Link className="ml-1 font-medium text-[#E2999B] " href="/login">
-              Zaloguj się
+              Login
             </Link>
           </h3>
         </div>
@@ -103,7 +103,7 @@ export default function RegisterContainer() {
               disabled={isPending}
               className="input"
               type="password"
-              placeholder="Hasło"
+              placeholder="Password"
               autoComplete="off"
             />
             {errors.password && (
@@ -116,7 +116,7 @@ export default function RegisterContainer() {
               disabled={isPending}
               className="input"
               type="password"
-              placeholder="Powtórz hasło"
+              placeholder="Repeat password"
               autoComplete="off"
             />
             {errors.confirmPassword && (
@@ -131,15 +131,15 @@ export default function RegisterContainer() {
               className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px]"
               type="submit"
             >
-              Stwórz konto
+              Create account
             </button>
           </div>
           <div className="flex flex-col pb-4 leading-[16px] cursor-default">
-            <span className="requirements">Co najmniej 8 liter</span>
+            <span className="requirements">At least eight letters</span>
             <span className="requirements">
-              Co najmniej jedna cyfra lub znak specjalny
+              At least one number or special character
             </span>
-            <span className="requirements">Co najmniej jedna duża litera</span>
+            <span className="requirements">At least one capital letter</span>
           </div>
         </form>
         <div className="flex items-center justify-center text-[#ffffff1f]">
@@ -150,29 +150,29 @@ export default function RegisterContainer() {
         <div className="">
           <div
             className="social-link bg-[#FFFFFF] hover:bg-[#efeded]"
-            onClick={() => handleProviderLogin("google")}
+            onClick={() => handleProviderLogin(SignInProvider.Google)}
           >
             <FaGoogle size={20} color="black" />
             <span className="social-link-span  text-[black]">
-              Kontynuuj jako Google
+              Continue as Google
             </span>
           </div>
           <div
             className="social-link bg-[#5266fc] hover:bg-[#5257fc]"
-            onClick={() => handleProviderLogin("facebook")}
+            onClick={() => handleProviderLogin(SignInProvider.Facebook)}
           >
             <FaFacebookF size={20} color="white" />
             <span className="social-link-span text-[white]">
-              Kontynuuj jako Facebook
+              Continue as Facebook
             </span>
           </div>
           <div
             className="social-link bg-[#7289da] hover:bg-[#7280da]"
-            onClick={() => handleProviderLogin("discord")}
+            onClick={() => handleProviderLogin(SignInProvider.Discord)}
           >
             <FaDiscord size={20} color="white" />
             <span className="social-link-span  text-[white]">
-              Kontynuuj jako Discord
+              Continue as Discord
             </span>
           </div>
         </div>

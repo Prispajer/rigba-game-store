@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import ProductService from "@/utils/classes/ProductService";
 import IProductService from "@/utils/interfaces/IProductsService";
 import { RequestResponse } from "@/utils/helpers/types";
+import { Product } from "@/utils/helpers/types";
 
 export async function POST(request: NextRequest) {
   const {
@@ -17,7 +18,7 @@ export async function POST(request: NextRequest) {
     added,
   } = await request.json();
 
-  const productService: IProductService = new ProductService(
+  const productService: IProductService = new ProductService({
     email,
     externalProductId,
     name,
@@ -27,8 +28,9 @@ export async function POST(request: NextRequest) {
     rating,
     slug,
     released,
-    added
-  );
+    added,
+  });
+
   const addProductToCartResponse = await productService.addProductToCart();
 
   return NextResponse.json<RequestResponse<LoggedUserProduct>>({

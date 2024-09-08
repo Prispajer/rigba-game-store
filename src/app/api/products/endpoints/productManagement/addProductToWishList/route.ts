@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     added,
   } = await request.json();
 
-  const productService: IProductService = new ProductService(
+  const productService: IProductService = new ProductService({
     email,
     externalProductId,
     name,
@@ -27,8 +27,9 @@ export async function POST(request: NextRequest) {
     rating,
     slug,
     released,
-    added
-  );
+    added,
+  });
+
   const addProductToWishlistResponse =
     await productService.addProductToWishlist();
 

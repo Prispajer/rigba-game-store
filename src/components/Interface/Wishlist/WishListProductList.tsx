@@ -1,9 +1,10 @@
 "use client";
 import React from "react";
 import Image from "next/image";
+import { CiHeart } from "react-icons/ci";
+import { MdOutlineSignalCellularNodata } from "react-icons/md";
 import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
 import useCustomRouter from "@/hooks/useCustomRouter";
-import { CiHeart } from "react-icons/ci";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useUserWishList from "@/hooks/useUserWishList";
@@ -42,18 +43,31 @@ export default function WishListProductList() {
              cursor-pointer`}
           >
             <div className="relative min-w-[95px] sm:h-[250px]">
-              <Image
-                src={
-                  isUserProduct(game)
-                    ? (game.productsInformations?.background_image as string)
-                    : (game.background_image as string)
-                }
-                layout="fill"
-                alt="game"
-              />
+              {game.productsInformations?.background_image ||
+              game.background_image ? (
+                <Image
+                  src={
+                    isUserProduct(game)
+                      ? (game.productsInformations?.background_image as string)
+                      : (game.background_image as string)
+                  }
+                  layout="fill"
+                  alt="game"
+                />
+              ) : (
+                <div className="relative flex flex-col items-center justify-center max-w-[95px] h-full sm:h-[250px] sm:min-w-full">
+                  <span>
+                    <MdOutlineSignalCellularNodata
+                      className="sm:h-[250px]"
+                      size="fill"
+                      color="green"
+                    />
+                  </span>
+                </div>
+              )}
             </div>
             <div className="max-w-[50%] sm:max-w-[100%] my-[10px] px-[15px]">
-              <div className="flex flex-col justify-between min-h-[60px]">
+              <div className="flex flex-col">
                 <div className="leading-none line-clamp-1 text-[#ffffff]">
                   <span className="font-bold text-[14px]">
                     {isUserProduct(game)
@@ -62,7 +76,7 @@ export default function WishListProductList() {
                   </span>
                 </div>
                 <div>
-                  <span className="overflow-hidden overflow-ellipsis line-clamp-1 text-[12px] text-[#fffa84] font-bold">
+                  <span className="pt-[5px] overflow-hidden overflow-ellipsis line-clamp-1 text-[12px] text-[#fffa84] font-bold">
                     GLOBAL
                   </span>
                 </div>

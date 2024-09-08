@@ -38,7 +38,7 @@ export default function HomeProductList({ ordering }: { ordering: string }) {
               redirectToGame(gamesWithOrdering[index].slug as string);
             }
           }}
-          className="relative flex flex-row sm:flex-col min-w-[200px] min-h-[150px] sm:min-h-[360px] mt-[20px] mb-[10px] bg-tertiaryColor cursor-pointer"
+          className="relative flex flex-row sm:flex-col min-w-[200px] min-h-[120px] sm:min-h-[360px] mt-[20px] mb-[10px] bg-tertiaryColor cursor-pointer"
         >
           {newLoadingArray[index] ? (
             <LoadingAnimation />
@@ -52,21 +52,18 @@ export default function HomeProductList({ ordering }: { ordering: string }) {
                     alt="game"
                   />
                 ) : (
-                  <div className="flex flex-col items-center justify-center">
+                  <div className="relative flex flex-col items-center justify-center max-w-[95px] h-full sm:h-[250px] sm:min-w-full">
                     <span>
                       <MdOutlineSignalCellularNodata
                         size="fill"
                         color="green"
                       />
                     </span>
-                    <span className="text-[#F4CD7A] font-[600]">
-                      No image data!
-                    </span>
                   </div>
                 )}
               </div>
               <div className="max-w-[50%] sm:max-w-[100%] my-[10px] px-[15px]">
-                <div className="flex flex-col justify-between min-h-[60px]">
+                <div className="flex flex-col">
                   <div className="leading-none line-clamp-1 text-[#ffffff]">
                     <span className="font-bold text-[13px] text-[#ffffff]">
                       {gamesWithOrdering[index]?.name}

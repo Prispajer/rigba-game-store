@@ -6,10 +6,11 @@ import { RequestResponse } from "@/utils/helpers/types";
 export async function PATCH(request: NextRequest) {
   const { email, externalProductId } = await request.json();
 
-  const productService: IProductService = new ProductService(
+  const productService: IProductService = new ProductService({
     email,
-    externalProductId
-  );
+    externalProductId,
+  });
+
   const increaseProductQuantityResponse =
     await productService.increaseProductQuantity();
 

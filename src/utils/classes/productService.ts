@@ -6,12 +6,9 @@ import {
   getUserWishList,
   getProductReviews,
 } from "@/data/database/publicSQL/queries";
-import {
-  RequestResponse,
-  LoggedUserCart,
-  LoggedUserWishList,
-} from "../helpers/types";
-import { RatingTitle } from "@prisma/client";
+import { RequestResponse } from "../helpers/types";
+import { RatingTitle, Product, Cart, Review, Wishlist } from "@prisma/client";
+import { ProductConstructor } from "../helpers/types";
 
 export default class ProductService implements IProductService {
   private email?: string;
@@ -27,35 +24,22 @@ export default class ProductService implements IProductService {
   private title?: string;
   private likes?: number;
 
-  constructor(
-    email?: string,
-    externalProductId?: number,
-    name?: string,
-    description?: string,
-    price?: number,
-    background_image?: string,
-    rating?: number,
-    slug?: string,
-    released?: string,
-    added?: number,
-    title?: string,
-    likes?: number
-  ) {
-    this.email = email;
-    this.externalProductId = externalProductId;
-    this.name = name;
-    this.description = description;
-    this.price = price;
-    this.background_image = background_image;
-    this.rating = rating;
-    this.slug = slug;
-    this.released = released;
-    this.added = added;
-    this.title = title;
-    this.likes = likes;
+  constructor(productData: ProductConstructor = {}) {
+    this.email = productData.email;
+    this.externalProductId = productData.externalProductId;
+    this.name = productData.name;
+    this.description = productData.description;
+    this.price = productData.price;
+    this.background_image = productData.background_image;
+    this.rating = productData.rating;
+    this.slug = productData.slug;
+    this.released = productData.released;
+    this.added = productData.added;
+    this.title = productData.title;
+    this.likes = productData.likes;
   }
 
-  async getCart(): Promise<RequestResponse<LoggedUserCart | null>> {
+  async getCart(): Promise<RequestResponse<Cart | null>> {
     try {
       const user = await getUserByEmail(this.email as string);
       if (!user) {
@@ -88,7 +72,7 @@ export default class ProductService implements IProductService {
     }
   }
 
-  async getWishList(): Promise<RequestResponse<LoggedUserWishList | null>> {
+  async getWishList(): Promise<RequestResponse<Wishlist | null>> {
     try {
       const user = await getUserByEmail(this.email as string);
       if (!user) {
@@ -121,7 +105,7 @@ export default class ProductService implements IProductService {
     }
   }
 
-  async getReviews(): Promise<RequestResponse<any | null>> {
+  async getReviews(): Promise<RequestResponse<Review | null>> {
     try {
       const existingProduct = await postgres.product.findFirst({
         where: { externalProductId: this.externalProductId },
@@ -216,7 +200,7 @@ export default class ProductService implements IProductService {
     }
   }
 
-  async addProductToCart(): Promise<RequestResponse<LoggedUserCart | null>> {
+  async addProductToCart(): Promise<RequestResponse<Cart | null>> {
     try {
       if (!this.externalProductId) {
         return {
@@ -318,9 +302,7 @@ export default class ProductService implements IProductService {
     }
   }
 
-  async addProductToWishlist(): Promise<
-    RequestResponse<LoggedUserWishList | null>
-  > {
+  async addProductToWishlist(): Promise<RequestResponse<Wishlist | null>> {
     try {
       if (!this.externalProductId) {
         return {
@@ -424,7 +406,7 @@ export default class ProductService implements IProductService {
     }
   }
 
-  async addReviewToProduct(): Promise<RequestResponse<any | null>> {
+  async addReviewToProduct(): Promise<RequestResponse<Review | null>> {
     try {
       if (!this.externalProductId || !this.rating) {
         return {
@@ -512,9 +494,7 @@ export default class ProductService implements IProductService {
     }
   }
 
-  async deleteProductFromCart(): Promise<
-    RequestResponse<LoggedUserCart | null>
-  > {
+  async deleteProductFromCart(): Promise<RequestResponse<Cart | null>> {
     try {
       if (!this.externalProductId) {
         return {
@@ -582,9 +562,7 @@ export default class ProductService implements IProductService {
     }
   }
 
-  async deleteProductFromWishList(): Promise<
-    RequestResponse<LoggedUserWishList | null>
-  > {
+  async deleteProductFromWishList(): Promise<RequestResponse<Wishlist | null>> {
     try {
       if (!this.externalProductId) {
         return {
@@ -660,9 +638,7 @@ export default class ProductService implements IProductService {
     }
   }
 
-  async increaseProductQuantity(): Promise<
-    RequestResponse<LoggedUserCart | null>
-  > {
+  async increaseProductQuantity(): Promise<RequestResponse<Cart | null>> {
     try {
       const user = await getUserByEmail(this.email as string);
 
@@ -723,9 +699,7 @@ export default class ProductService implements IProductService {
     }
   }
 
-  async decreaseProductQuantity(): Promise<
-    RequestResponse<LoggedUserCart | null>
-  > {
+  async decreaseProductQuantity(): Promise<RequestResponse<Cart | null>> {
     try {
       const user = await getUserByEmail(this.email as string);
 
@@ -792,7 +766,7 @@ export default class ProductService implements IProductService {
     }
   }
 
-  async likeReview(): Promise<RequestResponse<any | null>> {
+  async likeReview(): Promise<RequestResponse<Review | null>> {
     try {
       if (!this.email || !this.externalProductId) {
         return {
@@ -893,7 +867,7 @@ export default class ProductService implements IProductService {
     }
   }
 
-  async unLikeReview(): Promise<RequestResponse<any | null>> {
+  async unLikeReview(): Promise<RequestResponse<Review | null>> {
     try {
       if (!this.email || !this.externalProductId) {
         return {

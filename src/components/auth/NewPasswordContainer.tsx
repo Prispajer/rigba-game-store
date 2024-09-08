@@ -17,7 +17,7 @@ export default function ResetPasswordContainer() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
 
-  const resetPasswordObject = useForm<z.infer<typeof NewPasswordSchema>>({
+  const resetPasswordForm = useForm<z.infer<typeof NewPasswordSchema>>({
     resolver: zodResolver(NewPasswordSchema),
     defaultValues: {
       password: "",
@@ -34,9 +34,9 @@ export default function ResetPasswordContainer() {
     register,
     handleSubmit,
     formState: { errors },
-  } = resetPasswordObject;
+  } = resetPasswordForm;
 
-  async function handleFormSubmit(data: z.infer<typeof resetPasswordObject>) {
+  async function handleFormSubmit(data: z.infer<typeof NewPasswordSchema>) {
     startTransition(async () => {
       const { password } = data;
 
@@ -68,22 +68,22 @@ export default function ResetPasswordContainer() {
   }
 
   return (
-    <main className="flex flex-col lg:flex-row justify-center items-center mx-auto lg:px-[100px] gap-x-[120px]">
+    <section className="flex flex-col lg:flex-row justify-center items-center mx-auto lg:px-[100px] gap-x-[120px]">
       <h1 className="hidden lg:block text-[80px] leading-[90px] font-bold text-[white]">
-        Chronimy
+        We protect
         <br />
-        Cię!
+        You!
       </h1>
       <div className="max-w-[300px] lg:min-w-[400px] py-[30px] px-[20px] lg:px-[40px] lg:bg-primaryColor">
         <div>
           <h2 className="text-[22px] font-bold tracking-wide leading-none text-[white] cursor-default ">
-            Nowe hasło
+            New password
           </h2>
           <Link
             className="text-[14px] font-medium text-[#E2999B]"
             href="/login"
           >
-            Wróc do login
+            Back to login
           </Link>
           <form onSubmit={handleSubmit(handleFormSubmit)}>
             <div className="pt-4 text-white">
@@ -92,7 +92,7 @@ export default function ResetPasswordContainer() {
                 disabled={isPending}
                 className="bg-secondaryColor  w-[100%] p-[15px]"
                 type="password"
-                placeholder="Hasło"
+                placeholder="Password"
                 autoCorrect="off"
               />
               {errors.password && (
@@ -105,7 +105,7 @@ export default function ResetPasswordContainer() {
                 disabled={isPending}
                 className="bg-secondaryColor  w-[100%] p-[15px]"
                 type="password"
-                placeholder="Powtórz hasło"
+                placeholder="Repeat password"
                 autoCorrect="off"
               />
               {errors.confirmPassword && (
@@ -113,9 +113,9 @@ export default function ResetPasswordContainer() {
               )}
             </div>
             <div className="flex flex-col py-4 leading-[16px] cursor-default">
-              <span className="requirements">Co najmniej 8 liter</span>
+              <span className="requirements">At least eight letters</span>
               <span className="requirements">
-                Co najmniej jedna cyfra lub znak specjalny
+                At least one number or special character
               </span>
             </div>
             <FormSuccess message={success} />
@@ -125,12 +125,12 @@ export default function ResetPasswordContainer() {
                 className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px] mt-4"
                 type="submit"
               >
-                Potwierdź
+                Submit
               </button>
             </div>
           </form>
         </div>
       </div>
-    </main>
+    </section>
   );
 }

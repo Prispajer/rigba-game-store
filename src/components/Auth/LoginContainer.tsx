@@ -47,7 +47,7 @@ export default function LoginContainer() {
     setSuccess("");
   };
 
-  const loginObject = useForm<z.infer<typeof LoginSchema>>({
+  const loginForm = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: "",
@@ -60,7 +60,7 @@ export default function LoginContainer() {
     register,
     handleSubmit,
     formState: { errors },
-  } = loginObject;
+  } = loginForm;
 
   const handleFormSubmit = (data: z.infer<typeof LoginSchema>) => {
     startTransition(async () => {
@@ -97,19 +97,19 @@ export default function LoginContainer() {
   return (
     <main className="flex flex-col lg:flex-row justify-center items-center mx-auto lg:px-[100px] gap-x-[120px]">
       <h1 className="hidden lg:block text-[80px] leading-[90px] font-bold text-[white]">
-        Witaj!
+        Welcome!
         <br />
-        Miło Cię widzieć!
+        Good to see you!
       </h1>
       <div className="min-w-[300px] lg:min-w-[400px] py-[30px] px-[20px] lg:px-[40px] lg:bg-primaryColor">
         <div>
           <h2 className="text-[22px] font-bold tracking-wide text-[white] cursor-default">
-            Zaloguj się
+            Login
           </h2>
           <h3 className="cursor-default font-normal text-[#DFEDF2]">
-            Nie masz konta?
+            Don't have an account?
             <Link className="ml-1 font-medium text-[#E2999B] " href="/register">
-              Zarejestruj się
+              Register
             </Link>
           </h3>
         </div>
@@ -120,7 +120,7 @@ export default function LoginContainer() {
           >
             <FaGoogle size={20} color="black" />
             <span className="social-link-span  text-[black]">
-              Kontynuuj jako Google
+              Continue as Google
             </span>
           </div>
           <div
@@ -129,7 +129,7 @@ export default function LoginContainer() {
           >
             <FaFacebookF size={20} color="white" />
             <span className="social-link-span text-[white]">
-              Kontynuuj jako Facebook
+              Continue as Facebook
             </span>
           </div>
           <div
@@ -138,13 +138,13 @@ export default function LoginContainer() {
           >
             <FaDiscord size={20} color="white" />
             <span className="social-link-span  text-[white]">
-              Kontynuuj jako Discord
+              Continue as Discord
             </span>
           </div>
         </div>
         <div className="flex items-center justify-center text-[#ffffff1f]">
           <div className="flex-1 border-[1px] border-[#ffffff1f] "></div>
-          <span className="flex-0 px-2 cursor-default">albo</span>
+          <span className="flex-0 px-2 cursor-default">or</span>
           <div className="flex-1 border-[1px] border-[#ffffff1f]"></div>
         </div>
         <>
@@ -169,7 +169,7 @@ export default function LoginContainer() {
                   disabled={isPending}
                   className="input"
                   type="password"
-                  placeholder="Hasło"
+                  placeholder="Password"
                   autoCorrect="off"
                 />
                 {errors.password && (
@@ -184,13 +184,13 @@ export default function LoginContainer() {
                   className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px]"
                   type="submit"
                 >
-                  Zaloguj się
+                  Login
                 </button>
                 <Link
                   className="text-[14px] font-medium text-[#E2999B]"
                   href="/reset-password"
                 >
-                  Nie pamiętasz hasła?
+                  Forgot password?
                 </Link>
               </div>
             </form>

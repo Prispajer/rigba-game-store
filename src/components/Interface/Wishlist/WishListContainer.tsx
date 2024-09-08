@@ -18,14 +18,14 @@ export default function WishListContainer() {
 
   return (
     <main className="flex items-center justify-center w-full bg-primaryColor">
-      <section className="flex flex-col items-center w-full max-w-[1240px] min-h-[calc(100vh-500px)] mx-auto mt-[40px] mb-[100px] px-4 md:px-2">
+      <section className="flex flex-col items-center w-full max-w-[1240px] min-h-[calc(100vh-500px)] mx-auto mt-[40px] mb-[100px] px-[20px]">
         {user && <Profile />}
         <WishListCounter />
         <div className="w-full mt-[40px] md:grid grid-cols-[220px,calc(100%-220px)]">
           <aside className="max-h-[120px] bg-[#5389b7] text-white">
             <SearchBar />
           </aside>
-          <div className="flex flex-col w-full px-[15px] text-white">
+          <div className="flex flex-col w-full py-[15px] md:px-[15px] md:py-[0px] text-white">
             {user ? (
               <SortBy
                 handleSortChange={handleSetUserWishListOrdering}

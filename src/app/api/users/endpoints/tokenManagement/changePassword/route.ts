@@ -5,10 +5,11 @@ import IUserService from "@/utils/interfaces/IUserService";
 import { RequestResponse, ResetPasswordToken } from "@/utils/helpers/types";
 
 export async function POST(request: NextRequest, response: NextResponse) {
-  const { password, token } = await request.json();
+  const { password, newPassword, token } = await request.json();
 
   const userService: IUserService = new UserService({
     password,
+    newPassword,
     token,
   });
   const setNewPasswordResponse = await userService.handleSetNewPassword();

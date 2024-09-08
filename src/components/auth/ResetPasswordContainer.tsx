@@ -38,7 +38,7 @@ export default function ResetPasswordContainer() {
 
       try {
         const response = await requestService.postMethod(
-          "users/endpoints/userAuthentication/resetPasswordUser",
+          "users/endpoints/userAuthentication/resetPassword",
           {
             email,
           }
@@ -57,20 +57,19 @@ export default function ResetPasswordContainer() {
   }
 
   return (
-    <main className="flex flex-col lg:flex-row justify-center items-center mx-auto lg:px-[100px] gap-x-[120px]">
+    <section className="flex flex-col lg:flex-row justify-center items-center mx-auto lg:px-[100px] gap-x-[120px]">
       <h1 className="hidden lg:block text-[80px] leading-[90px] font-bold text-[white]">
-        Chronimy
+        We protect
         <br />
-        Cię!
+        You!
       </h1>
       <div className="max-w-[300px] lg:min-w-[400px] py-[30px] px-[20px] lg:px-[40px] lg:bg-primaryColor">
         <div>
           <h2 className="text-[22px] font-bold tracking-wide text-[white] cursor-default">
-            Nie pamiętasz hasła?
+            Forgot your password?
           </h2>
           <h3 className="cursor-default font-normal text-[14px] text-[#DFEDF2]">
-            Wyślemy Ci wiadomość e-mail z linkiem umożliwiającym ustawienie
-            nowego hasła
+            We will send you an email with a link to set a new password
           </h3>
           <form onSubmit={handleSubmit(handleFormSubmit)}>
             <div className="py-4 text-white">
@@ -92,18 +91,18 @@ export default function ResetPasswordContainer() {
                 className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px]"
                 type="submit"
               >
-                Potwierdź
+                Submit
               </button>
               <Link
                 className="text-[14px] font-medium text-[#E2999B]"
                 href="/login"
               >
-                Wróc do login
+                Back to login
               </Link>
             </div>
           </form>
         </div>
       </div>
-    </main>
+    </section>
   );
 }

@@ -1,23 +1,18 @@
-import {
-  RequestResponse,
-  LoggedUserCart,
-  LoggedUserWishList,
-} from "../helpers/types";
+import { RequestResponse } from "../helpers/types";
+import { RatingTitle, Product, Cart, Review, Wishlist } from "@prisma/client";
 
 export default interface IProductService {
-  getCart(): Promise<RequestResponse<LoggedUserCart | null>>;
-  getWishList(): Promise<RequestResponse<LoggedUserWishList | null>>;
-  getReviews(): Promise<RequestResponse<LoggedUserWishList | null>>;
-  addProductToCart(): Promise<RequestResponse<LoggedUserCart | null>>;
-  deleteProductFromCart(): Promise<RequestResponse<LoggedUserCart | null>>;
-  decreaseProductQuantity(): Promise<RequestResponse<LoggedUserCart | null>>;
-  increaseProductQuantity(): Promise<RequestResponse<LoggedUserCart | null>>;
-  addProductToWishlist(): Promise<RequestResponse<LoggedUserWishList | null>>;
-  deleteProductFromWishList(): Promise<
-    RequestResponse<LoggedUserWishList | null>
-  >;
-  addProductToDatabase(): Promise<RequestResponse<Product | null>>;
-  addReviewToProduct(): Promise<RequestResponse<any | null>>;
-  likeReview(): Promise<RequestResponse<UserReviews | null> | undefined>;
-  unLikeReview(): Promise<RequestResponse<any | null>>;
+  getCart(): Promise<RequestResponse<Cart | null>>;
+  getWishList(): Promise<RequestResponse<Wishlist | null>>;
+  getReviews(): Promise<RequestResponse<Review | null>>;
+  addProduct(): Promise<RequestResponse<Product | null>>;
+  addProductToCart(): Promise<RequestResponse<Cart | null>>;
+  deleteProductFromCart(): Promise<RequestResponse<Cart | null>>;
+  decreaseProductQuantity(): Promise<RequestResponse<Cart | null>>;
+  increaseProductQuantity(): Promise<RequestResponse<Cart | null>>;
+  addProductToWishlist(): Promise<RequestResponse<Wishlist | null>>;
+  deleteProductFromWishList(): Promise<RequestResponse<Wishlist | null>>;
+  addReviewToProduct(): Promise<RequestResponse<Review | null>>;
+  likeReview(): Promise<RequestResponse<Review | null> | undefined>;
+  unLikeReview(): Promise<RequestResponse<Review | null>>;
 }

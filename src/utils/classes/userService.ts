@@ -24,24 +24,22 @@ import {
   EmailVerificationToken,
   TwoFactorToken,
   ResetPasswordToken,
+  UserConstructor,
 } from "../helpers/types";
 
 export default class UserService implements IUserService {
   private email?: string;
   private password?: string;
+  private newPassword?: string;
   private code?: string;
   private token?: string;
 
-  constructor(
-    email?: string,
-    password?: string,
-    code?: string,
-    token?: string
-  ) {
-    this.email = email;
-    this.password = password;
-    this.code = code;
-    this.token = token;
+  constructor(userData: UserConstructor = {}) {
+    this.email = userData.email;
+    this.password = userData.password;
+    this.newPassword = userData.newPassword;
+    this.code = userData.code;
+    this.token = userData.token;
   }
 
   async loginUser(): Promise<RequestResponse<
@@ -331,6 +329,76 @@ export default class UserService implements IUserService {
   }
 
   async handleSetNewPassword(): Promise<RequestResponse<ResetPasswordToken>> {
+    const existingToken = await getPasswordResetTokenByToken(
+      this.token as string
+    );
+
+    if (!existingToken) {
+      return {
+        success: false,
+        message: "Token doesn't exsist!",
+        data: undefined,
+      };
+    }
+
+    const tokenHasExpired = new Date(existingToken.expires) < new Date();
+
+    if (tokenHasExpired) {
+      return {
+        success: false,
+        message: "Token has expired!",
+        data: undefined,
+      };
+    }
+
+    const existingUser = await getUserByEmail(existingToken.email);
+
+    if (!existingUser) {
+      return {
+        success: false,
+        message: "Email doesn't exsist!",
+        data: undefined,
+      };
+    }
+
+    const passwordMatch = await bcrypt.compare(
+      this.password as string,
+      existingUser.password as string
+    );
+
+    if (this.token && passwordMatch) {
+      return {
+        success: false,
+        message: "You must provide other password than the older one!",
+        data: undefined,
+      };
+    }
+
+    const hashedPassword = await bcrypt.hash(this.password as string, 10);
+
+    await postgres.user.update({
+      where: {
+        id: existingUser.id,
+      },
+      data: {
+        password: hashedPassword,
+      },
+    });
+
+    await postgres.passwordResetToken.delete({
+      where: {
+        id: existingToken.id,
+      },
+    });
+
+    return {
+      success: true,
+      message: "Password changed successfully!",
+      data: undefined,
+    };
+  }
+
+  async handleChangePassword(): Promise<RequestResponse<User>> {
     const existingToken = await getPasswordResetTokenByToken(
       this.token as string
     );

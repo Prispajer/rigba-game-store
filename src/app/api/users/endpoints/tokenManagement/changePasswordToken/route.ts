@@ -1,22 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import UserService from "@/utils/classes/UserService";
 import IUserService from "@/utils/interfaces/IUserService";
-
 import { RequestResponse, ResetPasswordToken } from "@/utils/helpers/types";
 
 export async function POST(request: NextRequest, response: NextResponse) {
-  const { password, newPassword, token } = await request.json();
+  const { email } = await request.json();
 
   const userService: IUserService = new UserService({
-    password,
-    newPassword,
-    token,
+    email,
   });
-  const setNewPasswordResponse = await userService.handleSetNewPassword();
+  const sendChangePasswordTokenResponse =
+    await userService.handleSendChangePasswordToken();
 
   return NextResponse.json<RequestResponse<ResetPasswordToken>>({
-    success: setNewPasswordResponse.success,
-    message: setNewPasswordResponse.message,
-    data: setNewPasswordResponse.data,
+    success: sendChangePasswordTokenResponse.success,
+    message: sendChangePasswordTokenResponse.message,
+    data: sendChangePasswordTokenResponse.data,
   });
 }

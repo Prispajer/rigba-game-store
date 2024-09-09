@@ -7,13 +7,23 @@ import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
+import TwoFactorModalContainer from "@/components/Interface/Shared/Modals/TwoFactorModalContainer";
+import { FormSuccess } from "@/components/Interface/Shared/FormsNotifications/FormSuccess";
+import { FormError } from "@/components/Interface/Shared/FormsNotifications/FormError";
+import useWindowVisibility from "@/hooks/useWindowVisibility";
+import useCurrentUser from "@/hooks/useCurrentUser";
 import requestService from "@/utils/classes/RequestService";
 import { NewPasswordSchema } from "@/utils/schemas/user";
 
 export default function ChangePasswordContainer() {
   const [error, setError] = React.useState<string | undefined>("");
   const [success, setSuccess] = React.useState<string | undefined>("");
+  const [showTwoFactorModal, setShowTwoFactorModal] =
+    React.useState<boolean>(false);
   const [oldPassword, setOldPassword] = React.useState<string | undefined>("");
+
+  const { twoFactorModalState, handleOpen } = useWindowVisibility();
+  const { user } = useCurrentUser();
 
   const [isPending, startTransition] = React.useTransition();
   const searchParams = useSearchParams();
@@ -38,30 +48,39 @@ export default function ChangePasswordContainer() {
     formState: { errors },
   } = resetPasswordForm;
 
-  async function handleFormSubmit(data: z.infer<typeof NewPasswordSchema>) {
-    startTransition(async () => {
-      const { password } = data;
-
-      try {
-        const response = await requestService.postMethod(
-          "users/endpoints/tokenManagement/newPassword",
-          {
-            password,
-            token,
-          }
-        );
-
-        clearMessages();
-
-        if (response.success) {
-          setSuccess(response.message);
-        } else {
-          setError(response.message);
-        }
-      } catch (error) {
-        setError("Something went wrong!");
+  async function handleSendToken() {
+    try {
+      const response = await requestService.postMethod("/changePasswordToken", {
+        email: user?.email,
+      });
+      if (response.success) {
+        setSuccess(response.message);
+        setShowTwoFactorModal(true);
+      } else {
+        setError(response.message);
       }
-    });
+    } catch (error) {
+      setError("Something went wrong!");
+    }
+  }
+
+  async function handleFormSubmit(data: z.infer<typeof NewPasswordSchema>) {
+    clearMessages();
+    const { password } = data;
+    try {
+      const response = await requestService.postMethod("/changePassword", {
+        password,
+        token,
+        twoFactorToken,
+      });
+      if (response.success) {
+        setSuccess(response.message);
+      } else {
+        setError(response.message);
+      }
+    } catch (error) {
+      setError("Something went wrong!");
+    }
   }
 
   return (
@@ -122,10 +141,16 @@ export default function ChangePasswordContainer() {
             </p>
           )}
         </label>
+        {<FormSuccess message={success} />}
+        {<FormError message={error} />}
         <div className="max-w-[180px] pt-[20px]">
-          <button className="flex items-center justify-center w-full min-h-[36px] px-[10px] bg-buttonBackground hover:bg-buttonBackgroundHover">
+          <button
+            onClick={() => handleOpen("twoFactorModal")}
+            className="flex items-center justify-center w-full min-h-[36px] px-[10px] bg-buttonBackground hover:bg-buttonBackgroundHover"
+          >
             <span className="text-buttonTextColor font-bold">Save</span>
           </button>
+          {showTwoFactorModal && <TwoFactorModalContainer />}
         </div>
       </form>
     </div>

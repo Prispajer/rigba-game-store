@@ -47,7 +47,7 @@ export default function ResetPasswordContainer() {
 
       try {
         const response = await requestService.postMethod(
-          "users/endpoints/tokenManagement/newPassword",
+          "users/endpoints/tokenManagement/newPasswordToken",
           {
             password,
             token,

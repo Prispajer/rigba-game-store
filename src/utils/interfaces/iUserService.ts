@@ -10,7 +10,7 @@ export default interface IUserService {
   loginUser(): Promise<RequestResponse<
     User | EmailVerificationToken | TwoFactorToken
   > | void>;
-  registerUser(): Promise<RequestResponse<User | EmailVerificationToken>>;
+  registerUser(): Promise<RequestResponse<User>>;
   handleSendEmailVerification(
     user: User
   ): Promise<RequestResponse<EmailVerificationToken> | void>;
@@ -21,6 +21,8 @@ export default interface IUserService {
     user: User,
     code?: string
   ): Promise<RequestResponse<TwoFactorToken> | void>;
-  handleSendResetPassword(): Promise<RequestResponse<ResetPasswordToken>>;
+  handleSendResetPasswordToken(): Promise<RequestResponse<ResetPasswordToken>>;
   handleSetNewPassword(): Promise<RequestResponse<ResetPasswordToken>>;
+  handleSendChangePasswordToken(): Promise<RequestResponse<TwoFactorToken>>;
+  handleChangePassword(): Promise<RequestResponse<User>>;
 }

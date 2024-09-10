@@ -7,7 +7,6 @@ import {
   getTwoFactorTokenByEmail,
   getEmailVerificationTokenByToken,
   getPasswordResetTokenByToken,
-  getUserById,
   getTwoFactorTokenByToken,
 } from "@/data/database/publicSQL/queries";
 import {
@@ -32,12 +31,14 @@ import {
 export default class UserService implements IUserService {
   private email?: string;
   private password?: string;
+  private newPassword?: string;
   private code?: string;
   private token?: string;
 
   constructor(userData: UserConstructor = {}) {
     this.email = userData.email;
     this.password = userData.password;
+    this.newPassword = userData.newPassword;
     this.code = userData.code;
     this.token = userData.token;
   }
@@ -279,7 +280,6 @@ export default class UserService implements IUserService {
           twoFactorToken.email,
           twoFactorToken.token
         );
-
         return {
           success: true,
           message: "Two Factor token has been sent!",
@@ -399,49 +399,103 @@ export default class UserService implements IUserService {
   async handleSendChangePasswordToken(): Promise<
     RequestResponse<TwoFactorToken>
   > {
-    try {
-      const existingUser = await getUserByEmail(this.email as string);
+    const existingUser = await getUserByEmail(this.email as string);
 
-      if (!existingUser) {
+    if (!existingUser) {
+      return {
+        success: false,
+        message: "User doesn't exist!",
+        data: undefined,
+      };
+    }
+
+    if (this.code) {
+      const twoFactorToken = await getTwoFactorTokenByEmail(
+        existingUser.email as string
+      );
+
+      if (!twoFactorToken || twoFactorToken.token !== this.code) {
         return {
           success: false,
-          message: "Invalid email!",
+          message: "Invalid code!",
           data: undefined,
         };
       }
 
-      const twoFactorToken = await generateTwoFactorToken(this.email as string);
+      const hasExpired = new Date(twoFactorToken.expires) < new Date();
 
-      await sendTwoFactorTokenEmail(twoFactorToken.email, twoFactorToken.token);
+      if (hasExpired) {
+        return {
+          success: false,
+          message: "Code expired!",
+          data: undefined,
+        };
+      }
+
+      if (hasExpired && twoFactorToken) {
+        await postgres.twoFactorToken.delete({
+          where: { id: twoFactorToken.id },
+        });
+      }
 
       return {
         success: true,
-        message: "Two-factor token sent! Please enter the code.",
-        data: twoFactorToken,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        message: "Something went wrong!",
+        message: "Two-factor token has been deleted!",
         data: undefined,
+      };
+    } else {
+      const passwordMatch = await bcrypt.compare(
+        this.password as string,
+        existingUser.password as string
+      );
+
+      if (!passwordMatch) {
+        return {
+          success: false,
+          message: "Invalid credentials!",
+          data: undefined,
+        };
+      }
+
+      if (passwordMatch) {
+        const existingToken = await getTwoFactorTokenByEmail(
+          existingUser.email as string
+        );
+
+        const hasExpired = new Date(existingToken?.expires) < new Date();
+
+        if (!existingToken && hasExpired) {
+          const twoFactorToken = await generateTwoFactorToken(
+            existingUser.email as string
+          );
+
+          await sendTwoFactorTokenEmail(
+            twoFactorToken.email,
+            twoFactorToken.token
+          );
+        }
+      }
+
+      return {
+        success: true,
+        message: "Two-factor token has been sent!",
+        data: null,
       };
     }
   }
 
   async handleChangePassword(): Promise<RequestResponse<User>> {
-    const existingToken = await getTwoFactorTokenByToken(this.token as string);
+    const twoFactorToken = await getTwoFactorTokenByEmail(this.email as string);
 
-    if (!existingToken) {
-      await this.handleSendChangePasswordToken();
-
+    if (!twoFactorToken) {
       return {
-        success: true,
-        message: "Two-factor token sent! Please enter the code.",
+        success: false,
+        message: "Token is missing!",
         data: undefined,
       };
     }
 
-    const existingUser = await getUserByEmail(existingToken.email as string);
+    const existingUser = await getUserByEmail(twoFactorToken.email as string);
 
     if (!existingUser) {
       return {
@@ -451,20 +505,8 @@ export default class UserService implements IUserService {
       };
     }
 
-    const passwordMatch = await bcrypt.compare(
-      this.password as string,
-      existingUser.password as string
-    );
+    const tokenHasExpired = new Date(twoFactorToken.expires) < new Date();
 
-    if (passwordMatch) {
-      return {
-        success: false,
-        message: "You must provide a different password than the old one!",
-        data: undefined,
-      };
-    }
-
-    const tokenHasExpired = new Date(existingToken.expires) < new Date();
     if (tokenHasExpired) {
       return {
         success: false,
@@ -473,21 +515,23 @@ export default class UserService implements IUserService {
       };
     }
 
-    const hashedPassword = await bcrypt.hash(this.password as string, 10);
+    if (!twoFactorToken || twoFactorToken.token !== this.code) {
+      return {
+        success: false,
+        message: "Invalid code!",
+        data: undefined,
+      };
+    }
+
+    const hashedPassword = await bcrypt.hash(this.newPassword as string, 10);
 
     await postgres.user.update({
-      where: {
-        id: existingUser.id,
-      },
-      data: {
-        password: hashedPassword,
-      },
+      where: { id: existingUser.id },
+      data: { password: hashedPassword },
     });
 
-    await postgres.passwordResetToken.delete({
-      where: {
-        id: existingToken.id,
-      },
+    await postgres.twoFactorToken.delete({
+      where: { id: twoFactorToken.id },
     });
 
     return {

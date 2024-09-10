@@ -53,9 +53,7 @@ export default function ResetPasswordContainer() {
             token,
           }
         );
-
         clearMessages();
-
         if (response.success) {
           setSuccess(response.message);
         } else {

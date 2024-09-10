@@ -24,7 +24,6 @@ export default function EmailVerificationContainer() {
         "users/endpoints/tokenManagement/emailVerificationToken",
         { token }
       );
-
       if (!response.success) {
         setError(response.message);
       }
@@ -32,6 +31,7 @@ export default function EmailVerificationContainer() {
         setSuccess(response.message);
       }
     } catch (error) {
+      console.error("Xd", error);
       setError("Something went wrong!");
     }
   }, [token]);

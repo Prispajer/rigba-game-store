@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import UserService from "@/utils/classes/UserService";
+import UserService from "@/utils/services/UserService";
 import IUserService from "@/utils/interfaces/IUserService";
 import { RequestResponse, User } from "@/utils/helpers/types";
 

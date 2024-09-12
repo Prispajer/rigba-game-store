@@ -5,8 +5,8 @@ import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import useFetchGameData from "@/hooks/useFetchGameData";
 import useSearchText from "@/hooks/useSearchText";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
-import UtilsService from "@/utils/classes/UtilsService";
-import IUtilsService from "@/utils/interfaces/IUtilsService";
+import UtilsService from "@/utils/services/UtilsService";
+import IUtilsService from "@/utils/serverInterfaces/IUtilsService";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
 export default function FilterModalContainer({

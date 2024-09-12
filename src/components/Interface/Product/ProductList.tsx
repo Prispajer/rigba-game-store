@@ -6,7 +6,7 @@ import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
 import LoadingAnimation from "../Shared/Animations/LoadingAnimation";
 import ShowMoreButton from "../Shared/Buttons/ShowMoreButton";
 import useCustomRouter from "@/hooks/useCustomRouter";
-import FetchService from "@/utils/classes/FetchService";
+import FetchService from "@/utils/services/FetchService";
 import { getGamesWithRandomPrices } from "@/utils/prices";
 
 export default function ProductList() {

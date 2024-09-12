@@ -138,6 +138,14 @@ export type UserConstructor = {
   token?: string;
 };
 
+export type TokenConstructor = {
+  email?: string;
+  password?: string;
+  newPassword?: string;
+  code?: string;
+  token?: string;
+};
+
 export type ProductConstructor = {
   email?: string;
   externalProductId?: number;

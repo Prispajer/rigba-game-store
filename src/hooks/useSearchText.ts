@@ -5,7 +5,7 @@ import useFetchGameData from "./useFetchGameData";
 import { RootState } from "../redux/store";
 
 export default function useSearchText() {
-  const { gamesFilterState } = useFetchGameData();
+  const { productFilterState } = useFetchGameData();
   const dispatch = useDispatch();
 
   const searchGenreTextState = useSelector(
@@ -35,7 +35,7 @@ export default function useSearchText() {
   };
 
   const handleComparePrices = (firstNumber: number, secondNumber: number) => {
-    return gamesFilterState.gamesWithFilters.filter((game) => {
+    return productFilterState.productsWithFilters.filter((game) => {
       return game.price > firstNumber && game.price < secondNumber;
     });
   };

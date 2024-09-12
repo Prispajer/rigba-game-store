@@ -4,9 +4,9 @@ import { IoCloseSharp } from "react-icons/io5";
 import SearchResultsModalContainer from "../Shared/Modals/SearchResultsModalContainer";
 import OutsideClickHandler from "../Shared/Backdrop/OutsideCLickHandler";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
-import FetchService from "@/utils/classes/FetchService";
-import UtilsService from "@/utils/classes/UtilsService";
-import IUtilsService from "@/utils/interfaces/IUtilsService";
+import FetchService from "@/utils/services/FetchService";
+import UtilsService from "@/utils/services/UtilsService";
+import IUtilsService from "@/utils/serverInterfaces/IUtilsService";
 import debounce from "@/utils/debounce";
 import { GameAPIResponse } from "@/utils/helpers/types";
 

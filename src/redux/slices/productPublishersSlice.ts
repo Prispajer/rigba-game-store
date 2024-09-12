@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import FetchService from "@/utils/classes/FetchService";
+import FetchService from "@/utils/services/FetchService";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
 interface ProductPublishersSlice {

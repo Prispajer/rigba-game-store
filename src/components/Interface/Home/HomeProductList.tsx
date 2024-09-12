@@ -6,7 +6,7 @@ import { MdOutlineSignalCellularNodata } from "react-icons/md";
 import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
 import LoadingAnimation from "../Shared/Animations/LoadingAnimation";
 import useCustomRouter from "@/hooks/useCustomRouter";
-import FetchService from "@/utils/classes/FetchService";
+import FetchService from "@/utils/services/FetchService";
 import { generateRandomValue } from "@/utils/prices";
 import { GameAPIResponse } from "@/utils/helpers/types";
 

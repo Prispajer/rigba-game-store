@@ -5,7 +5,7 @@ import { MoonLoader } from "react-spinners";
 import { useSearchParams } from "next/navigation";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
-import requestService from "@/utils/classes/RequestService";
+import requestService from "@/utils/services/RequestService";
 
 export default function EmailVerificationContainer() {
   const [error, setError] = React.useState<string | undefined>("");
@@ -21,7 +21,7 @@ export default function EmailVerificationContainer() {
 
     try {
       const response = await requestService.postMethod(
-        "users/endpoints/tokenManagement/emailVerificationToken",
+        "users/endpoints/userAuthentication/emailVerification",
         { token }
       );
       if (!response.success) {
@@ -31,7 +31,6 @@ export default function EmailVerificationContainer() {
         setSuccess(response.message);
       }
     } catch (error) {
-      console.error("Xd", error);
       setError("Something went wrong!");
     }
   }, [token]);
@@ -44,7 +43,7 @@ export default function EmailVerificationContainer() {
     <main className="flex-col  justify-center items-center mx-auto p-[20px]  lg:px-[100px] gap-x-[120px]">
       <h1 className=" text-[60px] leading-[70px] font-bold text-[white] cursor-default ">
         <span className="flex justify-center text-center">
-          Oczekiwanie na potwierdzenie adresu email
+          Waiting for email address confirmation
         </span>
       </h1>
       <div className="flex justify-center text-center mt-[40px]">
@@ -57,7 +56,7 @@ export default function EmailVerificationContainer() {
           href="/login"
           className="w-[200px] p-[15px] text-center text-buttonTextColor bg-buttonBackground hover:bg-buttonBackgroundHover"
         >
-          Wróć do logowania
+          Back to login
         </Link>
       </div>
     </main>

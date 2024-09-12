@@ -12,6 +12,8 @@ import { Cart, UserRole, Wishlist } from "@prisma/client";
 
 export type ExtendedUser = DefaultSession["user"] & {
   id: string;
+  isTwoFactorEnabled: boolean;
+  emailVerificationDate: Date;
   role: UserRole;
   cartId: string | null;
   wishlistId: string | null;
@@ -89,6 +91,8 @@ export const {
       token.role = existingUser.role;
       token.cartId = userCart?.id || null;
       token.wishlistId = userWishList?.id || null;
+      token.twoFactorEnabled = existingUser.isTwoFactorEnabled;
+      token.emailVerificationDate = existingUser.emailVerified;
 
       return token;
     },
@@ -98,6 +102,9 @@ export const {
         session.user.role = token.role as UserRole;
         session.user.cartId = token.cartId as string;
         session.user.wishlistId = token.wishlistId as string;
+        session.user.isTwoFactorEnabled = token.twoFactorEnabled as boolean;
+        session.user.emailVerificationDate =
+          token.emailVerificationDate as Date;
 
         if (session.user.cartId) {
           session.user.cart = await getUserCart(session.user.id);

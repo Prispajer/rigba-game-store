@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
 import ProductHeaders from "../Shared/ReusableComponents/ProductHeaders";
 import ProductList from "../Product/ProductList";
-import requestService from "@/utils/classes/RequestService";
+import requestService from "@/utils/services/RequestService";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { generateRandomValue } from "@/utils/prices";

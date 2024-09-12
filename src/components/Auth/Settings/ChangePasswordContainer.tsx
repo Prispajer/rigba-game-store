@@ -7,7 +7,7 @@ import { FormSuccess } from "@/components/Interface/Shared/FormsNotifications/Fo
 import { FormError } from "@/components/Interface/Shared/FormsNotifications/FormError";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import requestService from "@/utils/classes/RequestService";
+import requestService from "@/utils/services/RequestService";
 import { NewPasswordSchema } from "@/utils/schemas/user";
 
 export default function ChangePasswordContainer() {

@@ -13,7 +13,7 @@ import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import { signInAccount } from "@/hooks/useCurrentUser";
 import { SignInProvider } from "@/utils/helpers/types";
-import requestService from "@/utils/classes/RequestService";
+import requestService from "@/utils/services/RequestService";
 
 export default function LoginContainer() {
   const searchParams = useSearchParams();

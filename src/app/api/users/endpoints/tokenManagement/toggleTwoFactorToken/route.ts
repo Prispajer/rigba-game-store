@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import UserService from "@/utils/classes/UserService";
-import IUserService from "@/utils/interfaces/IUserService";
+import TokenService from "@/utils/services/TokenService";
+import ITokenService from "@/utils/interfaces/ITokenService";
 import { RequestResponse, ResetPasswordToken } from "@/utils/helpers/types";
 
 export async function POST(request: NextRequest, response: NextResponse) {
   const { email } = await request.json();
 
-  const userService: IUserService = new UserService({ email });
-  const resetPasswordResponse = await userService.handleSendResetPassword();
+  const tokenService: ITokenService = new TokenService({ email });
+  const resetPasswordResponse =
+    await tokenService.handleSendToggleTwoFactorToken();
 
   return NextResponse.json<RequestResponse<ResetPasswordToken>>({
     success: resetPasswordResponse?.success,

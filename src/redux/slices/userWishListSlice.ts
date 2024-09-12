@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import RequestService from "@/utils/classes/RequestService";
+import RequestService from "@/utils/services/RequestService";
 import { UserWishList } from "@/utils/helpers/types";
 
 interface UserWishListSlice {

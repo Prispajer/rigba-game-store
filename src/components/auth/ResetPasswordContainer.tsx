@@ -7,7 +7,7 @@ import { ResetPasswordSchema } from "@/utils/schemas/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
-import requestService from "@/utils/classes/RequestService";
+import requestService from "@/utils/services/RequestService";
 
 export default function ResetPasswordContainer() {
   const [error, setError] = React.useState<string | undefined>("");
@@ -32,18 +32,14 @@ export default function ResetPasswordContainer() {
     formState: { errors },
   } = ResetPasswordObject;
 
-  async function handleFormSubmit(data: z.infer<typeof ResetPasswordObject>) {
+  async function handleFormSubmit(data: z.infer<typeof ResetPasswordSchema>) {
     startTransition(async () => {
       const { email } = data;
-
       try {
         const response = await requestService.postMethod(
-          "users/endpoints/userAuthentication/resetPassword",
-          {
-            email,
-          }
+          "users/endpoints/tokenManagement/resetPasswordToken",
+          { email }
         );
-
         clearMessages();
         if (response.success) {
           setSuccess(response.message);

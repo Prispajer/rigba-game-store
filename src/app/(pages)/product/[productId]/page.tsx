@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import ProductContainer from "@/components/Interface/Product/ProductContainer";
-import fetchService from "@/utils/classes/FetchService";
+import fetchService from "@/utils/services/FetchService";
 
 export const generateMetadata = async ({
   params,

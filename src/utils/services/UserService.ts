@@ -7,17 +7,14 @@ import {
   getTwoFactorTokenByEmail,
   getEmailVerificationTokenByToken,
   getPasswordResetTokenByToken,
-  getTwoFactorTokenByToken,
 } from "@/data/database/publicSQL/queries";
 import {
   generateEmailVerificationToken,
   generateTwoFactorToken,
-  generatePasswordResetToken,
 } from "@/data/database/publicSQL/tokens";
 import {
   sendVerificationEmail,
   sendTwoFactorTokenEmail,
-  sendPasswordResetEmail,
 } from "@/data/database/publicSQL/mail";
 import {
   RequestResponse,
@@ -27,8 +24,10 @@ import {
   ResetPasswordToken,
   UserConstructor,
 } from "../helpers/types";
+import TokenService from "./TokenService";
 
 export default class UserService implements IUserService {
+  private readonly TokenServiceInstance: TokenService;
   private email?: string;
   private password?: string;
   private newPassword?: string;
@@ -36,6 +35,7 @@ export default class UserService implements IUserService {
   private token?: string;
 
   constructor(userData: UserConstructor = {}) {
+    this.TokenServiceInstance = new TokenService();
     this.email = userData.email;
     this.password = userData.password;
     this.newPassword = userData.newPassword;
@@ -70,9 +70,8 @@ export default class UserService implements IUserService {
         };
       }
 
-      const emailVerificationResponse = await this.handleSendEmailVerification(
-        user
-      );
+      const emailVerificationResponse =
+        await this.TokenServiceInstance.handleSendEmailVerificationToken(user);
 
       if (emailVerificationResponse) {
         return {
@@ -146,25 +145,6 @@ export default class UserService implements IUserService {
       return {
         success: false,
         message: "An error has occurred while registering user!",
-        data: undefined,
-      };
-    }
-  }
-
-  async handleSendEmailVerification(
-    user: User
-  ): Promise<RequestResponse<EmailVerificationToken> | void> {
-    const emailVerificationToken = await generateEmailVerificationToken(
-      user.email as string
-    );
-    if (!user.emailVerified) {
-      await sendVerificationEmail(
-        emailVerificationToken.email,
-        emailVerificationToken.token
-      );
-      return {
-        success: true,
-        message: "Confirmation email sent!",
         data: undefined,
       };
     }
@@ -289,43 +269,6 @@ export default class UserService implements IUserService {
     }
   }
 
-  async handleSendResetPasswordToken(): Promise<
-    RequestResponse<ResetPasswordToken>
-  > {
-    try {
-      const existingUser = await getUserByEmail(this.email as string);
-
-      if (!existingUser) {
-        return {
-          success: false,
-          message: "Invalid email!",
-          data: undefined,
-        };
-      }
-
-      const resetPasswordToken = await generatePasswordResetToken(
-        this.email as string
-      );
-
-      await sendPasswordResetEmail(
-        resetPasswordToken.email,
-        resetPasswordToken.token
-      );
-
-      return {
-        success: true,
-        message: "Reset email sent!",
-        data: undefined,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        message: "Something went wrong!",
-        data: undefined,
-      };
-    }
-  }
-
   async handleSetNewPassword(): Promise<RequestResponse<ResetPasswordToken>> {
     const existingToken = await getPasswordResetTokenByToken(
       this.token as string
@@ -396,94 +339,6 @@ export default class UserService implements IUserService {
     };
   }
 
-  async handleSendChangePasswordToken(): Promise<
-    RequestResponse<TwoFactorToken>
-  > {
-    const existingUser = await getUserByEmail(this.email as string);
-
-    if (!existingUser) {
-      return {
-        success: false,
-        message: "User doesn't exist!",
-        data: undefined,
-      };
-    }
-
-    if (this.code) {
-      const twoFactorToken = await getTwoFactorTokenByEmail(
-        existingUser.email as string
-      );
-
-      if (!twoFactorToken || twoFactorToken.token !== this.code) {
-        return {
-          success: false,
-          message: "Invalid code!",
-          data: undefined,
-        };
-      }
-
-      const hasExpired = new Date(twoFactorToken.expires) < new Date();
-
-      if (hasExpired) {
-        return {
-          success: false,
-          message: "Code expired!",
-          data: undefined,
-        };
-      }
-
-      if (hasExpired && twoFactorToken) {
-        await postgres.twoFactorToken.delete({
-          where: { id: twoFactorToken.id },
-        });
-      }
-
-      return {
-        success: true,
-        message: "Two-factor token has been deleted!",
-        data: undefined,
-      };
-    } else {
-      const passwordMatch = await bcrypt.compare(
-        this.password as string,
-        existingUser.password as string
-      );
-
-      if (!passwordMatch) {
-        return {
-          success: false,
-          message: "Invalid credentials!",
-          data: undefined,
-        };
-      }
-
-      if (passwordMatch) {
-        const existingToken = await getTwoFactorTokenByEmail(
-          existingUser.email as string
-        );
-
-        const hasExpired = new Date(existingToken?.expires) < new Date();
-
-        if (!existingToken && hasExpired) {
-          const twoFactorToken = await generateTwoFactorToken(
-            existingUser.email as string
-          );
-
-          await sendTwoFactorTokenEmail(
-            twoFactorToken.email,
-            twoFactorToken.token
-          );
-        }
-      }
-
-      return {
-        success: true,
-        message: "Two-factor token has been sent!",
-        data: null,
-      };
-    }
-  }
-
   async handleChangePassword(): Promise<RequestResponse<User>> {
     const twoFactorToken = await getTwoFactorTokenByEmail(this.email as string);
 
@@ -539,5 +394,70 @@ export default class UserService implements IUserService {
       message: "Password changed successfully!",
       data: undefined,
     };
+  }
+
+  async toggleTwoFactor(): Promise<RequestResponse<void>> {
+    try {
+      const existingUser = await getUserByEmail(this.email as string);
+      if (!existingUser) {
+        return {
+          success: false,
+          message: "User doesn't exist!",
+          data: undefined,
+        };
+      }
+      const twoFactorToken = await getTwoFactorTokenByEmail(
+        existingUser.email as string
+      );
+      if (!twoFactorToken || twoFactorToken.token !== this.code) {
+        return {
+          success: false,
+          message: "Invalid code!",
+          data: undefined,
+        };
+      }
+
+      const hasExpired = new Date(twoFactorToken.expires) < new Date();
+      if (hasExpired) {
+        await postgres.twoFactorToken.delete({
+          where: { id: twoFactorToken.id },
+        });
+        return {
+          success: false,
+          message: "Code expired!",
+          data: undefined,
+        };
+      }
+
+      await postgres.twoFactorToken.delete({
+        where: { id: twoFactorToken.id },
+      });
+
+      if (existingUser.isTwoFactorEnabled) {
+        await postgres.user.update({
+          where: { id: existingUser.id },
+          data: { isTwoFactorEnabled: false },
+        });
+      } else {
+        await postgres.user.update({
+          where: { id: existingUser.id },
+          data: { isTwoFactorEnabled: true },
+        });
+      }
+
+      return {
+        success: true,
+        message: existingUser.isTwoFactorEnabled
+          ? "Two-factor authentication has been disabled!"
+          : "Two-factor authentication has been enabled!",
+        data: undefined,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: "Something went wrong!",
+        data: undefined,
+      };
+    }
   }
 }

@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearchParams } from "next/navigation";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
-import requestService from "@/utils/classes/RequestService";
+import requestService from "@/utils/services/RequestService";
 
 export default function ResetPasswordContainer() {
   const [error, setError] = React.useState<string | undefined>("");
@@ -47,7 +47,7 @@ export default function ResetPasswordContainer() {
 
       try {
         const response = await requestService.postMethod(
-          "users/endpoints/tokenManagement/newPasswordToken",
+          "users/endpoints/userAuthentication/newPassword",
           {
             password,
             token,

@@ -1,32 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
-import UserService from "@/utils/classes/UserService";
-import IUserService from "@/utils/interfaces/IUserService";
+import TokenService from "@/utils/services/TokenService";
+import ITokenService from "@/utils/interfaces/ITokenService";
 import { RequestResponse, ResetPasswordToken } from "@/utils/helpers/types";
 
 export async function POST(
   request: NextRequest
 ): Promise<NextResponse<RequestResponse<ResetPasswordToken>>> {
-  try {
-    const { email, password } = await request.json();
+  const { email, password } = await request.json();
 
-    const userService: IUserService = new UserService({
-      email,
-      password,
-    });
+  const tokenService: ITokenService = new TokenService({
+    email,
+    password,
+  });
 
-    const sendChangePasswordTokenResponse =
-      await userService.handleSendChangePasswordToken();
+  const sendChangePasswordTokenResponse =
+    await tokenService.handleSendChangePasswordToken();
 
-    return NextResponse.json<RequestResponse<ResetPasswordToken>>({
-      success: sendChangePasswordTokenResponse.success,
-      message: sendChangePasswordTokenResponse.message,
-      data: sendChangePasswordTokenResponse.data,
-    });
-  } catch (error) {
-    return NextResponse.json<RequestResponse<ResetPasswordToken>>({
-      success: false,
-      message: "Something went wrong!",
-      data: undefined,
-    });
-  }
+  return NextResponse.json<RequestResponse<ResetPasswordToken>>({
+    success: sendChangePasswordTokenResponse.success,
+    message: sendChangePasswordTokenResponse.message,
+    data: sendChangePasswordTokenResponse.data,
+  });
 }

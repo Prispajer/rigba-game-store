@@ -7,18 +7,18 @@ import { FormSuccess } from "@/components/Interface/Shared/FormsNotifications/Fo
 import { FormError } from "@/components/Interface/Shared/FormsNotifications/FormError";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import requestService from "@/utils/services/RequestService";
+import useUserServices from "@/hooks/useUserServices";
 import { NewPasswordSchema } from "@/utils/schemas/user";
 
 export default function ChangePasswordContainer() {
-  const [error, setError] = React.useState<string | undefined>();
-  const [success, setSuccess] = React.useState<string | undefined>();
   const [oldPassword, setOldPassword] = React.useState<string | undefined>();
-  const [isPending, startTransition] = React.useTransition();
 
-  const { twoFactorModalState, handleOpen, handleClose } =
-    useWindowVisibility();
-  const { user } = useCurrentUser();
+  const { success, error, isPending, useUserActions, useUserToken } =
+    useUserServices();
+  const { handleChangePassword } = useUserActions();
+  const { handleSendChangePasswordToken } = useUserToken();
+
+  const { twoFactorModalState, handleOpen } = useWindowVisibility();
 
   const changePasswordForm = useForm<z.infer<typeof NewPasswordSchema>>({
     resolver: zodResolver(NewPasswordSchema),
@@ -28,65 +28,11 @@ export default function ChangePasswordContainer() {
     },
   });
 
-  const clearMessages = () => {
-    setError("");
-    setSuccess("");
-  };
-
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = changePasswordForm;
-
-  async function handleSendToken(data: z.infer<typeof NewPasswordSchema>) {
-    clearMessages();
-    startTransition(async () => {
-      const { password } = data;
-      try {
-        const response = await requestService.postMethod(
-          "users/endpoints/tokenManagement/changePasswordToken",
-          {
-            email: user?.email,
-            password: oldPassword,
-          }
-        );
-        if (response.success) {
-          setSuccess(response.message);
-        } else {
-          setError(response.message);
-        }
-      } catch (error) {
-        setError("Something went wrong!");
-      }
-    });
-  }
-
-  async function handleChangePassword(
-    code: string,
-    data: z.infer<typeof NewPasswordSchema>
-  ) {
-    clearMessages();
-    const { password } = data;
-    try {
-      const response = await requestService.postMethod(
-        "users/endpoints/userAuthentication/changePassword",
-        {
-          email: user?.email,
-          newPassword: password,
-          code,
-        }
-      );
-      if (response.success) {
-        setSuccess(response.message);
-        handleClose("twoFactorModal");
-      } else {
-        setError(response.message);
-      }
-    } catch (error) {
-      setError("Something went wrong!");
-    }
-  }
 
   return (
     <div className="flex-col justify-center items-center pt-[40px] px-[40px] pb-[80px] bg-[#e9eff4]">
@@ -94,7 +40,9 @@ export default function ChangePasswordContainer() {
         CHANGE PASSWORD
       </h1>
       <form
-        onSubmit={handleSubmit(handleSendToken)}
+        onSubmit={handleSubmit((data) =>
+          handleSendChangePasswordToken(data, oldPassword as string)
+        )}
         className="flex flex-col max-w-[450px] w-full"
       >
         <label className="flex flex-col mb-[20px] font-[600]">

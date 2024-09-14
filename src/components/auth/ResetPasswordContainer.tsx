@@ -7,12 +7,11 @@ import { ResetPasswordSchema } from "@/utils/schemas/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
-import requestService from "@/utils/services/RequestService";
+import useUserServices from "@/hooks/useUserServices";
 
 export default function ResetPasswordContainer() {
-  const [error, setError] = React.useState<string | undefined>("");
-  const [success, setSuccess] = React.useState<string | undefined>("");
-  const [isPending, startTransition] = React.useTransition();
+  const { success, error, isPending, useUserActions } = useUserServices();
+  const { handleResetPassword } = useUserActions();
 
   const ResetPasswordObject = useForm<z.infer<typeof ResetPasswordSchema>>({
     resolver: zodResolver(ResetPasswordSchema),
@@ -20,37 +19,11 @@ export default function ResetPasswordContainer() {
       email: "",
     },
   });
-
-  const clearMessages = () => {
-    setError("");
-    setSuccess("");
-  };
-
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = ResetPasswordObject;
-
-  async function handleFormSubmit(data: z.infer<typeof ResetPasswordSchema>) {
-    startTransition(async () => {
-      const { email } = data;
-      try {
-        const response = await requestService.postMethod(
-          "users/endpoints/tokenManagement/resetPasswordToken",
-          { email }
-        );
-        clearMessages();
-        if (response.success) {
-          setSuccess(response.message);
-        } else {
-          setError(response.message);
-        }
-      } catch (error) {
-        setError("Something went wrong!");
-      }
-    });
-  }
 
   return (
     <section className="flex flex-col lg:flex-row justify-center items-center mx-auto lg:px-[100px] gap-x-[120px]">
@@ -67,7 +40,7 @@ export default function ResetPasswordContainer() {
           <h3 className="cursor-default font-normal text-[14px] text-[#DFEDF2]">
             We will send you an email with a link to set a new password
           </h3>
-          <form onSubmit={handleSubmit(handleFormSubmit)}>
+          <form onSubmit={handleSubmit(handleResetPassword)}>
             <div className="py-4 text-white">
               <input
                 {...register("email")}

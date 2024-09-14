@@ -3,19 +3,15 @@
 import React from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { NewPasswordSchema } from "@/utils/schemas/user";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSearchParams } from "next/navigation";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
-import requestService from "@/utils/services/RequestService";
+import useUserServices from "@/hooks/useUserServices";
+import { NewPasswordSchema } from "@/utils/schemas/user";
 
 export default function ResetPasswordContainer() {
-  const [error, setError] = React.useState<string | undefined>("");
-  const [success, setSuccess] = React.useState<string | undefined>("");
-  const [isPending, startTransition] = React.useTransition();
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+  const { success, error, isPending, useUserActions } = useUserServices();
+  const { handleSetNewPassword } = useUserActions();
 
   const resetPasswordForm = useForm<z.infer<typeof NewPasswordSchema>>({
     resolver: zodResolver(NewPasswordSchema),
@@ -25,45 +21,11 @@ export default function ResetPasswordContainer() {
     },
   });
 
-  const clearMessages = () => {
-    setError("");
-    setSuccess("");
-  };
-
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = resetPasswordForm;
-
-  async function handleFormSubmit(data: z.infer<typeof NewPasswordSchema>) {
-    startTransition(async () => {
-      const { password } = data;
-
-      if (!token) {
-        setError("Missing token!");
-        return;
-      }
-
-      try {
-        const response = await requestService.postMethod(
-          "users/endpoints/userAuthentication/newPassword",
-          {
-            password,
-            token,
-          }
-        );
-        clearMessages();
-        if (response.success) {
-          setSuccess(response.message);
-        } else {
-          setError(response.message);
-        }
-      } catch (error) {
-        setError("Something went wrong!");
-      }
-    });
-  }
 
   return (
     <section className="flex flex-col lg:flex-row justify-center items-center mx-auto lg:px-[100px] gap-x-[120px]">
@@ -83,7 +45,7 @@ export default function ResetPasswordContainer() {
           >
             Back to login
           </Link>
-          <form onSubmit={handleSubmit(handleFormSubmit)}>
+          <form onSubmit={handleSubmit(handleSetNewPassword)}>
             <div className="pt-4 text-white">
               <input
                 {...register("password")}

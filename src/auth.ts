@@ -56,6 +56,7 @@ export const {
       if (!existingUser?.emailVerified) {
         return false;
       }
+
       if (existingUser?.isTwoFactorEnabled) {
         const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
           existingUser.id
@@ -74,7 +75,7 @@ export const {
 
       return true;
     },
-    async jwt({ token, trigger, session }) {
+    async jwt({ token }) {
       if (!token.sub) {
         return token;
       }

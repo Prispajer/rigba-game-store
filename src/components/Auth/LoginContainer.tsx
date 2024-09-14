@@ -11,12 +11,14 @@ import { useForm } from "react-hook-form";
 import { useSearchParams } from "next/navigation";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
+import useCurrentUser from "@/hooks/useCurrentUser";
 import { signInAccount } from "@/hooks/useCurrentUser";
-import { SignInProvider } from "@/utils/helpers/types";
 import requestService from "@/utils/services/RequestService";
+import { RequestResponse, SignInProvider } from "@/utils/helpers/types";
 
 export default function LoginContainer() {
   const searchParams = useSearchParams();
+  const { user } = useCurrentUser();
   const urlError =
     searchParams.get("error") === "OAuthAccountNotLinked"
       ? "Email already in use with different provider!"
@@ -67,7 +69,10 @@ export default function LoginContainer() {
       const { email, password, code } = data;
 
       try {
-        const response = await requestService.postMethod(
+        const response: RequestResponse<{
+          token: boolean;
+          emailVerified: string;
+        }> = await requestService.postMethod(
           "users/endpoints/userAuthentication/loginUser",
           { email, password, code }
         );
@@ -195,7 +200,7 @@ export default function LoginContainer() {
               </div>
             </form>
           )}
-          {showTwoFactor && (
+          {showTwoFactor && !user?.isTwoFactorEnabled && (
             <form onSubmit={handleSubmit(handleFormSubmit)}>
               <div className="pt-4 text-white">
                 <input
@@ -215,7 +220,7 @@ export default function LoginContainer() {
                   className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px]"
                   type="submit"
                 >
-                  Potwierdź
+                  Submit
                 </button>
                 <button
                   className="text-[14px] font-medium text-[#E2999B]"
@@ -223,7 +228,40 @@ export default function LoginContainer() {
                     clearMessages(), setShowTwoFactor(false);
                   }}
                 >
-                  Wróć do login
+                  Back to login
+                </button>
+              </div>
+            </form>
+          )}
+          {showTwoFactor && user?.isTwoFactorEnabled && (
+            <form onSubmit={handleSubmit(handleFormSubmit)}>
+              <div className="pt-4 text-white">
+                <input
+                  {...register("code")}
+                  disabled={isPending}
+                  className="input"
+                  placeholder="Two Factor Code"
+                  autoCorrect="off"
+                />
+                {errors.code && <p>{errors.code.message as React.ReactNode}</p>}
+              </div>
+              <FormSuccess message={success} />
+              <FormError message={error || urlError} />
+              <div className="flex flex-col items-center justfiy-center w- pt-4">
+                <button
+                  disabled={isPending}
+                  className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px]"
+                  type="submit"
+                >
+                  Submit
+                </button>
+                <button
+                  className="text-[14px] font-medium text-[#E2999B]"
+                  onClick={() => {
+                    clearMessages(), setShowTwoFactor(false);
+                  }}
+                >
+                  Back to login
                 </button>
               </div>
             </form>

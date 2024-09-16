@@ -14,9 +14,9 @@ import useUserServices from "@/hooks/useUserServices";
 export default function SettingsContainer() {
   const { handleOpen } = useWindowVisibility();
   const { user } = useCurrentUser();
-  const { success, error, useUserSecurity } = useUserServices();
-  const { handleSendToggleTwoFactorToken, handleToggleTwoFactor } =
-    useUserSecurity();
+  const { success, error, useUserSecurity, useUserToken } = useUserServices();
+  const { submitToggleTwoFactor } = useUserSecurity();
+  const { sendToggleTwoFactorToken } = useUserToken();
 
   return (
     <div className="flex-col justify-center items-center pt-[40px] px-[40px] pb-[80px] bg-[#e9eff4]">
@@ -75,7 +75,7 @@ export default function SettingsContainer() {
           <div className="flex-1">
             <button
               onClick={() => {
-                handleSendToggleTwoFactorToken();
+                sendToggleTwoFactorToken();
                 handleOpen("twoFactorModal");
               }}
               className={`flex items-center justify-center min-w-[140px] max-w-[240px] w-full min-h-[36px] gap-x-[6px] border-[2px] tranistion duration-300 ${
@@ -92,7 +92,7 @@ export default function SettingsContainer() {
           <FormError message={error} />
         </div>
         <TwoFactorModalContainer
-          handleSubmit={(code: string) => handleToggleTwoFactor(code)}
+          handleSubmit={(code: string) => submitToggleTwoFactor(code)}
         />
       </div>
       <div className="relative flex flex-col max-w-[750px] w-full mt-[20px] bg-[white]">

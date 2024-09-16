@@ -136,6 +136,14 @@ export type UserConstructor = {
   newPassword?: string;
   code?: string;
   token?: string;
+  fullName?: string;
+  birthDate?: Date;
+  address?: string;
+  state?: string;
+  zipCode?: string;
+  city?: string;
+  country?: string;
+  phoneNumber?: string;
 };
 
 export type TokenConstructor = {

@@ -14,7 +14,7 @@ export async function POST(
     code,
   });
 
-  const changePasswordResponse = await userService.handleChangePassword();
+  const changePasswordResponse = await userService.changePassword();
 
   return NextResponse.json<RequestResponse<User>>({
     success: changePasswordResponse.success,

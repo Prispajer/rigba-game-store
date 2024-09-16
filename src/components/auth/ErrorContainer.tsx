@@ -6,7 +6,7 @@ export default function ErrorContainer() {
       <h1 className=" text-[80px] leading-[90px] font-bold text-[white] cursor-default ">
         <span className="flex justify-center">Ups!</span>
         <span className="flex justify-center text-center">
-          Coś poszło nie tak!
+          Something went wrong!
         </span>
       </h1>
       <div className="flex items-center  justify-center w-full mt-[60px]">
@@ -14,7 +14,7 @@ export default function ErrorContainer() {
           href="/login"
           className="w-[200px] p-[15px] text-center text-buttonTextColor bg-buttonBackground hover:bg-buttonBackgroundHover"
         >
-          Wróć do logowania
+          Back to login
         </Link>
       </div>
     </main>

@@ -8,8 +8,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
 
   const tokenService: ITokenService = new TokenService({ email });
 
-  const resetPasswordResponse =
-    await tokenService.handleSendResetPasswordToken();
+  const resetPasswordResponse = await tokenService.sendResetPasswordToken();
   return NextResponse.json<RequestResponse<ResetPasswordToken>>({
     success: resetPasswordResponse?.success,
     message: resetPasswordResponse?.message,

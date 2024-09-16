@@ -14,7 +14,7 @@ export async function POST(
   });
 
   const sendChangePasswordTokenResponse =
-    await tokenService.handleSendChangePasswordToken();
+    await tokenService.sendChangePasswordToken();
 
   return NextResponse.json<RequestResponse<ResetPasswordToken>>({
     success: sendChangePasswordTokenResponse.success,

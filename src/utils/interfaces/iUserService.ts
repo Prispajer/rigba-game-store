@@ -11,14 +11,15 @@ export default interface IUserService {
     User | EmailVerificationToken | TwoFactorToken
   > | void>;
   registerUser(): Promise<RequestResponse<User>>;
-  handleConfirmEmailVerification(): Promise<
-    RequestResponse<EmailVerificationToken>
-  >;
-  handleTwoFactorAuthentication(
+  confirmEmailVerification(): Promise<RequestResponse<EmailVerificationToken>>;
+  confirmTwoFactorAuthentication(
     user: User,
     code?: string
   ): Promise<RequestResponse<TwoFactorToken> | void>;
-  handleSetNewPassword(): Promise<RequestResponse<ResetPasswordToken>>;
-  handleChangePassword(): Promise<RequestResponse<User>>;
+  setNewPassword(): Promise<RequestResponse<ResetPasswordToken>>;
+  changePassword(): Promise<RequestResponse<User>>;
   toggleTwoFactor(): Promise<RequestResponse<void>>;
+  updatePersonalData(
+    userData: Partial<PersonalData>
+  ): Promise<RequestResponse<PersonalData>>;
 }

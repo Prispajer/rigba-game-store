@@ -11,7 +11,7 @@ import useUserServices from "@/hooks/useUserServices";
 
 export default function ResetPasswordContainer() {
   const { success, error, isPending, useUserActions } = useUserServices();
-  const { handleResetPassword } = useUserActions();
+  const { submitResetPasswordForm } = useUserActions();
 
   const ResetPasswordObject = useForm<z.infer<typeof ResetPasswordSchema>>({
     resolver: zodResolver(ResetPasswordSchema),
@@ -40,7 +40,7 @@ export default function ResetPasswordContainer() {
           <h3 className="cursor-default font-normal text-[14px] text-[#DFEDF2]">
             We will send you an email with a link to set a new password
           </h3>
-          <form onSubmit={handleSubmit(handleResetPassword)}>
+          <form onSubmit={handleSubmit(submitResetPasswordForm)}>
             <div className="py-4 text-white">
               <input
                 {...register("email")}

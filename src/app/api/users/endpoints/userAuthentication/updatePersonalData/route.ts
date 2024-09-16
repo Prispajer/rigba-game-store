@@ -1,20 +1,45 @@
 import { NextRequest, NextResponse } from "next/server";
 import UserService from "@/utils/services/UserService";
 import IUserService from "@/utils/interfaces/IUserService";
-
 import { RequestResponse, ResetPasswordToken } from "@/utils/helpers/types";
 
 export async function POST(
   request: NextRequest,
   response: NextResponse
 ): Promise<NextResponse<RequestResponse<ResetPasswordToken>>> {
-  const { password, token } = await request.json();
+  const {
+    email,
+    fullName,
+    birthDate,
+    address,
+    state,
+    zipCode,
+    city,
+    country,
+    phoneNumber,
+  } = await request.json();
 
   const userService: IUserService = new UserService({
-    password,
-    token,
+    email,
+    fullName,
+    birthDate,
+    address,
+    state,
+    zipCode,
+    city,
+    country,
+    phoneNumber,
   });
-  const setNewPasswordResponse = await userService.setNewPassword();
+  const setNewPasswordResponse = await userService.updatePersonalData({
+    fullName,
+    birthDate,
+    address,
+    state,
+    zipCode,
+    city,
+    country,
+    phoneNumber,
+  });
 
   return NextResponse.json<RequestResponse<ResetPasswordToken>>({
     success: setNewPasswordResponse.success,

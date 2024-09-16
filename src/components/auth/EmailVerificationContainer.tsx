@@ -2,42 +2,17 @@
 import React from "react";
 import Link from "next/link";
 import { MoonLoader } from "react-spinners";
-import { useSearchParams } from "next/navigation";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
-import requestService from "@/utils/services/RequestService";
+import useUserServices from "@/hooks/useUserServices";
 
 export default function EmailVerificationContainer() {
-  const [error, setError] = React.useState<string | undefined>("");
-  const [success, setSuccess] = React.useState<string | undefined>("");
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token");
-
-  const handleSubmit = React.useCallback(async () => {
-    if (!token) {
-      setError("Missing token!");
-      return;
-    }
-
-    try {
-      const response = await requestService.postMethod(
-        "users/endpoints/userAuthentication/emailVerification",
-        { token }
-      );
-      if (!response.success) {
-        setError(response.message);
-      }
-      if (response.success) {
-        setSuccess(response.message);
-      }
-    } catch (error) {
-      setError("Something went wrong!");
-    }
-  }, [token]);
+  const { success, error, useUserSecurity } = useUserServices();
+  const { submitEmailVerification } = useUserSecurity();
 
   React.useEffect(() => {
-    handleSubmit();
-  }, [handleSubmit]);
+    submitEmailVerification();
+  }, [submitEmailVerification]);
 
   return (
     <main className="flex-col  justify-center items-center mx-auto p-[20px]  lg:px-[100px] gap-x-[120px]">

@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
     token,
   });
   const emailVerificationResponse =
-    await userService.handleConfirmEmailVerification();
+    await userService.confirmEmailVerification();
 
   return NextResponse.json<RequestResponse<EmailVerificationToken>>({
     success: emailVerificationResponse?.success,

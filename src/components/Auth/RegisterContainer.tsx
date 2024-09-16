@@ -11,18 +11,12 @@ import { useForm } from "react-hook-form";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import { signInAccount } from "@/hooks/useCurrentUser";
+import useUserServices from "@/hooks/useUserServices";
 import { SignInProvider } from "@/utils/helpers/types";
-import requestService from "@/utils/services/RequestService";
 
 export default function RegisterContainer() {
-  const [error, setError] = React.useState<string | undefined>("");
-  const [success, setSuccess] = React.useState<string | undefined>("");
-  const [isPending, startTransition] = React.useTransition();
-
-  const clearMessages = () => {
-    setError("");
-    setSuccess("");
-  };
+  const { success, error, isPending, useUserActions } = useUserServices();
+  const { submitRegisterForm } = useUserActions();
 
   const registerForm = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
@@ -41,29 +35,6 @@ export default function RegisterContainer() {
 
   const handleProviderLogin = async (provider: SignInProvider) => {
     await signInAccount(provider);
-  };
-
-  const handleFormSubmit = (data: z.infer<typeof RegisterSchema>) => {
-    startTransition(async () => {
-      const { email, password } = data;
-      try {
-        const response = await requestService.postMethod(
-          "users/endpoints/userAuthentication/registerUser",
-          { email, password }
-        );
-
-        clearMessages();
-
-        if (!response.success) {
-          setError(response.message);
-        }
-        if (response.success) {
-          setSuccess(response.message);
-        }
-      } catch (error) {
-        setError("Something went wrong!");
-      }
-    });
   };
 
   return (
@@ -85,7 +56,7 @@ export default function RegisterContainer() {
             </Link>
           </h3>
         </div>
-        <form onSubmit={handleSubmit(handleFormSubmit)}>
+        <form onSubmit={handleSubmit(submitRegisterForm)}>
           <div className="pt-4 text-white">
             <input
               {...register("email")}

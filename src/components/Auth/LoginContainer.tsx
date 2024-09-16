@@ -12,22 +12,24 @@ import { useSearchParams } from "next/navigation";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import useUserServices from "@/hooks/useUserServices";
 import { signInAccount } from "@/hooks/useCurrentUser";
-import requestService from "@/utils/services/RequestService";
-import { RequestResponse, SignInProvider } from "@/utils/helpers/types";
+import { SignInProvider } from "@/utils/helpers/types";
 
 export default function LoginContainer() {
-  const searchParams = useSearchParams();
+  const {
+    success,
+    error,
+    setError,
+    showTwoFactor,
+    setShowTwoFactor,
+    isPending,
+    providerError,
+    clearMessages,
+    useUserActions,
+  } = useUserServices();
+  const { submitLoginForm } = useUserActions();
   const { user } = useCurrentUser();
-  const urlError =
-    searchParams.get("error") === "OAuthAccountNotLinked"
-      ? "Email already in use with different provider!"
-      : "";
-
-  const [showTwoFactor, setShowTwoFactor] = React.useState(false);
-  const [error, setError] = React.useState<string | undefined>("");
-  const [success, setSuccess] = React.useState<string | undefined>("");
-  const [isPending, startTransition] = React.useTransition();
 
   const handleProviderLogin = async (provider: SignInProvider) => {
     try {
@@ -44,11 +46,6 @@ export default function LoginContainer() {
     });
   };
 
-  const clearMessages = () => {
-    setError("");
-    setSuccess("");
-  };
-
   const loginForm = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -63,41 +60,6 @@ export default function LoginContainer() {
     handleSubmit,
     formState: { errors },
   } = loginForm;
-
-  const handleFormSubmit = (data: z.infer<typeof LoginSchema>) => {
-    startTransition(async () => {
-      const { email, password, code } = data;
-
-      try {
-        const response: RequestResponse<{
-          token: boolean;
-          emailVerified: string;
-        }> = await requestService.postMethod(
-          "users/endpoints/userAuthentication/loginUser",
-          { email, password, code }
-        );
-
-        clearMessages();
-
-        if (!response.success) {
-          setError(response.message);
-        }
-        if (response.success) {
-          setSuccess(response.message);
-
-          if (response.data?.token) {
-            setShowTwoFactor(true);
-          }
-
-          if (response.data?.emailVerified) {
-            await handleLogin(email, password);
-          }
-        }
-      } catch (error) {
-        setError("Something went wrong!");
-      }
-    });
-  };
 
   return (
     <main className="flex flex-col lg:flex-row justify-center items-center mx-auto lg:px-[100px] gap-x-[120px]">
@@ -154,7 +116,11 @@ export default function LoginContainer() {
         </div>
         <>
           {!showTwoFactor && (
-            <form onSubmit={handleSubmit(handleFormSubmit)}>
+            <form
+              onSubmit={handleSubmit((data) =>
+                submitLoginForm(data, handleLogin)
+              )}
+            >
               <div className="pt-4 text-white">
                 <input
                   {...register("email")}
@@ -182,7 +148,7 @@ export default function LoginContainer() {
                 )}
               </div>
               <FormSuccess message={success} />
-              <FormError message={error || urlError} />
+              <FormError message={error || providerError} />
               <div className="flex flex-col items-center justfiy-center w- pt-4">
                 <button
                   disabled={isPending}
@@ -201,7 +167,11 @@ export default function LoginContainer() {
             </form>
           )}
           {showTwoFactor && !user?.isTwoFactorEnabled && (
-            <form onSubmit={handleSubmit(handleFormSubmit)}>
+            <form
+              onSubmit={handleSubmit((data) =>
+                submitLoginForm(data, handleLogin)
+              )}
+            >
               <div className="pt-4 text-white">
                 <input
                   {...register("code")}
@@ -213,7 +183,7 @@ export default function LoginContainer() {
                 {errors.code && <p>{errors.code.message as React.ReactNode}</p>}
               </div>
               <FormSuccess message={success} />
-              <FormError message={error || urlError} />
+              <FormError message={error || providerError} />
               <div className="flex flex-col items-center justfiy-center w- pt-4">
                 <button
                   disabled={isPending}
@@ -234,7 +204,11 @@ export default function LoginContainer() {
             </form>
           )}
           {showTwoFactor && user?.isTwoFactorEnabled && (
-            <form onSubmit={handleSubmit(handleFormSubmit)}>
+            <form
+              onSubmit={handleSubmit((data) =>
+                submitLoginForm(data, handleLogin)
+              )}
+            >
               <div className="pt-4 text-white">
                 <input
                   {...register("code")}
@@ -246,7 +220,7 @@ export default function LoginContainer() {
                 {errors.code && <p>{errors.code.message as React.ReactNode}</p>}
               </div>
               <FormSuccess message={success} />
-              <FormError message={error || urlError} />
+              <FormError message={error || providerError} />
               <div className="flex flex-col items-center justfiy-center w- pt-4">
                 <button
                   disabled={isPending}

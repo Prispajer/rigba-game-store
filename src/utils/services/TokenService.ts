@@ -28,16 +28,14 @@ export default class TokenService implements ITokenService {
   private email?: string;
   private password?: string;
   private code?: string;
-  private token?: string;
 
   constructor(tokenData: TokenConstructor = {}) {
     this.email = tokenData.email;
     this.password = tokenData.password;
     this.code = tokenData.code;
-    this.token = tokenData.token;
   }
 
-  async handleSendEmailVerificationToken(
+  async sendEmailVerificationToken(
     user: User
   ): Promise<RequestResponse<EmailVerificationToken> | void> {
     const emailVerificationToken = await generateEmailVerificationToken(
@@ -56,9 +54,7 @@ export default class TokenService implements ITokenService {
     }
   }
 
-  async handleSendResetPasswordToken(): Promise<
-    RequestResponse<ResetPasswordToken>
-  > {
+  async sendResetPasswordToken(): Promise<RequestResponse<ResetPasswordToken>> {
     try {
       const existingUser = await getUserByEmail(this.email as string);
 
@@ -93,9 +89,7 @@ export default class TokenService implements ITokenService {
     }
   }
 
-  async handleSendChangePasswordToken(): Promise<
-    RequestResponse<TwoFactorToken>
-  > {
+  async sendChangePasswordToken(): Promise<RequestResponse<TwoFactorToken>> {
     const existingUser = await getUserByEmail(this.email as string);
 
     if (!existingUser) {
@@ -203,9 +197,7 @@ export default class TokenService implements ITokenService {
     }
   }
 
-  async handleSendToggleTwoFactorToken(): Promise<
-    RequestResponse<TwoFactorToken>
-  > {
+  async sendToggleTwoFactorToken(): Promise<RequestResponse<TwoFactorToken>> {
     const existingUser = await getUserByEmail(this.email as string);
 
     if (!existingUser) {

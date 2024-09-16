@@ -1,30 +1,95 @@
-import Link from "next/link";
-import { IoCheckmarkCircleSharp } from "react-icons/io5";
-import Image from "next/image";
-import { LuPencil } from "react-icons/lu";
+import React from "react";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { FormSuccess } from "@/components/Interface/Shared/FormsNotifications/FormSuccess";
+import { FormError } from "@/components/Interface/Shared/FormsNotifications/FormError";
+import useUserServices from "@/hooks/useUserServices";
+import { PersonalDataSchema } from "@/utils/schemas/user";
+import { z } from "zod";
+
+type ValuePiece = Date | null;
+type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 export default function PersonalDataContainer() {
+  const [showCalendar, setShowCalendar] = React.useState<boolean>(false);
+  const [date, setDate] = React.useState<Value>(new Date());
+
+  const { success, error, useUserActions } = useUserServices();
+  const { submitUpdatePersonalData } = useUserActions();
+
+  const calendarRef = React.useRef<HTMLDivElement | null>(null);
+  const inputRef = React.useRef<HTMLInputElement | null>(null);
+
+  const personalDataForm = useForm<z.infer<typeof PersonalDataSchema>>({
+    resolver: zodResolver(PersonalDataSchema),
+    defaultValues: {
+      fullName: "",
+      birthDate: "",
+      address: "",
+      state: "",
+      zipCode: "",
+      city: "",
+      country: "",
+      phoneNumber: "",
+    },
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = personalDataForm;
+
+  React.useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (
+        calendarRef.current &&
+        !calendarRef.current.contains(event.target as Node) &&
+        inputRef.current &&
+        !inputRef.current.contains(event.target as Node)
+      ) {
+        setShowCalendar(false);
+      }
+    };
+
+    document.addEventListener("click", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (date instanceof Date) {
+      setValue("birthDate", date.toISOString());
+    }
+  }, [date, setValue]);
+
   return (
     <div className="flex-col justify-center items-center pt-[40px] px-[40px] pb-[80px] bg-[#e9eff4]">
-      <h1 className="flex justify-start mb-[20px] text-[#1A396E] text-[20px] font-[700] cursor-default ">
+      <h1 className="flex justify-start mb-[20px] text-[#1A396E] text-[20px] font-[700] cursor-default">
         PERSONAL DATA
       </h1>
-      <form className="flex flex-col max-w-[450px] w-full">
-        <label
-          htmlFor="fullname"
-          className="flex flex-col mb-[20px] font-[600]"
-        >
+      <form
+        onSubmit={handleSubmit(submitUpdatePersonalData)}
+        className="flex flex-col max-w-[450px] w-full"
+      >
+        <label className="flex flex-col mb-[20px] font-[600]">
           <span className="mb-[15px] text-[14px] text-[#797189]">
             Name and surname
           </span>
           <input
             className="min-h-[35px] px-[15px] border-[1px] outline-none transition ease-in-out duration-300 border-[#a09aac] text-[#1A396E] hover:bg-[#eaebec]"
             type="text"
-            name="fullname"
-            id="fullname"
-            autoCorrect="off"
-            value="Adrian Kozieł"
+            placeholder="Name and surname"
+            {...register("fullName")}
           />
+          {errors.fullName && (
+            <p className="text-red-500">{errors.fullName.message}</p>
+          )}
         </label>
         <label
           htmlFor="dateOfBirth"
@@ -39,30 +104,47 @@ export default function PersonalDataContainer() {
             name="dateOfBirth"
             id="dateOfBirth"
             autoCorrect="off"
-            value="22-06-2024"
+            placeholder="Date of birth"
+            ref={inputRef}
+            onClick={() => setShowCalendar(true)}
+            value={new Date(date as Date).toLocaleDateString()}
           />
+          {errors.birthDate && (
+            <p className="text-red-500">{errors.birthDate.message}</p>
+          )}
         </label>
+        {showCalendar && (
+          <div className="flex items-center justify-center" ref={calendarRef}>
+            <Calendar
+              className="w-full mb-[10px]"
+              onChange={setDate}
+              value={date}
+            />
+          </div>
+        )}
         <label htmlFor="address" className="flex flex-col mb-[20px] font-[600]">
           <span className="mb-[15px] text-[14px] text-[#797189]">Address</span>
           <input
             className="min-h-[35px] px-[15px] border-[1px] outline-none transition ease-in-out duration-300 border-[#a09aac] text-[#1A396E] hover:bg-[#eaebec]"
             type="text"
-            name="address"
-            id="address"
-            autoCorrect="off"
-            value="Długa 54"
+            placeholder="Address"
+            {...register("address")}
           />
+          {errors.address && (
+            <p className="text-red-500">{errors.address.message}</p>
+          )}
         </label>
         <label htmlFor="state" className="flex flex-col mb-[20px] font-[600]">
           <span className="mb-[15px] text-[14px] text-[#797189]">State</span>
           <input
             className="min-h-[35px] px-[15px] border-[1px] outline-none transition ease-in-out duration-300 border-[#a09aac] text-[#1A396E] hover:bg-[#eaebec]"
             type="text"
-            name="state"
-            id="state"
-            autoCorrect="off"
-            value="Świętokrzyskie"
+            placeholder="State"
+            {...register("state")}
           />
+          {errors.state && (
+            <p className="text-red-500">{errors.state.message}</p>
+          )}
         </label>
         <div className="flex flex-col sm:flex-row">
           <label
@@ -75,11 +157,12 @@ export default function PersonalDataContainer() {
             <input
               className="min-h-[35px] px-[15px] border-[1px] outline-none transition ease-in-out duration-300 border-[#a09aac] text-[#1A396E] hover:bg-[#eaebec]"
               type="text"
-              name="zipCode"
-              id="zipCode"
-              autoCorrect="off"
-              value="27-230"
+              placeholder="Zip code"
+              {...register("zipCode")}
             />
+            {errors.zipCode && (
+              <p className="text-red-500">{errors.zipCode.message}</p>
+            )}
           </label>
           <label
             htmlFor="city"
@@ -91,11 +174,12 @@ export default function PersonalDataContainer() {
             <input
               className="min-h-[35px] px-[15px] border-[1px] outline-none transition ease-in-out duration-300 border-[#a09aac] text-[#1A396E] hover:bg-[#eaebec]"
               type="text"
-              name="city"
-              id="city"
-              autoCorrect="off"
-              value="Krynki"
+              placeholder="City"
+              {...register("city")}
             />
+            {errors.city && (
+              <p className="text-red-500">{errors.city.message}</p>
+            )}
           </label>
         </div>
         <div>
@@ -109,11 +193,12 @@ export default function PersonalDataContainer() {
             <input
               className="min-h-[35px] px-[15px] border-[1px] outline-none transition ease-in-out duration-300 border-[#a09aac] text-[#1A396E] hover:bg-[#eaebec]"
               type="text"
-              name="country"
-              id="country"
-              autoCorrect="off"
-              value="Poland"
+              placeholder="Country"
+              {...register("country")}
             />
+            {errors.country && (
+              <p className="text-red-500">{errors.country.message}</p>
+            )}
           </label>
         </div>
         <label
@@ -126,17 +211,23 @@ export default function PersonalDataContainer() {
           <input
             className="min-h-[35px] px-[15px] border-[1px] outline-none transition ease-in-out duration-300 border-[#a09aac] text-[#1A396E] hover:bg-[#eaebec]"
             type="text"
-            name="phoneNumber"
-            id="phoneNumber"
-            autoCorrect="off"
-            value="533331490"
+            placeholder="Phone number"
+            {...register("phoneNumber")}
           />
+          {errors.phoneNumber && (
+            <p className="text-red-500">{errors.phoneNumber.message}</p>
+          )}
         </label>
-        <div className="max-w-[180px] pt-[20px]">
-          <button className="flex items-center justify-center w-full min-h-[36px] px-[10px] bg-buttonBackground hover:bg-buttonBackgroundHover">
+        <div className="max-w-[180px] py-[20px]">
+          <button
+            className="flex items-center justify-center w-full min-h-[36px] px-[10px] bg-buttonBackground hover:bg-buttonBackgroundHover"
+            type="submit"
+          >
             <span className="text-buttonTextColor font-bold">Save</span>
           </button>
         </div>
+        <FormSuccess message={success} />
+        <FormError message={error} />
       </form>
     </div>
   );

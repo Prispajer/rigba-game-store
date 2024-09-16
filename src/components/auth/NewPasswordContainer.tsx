@@ -11,7 +11,7 @@ import { NewPasswordSchema } from "@/utils/schemas/user";
 
 export default function ResetPasswordContainer() {
   const { success, error, isPending, useUserActions } = useUserServices();
-  const { handleSetNewPassword } = useUserActions();
+  const { submitNewPasswordForm } = useUserActions();
 
   const resetPasswordForm = useForm<z.infer<typeof NewPasswordSchema>>({
     resolver: zodResolver(NewPasswordSchema),
@@ -45,7 +45,7 @@ export default function ResetPasswordContainer() {
           >
             Back to login
           </Link>
-          <form onSubmit={handleSubmit(handleSetNewPassword)}>
+          <form onSubmit={handleSubmit(submitNewPasswordForm)}>
             <div className="pt-4 text-white">
               <input
                 {...register("password")}

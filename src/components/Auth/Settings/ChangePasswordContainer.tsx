@@ -6,7 +6,6 @@ import TwoFactorModalContainer from "@/components/Interface/Shared/Modals/TwoFac
 import { FormSuccess } from "@/components/Interface/Shared/FormsNotifications/FormSuccess";
 import { FormError } from "@/components/Interface/Shared/FormsNotifications/FormError";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
-import useCurrentUser from "@/hooks/useCurrentUser";
 import useUserServices from "@/hooks/useUserServices";
 import { NewPasswordSchema } from "@/utils/schemas/user";
 
@@ -15,8 +14,8 @@ export default function ChangePasswordContainer() {
 
   const { success, error, isPending, useUserActions, useUserToken } =
     useUserServices();
-  const { handleChangePassword } = useUserActions();
-  const { handleSendChangePasswordToken } = useUserToken();
+  const { submitChangePasswordForm } = useUserActions();
+  const { sendChangePasswordToken } = useUserToken();
 
   const { twoFactorModalState, handleOpen } = useWindowVisibility();
 
@@ -41,7 +40,7 @@ export default function ChangePasswordContainer() {
       </h1>
       <form
         onSubmit={handleSubmit((data) =>
-          handleSendChangePasswordToken(data, oldPassword as string)
+          sendChangePasswordToken(data, oldPassword as string)
         )}
         className="flex flex-col max-w-[450px] w-full"
       >
@@ -104,7 +103,7 @@ export default function ChangePasswordContainer() {
           {twoFactorModalState && (
             <TwoFactorModalContainer
               handleSubmit={(code: string) =>
-                handleChangePassword(code, changePasswordForm.getValues())
+                submitChangePasswordForm(code, changePasswordForm.getValues())
               }
             />
           )}

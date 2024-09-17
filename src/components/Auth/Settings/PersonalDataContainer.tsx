@@ -1,13 +1,13 @@
 import React from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { FormSuccess } from "@/components/Interface/Shared/FormsNotifications/FormSuccess";
 import { FormError } from "@/components/Interface/Shared/FormsNotifications/FormError";
 import useUserServices from "@/hooks/useUserServices";
 import { PersonalDataSchema } from "@/utils/schemas/user";
-import { z } from "zod";
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -20,7 +20,6 @@ export default function PersonalDataContainer() {
   const { submitUpdatePersonalData } = useUserActions();
 
   const calendarRef = React.useRef<HTMLDivElement | null>(null);
-  const inputRef = React.useRef<HTMLInputElement | null>(null);
 
   const personalDataForm = useForm<z.infer<typeof PersonalDataSchema>>({
     resolver: zodResolver(PersonalDataSchema),
@@ -43,22 +42,20 @@ export default function PersonalDataContainer() {
     setValue,
   } = personalDataForm;
 
+  const handleCloseCalendar = () => {
+    setShowCalendar(false);
+  };
+
+  const handleOutsideClick = (event: MouseEvent) => {
+    if (!calendarRef.current?.contains(event.target as Node)) {
+      handleCloseCalendar();
+    }
+  };
+
   React.useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (
-        calendarRef.current &&
-        !calendarRef.current.contains(event.target as Node) &&
-        inputRef.current &&
-        !inputRef.current.contains(event.target as Node)
-      ) {
-        setShowCalendar(false);
-      }
-    };
-
-    document.addEventListener("click", handleOutsideClick);
-
+    document.addEventListener("mousedown", handleOutsideClick);
     return () => {
-      document.removeEventListener("click", handleOutsideClick);
+      document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
 
@@ -101,11 +98,8 @@ export default function PersonalDataContainer() {
           <input
             className="min-h-[35px] px-[15px] border-[1px] outline-none transition ease-in-out duration-300 border-[#a09aac] text-[#1A396E] hover:bg-[#eaebec]"
             type="text"
-            name="dateOfBirth"
-            id="dateOfBirth"
             autoCorrect="off"
             placeholder="Date of birth"
-            ref={inputRef}
             onClick={() => setShowCalendar(true)}
             value={new Date(date as Date).toLocaleDateString()}
           />
@@ -114,12 +108,14 @@ export default function PersonalDataContainer() {
           )}
         </label>
         {showCalendar && (
-          <div className="flex items-center justify-center" ref={calendarRef}>
-            <Calendar
-              className="w-full mb-[10px]"
-              onChange={setDate}
-              value={date}
-            />
+          <div className="relative">
+            <div className="absolute z-50" ref={calendarRef}>
+              <Calendar
+                className="w-full mb-[10px]"
+                onChange={setDate}
+                value={date}
+              />
+            </div>
           </div>
         )}
         <label htmlFor="address" className="flex flex-col mb-[20px] font-[600]">
@@ -157,7 +153,7 @@ export default function PersonalDataContainer() {
             <input
               className="min-h-[35px] px-[15px] border-[1px] outline-none transition ease-in-out duration-300 border-[#a09aac] text-[#1A396E] hover:bg-[#eaebec]"
               type="text"
-              placeholder="Zip code"
+              placeholder="Zip"
               {...register("zipCode")}
             />
             {errors.zipCode && (

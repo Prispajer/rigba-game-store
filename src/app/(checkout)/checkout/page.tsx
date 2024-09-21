@@ -1,7 +1,7 @@
 import CheckoutHeader from "@/components/Interface/Checkout/CheckoutHeader";
 import CheckoutContainer from "@/components/Interface/Checkout/CheckoutContainer";
 
-export default function CheckoutPage() {
+export default async function CheckoutPage() {
   return (
     <>
       <CheckoutHeader

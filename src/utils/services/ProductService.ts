@@ -793,9 +793,6 @@ export default class ProductService implements IProductService {
         return { success: false, message: "Product not found!", data: null };
       }
 
-      console.log(this.externalProductId);
-      console.log(product);
-
       const existingReview = await postgres.review.findFirst({
         where: {
           userId: user.id,

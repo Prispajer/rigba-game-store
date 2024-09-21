@@ -6,6 +6,7 @@ export const publicRoutes: string[] = [
   "/product/[productId]",
   "/review/[productId]",
   "/checkout",
+  "/checkout/redeem",
 ];
 export const authRoutes: string[] = [
   "/login",

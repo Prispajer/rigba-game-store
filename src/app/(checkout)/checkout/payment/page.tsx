@@ -20,6 +20,8 @@ export default function PaymentPage() {
 
   const productsByRole = user ? userCartState.products : localCartState;
 
+  console.log(productsByRole);
+
   React.useEffect(() => {
     fetch("/api/stripe/config").then(async (response) => {
       const { publishableKey } = await response.json();
@@ -30,7 +32,11 @@ export default function PaymentPage() {
   React.useEffect(() => {
     fetch("/api/stripe/create-payment-intent", {
       method: "POST",
-      body: JSON.stringify({ amount: calculateTotalPrice(productsByRole) }),
+      body: JSON.stringify({
+        email: user?.email,
+        cart: productsByRole,
+        amount: parseFloat(calculateTotalPrice(productsByRole)),
+      }),
     }).then(async (response) => {
       const { clientSecret } = await response.json();
       setClientSecret(clientSecret);

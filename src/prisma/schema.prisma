@@ -33,6 +33,7 @@ model User {
   personalData          PersonalData?
   cart                  Cart?
   wishlist              Wishlist?
+  order                 Order[]
   reviews               Review[]
   reviewsLikers         ReviewLikers[]
   isTwoFactorEnabled    Boolean                @default(false)
@@ -174,7 +175,32 @@ model Product {
   reviews              Review[]             
   cart                 Cart?                 @relation(fields: [cartId], references: [id], onDelete: Cascade)
   wishlist             Wishlist?             @relation(fields: [wishListId], references: [id], onDelete: Cascade)
+  keys     Key[]
 }
+
+model Order {
+  id               String   @id @default(cuid())
+  userId           String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  status           String   
+  title            String   
+  paymentMethod    String
+  total            Float
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  keys             Key[] 
+}
+
+model Key {
+  id        String   @id @default(cuid())
+  orderId   String
+  productId String   
+  key       String    
+  createdAt DateTime  @default(now())
+  order     Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
 
 model ProductInformations {
   id                   String       @id @default(cuid())

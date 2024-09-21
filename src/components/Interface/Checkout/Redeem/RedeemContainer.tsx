@@ -1,14 +1,10 @@
-"use client";
+"use server";
 
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { FaRegTrashAlt } from "react-icons/fa";
-import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
-import ProductInformations from "../../Filters/FilterProductList";
-import ProductHeaders from "../../Shared/ReusableComponents/ProductHeaders";
 
-export default function RedeemContainer() {
+export default async function RedeemContainer() {
   return (
     <section className="flex flex-col items-center w-full  h-[calc(100vh-96px)] md:py-[20px] bg-primaryColor mx-auto">
       <h1 className="mt-[10px] mb-[30px] text-[30px] text-[#FFFFFF] font-bold">

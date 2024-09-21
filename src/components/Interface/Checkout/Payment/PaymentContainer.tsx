@@ -2,8 +2,11 @@
 
 import React from "react";
 import Image from "next/image";
-import { Stripe, StripeElements } from "@stripe/stripe-js";
-import { useStripe, useElements } from "@stripe/react-stripe-js";
+import {
+  useStripe,
+  useElements,
+  LinkAuthenticationElement,
+} from "@stripe/react-stripe-js";
 import { PaymentElement } from "@stripe/react-stripe-js";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
@@ -14,6 +17,8 @@ import useCustomRouter from "@/hooks/useCustomRouter";
 
 export default function PaymentContainer() {
   const [isProcessing, setIsProcessing] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState<string>("");
+  const [email, setEmail] = React.useState<string>("");
   const stripe = useStripe();
   const elements = useElements();
   const { user } = useCurrentUser();
@@ -35,7 +40,7 @@ export default function PaymentContainer() {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!stripe || !elements) {
+    if (!stripe || !elements || !email) {
       return;
     }
 
@@ -48,10 +53,16 @@ export default function PaymentContainer() {
       },
     });
 
-    setIsProcessing(false);
-    if (error) {
-      console.error(error);
+    console.log(
+      "Return URL:",
+      `${process.env.NEXT_PUBLIC_URL}/checkout/redeem`
+    );
+
+    if (error.type === "card_error" || error.type === "validation_error") {
+      setErrorMessage(error.message as string);
     }
+
+    setIsProcessing(false);
   };
 
   return (
@@ -60,8 +71,12 @@ export default function PaymentContainer() {
         <div className="h-min p-[20px] text-[#FFFFFF] bg-secondaryColor">
           <form id="payment-form" onSubmit={handleSubmit}>
             <PaymentElement />
+            <LinkAuthenticationElement
+              onChange={(event) => setEmail(event.value.email)}
+              className="pt-[20px]"
+            />
             <button
-              disabled={isProcessing}
+              disabled={stripe == null || elements == null || isProcessing}
               className="w-full my-[20px] p-[10px] bg-buttonBackground hover:to-buttonBackgroundHover text-buttonTextColor cursor-pointer"
               id="submit"
             >
@@ -69,6 +84,9 @@ export default function PaymentContainer() {
                 {isProcessing ? "Processing..." : "Pay"}
               </span>
             </button>
+            <span className="text-[#DF1B41]">
+              {errorMessage ? errorMessage : ""}
+            </span>
           </form>
         </div>
         <div className="w-full bg-secondaryColor md:p-[20px]">

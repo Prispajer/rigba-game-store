@@ -5,6 +5,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutHeader from "@/components/Interface/Checkout/CheckoutHeader";
 import PaymentContainer from "@/components/Interface/Checkout/Payment/PaymentContainer";
+import LoadingAnimation from "@/components/Interface/Shared/Animations/LoadingAnimation";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useUserCart from "@/hooks/useUserCart";
 import useCurrentUser from "@/hooks/useCurrentUser";
@@ -20,31 +21,46 @@ export default function PaymentPage() {
 
   const productsByRole = user ? userCartState.products : localCartState;
 
-  console.log(productsByRole);
-
-  React.useEffect(() => {
-    fetch("/api/stripe/config").then(async (response) => {
-      const { publishableKey } = await response.json();
-      setStripePromise(loadStripe(publishableKey));
-    });
+  const loadStripeConfig = React.useCallback(async () => {
+    const response = await fetch("/api/stripe/config");
+    const { publishableKey } = await response.json();
+    setStripePromise(loadStripe(publishableKey));
   }, []);
 
+  const createPaymentIntent = React.useCallback(async () => {
+    if (!clientSecret) {
+      const response = await fetch("/api/stripe/create-payment-intent", {
+        method: "POST",
+        body: JSON.stringify({
+          email: user?.email,
+          cart: productsByRole,
+          amount: parseFloat(calculateTotalPrice(productsByRole)),
+        }),
+      });
+
+      const { clientSecret: newClientSecret } = await response.json();
+      setClientSecret(newClientSecret);
+    }
+  }, [user?.email, productsByRole, clientSecret]);
+
   React.useEffect(() => {
-    fetch("/api/stripe/create-payment-intent", {
-      method: "POST",
-      body: JSON.stringify({
-        email: user?.email,
-        cart: productsByRole,
-        amount: parseFloat(calculateTotalPrice(productsByRole)),
-      }),
-    }).then(async (response) => {
-      const { clientSecret } = await response.json();
-      setClientSecret(clientSecret);
-    });
-  }, [productsByRole]);
+    if (!stripePromise) {
+      loadStripeConfig();
+    }
+  }, [stripePromise, loadStripeConfig]);
+
+  React.useEffect(() => {
+    if (productsByRole.length > 0) {
+      createPaymentIntent();
+    }
+  }, [productsByRole, clientSecret, createPaymentIntent]);
 
   if (!clientSecret || !stripePromise) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex flex-col items-center justify-center w-[100vw] h-[100vh] mx-auto bg-primaryColor">
+        <LoadingAnimation />
+      </div>
+    );
   }
 
   const appearance = {

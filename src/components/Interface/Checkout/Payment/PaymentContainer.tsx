@@ -53,11 +53,6 @@ export default function PaymentContainer() {
       },
     });
 
-    console.log(
-      "Return URL:",
-      `${process.env.NEXT_PUBLIC_URL}/checkout/redeem`
-    );
-
     if (error.type === "card_error" || error.type === "validation_error") {
       setErrorMessage(error.message as string);
     }

@@ -41,6 +41,7 @@ export const endpointsRoutes: string[] = [
   "/api/stripe/create-checkout-session",
   "/api/stripe/config",
   "/api/stripe/create-payment-intent",
+  "/api/stripe/webhook",
 ];
 
 export function handleDynamicId(route: string): boolean {

@@ -23,6 +23,7 @@ export default class ProductService implements IProductService {
   private added?: number;
   private title?: string;
   private likes?: number;
+  private reviewId?: string;
 
   constructor(productData: ProductConstructor = {}) {
     this.email = productData.email;
@@ -37,6 +38,7 @@ export default class ProductService implements IProductService {
     this.added = productData.added;
     this.title = productData.title;
     this.likes = productData.likes;
+    this.reviewId = productData.reviewId;
   }
 
   async getCart(): Promise<RequestResponse<Cart | null>> {
@@ -793,11 +795,8 @@ export default class ProductService implements IProductService {
         return { success: false, message: "Product not found!", data: null };
       }
 
-      const existingReview = await postgres.review.findFirst({
-        where: {
-          userId: user.id,
-          productId: product.id,
-        },
+      const review = await postgres.review.findUnique({
+        where: { id: this.reviewId },
       });
 
       const existingLiker = await postgres.reviewLikers.findUnique({
@@ -805,7 +804,7 @@ export default class ProductService implements IProductService {
           userId_productId_reviewId: {
             userId: user.id,
             productId: product.id,
-            reviewId: existingReview?.id as string,
+            reviewId: review?.id as string,
           },
         },
       });
@@ -824,8 +823,8 @@ export default class ProductService implements IProductService {
           });
 
           await postgres.review.update({
-            where: { id: existingReview?.id },
-            data: { likes: (existingReview?.likes ?? 0) + 1 },
+            where: { id: review?.id },
+            data: { likes: (review?.likes ?? 0) + 1 },
           });
 
           return {
@@ -840,14 +839,14 @@ export default class ProductService implements IProductService {
         data: {
           userId: user.id,
           productId: product.id,
-          reviewId: existingReview?.id as string,
+          reviewId: review?.id as string,
           isLiked: true,
         },
       });
 
       await postgres.review.update({
-        where: { id: existingReview?.id as string },
-        data: { likes: (existingReview?.likes ?? 0) + 1 },
+        where: { id: review?.id as string },
+        data: { likes: (review?.likes ?? 0) + 1 },
       });
 
       return {
@@ -891,11 +890,8 @@ export default class ProductService implements IProductService {
         return { success: false, message: "Product not found!", data: null };
       }
 
-      const existingReview = await postgres.review.findFirst({
-        where: {
-          userId: user.id,
-          productId: product.id,
-        },
+      const review = await postgres.review.findUnique({
+        where: { id: this.reviewId },
       });
 
       const existingLiker = await postgres.reviewLikers.findUnique({
@@ -903,7 +899,7 @@ export default class ProductService implements IProductService {
           userId_productId_reviewId: {
             userId: user.id,
             productId: product.id,
-            reviewId: existingReview?.id as string,
+            reviewId: review?.id as string,
           },
         },
       });
@@ -922,8 +918,8 @@ export default class ProductService implements IProductService {
           });
 
           await postgres.review.update({
-            where: { id: existingReview?.id },
-            data: { likes: (existingReview?.likes ?? 0) - 1 },
+            where: { id: review?.id },
+            data: { likes: (review?.likes ?? 0) - 1 },
           });
 
           return {
@@ -938,14 +934,14 @@ export default class ProductService implements IProductService {
         data: {
           userId: user.id,
           productId: product.id,
-          reviewId: existingReview?.id as string,
+          reviewId: review?.id as string,
           isLiked: false,
         },
       });
 
       await postgres.review.update({
-        where: { id: existingReview?.id },
-        data: { likes: (existingReview?.likes ?? 0) - 1 },
+        where: { id: review?.id },
+        data: { likes: (review?.likes ?? 0) - 1 },
       });
 
       return {

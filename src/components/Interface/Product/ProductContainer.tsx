@@ -26,7 +26,6 @@ export default function ProductContainer({
   product: GameAPIResponse;
   screenshots: GameAPIResponse["screenshots"];
 }) {
-  const { user } = useCurrentUser();
   const { redirectToReview } = useCustomRouter();
 
   return (
@@ -42,12 +41,12 @@ export default function ProductContainer({
           <ProductScreenshots screenshots={screenshots} />
           <ProductHeaders headerText="Gamers also viewed" />
           <ProductList />
-          <ProductHeaders headerText="Reviews: 26" />
+          <ProductHeaders headerText="Reviews" />
           <ProductReview
             product={product}
             redirectToReview={redirectToReview}
           />
-          <ProductUsersReview product={product} user={user} />
+          <ProductUsersReview product={product} />
           <ShowMoreButton text="Load more reviews" />
           <ProductHeaders headerText="Product description" />
           <ProductGenres product={product} />

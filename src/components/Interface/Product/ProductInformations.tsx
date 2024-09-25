@@ -76,6 +76,8 @@ const calculateAverageRating = (
   return Number(averageRating.toFixed(2));
 };
 
+console.log(generateStars(3.33));
+
 export default function ProductInformations({
   product,
 }: {

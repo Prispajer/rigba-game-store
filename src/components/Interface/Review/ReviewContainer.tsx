@@ -52,7 +52,7 @@ export default function ReviewContainer({
       const response = await requestService.postMethod(
         "products/endpoints/productManagement/addReviewToProduct",
         {
-          email: user.email as string,
+          email: user?.email as string,
           externalProductId: product.id,
           name: product.name,
           description: review,
@@ -67,8 +67,6 @@ export default function ReviewContainer({
         }
       );
       if (response.success) {
-        console.log(response);
-
         return response.data;
       } else {
         throw new Error(response.message || "Unknown error");

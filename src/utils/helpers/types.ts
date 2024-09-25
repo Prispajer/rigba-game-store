@@ -167,4 +167,5 @@ export type ProductConstructor = {
   added?: number;
   title?: string;
   likes?: number;
+  reviewId?: string;
 };

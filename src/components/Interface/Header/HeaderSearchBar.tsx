@@ -6,7 +6,7 @@ import OutsideClickHandler from "../Shared/Backdrop/OutsideCLickHandler";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import FetchService from "@/utils/services/FetchService";
 import UtilsService from "@/utils/services/UtilsService";
-import IUtilsService from "@/utils/serverInterfaces/IUtilsService";
+import IUtilsService from "@/utils/interfaces/IUtilsService";
 import debounce from "@/utils/debounce";
 import { GameAPIResponse } from "@/utils/helpers/types";
 

@@ -48,17 +48,17 @@ export const fetchUserReviews = createAsyncThunk<
 
 export const fetchLikeUserReview = createAsyncThunk<
   { reviews: UserReviews[]; message?: string },
-  { email: string; externalProductId: number },
+  { email: string; externalProductId: number; reviewId: string },
   { rejectValue: string }
 >(
   "userReviews/fetchLikeUserReview",
-  async ({ email, externalProductId }, { rejectWithValue }) => {
+  async ({ email, externalProductId, reviewId }, { rejectWithValue }) => {
     try {
       const likeUserReviewResponse: RequestResponse<{
         reviews: UserReviews[];
       }> = await requestService.patchMethod(
         "products/endpoints/productManagement/likeReview",
-        { email, externalProductId }
+        { email, externalProductId, reviewId }
       );
 
       if (likeUserReviewResponse.success) {
@@ -77,17 +77,17 @@ export const fetchLikeUserReview = createAsyncThunk<
 
 export const fetchUnLikeUserReview = createAsyncThunk<
   { reviews: UserReviews[]; message?: string },
-  { email: string; externalProductId: number },
+  { email: string; externalProductId: number; reviewId: string },
   { rejectValue: string }
 >(
   "userReviews/fetchUnLikeUserReview",
-  async ({ email, externalProductId }, { rejectWithValue }) => {
+  async ({ email, externalProductId, reviewId }, { rejectWithValue }) => {
     try {
       const unLikeUserReviewResponse: RequestResponse<{
         reviews: UserReviews[];
       }> = await requestService.patchMethod(
         "products/endpoints/productManagement/unLikeReview",
-        { email, externalProductId }
+        { email, externalProductId, reviewId }
       );
 
       if (unLikeUserReviewResponse.success) {

@@ -20,19 +20,27 @@ export default function ProductReview({
       <div className="sm:flex sm:flex-row w-full gap-4">
         <div className="flex flex-wrap justify-between items-center w-full">
           <ul className="flex flex-col md:flex-row lg:flex-col xxl:flex-row">
-            {mergedData
-              ?.sort((a, b) => a.percent - b.percent)
-              .map((rating) => (
-                <li
-                  key={rating.id}
-                  className="flex md:flex-col flex-row-reverse justify-between items-center md:items-start mx-[20px] md:ml-[0px] lg:mx-[20px] xxl:ml-[0px] lg:flex-row-reverse lg:items-center xxl:mx-[20px] xxl:flex-col xxl:items-start text-buttonTextColor"
-                >
-                  <span className="flex grow mt-[4px] lg:mt-[4px] mx-[20px] md:m-0 lg:mx-[20px] xxl:m-0 text-[15px] text-[#DCD8D6] capitalize">
-                    {rating.title}
-                  </span>
-                  {generateStars((5 * rating.percent) / 100)}
-                </li>
-              ))}
+            {mergedData.length > 0 ? (
+              mergedData
+                ?.sort((a, b) => a.percent - b.percent)
+                .map((rating) => (
+                  <li
+                    key={rating.id}
+                    className="flex md:flex-col flex-row-reverse justify-between items-center md:items-start mx-[20px] md:ml-[0px] lg:mx-[20px] xxl:ml-[0px] lg:flex-row-reverse lg:items-center xxl:mx-[20px] xxl:flex-col xxl:items-start text-buttonTextColor"
+                  >
+                    <span className="flex grow mt-[4px] lg:mt-[4px] mx-[20px] md:m-0 lg:mx-[20px] xxl:m-0 text-[15px] text-[#DCD8D6] capitalize">
+                      {rating.title}
+                    </span>
+                    {generateStars((5 * rating.percent) / 100)}
+                  </li>
+                ))
+            ) : (
+              <div className="">
+                <span className="text-[19px] font-[500] text-[#FFFFFF]">
+                  This product has no ratings!
+                </span>
+              </div>
+            )}
           </ul>
         </div>
         <div className="flex items-end justify-end">

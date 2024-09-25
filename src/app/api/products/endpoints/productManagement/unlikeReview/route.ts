@@ -3,9 +3,13 @@ import ProductService from "@/utils/services/ProductService";
 import { RequestResponse } from "@/utils/helpers/types";
 
 export async function PATCH(request: NextRequest) {
-  const { email, externalProductId } = await request.json();
+  const { email, externalProductId, reviewId } = await request.json();
 
-  const productService = new ProductService({ email, externalProductId });
+  const productService = new ProductService({
+    email,
+    externalProductId,
+    reviewId,
+  });
   const unlikeReviewResponse = await productService.unLikeReview();
 
   return NextResponse.json<RequestResponse<any | null>>({

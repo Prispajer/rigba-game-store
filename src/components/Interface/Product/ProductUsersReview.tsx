@@ -2,18 +2,16 @@ import React from "react";
 import Image from "next/image";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import useUserReviews from "@/hooks/useUserReviews";
+import useCurrentUser from "@/hooks/useCurrentUser";
 import { generateStars } from "./ProductInformations";
 import { GameAPIResponse, User } from "@/utils/helpers/types";
 
-interface ProductUsersReviewProps {
-  product: GameAPIResponse;
-  user: User;
-}
-
-const ProductUsersReview: React.FC<ProductUsersReviewProps> = ({
+export default function ProductUsersReview({
   product,
-  user,
-}) => {
+}: {
+  product: GameAPIResponse;
+}) {
+  const { user } = useCurrentUser();
   const {
     userReviewsState,
     handleFetchUserReviews,
@@ -23,7 +21,12 @@ const ProductUsersReview: React.FC<ProductUsersReviewProps> = ({
 
   React.useEffect(() => {
     handleFetchUserReviews(product.id as number);
-  }, [product.id, handleFetchUserReviews]);
+  }, [
+    product.id,
+    handleFetchUserReviews,
+    handleFetchLikeUserReview,
+    handleFetchUnLikeUserReview,
+  ]);
 
   return (
     <div className="flex flex-col max-w-[1240px] md:mx-auto mx-[-20px] border-t-[2px] border-primaryColor bg-secondaryColor">
@@ -40,23 +43,26 @@ const ProductUsersReview: React.FC<ProductUsersReviewProps> = ({
                 </ul>
                 <div className="flex items-center">
                   <button
-                    onClick={() =>
+                    onClick={() => {
                       handleFetchLikeUserReview(
                         user.email as string,
-                        product.id as number
-                      )
-                    }
+                        product.id as number,
+                        review.id as string
+                      );
+                    }}
                     className="ml-[10px]"
                   >
                     <AiFillLike size="22px" color="#FFFFFF" />
                   </button>
+
                   <button
-                    onClick={() =>
+                    onClick={() => {
                       handleFetchUnLikeUserReview(
                         user.email as string,
-                        product.id as number
-                      )
-                    }
+                        product.id as number,
+                        review.id as string
+                      );
+                    }}
                     className="ml-[10px] mt-[2px]"
                   >
                     <AiFillDislike size="22px" color="#FFFFFF" />
@@ -66,7 +72,7 @@ const ProductUsersReview: React.FC<ProductUsersReviewProps> = ({
                       ? `${review.likes}`
                       : review.likes > 0
                       ? `+${review.likes}`
-                      : `-${review.likes}`}
+                      : `${review.likes}`}
                   </span>
                 </div>
               </div>
@@ -98,6 +104,4 @@ const ProductUsersReview: React.FC<ProductUsersReviewProps> = ({
       </div>
     </div>
   );
-};
-
-export default ProductUsersReview;
+}

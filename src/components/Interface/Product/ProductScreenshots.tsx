@@ -7,10 +7,11 @@ import { GameAPIResponse } from "@/utils/helpers/types";
 
 export default function ProductScreenshots({
   screenshots,
+  handleOpen,
 }: {
   screenshots: GameAPIResponse["screenshots"];
+  handleOpen: (element: string) => void;
 }) {
-  const { handleOpen } = useWindowVisibility();
   const [currentImageId, setCurrentImageId] = React.useState<number | null>(
     null
   );
@@ -42,7 +43,7 @@ export default function ProductScreenshots({
             </div>
           ))
         ) : (
-          <div>Brak zrzutów ekranu</div>
+          <div>No screenshoots found</div>
         )}
       </div>
       <ProductScreenshotModalContainer

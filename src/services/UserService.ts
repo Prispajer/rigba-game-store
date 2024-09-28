@@ -1,90 +1,77 @@
 import bcrypt from "bcryptjs";
+import { injectable, inject } from "inversify";
+import { PersonalData } from "@prisma/client";
 import { postgres } from "@/data/database/publicSQL/postgres";
 import IUserService from "../interfaces/IUserService";
-import {
-  getTwoFactorConfirmationByUserId,
-  getUserByEmail,
-  getTwoFactorTokenByEmail,
-  getEmailVerificationTokenByToken,
-  getPasswordResetTokenByToken,
-} from "@/data/database/publicSQL/queries";
-import {
-  generateEmailVerificationToken,
-  generateTwoFactorToken,
-} from "@/data/database/publicSQL/tokens";
-import {
-  sendVerificationEmail,
-  sendTwoFactorTokenEmail,
-} from "@/data/database/publicSQL/mail";
+import ICheckerService from "../interfaces/ICheckerService";
+import ITokenService from "../interfaces/ITokenService";
+import IUserRepository from "@/interfaces/IUserRepository";
+import ITokenRepository from "@/interfaces/ITokenRepository";
+import { sendVerificationEmail } from "@/data/database/publicSQL/mail";
 import {
   RequestResponse,
   User,
   EmailVerificationToken,
   TwoFactorToken,
   ResetPasswordToken,
-  UserConstructor,
-} from "../helpers/types";
-import TokenService from "./TokenService";
-import { PersonalData } from "@prisma/client";
+  UserDTO,
+  CLASSTYPES,
+  RegisterUserDTO,
+} from "../utils/helpers/types";
 
+@injectable()
 export default class UserService implements IUserService {
-  private readonly TokenServiceInstance: TokenService;
-  private userData: UserConstructor;
+  private _tokenService: ITokenService;
+  private _tokenRepository: ITokenRepository;
+  private _checkerService: ICheckerService;
+  private _userRepository: IUserRepository;
 
-  constructor(userData: UserConstructor = {}) {
-    this.TokenServiceInstance = new TokenService();
-    this.userData = { ...userData };
+  constructor(
+    @inject(CLASSTYPES.ITokenService) tokenService: ITokenService,
+    @inject(CLASSTYPES.ITokenRepository) tokenRepository: ITokenRepository,
+    @inject(CLASSTYPES.ICheckerService) checkerService: ICheckerService,
+    @inject(CLASSTYPES.IUserRepository) userRepository: IUserRepository
+  ) {
+    this._tokenService = tokenService;
+    this._tokenRepository = tokenRepository;
+    this._checkerService = checkerService;
+    this._userRepository = userRepository;
   }
 
-  async loginUser(): Promise<RequestResponse<
+  async loginUser(
+    userDTO: UserDTO
+  ): Promise<RequestResponse<
     User | EmailVerificationToken | TwoFactorToken
   > | void> {
     try {
-      const user = await getUserByEmail(this.userData.email as string);
-
-      if (!user || !user.email || !user.password) {
-        return {
-          success: false,
-          message: "User doesn't exist!",
-          data: null,
-        };
-      }
-
-      const isPasswordCorrect = await bcrypt.compare(
-        this.userData.password as string,
-        user.password
+      const userCheckResponse = await this._checkerService.checkUserExists(
+        userDTO
       );
-
-      if (!isPasswordCorrect) {
-        return {
-          success: false,
-          message: "Invalid credentials!",
-          data: null,
-        };
+      if (!userCheckResponse.success) {
+        return userCheckResponse;
       }
+
+      const checkIsUserPasswordResponse =
+        await this._checkerService.checkIsUserPasswordCorrect(userDTO);
+      if (!checkIsUserPasswordResponse.success) {
+        return checkIsUserPasswordResponse;
+      }
+
+      const user = await this._userRepository.getUser(userDTO.email);
 
       const emailVerificationResponse =
-        await this.TokenServiceInstance.sendEmailVerificationToken(user);
-
+        await this._tokenService.sendEmailVerificationToken(user);
       if (emailVerificationResponse) {
-        return {
-          success: emailVerificationResponse.success,
-          message: emailVerificationResponse.message,
-          data: emailVerificationResponse.data,
-        };
+        return emailVerificationResponse;
       }
 
       const twoFactorResponse = await this.confirmTwoFactorAuthentication(
         user,
-        this.userData.code
+        userDTO.code
       );
-      if (user.emailVerified) {
+      if (user?.emailVerified) {
         if (twoFactorResponse) {
-          return {
-            success: twoFactorResponse.success,
-            message: twoFactorResponse.message,
-            data: twoFactorResponse.data,
-          };
+          return twoFactorResponse;
         }
         return {
           success: true,
@@ -93,6 +80,7 @@ export default class UserService implements IUserService {
         };
       }
     } catch (error) {
+      console.error(error);
       return {
         success: false,
         message: "Something went wrong!",
@@ -101,32 +89,28 @@ export default class UserService implements IUserService {
     }
   }
 
-  async registerUser(): Promise<RequestResponse<User>> {
+  async registerUser(
+    userDTO: UserDTO
+  ): Promise<RequestResponse<RegisterUserDTO>> {
     try {
-      const user = await getUserByEmail(this.userData.email as string);
-      const hashedPassword = await bcrypt.hash(
-        this.userData.password as string,
-        10
-      );
+      const hashedPassword = await bcrypt.hash(userDTO.password as string, 10);
 
-      if (user) {
-        return {
-          success: false,
-          message: "Email in use!",
-          data: null,
-        };
+      const checkIsEmailInUseResponse =
+        await this._checkerService.checkIsEmailInUse(userDTO);
+      if (checkIsEmailInUseResponse && !checkIsEmailInUseResponse.success) {
+        return checkIsEmailInUseResponse;
       }
 
-      const newUser = await postgres.user.create({
-        data: {
-          email: this.userData.email,
-          password: hashedPassword,
-        },
-      });
-
-      const emailVerificationToken = await generateEmailVerificationToken(
-        this.userData.email as string
+      const createdUser = await this._userRepository.createUser(
+        userDTO.email,
+        hashedPassword
       );
+
+      const emailVerificationToken =
+        await this._tokenRepository.generateEmailVerificationToken(
+          userDTO.email as string
+        );
+
       await sendVerificationEmail(
         emailVerificationToken.email,
         emailVerificationToken.token
@@ -135,7 +119,7 @@ export default class UserService implements IUserService {
       return {
         success: true,
         message: "User has been created! Confirmation email sent!",
-        data: newUser,
+        data: createdUser,
       };
     } catch (error) {
       return {
@@ -146,54 +130,47 @@ export default class UserService implements IUserService {
     }
   }
 
-  async confirmEmailVerification(): Promise<
-    RequestResponse<EmailVerificationToken>
-  > {
-    const existingToken = await getEmailVerificationTokenByToken(
-      this.userData.token as string
+  async confirmEmailVerification(
+    userDTO: UserDTO
+  ): Promise<RequestResponse<EmailVerificationToken>> {
+    const existingTokenResponse =
+      await this._tokenRepository.getEmailVerificationToken(
+        userDTO.token as string
+      );
+
+    if (!existingTokenResponse.success || !existingTokenResponse.data) {
+      return {
+        success: false,
+        message: existingTokenResponse.message || "Invalid token!",
+        data: null,
+      };
+    }
+
+    const checkUserExistsResponse = await this._checkerService.checkUserExists(
+      userDTO.email
+    );
+    if (!checkUserExistsResponse.success) {
+      return checkUserExistsResponse;
+    }
+
+    const user = await this._userRepository.getUser(
+      existingTokenResponse.data.email
     );
 
-    if (!existingToken) {
-      return {
-        success: false,
-        message: "Token doesn't exist!",
-        data: null,
-      };
-    }
-
-    const tokenHasExpired = new Date(existingToken.expires) < new Date();
-
-    if (tokenHasExpired) {
-      return {
-        success: false,
-        message: "Token has expired!",
-        data: null,
-      };
-    }
-
-    const existingUser = await getUserByEmail(existingToken.email);
-
-    if (!existingUser) {
-      return {
-        success: false,
-        message: "Email doesn't exist!",
-        data: null,
-      };
-    }
-
-    await postgres.user.update({
-      where: {
-        id: existingUser.id,
-      },
-      data: {
-        emailVerified: new Date(),
-        email: existingUser.email,
-      },
-    });
+    if (!user)
+      await postgres.user.update({
+        where: {
+          id: user?.id,
+        },
+        data: {
+          emailVerified: new Date(),
+          email: user?.email,
+        },
+      });
 
     await postgres.emailVerificationToken.delete({
       where: {
-        id: existingToken.id,
+        id: existingTokenResponse.data.id,
       },
     });
 
@@ -205,7 +182,7 @@ export default class UserService implements IUserService {
   }
 
   async confirmTwoFactorAuthentication(
-    user: User,
+    user: User | null,
     code?: string
   ): Promise<RequestResponse<TwoFactorToken> | void> {
     if (!user.isTwoFactorEnabled && user.email) {
@@ -267,7 +244,7 @@ export default class UserService implements IUserService {
 
   async setNewPassword(): Promise<RequestResponse<ResetPasswordToken>> {
     const existingToken = await getPasswordResetTokenByToken(
-      this.userData.token as string
+      this._userData.token as string
     );
 
     if (!existingToken) {
@@ -299,11 +276,11 @@ export default class UserService implements IUserService {
     }
 
     const passwordMatch = await bcrypt.compare(
-      this.userData.password as string,
+      this._userData.password as string,
       existingUser.password as string
     );
 
-    if (this.userData.token && passwordMatch) {
+    if (this._userData.token && passwordMatch) {
       return {
         success: false,
         message: "You must provide other password than the older one!",
@@ -312,7 +289,7 @@ export default class UserService implements IUserService {
     }
 
     const hashedPassword = await bcrypt.hash(
-      this.userData.password as string,
+      this._userData.password as string,
       10
     );
 
@@ -340,7 +317,7 @@ export default class UserService implements IUserService {
 
   async changePassword(): Promise<RequestResponse<User>> {
     const twoFactorToken = await getTwoFactorTokenByEmail(
-      this.userData.email as string
+      this._userData.email as string
     );
 
     if (!twoFactorToken) {
@@ -371,7 +348,7 @@ export default class UserService implements IUserService {
       };
     }
 
-    if (!twoFactorToken || twoFactorToken.token !== this.userData.code) {
+    if (!twoFactorToken || twoFactorToken.token !== this._userData.code) {
       return {
         success: false,
         message: "Invalid code!",
@@ -380,7 +357,7 @@ export default class UserService implements IUserService {
     }
 
     const hashedPassword = await bcrypt.hash(
-      this.userData.newPassword as string,
+      this._userData.newPassword as string,
       10
     );
 
@@ -402,7 +379,7 @@ export default class UserService implements IUserService {
 
   async toggleTwoFactor(): Promise<RequestResponse<void>> {
     try {
-      const existingUser = await getUserByEmail(this.userData.email as string);
+      const existingUser = await getUserByEmail(this._userData.email as string);
       if (!existingUser) {
         return {
           success: false,
@@ -413,7 +390,7 @@ export default class UserService implements IUserService {
       const twoFactorToken = await getTwoFactorTokenByEmail(
         existingUser.email as string
       );
-      if (!twoFactorToken || twoFactorToken.token !== this.userData.code) {
+      if (!twoFactorToken || twoFactorToken.token !== this._userData.code) {
         return {
           success: false,
           message: "Invalid code!",
@@ -466,10 +443,10 @@ export default class UserService implements IUserService {
   }
 
   async updatePersonalData(
-    userData: Partial<PersonalData>
+    _userData: Partial<PersonalData>
   ): Promise<RequestResponse<PersonalData>> {
     try {
-      const existingUser = await getUserByEmail(this.userData.email as string);
+      const existingUser = await getUserByEmail(this._userData.email as string);
 
       if (!existingUser) {
         return {
@@ -486,7 +463,7 @@ export default class UserService implements IUserService {
       if (personalData) {
         const updatedUser = await postgres.personalData.update({
           where: { userId: existingUser.id },
-          data: { ...userData },
+          data: { ..._userData },
         });
 
         return {
@@ -498,7 +475,7 @@ export default class UserService implements IUserService {
         const newUserData = await postgres.personalData.create({
           data: {
             userId: existingUser.id,
-            ...userData,
+            ..._userData,
           },
         });
 

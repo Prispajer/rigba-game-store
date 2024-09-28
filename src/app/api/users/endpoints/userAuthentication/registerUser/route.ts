@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import UserService from "@/utils/services/UserService";
+import { userService } from "@/utils/injector";
 import IUserService from "@/utils/interfaces/IUserService";
 import {
   RequestResponse,
@@ -9,9 +9,7 @@ import {
 
 export async function POST(request: NextRequest, response: NextResponse) {
   const { email, password } = await request.json();
-
-  const userService: IUserService = new UserService({ email, password });
-  const registerResponse = await userService.registerUser();
+  const registerResponse = await userService.registerUser({ email, password });
 
   return NextResponse.json<RequestResponse<User | EmailVerificationToken>>({
     success: registerResponse?.success,

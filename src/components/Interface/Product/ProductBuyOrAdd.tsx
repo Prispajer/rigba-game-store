@@ -2,17 +2,20 @@
 
 import React from "react";
 import { FaCartPlus } from "react-icons/fa";
-import useCurrentUser from "@/hooks/useCurrentUser";
-import useLocalStorage from "@/hooks/useLocalStorage";
-import useUserCart from "@/hooks/useUserCart";
 import { generateRandomValue } from "@/utils/prices";
-import { Product } from "@/utils/helpers/types";
+import { Product, User } from "@/utils/helpers/types";
 
-export default function ProductBuyOrAdd({ product }: { product: Product }) {
-  const { handleAddUserProductToCart } = useUserCart();
-  const { handleAddLocalProductToCart } = useLocalStorage("localCart");
-  const { user } = useCurrentUser();
-
+export default function ProductBuyOrAdd({
+  product,
+  user,
+  handleAddUserProductToCart,
+  handleAddLocalProductToCart,
+}: {
+  product: Product;
+  user: User | null;
+  handleAddUserProductToCart: (product: Product) => void;
+  handleAddLocalProductToCart: (product: Product) => void;
+}) {
   return (
     <>
       <div className="flex flex-col sm:mx-[20px] my-[20px] py-[15px] px-[20px] bg-[#387CBD] shadow-md">

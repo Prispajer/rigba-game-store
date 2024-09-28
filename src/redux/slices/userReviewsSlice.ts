@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import requestService from "@/utils/services/RequestService";
+import requestService from "@/services/RequestService";
 import { RequestResponse, UserReviews } from "@/utils/helpers/types";
 
-interface UserReviewsSlice {
+export interface UserReviewsSlice {
   reviews: UserReviews[];
   status: string;
   error: string | null;

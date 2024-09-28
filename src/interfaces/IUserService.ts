@@ -4,14 +4,19 @@ import {
   EmailVerificationToken,
   TwoFactorToken,
   ResetPasswordToken,
-} from "../helpers/types";
+  UserDTO,
+} from "@/utils/helpers/types";
 
 export default interface IUserService {
-  loginUser(): Promise<RequestResponse<
+  loginUser(
+    userDTO: UserDTO
+  ): Promise<RequestResponse<
     User | EmailVerificationToken | TwoFactorToken
   > | void>;
-  registerUser(): Promise<RequestResponse<User>>;
-  confirmEmailVerification(): Promise<RequestResponse<EmailVerificationToken>>;
+  registerUser(userDTO: UserDTO): Promise<RequestResponse<RegisterUserDTO>>;
+  confirmEmailVerification(
+    userDTO: UserDTO
+  ): Promise<RequestResponse<EmailVerificationToken>>;
   confirmTwoFactorAuthentication(
     user: User,
     code?: string

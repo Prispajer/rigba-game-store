@@ -5,92 +5,30 @@ import { CiShare1 } from "react-icons/ci";
 import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
 import DigitalProductDetails from "./ProductDigitalProductDetails";
 import useUserReviews from "@/hooks/useUserReviews";
-import { processReviews, mergeReviewData } from "@/utils/prices";
+import { processReviews, mergeReviews } from "@/utils/reviews";
+import { generateStars, calculateOverallRating } from "@/utils/ratings";
 import { GameAPIResponse } from "@/utils/helpers/types";
-
-export const generateStars = (rating: number) => {
-  const fullStars = Math.floor(rating);
-  const decimalPart = rating % 1;
-
-  const fullStar = Array(fullStars)
-    .fill(0)
-    .map((_, index) => (
-      <div key={`full-${index}`} className="rating-star filled"></div>
-    ));
-
-  const partialStar =
-    decimalPart > 0 ? (
-      <div
-        className="rating-star"
-        style={{
-          background: `linear-gradient(to right, gold ${
-            decimalPart * 100
-          }%, transparent ${decimalPart * 100}%)`,
-          WebkitBackgroundClip: "text",
-          color: "transparent",
-        }}
-      ></div>
-    ) : null;
-
-  const emptyStar = Array(5 - fullStars - (decimalPart > 0 ? 1 : 0))
-    .fill(0)
-    .map((_, index) => (
-      <div key={`empty-${index}`} className="rating-star empty"></div>
-    ));
-
-  return (
-    <div className="flex items-center">
-      {fullStar}
-      {partialStar}
-      {emptyStar}
-    </div>
-  );
-};
-
-const calculateAverageRating = (
-  data: {
-    count: number;
-    id: number;
-    title: string;
-    percent: number;
-  }[]
-): number => {
-  const starRatings: { [key: number]: number } = {
-    5: 5,
-    4: 4,
-    3: 3,
-    2: 2,
-    1: 1,
-  };
-
-  const totalWeightedRating = data.reduce(
-    (acc, review) => acc + starRatings[review.id] * review.count,
-    0
-  );
-
-  const totalRatingsCount = data.reduce((acc, review) => acc + review.count, 0);
-
-  const averageRating =
-    totalRatingsCount > 0 ? totalWeightedRating / totalRatingsCount : 0;
-
-  return Number(averageRating.toFixed(2));
-};
-
-console.log(generateStars(3.33));
+import { UserReviewsSlice } from "@/redux/slices/userReviewsSlice";
 
 export default function ProductInformations({
   product,
+  userReviewsState,
 }: {
   product: GameAPIResponse;
+  userReviewsState: UserReviewsSlice;
 }) {
-  const { userReviewsState } = useUserReviews();
-  const processedReviews = processReviews(userReviewsState.reviews);
-  const mergedData = mergeReviewData(processedReviews, product.ratings);
-
-  const averageRating = calculateAverageRating(mergedData);
-
-  const mergedRatingsCount =
-    mergedData.reduce((acc, review) => acc + review.count, 0) || 0;
+  const processedReviews = React.useMemo(
+    () => processReviews(userReviewsState.reviews),
+    [userReviewsState.reviews]
+  );
+  const mergedReviews = React.useMemo(
+    () => mergeReviews(processedReviews, product.ratings),
+    [userReviewsState.reviews, product.ratings]
+  );
+  const mergedRatingsCount = React.useMemo(
+    () => mergedReviews.reduce((acc, review) => acc + review.count, 0) || 0,
+    [mergedReviews]
+  );
 
   return (
     <>
@@ -123,11 +61,13 @@ export default function ProductInformations({
             </div>
             <div className="flex items-center flex-wrap gap-x-[5px] mb-[15px] cursor-default">
               <div>
-                <span className="">{generateStars(averageRating)}</span>
+                <span className="">
+                  {generateStars(calculateOverallRating(mergedReviews))}
+                </span>
               </div>
               <div className="flex-wrap mt-[5px]">
                 <span className="text-[15px] text-buttonBackground font-[800]">
-                  {averageRating}
+                  {calculateOverallRating(mergedReviews)}
                 </span>
                 <span className="text-[14px] text-[#FFFFFF]">/ 5</span>
                 <span className="text-[14px] text-[#FFFFFF]"> from </span>

@@ -6,7 +6,6 @@ import {
   TwoFactorToken,
   TwoFactorConfirmation,
 } from "@prisma/client";
-import { LoggedUserWishList, LoggedUserCart } from "@/utils/helpers/types";
 
 export const getUserByEmail = async (email: string): Promise<User | null> => {
   try {

@@ -6,44 +6,20 @@ import {
   getUserWishList,
   getProductReviews,
 } from "@/data/database/publicSQL/queries";
-import { RequestResponse } from "../helpers/types";
+import { RequestResponse } from "../utils/helpers/types";
 import { RatingTitle, Product, Cart, Review, Wishlist } from "@prisma/client";
-import { ProductConstructor } from "../helpers/types";
+import { ProductConstructor } from "../utils/helpers/types";
 
 export default class ProductService implements IProductService {
-  private email?: string;
-  private externalProductId?: number;
-  private name?: string;
-  private description?: string;
-  private price?: number;
-  private background_image?: string;
-  private rating?: number;
-  private slug?: string;
-  private released?: string;
-  private added?: number;
-  private title?: string;
-  private likes?: number;
-  private reviewId?: string;
+  private productData: ProductConstructor;
 
   constructor(productData: ProductConstructor = {}) {
-    this.email = productData.email;
-    this.externalProductId = productData.externalProductId;
-    this.name = productData.name;
-    this.description = productData.description;
-    this.price = productData.price;
-    this.background_image = productData.background_image;
-    this.rating = productData.rating;
-    this.slug = productData.slug;
-    this.released = productData.released;
-    this.added = productData.added;
-    this.title = productData.title;
-    this.likes = productData.likes;
-    this.reviewId = productData.reviewId;
+    this.productData = productData;
   }
 
   async getCart(): Promise<RequestResponse<Cart | null>> {
     try {
-      const user = await getUserByEmail(this.email as string);
+      const user = await getUserByEmail(this.productData.email as string);
       if (!user) {
         return {
           success: false,
@@ -76,7 +52,7 @@ export default class ProductService implements IProductService {
 
   async getWishList(): Promise<RequestResponse<Wishlist | null>> {
     try {
-      const user = await getUserByEmail(this.email as string);
+      const user = await getUserByEmail(this.productData.email as string);
       if (!user) {
         return {
           success: false,
@@ -110,7 +86,7 @@ export default class ProductService implements IProductService {
   async getReviews(): Promise<RequestResponse<Review | null>> {
     try {
       const existingProduct = await postgres.product.findFirst({
-        where: { externalProductId: this.externalProductId },
+        where: { externalProductId: this.productData.externalProductId },
       });
 
       if (!existingProduct) {
@@ -149,7 +125,11 @@ export default class ProductService implements IProductService {
 
   async addProduct(): Promise<RequestResponse<Product | null>> {
     try {
-      if (!this.externalProductId || !this.name || !this.price) {
+      if (
+        !this.productData.externalProductId ||
+        !this.productData.name ||
+        !this.productData.price
+      ) {
         return {
           success: false,
           message: "Product ID, name, and price are required!",
@@ -158,7 +138,7 @@ export default class ProductService implements IProductService {
       }
 
       const existingProduct = await postgres.product.findFirst({
-        where: { externalProductId: this.externalProductId },
+        where: { externalProductId: this.productData.externalProductId },
       });
 
       if (existingProduct) {
@@ -171,17 +151,17 @@ export default class ProductService implements IProductService {
 
       const newProduct = await postgres.product.create({
         data: {
-          externalProductId: this.externalProductId,
+          externalProductId: this.productData.externalProductId,
           quantity: 1,
           productsInformations: {
             create: {
-              name: this.name as string,
-              description: this.description as string,
-              price: this.price as number,
-              background_image: this.background_image as string,
-              slug: this.slug as string,
-              released: this.released as string,
-              added: this.added as number,
+              name: this.productData.name as string,
+              description: this.productData.description as string,
+              price: this.productData.price as number,
+              background_image: this.productData.background_image as string,
+              slug: this.productData.slug as string,
+              released: this.productData.released as string,
+              added: this.productData.added as number,
             },
           },
         },
@@ -204,7 +184,7 @@ export default class ProductService implements IProductService {
 
   async addProductToCart(): Promise<RequestResponse<Cart | null>> {
     try {
-      if (!this.externalProductId) {
+      if (!this.productData.externalProductId) {
         return {
           success: false,
           message: "Product ID is required!",
@@ -212,7 +192,7 @@ export default class ProductService implements IProductService {
         };
       }
 
-      const user = await getUserByEmail(this.email as string);
+      const user = await getUserByEmail(this.productData.email as string);
 
       if (!user) {
         return {
@@ -230,17 +210,18 @@ export default class ProductService implements IProductService {
             userId: user.id,
             products: {
               create: {
-                externalProductId: this.externalProductId as number,
+                externalProductId: this.productData.externalProductId as number,
                 quantity: 1,
                 productsInformations: {
                   create: {
-                    name: this.name as string,
-                    description: this.description as string,
-                    price: this.price as number,
-                    background_image: this.background_image as string,
-                    slug: this.slug as string,
-                    released: this.released as string,
-                    added: this.added as number,
+                    name: this.productData.name as string,
+                    description: this.productData.description as string,
+                    price: this.productData.price as number,
+                    background_image: this.productData
+                      .background_image as string,
+                    slug: this.productData.slug as string,
+                    released: this.productData.released as string,
+                    added: this.productData.added as number,
                   },
                 },
               },
@@ -254,7 +235,7 @@ export default class ProductService implements IProductService {
         const productInCart = await postgres.product.findFirst({
           where: {
             cartId: userCart.id,
-            externalProductId: this.externalProductId,
+            externalProductId: this.productData.externalProductId,
           },
         });
 
@@ -267,17 +248,17 @@ export default class ProductService implements IProductService {
           await postgres.product.create({
             data: {
               cartId: userCart.id as string,
-              externalProductId: this.externalProductId as number,
+              externalProductId: this.productData.externalProductId as number,
               quantity: 1,
               productsInformations: {
                 create: {
-                  name: this.name as string,
-                  description: this.description as string,
-                  price: this.price as number,
-                  background_image: this.background_image as string,
-                  slug: this.slug as string,
-                  released: this.released as string,
-                  added: this.added as number,
+                  name: this.productData.name as string,
+                  description: this.productData.description as string,
+                  price: this.productData.price as number,
+                  background_image: this.productData.background_image as string,
+                  slug: this.productData.slug as string,
+                  released: this.productData.released as string,
+                  added: this.productData.added as number,
                 },
               },
             },
@@ -306,7 +287,7 @@ export default class ProductService implements IProductService {
 
   async addProductToWishlist(): Promise<RequestResponse<Wishlist | null>> {
     try {
-      if (!this.externalProductId) {
+      if (!this.productData.externalProductId) {
         return {
           success: false,
           message: "Product ID is required!",
@@ -314,7 +295,7 @@ export default class ProductService implements IProductService {
         };
       }
 
-      const user = await getUserByEmail(this.email as string);
+      const user = await getUserByEmail(this.productData.email as string);
 
       if (!user) {
         return {
@@ -332,17 +313,18 @@ export default class ProductService implements IProductService {
             userId: user.id,
             products: {
               create: {
-                externalProductId: this.externalProductId as number,
+                externalProductId: this.productData.externalProductId as number,
                 productsInformations: {
                   create: {
-                    name: this.name as string,
-                    description: this.description as string,
-                    price: this.price as number,
-                    background_image: this.background_image as string,
-                    rating: this.rating as number,
-                    slug: this.slug as string,
-                    released: this.released as string,
-                    added: this.added as number,
+                    name: this.productData.name as string,
+                    description: this.productData.description as string,
+                    price: this.productData.price as number,
+                    background_image: this.productData
+                      .background_image as string,
+                    rating: this.productData.rating as number,
+                    slug: this.productData.slug as string,
+                    released: this.productData.released as string,
+                    added: this.productData.added as number,
                   },
                 },
               },
@@ -356,7 +338,7 @@ export default class ProductService implements IProductService {
         const productInWishlist = await postgres.product.findFirst({
           where: {
             wishListId: userWishList.id,
-            externalProductId: this.externalProductId,
+            externalProductId: this.productData.externalProductId,
           },
         });
 
@@ -370,17 +352,17 @@ export default class ProductService implements IProductService {
           await postgres.product.create({
             data: {
               wishListId: userWishList.id as string,
-              externalProductId: this.externalProductId as number,
+              externalProductId: this.productData.externalProductId as number,
               productsInformations: {
                 create: {
-                  name: this.name as string,
-                  description: this.description as string,
-                  price: this.price as number,
-                  background_image: this.background_image as string,
-                  rating: this.rating as number,
-                  slug: this.slug as string,
-                  released: this.released as string,
-                  added: this.added as number,
+                  name: this.productData.name as string,
+                  description: this.productData.description as string,
+                  price: this.productData.price as number,
+                  background_image: this.productData.background_image as string,
+                  rating: this.productData.rating as number,
+                  slug: this.productData.slug as string,
+                  released: this.productData.released as string,
+                  added: this.productData.added as number,
                 },
               },
             },
@@ -410,7 +392,7 @@ export default class ProductService implements IProductService {
 
   async addReviewToProduct(): Promise<RequestResponse<Review | null>> {
     try {
-      if (!this.externalProductId || !this.rating) {
+      if (!this.productData.externalProductId || !this.productData.rating) {
         return {
           success: false,
           message: "Product ID and rating are required!",
@@ -418,7 +400,7 @@ export default class ProductService implements IProductService {
         };
       }
 
-      if (!this.email) {
+      if (!this.productData.email) {
         return {
           success: false,
           message: "User email is required!",
@@ -426,7 +408,7 @@ export default class ProductService implements IProductService {
         };
       }
 
-      const user = await getUserByEmail(this.email);
+      const user = await getUserByEmail(this.productData.email);
       if (!user) {
         return {
           success: false,
@@ -436,7 +418,7 @@ export default class ProductService implements IProductService {
       }
 
       let product = await postgres.product.findFirst({
-        where: { externalProductId: this.externalProductId },
+        where: { externalProductId: this.productData.externalProductId },
       });
 
       if (!product) {
@@ -467,17 +449,17 @@ export default class ProductService implements IProductService {
         data: {
           userId: user.id,
           productId: product?.id as string,
-          likes: this.likes,
+          likes: this.productData.likes,
         },
       });
 
       await postgres.rating.create({
         data: {
-          rating: this.rating,
+          rating: this.productData.rating,
           reviewId: createdReview.id,
-          title: this.title as RatingTitle,
-          percent: this.rating * 20,
-          description: this.description as string,
+          title: this.productData.title as RatingTitle,
+          percent: this.productData.rating * 20,
+          description: this.productData.description as string,
         },
       });
 
@@ -498,7 +480,7 @@ export default class ProductService implements IProductService {
 
   async deleteProductFromCart(): Promise<RequestResponse<Cart | null>> {
     try {
-      if (!this.externalProductId) {
+      if (!this.productData.externalProductId) {
         return {
           success: false,
           message: "Product ID is required!",
@@ -506,7 +488,7 @@ export default class ProductService implements IProductService {
         };
       }
 
-      const user = await getUserByEmail(this.email as string);
+      const user = await getUserByEmail(this.productData.email as string);
 
       if (!user) {
         return {
@@ -529,7 +511,7 @@ export default class ProductService implements IProductService {
       const productInCart = await postgres.product.findFirst({
         where: {
           cartId: userCart.id,
-          externalProductId: this.externalProductId,
+          externalProductId: this.productData.externalProductId,
         },
       });
 
@@ -566,7 +548,7 @@ export default class ProductService implements IProductService {
 
   async deleteProductFromWishList(): Promise<RequestResponse<Wishlist | null>> {
     try {
-      if (!this.externalProductId) {
+      if (!this.productData.externalProductId) {
         return {
           success: false,
           message: "Product ID is required!",
@@ -574,7 +556,7 @@ export default class ProductService implements IProductService {
         };
       }
 
-      const user = await getUserByEmail(this.email as string);
+      const user = await getUserByEmail(this.productData.email as string);
 
       if (!user) {
         return {
@@ -597,7 +579,7 @@ export default class ProductService implements IProductService {
       const productInWishlist = await postgres.product.findFirst({
         where: {
           wishListId: userWishList.id,
-          externalProductId: this.externalProductId,
+          externalProductId: this.productData.externalProductId,
         },
       });
 
@@ -642,7 +624,7 @@ export default class ProductService implements IProductService {
 
   async increaseProductQuantity(): Promise<RequestResponse<Cart | null>> {
     try {
-      const user = await getUserByEmail(this.email as string);
+      const user = await getUserByEmail(this.productData.email as string);
 
       if (!user) {
         return {
@@ -665,7 +647,7 @@ export default class ProductService implements IProductService {
       const productInCart = await postgres.product.findFirst({
         where: {
           cartId: userCart.id,
-          externalProductId: this.externalProductId,
+          externalProductId: this.productData.externalProductId,
         },
       });
 
@@ -703,7 +685,7 @@ export default class ProductService implements IProductService {
 
   async decreaseProductQuantity(): Promise<RequestResponse<Cart | null>> {
     try {
-      const user = await getUserByEmail(this.email as string);
+      const user = await getUserByEmail(this.productData.email as string);
 
       if (!user) {
         return {
@@ -726,7 +708,7 @@ export default class ProductService implements IProductService {
       const productInCart = await postgres.product.findFirst({
         where: {
           cartId: userCart.id,
-          externalProductId: this.externalProductId,
+          externalProductId: this.productData.externalProductId,
         },
       });
 
@@ -770,7 +752,7 @@ export default class ProductService implements IProductService {
 
   async likeReview(): Promise<RequestResponse<Review | null>> {
     try {
-      if (!this.email || !this.externalProductId) {
+      if (!this.productData.email || !this.productData.externalProductId) {
         return {
           success: false,
           message: "Email and product ID are required!",
@@ -779,7 +761,7 @@ export default class ProductService implements IProductService {
       }
 
       const user = await postgres.user.findUnique({
-        where: { email: this.email },
+        where: { email: this.productData.email },
         include: { reviewsLikers: true, reviews: true },
       });
 
@@ -788,7 +770,7 @@ export default class ProductService implements IProductService {
       }
 
       const product = await postgres.product.findFirst({
-        where: { externalProductId: this.externalProductId },
+        where: { externalProductId: this.productData.externalProductId },
       });
 
       if (!product) {
@@ -796,7 +778,7 @@ export default class ProductService implements IProductService {
       }
 
       const review = await postgres.review.findUnique({
-        where: { id: this.reviewId },
+        where: { id: this.productData.reviewId },
       });
 
       const existingLiker = await postgres.reviewLikers.findUnique({
@@ -865,7 +847,7 @@ export default class ProductService implements IProductService {
 
   async unLikeReview(): Promise<RequestResponse<Review | null>> {
     try {
-      if (!this.email || !this.externalProductId) {
+      if (!this.productData.email || !this.productData.externalProductId) {
         return {
           success: false,
           message: "Email and product ID are required!",
@@ -873,14 +855,14 @@ export default class ProductService implements IProductService {
         };
       }
 
-      const user = await getUserByEmail(this.email);
+      const user = await getUserByEmail(this.productData.email);
 
       if (!user) {
         return { success: false, message: "User not found!", data: null };
       }
 
       const product = await postgres.product.findFirst({
-        where: { externalProductId: this.externalProductId },
+        where: { externalProductId: this.productData.externalProductId },
         include: {
           reviews: true,
         },
@@ -891,7 +873,7 @@ export default class ProductService implements IProductService {
       }
 
       const review = await postgres.review.findUnique({
-        where: { id: this.reviewId },
+        where: { id: this.productData.reviewId },
       });
 
       const existingLiker = await postgres.reviewLikers.findUnique({

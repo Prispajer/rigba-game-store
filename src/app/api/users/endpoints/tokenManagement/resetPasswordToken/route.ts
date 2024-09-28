@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import TokenService from "@/utils/services/TokenService";
+import TokenService from "@/services/TokenService";
 import ITokenService from "@/utils/interfaces/ITokenService";
 import { RequestResponse, ResetPasswordToken } from "@/utils/helpers/types";
 

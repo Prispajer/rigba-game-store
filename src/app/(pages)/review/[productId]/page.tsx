@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import ReviewContainer from "@/components/Interface/Review/ReviewContainer";
-import fetchService from "@/utils/services/FetchService";
+import fetchService from "@/services/FetchService";
 
 export const generateMetadata = async ({
   params,

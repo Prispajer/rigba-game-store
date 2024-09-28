@@ -4,7 +4,7 @@ import { FaSearch } from "react-icons/fa";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useFetchGameData from "@/hooks/useFetchGameData";
 import useSearchText from "@/hooks/useSearchText";
-import UtilsService from "@/utils/services/UtilsService";
+import UtilsService from "@/services/UtilsService";
 import IUtilsService from "@/utils/serverInterfaces/IUtilsService";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { GameAPIResponse } from "@/utils/helpers/types";

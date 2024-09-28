@@ -22,6 +22,7 @@ import { AppDispatch, RootState } from "@/redux/store";
 
 export default function useFetchGameData() {
   const dispatch = useDispatch<AppDispatch>();
+
   const productFilterState = useSelector(
     (state: RootState) => state.productFilter
   );

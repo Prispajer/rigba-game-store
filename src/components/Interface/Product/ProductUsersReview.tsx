@@ -1,24 +1,34 @@
 import React from "react";
 import Image from "next/image";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
-import useUserReviews from "@/hooks/useUserReviews";
-import useCurrentUser from "@/hooks/useCurrentUser";
-import { generateStars } from "./ProductInformations";
-import { GameAPIResponse, User } from "@/utils/helpers/types";
+import { generateStars } from "@/utils/ratings";
+import { GameAPIResponse } from "@/utils/helpers/types";
+import { UserReviewsSlice } from "@/redux/slices/userReviewsSlice";
+import { User } from "@/utils/helpers/types";
 
 export default function ProductUsersReview({
   product,
+  user,
+  userReviewsState,
+  handleFetchUserReviews,
+  handleFetchLikeUserReview,
+  handleFetchUnLikeUserReview,
 }: {
   product: GameAPIResponse;
+  user: User | null;
+  userReviewsState: UserReviewsSlice;
+  handleFetchUserReviews: (externalProductId: number) => void;
+  handleFetchLikeUserReview: (
+    email: string,
+    externalProductId: number,
+    reviewId: string
+  ) => void;
+  handleFetchUnLikeUserReview: (
+    email: string,
+    externalProductId: number,
+    reviewId: string
+  ) => void;
 }) {
-  const { user } = useCurrentUser();
-  const {
-    userReviewsState,
-    handleFetchUserReviews,
-    handleFetchLikeUserReview,
-    handleFetchUnLikeUserReview,
-  } = useUserReviews();
-
   React.useEffect(() => {
     handleFetchUserReviews(product.id as number);
   }, [

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import fetchService from "@/utils/services/FetchService";
+import fetchService from "@/services/FetchService";
 import { getGamesWithRandomPrices } from "@/utils/prices";
 import { GameAPIResponse, RequestResponse } from "@/utils/helpers/types";
 

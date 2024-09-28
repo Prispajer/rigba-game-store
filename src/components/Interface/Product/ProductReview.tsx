@@ -1,27 +1,34 @@
-"use client";
-import { generateStars } from "./ProductInformations";
-import useUserReviews from "@/hooks/useUserReviews";
-import { processReviews, mergeReviewData } from "@/utils/prices";
+import React from "react";
+import { generateStars } from "@/utils/ratings";
+import { processReviews, mergeReviews } from "@/utils/reviews";
 import { GameAPIResponse } from "@/utils/helpers/types";
+import { UserReviewsSlice } from "@/redux/slices/userReviewsSlice";
 
 export default function ProductReview({
   product,
   redirectToReview,
+  userReviewsState,
 }: {
   product: GameAPIResponse;
   redirectToReview: (name: string) => void;
+  userReviewsState: UserReviewsSlice;
 }) {
-  const { userReviewsState } = useUserReviews();
-  const processedReviews = processReviews(userReviewsState.reviews);
-  const mergedData = mergeReviewData(processedReviews, product.ratings);
+  const processedReviews = React.useMemo(
+    () => processReviews(userReviewsState.reviews),
+    [userReviewsState.reviews]
+  );
+  const mergedReviews = React.useMemo(
+    () => mergeReviews(processedReviews, product.ratings),
+    [userReviewsState.reviews, product.ratings]
+  );
 
   return (
     <div className="md:mx-auto mx-[-20px] pt-[20px] px-[20px] pb-[15px] md:px-0 lg:px-[20px] xxl:px-0 bg-secondaryColor md:bg-transparent lg:bg-secondaryColor xxl:bg-transparent">
       <div className="sm:flex sm:flex-row w-full gap-4">
         <div className="flex flex-wrap justify-between items-center w-full">
           <ul className="flex flex-col md:flex-row lg:flex-col xxl:flex-row">
-            {mergedData.length > 0 ? (
-              mergedData
+            {mergedReviews.length > 0 ? (
+              mergedReviews
                 ?.sort((a, b) => a.percent - b.percent)
                 .map((rating) => (
                   <li

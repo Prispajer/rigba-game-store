@@ -2,7 +2,7 @@ import React from "react";
 import { useSearchParams } from "next/navigation";
 import useCurrentUser from "./useCurrentUser";
 import useWindowVisibility from "./useWindowVisibility";
-import requestService from "@/utils/services/RequestService";
+import requestService from "@/services/RequestService";
 import {
   LoginSchema,
   RegisterSchema,

@@ -1,4 +1,6 @@
 import bcrypt from "bcryptjs";
+import "reflect-metadata";
+import { injectable, inject } from "inversify";
 import { postgres } from "@/data/database/publicSQL/postgres";
 import ITokenService from "../interfaces/ITokenService";
 import {
@@ -22,26 +24,20 @@ import {
   TwoFactorToken,
   ResetPasswordToken,
   TokenConstructor,
-} from "../helpers/types";
+  UserDTO,
+} from "../utils/helpers/types";
+import IUserService from "../interfaces/IUserService";
+import UserService from "./UserService";
 
+@injectable()
 export default class TokenService implements ITokenService {
-  private email?: string;
-  private password?: string;
-  private code?: string;
-
-  constructor(tokenData: TokenConstructor = {}) {
-    this.email = tokenData.email;
-    this.password = tokenData.password;
-    this.code = tokenData.code;
-  }
-
   async sendEmailVerificationToken(
-    user: User
+    user: User | null
   ): Promise<RequestResponse<EmailVerificationToken> | void> {
     const emailVerificationToken = await generateEmailVerificationToken(
-      user.email as string
+      user?.email as string
     );
-    if (!user.emailVerified) {
+    if (!user?.emailVerified) {
       await sendVerificationEmail(
         emailVerificationToken.email,
         emailVerificationToken.token

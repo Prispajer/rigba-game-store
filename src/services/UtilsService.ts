@@ -1,5 +1,5 @@
-import { SearchData } from "../helpers/types";
 import IUtilsService from "../interfaces/IUtilsService";
+import { ProductInformations } from "../utils/helpers/types";
 
 export default class UtilsService implements IUtilsService {
   private searchText: string = "";
@@ -16,7 +16,7 @@ export default class UtilsService implements IUtilsService {
     this.searchText = searchText;
   }
 
-  searchByString(searchData: SearchData[]): SearchData[] {
+  searchByString(searchData: ProductInformations[]): ProductInformations[] {
     const searchText = this.getSearchText();
     if (!searchData) {
       return [];

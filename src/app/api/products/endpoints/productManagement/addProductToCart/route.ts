@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import ProductService from "@/utils/services/ProductService";
+import ProductService from "@/services/ProductService";
 import IProductService from "@/utils/interfaces/IProductsService";
 import { RequestResponse } from "@/utils/helpers/types";
 import { Product } from "@/utils/helpers/types";

@@ -6,16 +6,16 @@ import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
 import LoadingAnimation from "../Shared/Animations/LoadingAnimation";
 import ShowMoreButton from "../Shared/Buttons/ShowMoreButton";
 import useCustomRouter from "@/hooks/useCustomRouter";
-import FetchService from "@/utils/services/FetchService";
+import FetchService from "@/services/FetchService";
 import { getGamesWithRandomPrices } from "@/utils/prices";
 
 export default function ProductList() {
-  const { redirectToGame } = useCustomRouter();
   const [productsByOrdering, setProductsByOrdering] = React.useState<
     GameAPIResponse[]
   >([]);
   const [quantity, setQuantity] = React.useState(1);
   const [newLoadingArray, setNewLoadingArray] = React.useState<boolean[]>([]);
+  const { redirectToGame } = useCustomRouter();
 
   const loadMore = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
@@ -40,7 +40,7 @@ export default function ProductList() {
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-product-list-auto-fit  gap-x-[10px]">
-        {newLoadingArray.map((value, index) => (
+        {newLoadingArray.map((_, index) => (
           <div
             key={productsByOrdering[index]?.id}
             onClick={() => {

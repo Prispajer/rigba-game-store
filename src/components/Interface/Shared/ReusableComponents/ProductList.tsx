@@ -11,7 +11,7 @@ import useSearchText from "@/hooks/useSearchText";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useUserWishList from "@/hooks/useUserWishList";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import FetchService from "@/utils/services/FetchService";
+import FetchService from "@/services/FetchService";
 import { getGamesWithRandomPrices } from "@/utils/prices";
 
 const ProductList = ({ type }) => {

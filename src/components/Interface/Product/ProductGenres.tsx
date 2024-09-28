@@ -1,14 +1,14 @@
 "use client";
 import React from "react";
-import useCustomRouter from "@/hooks/useCustomRouter";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
 export default function ProductGenres({
   product,
+  pushGenresToUrl,
 }: {
   product: GameAPIResponse;
+  pushGenresToUrl: (genresId: number[]) => void;
 }) {
-  const { pushGenresToUrl } = useCustomRouter();
   return (
     <section className="flex flex-col max-w-[1240px] md:mx-auto pb-[15px] bg-primaryColor">
       <ul className="flex overflow-x-auto">

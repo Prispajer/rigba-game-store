@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import RequestService from "@/utils/services/RequestService";
+import RequestService from "@/services/RequestService";
 import { RequestResponse, UserCart } from "@/utils/helpers/types";
 
 interface UserCartState {

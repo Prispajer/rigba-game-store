@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
 import ProductHeaders from "../Shared/ReusableComponents/ProductHeaders";
 import ProductList from "../Product/ProductList";
-import requestService from "@/utils/services/RequestService";
+import requestService from "@/services/RequestService";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { generateRandomValue } from "@/utils/prices";
@@ -214,7 +214,7 @@ export default function ReviewContainer({
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-1 items-start w-full px-[20px] pb-[20px] bg-secondaryColor ">
+        <div className="grid grid-cols-1 items-start w-full px-[20px] pb-[20px]  ">
           <ProductHeaders headerText="You may like" />
           <ProductList />
         </div>

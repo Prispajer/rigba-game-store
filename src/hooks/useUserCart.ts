@@ -28,9 +28,9 @@ export default function useUserCart() {
     debounce(
       async (
         productId: string,
-        productName: string,
-        productDescription: string,
-        image: string,
+        name: string,
+        description: string,
+        background_image: string,
         rating: number,
         slug: string,
         released: string,
@@ -41,10 +41,10 @@ export default function useUserCart() {
             fetchAddUserProductToCart({
               email: user.email,
               externalProductId: productId,
-              name: productName,
-              description: productDescription,
+              name: name,
+              description: description,
               price: generateRandomValue(),
-              background_image: image,
+              background_image: background_image,
               rating,
               slug,
               released,

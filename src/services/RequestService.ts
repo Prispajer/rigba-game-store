@@ -1,5 +1,5 @@
 import IRequestService from "../interfaces/IRequestService";
-import { RequestResponse } from "../helpers/types";
+import { RequestResponse } from "../utils/helpers/types";
 
 export class RequestService implements IRequestService {
   private readonly baseUrl: string;

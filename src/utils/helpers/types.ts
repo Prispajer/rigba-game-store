@@ -1,13 +1,35 @@
 export interface User {
   id: string;
   name?: string | null;
-  email: string | null;
+  email: string;
   emailVerified?: Date | null;
   password?: string | null;
   role: string;
   image?: string | null;
   isTwoFactorEnabled: boolean;
 }
+
+export type UserDTO = {
+  email: string;
+  password?: string;
+  newPassword?: string;
+  emailVerified?: Date | null;
+  code?: string;
+  token?: string;
+  fullName?: string;
+  birthDate?: Date;
+  address?: string;
+  state?: string;
+  zipCode?: string;
+  city?: string;
+  country?: string;
+  phoneNumber?: string;
+};
+
+export type RegisterUserDTO = {
+  email: string;
+  password: string;
+};
 export interface Token {
   id: string;
   email: string;
@@ -130,22 +152,6 @@ export enum NavCurrentElement {
   Link = "link",
 }
 
-export type UserConstructor = {
-  email?: string;
-  password?: string;
-  newPassword?: string;
-  code?: string;
-  token?: string;
-  fullName?: string;
-  birthDate?: Date;
-  address?: string;
-  state?: string;
-  zipCode?: string;
-  city?: string;
-  country?: string;
-  phoneNumber?: string;
-};
-
 export type TokenConstructor = {
   email?: string;
   password?: string;
@@ -168,4 +174,12 @@ export type ProductConstructor = {
   title?: string;
   likes?: number;
   reviewId?: string;
+};
+
+export const CLASSTYPES = {
+  IUserService: Symbol.for("IUserService"),
+  IUserRepository: Symbol.for("IUserRepository"),
+  ITokenService: Symbol.for("ITokenService"),
+  ITokenRepository: Symbol.for("ITokenRepository"),
+  ICheckerService: Symbol.for("ICheckerService"),
 };

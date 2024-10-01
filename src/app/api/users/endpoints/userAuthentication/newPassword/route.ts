@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import UserService from "@/services/UserService";
-import IUserService from "@/utils/interfaces/IUserService";
-
+import { userService } from "@/utils/injector";
 import { RequestResponse, ResetPasswordToken } from "@/utils/helpers/types";
 
 export async function POST(
@@ -10,11 +8,10 @@ export async function POST(
 ): Promise<NextResponse<RequestResponse<ResetPasswordToken>>> {
   const { password, token } = await request.json();
 
-  const userService: IUserService = new UserService({
+  const setNewPasswordResponse = await userService.setNewPassword({
     password,
     token,
   });
-  const setNewPasswordResponse = await userService.setNewPassword();
 
   return NextResponse.json<RequestResponse<ResetPasswordToken>>({
     success: setNewPasswordResponse.success,

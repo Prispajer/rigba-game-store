@@ -1,34 +1,30 @@
-import { injectable, inject } from "inversify";
 import { postgres } from "@/data/database/publicSQL/postgres";
-import {
-  getTwoFactorConfirmationByUserId,
-  getUserByEmail,
-  getTwoFactorTokenByEmail,
-  getEmailVerificationTokenByToken,
-  getPasswordResetTokenByToken,
-} from "@/data/database/publicSQL/queries";
-import {
-  generateEmailVerificationToken,
-  generateTwoFactorToken,
-} from "@/data/database/publicSQL/tokens";
-import {
-  sendVerificationEmail,
-  sendTwoFactorTokenEmail,
-} from "@/data/database/publicSQL/mail";
-import IUserRepository from "../interfaces/IUserRepository";
-import { User, RegisterUserDTO } from "@/utils/helpers/types";
+import { injectable, inject } from "inversify";
+import type IUserRepository from "@/interfaces/IUserRepository";
+import type IUserQueries from "@/interfaces/IUserQueries";
+import { User, RegisterUserDTO, CLASSTYPES } from "@/utils/helpers/types";
 
 @injectable()
-export class UserRepository implements IUserRepository {
-  async getUser(email: string): Promise<User | null> {
-    return await getUserByEmail(email);
+export default class UserRepository implements IUserRepository {
+  private readonly _userQueries: IUserQueries;
+
+  constructor(@inject(CLASSTYPES.IUserQueries) userQueries: IUserQueries) {
+    this._userQueries = userQueries;
+  }
+
+  async getUserByEmail(email: string): Promise<User | null> {
+    return await this._userQueries.getUserByProperty("email", email);
+  }
+
+  async getUserById(id: string): Promise<User | null> {
+    return await this._userQueries.getUserByProperty("id", id);
   }
 
   async createUser(email: string, password: string): Promise<RegisterUserDTO> {
     const createdUser = await postgres.user.create({
       data: {
-        email: email,
-        password: password,
+        email,
+        password,
       },
     });
 

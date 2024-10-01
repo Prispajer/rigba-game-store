@@ -18,10 +18,12 @@ export default interface IUserService {
     userDTO: UserDTO
   ): Promise<RequestResponse<EmailVerificationToken>>;
   confirmTwoFactorAuthentication(
-    user: User,
+    user: User | null,
     code?: string
   ): Promise<RequestResponse<TwoFactorToken> | void>;
-  setNewPassword(): Promise<RequestResponse<ResetPasswordToken>>;
+  setNewPassword(
+    userDTO: UserDTO
+  ): Promise<RequestResponse<ResetPasswordToken>>;
   changePassword(): Promise<RequestResponse<User>>;
   toggleTwoFactor(): Promise<RequestResponse<void>>;
   updatePersonalData(

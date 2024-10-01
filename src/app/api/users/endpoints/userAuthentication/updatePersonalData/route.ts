@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import UserService from "@/services/UserService";
-import IUserService from "@/utils/interfaces/IUserService";
+import IUserService from "@/interfaces/IUserService";
 import { RequestResponse, ResetPasswordToken } from "@/utils/helpers/types";
 
 export async function POST(

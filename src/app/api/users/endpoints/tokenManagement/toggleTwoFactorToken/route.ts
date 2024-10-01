@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import TokenService from "@/services/TokenService";
-import ITokenService from "@/utils/interfaces/ITokenService";
+import ITokenService from "@/interfaces/ITokenService";
 import { RequestResponse, ResetPasswordToken } from "@/utils/helpers/types";
 
 export async function POST(request: NextRequest, response: NextResponse) {

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { headers } from "next/headers";
 import { postgres } from "@/data/database/publicSQL/postgres";
-import { getUserByEmail } from "@/data/database/publicSQL/queries";
+import { userRepository } from "@/utils/injector";
 
 const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY || "", {
   apiVersion: "2024-06-20",
@@ -11,7 +11,8 @@ const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY || "", {
 export async function POST(request: NextRequest) {
   const { email, amount, cart } = await request.json();
 
-  const user = await getUserByEmail(email);
+  const user = await userRepository.getUserByEmail(email);
+
   if (!user) {
     console.error("User not found");
     throw new Error("User not found");

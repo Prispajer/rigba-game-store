@@ -1,25 +1,32 @@
+import { inject } from "inversify";
 import { postgres } from "@/data/database/publicSQL/postgres";
-import IProductService from "../interfaces/IProductsService";
+import { RatingTitle, Product, Cart, Review, Wishlist } from "@prisma/client";
 import {
-  getUserByEmail,
   getUserCart,
   getUserWishList,
   getProductReviews,
 } from "@/data/database/publicSQL/queries";
-import { RequestResponse } from "../utils/helpers/types";
-import { RatingTitle, Product, Cart, Review, Wishlist } from "@prisma/client";
-import { ProductConstructor } from "../utils/helpers/types";
+import type IUserRepository from "@/interfaces/IUserRepository";
+import IProductService from "../interfaces/IProductsService";
+import type {
+  RequestResponse,
+  ProductConstructor,
+} from "../utils/helpers/types";
+import { CLASSTYPES } from "../utils/helpers/types";
+import { userRepository } from "@/utils/injector";
 
 export default class ProductService implements IProductService {
   private productData: ProductConstructor;
 
-  constructor(productData: ProductConstructor = {}) {
+  constructor(productData: ProductConstructor) {
     this.productData = productData;
   }
 
   async getCart(): Promise<RequestResponse<Cart | null>> {
     try {
-      const user = await getUserByEmail(this.productData.email as string);
+      const user = await userRepository.getUserByEmail(
+        this.productData.email as string
+      );
       if (!user) {
         return {
           success: false,
@@ -52,7 +59,9 @@ export default class ProductService implements IProductService {
 
   async getWishList(): Promise<RequestResponse<Wishlist | null>> {
     try {
-      const user = await getUserByEmail(this.productData.email as string);
+      const user = await userRepository.getUserByEmail(
+        this.productData.email as string
+      );
       if (!user) {
         return {
           success: false,
@@ -192,7 +201,9 @@ export default class ProductService implements IProductService {
         };
       }
 
-      const user = await getUserByEmail(this.productData.email as string);
+      const user = await userRepository.getUserByEmail(
+        this.productData.email as string
+      );
 
       if (!user) {
         return {
@@ -295,7 +306,9 @@ export default class ProductService implements IProductService {
         };
       }
 
-      const user = await getUserByEmail(this.productData.email as string);
+      const user = await userRepository.getUserByEmail(
+        this.productData.email as string
+      );
 
       if (!user) {
         return {
@@ -408,7 +421,7 @@ export default class ProductService implements IProductService {
         };
       }
 
-      const user = await getUserByEmail(this.productData.email);
+      const user = await userRepository.getUserByEmail(this.productData.email);
       if (!user) {
         return {
           success: false,
@@ -488,7 +501,9 @@ export default class ProductService implements IProductService {
         };
       }
 
-      const user = await getUserByEmail(this.productData.email as string);
+      const user = await userRepository.getUserByEmail(
+        this.productData.email as string
+      );
 
       if (!user) {
         return {
@@ -556,7 +571,9 @@ export default class ProductService implements IProductService {
         };
       }
 
-      const user = await getUserByEmail(this.productData.email as string);
+      const user = await userRepository.getUserByEmail(
+        this.productData.email as string
+      );
 
       if (!user) {
         return {
@@ -624,7 +641,9 @@ export default class ProductService implements IProductService {
 
   async increaseProductQuantity(): Promise<RequestResponse<Cart | null>> {
     try {
-      const user = await getUserByEmail(this.productData.email as string);
+      const user = await userRepository.getUserByEmail(
+        this.productData.email as string
+      );
 
       if (!user) {
         return {
@@ -685,7 +704,9 @@ export default class ProductService implements IProductService {
 
   async decreaseProductQuantity(): Promise<RequestResponse<Cart | null>> {
     try {
-      const user = await getUserByEmail(this.productData.email as string);
+      const user = await userRepository.getUserByEmail(
+        this.productData.email as string
+      );
 
       if (!user) {
         return {
@@ -855,7 +876,7 @@ export default class ProductService implements IProductService {
         };
       }
 
-      const user = await getUserByEmail(this.productData.email);
+      const user = await userRepository.getUserByEmail(this.productData.email);
 
       if (!user) {
         return { success: false, message: "User not found!", data: null };

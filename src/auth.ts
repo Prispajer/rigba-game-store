@@ -4,11 +4,12 @@ import { postgres } from "@/data/database/publicSQL/postgres";
 import { getTwoFactorConfirmationByUserId } from "@/data/database/publicSQL/queries";
 import authConfig from "./auth.config";
 import {
-  getUserById,
   getUserCart,
   getUserWishList,
 } from "@/data/database/publicSQL/queries";
 import { Cart, UserRole, Wishlist } from "@prisma/client";
+import { userRepository } from "./utils/injector";
+import { UserCart, UserWishList } from "./utils/helpers/types";
 
 export type ExtendedUser = DefaultSession["user"] & {
   id: string;
@@ -17,8 +18,8 @@ export type ExtendedUser = DefaultSession["user"] & {
   role: UserRole;
   cartId: string | null;
   wishlistId: string | null;
-  cart: Cart | null;
-  wishlist: Wishlist | null;
+  cart: UserCart | null;
+  wishlist: UserWishList | null;
 };
 
 declare module "next-auth" {
@@ -51,7 +52,7 @@ export const {
         return true;
       }
 
-      const existingUser = await getUserById(user.id as string);
+      const existingUser = await userRepository.getUserById(user.id as string);
 
       if (!existingUser?.emailVerified) {
         return false;
@@ -80,7 +81,7 @@ export const {
         return token;
       }
 
-      const existingUser = await getUserById(token.sub);
+      const existingUser = await userRepository.getUserById(token.sub);
 
       if (!existingUser) {
         return token;

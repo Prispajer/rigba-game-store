@@ -1,3 +1,4 @@
+import { IconType } from "react-icons/lib";
 export interface User {
   id: string;
   name?: string | null;
@@ -69,10 +70,12 @@ export interface ProductInformations {
 }
 
 export interface UserWishList {
+  id: string;
   externalProductId: number;
   productsInformations: Product;
 }
 export interface UserCart {
+  id: string;
   externalProductId: number;
   productsInformations: Product;
 }
@@ -179,7 +182,9 @@ export type ProductConstructor = {
 export const CLASSTYPES = {
   IUserService: Symbol.for("IUserService"),
   IUserRepository: Symbol.for("IUserRepository"),
+  IUserQueries: Symbol.for("IUserQueries"),
   ITokenService: Symbol.for("ITokenService"),
   ITokenRepository: Symbol.for("ITokenRepository"),
+  ITokenQueries: Symbol.for("ITokenQueries"),
   ICheckerService: Symbol.for("ICheckerService"),
 };

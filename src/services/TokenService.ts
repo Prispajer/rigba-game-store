@@ -2,16 +2,10 @@ import bcrypt from "bcryptjs";
 import "reflect-metadata";
 import { injectable, inject } from "inversify";
 import { postgres } from "@/data/database/publicSQL/postgres";
-import ITokenService from "../interfaces/ITokenService";
-import {
-  getUserByEmail,
-  getTwoFactorTokenByEmail,
-} from "@/data/database/publicSQL/queries";
-import {
-  generateEmailVerificationToken,
-  generateTwoFactorToken,
-  generatePasswordResetToken,
-} from "@/data/database/publicSQL/tokens";
+import type ITokenService from "../interfaces/ITokenService";
+import type ICheckerService from "@/interfaces/ICheckerService";
+import type IUserRepository from "@/interfaces/IUserRepository";
+import type ITokenRepository from "@/interfaces/ITokenRepository";
 import {
   sendVerificationEmail,
   sendTwoFactorTokenEmail,
@@ -23,25 +17,40 @@ import {
   EmailVerificationToken,
   TwoFactorToken,
   ResetPasswordToken,
-  TokenConstructor,
+  CLASSTYPES,
   UserDTO,
 } from "../utils/helpers/types";
-import IUserService from "../interfaces/IUserService";
-import UserService from "./UserService";
 
 @injectable()
 export default class TokenService implements ITokenService {
+  private readonly _checkerService: ICheckerService;
+  private readonly _userRepository: IUserRepository;
+  private readonly _tokenRepository: ITokenRepository;
+
+  constructor(
+    @inject(CLASSTYPES.ICheckerService) checkerService: ICheckerService,
+    @inject(CLASSTYPES.IUserRepository) userRepository: IUserRepository,
+    @inject(CLASSTYPES.ITokenRepository) tokenRepository: ITokenRepository
+  ) {
+    this._checkerService = checkerService;
+    this._userRepository = userRepository;
+    this._tokenRepository = tokenRepository;
+  }
+
   async sendEmailVerificationToken(
     user: User | null
   ): Promise<RequestResponse<EmailVerificationToken> | void> {
-    const emailVerificationToken = await generateEmailVerificationToken(
-      user?.email as string
-    );
+    const emailVerificationToken =
+      await this._tokenRepository.generateEmailVerificationToken(
+        user?.email as string
+      );
+
     if (!user?.emailVerified) {
       await sendVerificationEmail(
         emailVerificationToken.email,
         emailVerificationToken.token
       );
+
       return {
         success: true,
         message: "Confirmation email sent!",
@@ -50,21 +59,20 @@ export default class TokenService implements ITokenService {
     }
   }
 
-  async sendResetPasswordToken(): Promise<RequestResponse<ResetPasswordToken>> {
+  async sendResetPasswordToken(
+    userDTO: UserDTO
+  ): Promise<RequestResponse<ResetPasswordToken>> {
     try {
-      const existingUser = await getUserByEmail(this.email as string);
+      const userExistsResponse = await this._checkerService.checkUserExists(
+        userDTO
+      );
 
-      if (!existingUser) {
-        return {
-          success: false,
-          message: "Invalid email!",
-          data: undefined,
-        };
+      if (userExistsResponse && !userExistsResponse.success) {
+        return userExistsResponse;
       }
 
-      const resetPasswordToken = await generatePasswordResetToken(
-        this.email as string
-      );
+      const resetPasswordToken =
+        await this._tokenRepository.generatePasswordResetToken(userDTO.email);
 
       await sendPasswordResetEmail(
         resetPasswordToken.email,
@@ -85,60 +93,33 @@ export default class TokenService implements ITokenService {
     }
   }
 
-  async sendChangePasswordToken(): Promise<RequestResponse<TwoFactorToken>> {
-    const existingUser = await getUserByEmail(this.email as string);
+  async sendChangePasswordToken(
+    userDTO: UserDTO,
+    code?: string
+  ): Promise<RequestResponse<TwoFactorToken>> {
+    const userExistsResponse = await this._checkerService.checkUserExists(
+      userDTO
+    );
 
-    if (!existingUser) {
-      return {
-        success: false,
-        message: "User doesn't exist!",
-        data: undefined,
-      };
+    if (userExistsResponse.success) {
+      return userExistsResponse;
     }
 
-    if (this.code) {
-      const twoFactorToken = await getTwoFactorTokenByEmail(
-        existingUser.email as string
-      );
+    const user = userExistsResponse as User;
 
-      if (!twoFactorToken) {
-        return {
-          success: false,
-          message: "Token not found!",
-          data: undefined,
-        };
-      }
+    if (code) {
+      const validateTwoFactorTokenByEmailResponse =
+        this._tokenRepository.validateTwoFactorTokenByEmail(
+          user.email as string,
+          code
+        );
 
-      if (twoFactorToken.token !== this.code) {
-        return {
-          success: false,
-          message: "Invalid code!",
-          data: undefined,
-        };
-      }
-
-      const hasExpired = new Date(twoFactorToken.expires) < new Date();
-
-      if (hasExpired) {
-        await postgres.twoFactorToken.delete({
-          where: { id: twoFactorToken.id },
-        });
-        return {
-          success: false,
-          message: "Code expired!",
-          data: undefined,
-        };
-      }
-
-      return {
-        success: true,
-        message: "Two-factor token has been deleted!",
-        data: undefined,
-      };
+      if (!validateTwoFactorTokenByEmailResponse.success)
+        return validateTwoFactorTokenByEmailResponse;
     } else {
       const passwordMatch = await bcrypt.compare(
-        this.password as string,
-        existingUser.password as string
+        userDTO.password as string,
+        user.password as string
       );
 
       if (!passwordMatch) {
@@ -149,8 +130,8 @@ export default class TokenService implements ITokenService {
         };
       }
 
-      let existingToken = await getTwoFactorTokenByEmail(
-        existingUser.email as string
+      let existingToken = await this._tokenRepository.getTwoFactorTokenByEmail(
+        user.email as string
       );
 
       if (existingToken) {
@@ -161,8 +142,8 @@ export default class TokenService implements ITokenService {
             where: { id: existingToken.id },
           });
 
-          const newToken = await generateTwoFactorToken(
-            existingUser.email as string
+          const newToken = await this._tokenRepository.generateTwoFactorToken(
+            user.email as string
           );
           await sendTwoFactorTokenEmail(newToken.email, newToken.token);
 
@@ -179,8 +160,8 @@ export default class TokenService implements ITokenService {
           };
         }
       } else {
-        const newToken = await generateTwoFactorToken(
-          existingUser.email as string
+        const newToken = await this._tokenRepository.generateTwoFactorToken(
+          user.email as string
         );
         await sendTwoFactorTokenEmail(newToken.email, newToken.token);
 
@@ -193,59 +174,32 @@ export default class TokenService implements ITokenService {
     }
   }
 
-  async sendToggleTwoFactorToken(): Promise<RequestResponse<TwoFactorToken>> {
-    const existingUser = await getUserByEmail(this.email as string);
+  async sendToggleTwoFactorToken(
+    userDTO: UserDTO,
+    code?: string
+  ): Promise<RequestResponse<TwoFactorToken>> {
+    const userExistsResponse = await this._checkerService.checkUserExists(
+      userDTO
+    );
 
-    if (!existingUser) {
-      return {
-        success: false,
-        message: "User doesn't exist!",
-        data: undefined,
-      };
+    if (userExistsResponse.success) {
+      return userExistsResponse;
     }
 
-    if (this.code) {
-      const twoFactorToken = await getTwoFactorTokenByEmail(
-        existingUser.email as string
-      );
+    const user = userExistsResponse as User;
 
-      if (!twoFactorToken) {
-        return {
-          success: false,
-          message: "Token not found!",
-          data: undefined,
-        };
-      }
+    if (code) {
+      const validateTwoFactorTokenByEmailResponse =
+        this._tokenRepository.validateTwoFactorTokenByEmail(
+          user.email as string,
+          code
+        );
 
-      if (twoFactorToken.token !== this.code) {
-        return {
-          success: false,
-          message: "Invalid code!",
-          data: undefined,
-        };
-      }
-
-      const hasExpired = new Date(twoFactorToken.expires) < new Date();
-
-      if (hasExpired) {
-        await postgres.twoFactorToken.delete({
-          where: { id: twoFactorToken.id },
-        });
-        return {
-          success: false,
-          message: "Code expired!",
-          data: undefined,
-        };
-      }
-
-      return {
-        success: true,
-        message: "Two-factor token has been deleted!",
-        data: undefined,
-      };
+      if (!validateTwoFactorTokenByEmailResponse.success)
+        return validateTwoFactorTokenByEmailResponse;
     } else {
-      let existingToken = await getTwoFactorTokenByEmail(
-        existingUser.email as string
+      let existingToken = await this._tokenRepository.getTwoFactorTokenByEmail(
+        user.email as string
       );
 
       if (existingToken) {
@@ -256,8 +210,8 @@ export default class TokenService implements ITokenService {
             where: { id: existingToken.id },
           });
 
-          const newToken = await generateTwoFactorToken(
-            existingUser.email as string
+          const newToken = await this._tokenRepository.generateTwoFactorToken(
+            user.email as string
           );
           await sendTwoFactorTokenEmail(newToken.email, newToken.token);
 
@@ -274,8 +228,8 @@ export default class TokenService implements ITokenService {
           };
         }
       } else {
-        const newToken = await generateTwoFactorToken(
-          existingUser.email as string
+        const newToken = await this._tokenRepository.generateTwoFactorToken(
+          user.email as string
         );
         await sendTwoFactorTokenEmail(newToken.email, newToken.token);
 

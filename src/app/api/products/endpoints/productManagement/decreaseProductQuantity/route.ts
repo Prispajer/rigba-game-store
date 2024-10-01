@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import ProductService from "@/services/ProductService";
-import IProductService from "@/utils/interfaces/IProductsService";
+import IProductService from "@/interfaces/IProductsService";
 import { RequestResponse } from "@/utils/helpers/types";
 
 export async function PATCH(request: NextRequest) {

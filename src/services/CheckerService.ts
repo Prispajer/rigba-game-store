@@ -4,7 +4,14 @@ import { inject, injectable } from "inversify";
 import { RequestResponse } from "../utils/helpers/types";
 import type ICheckerService from "../interfaces/ICheckerService";
 import type IUserRepository from "@/interfaces/IUserRepository";
-import { UserDTO, User, CLASSTYPES } from "../utils/helpers/types";
+import { User, CLASSTYPES } from "../utils/helpers/types";
+import {
+  CheckUserExistsDTO,
+  CheckTokenExistsDTO,
+  CheckIsUserPasswordCorrectDTO,
+  CheckIsEmailInUse,
+  CheckDataExistsDTO,
+} from "@/utils/helpers/typesDTO";
 
 @injectable()
 export default class CheckerService implements ICheckerService {
@@ -16,43 +23,53 @@ export default class CheckerService implements ICheckerService {
     this._userRepository = userRepository;
   }
 
+  async checkDataExistsAndReturn<T, R>(
+    checkDataExists: (checkDataExistsDTO: R) => Promise<T | null>,
+    checkDataExistsDTO: R,
+    message: string
+  ): Promise<RequestResponse<T | null>> {
+    const checkDataResponse = await checkDataExists(checkDataExistsDTO);
+
+    if (!checkDataResponse) {
+      return this.handleError(message);
+    }
+
+    return this.handleSuccess("Found data!", checkDataResponse);
+  }
+
   async checkUserExists(
-    userDTO: UserDTO
+    CheckUserExistsDTO: CheckUserExistsDTO
   ): Promise<RequestResponse<null> | User> {
-    const user = await this._userRepository.getUserByEmail(userDTO.email);
+    const user = await this._userRepository.getUserByEmail(
+      CheckUserExistsDTO.email
+    );
 
     if (!user) {
-      return {
-        success: false,
-        message: "User doesn't exist.",
-        data: null,
-      };
+      return this.handleError("User doesn't exsist!");
     }
 
     return user;
   }
 
   async checkTokenExists(
-    userDTO: UserDTO
+    CheckTokenExistsDTO: CheckTokenExistsDTO
   ): Promise<RequestResponse<null> | User> {
-    const user = await this._userRepository.getUserByEmail(userDTO.email);
+    const user = await this._userRepository.getUserByEmail(
+      CheckTokenExistsDTO.email
+    );
 
     if (!user) {
-      return {
-        success: false,
-        message: "User doesn't exist.",
-        data: null,
-      };
+      return this.handleError("User doesn't exsist!");
     }
 
     return user;
   }
 
   async checkIsUserPasswordCorrect(
-    userDTO: UserDTO
-  ): Promise<RequestResponse<UserDTO | null> | void> {
+    checkIsUserPasswordCorrect: CheckIsUserPasswordCorrectDTO
+  ): Promise<RequestResponse<CheckIsUserPasswordCorrectDTO | null> | void> {
     const existingUser = await this._userRepository.getUserByEmail(
-      userDTO.email
+      checkIsUserPasswordCorrect.email
     );
 
     if (!existingUser?.password) {
@@ -60,7 +77,7 @@ export default class CheckerService implements ICheckerService {
     }
 
     const isPasswordCorrect = await bcrypt.compare(
-      userDTO.password as string,
+      checkIsUserPasswordCorrect.password as string,
       existingUser.password
     );
 
@@ -70,16 +87,14 @@ export default class CheckerService implements ICheckerService {
   }
 
   async checkIsEmailInUse(
-    userDTO: UserDTO
+    checkIsEmailInUse: CheckIsEmailInUse
   ): Promise<RequestResponse<null> | void> {
-    const user = await this._userRepository.getUserByEmail(userDTO.email);
+    const user = await this._userRepository.getUserByEmail(
+      checkIsEmailInUse.email
+    );
 
     if (user) {
-      return {
-        success: false,
-        message: "Email in use!",
-        data: null,
-      };
+      this.handleError("Email in use!");
     }
   }
 

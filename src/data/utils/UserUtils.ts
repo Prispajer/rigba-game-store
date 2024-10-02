@@ -1,10 +1,10 @@
 import { postgres } from "../database/publicSQL/postgres";
 import { injectable } from "inversify";
-import IUserQueries from "@/interfaces/IUserQueries";
+import IUserUtils from "@/interfaces/IUserUtils";
 import { User } from "@/utils/helpers/types";
 
 @injectable()
-export default class UserQueries implements IUserQueries {
+export default class UserUtils implements IUserUtils {
   async getUserByProperty(
     property: "email" | "id",
     value: string

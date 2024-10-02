@@ -1,280 +1,230 @@
-import { inject } from "inversify";
+import { injectable, inject } from "inversify";
 import { postgres } from "@/data/database/publicSQL/postgres";
 import { RatingTitle, Product, Cart, Review, Wishlist } from "@prisma/client";
-import {
-  getUserCart,
-  getUserWishList,
-  getProductReviews,
-} from "@/data/database/publicSQL/queries";
 import type IUserRepository from "@/interfaces/IUserRepository";
-import IProductService from "../interfaces/IProductsService";
-import type {
-  RequestResponse,
-  ProductConstructor,
-} from "../utils/helpers/types";
-import { CLASSTYPES } from "../utils/helpers/types";
+import type IProductService from "../interfaces/IProductService";
+import type ICheckerService from "@/interfaces/ICheckerService";
+import type { RequestResponse } from "../utils/helpers/types";
 import { userRepository } from "@/utils/injector";
+import { User, UserCart, CLASSTYPES } from "../utils/helpers/types";
+import {
+  AddProductToCartDTO,
+  AddProductToDataDTO,
+  GetProductReviewsDTO,
+  GetUserCartDTO,
+  GetUserWishListDTO,
+} from "@/utils/helpers/typesDTO";
+import IProductRepository from "@/interfaces/IProductRepository";
 
+@injectable()
 export default class ProductService implements IProductService {
-  private productData: ProductConstructor;
+  private readonly _checkerService: ICheckerService;
+  private readonly _productRepository: IProductRepository;
+  private readonly _userRepository: IUserRepository;
 
-  constructor(productData: ProductConstructor) {
-    this.productData = productData;
+  constructor(
+    @inject(CLASSTYPES.ICheckerService) checkerService: ICheckerService,
+    @inject(CLASSTYPES.IProductRepository)
+    productRepository: IProductRepository,
+    @inject(CLASSTYPES.IUserRepository) userRepository: IUserRepository
+  ) {
+    this._checkerService = checkerService;
+    this._productRepository = productRepository;
+    this._userRepository = userRepository;
   }
 
-  async getCart(): Promise<RequestResponse<Cart | null>> {
+  async getUserCart(
+    getUserCartDTO: GetUserCartDTO
+  ): Promise<RequestResponse<Cart | null>> {
     try {
-      const user = await userRepository.getUserByEmail(
-        this.productData.email as string
-      );
-      if (!user) {
-        return {
-          success: false,
-          message: "User doesn't exist!",
-          data: null,
-        };
+      const getUserByEmailResponse =
+        await this._checkerService.checkDataExistsAndReturn(
+          (getUserCartDTO) =>
+            this._userRepository.getUserByEmail(getUserCartDTO.email),
+          getUserCartDTO,
+          "User not found!"
+        );
+
+      if (!getUserByEmailResponse.success) {
+        return getUserByEmailResponse;
       }
 
-      let userCart = await getUserCart(user.id);
+      const userCart = await this._productRepository.getUserCart(
+        getUserByEmailResponse.data.id
+      );
+
       if (!userCart) {
-        userCart = await postgres.cart.create({
-          data: { userId: user.id, products: {} },
-          include: { products: true },
-        });
+        await this._productRepository.createUserCart(
+          getUserByEmailResponse.data
+        );
       }
 
-      return {
-        success: true,
-        message: "Cart retrieved successfully!",
-        data: userCart,
-      };
+      return this._checkerService.handleSuccess(
+        "Cart retrieved successfully!",
+        userCart
+      );
     } catch (error) {
-      return {
-        success: false,
-        message: "Error while retrieving cart!",
-        data: null,
-      };
+      return this._checkerService.handleError("Error while retrieving cart!");
     }
   }
 
-  async getWishList(): Promise<RequestResponse<Wishlist | null>> {
+  async getUserWishList(
+    getUserWishListDTO: GetUserWishListDTO
+  ): Promise<RequestResponse<Wishlist | null>> {
     try {
-      const user = await userRepository.getUserByEmail(
-        this.productData.email as string
-      );
-      if (!user) {
-        return {
-          success: false,
-          message: "User doesn't exist!",
-          data: null,
-        };
+      const getUserByEmailResponse =
+        await this._checkerService.checkDataExistsAndReturn(
+          (getUserWishListDTO) =>
+            this._userRepository.getUserByEmail(getUserWishListDTO.email),
+          getUserWishListDTO,
+          "User not found!"
+        );
+
+      if (!getUserByEmailResponse.success) {
+        return getUserByEmailResponse;
       }
 
-      let userWishList = await getUserWishList(user.id);
+      const userWishList =
+        (await this._productRepository.getUserWishList(
+          getUserByEmailResponse.data.id
+        )) || [];
+
       if (!userWishList) {
-        userWishList = await postgres.cart.create({
-          data: { userId: user.id, products: {} },
-          include: { products: true },
-        });
+        await this._productRepository.createUserWishList(
+          getUserByEmailResponse.data
+        );
       }
 
-      return {
-        success: true,
-        message: "Wishlist retrieved successfully!",
-        data: userWishList,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        message: "Error while retrieving wishlist!",
-        data: null,
-      };
-    }
-  }
-
-  async getReviews(): Promise<RequestResponse<Review | null>> {
-    try {
-      const existingProduct = await postgres.product.findFirst({
-        where: { externalProductId: this.productData.externalProductId },
-      });
-
-      if (!existingProduct) {
-        return {
-          success: false,
-          message: "Product not found!",
-          data: null,
-        };
-      }
-
-      const productReviews = await getProductReviews(
-        existingProduct.externalProductId
+      return this._checkerService.handleSuccess(
+        "Wishlist retrieved successfully!",
+        userWishList
       );
-
-      if (!productReviews) {
-        return {
-          success: false,
-          message: "This product doesn't have any reviews!",
-          data: null,
-        };
-      }
-
-      return {
-        success: true,
-        message: "Reviews retrieved successfully!",
-        data: productReviews,
-      };
     } catch (error) {
-      return {
-        success: false,
-        message: "Error while retrieving reviews!",
-        data: null,
-      };
+      return this._checkerService.handleError(
+        "Error while retrieving wishlist!"
+      );
     }
   }
 
-  async addProduct(): Promise<RequestResponse<Product | null>> {
+  async getProductReviews(
+    getProductReviewsDTO: GetProductReviewsDTO
+  ): Promise<RequestResponse<Review | null>> {
+    try {
+      const getProductByExternalProductIdResponse =
+        await this._checkerService.checkDataExistsAndReturn(
+          (getProductReviewsDTO) =>
+            this._productRepository.getProductByExternalProductId(
+              getProductReviewsDTO.externalProductId
+            ),
+          getProductReviewsDTO,
+          "Product not found!"
+        );
+
+      if (!getProductByExternalProductIdResponse.success) {
+        return getProductByExternalProductIdResponse;
+      }
+
+      const productReviews =
+        (await this._productRepository.getProductReviews(
+          getProductByExternalProductIdResponse.data?.externalProductId
+        )) || [];
+
+      return this._checkerService.handleSuccess(
+        "Reviews retrieved successfully!",
+        productReviews
+      );
+    } catch (error) {
+      return this._checkerService.handleError(
+        "Error while retrieving reviews!"
+      );
+    }
+  }
+
+  async addProductToData(
+    addProductToDataDTO: AddProductToDataDTO
+  ): Promise<RequestResponse<Product>> {
     try {
       if (
-        !this.productData.externalProductId ||
-        !this.productData.name ||
-        !this.productData.price
+        !addProductToDataDTO.externalProductId ||
+        !addProductToDataDTO.name ||
+        !addProductToDataDTO.price
       ) {
-        return {
-          success: false,
-          message: "Product ID, name, and price are required!",
-          data: null,
-        };
+        return this._checkerService.handleError(
+          "Product ID, name, and price are required!"
+        );
       }
 
-      const existingProduct = await postgres.product.findFirst({
-        where: { externalProductId: this.productData.externalProductId },
-      });
+      const getProductByExternalProductIdResponse =
+        await this._checkerService.checkDataExistsAndReturn(
+          (addProductToDataDTO) =>
+            this._productRepository.getProductByExternalProductId(
+              addProductToDataDTO.externalProductId
+            ),
+          addProductToDataDTO,
+          "Product already exists in database!"
+        );
 
-      if (existingProduct) {
-        return {
-          success: false,
-          message: "Product already exists in the database!",
-          data: existingProduct,
-        };
+      if (!getProductByExternalProductIdResponse.success) {
+        return getProductByExternalProductIdResponse;
       }
 
-      const newProduct = await postgres.product.create({
-        data: {
-          externalProductId: this.productData.externalProductId,
-          quantity: 1,
-          productsInformations: {
-            create: {
-              name: this.productData.name as string,
-              description: this.productData.description as string,
-              price: this.productData.price as number,
-              background_image: this.productData.background_image as string,
-              slug: this.productData.slug as string,
-              released: this.productData.released as string,
-              added: this.productData.added as number,
-            },
-          },
+      const createUserProductResponse =
+        await this._productRepository.createUserProduct(addProductToDataDTO);
+
+      return this._checkerService.handleSuccess(
+        "Product added to database successfully!",
+        createUserProductResponse.data
+      );
+    } catch (error) {
+      return this._checkerService.handleError(
+        "Error while adding product to database!"
+      );
+    }
+  }
+
+  async addProductToCart(
+    addProductToCartDTO: AddProductToCartDTO
+  ): Promise<RequestResponse<Cart | null>> {
+    try {
+      if (!addProductToCartDTO.externalProductId) {
+        return this._checkerService.handleError("Product ID is required!");
+      }
+
+      const getUserByEmailResponse =
+        await this._checkerService.checkDataExistsAndReturn(
+          (dto) => this._userRepository.getUserByEmail(dto.email),
+          addProductToCartDTO,
+          "User not found!"
+        );
+
+      if (!getUserByEmailResponse.success) {
+        return getUserByEmailResponse;
+      }
+
+      let userCart = await this._productRepository.getUserCart(
+        getUserByEmailResponse.data.id
+      );
+
+      if (!userCart) {
+        userCart = await this._productRepository.createUserCart(
+          getUserByEmailResponse.data
+        );
+      }
+
+      const productInCart = await postgres.product.findFirst({
+        where: {
+          cartId: userCart.id,
+          externalProductId: addProductToCartDTO.externalProductId,
         },
       });
 
-      return {
-        success: true,
-        message: "Product added to database successfully!",
-        data: newProduct,
-      };
-    } catch (error) {
-      console.error("Error while adding product to database:", error);
-      return {
-        success: false,
-        message: "Error while adding product to database!",
-        data: null,
-      };
-    }
-  }
-
-  async addProductToCart(): Promise<RequestResponse<Cart | null>> {
-    try {
-      if (!this.productData.externalProductId) {
-        return {
-          success: false,
-          message: "Product ID is required!",
-          data: null,
-        };
-      }
-
-      const user = await userRepository.getUserByEmail(
-        this.productData.email as string
-      );
-
-      if (!user) {
-        return {
-          success: false,
-          message: "User doesn't exist!",
-          data: null,
-        };
-      }
-
-      let userCart = await getUserCart(user.id);
-
-      if (!userCart) {
-        userCart = await postgres.cart.create({
-          data: {
-            userId: user.id,
-            products: {
-              create: {
-                externalProductId: this.productData.externalProductId as number,
-                quantity: 1,
-                productsInformations: {
-                  create: {
-                    name: this.productData.name as string,
-                    description: this.productData.description as string,
-                    price: this.productData.price as number,
-                    background_image: this.productData
-                      .background_image as string,
-                    slug: this.productData.slug as string,
-                    released: this.productData.released as string,
-                    added: this.productData.added as number,
-                  },
-                },
-              },
-            },
-          },
-          include: {
-            products: true,
-          },
+      if (productInCart) {
+        await postgres.product.update({
+          where: { id: productInCart.id },
+          data: { quantity: (productInCart.quantity ?? 0) + 1 },
         });
       } else {
-        const productInCart = await postgres.product.findFirst({
-          where: {
-            cartId: userCart.id,
-            externalProductId: this.productData.externalProductId,
-          },
-        });
-
-        if (productInCart) {
-          await postgres.product.update({
-            where: { id: productInCart.id },
-            data: { quantity: (productInCart.quantity ?? 0) + 1 },
-          });
-        } else {
-          await postgres.product.create({
-            data: {
-              cartId: userCart.id as string,
-              externalProductId: this.productData.externalProductId as number,
-              quantity: 1,
-              productsInformations: {
-                create: {
-                  name: this.productData.name as string,
-                  description: this.productData.description as string,
-                  price: this.productData.price as number,
-                  background_image: this.productData.background_image as string,
-                  slug: this.productData.slug as string,
-                  released: this.productData.released as string,
-                  added: this.productData.added as number,
-                },
-              },
-            },
-          });
-        }
+        await this._productRepository.createUserProduct(addProductToCartDTO);
       }
 
       const updatedUserCart = await postgres.cart.findUnique({
@@ -282,17 +232,14 @@ export default class ProductService implements IProductService {
         include: { products: { include: { productsInformations: true } } },
       });
 
-      return {
-        success: true,
-        message: "Product added to cart successfully!",
-        data: updatedUserCart,
-      };
+      return this._checkerService.handleSuccess(
+        "Product added to cart successfully!",
+        updatedUserCart
+      );
     } catch (error) {
-      return {
-        success: false,
-        message: "Error while adding product to the cart!",
-        data: null,
-      };
+      return this._checkerService.handleError(
+        "Error while adding product to the cart!"
+      );
     }
   }
 
@@ -318,7 +265,7 @@ export default class ProductService implements IProductService {
         };
       }
 
-      let userWishList = await getUserWishList(user.id);
+      let userWishList = await this._productRepository.getUserWishList(user.id);
 
       if (!userWishList) {
         userWishList = await postgres.wishlist.create({
@@ -583,7 +530,7 @@ export default class ProductService implements IProductService {
         };
       }
 
-      let userWishList = await getUserWishList(user.id);
+      let userWishList = await this._productRepository.getUserWishList(user.id);
 
       if (!userWishList) {
         return {
@@ -716,7 +663,7 @@ export default class ProductService implements IProductService {
         };
       }
 
-      let userCart = await getUserCart(user?.id);
+      let userCart = await this._productRepository.getUserCart(user?.id);
 
       if (!userCart) {
         return {

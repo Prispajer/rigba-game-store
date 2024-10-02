@@ -1,20 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import TokenService from "@/services/TokenService";
-import ITokenService from "@/interfaces/ITokenService";
+import { tokenService } from "@/utils/injector";
 import { RequestResponse, ResetPasswordToken } from "@/utils/helpers/types";
 
 export async function POST(
   request: NextRequest
 ): Promise<NextResponse<RequestResponse<ResetPasswordToken>>> {
-  const { email, password } = await request.json();
-
-  const tokenService: ITokenService = new TokenService({
-    email,
-    password,
-  });
+  const { email, password, code } = await request.json();
 
   const sendChangePasswordTokenResponse =
-    await tokenService.sendChangePasswordToken();
+    await tokenService.sendChangePasswordToken({ email, password }, code);
 
   return NextResponse.json<RequestResponse<ResetPasswordToken>>({
     success: sendChangePasswordTokenResponse.success,

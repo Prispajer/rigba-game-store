@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import ProductService from "@/services/ProductService";
-import IProductService from "@/interfaces/IProductsService";
+import IProductService from "@/interfaces/IProductService";
 import { RequestResponse } from "@/utils/helpers/types";
 
 export async function POST(request: NextRequest) {

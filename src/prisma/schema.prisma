@@ -148,7 +148,7 @@ model ReviewLikers {
   isLiked   Boolean
   createdAt DateTime @default(now())
   user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  product  Product @relation(fields: [productId], references:[id])
+  product  Product @relation(fields: [productId], references:[id], onDelete: Cascade)
   review   Review  @relation(fields: [reviewId], references: [id], onDelete: Cascade)
 
   @@unique([userId, productId, reviewId])
@@ -161,7 +161,7 @@ model Rating {
   description String
   rating      Int
   percent     Float
-  review      Review   @relation(fields: [reviewId], references: [id])
+  review      Review   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
 }
 
 model Product {

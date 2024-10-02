@@ -1,16 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import ProductService from "@/services/ProductService";
-import IProductService from "@/interfaces/IProductsService";
+import { productService } from "@/utils/injector";
 import { RequestResponse } from "@/utils/helpers/types";
 
 export async function POST(request: NextRequest) {
   const { externalProductId } = await request.json();
 
-  const productService: IProductService = new ProductService({
+  const getReviewsResponse = await productService.getProductReviews({
     externalProductId,
   });
-
-  const getReviewsResponse = await productService.getReviews();
 
   return NextResponse.json<RequestResponse<LoggedUserCart>>({
     success: getReviewsResponse.success,

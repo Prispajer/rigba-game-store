@@ -1,14 +1,9 @@
 import NextAuth, { DefaultSession } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { postgres } from "@/data/database/publicSQL/postgres";
-import { getTwoFactorConfirmationByUserId } from "@/data/database/publicSQL/queries";
 import authConfig from "./auth.config";
-import {
-  getUserCart,
-  getUserWishList,
-} from "@/data/database/publicSQL/queries";
+import { userRepository, productRepository } from "./utils/injector";
 import { Cart, UserRole, Wishlist } from "@prisma/client";
-import { userRepository } from "./utils/injector";
 import { UserCart, UserWishList } from "./utils/helpers/types";
 
 export type ExtendedUser = DefaultSession["user"] & {
@@ -59,9 +54,10 @@ export const {
       }
 
       if (existingUser?.isTwoFactorEnabled) {
-        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
-          existingUser.id
-        );
+        const twoFactorConfirmation =
+          await userRepository.getTwoFactorConfirmationByUserId(
+            existingUser.id
+          );
 
         if (!twoFactorConfirmation) {
           return false;
@@ -87,8 +83,10 @@ export const {
         return token;
       }
 
-      const userCart = await getUserCart(existingUser.id);
-      const userWishList = await getUserWishList(existingUser.id);
+      const userCart = await productRepository.getUserCart(existingUser.id);
+      const userWishList = await productRepository.getUserWishList(
+        existingUser.id
+      );
 
       token.role = existingUser.role;
       token.cartId = userCart?.id || null;
@@ -109,10 +107,14 @@ export const {
           token.emailVerificationDate as Date;
 
         if (session.user.cartId) {
-          session.user.cart = await getUserCart(session.user.id);
+          session.user.cart = await productRepository.getUserCart(
+            session.user.id
+          );
         }
         if (session.user.wishlistId) {
-          session.user.wishlist = await getUserWishList(session.user.id);
+          session.user.wishlist = await productRepository.getUserWishList(
+            session.user.id
+          );
         }
       }
       return session;

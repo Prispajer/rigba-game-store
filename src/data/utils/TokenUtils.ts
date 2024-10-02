@@ -1,7 +1,8 @@
 import { injectable } from "inversify";
+import ITokenUtils from "@/interfaces/ITokenUtils";
 
 @injectable()
-export default class TokenQueries {
+export default class TokenUtils implements ITokenUtils {
   async generateToken<T extends { id: string }>(
     email: string,
     getTokenByEmail: (email: string) => Promise<T | null>,

@@ -12,20 +12,22 @@ import {
   sendVerificationEmail,
 } from "@/data/database/publicSQL/mail";
 import {
-  getTwoFactorTokenByEmail,
-  getTwoFactorConfirmationByUserId,
-  getPasswordResetTokenByToken,
-} from "@/data/database/publicSQL/queries";
-import {
   RequestResponse,
   User,
   EmailVerificationToken,
   TwoFactorToken,
   ResetPasswordToken,
-  UserDTO,
-  RegisterUserDTO,
 } from "../utils/helpers/types";
 import { CLASSTYPES } from "../utils/helpers/types";
+import {
+  LoginUserDTO,
+  RegisterUserDTO,
+  ConfirmEmailVerificationDTO,
+  SetNewPasswordDTO,
+  ChangePasswordDTO,
+  ToggleTwoFactorDTO,
+  UpdatePersonalDataDTO,
+} from "@/utils/helpers/typesDTO";
 
 @injectable()
 export default class UserService implements IUserService {
@@ -47,13 +49,13 @@ export default class UserService implements IUserService {
   }
 
   async loginUser(
-    userDTO: UserDTO
+    loginUserDTO: LoginUserDTO
   ): Promise<RequestResponse<
     User | EmailVerificationToken | TwoFactorToken
   > | void> {
     try {
       const userExistsResponse = await this._checkerService.checkUserExists(
-        userDTO
+        loginUserDTO
       );
 
       if (userExistsResponse.success) {
@@ -63,62 +65,62 @@ export default class UserService implements IUserService {
       const user = userExistsResponse as User;
 
       const checkIsUserPasswordResponse =
-        await this._checkerService.checkIsUserPasswordCorrect(userDTO);
+        await this._checkerService.checkIsUserPasswordCorrect(loginUserDTO);
 
       if (checkIsUserPasswordResponse && !checkIsUserPasswordResponse.success) {
         return checkIsUserPasswordResponse;
       }
 
-      const emailVerificationResponse =
-        await this._tokenService.sendEmailVerificationToken(user);
-      if (emailVerificationResponse) {
-        return emailVerificationResponse;
+      if (!user.emailVerified) {
+        const emailVerificationResponse =
+          await this._tokenService.sendEmailVerificationToken(user);
+        if (emailVerificationResponse) {
+          return emailVerificationResponse;
+        }
       }
 
       const twoFactorResponse = await this.confirmTwoFactorAuthentication(
         user,
-        userDTO.code
+        loginUserDTO.code
       );
 
       if (user?.emailVerified) {
         if (twoFactorResponse) {
           return twoFactorResponse;
         }
-        return {
-          success: true,
-          message: "Login was successful!",
-          data: user,
-        };
+        return this._checkerService.handleSuccess(
+          "Login was successfull!",
+          user
+        );
       }
     } catch (error) {
-      return {
-        success: false,
-        message: "Something went wrong!",
-        data: null,
-      };
+      return this._checkerService.handleError("Something went wrong!");
     }
   }
 
   async registerUser(
-    userDTO: UserDTO
+    registerUserDTO: RegisterUserDTO
   ): Promise<RequestResponse<RegisterUserDTO>> {
     try {
-      const hashedPassword = await bcrypt.hash(userDTO.password as string, 10);
+      const hashedPassword = await bcrypt.hash(
+        registerUserDTO.password as string,
+        10
+      );
 
       const checkIsEmailInUseResponse =
-        await this._checkerService.checkIsEmailInUse(userDTO);
+        await this._checkerService.checkIsEmailInUse(registerUserDTO);
       if (checkIsEmailInUseResponse && !checkIsEmailInUseResponse.success) {
         return checkIsEmailInUseResponse;
       }
 
       const createdUser = await this._userRepository.createUser(
-        userDTO.email,
+        registerUserDTO.email,
         hashedPassword
       );
 
       const emailVerificationToken =
         await this._tokenRepository.generateEmailVerificationToken(
-          userDTO.email as string
+          registerUserDTO.email as string
         );
 
       await sendVerificationEmail(
@@ -126,77 +128,47 @@ export default class UserService implements IUserService {
         emailVerificationToken.token
       );
 
-      return {
-        success: true,
-        message: "User has been created! Confirmation email sent!",
-        data: createdUser,
-      };
+      return this._checkerService.handleSuccess(
+        "User has been created! Confirmation email sent!",
+        createdUser
+      );
     } catch (error) {
-      return {
-        success: false,
-        message: "An error has occurred while registering user!",
-        data: null,
-      };
+      return this._checkerService.handleError("Something went wrong!");
     }
   }
 
   async confirmEmailVerification(
-    userDTO: UserDTO
-  ): Promise<RequestResponse<EmailVerificationToken>> {
+    confirmEmailVerification: ConfirmEmailVerificationDTO
+  ): Promise<RequestResponse<EmailVerificationToken> | void> {
     try {
-      const existingTokenResponse =
-        await this._tokenRepository.getEmailVerificationToken(
-          userDTO.token as string
+      const getEmailVerificationTokenByTokenResponse =
+        await this._tokenRepository.getEmailVerificationTokenByToken(
+          confirmEmailVerification.token as string
         );
 
-      if (!existingTokenResponse.success || !existingTokenResponse.data) {
-        return {
-          success: false,
-          message: existingTokenResponse.message || "Invalid token!",
-          data: null,
-        };
-      }
-
-      const checkUserExistsResponse =
-        await this._checkerService.checkUserExists(userDTO.email);
-
-      if (!checkUserExistsResponse.success) {
-        return checkUserExistsResponse;
-      }
-
-      const user = await this._userRepository.getUserByEmail(
-        existingTokenResponse.data.email
+      const userExistsResponse = await this._checkerService.checkUserExists(
+        getEmailVerificationTokenByTokenResponse
       );
 
-      if (user) {
-        await postgres.user.update({
-          where: { id: user.id },
-          data: { emailVerified: new Date() },
-        });
-
-        await postgres.emailVerificationToken.delete({
-          where: { id: existingTokenResponse.data.id },
-        });
-
-        return {
-          success: true,
-          message: "Email verified!",
-          data: null,
-        };
-      } else {
-        return {
-          success: false,
-          message: "User not found!",
-          data: null,
-        };
+      if (userExistsResponse.success) {
+        return userExistsResponse;
       }
+
+      const user = userExistsResponse as User;
+
+      await postgres.user.update({
+        where: { id: user.id },
+        data: { emailVerified: new Date() },
+      });
+
+      await postgres.emailVerificationToken.delete({
+        where: { id: getEmailVerificationTokenByTokenResponse?.id },
+      });
+
+      return this._checkerService.handleSuccess("Email verified!", null);
     } catch (error) {
-      console.error("Error confirming email verification:", error);
-      return {
-        success: false,
-        message: "An error occurred while confirming email verification.",
-        data: null,
-      };
+      console.error("Error in confirmEmailVerification:", error);
+      return this._checkerService.handleError("Something went wrong!");
     }
   }
 
@@ -206,9 +178,10 @@ export default class UserService implements IUserService {
   ): Promise<RequestResponse<TwoFactorToken> | void> {
     if (!user?.isTwoFactorEnabled && user?.email) {
       if (code) {
-        const twoFactorToken = await getTwoFactorTokenByEmail(
-          user.email as string
-        );
+        const twoFactorToken =
+          await this._tokenRepository.getTwoFactorTokenByEmail(
+            user.email as string
+          );
 
         if (!twoFactorToken || twoFactorToken.token !== code) {
           return {
@@ -232,9 +205,10 @@ export default class UserService implements IUserService {
           where: { id: twoFactorToken.id },
         });
 
-        const existingConfirmation = await getTwoFactorConfirmationByUserId(
-          user.id as string
-        );
+        const existingConfirmation =
+          await this._userRepository.getTwoFactorConfirmationByUserId(
+            user.id as string
+          );
 
         if (existingConfirmation) {
           await postgres.twoFactorConfirmation.delete({
@@ -263,11 +237,12 @@ export default class UserService implements IUserService {
   }
 
   async setNewPassword(
-    userDTO: UserDTO
+    setNewPassword: SetNewPasswordDTO
   ): Promise<RequestResponse<ResetPasswordToken>> {
-    const existingToken = await getPasswordResetTokenByToken(
-      userDTO.token as string
-    );
+    const existingToken =
+      await this._tokenRepository.getPasswordResetTokenByToken(
+        setNewPassword.token as string
+      );
 
     if (!existingToken) {
       return {
@@ -300,11 +275,11 @@ export default class UserService implements IUserService {
     }
 
     const passwordMatch = await bcrypt.compare(
-      userDTO.password as string,
+      setNewPassword.password as string,
       existingUser.password as string
     );
 
-    if (userDTO.token && passwordMatch) {
+    if (setNewPassword.token && passwordMatch) {
       return {
         success: false,
         message: "You must provide other password than the older one!",
@@ -312,7 +287,10 @@ export default class UserService implements IUserService {
       };
     }
 
-    const hashedPassword = await bcrypt.hash(userDTO.password as string, 10);
+    const hashedPassword = await bcrypt.hash(
+      setNewPassword.password as string,
+      10
+    );
 
     await postgres.user.update({
       where: {
@@ -336,9 +314,11 @@ export default class UserService implements IUserService {
     };
   }
 
-  async changePassword(): Promise<RequestResponse<User>> {
-    const twoFactorToken = await getTwoFactorTokenByEmail(
-      this._userData.email as string
+  async changePassword(
+    changePasswordDTO: ChangePasswordDTO
+  ): Promise<RequestResponse<User>> {
+    const twoFactorToken = await this._tokenRepository.getTwoFactorTokenByEmail(
+      changePasswordDTO.email as string
     );
 
     if (!twoFactorToken) {
@@ -371,7 +351,7 @@ export default class UserService implements IUserService {
       };
     }
 
-    if (!twoFactorToken || twoFactorToken.token !== this._userData.code) {
+    if (!twoFactorToken || twoFactorToken.token !== changePasswordDTO.code) {
       return {
         success: false,
         message: "Invalid code!",
@@ -380,7 +360,7 @@ export default class UserService implements IUserService {
     }
 
     const hashedPassword = await bcrypt.hash(
-      this._userData.newPassword as string,
+      changePasswordDTO.newPassword as string,
       10
     );
 
@@ -400,10 +380,12 @@ export default class UserService implements IUserService {
     };
   }
 
-  async toggleTwoFactor(): Promise<RequestResponse<void>> {
+  async toggleTwoFactor(
+    toggleTwoFactorDTO: ToggleTwoFactorDTO
+  ): Promise<RequestResponse<void>> {
     try {
       const existingUser = await this._userRepository.getUserByEmail(
-        this._userData.email as string
+        toggleTwoFactorDTO.email as string
       );
       if (!existingUser) {
         return {
@@ -412,10 +394,11 @@ export default class UserService implements IUserService {
           data: null,
         };
       }
-      const twoFactorToken = await getTwoFactorTokenByEmail(
-        existingUser.email as string
-      );
-      if (!twoFactorToken || twoFactorToken.token !== this._userData.code) {
+      const twoFactorToken =
+        await this._tokenRepository.getTwoFactorTokenByEmail(
+          existingUser.email as string
+        );
+      if (!twoFactorToken || twoFactorToken.token !== toggleTwoFactorDTO.code) {
         return {
           success: false,
           message: "Invalid code!",
@@ -468,11 +451,11 @@ export default class UserService implements IUserService {
   }
 
   async updatePersonalData(
-    _userData: Partial<PersonalData>
+    updatePersonalData: Partial<UpdatePersonalDataDTO>
   ): Promise<RequestResponse<PersonalData>> {
     try {
       const existingUser = await this._userRepository.getUserByEmail(
-        this._userData.email as string
+        updatePersonalData.email as string
       );
 
       if (!existingUser) {
@@ -490,7 +473,7 @@ export default class UserService implements IUserService {
       if (personalData) {
         const updatedUser = await postgres.personalData.update({
           where: { userId: existingUser.id },
-          data: { ..._userData },
+          data: { ...updatePersonalData },
         });
 
         return {
@@ -502,7 +485,7 @@ export default class UserService implements IUserService {
         const newUserData = await postgres.personalData.create({
           data: {
             userId: existingUser.id,
-            ..._userData,
+            ...updatePersonalData,
           },
         });
 

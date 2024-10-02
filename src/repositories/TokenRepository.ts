@@ -4,25 +4,26 @@ import crypto from "crypto";
 import { postgres } from "@/data/database/publicSQL/postgres";
 import ITokenRepository from "@/interfaces/ITokenRepository";
 import {
+  RequestResponse,
   EmailVerificationToken,
   ResetPasswordToken,
   TwoFactorToken,
   CLASSTYPES,
 } from "@/utils/helpers/types";
-import ITokenQueries from "@/interfaces/ITokenQueries";
+import ITokenUtils from "@/interfaces/ITokenUtils";
 
 @injectable()
 export default class TokenRepository implements ITokenRepository {
-  private readonly _tokenQueries: ITokenQueries;
+  private readonly _tokenUtils: ITokenUtils;
 
-  constructor(@inject(CLASSTYPES.ITokenQueries) tokenQueries: ITokenQueries) {
-    this._tokenQueries = tokenQueries;
+  constructor(@inject(CLASSTYPES.ITokenUtils) tokenUtils: ITokenUtils) {
+    this._tokenUtils = tokenUtils;
   }
 
   async generateEmailVerificationToken(
     email: string
   ): Promise<EmailVerificationToken> {
-    return await this._tokenQueries.generateToken(
+    return await this._tokenUtils.generateToken(
       email,
       this.getEmailVerificationTokenByEmail,
       async (id: string) => {
@@ -47,7 +48,7 @@ export default class TokenRepository implements ITokenRepository {
   }
 
   async generatePasswordResetToken(email: string): Promise<ResetPasswordToken> {
-    return await this._tokenQueries.generateToken(
+    return await this._tokenUtils.generateToken(
       email,
       this.getPasswordResetTokenByEmail,
       async (id: string) => {
@@ -72,7 +73,7 @@ export default class TokenRepository implements ITokenRepository {
   }
 
   async generateTwoFactorToken(email: string): Promise<TwoFactorToken> {
-    return await this._tokenQueries.generateToken(
+    return await this._tokenUtils.generateToken(
       email,
       this.getTwoFactorTokenByEmail,
       async (id: string) => {
@@ -100,11 +101,10 @@ export default class TokenRepository implements ITokenRepository {
     email: string
   ): Promise<EmailVerificationToken | null> {
     try {
-      return await this._tokenQueries.getTokenByProperty(
+      return await this._tokenUtils.getTokenByProperty(
         (email) =>
           postgres.emailVerificationToken.findFirst({ where: { email } }),
-        email,
-        undefined
+        email
       );
     } catch {
       return null;
@@ -115,11 +115,10 @@ export default class TokenRepository implements ITokenRepository {
     token: string
   ): Promise<EmailVerificationToken | null> {
     try {
-      return await this._tokenQueries.getTokenByProperty(
+      return await this._tokenUtils.getTokenByProperty(
         (token) =>
           postgres.emailVerificationToken.findFirst({ where: { token } }),
-        token,
-        undefined
+        token
       );
     } catch {
       return null;
@@ -130,10 +129,9 @@ export default class TokenRepository implements ITokenRepository {
     email: string
   ): Promise<PasswordResetToken | null> {
     try {
-      return await this._tokenQueries.getTokenByProperty(
+      return await this._tokenUtils.getTokenByProperty(
         (email) => postgres.passwordResetToken.findFirst({ where: { email } }),
-        email,
-        undefined
+        email
       );
     } catch {
       return null;
@@ -144,10 +142,9 @@ export default class TokenRepository implements ITokenRepository {
     token: string
   ): Promise<PasswordResetToken | null> {
     try {
-      return await this._tokenQueries.getTokenByProperty(
+      return await this._tokenUtils.getTokenByProperty(
         (token) => postgres.passwordResetToken.findFirst({ where: { token } }),
-        token,
-        undefined
+        token
       );
     } catch {
       return null;
@@ -158,10 +155,9 @@ export default class TokenRepository implements ITokenRepository {
     email: string
   ): Promise<TwoFactorToken | null> {
     try {
-      return await this._tokenQueries.getTokenByProperty(
+      return await this._tokenUtils.getTokenByProperty(
         (email) => postgres.twoFactorToken.findFirst({ where: { email } }),
-        email,
-        undefined
+        email
       );
     } catch {
       return null;
@@ -172,10 +168,9 @@ export default class TokenRepository implements ITokenRepository {
     token: string
   ): Promise<TwoFactorToken | null> {
     try {
-      return await this._tokenQueries.getTokenByProperty(
+      return await this._tokenUtils.getTokenByProperty(
         (token) => postgres.twoFactorToken.findFirst({ where: { token } }),
-        token,
-        undefined
+        token
       );
     } catch {
       return null;

@@ -9,28 +9,6 @@ export interface User {
   image?: string | null;
   isTwoFactorEnabled: boolean;
 }
-
-export type UserDTO = {
-  email: string;
-  password?: string;
-  newPassword?: string;
-  emailVerified?: Date | null;
-  code?: string;
-  token?: string;
-  fullName?: string;
-  birthDate?: Date;
-  address?: string;
-  state?: string;
-  zipCode?: string;
-  city?: string;
-  country?: string;
-  phoneNumber?: string;
-};
-
-export type RegisterUserDTO = {
-  email: string;
-  password: string;
-};
 export interface Token {
   id: string;
   email: string;
@@ -100,21 +78,6 @@ export interface RequestResponse<T> {
   message?: string;
   twoFactor?: boolean;
 }
-
-export interface UserDataRequest {
-  email: string;
-  password: string;
-  token?: string;
-  code?: string;
-}
-
-export interface ProductDataRequest {
-  externalProductId: number;
-  quantity: number;
-}
-
-export type RequestData = UserDataRequest & ProductDataRequest;
-
 export interface GameAPIResponse extends Product {
   image_background?: string;
   games_count?: number;
@@ -155,36 +118,15 @@ export enum NavCurrentElement {
   Link = "link",
 }
 
-export type TokenConstructor = {
-  email?: string;
-  password?: string;
-  newPassword?: string;
-  code?: string;
-  token?: string;
-};
-
-export type ProductConstructor = {
-  email?: string;
-  externalProductId?: number;
-  name?: string;
-  description?: string;
-  price?: number;
-  background_image?: string;
-  rating?: number;
-  slug?: string;
-  released?: string;
-  added?: number;
-  title?: string;
-  likes?: number;
-  reviewId?: string;
-};
-
 export const CLASSTYPES = {
   IUserService: Symbol.for("IUserService"),
   IUserRepository: Symbol.for("IUserRepository"),
-  IUserQueries: Symbol.for("IUserQueries"),
+  IUserUtils: Symbol.for("IUserUtils"),
   ITokenService: Symbol.for("ITokenService"),
   ITokenRepository: Symbol.for("ITokenRepository"),
-  ITokenQueries: Symbol.for("ITokenQueries"),
+  ITokenUtils: Symbol.for("ITokenUtils"),
+  IProductService: Symbol.for("IProductService"),
+  IProductRepository: Symbol.for("IProductRepository"),
+  IProductUtils: Symbol.for("IProductUtils"),
   ICheckerService: Symbol.for("ICheckerService"),
 };

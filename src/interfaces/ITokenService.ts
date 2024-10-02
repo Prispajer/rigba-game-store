@@ -4,16 +4,25 @@ import {
   EmailVerificationToken,
   TwoFactorToken,
   ResetPasswordToken,
-  UserDTO,
 } from "@/utils//helpers/types";
-z;
+import {
+  SendResetPasswordTokenDTO,
+  SendChangePasswordTokenDTO,
+} from "@/utils/helpers/typesDTO";
+
 export default interface ITokenService {
   sendEmailVerificationToken(
     user: User | null
   ): Promise<RequestResponse<EmailVerificationToken> | void>;
   sendResetPasswordToken(
-    userDTO: UserDTO
-  ): Promise<RequestResponse<ResetPasswordToken>>;
-  sendChangePasswordToken(): Promise<RequestResponse<TwoFactorToken>>;
-  sendToggleTwoFactorToken(): Promise<RequestResponse<TwoFactorToken>>;
+    sendResetPasswordTokenDTO: SendResetPasswordTokenDTO
+  ): Promise<RequestResponse<ResetPasswordToken | null>>;
+  sendChangePasswordToken(
+    sendChangePasswordToken: SendChangePasswordTokenDTO,
+    code?: string
+  ): Promise<RequestResponse<TwoFactorToken> | void>;
+  sendToggleTwoFactorToken(
+    sendChangePasswordToken: SendToggleTwoFactorToken,
+    code?: string
+  ): Promise<RequestResponse<TwoFactorToken> | void>;
 }

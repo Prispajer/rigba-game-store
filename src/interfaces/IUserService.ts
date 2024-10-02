@@ -4,8 +4,16 @@ import {
   EmailVerificationToken,
   TwoFactorToken,
   ResetPasswordToken,
-  UserDTO,
 } from "@/utils/helpers/types";
+import {
+  LoginUserDTO,
+  RegisterUserDTO,
+  ConfirmEmailVerificationDTO,
+  SetNewPasswordDTO,
+  ChangePasswordDTO,
+  ToggleTwoFactorDTO,
+  UpdatePersonalDataDTO,
+} from "@/utils/helpers/typesDTO";
 
 export default interface IUserService {
   loginUser(
@@ -15,8 +23,8 @@ export default interface IUserService {
   > | void>;
   registerUser(userDTO: UserDTO): Promise<RequestResponse<RegisterUserDTO>>;
   confirmEmailVerification(
-    userDTO: UserDTO
-  ): Promise<RequestResponse<EmailVerificationToken>>;
+    confirmEmailVerification: ConfirmEmailVerificationDTO
+  ): Promise<RequestResponse<EmailVerificationToken> | void>;
   confirmTwoFactorAuthentication(
     user: User | null,
     code?: string
@@ -24,8 +32,12 @@ export default interface IUserService {
   setNewPassword(
     userDTO: UserDTO
   ): Promise<RequestResponse<ResetPasswordToken>>;
-  changePassword(): Promise<RequestResponse<User>>;
-  toggleTwoFactor(): Promise<RequestResponse<void>>;
+  changePassword(
+    changePasswordDTO: ChangePasswordDTO
+  ): Promise<RequestResponse<User>>;
+  toggleTwoFactor(
+    toggleTwoFactorDTO: ToggleTwoFactorDTO
+  ): Promise<RequestResponse<void>>;
   updatePersonalData(
     userData: Partial<PersonalData>
   ): Promise<RequestResponse<PersonalData>>;

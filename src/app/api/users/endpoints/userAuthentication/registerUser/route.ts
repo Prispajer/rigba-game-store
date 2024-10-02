@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { userService } from "@/utils/injector";
-import IUserService from "@/interfaces/IUserService";
 import {
   RequestResponse,
   User,

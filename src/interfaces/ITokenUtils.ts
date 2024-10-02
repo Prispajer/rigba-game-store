@@ -1,4 +1,4 @@
-export default interface ITokenQueries {
+export default interface ITokenUtils {
   generateToken<T extends { id: string }>(
     email: string,
     getTokenByEmail: (email: string) => Promise<T | null>,

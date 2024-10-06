@@ -4,7 +4,14 @@ import type IUserRepository from "@/interfaces/IUserRepository";
 import IUserUtils from "@/interfaces/IUserUtils";
 import { User, CLASSTYPES } from "@/utils/helpers/types";
 import { TwoFactorConfirmation } from "@prisma/client";
-import { RegisterUserDTO } from "@/utils/helpers/typesDTO";
+import {
+  CheckDataExistsAndReturnUser,
+  CreateUserDTO,
+  GetTwoFactorConfirmationByUserIdDTO,
+  GetUserByEmailDTO,
+  GetUserByIdDTO,
+  RegisterUserDTO,
+} from "@/utils/helpers/backendDTO";
 
 @injectable()
 export default class UserRepository implements IUserRepository {
@@ -14,21 +21,26 @@ export default class UserRepository implements IUserRepository {
     this._userUtils = userUtils;
   }
 
-  async getUserByEmail(email: string): Promise<User | null> {
-    return await this._userUtils.getUserByProperty("email", email);
+  async getUserByEmail(
+    GetUserByEmailDTO: GetUserByEmailDTO
+  ): Promise<User | null> {
+    return await this._userUtils.getUserByProperty(
+      "email",
+      GetUserByEmailDTO.email
+    );
   }
 
-  async getUserById(id: string): Promise<User | null> {
-    return await this._userUtils.getUserByProperty("id", id);
+  async getUserById(getUserByIdDTO: GetUserByIdDTO): Promise<User | null> {
+    return await this._userUtils.getUserByProperty("id", getUserByIdDTO.id);
   }
 
   async getTwoFactorConfirmationByUserId(
-    userId: string
+    getTwoFactorConfirmationByUserIdDTO: GetTwoFactorConfirmationByUserIdDTO
   ): Promise<TwoFactorConfirmation | null> {
     try {
       const twoFactorConfirmation =
         await postgres.twoFactorConfirmation.findUnique({
-          where: { userId },
+          where: { userId: getTwoFactorConfirmationByUserIdDTO.id },
         });
 
       return twoFactorConfirmation;
@@ -37,11 +49,11 @@ export default class UserRepository implements IUserRepository {
     }
   }
 
-  async createUser(email: string, password: string): Promise<RegisterUserDTO> {
+  async createUser(createUserDTO: CreateUserDTO): Promise<RegisterUserDTO> {
     const createdUser = await postgres.user.create({
       data: {
-        email,
-        password,
+        email: createUserDTO.email,
+        password: createUserDTO.password,
       },
     });
 

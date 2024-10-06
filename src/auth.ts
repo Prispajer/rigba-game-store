@@ -3,7 +3,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { postgres } from "@/data/database/publicSQL/postgres";
 import authConfig from "./auth.config";
 import { userRepository, productRepository } from "./utils/injector";
-import { Cart, UserRole, Wishlist } from "@prisma/client";
+import { Cart, UserRole, WishList } from "@prisma/client";
 import { UserCart, UserWishList } from "./utils/helpers/types";
 
 export type ExtendedUser = DefaultSession["user"] & {
@@ -12,9 +12,9 @@ export type ExtendedUser = DefaultSession["user"] & {
   emailVerificationDate: Date;
   role: UserRole;
   cartId: string | null;
-  wishlistId: string | null;
+  wishListId: string | null;
   cart: UserCart | null;
-  wishlist: UserWishList | null;
+  wishList: UserWishList | null;
 };
 
 declare module "next-auth" {
@@ -47,7 +47,7 @@ export const {
         return true;
       }
 
-      const existingUser = await userRepository.getUserById(user.id as string);
+      const existingUser = await userRepository.getUserById(user);
 
       if (!existingUser?.emailVerified) {
         return false;
@@ -55,9 +55,7 @@ export const {
 
       if (existingUser?.isTwoFactorEnabled) {
         const twoFactorConfirmation =
-          await userRepository.getTwoFactorConfirmationByUserId(
-            existingUser.id
-          );
+          await userRepository.getTwoFactorConfirmationByUserId(existingUser);
 
         if (!twoFactorConfirmation) {
           return false;
@@ -66,6 +64,12 @@ export const {
         await postgres.twoFactorConfirmation.delete({
           where: {
             id: twoFactorConfirmation.id,
+          },
+        });
+
+        await postgres.twoFactorConfirmation.create({
+          data: {
+            userId: user.id as string,
           },
         });
       }
@@ -83,14 +87,14 @@ export const {
         return token;
       }
 
-      const userCart = await productRepository.getUserCart(existingUser.id);
+      const userCart = await productRepository.getUserCart(existingUser);
       const userWishList = await productRepository.getUserWishList(
-        existingUser.id
+        existingUser
       );
 
       token.role = existingUser.role;
       token.cartId = userCart?.id || null;
-      token.wishlistId = userWishList?.id || null;
+      token.wishListId = userWishList?.id || null;
       token.twoFactorEnabled = existingUser.isTwoFactorEnabled;
       token.emailVerificationDate = existingUser.emailVerified;
 
@@ -101,19 +105,17 @@ export const {
         session.user.id = token.sub;
         session.user.role = token.role as UserRole;
         session.user.cartId = token.cartId as string;
-        session.user.wishlistId = token.wishlistId as string;
+        session.user.wishListId = token.wishListId as string;
         session.user.isTwoFactorEnabled = token.twoFactorEnabled as boolean;
         session.user.emailVerificationDate =
           token.emailVerificationDate as Date;
 
         if (session.user.cartId) {
-          session.user.cart = await productRepository.getUserCart(
-            session.user.id
-          );
+          session.user.cart = await productRepository.getUserCart(session.user);
         }
-        if (session.user.wishlistId) {
-          session.user.wishlist = await productRepository.getUserWishList(
-            session.user.id
+        if (session.user.wishListId) {
+          session.user.wishList = await productRepository.getUserWishList(
+            session.user
           );
         }
       }

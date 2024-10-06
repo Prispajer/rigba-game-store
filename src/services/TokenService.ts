@@ -22,7 +22,7 @@ import {
 import {
   SendResetPasswordTokenDTO,
   SendChangePasswordTokenDTO,
-} from "@/utils/helpers/typesDTO";
+} from "@/utils/helpers/backendDTO";
 
 @injectable()
 export default class TokenService implements ITokenService {
@@ -40,9 +40,7 @@ export default class TokenService implements ITokenService {
     this._tokenRepository = tokenRepository;
   }
 
-  async sendEmailVerificationToken(
-    user: User | null
-  ): Promise<RequestResponse<EmailVerificationToken> | void> {
+  async sendEmailVerificationToken(user: User): Promise<RequestResponse<null>> {
     const emailVerificationToken =
       await this._tokenRepository.generateEmailVerificationToken(
         user?.email as string
@@ -53,12 +51,9 @@ export default class TokenService implements ITokenService {
         emailVerificationToken.email,
         emailVerificationToken.token
       );
-
-      return this._checkerService.handleSuccess(
-        "Confirmation email sent!",
-        null
-      );
     }
+
+    return this._checkerService.handleSuccess("Confirmation email sent!", null);
   }
 
   async sendResetPasswordToken(

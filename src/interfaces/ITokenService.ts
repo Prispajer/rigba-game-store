@@ -8,12 +8,10 @@ import {
 import {
   SendResetPasswordTokenDTO,
   SendChangePasswordTokenDTO,
-} from "@/utils/helpers/typesDTO";
+} from "@/utils/helpers/backendDTO";
 
 export default interface ITokenService {
-  sendEmailVerificationToken(
-    user: User | null
-  ): Promise<RequestResponse<EmailVerificationToken> | void>;
+  sendEmailVerificationToken(user: User): Promise<RequestResponse<null>>;
   sendResetPasswordToken(
     sendResetPasswordTokenDTO: SendResetPasswordTokenDTO
   ): Promise<RequestResponse<ResetPasswordToken | null>>;

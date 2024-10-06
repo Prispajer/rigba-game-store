@@ -13,7 +13,7 @@ import {
   ChangePasswordDTO,
   ToggleTwoFactorDTO,
   UpdatePersonalDataDTO,
-} from "@/utils/helpers/typesDTO";
+} from "@/utils/helpers/backendDTO";
 
 export default interface IUserService {
   loginUser(

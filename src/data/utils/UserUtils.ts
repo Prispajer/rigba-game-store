@@ -1,7 +1,9 @@
+import bcrypt from "bcryptjs";
 import { postgres } from "../database/publicSQL/postgres";
 import { injectable } from "inversify";
 import IUserUtils from "@/interfaces/IUserUtils";
 import { User } from "@/utils/helpers/types";
+import { RegisterUserDTO } from "@/utils/helpers/backendDTO";
 
 @injectable()
 export default class UserUtils implements IUserUtils {
@@ -17,5 +19,9 @@ export default class UserUtils implements IUserUtils {
     } catch {
       return null;
     }
+  }
+
+  async hashPassword(registerUserDTO: RegisterUserDTO): Promise<string> {
+    return await bcrypt.hash(registerUserDTO.password as string, 10);
   }
 }

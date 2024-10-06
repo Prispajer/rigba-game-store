@@ -17,14 +17,14 @@ export default function useUserWishList() {
     (state: RootState) => state.userWishList
   );
   const userWishListStateProducts = useSelector(
-    (state: RootState) => state.userWishList.products
+    (state: RootState) => state.userWishList.products || []
   );
 
   const handleSetUserWishList = React.useCallback(() => {
-    if (user?.wishlist?.products) {
-      dispatch(setProducts(user.wishlist.products));
+    if (user?.wishList?.products) {
+      dispatch(setProducts(user.wishList.products));
     }
-  }, [dispatch, user?.wishlist?.products]);
+  }, [dispatch, user?.wishList?.products]);
 
   const handleSetUserWishListOrdering = React.useCallback(
     (ordering: string) => {

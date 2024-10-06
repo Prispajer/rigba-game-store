@@ -1,10 +1,10 @@
 import { User } from "@/utils/helpers/types";
-import { RegisterUserDTO } from "@/utils/helpers/typesDTO";
+import { RegisterUserDTO } from "@/utils/helpers/backendDTO";
 export default interface IUserRepository {
-  getUserByEmail(email: string): Promise<User | null>;
-  getUserById(id: string): Promise<User | null>;
+  getUserByEmail(GetUserByEmailDTO: GetUserByEmailDTO): Promise<User | null>;
+  getUserById(getUserByIdDTO: GetUserByIdDTO): Promise<User | null>;
   getTwoFactorConfirmationByUserId(
-    userId: string
+    getTwoFactorConfirmationByUserIdDTO: GetTwoFactorConfirmationByUserIdDTO
   ): Promise<TwoFactorConfirmation | null>;
-  createUser(email: string, password: string): Promise<RegisterUserDTO>;
+  createUser(createUserDTO: CreateUserDTO): Promise<RegisterUserDTO>;
 }

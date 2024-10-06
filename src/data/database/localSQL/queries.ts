@@ -9,7 +9,6 @@ export async function selectQuery<T>(
     const [results] = await dataBase.execute(query, params);
     return results as T[];
   } catch (error) {
-    console.log("Coś poszło nie tak!", error);
     return [];
   }
 }

@@ -130,10 +130,10 @@ export const fetchDeleteUserProductFromWishList = createAsyncThunk<
 );
 
 const userWishListSlice = createSlice({
-  name: "userWishList",
+  name: "userWishlist",
   initialState,
   reducers: {
-    setProducts: (state, action: PayloadAction<LoggedUserWishList[]>) => {
+    setProducts: (state, action: PayloadAction<UserWishList[]>) => {
       switch (state.ordering) {
         case "price": {
           state.products = [...action.payload].sort((a, b) => {

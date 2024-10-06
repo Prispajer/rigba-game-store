@@ -6,79 +6,153 @@ import type ICheckerService from "../interfaces/ICheckerService";
 import type IUserRepository from "@/interfaces/IUserRepository";
 import { User, CLASSTYPES } from "../utils/helpers/types";
 import {
-  CheckUserExistsDTO,
-  CheckTokenExistsDTO,
-  CheckIsUserPasswordCorrectDTO,
-  CheckIsEmailInUse,
-  CheckDataExistsDTO,
-} from "@/utils/helpers/typesDTO";
+  CheckDataExistsAndReturnProductDTO,
+  CheckDataExistsAndReturnProductReviewsDTO,
+  CheckDataExistsAndReturnUserDTO,
+  CheckDataExistsAndReturnUserCartDTO,
+  CheckDataExistsAndReturnUserCartProductDTO,
+  CheckDataExistsAndReturnUserWishListDTO,
+  RegisterUserDTO,
+} from "@/utils/helpers/backendDTO";
+import IProductRepository from "@/interfaces/IProductRepository";
+import { Cart, Product, Review, WishList } from "@prisma/client";
 
 @injectable()
 export default class CheckerService implements ICheckerService {
   private readonly _userRepository: IUserRepository;
+  private readonly _productRepository: IProductRepository;
 
   constructor(
-    @inject(CLASSTYPES.IUserRepository) userRepository: IUserRepository
+    @inject(CLASSTYPES.IUserRepository) userRepository: IUserRepository,
+    @inject(CLASSTYPES.IProductRepository) productRepository: IProductRepository
   ) {
     this._userRepository = userRepository;
+    this._productRepository = productRepository;
   }
 
   async checkDataExistsAndReturn<T, R>(
-    checkDataExists: (checkDataExistsDTO: R) => Promise<T | null>,
-    checkDataExistsDTO: R,
+    checkDataExists: (data: R) => Promise<T | null>,
+    data: R,
     message: string
   ): Promise<RequestResponse<T | null>> {
-    const checkDataResponse = await checkDataExists(checkDataExistsDTO);
+    const checkDataExistsResponse = await checkDataExists(data);
 
-    if (!checkDataResponse) {
+    if (!checkDataExistsResponse) {
       return this.handleError(message);
     }
 
-    return this.handleSuccess("Found data!", checkDataResponse);
+    return this.handleSuccess("Data has been found!", checkDataExistsResponse);
   }
 
-  async checkUserExists(
-    CheckUserExistsDTO: CheckUserExistsDTO
-  ): Promise<RequestResponse<null> | User> {
-    const user = await this._userRepository.getUserByEmail(
-      CheckUserExistsDTO.email
+  async checkDataExistsAndReturnUser(
+    checkDataExistsAndReturnUser: CheckDataExistsAndReturnUserDTO
+  ): Promise<RequestResponse<User | null>> {
+    const getUserByEmailResponse = await this.checkDataExistsAndReturn(
+      (checkDataExistsAndReturnUser) =>
+        this._userRepository.getUserByEmail(checkDataExistsAndReturnUser),
+      checkDataExistsAndReturnUser,
+      "User not found!"
     );
 
-    if (!user) {
-      return this.handleError("User doesn't exsist!");
-    }
-
-    return user;
+    return getUserByEmailResponse;
   }
 
-  async checkTokenExists(
-    CheckTokenExistsDTO: CheckTokenExistsDTO
-  ): Promise<RequestResponse<null> | User> {
-    const user = await this._userRepository.getUserByEmail(
-      CheckTokenExistsDTO.email
+  async checkDataExistsAndReturnProduct(
+    checkDataExistsAndReturnProduct: CheckDataExistsAndReturnProductDTO
+  ): Promise<RequestResponse<Product | null>> {
+    const getProductByExternalProductIdResponse =
+      await this.checkDataExistsAndReturn(
+        (checkDataExistsAndReturnProduct) =>
+          this._productRepository.getProductByExternalProductId(
+            checkDataExistsAndReturnProduct
+          ),
+        checkDataExistsAndReturnProduct,
+        "Product not found!"
+      );
+
+    return getProductByExternalProductIdResponse;
+  }
+
+  async checkDataExistsAndReturnUserCart(
+    checkDataExistsAndReturnUserCart: CheckDataExistsAndReturnUserCartDTO
+  ): Promise<RequestResponse<Cart | null>> {
+    const getUserCartResponse = await this.checkDataExistsAndReturn(
+      (checkDataExistsAndReturnUserCart) =>
+        this._productRepository.getUserCart(checkDataExistsAndReturnUserCart),
+      checkDataExistsAndReturnUserCart,
+      "Cart not found!"
     );
 
-    if (!user) {
-      return this.handleError("User doesn't exsist!");
-    }
+    return getUserCartResponse;
+  }
 
-    return user;
+  async checkDataExistsAndReturnUserWishList(
+    checkDataExistsAndReturnUserWishList: CheckDataExistsAndReturnUserWishListDTO
+  ): Promise<RequestResponse<WishList | null>> {
+    const getUserWishListResponse = await this.checkDataExistsAndReturn(
+      (checkDataExistsAndReturnUserWishList) =>
+        this._productRepository.getUserWishList(
+          checkDataExistsAndReturnUserWishList
+        ),
+      checkDataExistsAndReturnUserWishList,
+      "Wishlist not found!"
+    );
+
+    return getUserWishListResponse;
+  }
+
+  async checkDataExistsAndReturnProductReviews(
+    checkDataExistsAndReturnProductReviews: CheckDataExistsAndReturnProductReviewsDTO
+  ): Promise<RequestResponse<Review | null>> {
+    const getProductReviewsResponse = await this.checkDataExistsAndReturn(
+      (checkDataExistsAndReturnProductReviews) =>
+        this._productRepository.getProductReviews(
+          checkDataExistsAndReturnProductReviews
+        ),
+      checkDataExistsAndReturnProductReviews,
+      "Reviews not found!"
+    );
+
+    return getProductReviewsResponse;
+  }
+
+  async checkDataExistsAndReturnUserCartProduct(
+    checkDataExistsAndReturnUserCartProduct: CheckDataExistsAndReturnUserCartProductDTO
+  ): Promise<RequestResponse<Product | null>> {
+    const getUserCartProductResponse = await this.checkDataExistsAndReturn(
+      (checkDataExistsAndReturnUserCartProduct) =>
+        this._productRepository.getUserCartProduct(
+          checkDataExistsAndReturnUserCartProduct
+        ),
+      checkDataExistsAndReturnUserCartProduct,
+      "User cart product not found!"
+    );
+
+    return getUserCartProductResponse;
+  }
+
+  async checkDataExistsAndReturnUserWishListProduct(
+    checkDataExistsAndReturnUserWishListDTO: CheckDataExistsAndReturnUserWishListDTO
+  ): Promise<RequestResponse<Product | null>> {
+    const getUserWishListResponse = await this.checkDataExistsAndReturn(
+      (checkDataExistsAndReturnUserWishListDTO) =>
+        this._productRepository.getUserWishListProduct(
+          checkDataExistsAndReturnUserWishListDTO
+        ),
+      checkDataExistsAndReturnUserWishListDTO,
+      "User wishlist product not found!"
+    );
+
+    return getUserWishListResponse;
   }
 
   async checkIsUserPasswordCorrect(
-    checkIsUserPasswordCorrect: CheckIsUserPasswordCorrectDTO
-  ): Promise<RequestResponse<CheckIsUserPasswordCorrectDTO | null> | void> {
-    const existingUser = await this._userRepository.getUserByEmail(
-      checkIsUserPasswordCorrect.email
-    );
-
-    if (!existingUser?.password) {
-      return this.handleError("Password is not set!");
-    }
-
+    user: User,
+    loginUserDTO: LoginUserDTO
+  ): Promise<RequestResponse<null> | void> {
     const isPasswordCorrect = await bcrypt.compare(
-      checkIsUserPasswordCorrect.password as string,
-      existingUser.password
+      loginUserDTO.password as string,
+      user.password as string
     );
 
     if (!isPasswordCorrect) {
@@ -87,15 +161,13 @@ export default class CheckerService implements ICheckerService {
   }
 
   async checkIsEmailInUse(
-    checkIsEmailInUse: CheckIsEmailInUse
-  ): Promise<RequestResponse<null> | void> {
-    const user = await this._userRepository.getUserByEmail(
-      checkIsEmailInUse.email
+    registerUserDTO: RegisterUserDTO
+  ): Promise<RequestResponse<User | null> | void> {
+    const getUserByEmailResponse = await this._userRepository.getUserByEmail(
+      registerUserDTO.email
     );
 
-    if (user) {
-      this.handleError("Email in use!");
-    }
+    if (getUserByEmailResponse) return this.handleError("Email is in use!");
   }
 
   handleSuccess<T>(message: string, data: T): RequestResponse<T> {

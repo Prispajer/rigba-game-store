@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { productService } from "@/utils/injector";
 import { RequestResponse } from "@/utils/helpers/types";
-
+import { Product } from "@/utils/helpers/types";
 export async function POST(request: NextRequest) {
   const {
     email,
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     added,
   });
 
-  return NextResponse.json<RequestResponse<LoggedUserProduct>>({
+  return NextResponse.json<RequestResponse<Product>>({
     success: addProductToCartResponse?.success,
     message: addProductToCartResponse?.message,
     data: addProductToCartResponse?.data,

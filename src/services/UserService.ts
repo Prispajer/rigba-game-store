@@ -11,13 +11,7 @@ import {
   sendTwoFactorTokenEmail,
   sendVerificationEmail,
 } from "@/data/database/publicSQL/mail";
-import {
-  RequestResponse,
-  User,
-  EmailVerificationToken,
-  TwoFactorToken,
-  ResetPasswordToken,
-} from "../utils/helpers/types";
+import { RequestResponse, User } from "../utils/helpers/types";
 import { CLASSTYPES } from "../utils/helpers/types";
 import {
   LoginUserDTO,
@@ -27,7 +21,8 @@ import {
   ChangePasswordDTO,
   ToggleTwoFactorDTO,
   UpdatePersonalDataDTO,
-} from "@/utils/helpers/typesDTO";
+} from "@/utils/helpers/backendDTO";
+import IUserUtils from "@/interfaces/IUserUtils";
 
 @injectable()
 export default class UserService implements IUserService {
@@ -35,65 +30,71 @@ export default class UserService implements IUserService {
   private readonly _tokenRepository: ITokenRepository;
   private readonly _checkerService: ICheckerService;
   private readonly _userRepository: IUserRepository;
+  private readonly _userUtils: IUserUtils;
 
   constructor(
     @inject(CLASSTYPES.ITokenService) tokenService: ITokenService,
     @inject(CLASSTYPES.ITokenRepository) tokenRepository: ITokenRepository,
     @inject(CLASSTYPES.ICheckerService) checkerService: ICheckerService,
-    @inject(CLASSTYPES.IUserRepository) userRepository: IUserRepository
+    @inject(CLASSTYPES.IUserRepository) userRepository: IUserRepository,
+    @inject(CLASSTYPES.IUserUtils) userUtils: IUserUtils
   ) {
     this._tokenService = tokenService;
     this._tokenRepository = tokenRepository;
     this._checkerService = checkerService;
     this._userRepository = userRepository;
+    this._userUtils = userUtils;
   }
 
   async loginUser(
     loginUserDTO: LoginUserDTO
-  ): Promise<RequestResponse<
-    User | EmailVerificationToken | TwoFactorToken
-  > | void> {
+  ): Promise<RequestResponse<Token | null> | void> {
     try {
-      const userExistsResponse = await this._checkerService.checkUserExists(
-        loginUserDTO
-      );
+      const getUserByEmailResponse =
+        await this._checkerService.checkDataExistsAndReturnUser(loginUserDTO);
 
-      if (userExistsResponse.success) {
-        return userExistsResponse;
-      }
-
-      const user = userExistsResponse as User;
+      if (getUserByEmailResponse && !getUserByEmailResponse.success)
+        return getUserByEmailResponse;
 
       const checkIsUserPasswordResponse =
-        await this._checkerService.checkIsUserPasswordCorrect(loginUserDTO);
-
-      if (checkIsUserPasswordResponse && !checkIsUserPasswordResponse.success) {
-        return checkIsUserPasswordResponse;
-      }
-
-      if (!user.emailVerified) {
-        const emailVerificationResponse =
-          await this._tokenService.sendEmailVerificationToken(user);
-        if (emailVerificationResponse) {
-          return emailVerificationResponse;
-        }
-      }
-
-      const twoFactorResponse = await this.confirmTwoFactorAuthentication(
-        user,
-        loginUserDTO.code
-      );
-
-      if (user?.emailVerified) {
-        if (twoFactorResponse) {
-          return twoFactorResponse;
-        }
-        return this._checkerService.handleSuccess(
-          "Login was successfull!",
-          user
+        await this._checkerService.checkIsUserPasswordCorrect(
+          getUserByEmailResponse.data,
+          loginUserDTO
         );
+
+      if (checkIsUserPasswordResponse && !checkIsUserPasswordResponse.success)
+        return checkIsUserPasswordResponse;
+
+      if (!getUserByEmailResponse.data.emailVerified) {
+        const sendEmailVerificationTokenResponse =
+          await this._tokenService.sendEmailVerificationToken(
+            getUserByEmailResponse.data
+          );
+        if (
+          sendEmailVerificationTokenResponse &&
+          sendEmailVerificationTokenResponse.success
+        )
+          return sendEmailVerificationTokenResponse;
       }
+
+      const confirmTwoFactorAuthenticationResponse =
+        await this.confirmTwoFactorAuthentication(
+          getUserByEmailResponse.data,
+          loginUserDTO.code
+        );
+
+      if (
+        confirmTwoFactorAuthenticationResponse &&
+        confirmTwoFactorAuthenticationResponse.success
+      )
+        return confirmTwoFactorAuthenticationResponse;
+
+      return this._checkerService.handleSuccess(
+        "Login was successful!",
+        getUserByEmailResponse.data
+      );
     } catch (error) {
+      console.error(error);
       return this._checkerService.handleError("Something went wrong!");
     }
   }
@@ -102,20 +103,14 @@ export default class UserService implements IUserService {
     registerUserDTO: RegisterUserDTO
   ): Promise<RequestResponse<RegisterUserDTO>> {
     try {
-      const hashedPassword = await bcrypt.hash(
-        registerUserDTO.password as string,
-        10
-      );
-
       const checkIsEmailInUseResponse =
         await this._checkerService.checkIsEmailInUse(registerUserDTO);
-      if (checkIsEmailInUseResponse && !checkIsEmailInUseResponse.success) {
+      if (checkIsEmailInUseResponse && !checkIsEmailInUseResponse.success)
         return checkIsEmailInUseResponse;
-      }
 
       const createdUser = await this._userRepository.createUser(
         registerUserDTO.email,
-        hashedPassword
+        await this._userUtils.hashPassword(registerUserDTO)
       );
 
       const emailVerificationToken =
@@ -146,18 +141,17 @@ export default class UserService implements IUserService {
           confirmEmailVerification.token as string
         );
 
-      const userExistsResponse = await this._checkerService.checkUserExists(
-        getEmailVerificationTokenByTokenResponse
-      );
+      const getUserByEmailResponse =
+        await this._checkerService.checkDataExistsAndReturnUser(
+          confirmEmailVerification
+        );
 
-      if (userExistsResponse.success) {
-        return userExistsResponse;
+      if (!getUserByEmailResponse.success) {
+        return getUserByEmailResponse;
       }
 
-      const user = userExistsResponse as User;
-
       await postgres.user.update({
-        where: { id: user.id },
+        where: { id: getUserByEmailResponse.data.id },
         data: { emailVerified: new Date() },
       });
 
@@ -176,7 +170,7 @@ export default class UserService implements IUserService {
     user: User | null,
     code?: string
   ): Promise<RequestResponse<TwoFactorToken> | void> {
-    if (!user?.isTwoFactorEnabled && user?.email) {
+    if (user?.isTwoFactorEnabled && user?.email) {
       if (code) {
         const twoFactorToken =
           await this._tokenRepository.getTwoFactorTokenByEmail(
@@ -206,9 +200,7 @@ export default class UserService implements IUserService {
         });
 
         const existingConfirmation =
-          await this._userRepository.getTwoFactorConfirmationByUserId(
-            user.id as string
-          );
+          await this._userRepository.getTwoFactorConfirmationByUserId(user);
 
         if (existingConfirmation) {
           await postgres.twoFactorConfirmation.delete({

@@ -1,24 +1,43 @@
 import {
   CheckUserExistsDTO,
   CheckTokenExistsDTO,
-  CheckIsUserPasswordCorrectDTO,
   CheckIsEmailInUse,
-  CheckDataExistsDTO,
-} from "@/utils/helpers/typesDTO";
+} from "@/utils/helpers/backendDTO";
 
 export default interface ICheckerService {
   checkDataExistsAndReturn<T, R>(
-    checkDataExists: (checkDataExistsDTO: R) => Promise<T | null>,
-    checkDataExistsDTO: R,
+    checkDataExists: (data: R) => Promise<T | null>,
+    data: R,
     message: string
   ): Promise<RequestResponse<T | null>>;
-  checkUserExists(
-    CheckUserExistsDTO: CheckUserExistsDTO
-  ): Promise<RequestResponse<null> | User>;
+  checkDataExistsAndReturnUser(
+    checkDataExistsAndReturnUser: CheckDataExistsAndReturnUserDTO
+  ): Promise<RequestResponse<User | null>>;
+  checkDataExistsAndReturnProduct(
+    checkDataExistsAndReturnProduct: CheckDataExistsAndReturnProductDTO
+  ): Promise<RequestResponse<User | null>>;
+  checkDataExistsAndReturnUserCart(
+    checkDataExistsAndReturnUserCart: CheckDataExistsAndReturnUserCartDTO
+  ): Promise<RequestResponse<User | null>>;
+  checkDataExistsAndReturnUserWishList(
+    checkDataExistsAndReturnUserWishList: CheckDataExistsAndReturnUserWishListDTO
+  ): Promise<RequestResponse<User | null>>;
+  checkDataExistsAndReturnProductReviews(
+    checkDataExistsAndReturnProductReviews: CheckDataExistsAndReturnProductReviewsDTO
+  ): Promise<RequestResponse<Review | null>>;
+  checkDataExistsAndReturnUserCartProduct(
+    checkDataExistsAndReturnUserCartProduct: CheckDataExistsAndReturnUserCartProductDTO
+  ): Promise<RequestResponse<Product | null>>;
+  checkDataExistsAndReturnUserWishListProduct(
+    checkDataExistsAndReturnUserWishListDTO: CheckDataExistsAndReturnUserWishListDTO
+  ): Promise<RequestResponse<Product | null>>;
   checkIsUserPasswordCorrect(
-    checkIsUserPasswordCorrect: CheckIsUserPasswordCorrectDTO
-  ): Promise<RequestResponse<CheckIsUserPasswordCorrectDTO | null> | void>;
-  checkIsEmailInUse(userDTO: UserDTO): Promise<RequestResponse<null> | void>;
+    user: User,
+    loginUserDTO: LoginUserDTO
+  ): Promise<RequestResponse<null> | void>;
+  checkIsEmailInUse(
+    registerUserDTO: RegisterUserDTO
+  ): Promise<RequestResponse<null> | void>;
   handleSuccess<T>(message: string, data: T): RequestResponse<T>;
   handleError(message: string): RequestResponse<null>;
 }

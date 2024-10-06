@@ -1,6 +1,10 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import RequestService from "@/services/RequestService";
 import { RequestResponse, UserCart } from "@/utils/helpers/types";
+import {
+  FetchAddUserProductToCart,
+  FetchUserCart,
+} from "@/utils/helpers/frontendDTO";
 
 interface UserCartState {
   products: UserCart[];
@@ -20,9 +24,7 @@ const initialState: UserCartState = {
 
 export const fetchUserCart = createAsyncThunk<
   { products: UserCart[]; message: string },
-  {
-    email: string | null | undefined;
-  },
+  { email: string | null | undefined },
   { rejectValue: string }
 >("userCart/fetchUserCart", async ({ email }, { rejectWithValue }) => {
   try {
@@ -50,53 +52,19 @@ export const fetchUserCart = createAsyncThunk<
 });
 
 export const fetchAddUserProductToCart = createAsyncThunk<
-  LoggedUserCart[],
-  {
-    email: string | null | undefined;
-    externalProductId: string | undefined;
-    name: string;
-    description: string | undefined;
-    price: number;
-    background_image: string;
-    rating: number | undefined;
-    slug: string | undefined;
-    released: string | undefined;
-    added: number | undefined;
-  },
+  UserCart[],
+  FetchAddUserProductToCart,
   { rejectValue: string }
 >(
   "userCart/fetchAddUserProductToCart",
-  async (
-    {
-      email,
-      externalProductId,
-      name,
-      description,
-      price,
-      background_image,
-      rating,
-      slug,
-      released,
-      added,
-    },
-    { rejectWithValue }
-  ) => {
+  async (fetchAddUserProductToCart, { rejectWithValue }) => {
     try {
       const response = await RequestService.postMethod(
         "products/endpoints/productManagement/addProductToCart",
-        {
-          email,
-          externalProductId,
-          name,
-          description,
-          price,
-          background_image,
-          rating,
-          slug,
-          released,
-          added,
-        }
+
+        fetchAddUserProductToCart
       );
+      console.log(response);
 
       if (response.success) {
         return response.data?.products;
@@ -111,7 +79,7 @@ export const fetchAddUserProductToCart = createAsyncThunk<
 );
 
 export const fetchDeleteUserProductFromCart = createAsyncThunk<
-  LoggedUserCart[],
+  UserCart[],
   { email: string | null | undefined; externalProductId: number },
   { rejectValue: string }
 >(
@@ -155,7 +123,7 @@ export const fetchIncreaseQuantityUserProductFromCart = createAsyncThunk<
 );
 
 export const fetchDecreaseQuantityUserProductFromCart = createAsyncThunk<
-  LoggedUserCart[],
+  UserCart[],
   { email: string | null | undefined; externalProductId: number },
   { rejectValue: string }
 >(
@@ -183,9 +151,6 @@ const userCartSlice = createSlice({
     clearMessages: (state) => {
       state.error = null;
       state.success = null;
-    },
-    setProducts: (state, action: PayloadAction<LoggedUserCart[]>) => {
-      state.products = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -270,6 +235,6 @@ const userCartSlice = createSlice({
   },
 });
 
-export const { clearMessages, setProducts } = userCartSlice.actions;
+export const { clearMessages } = userCartSlice.actions;
 
 export default userCartSlice.reducer;

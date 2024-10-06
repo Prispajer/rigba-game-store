@@ -22,8 +22,6 @@ export async function POST(request: NextRequest) {
       const email = charge.billing_details.email;
       const amount = charge.amount;
 
-      console.log("Received Stripe event:", event);
-
       let order = await postgres.order.findFirst({
         where: {
           id: orderId,

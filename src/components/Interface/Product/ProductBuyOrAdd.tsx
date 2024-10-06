@@ -38,17 +38,7 @@ export default function ProductBuyOrAdd({
               className="flex items-center min-h-[35px] px-[10px] bg-transparent border-[2px] cursor-pointer"
               onClick={
                 user
-                  ? () =>
-                      handleAddUserProductToCart(
-                        product.id as string,
-                        product?.name,
-                        product?.description_raw as string,
-                        product?.background_image,
-                        product?.rating as number,
-                        product?.slug as string,
-                        product?.released as string,
-                        product?.added as number
-                      )
+                  ? () => handleAddUserProductToCart(product)
                   : () =>
                       handleAddLocalProductToCart({
                         externalProductId: product.id,

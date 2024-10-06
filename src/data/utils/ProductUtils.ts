@@ -5,28 +5,16 @@ import { User } from "@/utils/helpers/types";
 
 @injectable()
 export default class ProductUtils implements IProductUtils {
-  async getDataByProperty<T>(
-    findDataByProperty: (
-      userId: string | undefined,
-      externalProductId: number | undefined
-    ) => Promise<T | null>,
-    userId?: string,
-    externalProductId?: number
+  async executeOperation<T, R>(
+    findDataByProperty: (property?: R) => Promise<T | null>,
+    property?: R
   ): Promise<T | null> {
     try {
-      const dataByProperty = await findDataByProperty(
-        userId,
-        externalProductId
-      );
+      const dataByProperty = await findDataByProperty(property);
       return dataByProperty;
-    } catch {
+    } catch (error) {
+      console.error("Error during database operation:", error);
       return null;
     }
-  }
-
-  async createDataByProperty<T>(
-    createDataByProperty: () => Promise<T>
-  ): Promise<T> {
-    return await createDataByProperty();
   }
 }

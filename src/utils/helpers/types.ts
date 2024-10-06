@@ -16,10 +16,6 @@ export interface Token {
   expires: Date;
 }
 
-export type EmailVerificationToken = Token;
-export type TwoFactorToken = Token;
-export type ResetPasswordToken = Token;
-
 export interface Product {
   id?: string | number;
   externalProductId?: number | string;

@@ -12,6 +12,7 @@ import useCurrentUser from "./useCurrentUser";
 import { generateRandomValue } from "@/utils/prices";
 import debounce from "@/utils/debounce";
 import { AppDispatch, RootState } from "@/redux/store";
+import { AddUserProductToCart } from "@/utils/helpers/frontendDTO";
 
 export default function useUserCart() {
   const { user, update } = useCurrentUser();
@@ -25,37 +26,25 @@ export default function useUserCart() {
   }, [dispatch, user?.email]);
 
   const handleAddUserProductToCart = React.useCallback(
-    debounce(
-      async (
-        productId: string,
-        name: string,
-        description: string,
-        background_image: string,
-        rating: number,
-        slug: string,
-        released: string,
-        added: number
-      ) => {
-        if (user?.email) {
-          await dispatch(
-            fetchAddUserProductToCart({
-              email: user.email,
-              externalProductId: productId,
-              name: name,
-              description: description,
-              price: generateRandomValue(),
-              background_image: background_image,
-              rating,
-              slug,
-              released,
-              added,
-            })
-          );
-        }
-        update();
-      },
-      1000
-    ),
+    debounce(async (AddUserProductToCart: AddUserProductToCart) => {
+      if (user?.email) {
+        await dispatch(
+          fetchAddUserProductToCart({
+            email: user.email,
+            externalProductId: AddUserProductToCart.id,
+            name: AddUserProductToCart.name,
+            description: AddUserProductToCart.description,
+            price: generateRandomValue(),
+            background_image: AddUserProductToCart.background_image,
+            rating: AddUserProductToCart.rating,
+            slug: AddUserProductToCart.slug,
+            released: AddUserProductToCart.released,
+            added: AddUserProductToCart.added,
+          })
+        );
+      }
+      update();
+    }, 1000),
     [dispatch, user?.email, update]
   );
 
@@ -106,7 +95,13 @@ export default function useUserCart() {
 
   React.useEffect(() => {
     handleFetchUserCart();
-  }, [handleFetchUserCart]);
+  }, [
+    handleFetchUserCart,
+    handleAddUserProductToCart,
+    handleDeleteUserProductFromCart,
+    handleIncreaseQuantityUserProductFromCart,
+    handleDecreaseQuantityUserProductFromCart,
+  ]);
 
   return {
     userCartState,

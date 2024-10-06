@@ -1,7 +1,4 @@
-import { generateGameKey } from "@/utils/prices";
-
 export default function OrdersContainer() {
-  console.log(generateGameKey());
   return (
     <div className="flex-col justify-center items-center pt-[40px] px-[40px] pb-[80px] bg-[#e9eff4]">
       <h1 className="flex justify-start text-[#1A396E] text-[20px] font-[700] cursor-default ">

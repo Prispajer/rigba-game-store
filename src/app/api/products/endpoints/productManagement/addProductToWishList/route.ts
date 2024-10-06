@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import ProductService from "@/services/ProductService";
-import IProductService from "@/interfaces/IProductService";
+import { productService } from "@/utils/injector";
 import { RequestResponse } from "@/utils/helpers/types";
 
 export async function POST(request: NextRequest) {
@@ -17,21 +16,19 @@ export async function POST(request: NextRequest) {
     added,
   } = await request.json();
 
-  const productService: IProductService = new ProductService({
-    email,
-    externalProductId,
-    name,
-    description,
-    price,
-    background_image,
-    rating,
-    slug,
-    released,
-    added,
-  });
-
   const addProductToWishlistResponse =
-    await productService.addProductToWishlist();
+    await productService.addProductToWishList({
+      email,
+      externalProductId,
+      name,
+      description,
+      price,
+      background_image,
+      rating,
+      slug,
+      released,
+      added,
+    });
 
   return NextResponse.json<RequestResponse<LoggedUserProduct>>({
     success: addProductToWishlistResponse?.success,

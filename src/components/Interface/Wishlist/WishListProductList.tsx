@@ -27,7 +27,7 @@ export default function WishListProductList() {
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-product-list-auto-fit gap-x-[10px]">
+    <div className="grid grid-cols-1 sm:grid-cols-product-list-auto-fit lg:grid-cols-3 xxl:grid-cols-4 gap-x-[10px]">
       {displayByCondition && displayByCondition.length > 0 ? (
         displayByCondition.map((game) => (
           <div

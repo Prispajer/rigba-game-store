@@ -1,18 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import ProductService from "@/services/ProductService";
-import IProductService from "@/interfaces/IProductService";
+import { productService } from "@/utils/injector";
 import { RequestResponse } from "@/utils/helpers/types";
 
 export async function DELETE(request: NextRequest) {
   const { email, externalProductId } = await request.json();
 
-  const productService: IProductService = new ProductService({
-    email,
-    externalProductId,
-  });
-
   const deleteProductFromCartResponse =
-    await productService.deleteProductFromCart();
+    await productService.deleteProductFromCart({ email, externalProductId });
 
   return NextResponse.json<RequestResponse<LoggedUserUpdatedProduct>>({
     success: deleteProductFromCartResponse.success,

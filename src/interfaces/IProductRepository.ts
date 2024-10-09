@@ -16,20 +16,28 @@ export default interface IProductRepository {
   getProductByExternalProductId(
     getProductByExternalProductIdDTO: GetProductByExternalProductIdDTO
   ): Promise<Product | null>;
-  getUserCartProduct(
-    getUserCartProductDTO: GetUserCartProductDTO
-  ): Promise<Product | null>;
-  getUserWishListProduct(
-    GetUserWishListProductDTO: GetUserWishListProductDTO
-  ): Promise<Product | null>;
   createUserCart(user: User): Promise<Cart | null>;
   createUserWishList(user: User): Promise<WishList | null>;
+  createReview(createReviewDTO: CreateReviewDTO): Promise<Review | null>;
+  createRating(createRatingDTO: CreateRatingDTO): Promise<Rating | null>;
   createUserCartProduct(
     createUserCartProductDTO: CreateUserCartProductDTO
   ): Promise<Product>;
   createUserWishListProduct(
     createUserWishListProductDTO: CreateUserWishListProductDTO
   ): Promise<Product>;
+  createProductToReview(
+    createProductToReviewDTO: CreateProductToReviewDTO
+  ): Promise<Product | null>;
+  deleteUserProductFromCart(
+    deleteUserProductFromCartDTO: DeleteUserProductFromCartDTO
+  ): Promise<Product | null>;
+  deleteUserProductFromWishList(
+    deleteUserProductFromWishListDTO: DeleteUserProductFromWishListDTO
+  ): Promise<Product | null>;
+  deleteUserProduct(
+    deleteUserProductDTO: DeleteUserProductDTO
+  ): Promise<Product | null>;
   increaseUserProductQuantity(
     UserProductQuantityDTO: UserProductQuantityDTO
   ): Promise<UserProductQuantity | null>;

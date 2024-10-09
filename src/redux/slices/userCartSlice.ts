@@ -24,7 +24,7 @@ const initialState: UserCartState = {
 
 export const fetchUserCart = createAsyncThunk<
   { products: UserCart[]; message: string },
-  { email: string | null | undefined },
+  { email: string },
   { rejectValue: string }
 >("userCart/fetchUserCart", async ({ email }, { rejectWithValue }) => {
   try {
@@ -64,8 +64,6 @@ export const fetchAddUserProductToCart = createAsyncThunk<
 
         fetchAddUserProductToCart
       );
-      console.log(response);
-
       if (response.success) {
         return response.data?.products;
       } else {

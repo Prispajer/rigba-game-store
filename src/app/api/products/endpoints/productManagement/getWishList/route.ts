@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { productService } from "@/utils/injector";
 import { RequestResponse } from "@/utils/helpers/types";
+import { WishList } from "@prisma/client";
 
 export async function POST(request: NextRequest) {
   const { email } = await request.json();
@@ -9,7 +10,7 @@ export async function POST(request: NextRequest) {
     email,
   });
 
-  return NextResponse.json<RequestResponse<LoggedUserCart>>({
+  return NextResponse.json<RequestResponse<WishList>>({
     success: getUserWishListResponse.success,
     message: getUserWishListResponse.message,
     data: getUserWishListResponse.data,

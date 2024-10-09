@@ -1,18 +1,31 @@
 import { injectable, inject } from "inversify";
 import { postgres } from "@/data/database/publicSQL/postgres";
-import IProductRepository from "@/interfaces/IProductRepository";
-import IProductUtils from "@/interfaces/IProductUtils";
-import { WishList, Product } from "@prisma/client";
-import { User, CLASSTYPES } from "@/utils/helpers/types";
+import type IProductRepository from "@/interfaces/IProductRepository";
+import type IProductUtils from "@/interfaces/IProductUtils";
+import {
+  User,
+  Cart,
+  WishList,
+  Product,
+  Review,
+  Rating,
+  RatingTitle,
+} from "@prisma/client";
+import { CLASSTYPES } from "@/utils/helpers/types";
 import {
   CreateUserCartProductDTO,
   GetUserCartDTO,
   GetUserWishListDTO,
-  GetUserCartProductDTO,
   GetProductReviewsDTO,
   GetProductByExternalProductIdDTO,
   CreateUserWishListProductDTO,
-  GetUserWishListProductDTO,
+  UserProductQuantityDTO,
+  CreateProductToReviewDTO,
+  CreateReviewDTO,
+  CreateRatingDTO,
+  DeleteUserProductFromCartDTO,
+  DeleteUserProductFromWishListDTO,
+  DeleteUserProductDTO,
 } from "@/utils/helpers/backendDTO";
 
 @injectable()
@@ -46,7 +59,7 @@ export default class ProductRepository implements IProductRepository {
 
   async getUserWishList(
     getUserWishListDTO: GetUserWishListDTO
-  ): Promise<Wishlist | null> {
+  ): Promise<WishList | null> {
     try {
       return await this._productUtils.executeOperation(
         (getUserWishListDTO) =>
@@ -103,47 +116,10 @@ export default class ProductRepository implements IProductRepository {
             where: {
               externalProductId:
                 getProductByExternalProductIdDTO?.externalProductId,
+              userId: getProductByExternalProductIdDTO?.userId,
             },
           }),
         getProductByExternalProductIdDTO
-      );
-    } catch {
-      return null;
-    }
-  }
-
-  async getUserCartProduct(
-    getUserCartProductDTO: GetUserCartProductDTO
-  ): Promise<Product | null> {
-    try {
-      return await this._productUtils.executeOperation(
-        (getUserCartProductDTO) =>
-          postgres.product.findFirst({
-            where: {
-              cartId: getUserCartProductDTO?.id,
-              externalProductId: getUserCartProductDTO?.externalProductId,
-            },
-          }),
-        getUserCartProductDTO
-      );
-    } catch {
-      return null;
-    }
-  }
-
-  async getUserWishListProduct(
-    getUserWishListProductDTO: GetUserWishListProductDTO
-  ): Promise<Product | null> {
-    try {
-      return await this._productUtils.executeOperation(
-        (getUserWishListProductDTO) =>
-          postgres.product.findFirst({
-            where: {
-              cartId: getUserWishListProductDTO?.id,
-              externalProductId: getUserWishListProductDTO?.externalProductId,
-            },
-          }),
-        getUserWishListProductDTO
       );
     } catch {
       return null;
@@ -168,6 +144,28 @@ export default class ProductRepository implements IProductRepository {
     );
   }
 
+  async createReview(createReviewDTO: CreateReviewDTO): Promise<Review | null> {
+    return await postgres.review.create({
+      data: {
+        userId: createReviewDTO.userId,
+        productId: createReviewDTO.productId,
+        likes: createReviewDTO.likes,
+      },
+    });
+  }
+
+  async createRating(createRatingDTO: CreateRatingDTO): Promise<Rating | null> {
+    return await postgres.rating.create({
+      data: {
+        rating: createRatingDTO.rating,
+        reviewId: createRatingDTO.reviewId,
+        title: createRatingDTO.title as RatingTitle,
+        percent: createRatingDTO.rating * 20,
+        description: createRatingDTO.description,
+      },
+    });
+  }
+
   async createUserCartProduct(
     createUserCartProductDTO: CreateUserCartProductDTO
   ): Promise<Product | null> {
@@ -175,6 +173,7 @@ export default class ProductRepository implements IProductRepository {
       postgres.product.create({
         data: {
           cartId: createUserCartProductDTO.cartId,
+          userId: createUserCartProductDTO.userId,
           externalProductId: createUserCartProductDTO.externalProductId,
           quantity: 1,
           productsInformations: {
@@ -201,6 +200,7 @@ export default class ProductRepository implements IProductRepository {
       postgres.product.create({
         data: {
           wishListId: createUserWishListProductDTO.wishListId,
+          userId: createUserWishListProductDTO.userId,
           externalProductId: createUserWishListProductDTO.externalProductId,
           productsInformations: {
             create: {
@@ -219,14 +219,96 @@ export default class ProductRepository implements IProductRepository {
     );
   }
 
+  async createProductToReview(
+    createProductToReviewDTO: CreateProductToReviewDTO
+  ): Promise<Product | null> {
+    return await this._productUtils.executeOperation(() =>
+      postgres.product.create({
+        data: {
+          externalProductId: createProductToReviewDTO.externalProductId,
+          productsInformations: {
+            create: {
+              name: createProductToReviewDTO.name,
+              description: createProductToReviewDTO.description,
+              price: createProductToReviewDTO.price,
+              background_image: createProductToReviewDTO.background_image,
+              rating: createProductToReviewDTO.rating,
+              slug: createProductToReviewDTO.slug,
+              released: createProductToReviewDTO.released,
+              added: createProductToReviewDTO.added,
+            },
+          },
+        },
+      })
+    );
+  }
+
+  async createUserProductFromWishList(
+    createProductToReviewDTO: CreateProductToReviewDTO
+  ): Promise<Product | null> {
+    return await this._productUtils.executeOperation(() =>
+      postgres.product.create({
+        data: {
+          externalProductId: createProductToReviewDTO.externalProductId,
+          productsInformations: {
+            create: {
+              name: createProductToReviewDTO.name,
+              description: createProductToReviewDTO.description,
+              price: createProductToReviewDTO.price,
+              background_image: createProductToReviewDTO.background_image,
+              rating: createProductToReviewDTO.rating,
+              slug: createProductToReviewDTO.slug,
+              released: createProductToReviewDTO.released,
+              added: createProductToReviewDTO.added,
+            },
+          },
+        },
+      })
+    );
+  }
+
+  async deleteUserProductFromCart(
+    deleteUserProductFromCartDTO: DeleteUserProductFromCartDTO
+  ): Promise<Product | null> {
+    return await postgres.product.update({
+      where: { id: deleteUserProductFromCartDTO.id },
+      data: {
+        cartId: null,
+        quantity: null,
+      },
+    });
+  }
+
+  async deleteUserProductFromWishList(
+    deleteUserProductFromWishListDTO: DeleteUserProductFromWishListDTO
+  ): Promise<Product | null> {
+    return await postgres.product.update({
+      where: { id: deleteUserProductFromWishListDTO.id },
+      data: {
+        wishListId: null,
+      },
+    });
+  }
+
+  async deleteUserProduct(
+    deleteUserProductDTO: DeleteUserProductDTO
+  ): Promise<Product | null> {
+    return await postgres.product.delete({
+      where: { id: deleteUserProductDTO.id },
+    });
+  }
+
   async increaseUserProductQuantity(
     userProductQuantityDTO: UserProductQuantityDTO
-  ): Promise<UserProductQuantity | null> {
-    await this._productUtils.executeOperation(
+  ): Promise<Product | null> {
+    return await this._productUtils.executeOperation(
       (userProductQuantityDTO) =>
         postgres.product.update({
-          where: { id: userProductQuantityDTO.id },
-          data: { quantity: (userProductQuantityDTO.quantity ?? 0) + 1 },
+          where: {
+            id: userProductQuantityDTO?.id,
+            userId: userProductQuantityDTO?.userId,
+          },
+          data: { quantity: (userProductQuantityDTO?.quantity ?? 0) + 1 },
         }),
       userProductQuantityDTO
     );
@@ -234,12 +316,15 @@ export default class ProductRepository implements IProductRepository {
 
   async decreaseUserProductQuantity(
     userProductQuantityDTO: UserProductQuantityDTO
-  ): Promise<UserProductQuantity | null> {
-    await this._productUtils.executeOperation(
+  ): Promise<Product | null> {
+    return await this._productUtils.executeOperation(
       (userProductQuantityDTO) =>
         postgres.product.update({
-          where: { id: userProductQuantityDTO.id },
-          data: { quantity: userProductQuantityDTO.quantity - 1 },
+          where: {
+            id: userProductQuantityDTO?.id,
+            userId: userProductQuantityDTO?.userId,
+          },
+          data: { quantity: (userProductQuantityDTO?.quantity ?? 0) - 1 },
         }),
       userProductQuantityDTO
     );

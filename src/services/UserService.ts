@@ -7,11 +7,13 @@ import type ICheckerService from "../interfaces/ICheckerService";
 import type ITokenService from "../interfaces/ITokenService";
 import type IUserRepository from "@/interfaces/IUserRepository";
 import type ITokenRepository from "@/interfaces/ITokenRepository";
+import type IUserUtils from "@/interfaces/IUserUtils";
 import {
   sendTwoFactorTokenEmail,
   sendVerificationEmail,
 } from "@/data/database/publicSQL/mail";
-import { RequestResponse, User } from "../utils/helpers/types";
+import { User } from "@prisma/client";
+import { RequestResponse } from "../utils/helpers/types";
 import { CLASSTYPES } from "../utils/helpers/types";
 import {
   LoginUserDTO,
@@ -22,7 +24,6 @@ import {
   ToggleTwoFactorDTO,
   UpdatePersonalDataDTO,
 } from "@/utils/helpers/backendDTO";
-import IUserUtils from "@/interfaces/IUserUtils";
 
 @injectable()
 export default class UserService implements IUserService {

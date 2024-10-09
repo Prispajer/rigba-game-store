@@ -1,20 +1,25 @@
 import { injectable, inject } from "inversify";
 import { postgres } from "@/data/database/publicSQL/postgres";
-import { RatingTitle, Product, Cart, Review, WishList } from "@prisma/client";
+import { Cart, Review, WishList } from "@prisma/client";
 import type IUserRepository from "@/interfaces/IUserRepository";
 import type IProductService from "../interfaces/IProductService";
 import type ICheckerService from "@/interfaces/ICheckerService";
+import type IProductRepository from "@/interfaces/IProductRepository";
 import type { RequestResponse } from "../utils/helpers/types";
 import { userRepository } from "@/utils/injector";
-import { User, UserCart, CLASSTYPES } from "../utils/helpers/types";
+import { CLASSTYPES } from "../utils/helpers/types";
 import {
   AddProductToCartDTO,
   AddProductToWishListDTO,
+  AddReviewToProductDTO,
+  DecreaseProductQuantityDTO,
+  DeleteProductFromCartDTO,
+  DeleteProductFromWishListDTO,
   GetProductReviewsDTO,
   GetUserCartDTO,
   GetUserWishListDTO,
+  IncreaseProductQuantityDTO,
 } from "@/utils/helpers/backendDTO";
-import IProductRepository from "@/interfaces/IProductRepository";
 
 @injectable()
 export default class ProductService implements IProductService {
@@ -55,7 +60,9 @@ export default class ProductService implements IProductService {
       }
 
       return this._checkerService.handleSuccess(
-        "Cart retrieved successfully!",
+        getUserCartResponse.success
+          ? "Cart retrieved successfully!"
+          : "Cart not found, creating new one!",
         getUserCartResponse.data
       );
     } catch (error) {
@@ -87,7 +94,9 @@ export default class ProductService implements IProductService {
       }
 
       return this._checkerService.handleSuccess(
-        "Wishlist retrieved successfully!",
+        getUserWishListResponse.success
+          ? "Wishlist retrieved successfully!"
+          : "Wishlist not found, creating new one!",
         getUserWishListResponse.data
       );
     } catch (error) {
@@ -101,20 +110,17 @@ export default class ProductService implements IProductService {
     getProductReviewsDTO: GetProductReviewsDTO
   ): Promise<RequestResponse<Review | null>> {
     try {
-      const getProductByExternalProductIdResponse =
+      const getUserProductResponse =
         await this._checkerService.checkDataExistsAndReturnProduct(
           getProductReviewsDTO
         );
 
-      if (
-        getProductByExternalProductIdResponse &&
-        !getProductByExternalProductIdResponse.success
-      )
-        return getProductByExternalProductIdResponse;
+      if (getUserProductResponse && !getUserProductResponse.success)
+        return getUserProductResponse;
 
       const getProductReviewsResponse =
         await this._checkerService.checkDataExistsAndReturnProductReviews(
-          getProductByExternalProductIdResponse.data
+          getUserProductResponse.data
         );
 
       if (getProductReviewsResponse && !getProductReviewsResponse.success) {
@@ -141,32 +147,44 @@ export default class ProductService implements IProductService {
           addProductToCartDTO
         );
 
-      if (getUserByEmailResponse && !getUserByEmailResponse.success)
+      if (getUserByEmailResponse && !getUserByEmailResponse.success) {
         return getUserByEmailResponse;
+      }
 
       const getUserCartResponse =
         await this._checkerService.checkDataExistsAndReturnUserCart(
           getUserByEmailResponse.data
         );
 
-      if (getUserCartResponse && !getUserCartResponse.success) {
+      if (getUserCartResponse && !getUserCartResponse.success)
         return getUserCartResponse;
-      }
 
-      const getUserCartProductResponse =
-        await this._checkerService.checkDataExistsAndReturnUserCartProduct({
-          cartId: getUserCartResponse.data.id,
+      const getUserProductResponse =
+        await this._checkerService.checkDataExistsAndReturnProduct({
           externalProductId: addProductToCartDTO.externalProductId,
+          userId: getUserByEmailResponse.data.id,
         });
 
-      if (getUserCartProductResponse && getUserCartProductResponse.success) {
+      if (getUserProductResponse && getUserProductResponse.success) {
+        if (getUserProductResponse.data.cartId === null) {
+          await prisma?.product.update({
+            where: {
+              id: getUserProductResponse.data.id,
+            },
+            data: {
+              cartId: getUserCartResponse.data.id,
+            },
+          });
+        }
         await this._productRepository.increaseUserProductQuantity({
-          id: getUserCartProductResponse.data.id,
-          quantity: getUserCartProductResponse.data.quantity,
+          id: getUserProductResponse.data.id,
+          userId: getUserByEmailResponse.data.id,
+          quantity: getUserProductResponse.data.quantity,
         });
       } else {
         await this._productRepository.createUserCartProduct({
           cartId: getUserCartResponse.data.id,
+          userId: getUserByEmailResponse.data.id,
           ...addProductToCartDTO,
         });
       }
@@ -176,6 +194,7 @@ export default class ProductService implements IProductService {
         getUserCartResponse.data || null
       );
     } catch (error) {
+      console.error("Error while adding product to cart:", error);
       return this._checkerService.handleError(
         "Error while adding product to the cart!"
       );
@@ -191,354 +210,254 @@ export default class ProductService implements IProductService {
           addProductToWishListDTO
         );
 
-      console.log("User check response:", getUserByEmailResponse);
-
-      if (getUserByEmailResponse && !getUserByEmailResponse?.success) {
+      if (getUserByEmailResponse && !getUserByEmailResponse.success)
         return getUserByEmailResponse;
-      }
 
       const getUserWishListResponse =
         await this._checkerService.checkDataExistsAndReturnUserWishList(
           getUserByEmailResponse.data
         );
 
-      console.log("Wishlist response:", getUserWishListResponse);
+      if (getUserWishListResponse && !getUserWishListResponse.success)
+        return getUserWishListResponse;
 
-      if (getUserWishListResponse && !getUserWishListResponse.success) {
-        const createUserWishList = await this.getUserWishList(
-          addProductToWishListDTO
-        );
-
-        if (!createUserWishList?.success) {
-          return this._checkerService.handleError(
-            "Failed to create user wishlist."
-          );
-        }
-      }
-
-      const getUserWishListProductResponse =
-        await this._checkerService.checkDataExistsAndReturnUserWishListProduct({
-          wishListId: getUserWishListResponse.data.id,
+      const getUserProductResponse =
+        await this._checkerService.checkDataExistsAndReturnProduct({
           externalProductId: addProductToWishListDTO.externalProductId,
+          userId: getUserByEmailResponse.data.id,
         });
 
-      console.log("PROUDCT WISH LISTY:", getUserWishListResponse);
-
-      console.log(getUserWishListProductResponse);
-
-      if (
-        getUserWishListProductResponse &&
-        getUserWishListProductResponse.success
-      ) {
+      if (getUserProductResponse && getUserProductResponse.success) {
+        if (getUserProductResponse.data.wishListId === null) {
+          await prisma?.product.update({
+            where: {
+              id: getUserProductResponse.data.id,
+            },
+            data: {
+              wishListId: getUserWishListResponse.data.id,
+            },
+          });
+        }
         return this._checkerService.handleError(
           "User wishlist product already exists!"
         );
       } else {
         await this._productRepository.createUserWishListProduct({
           wishListId: getUserWishListResponse.data.id,
+          userId: getUserByEmailResponse.data.id,
           ...addProductToWishListDTO,
         });
       }
+
       return this._checkerService.handleSuccess(
         "Product added to wishlist successfully!",
         getUserWishListResponse.data
       );
     } catch (error) {
-      console.error(error);
+      console.error("Error while adding product to wishlist:", error);
       return this._checkerService.handleError(
         "Error while adding product to the wishlist!"
       );
     }
   }
 
-  async addReviewToProduct(): Promise<RequestResponse<Review | null>> {
+  async addReviewToProduct(
+    addReviewToProductDTO: AddReviewToProductDTO
+  ): Promise<RequestResponse<Review | null>> {
     try {
-      if (!this.productData.externalProductId || !this.productData.rating) {
-        return {
-          success: false,
-          message: "Product ID and rating are required!",
-          data: null,
-        };
-      }
+      const { externalProductId } = addReviewToProductDTO;
+      const getUserByEmailResponse =
+        await this._checkerService.checkDataExistsAndReturnUser(
+          addReviewToProductDTO
+        );
 
-      if (!this.productData.email) {
-        return {
-          success: false,
-          message: "User email is required!",
-          data: null,
-        };
-      }
+      if (getUserByEmailResponse && !getUserByEmailResponse.success)
+        return getUserByEmailResponse;
 
-      const user = await userRepository.getUserByEmail(this.productData.email);
-      if (!user) {
-        return {
-          success: false,
-          message: "User doesn't exist!",
-          data: null,
-        };
-      }
+      const getReviewProductResponse =
+        await this._checkerService.checkDataExistsAndReturnProduct({
+          externalProductId,
+          userId: null,
+        });
 
-      let product = await postgres.product.findFirst({
-        where: { externalProductId: this.productData.externalProductId },
-      });
+      if (getReviewProductResponse && !getReviewProductResponse.success)
+        await this._productRepository.createProductToReview(
+          addReviewToProductDTO
+        );
 
-      if (!product) {
-        const addedProduct = await this.addProduct();
-        if (!addedProduct.success) {
-          return {
-            success: false,
-            message: "Error adding product to database!",
-            data: null,
-          };
-        }
-        product = addedProduct.data;
-      }
+      const checkIsSameReviewResponse =
+        await this._checkerService.checkIsSameReview(
+          getUserByEmailResponse.data,
+          getReviewProductResponse.data
+        );
 
-      const sameReview = await postgres.review.findFirst({
-        where: { productId: product?.id, userId: user.id },
-      });
+      if (checkIsSameReviewResponse && !checkIsSameReviewResponse.success) {
+        return checkIsSameReviewResponse;
+      } else {
+        const createdReview = await this._productRepository.createReview({
+          userId: getUserByEmailResponse.data.id,
+          productId: getReviewProductResponse.data.id,
+          ...addReviewToProductDTO,
+        });
 
-      if (sameReview) {
-        return {
-          success: false,
-          message: "User has already written a review for this game!",
-          data: null,
-        };
-      }
-
-      const createdReview = await postgres.review.create({
-        data: {
-          userId: user.id,
-          productId: product?.id as string,
-          likes: this.productData.likes,
-        },
-      });
-
-      await postgres.rating.create({
-        data: {
-          rating: this.productData.rating,
+        await this._productRepository.createRating({
           reviewId: createdReview.id,
-          title: this.productData.title as RatingTitle,
-          percent: this.productData.rating * 20,
-          description: this.productData.description as string,
-        },
-      });
+          ...addReviewToProductDTO,
+        });
+      }
 
-      return {
-        success: true,
-        message: "Review added successfully!",
-        data: null,
-      };
+      return this._checkerService.handleSuccess(
+        "Review was added successfully to product!",
+        null
+      );
     } catch (error) {
-      return {
-        success: false,
-        message: "Error while adding review!",
-        data: null,
-      };
+      return this._checkerService.handleError("Error while adding review!");
     }
   }
 
-  async deleteProductFromCart(): Promise<RequestResponse<Cart | null>> {
+  async deleteProductFromCart(
+    deleteProductFromCartDTO: DeleteProductFromCartDTO
+  ): Promise<RequestResponse<Cart | null>> {
     try {
-      if (!this.productData.externalProductId) {
-        return {
-          success: false,
-          message: "Product ID is required!",
-          data: null,
-        };
+      const getUserByEmailResponse =
+        await this._checkerService.checkDataExistsAndReturnUser(
+          deleteProductFromCartDTO
+        );
+
+      if (getUserByEmailResponse && !getUserByEmailResponse.success)
+        return getUserByEmailResponse;
+
+      const getUserCartResponse =
+        await this._checkerService.checkDataExistsAndReturnUserCart(
+          getUserByEmailResponse.data
+        );
+
+      if (getUserCartResponse && !getUserCartResponse.success)
+        return getUserCartResponse;
+
+      const getUserProductResponse =
+        await this._checkerService.checkDataExistsAndReturnProduct({
+          externalProductId: deleteProductFromCartDTO.externalProductId,
+          userId: getUserByEmailResponse.data.id,
+        });
+
+      if (getUserProductResponse && !getUserProductResponse.success) {
+        return getUserProductResponse;
+      } else if (
+        !getUserProductResponse.data.cartId &&
+        !getUserProductResponse.data.wishListId
+      ) {
+        await this._productRepository.deleteUserProduct(
+          getUserProductResponse.data
+        );
+      } else {
+        await this._productRepository.deleteUserProductFromCart(
+          getUserProductResponse.data
+        );
       }
 
-      const user = await userRepository.getUserByEmail(
-        this.productData.email as string
+      return this._checkerService.handleSuccess(
+        "Product added to cart successfully!",
+        getUserCartResponse.data
       );
-
-      if (!user) {
-        return {
-          success: false,
-          message: "User doesn't exist!",
-          data: null,
-        };
-      }
-
-      let userCart = await getUserCart(user.id);
-
-      if (!userCart) {
-        return {
-          success: false,
-          message: "Cart doesn't exist!",
-          data: null,
-        };
-      }
-
-      const productInCart = await postgres.product.findFirst({
-        where: {
-          cartId: userCart.id,
-          externalProductId: this.productData.externalProductId,
-        },
-      });
-
-      if (!productInCart) {
-        return {
-          success: false,
-          message: "Product not found in cart!",
-          data: null,
-        };
-      }
-
-      await postgres.product.delete({
-        where: { id: productInCart.id },
-      });
-
-      const updatedUserCart = await postgres.cart.findUnique({
-        where: { id: userCart.id },
-        include: { products: { include: { productsInformations: true } } },
-      });
-
-      return {
-        success: true,
-        message: "Product added to cart successfully!",
-        data: updatedUserCart,
-      };
     } catch (error) {
-      return {
-        success: false,
-        message: "Error while removing product from cart!",
-        data: null,
-      };
+      return this._checkerService.handleError(
+        "Error while removing product from cart!"
+      );
     }
   }
 
-  async deleteProductFromWishList(): Promise<RequestResponse<WishList | null>> {
+  async deleteProductFromWishList(
+    deleteProductFromWishListDTO: DeleteProductFromWishListDTO
+  ): Promise<RequestResponse<WishList | null>> {
     try {
-      if (!this.productData.externalProductId) {
-        return {
-          success: false,
-          message: "Product ID is required!",
-          data: null,
-        };
+      const getUserByEmailResponse =
+        await this._checkerService.checkDataExistsAndReturnUser(
+          deleteProductFromWishListDTO
+        );
+
+      if (getUserByEmailResponse && !getUserByEmailResponse.success)
+        return getUserByEmailResponse;
+
+      const getUserWishListResponse =
+        await this._checkerService.checkDataExistsAndReturnUserWishList(
+          getUserByEmailResponse.data
+        );
+
+      if (getUserWishListResponse && !getUserWishListResponse.success)
+        return getUserWishListResponse;
+
+      const getUserProductResponse =
+        await this._checkerService.checkDataExistsAndReturnProduct({
+          externalProductId: deleteProductFromWishListDTO.externalProductId,
+          userId: getUserByEmailResponse.data.id,
+        });
+
+      if (getUserProductResponse && !getUserProductResponse.success) {
+        return getUserProductResponse;
+      } else if (
+        !getUserProductResponse.data.cartId &&
+        !getUserProductResponse.data.wishListId
+      ) {
+        await this._productRepository.deleteUserProduct(
+          getUserProductResponse.data
+        );
+      } else {
+        await this._productRepository.deleteUserProductFromWishList(
+          getUserProductResponse.data
+        );
       }
 
-      const user = await userRepository.getUserByEmail(
-        this.productData.email as string
+      return this._checkerService.handleSuccess(
+        "Product added to wishlist successfully!",
+        getUserWishListResponse.data
       );
-
-      if (!user) {
-        return {
-          success: false,
-          message: "User doesn't exist!",
-          data: null,
-        };
-      }
-
-      let userWishList = await this._productRepository.getUserWishlist(user.id);
-
-      if (!userWishList) {
-        return {
-          success: false,
-          message: "Wishlist doesn't exist!",
-          data: null,
-        };
-      }
-
-      const productInWishList = await postgres.product.findFirst({
-        where: {
-          wishListId: userWishList.id,
-          externalProductId: this.productData.externalProductId,
-        },
-      });
-
-      if (!productInWishList) {
-        return {
-          success: false,
-          message: "Product not found in wishlist!",
-          data: null,
-        };
-      }
-
-      await postgres.product.delete({
-        where: { id: productInWishlist.id },
-      });
-
-      const updatedUserWishList = await postgres.wishList.findUnique({
-        where: { id: userWishlist.id },
-        include: { products: { include: { productsInformations: true } } },
-      });
-
-      if (!updatedUserWishList) {
-        return {
-          success: false,
-          message: "Error retrieving updated wishlist!",
-          data: null,
-        };
-      }
-
-      return {
-        success: true,
-        message: "Product removed from wishlist successfully!",
-        data: updatedUserWishList,
-      };
     } catch (error) {
-      return {
-        success: false,
-        message: "Error while removing product from wishlist!",
-        data: null,
-      };
+      return this._checkerService.handleError(
+        "Error while removing product from wishlist!"
+      );
     }
   }
 
-  async increaseProductQuantity(): Promise<RequestResponse<Cart | null>> {
+  async increaseProductQuantity(
+    increaseProductQuantityDTO: IncreaseProductQuantityDTO
+  ): Promise<RequestResponse<Cart | null>> {
     try {
-      const user = await userRepository.getUserByEmail(
-        this.productData.email as string
-      );
+      const getUserByEmailResponse =
+        await this._checkerService.checkDataExistsAndReturnUser(
+          increaseProductQuantityDTO
+        );
 
-      if (!user) {
-        return {
-          success: false,
-          message: "User doesn't exist!",
-          data: null,
-        };
+      if (getUserByEmailResponse && !getUserByEmailResponse.success)
+        return getUserByEmailResponse;
+
+      const getUserCartResponse =
+        await this._checkerService.checkDataExistsAndReturnUserCart(
+          getUserByEmailResponse.data
+        );
+
+      if (getUserCartResponse && !getUserCartResponse.success)
+        return getUserCartResponse;
+
+      const getUserProductResponse =
+        await this._checkerService.checkDataExistsAndReturnProduct({
+          externalProductId: increaseProductQuantityDTO.externalProductId,
+          userId: getUserByEmailResponse.data.id,
+        });
+
+      if (getUserProductResponse && !getUserProductResponse.success) {
+        return getUserProductResponse;
       }
 
-      let userCart = await getUserCart(user?.id);
-
-      if (!userCart) {
-        return {
-          success: false,
-          message: "Cart not found!",
-          data: null,
-        };
-      }
-
-      const productInCart = await postgres.product.findFirst({
-        where: {
-          cartId: userCart.id,
-          externalProductId: this.productData.externalProductId,
-        },
-      });
-
-      if (!productInCart) {
-        return {
-          success: false,
-          message: "Product not found in cart!",
-          data: null,
-        };
-      }
-
-      await postgres.product.update({
-        where: { id: productInCart.id },
-        data: { quantity: (productInCart.quantity ?? 0) + 1 },
-      });
-
-      const updatedUserCart = await postgres.cart.findUnique({
-        where: { id: userCart.id },
-        include: { products: { include: { productsInformations: true } } },
+      await this._productRepository.increaseUserProductQuantity({
+        id: getUserProductResponse.data.id,
+        userId: getUserByEmailResponse.data.id,
       });
 
       return {
         success: true,
-        message: "Product added to cart successfully!",
-        data: updatedUserCart,
+        message: "Product increase quantity was successfull!",
+        data: getUserCartResponse.data,
       };
     } catch (error) {
       return {
@@ -549,65 +468,49 @@ export default class ProductService implements IProductService {
     }
   }
 
-  async decreaseProductQuantity(): Promise<RequestResponse<Cart | null>> {
+  async decreaseProductQuantity(
+    decreaseProductQuantityDTO: DecreaseProductQuantityDTO
+  ): Promise<RequestResponse<Cart | null>> {
     try {
-      const user = await userRepository.getUserByEmail(
-        this.productData.email as string
-      );
+      const getUserByEmailResponse =
+        await this._checkerService.checkDataExistsAndReturnUser(
+          decreaseProductQuantityDTO
+        );
 
-      if (!user) {
-        return {
-          success: false,
-          message: "User doesn't exist!",
-          data: null,
-        };
-      }
+      if (getUserByEmailResponse && !getUserByEmailResponse.success)
+        return getUserByEmailResponse;
 
-      let userCart = await this._productRepository.getUserCart(user?.id);
+      const getUserCartResponse =
+        await this._checkerService.checkDataExistsAndReturnUserCart(
+          getUserByEmailResponse.data
+        );
 
-      if (!userCart) {
-        return {
-          success: false,
-          message: "Cart not found!",
-          data: null,
-        };
-      }
+      if (getUserCartResponse && !getUserCartResponse.success)
+        return getUserCartResponse;
 
-      const productInCart = await postgres.product.findFirst({
-        where: {
-          cartId: userCart.id,
-          externalProductId: this.productData.externalProductId,
-        },
-      });
+      const getUserProductResponse =
+        await this._checkerService.checkDataExistsAndReturnProduct({
+          externalProductId: decreaseProductQuantityDTO.externalProductId,
+          userId: getUserByEmailResponse.data.id,
+        });
 
-      if (!productInCart) {
-        return {
-          success: false,
-          message: "Product not found in cart!",
-          data: null,
-        };
-      }
-
-      const updatedProduct = await postgres.product.update({
-        where: { id: productInCart.id },
-        data: { quantity: (productInCart.quantity as number) - 1 },
-      });
-
-      if ((updatedProduct.quantity as number) <= 0) {
-        await postgres.product.delete({
-          where: { id: productInCart.id },
+      if (getUserProductResponse && !getUserProductResponse.success) {
+        return getUserProductResponse;
+      } else if (getUserProductResponse.data.quantity <= 0) {
+        await this._productRepository.deleteUserProductFromCart(
+          getUserProductResponse.data
+        );
+      } else {
+        await this._productRepository.decreaseUserProductQuantity({
+          id: getUserProductResponse.data.id,
+          userId: getUserByEmailResponse.data.id,
         });
       }
 
-      const updatedUserCart = await postgres.cart.findUnique({
-        where: { id: userCart.id },
-        include: { products: { include: { productsInformations: true } } },
-      });
-
       return {
         success: true,
-        message: "Product added to cart successfully!",
-        data: updatedUserCart,
+        message: "Product decrease quantity was successfull !",
+        data: getUserCartResponse,
       };
     } catch (error) {
       return {

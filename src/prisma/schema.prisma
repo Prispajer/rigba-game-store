@@ -169,6 +169,7 @@ model Product {
   externalProductId    Int                   
   cartId               String?     
   wishListId           String?
+  userId               String?
   quantity             Int?
   productsInformations ProductInformations? 
   reviewLikers         ReviewLikers[]

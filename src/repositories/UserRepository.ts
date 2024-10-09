@@ -1,12 +1,10 @@
 import { postgres } from "@/data/database/publicSQL/postgres";
 import { injectable, inject } from "inversify";
 import type IUserRepository from "@/interfaces/IUserRepository";
-import IUserUtils from "@/interfaces/IUserUtils";
-import { User, CLASSTYPES } from "@/utils/helpers/types";
-import { TwoFactorConfirmation } from "@prisma/client";
+import type IUserUtils from "@/interfaces/IUserUtils";
+import { CLASSTYPES } from "@/utils/helpers/types";
+import { User, TwoFactorConfirmation } from "@prisma/client";
 import {
-  CheckDataExistsAndReturnUser,
-  CreateUserDTO,
   GetTwoFactorConfirmationByUserIdDTO,
   GetUserByEmailDTO,
   GetUserByIdDTO,
@@ -22,11 +20,11 @@ export default class UserRepository implements IUserRepository {
   }
 
   async getUserByEmail(
-    GetUserByEmailDTO: GetUserByEmailDTO
+    getUserByEmailDTO: GetUserByEmailDTO
   ): Promise<User | null> {
     return await this._userUtils.getUserByProperty(
       "email",
-      GetUserByEmailDTO.email
+      getUserByEmailDTO.email
     );
   }
 
@@ -49,11 +47,11 @@ export default class UserRepository implements IUserRepository {
     }
   }
 
-  async createUser(createUserDTO: CreateUserDTO): Promise<RegisterUserDTO> {
+  async createUser(registerUserDTO: RegisterUserDTO): Promise<RegisterUserDTO> {
     const createdUser = await postgres.user.create({
       data: {
-        email: createUserDTO.email,
-        password: createUserDTO.password,
+        email: registerUserDTO.email,
+        password: registerUserDTO.password,
       },
     });
 

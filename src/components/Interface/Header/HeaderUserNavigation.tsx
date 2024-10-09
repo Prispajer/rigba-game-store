@@ -1,5 +1,7 @@
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useDispatch, useSelector } from "react-redux";
 import { FaRegHeart, FaShoppingCart, FaSearch, FaUser } from "react-icons/fa";
 import AuthSidebar from "../Shared/Sidebars/AuthSidebar";
 import CartModalContainer from "../Shared/Modals/CartModalContainer";
@@ -9,13 +11,24 @@ import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useUserCart from "@/hooks/useUserCart";
+import { fetchUserCart } from "@/redux/slices/userCartSlice";
+import { fetchUserWishList } from "@/redux/slices/userWishListSlice";
+import { AppDispatch } from "@/redux/store";
 
 export default function HeaderUserNavigation({}) {
+  const dispatch = useDispatch<AppDispatch>();
   const { user } = useCurrentUser();
   const { userCartState } = useUserCart();
   const { resolutionState, handleOpen } = useWindowVisibility();
   const { localCartState } = useLocalStorage("LocalCart");
   const cartLength = user ? userCartState.products : localCartState;
+
+  React.useEffect(() => {
+    if (user?.email) {
+      dispatch(fetchUserWishList({ email: user.email }));
+      dispatch(fetchUserCart({ email: user.email }));
+    }
+  }, []);
 
   return (
     <div className="flex flex-1 justify-end items-center relative">

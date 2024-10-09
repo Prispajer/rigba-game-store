@@ -59,6 +59,7 @@ export default function FilterSelectedFilters() {
     productFilterState.storesIdArray,
   ]);
 
+  console.log(hasFiltersNumber);
   return (
     <div className="scrollbar-filters-selected-filters relative overflow-x-auto md:overflow-visible">
       <ul className="relative flex items-center flex-nowrap gap-[10px] pb-[25px]">

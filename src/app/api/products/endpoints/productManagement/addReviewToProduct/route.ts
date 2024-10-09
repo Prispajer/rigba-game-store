@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import ProductService from "@/services/ProductService";
+import { productService } from "@/utils/injector";
 import { RequestResponse } from "@/utils/helpers/types";
 
 export async function POST(request: NextRequest) {
@@ -18,22 +18,20 @@ export async function POST(request: NextRequest) {
     likes,
   } = await request.json();
 
-  const productService = new ProductService({
+  const addReviewToProductResponse = await productService.addReviewToProduct({
     email,
     externalProductId,
     name,
-    description,
     price,
     background_image,
     rating,
+    description,
     slug,
     released,
     added,
     title,
     likes,
   });
-
-  const addReviewToProductResponse = await productService.addReviewToProduct();
 
   return NextResponse.json<RequestResponse<any | null>>({
     success: addReviewToProductResponse.success,

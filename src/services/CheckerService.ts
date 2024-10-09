@@ -1,21 +1,22 @@
 import "reflect-metadata";
 import bcrypt from "bcryptjs";
 import { inject, injectable } from "inversify";
+import { postgres } from "@/data/database/publicSQL/postgres";
 import { RequestResponse } from "../utils/helpers/types";
 import type ICheckerService from "../interfaces/ICheckerService";
 import type IUserRepository from "@/interfaces/IUserRepository";
-import { User, CLASSTYPES } from "../utils/helpers/types";
+import type IProductRepository from "@/interfaces/IProductRepository";
+import { CLASSTYPES } from "../utils/helpers/types";
 import {
   CheckDataExistsAndReturnProductDTO,
   CheckDataExistsAndReturnProductReviewsDTO,
   CheckDataExistsAndReturnUserDTO,
   CheckDataExistsAndReturnUserCartDTO,
-  CheckDataExistsAndReturnUserCartProductDTO,
   CheckDataExistsAndReturnUserWishListDTO,
-  RegisterUserDTO,
+  CheckIsEmailInUseDTO,
+  CheckIsUserPasswordCorrectDTO,
 } from "@/utils/helpers/backendDTO";
-import IProductRepository from "@/interfaces/IProductRepository";
-import { Cart, Product, Review, WishList } from "@prisma/client";
+import { Cart, Product, Review, WishList, User } from "@prisma/client";
 
 @injectable()
 export default class CheckerService implements ICheckerService {
@@ -116,42 +117,12 @@ export default class CheckerService implements ICheckerService {
     return getProductReviewsResponse;
   }
 
-  async checkDataExistsAndReturnUserCartProduct(
-    checkDataExistsAndReturnUserCartProduct: CheckDataExistsAndReturnUserCartProductDTO
-  ): Promise<RequestResponse<Product | null>> {
-    const getUserCartProductResponse = await this.checkDataExistsAndReturn(
-      (checkDataExistsAndReturnUserCartProduct) =>
-        this._productRepository.getUserCartProduct(
-          checkDataExistsAndReturnUserCartProduct
-        ),
-      checkDataExistsAndReturnUserCartProduct,
-      "User cart product not found!"
-    );
-
-    return getUserCartProductResponse;
-  }
-
-  async checkDataExistsAndReturnUserWishListProduct(
-    checkDataExistsAndReturnUserWishListDTO: CheckDataExistsAndReturnUserWishListDTO
-  ): Promise<RequestResponse<Product | null>> {
-    const getUserWishListResponse = await this.checkDataExistsAndReturn(
-      (checkDataExistsAndReturnUserWishListDTO) =>
-        this._productRepository.getUserWishListProduct(
-          checkDataExistsAndReturnUserWishListDTO
-        ),
-      checkDataExistsAndReturnUserWishListDTO,
-      "User wishlist product not found!"
-    );
-
-    return getUserWishListResponse;
-  }
-
   async checkIsUserPasswordCorrect(
     user: User,
-    loginUserDTO: LoginUserDTO
+    checkIsUserPasswordCorrectDTO: CheckIsUserPasswordCorrectDTO
   ): Promise<RequestResponse<null> | void> {
     const isPasswordCorrect = await bcrypt.compare(
-      loginUserDTO.password as string,
+      checkIsUserPasswordCorrectDTO.password as string,
       user.password as string
     );
 
@@ -161,13 +132,30 @@ export default class CheckerService implements ICheckerService {
   }
 
   async checkIsEmailInUse(
-    registerUserDTO: RegisterUserDTO
+    CheckIsEmailInUseDTO: CheckIsEmailInUseDTO
   ): Promise<RequestResponse<User | null> | void> {
-    const getUserByEmailResponse = await this._userRepository.getUserByEmail(
-      registerUserDTO.email
+    const isEmailInUse = await this._userRepository.getUserByEmail(
+      CheckIsEmailInUseDTO
     );
 
-    if (getUserByEmailResponse) return this.handleError("Email is in use!");
+    if (isEmailInUse) return this.handleError("Email is in use!");
+  }
+
+  async checkIsSameReview(
+    user: User,
+    product: Product
+  ): Promise<RequestResponse<Review | null> | void> {
+    const isSameReview = await postgres.review.findFirst({
+      where: {
+        userId: user.id,
+        productId: product?.id,
+      },
+    });
+
+    if (isSameReview)
+      return this.handleError(
+        "User has already written a review for this game!"
+      );
   }
 
   handleSuccess<T>(message: string, data: T): RequestResponse<T> {

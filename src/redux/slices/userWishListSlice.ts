@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import RequestService from "@/services/RequestService";
-import { UserWishList } from "@/utils/helpers/types";
+import requestService from "@/services/RequestService";
+import { RequestResponse, UserWishList } from "@/utils/helpers/types";
 
 interface UserWishListSlice {
   products: UserWishList[];
@@ -19,6 +19,34 @@ const initialState: UserWishListSlice = {
   ordering: null,
   message: null,
 };
+
+export const fetchUserWishList = createAsyncThunk<
+  { products: UserWishList[]; message: string },
+  { email: string },
+  { rejectValue: string }
+>("userCart/fetchUserWishList", async ({ email }, { rejectWithValue }) => {
+  try {
+    const fetchUserWishListResponse: RequestResponse<{
+      products: UserWishList[];
+      message: string;
+    }> = await requestService.postMethod(
+      "products/endpoints/productManagement/getWishList",
+      {
+        email,
+      }
+    );
+    if (fetchUserWishListResponse.success) {
+      return {
+        products: fetchUserWishListResponse.data?.products,
+        message: fetchUserWishListResponse.message,
+      };
+    } else {
+      throw new Error(fetchUserWishListResponse.message || "Unknown error");
+    }
+  } catch (error) {
+    return rejectWithValue((error as Error).message);
+  }
+});
 
 export const fetchAddUserProductToWishList = createAsyncThunk<
   { products: UserWishList[]; message: string },
@@ -53,10 +81,10 @@ export const fetchAddUserProductToWishList = createAsyncThunk<
     { rejectWithValue }
   ) => {
     try {
-      const fetchAddUserProductToWishListResponse: RequestService<{
+      const fetchAddUserProductToWishListResponse: RequestResponse<{
         message: string;
         products: UserWishList[];
-      }> = await RequestService.postMethod(
+      }> = await requestService.postMethod(
         "products/endpoints/productManagement/addProductToWishList",
         {
           email,
@@ -104,10 +132,10 @@ export const fetchDeleteUserProductFromWishList = createAsyncThunk<
   "userWishList/fetchDeleteUserProductFromWishList",
   async ({ email, externalProductId }, { rejectWithValue }) => {
     try {
-      const fetchDeleteUserProductFromWishListResponse: RequestService<{
+      const fetchDeleteUserProductFromWishListResponse: RequestResponse<{
         message: string;
         products: UserWishList[];
-      }> = await RequestService.deleteMethod(
+      }> = await requestService.deleteMethod(
         "products/endpoints/productManagement/deleteProductFromWishList",
         { email, externalProductId }
       );
@@ -133,74 +161,88 @@ const userWishListSlice = createSlice({
   name: "userWishlist",
   initialState,
   reducers: {
-    setProducts: (state, action: PayloadAction<UserWishList[]>) => {
-      switch (state.ordering) {
-        case "price": {
-          state.products = [...action.payload].sort((a, b) => {
-            const priceA = a.productsInformations?.price || 0;
-            const priceB = b.productsInformations?.price || 0;
-            return priceA - priceB;
-          });
-          break;
-        }
-        case "-price": {
-          state.products = [...action.payload].sort((a, b) => {
-            const priceA = a.productsInformations?.price || 0;
-            const priceB = b.productsInformations?.price || 0;
-            return priceB - priceA;
-          });
-          break;
-        }
-        case "-released": {
-          state.products = [...action.payload].sort((a, b) => {
-            const nameA = a.productsInformations?.released || "";
-            const nameB = b.productsInformations?.released || "";
-            return nameA.localeCompare(nameB);
-          });
-          break;
-        }
-        case "released": {
-          state.products = [...action.payload].sort((a, b) => {
-            const nameA = a.productsInformations?.released || "";
-            const nameB = b.productsInformations?.released || "";
-            return nameB.localeCompare(nameA);
-          });
-          break;
-        }
-        case "-added": {
-          state.products = [...action.payload].sort((a, b) => {
-            const nameA = a.productsInformations?.added || 0;
-            const nameB = b.productsInformations?.added || 0;
-            return nameB - nameA;
-          });
-          break;
-        }
-        case "name": {
-          state.products = [...action.payload].sort((a, b) => {
-            const nameA = a.productsInformations?.name || "";
-            const nameB = b.productsInformations?.name || "";
-            return nameA.localeCompare(nameB);
-          });
-          break;
-        }
-        case "-name": {
-          state.products = [...action.payload].sort((a, b) => {
-            const nameA = a.productsInformations?.name || "";
-            const nameB = b.productsInformations?.name || "";
-            return nameB.localeCompare(nameA);
-          });
-          break;
-        }
-        default:
-          state.products = [...action.payload];
-      }
-    },
     setOrdering: (state, action: PayloadAction<string>) => {
       state.ordering = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchUserWishList.pending, (state) => {
+        state.status = "Loading";
+        state.error = null;
+        state.message = "Loading...";
+      })
+      .addCase(fetchUserWishList.fulfilled, (state, action) => {
+        state.status = "Succeded";
+        state.message = action.payload.message;
+        state.products = action.payload.products || [];
+        switch (state.ordering) {
+          case "price": {
+            state.products = [...action.payload.products].sort((a, b) => {
+              const priceA = a.productsInformations?.price || 0;
+              const priceB = b.productsInformations?.price || 0;
+              return priceA - priceB;
+            });
+            break;
+          }
+          case "-price": {
+            state.products = [...action.payload.products].sort((a, b) => {
+              const priceA = a.productsInformations?.price || 0;
+              const priceB = b.productsInformations?.price || 0;
+              return priceB - priceA;
+            });
+            break;
+          }
+          case "-released": {
+            state.products = [...action.payload.products].sort((a, b) => {
+              const nameA = a.productsInformations?.released || "";
+              const nameB = b.productsInformations?.released || "";
+              return nameA.localeCompare(nameB);
+            });
+            break;
+          }
+          case "released": {
+            state.products = [...action.payload.products].sort((a, b) => {
+              const nameA = a.productsInformations?.released || "";
+              const nameB = b.productsInformations?.released || "";
+              return nameB.localeCompare(nameA);
+            });
+            break;
+          }
+          case "-added": {
+            state.products = [...action.payload.products].sort((a, b) => {
+              const nameA = a.productsInformations?.added || 0;
+              const nameB = b.productsInformations?.added || 0;
+              return nameB - nameA;
+            });
+            break;
+          }
+          case "name": {
+            state.products = [...action.payload.products].sort((a, b) => {
+              const nameA = a.productsInformations?.name || "";
+              const nameB = b.productsInformations?.name || "";
+              return nameA.localeCompare(nameB);
+            });
+            break;
+          }
+          case "-name": {
+            state.products = [...action.payload.products].sort((a, b) => {
+              const nameA = a.productsInformations?.name || "";
+              const nameB = b.productsInformations?.name || "";
+              return nameB.localeCompare(nameA);
+            });
+            break;
+          }
+          default:
+            state.products = [...action.payload.products];
+        }
+      })
+      .addCase(fetchUserWishList.rejected, (state, action) => {
+        state.status = "Failed";
+        state.message = action.payload as string;
+        state.error = action.payload as string;
+        state.products = [];
+      })
       .addCase(fetchAddUserProductToWishList.pending, (state) => {
         state.status = "Loading";
         state.error = null;
@@ -238,5 +280,5 @@ const userWishListSlice = createSlice({
   },
 });
 
-export const { setProducts, setOrdering } = userWishListSlice.actions;
+export const { setOrdering } = userWishListSlice.actions;
 export default userWishListSlice.reducer;

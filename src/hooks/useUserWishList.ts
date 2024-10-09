@@ -1,12 +1,12 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setProducts,
   setOrdering,
   fetchAddUserProductToWishList,
   fetchDeleteUserProductFromWishList,
 } from "@/redux/slices/userWishListSlice";
 import useCurrentUser from "./useCurrentUser";
+import { fetchUserWishList } from "@/redux/slices/userWishListSlice";
 import { generateRandomValue } from "@/utils/prices";
 import { AppDispatch, RootState } from "@/redux/store";
 
@@ -16,25 +16,17 @@ export default function useUserWishList() {
   const userWishListState = useSelector(
     (state: RootState) => state.userWishList
   );
-  const userWishListStateProducts = useSelector(
-    (state: RootState) => state.userWishList.products || []
-  );
-
-  const handleSetUserWishList = React.useCallback(() => {
-    if (user?.wishList?.products) {
-      dispatch(setProducts(user.wishList.products));
-    }
-  }, [dispatch, user?.wishList?.products]);
 
   const handleSetUserWishListOrdering = React.useCallback(
     (ordering: string) => {
       dispatch(setOrdering(ordering));
+      dispatch(fetchUserWishList(user as User));
     },
-    [dispatch]
+    [dispatch, user]
   );
 
   const handleAddUserProductToWishList = React.useCallback(
-    (
+    async (
       productId: string,
       productName: string,
       productDescription: string,
@@ -45,7 +37,7 @@ export default function useUserWishList() {
       added: number
     ) => {
       if (user?.email) {
-        dispatch(
+        await dispatch(
           fetchAddUserProductToWishList({
             email: user.email,
             externalProductId: productId,
@@ -59,34 +51,31 @@ export default function useUserWishList() {
             added,
           })
         );
-        update();
+        await dispatch(fetchUserWishList(user as User));
+        await update();
       }
     },
     [dispatch, user?.email, update]
   );
 
   const handleRemoveUserProductFromWishList = React.useCallback(
-    (externalProductId: number) => {
+    async (externalProductId: number) => {
       if (user?.email) {
-        dispatch(
+        await dispatch(
           fetchDeleteUserProductFromWishList({
             email: user.email,
             externalProductId,
           })
         );
-        update();
+        await dispatch(fetchUserWishList(user as User));
+        await update();
       }
     },
     [dispatch, user?.email, update]
   );
 
-  React.useEffect(() => {
-    handleSetUserWishList();
-  }, [handleSetUserWishList, userWishListState.ordering]);
-
   return {
     userWishListState,
-    userWishListStateProducts,
     handleSetUserWishListOrdering,
     handleAddUserProductToWishList,
     handleRemoveUserProductFromWishList,

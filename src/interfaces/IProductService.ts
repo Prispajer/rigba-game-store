@@ -1,5 +1,15 @@
 import { RequestResponse } from "@/utils/helpers/types";
 import { RatingTitle, Product, Cart, Review, WishList } from "@prisma/client";
+import {
+  AddProductToCartDTO,
+  AddProductToWishListDTO,
+  AddReviewToProductDTO,
+  DeleteProductFromCartDTO,
+  DeleteProductFromWishListDTO,
+  GetProductReviewsDTO,
+  GetUserCartDTO,
+  GetUserWishListDTO,
+} from "@/utils/helpers/backendDTO";
 
 export default interface IProductService {
   getUserCart(
@@ -17,11 +27,21 @@ export default interface IProductService {
   addProductToWishList(
     addProductToWishListDTO: AddProductToWishListDTO
   ): Promise<RequestResponse<WishList | null>>;
-  addReviewToProduct(): Promise<RequestResponse<Review | null>>;
-  deleteProductFromCart(): Promise<RequestResponse<Cart | null>>;
-  decreaseProductQuantity(): Promise<RequestResponse<Cart | null>>;
-  increaseProductQuantity(): Promise<RequestResponse<Cart | null>>;
-  deleteProductFromWishList(): Promise<RequestResponse<WishList | null>>;
+  addReviewToProduct(
+    addReviewToProductDTO: AddReviewToProductDTO
+  ): Promise<RequestResponse<Review | null>>;
+  deleteProductFromCart(
+    deleteProductFromCartDTO: DeleteProductFromCartDTO
+  ): Promise<RequestResponse<Cart | null>>;
+  deleteProductFromWishList(
+    deleteProductFromWishListDTO: DeleteProductFromWishListDTO
+  ): Promise<RequestResponse<WishList | null>>;
+  increaseProductQuantity(
+    increaseProductQuantityDTO: IncreaseProductQuantityDTO
+  ): Promise<RequestResponse<Cart | null>>
+  decreaseProductQuantity(
+    decreaseProductQuantityDTO: DecreaseProductQuantityDTO
+  ): Promise<RequestResponse<Cart | null>>;;
   likeReview(): Promise<RequestResponse<Review | null> | undefined>;
   unLikeReview(): Promise<RequestResponse<Review | null>>;
 }

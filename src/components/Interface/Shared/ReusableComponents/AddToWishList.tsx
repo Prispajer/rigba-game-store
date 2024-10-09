@@ -4,7 +4,7 @@ import { CiHeart } from "react-icons/ci";
 import { Product } from "@/utils/helpers/types";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import useUserWishList from "@/hooks/useUserWishlist";
+import useUserWishList from "@/hooks/useUserWishList";
 import { generateRandomValue } from "@/utils/prices";
 
 export default function AddToWishList({

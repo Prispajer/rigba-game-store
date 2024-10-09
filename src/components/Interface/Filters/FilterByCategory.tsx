@@ -5,7 +5,7 @@ import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useFetchGameData from "@/hooks/useFetchGameData";
 import useSearchText from "@/hooks/useSearchText";
 import UtilsService from "@/services/UtilsService";
-import IUtilsService from "@/utils/serverInterfaces/IUtilsService";
+import IUtilsService from "@/interfaces/IUtilsService";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { GameAPIResponse } from "@/utils/helpers/types";
 

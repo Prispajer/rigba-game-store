@@ -163,21 +163,21 @@ body {
 
 .rating-star {
   font-size: 24px;
-  color: gold;
   margin-right: 2px;
   position: relative;
-  -webkit-background-clip: text;
+  display: inline-block;
+  background-clip: text;
   -webkit-text-stroke: 1px gold;
 }
 
-.filled {
+.filled::before {
   background: linear-gradient(to right, gold 100%, transparent 100%);
   -webkit-text-stroke: 1px gold;
-  -webkit-background-clip: text;
+  background-clip: text;
   color: transparent;
 }
 
-.empty {
+.empty::before {
   color: transparent;
   -webkit-text-stroke: 1px gold;
 }

@@ -1,12 +1,10 @@
 import { injectable, inject } from "inversify";
-import { postgres } from "@/data/database/publicSQL/postgres";
 import { Cart, Review, WishList } from "@prisma/client";
 import type IUserRepository from "@/interfaces/IUserRepository";
 import type IProductService from "../interfaces/IProductService";
 import type ICheckerService from "@/interfaces/ICheckerService";
 import type IProductRepository from "@/interfaces/IProductRepository";
 import type { RequestResponse } from "../utils/helpers/types";
-import { userRepository } from "@/utils/injector";
 import { CLASSTYPES } from "../utils/helpers/types";
 import {
   AddProductToCartDTO,
@@ -19,6 +17,8 @@ import {
   GetUserCartDTO,
   GetUserWishListDTO,
   IncreaseProductQuantityDTO,
+  LikeReviewDTO,
+  UnLikeReviewDTO,
 } from "@/utils/helpers/backendDTO";
 
 @injectable()
@@ -119,9 +119,10 @@ export default class ProductService implements IProductService {
         return getUserProductResponse;
 
       const getProductReviewsResponse =
-        await this._checkerService.checkDataExistsAndReturnProductReviews(
-          getUserProductResponse.data
-        );
+        await this._checkerService.checkDataExistsAndReturnProductReviews({
+          externalProductId: getUserProductResponse.data.externalProductId,
+          userId: null,
+        });
 
       if (getProductReviewsResponse && !getProductReviewsResponse.success) {
         return getProductReviewsResponse;
@@ -183,9 +184,9 @@ export default class ProductService implements IProductService {
         });
       } else {
         await this._productRepository.createUserCartProduct({
+          ...addProductToCartDTO,
           cartId: getUserCartResponse.data.id,
           userId: getUserByEmailResponse.data.id,
-          ...addProductToCartDTO,
         });
       }
 
@@ -243,9 +244,9 @@ export default class ProductService implements IProductService {
         );
       } else {
         await this._productRepository.createUserWishListProduct({
+          ...addProductToWishListDTO,
           wishListId: getUserWishListResponse.data.id,
           userId: getUserByEmailResponse.data.id,
-          ...addProductToWishListDTO,
         });
       }
 
@@ -295,14 +296,14 @@ export default class ProductService implements IProductService {
         return checkIsSameReviewResponse;
       } else {
         const createdReview = await this._productRepository.createReview({
+          ...addReviewToProductDTO,
           userId: getUserByEmailResponse.data.id,
           productId: getReviewProductResponse.data.id,
-          ...addReviewToProductDTO,
         });
 
         await this._productRepository.createRating({
-          reviewId: createdReview.id,
           ...addReviewToProductDTO,
+          reviewId: createdReview.id,
         });
       }
 
@@ -452,19 +453,17 @@ export default class ProductService implements IProductService {
       await this._productRepository.increaseUserProductQuantity({
         id: getUserProductResponse.data.id,
         userId: getUserByEmailResponse.data.id,
+        quantity: getUserProductResponse.data.quantity,
       });
 
-      return {
-        success: true,
-        message: "Product increase quantity was successfull!",
-        data: getUserCartResponse.data,
-      };
+      return this._checkerService.handleSuccess(
+        "Product quantity increased successfully!",
+        getUserCartResponse.data
+      );
     } catch (error) {
-      return {
-        success: false,
-        message: "Something went wrong!",
-        data: null,
-      };
+      return this._checkerService.handleError(
+        "There was problem in increasing product quantity!"
+      );
     }
   }
 
@@ -504,210 +503,140 @@ export default class ProductService implements IProductService {
         await this._productRepository.decreaseUserProductQuantity({
           id: getUserProductResponse.data.id,
           userId: getUserByEmailResponse.data.id,
+          quantity: getUserProductResponse.data.quantity,
         });
       }
 
-      return {
-        success: true,
-        message: "Product decrease quantity was successfull !",
-        data: getUserCartResponse,
-      };
+      return this._checkerService.handleSuccess(
+        "Product quantity decreased successfully!",
+        getUserCartResponse.data
+      );
     } catch (error) {
-      return {
-        success: false,
-        message: "Something went wrong!",
-        data: null,
-      };
+      return this._checkerService.handleError(
+        "There was problem in decreasing product quantity!"
+      );
     }
   }
 
-  async likeReview(): Promise<RequestResponse<Review | null>> {
+  async likeReview(
+    likeReviewDTO: LikeReviewDTO
+  ): Promise<RequestResponse<Review | null>> {
     try {
-      if (!this.productData.email || !this.productData.externalProductId) {
-        return {
-          success: false,
-          message: "Email and product ID are required!",
-          data: null,
-        };
+      const getUserByEmailResponse =
+        await this._checkerService.checkDataExistsAndReturnUser(likeReviewDTO);
+
+      if (getUserByEmailResponse && !getUserByEmailResponse.success)
+        return getUserByEmailResponse;
+
+      const getProductResponse =
+        await this._checkerService.checkDataExistsAndReturnProduct({
+          externalProductId: likeReviewDTO.externalProductId,
+          userId: null,
+        });
+
+      if (getProductResponse && !getProductResponse.success)
+        return getProductResponse;
+
+      const getReviewResponse =
+        await this._checkerService.checkDataExistsAndReturnReview({
+          reviewId: likeReviewDTO.reviewId,
+          productId: getProductResponse.data.id,
+        });
+
+      if (getReviewResponse && !getReviewResponse.success) {
+        return getReviewResponse;
       }
 
-      const user = await postgres.user.findUnique({
-        where: { email: this.productData.email },
-        include: { reviewsLikers: true, reviews: true },
-      });
+      const getReviewLikersResponse =
+        await this._checkerService.checkDataExistsAndReturnReviewLikers({
+          userId: getUserByEmailResponse.data.id,
+          productId: getProductResponse.data.id,
+          reviewId: getReviewResponse.data.id,
+        });
 
-      if (!user) {
-        return { success: false, message: "User not found!", data: null };
+      if (getReviewLikersResponse && getReviewLikersResponse.data?.isLiked) {
+        return this._checkerService.handleError(
+          "You have already liked this review!"
+        );
       }
 
-      const product = await postgres.product.findFirst({
-        where: { externalProductId: this.productData.externalProductId },
-      });
+      if (getReviewLikersResponse && !getReviewLikersResponse.success) {
+        await this._productRepository.createReviewLiker({
+          userId: getUserByEmailResponse.data.id,
+          productId: getProductResponse.data.id,
+          reviewId: getReviewResponse.data.id,
+        });
 
-      if (!product) {
-        return { success: false, message: "Product not found!", data: null };
+        await this._productRepository.updateReviewLike({
+          id: getReviewResponse.data.id,
+          likes: getReviewResponse.data.likes,
+        });
       }
 
-      const review = await postgres.review.findUnique({
-        where: { id: this.productData.reviewId },
-      });
-
-      const existingLiker = await postgres.reviewLikers.findUnique({
-        where: {
-          userId_productId_reviewId: {
-            userId: user.id,
-            productId: product.id,
-            reviewId: review?.id as string,
-          },
-        },
-      });
-
-      if (existingLiker) {
-        if (existingLiker.isLiked) {
-          return {
-            success: false,
-            message: "You have already liked this review!",
-            data: null,
-          };
-        } else {
-          await postgres.reviewLikers.update({
-            where: { id: existingLiker.id },
-            data: { isLiked: true },
-          });
-
-          await postgres.review.update({
-            where: { id: review?.id },
-            data: { likes: (review?.likes ?? 0) + 1 },
-          });
-
-          return {
-            success: true,
-            message: "Review liked successfully!",
-            data: null,
-          };
-        }
-      }
-
-      await postgres.reviewLikers.create({
-        data: {
-          userId: user.id,
-          productId: product.id,
-          reviewId: review?.id as string,
-          isLiked: true,
-        },
-      });
-
-      await postgres.review.update({
-        where: { id: review?.id as string },
-        data: { likes: (review?.likes ?? 0) + 1 },
-      });
-
-      return {
-        success: true,
-        message: "Review liked successfully!",
-        data: null,
-      };
+      return this._checkerService.handleSuccess(
+        "Review liked successfully!",
+        getReviewLikersResponse.data
+      );
     } catch (error) {
-      return {
-        success: false,
-        message: "Error while liking review!",
-        data: null,
-      };
+      return this._checkerService.handleError("Error while liking review!");
     }
   }
 
-  async unLikeReview(): Promise<RequestResponse<Review | null>> {
+  async unLikeReview(
+    unLikeReviewDTO: UnLikeReviewDTO
+  ): Promise<RequestResponse<Review | null>> {
     try {
-      if (!this.productData.email || !this.productData.externalProductId) {
-        return {
-          success: false,
-          message: "Email and product ID are required!",
-          data: null,
-        };
+      const getUserByEmailResponse =
+        await this._checkerService.checkDataExistsAndReturnUser(
+          unLikeReviewDTO
+        );
+
+      if (getUserByEmailResponse && !getUserByEmailResponse.success)
+        return getUserByEmailResponse;
+
+      const getProductResponse =
+        await this._checkerService.checkDataExistsAndReturnProduct({
+          externalProductId: unLikeReviewDTO.externalProductId,
+          userId: null,
+        });
+
+      if (getProductResponse && !getProductResponse.success)
+        return getProductResponse;
+
+      const getReviewResponse =
+        await this._checkerService.checkDataExistsAndReturnReview({
+          reviewId: unLikeReviewDTO.reviewId,
+          productId: getProductResponse.data.id,
+        });
+
+      if (getReviewResponse && !getReviewResponse.success) {
+        return getReviewResponse;
       }
 
-      const user = await userRepository.getUserByEmail(this.productData.email);
+      const getReviewLikersResponse =
+        await this._checkerService.checkDataExistsAndReturnReviewLikers({
+          userId: getUserByEmailResponse.data.id,
+          productId: getProductResponse.data.id,
+          reviewId: getReviewResponse.data.id,
+        });
 
-      if (!user) {
-        return { success: false, message: "User not found!", data: null };
+      if (getReviewLikersResponse && getReviewLikersResponse.data?.isLiked) {
+        await this._productRepository.deleteReviewLiker(
+          getReviewLikersResponse.data
+        );
+
+        await this._productRepository.updateReviewUnLike({
+          id: getReviewResponse.data.id,
+          likes: getReviewResponse.data.likes,
+        });
       }
 
-      const product = await postgres.product.findFirst({
-        where: { externalProductId: this.productData.externalProductId },
-        include: {
-          reviews: true,
-        },
-      });
-
-      if (!product) {
-        return { success: false, message: "Product not found!", data: null };
-      }
-
-      const review = await postgres.review.findUnique({
-        where: { id: this.productData.reviewId },
-      });
-
-      const existingLiker = await postgres.reviewLikers.findUnique({
-        where: {
-          userId_productId_reviewId: {
-            userId: user.id,
-            productId: product.id,
-            reviewId: review?.id as string,
-          },
-        },
-      });
-
-      if (existingLiker) {
-        if (!existingLiker.isLiked) {
-          return {
-            success: false,
-            message: "You have already disliked this review!",
-            data: null,
-          };
-        } else {
-          await postgres.reviewLikers.update({
-            where: { id: existingLiker.id },
-            data: { isLiked: false },
-          });
-
-          await postgres.review.update({
-            where: { id: review?.id },
-            data: { likes: (review?.likes ?? 0) - 1 },
-          });
-
-          return {
-            success: true,
-            message: "Review dislike updated successfully!",
-            data: null,
-          };
-        }
-      }
-
-      await postgres.reviewLikers.create({
-        data: {
-          userId: user.id,
-          productId: product.id,
-          reviewId: review?.id as string,
-          isLiked: false,
-        },
-      });
-
-      await postgres.review.update({
-        where: { id: review?.id },
-        data: { likes: (review?.likes ?? 0) - 1 },
-      });
-
-      return {
-        success: true,
-        message: "Review disliked successfully!",
-        data: null,
-      };
+      return this._checkerService.handleSuccess(
+        "Review unliked successfully!",
+        getReviewLikersResponse.data
+      );
     } catch (error) {
-      return {
-        success: false,
-        message: "Error while disliking review!",
-        data: null,
-      };
+      return this._checkerService.handleError("Error while unliking review!");
     }
   }
 }

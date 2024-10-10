@@ -21,6 +21,12 @@ export default interface ICheckerService {
   checkDataExistsAndReturnProductReviews(
     checkDataExistsAndReturnProductReviews: CheckDataExistsAndReturnProductReviewsDTO
   ): Promise<RequestResponse<Review | null>>;
+  checkDataExistsAndReturnReview(
+    checkDataExistsAndReturnReviewDTO: CheckDataExistsAndReturnReviewDTO
+  ): Promise<RequestResponse<Review | null>>;
+  checkDataExistsAndReturnReviewLikers(
+    checkDataExistsAndReturnReviewLikersDTO: CheckDataExistsAndReturnReviewLikersDTO
+  ): Promise<RequestResponse<Review | null>>;
   checkIsUserPasswordCorrect(
     user: User,
     loginUserDTO: LoginUserDTO

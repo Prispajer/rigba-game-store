@@ -4,8 +4,7 @@ import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { generateStars } from "@/utils/ratings";
 import { GameAPIResponse } from "@/utils/helpers/types";
 import { UserReviewsSlice } from "@/redux/slices/userReviewsSlice";
-import { User } from "@/utils/helpers/types";
-
+import { User } from "@prisma/client";
 export default function ProductUsersReview({
   product,
   user,
@@ -55,7 +54,7 @@ export default function ProductUsersReview({
                   <button
                     onClick={() => {
                       handleFetchLikeUserReview(
-                        user.email as string,
+                        user?.email as string,
                         product.id as number,
                         review.id as string
                       );
@@ -64,11 +63,10 @@ export default function ProductUsersReview({
                   >
                     <AiFillLike size="22px" color="#FFFFFF" />
                   </button>
-
                   <button
                     onClick={() => {
                       handleFetchUnLikeUserReview(
-                        user.email as string,
+                        user?.email as string,
                         product.id as number,
                         review.id as string
                       );

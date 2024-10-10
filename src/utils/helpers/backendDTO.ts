@@ -22,6 +22,17 @@ export type CheckDataExistsAndReturnProductReviewsDTO = {
   externalProductId: number;
 };
 
+export type CheckDataExistsAndReturnReviewDTO = {
+  userId: string;
+  productId: string;
+};
+
+export type CheckDataExistsAndReturnReviewLikersDTO = {
+  userId: string;
+  productId: string;
+  reviewId: string;
+};
+
 export type CheckDataExistsAndReturnUserCartProductDTO = {
   id: string;
   externalProductId: number;
@@ -131,11 +142,23 @@ export type GetProductByExternalProductIdDTO = {
 
 export type GetProductReviewsDTO = {
   externalProductId: number;
+  userId: number;
 };
 
 export type GetUserCartProductDTO = {
   id: string;
   externalProductId: number;
+};
+
+export type GetReviewDTO = {
+  reviewId: string;
+  productId: string;
+};
+
+export type GetReviewLikerDTO = {
+  userId: string;
+  productId: string;
+  reviewId: string;
 };
 
 export type GetUserWishListProductDTO = {
@@ -193,6 +216,12 @@ export type CreateReviewDTO = {
   userId: string;
   productId: string;
   likes: number;
+};
+
+export type CreateReviewLikerDTO = {
+  userId: string;
+  productId: string;
+  reviewId: string;
 };
 
 export type CreateRatingDTO = {
@@ -255,11 +284,6 @@ export type DeleteProductFromWishListDTO = {
   externalProductId: number;
 };
 
-export type DeleteProductFromWishListDTO = {
-  email: string;
-  externalProductId: number;
-};
-
 export type DeleteUserProductFromCartDTO = {
   id: string;
   email: string;
@@ -278,6 +302,12 @@ export type DeleteUserProductDTO = {
   externalProductId: number;
 };
 
+export type DeleteReviewLikerDTO = {
+  userId: string;
+  productId: string;
+  reviewId: string;
+};
+
 export type IncreaseProductQuantityDTO = {
   email: string;
   userId: string;
@@ -294,4 +324,26 @@ export type UserProductQuantityDTO = {
   id: string;
   userId: string;
   quantity: number;
+};
+
+export type LikeReviewDTO = {
+  email: string;
+  externalProductId: number;
+  reviewId: string;
+};
+
+export type UnLikeReviewDTO = {
+  email: string;
+  externalProductId: number;
+  reviewId: string;
+};
+
+export type UpdateReviewLikeDTO = {
+  id: string;
+  likes: number;
+};
+
+export type UpdateReviewUnLikeDTO = {
+  id: string;
+  likes: number;
 };

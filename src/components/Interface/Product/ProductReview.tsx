@@ -44,7 +44,7 @@ export default function ProductReview({
             ) : (
               <div className="">
                 <span className="text-[19px] font-[500] text-[#FFFFFF]">
-                  This product has no ratings!
+                  This product has no reviews!
                 </span>
               </div>
             )}

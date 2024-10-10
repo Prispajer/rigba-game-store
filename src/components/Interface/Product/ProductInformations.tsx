@@ -49,14 +49,14 @@ export default function ProductInformations({
                 </h1>
               </div>
               <div className="relative">
-                <button className="p-[6px] md:p-[10px] transition duration-300 cursor-pointer ">
+                <div className="p-[6px] md:p-[10px] transition duration-300 cursor-pointer ">
                   <AddToWishList
                     game={product}
                     position="absolute top-0 right-0"
                     added="border-[#FFFA84] bg-[#FFFA84]"
                     deleted="border-[#487CBD] bg-[#487CBD]"
                   />
-                </button>
+                </div>
               </div>
             </div>
             <div className="flex items-center flex-wrap gap-x-[5px] mb-[15px] cursor-default">

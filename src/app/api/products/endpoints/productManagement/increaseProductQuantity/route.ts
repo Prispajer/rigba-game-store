@@ -1,18 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-import { productRepository } from "@/utils/injector";
+import { productService } from "@/utils/injector";
 import { RequestResponse } from "@/utils/helpers/types";
-import { Product } from "@prisma/client";
+import { Product, Cart } from "@prisma/client";
 
 export async function PATCH(request: NextRequest) {
   const { email, externalProductId } = await request.json();
 
   const increaseProductQuantityResponse =
-    await productRepository.increaseUserProductQuantity({
+    await productService.increaseProductQuantity({
       email,
       externalProductId,
     });
 
-  return NextResponse.json<RequestResponse<Product>>({
+  return NextResponse.json<RequestResponse<Cart>>({
     success: increaseProductQuantityResponse.success,
     message: increaseProductQuantityResponse.message,
     data: increaseProductQuantityResponse.data,

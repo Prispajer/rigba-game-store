@@ -10,6 +10,7 @@ import {
   Review,
   Rating,
   RatingTitle,
+  ReviewLikers,
 } from "@prisma/client";
 import { CLASSTYPES } from "@/utils/helpers/types";
 import {
@@ -26,6 +27,12 @@ import {
   DeleteUserProductFromCartDTO,
   DeleteUserProductFromWishListDTO,
   DeleteUserProductDTO,
+  GetReviewDTO,
+  GetReviewLikerDTO,
+  CreateReviewLikerDTO,
+  UpdateReviewLikeDTO,
+  UpdateReviewUnLikeDTO,
+  DeleteReviewLikerDTO,
 } from "@/utils/helpers/backendDTO";
 
 @injectable()
@@ -89,6 +96,7 @@ export default class ProductRepository implements IProductRepository {
           postgres.product.findFirst({
             where: {
               externalProductId: getProductReviewsDTO?.externalProductId,
+              userId: null,
             },
             include: {
               reviews: {
@@ -106,10 +114,50 @@ export default class ProductRepository implements IProductRepository {
     }
   }
 
+  async getReview(getReviewDTO: GetReviewDTO): Promise<Review | null> {
+    try {
+      return await this._productUtils.executeOperation(
+        (getReviewDTO) =>
+          postgres.review.findFirst({
+            where: {
+              id: getReviewDTO?.reviewId,
+              productId: getReviewDTO?.productId,
+            },
+          }),
+        getReviewDTO
+      );
+    } catch {
+      return null;
+    }
+  }
+
+  async getReviewLikers(
+    getReviewLikerDTO: GetReviewLikerDTO
+  ): Promise<ReviewLikers | null> {
+    try {
+      return await this._productUtils.executeOperation(
+        (getReviewLikerDTO) =>
+          postgres.reviewLikers.findFirst({
+            where: {
+              userId: getReviewLikerDTO?.userId,
+              productId: getReviewLikerDTO?.productId,
+              reviewId: getReviewLikerDTO?.reviewId,
+            },
+          }),
+        getReviewLikerDTO
+      );
+    } catch {
+      return null;
+    }
+  }
+
   async getProductByExternalProductId(
     getProductByExternalProductIdDTO: GetProductByExternalProductIdDTO
   ): Promise<Product | null> {
     try {
+      if (!getProductByExternalProductIdDTO.externalProductId) {
+        return null;
+      }
       return await this._productUtils.executeOperation(
         (getProductByExternalProductIdDTO) =>
           postgres.product.findFirst({
@@ -219,6 +267,30 @@ export default class ProductRepository implements IProductRepository {
     );
   }
 
+  async createUserProductFromWishList(
+    createProductToReviewDTO: CreateProductToReviewDTO
+  ): Promise<Product | null> {
+    return await this._productUtils.executeOperation(() =>
+      postgres.product.create({
+        data: {
+          externalProductId: createProductToReviewDTO.externalProductId,
+          productsInformations: {
+            create: {
+              name: createProductToReviewDTO.name,
+              description: createProductToReviewDTO.description,
+              price: createProductToReviewDTO.price,
+              background_image: createProductToReviewDTO.background_image,
+              rating: createProductToReviewDTO.rating,
+              slug: createProductToReviewDTO.slug,
+              released: createProductToReviewDTO.released,
+              added: createProductToReviewDTO.added,
+            },
+          },
+        },
+      })
+    );
+  }
+
   async createProductToReview(
     createProductToReviewDTO: CreateProductToReviewDTO
   ): Promise<Product | null> {
@@ -243,28 +315,17 @@ export default class ProductRepository implements IProductRepository {
     );
   }
 
-  async createUserProductFromWishList(
-    createProductToReviewDTO: CreateProductToReviewDTO
-  ): Promise<Product | null> {
-    return await this._productUtils.executeOperation(() =>
-      postgres.product.create({
-        data: {
-          externalProductId: createProductToReviewDTO.externalProductId,
-          productsInformations: {
-            create: {
-              name: createProductToReviewDTO.name,
-              description: createProductToReviewDTO.description,
-              price: createProductToReviewDTO.price,
-              background_image: createProductToReviewDTO.background_image,
-              rating: createProductToReviewDTO.rating,
-              slug: createProductToReviewDTO.slug,
-              released: createProductToReviewDTO.released,
-              added: createProductToReviewDTO.added,
-            },
-          },
-        },
-      })
-    );
+  async createReviewLiker(
+    createReviewLikerDTO: CreateReviewLikerDTO
+  ): Promise<ReviewLikers | null> {
+    return await postgres.reviewLikers.create({
+      data: {
+        userId: createReviewLikerDTO.userId,
+        productId: createReviewLikerDTO.productId,
+        reviewId: createReviewLikerDTO?.reviewId as string,
+        isLiked: true,
+      },
+    });
   }
 
   async deleteUserProductFromCart(
@@ -298,6 +359,20 @@ export default class ProductRepository implements IProductRepository {
     });
   }
 
+  async deleteReviewLiker(
+    deleteReviewLikerDTO: DeleteReviewLikerDTO
+  ): Promise<ReviewLikers | null> {
+    return await postgres.reviewLikers.delete({
+      where: {
+        userId_productId_reviewId: {
+          userId: deleteReviewLikerDTO.userId,
+          productId: deleteReviewLikerDTO.productId,
+          reviewId: deleteReviewLikerDTO.reviewId,
+        },
+      },
+    });
+  }
+
   async increaseUserProductQuantity(
     userProductQuantityDTO: UserProductQuantityDTO
   ): Promise<Product | null> {
@@ -327,6 +402,34 @@ export default class ProductRepository implements IProductRepository {
           data: { quantity: (userProductQuantityDTO?.quantity ?? 0) - 1 },
         }),
       userProductQuantityDTO
+    );
+  }
+
+  async updateReviewLike(
+    updateReviewLikeDTO: UpdateReviewLikeDTO
+  ): Promise<Review | null> {
+    console.log("UPDATEREVIEWLIKE", updateReviewLikeDTO);
+    return await this._productUtils.executeOperation(
+      (updateReviewLikeDTO) =>
+        postgres.review.update({
+          where: { id: updateReviewLikeDTO?.id },
+          data: { likes: (updateReviewLikeDTO?.likes ?? 0) + 1 },
+        }),
+      updateReviewLikeDTO
+    );
+  }
+
+  async updateReviewUnLike(
+    updateReviewUnLikeDTO: UpdateReviewUnLikeDTO
+  ): Promise<Review | null> {
+    console.log("UPDATEREVIEWUNLINE", updateReviewUnLikeDTO);
+    return await this._productUtils.executeOperation(
+      (updateReviewUnLikeDTO) =>
+        postgres.review.update({
+          where: { id: updateReviewUnLikeDTO?.id },
+          data: { likes: (updateReviewUnLikeDTO?.likes ?? 0) - 1 },
+        }),
+      updateReviewUnLikeDTO
     );
   }
 }

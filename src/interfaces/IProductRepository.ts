@@ -13,6 +13,10 @@ export default interface IProductRepository {
   getProductReviews(
     getProductReviewsDTO: GetProductReviewsDTO
   ): Promise<Product | null>;
+  getReview(getReviewDTO: GetReviewDTO): Promise<Review | null>;
+  getReviewLikers(
+    getReviewLikerDTO: GetReviewLikerDTO
+  ): Promise<ReviewLikers | null>;
   getProductByExternalProductId(
     getProductByExternalProductIdDTO: GetProductByExternalProductIdDTO
   ): Promise<Product | null>;
@@ -29,6 +33,9 @@ export default interface IProductRepository {
   createProductToReview(
     createProductToReviewDTO: CreateProductToReviewDTO
   ): Promise<Product | null>;
+  createReviewLiker(
+    createReviewLikerDTO: CreateReviewLikerDTO
+  ): Promise<ReviewLikers | null>;
   deleteUserProductFromCart(
     deleteUserProductFromCartDTO: DeleteUserProductFromCartDTO
   ): Promise<Product | null>;
@@ -38,10 +45,19 @@ export default interface IProductRepository {
   deleteUserProduct(
     deleteUserProductDTO: DeleteUserProductDTO
   ): Promise<Product | null>;
+  deleteReviewLiker(
+    deleteReviewLikerDTO: DeleteReviewLikerDTO
+  ): Promise<ReviewLikers | null>;
   increaseUserProductQuantity(
     UserProductQuantityDTO: UserProductQuantityDTO
   ): Promise<UserProductQuantity | null>;
   decreaseUserProductQuantity(
     userProductQuantityDTO: UserProductQuantityDTO
   ): Promise<UserProductQuantity | null>;
+  updateReviewLike(
+    updateReviewLikeDTO: UpdateReviewLikeDTO
+  ): Promise<Review | null>;
+  updateReviewUnLike(
+    updateReviewUnLikeDTO: UpdateReviewUnLikeDTO
+  ): Promise<Review | null>;
 }

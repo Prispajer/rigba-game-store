@@ -15,7 +15,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@hookform/resolvers": "^3.9.0",
-    "@prisma/client": "^5.19.1",
+    "@prisma/client": "^5.20.0",
     "@react-icons/all-files": "^4.1.0",
     "@reduxjs/toolkit": "^2.2.7",
     "@stripe/react-stripe-js": "^2.8.0",
@@ -66,7 +66,7 @@
     "eslint-config-next": "14.2.8",
     "html-loader": "^5.1.0",
     "postcss": "^8",
-    "prisma": "^5.19.1",
+    "prisma": "^5.20.0",
     "tailwindcss": "^3.4.10",
     "typescript": "^5.6.2"
   },

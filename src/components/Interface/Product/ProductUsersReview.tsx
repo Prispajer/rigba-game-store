@@ -5,6 +5,7 @@ import { generateStars } from "@/utils/ratings";
 import { GameAPIResponse } from "@/utils/helpers/types";
 import { UserReviewsSlice } from "@/redux/slices/userReviewsSlice";
 import { User } from "@prisma/client";
+
 export default function ProductUsersReview({
   product,
   user,
@@ -31,7 +32,7 @@ export default function ProductUsersReview({
   React.useEffect(() => {
     handleFetchUserReviews(product.id as number);
   }, [
-    product.id,
+    product,
     handleFetchUserReviews,
     handleFetchLikeUserReview,
     handleFetchUnLikeUserReview,

@@ -155,6 +155,7 @@ const userCartSlice = createSlice({
     builder
       .addCase(fetchUserCart.pending, (state) => {
         state.status = "Loading";
+        clearMessages();
       })
       .addCase(fetchUserCart.fulfilled, (state, action) => {
         state.status = "Succeeded";

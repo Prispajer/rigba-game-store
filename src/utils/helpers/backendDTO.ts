@@ -127,12 +127,10 @@ export type GetUserByIdDTO = {
 
 export type GetUserCartDTO = {
   email: string;
-  id: string;
 };
 
 export type GetUserWishListDTO = {
   email: string;
-  id: string;
 };
 
 export type GetProductByExternalProductIdDTO = {

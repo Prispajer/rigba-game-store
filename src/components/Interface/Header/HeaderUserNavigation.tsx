@@ -28,7 +28,7 @@ export default function HeaderUserNavigation({}) {
       dispatch(fetchUserWishList({ email: user.email }));
       dispatch(fetchUserCart({ email: user.email }));
     }
-  }, []);
+  }, [user?.email]);
 
   return (
     <div className="flex flex-1 justify-end items-center relative">

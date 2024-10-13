@@ -7,13 +7,14 @@ import { useForm } from "react-hook-form";
 import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
 import ProductHeaders from "../Shared/ReusableComponents/ProductHeaders";
 import ProductList from "../Product/ProductList";
-import requestService from "@/services/RequestService";
+import { FormSuccess } from "../Shared/FormsNotifications/FormSuccess";
+import { FormError } from "../Shared/FormsNotifications/FormError";
+import useProductServices from "@/hooks/useProductServices";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { generateRandomValue } from "@/utils/prices";
 import { GameAPIResponse } from "@/utils/helpers/types";
 import { ReviewSchema } from "@/utils/schemas/product";
-import { RatingTitle } from "@prisma/client";
 
 export default function ReviewContainer({
   product,
@@ -22,6 +23,8 @@ export default function ReviewContainer({
 }) {
   const { user } = useCurrentUser();
   const { redirectToGame } = useCustomRouter();
+  const { success, error, useProductActions } = useProductServices();
+  const { submitReviewForm } = useProductActions();
   const reviewObject = useForm<z.infer<typeof ReviewSchema>>({
     resolver: zodResolver(ReviewSchema),
     defaultValues: {
@@ -44,44 +47,14 @@ export default function ReviewContainer({
     formState: { errors },
   } = reviewObject;
 
-  const handleReviewSubmit = async (data: z.infer<typeof ReviewSchema>) => {
-    const { review, rating } = data;
-    const title = ratingTitles[rating as keyof typeof ratingTitles];
-
-    try {
-      const response = await requestService.postMethod(
-        "products/endpoints/productManagement/addReviewToProduct",
-        {
-          email: user?.email as string,
-          externalProductId: product.id,
-          name: product.name,
-          description: review,
-          background_image: product.background_image,
-          price: generateRandomValue(),
-          rating: parseInt(rating),
-          title: title as RatingTitle,
-          slug: product.slug,
-          released: product.released,
-          added: product.added,
-          likes: 0,
-        }
-      );
-      if (response.success) {
-        return response.data;
-      } else {
-        throw new Error(response.message || "Unknown error");
-      }
-    } catch (error) {
-      console.error("Error adding review:", error);
-    }
-  };
-
   return (
     <section className="sm:py-[20px] sm:px-[15px] bg-primaryColor">
       <div className="flex flex-col w-full max-w-[1240px] mx-auto sm:px-[20px]">
         <div className="grid grid-cols-1 sm:grid-cols-[1fr,200px] mt-[15px] md:mt-[40px] sm:mb-[60px] px-[20px] sm:px-0 gap-x-[20px]">
           <form
-            onSubmit={handleSubmit(handleReviewSubmit)}
+            onSubmit={handleSubmit(async (data) => {
+              await submitReviewForm(data, ratingTitles, user as User, product);
+            })}
             className="grid grid-cols-1 md:grid-cols-[180px,1fr] md:gap-x-[40px] mx-[-20px] sm:mx-[0px] p-[20px] lg:py-[30px] lg:px-[40px] bg-secondaryColor"
           >
             <div className="sm:mb-[55px] mb-[20px]">
@@ -106,7 +79,9 @@ export default function ReviewContainer({
               </div>
               {errors.rating && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.rating.message as React.ReactNode}
+                  {(errors.rating.message as React.ReactNode)
+                    ? "You must choose one at least on option!"
+                    : ""}
                 </p>
               )}
               <div className="flex flex-col mt-[10px] mb-[20px]">
@@ -125,6 +100,8 @@ export default function ReviewContainer({
                   />
                 </div>
               </div>
+              <FormSuccess message={success} />
+              <FormError message={error} />
             </div>
             <div className="grid row-start-2 col-start-1 col-end-3 md:row-start-auto md:col-start-auto md:col-end-auto">
               <h2 className="mb-[20px] text-[26px] text-[#FFFFFF] font-bold leading-[30px]">

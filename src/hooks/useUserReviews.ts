@@ -11,6 +11,8 @@ export default function useUserReviews() {
   const dispatch = useDispatch<AppDispatch>();
   const userReviewsState = useSelector((state: RootState) => state.userReviews);
 
+  console.log(userReviewsState);
+
   const handleFetchUserReviews = React.useCallback(
     async (externalProductId: number) => {
       await dispatch(fetchUserReviews({ externalProductId }));
@@ -23,7 +25,7 @@ export default function useUserReviews() {
       await dispatch(
         fetchLikeUserReview({ email, externalProductId, reviewId })
       );
-      handleFetchUserReviews(externalProductId);
+      await handleFetchUserReviews(externalProductId);
     },
     [dispatch, handleFetchUserReviews]
   );
@@ -33,7 +35,7 @@ export default function useUserReviews() {
       await dispatch(
         fetchUnLikeUserReview({ email, externalProductId, reviewId })
       );
-      handleFetchUserReviews(externalProductId);
+      await handleFetchUserReviews(externalProductId);
     },
     [dispatch, handleFetchUserReviews]
   );

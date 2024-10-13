@@ -17,13 +17,13 @@ export default function useUserServices() {
   const [showTwoFactor, setShowTwoFactor] = React.useState(false);
   const [isPending, startTransition] = React.useTransition();
   const searchParams = useSearchParams();
+  const { handleClose } = useWindowVisibility();
+  const { user } = useCurrentUser();
   const token = searchParams.get("token");
   const providerError =
     searchParams.get("error") === "OAuthAccountNotLinked"
       ? "Email already in use with different provider!"
       : "";
-  const { handleOpen, handleClose } = useWindowVisibility();
-  const { user } = useCurrentUser();
 
   const clearMessages = () => {
     setError("");
@@ -82,6 +82,7 @@ export default function useUserServices() {
       callback: (email: string, password: string) => Promise<void>
     ) => {
       startTransition(async () => {
+        clearMessages();
         const { email, password, code } = data;
         try {
           const response: RequestResponse<{
@@ -91,8 +92,6 @@ export default function useUserServices() {
             "users/endpoints/userAuthentication/loginUser",
             { email, password, code }
           );
-
-          clearMessages();
 
           if (!response.success) {
             setError(response.message);
@@ -116,14 +115,13 @@ export default function useUserServices() {
 
     const submitRegisterForm = async (data: z.infer<typeof RegisterSchema>) => {
       startTransition(async () => {
+        clearMessages();
         const { email, password } = data;
         try {
           const response = await requestService.postMethod(
             "users/endpoints/userAuthentication/registerUser",
             { email, password }
           );
-
-          clearMessages();
 
           if (!response.success) {
             setError(response.message);
@@ -141,6 +139,7 @@ export default function useUserServices() {
       data: z.infer<typeof NewPasswordSchema>
     ) => {
       startTransition(async () => {
+        clearMessages();
         const { password } = data;
 
         if (!token) {
@@ -156,7 +155,7 @@ export default function useUserServices() {
               token,
             }
           );
-          clearMessages();
+
           if (response.success) {
             setSuccess(response.message);
           } else {
@@ -172,13 +171,13 @@ export default function useUserServices() {
       data: z.infer<typeof ResetPasswordSchema>
     ) => {
       startTransition(async () => {
+        clearMessages();
         const { email } = data;
         try {
           const response = await requestService.postMethod(
             "users/endpoints/tokenManagement/resetPasswordToken",
             { email }
           );
-          clearMessages();
           if (response.success) {
             setSuccess(response.message);
           } else {

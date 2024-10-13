@@ -32,6 +32,8 @@ export const fetchUserReviews = createAsyncThunk<
           { externalProductId }
         );
 
+      console.log(getReviewsResponse);
+
       if (getReviewsResponse.success) {
         return {
           reviews: getReviewsResponse.data?.reviews ?? [],
@@ -107,12 +109,20 @@ export const fetchUnLikeUserReview = createAsyncThunk<
 const userReviewsSlice = createSlice({
   name: "userReviews",
   initialState,
-  reducers: {},
+  reducers: {
+    clearMessages: (state) => {
+      state.message = null;
+      state.error = null;
+      state.success = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchUserReviews.pending, (state) => {
         state.status = "Loading";
-        state.message = "Loading...";
+        state.message = null;
+        state.error = null;
+        state.success = null;
       })
       .addCase(fetchUserReviews.fulfilled, (state, action) => {
         state.status = "Succeeded";
@@ -127,10 +137,13 @@ const userReviewsSlice = createSlice({
         state.status = "Failed";
         state.error = action.payload as string;
         state.message = action.payload as string;
+        state.reviews = [];
       })
       .addCase(fetchLikeUserReview.pending, (state) => {
         state.status = "Loading";
-        state.message = "Liking the review...";
+        state.message = null;
+        state.error = null;
+        state.success = null;
       })
       .addCase(fetchLikeUserReview.fulfilled, (state, action) => {
         state.status = "Succeeded";
@@ -147,7 +160,9 @@ const userReviewsSlice = createSlice({
       })
       .addCase(fetchUnLikeUserReview.pending, (state) => {
         state.status = "Loading";
-        state.message = "Unliking the review...";
+        state.message = null;
+        state.error = null;
+        state.success = null;
       })
       .addCase(fetchUnLikeUserReview.fulfilled, (state, action) => {
         state.status = "Succeeded";
@@ -165,5 +180,7 @@ const userReviewsSlice = createSlice({
       });
   },
 });
+
+export const { clearMessages } = userReviewsSlice.actions;
 
 export default userReviewsSlice.reducer;

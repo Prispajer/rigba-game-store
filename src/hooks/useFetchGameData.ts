@@ -19,6 +19,8 @@ import { fetchStores } from "@/redux/slices/productStoresSlice";
 import { fetchPlatforms } from "@/redux/slices/productPlatformsSlice";
 import useCustomRouter from "./useCustomRouter";
 import { AppDispatch, RootState } from "@/redux/store";
+import { PayloadAction, ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import { array } from "zod";
 
 export default function useFetchGameData() {
   const dispatch = useDispatch<AppDispatch>();
@@ -115,9 +117,9 @@ export default function useFetchGameData() {
   const handleSetOrdering = React.useCallback(
     (ordering: string): void => {
       dispatch(setOrdering(ordering));
-      pushOrderingToUrl(productFilterState.ordering);
+      pushOrderingToUrl(ordering);
     },
-    [dispatch, pushOrderingToUrl, productFilterState.ordering]
+    [dispatch, pushOrderingToUrl]
   );
 
   const handleFilterChange = React.useCallback(
@@ -132,7 +134,7 @@ export default function useFetchGameData() {
       dispatch(callback(updatedFilters));
       handleFetchProductsWithFilters(productFilterState.page);
     },
-    [dispatch, handleFetchProductsWithFilters, productFilterState.page]
+    [dispatch, array]
   );
 
   const handleClearAllFilters = React.useCallback(() => {

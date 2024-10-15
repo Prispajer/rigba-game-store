@@ -6,7 +6,7 @@ import useFetchGameData from "@/hooks/useFetchGameData";
 import useSearchText from "@/hooks/useSearchText";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import UtilsService from "@/services/UtilsService";
-import IUtilsService from "@/utils/interfaces/IUtilsService";
+import IUtilsService from "@/interfaces/IUtilsService";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
 export default function FilterModalContainer({
@@ -59,7 +59,9 @@ export default function FilterModalContainer({
         <FaSearch size="25px" color="white" className="mr-3" />
         <input
           className="w-[100%] text-[white] border-none outline-none bg-transparent"
-          onChange={(event) => handleSetSearchText(searchText, event)}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            handleSetSearchText(searchText, event)
+          }
           placeholder="Search..."
           type="text"
           name="text"

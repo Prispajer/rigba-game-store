@@ -24,6 +24,7 @@ export default function FilterSelectedFilters() {
     productGenresState,
     productStoresState,
     handleClearAllFilters,
+    handleFetchProductsWithFilters,
   } = useFetchGameData();
   const {
     searchGenreTextState,
@@ -41,25 +42,24 @@ export default function FilterSelectedFilters() {
     handleOpen,
   } = useWindowVisibility();
 
-  const hasFilters = (array: number[]): number => {
-    return array.some((value) => value > 0) ? 1 : 0;
-  };
+  const totalFilters = React.useMemo(() => {
+    const filters = [
+      productFilterState.publishersIdArray,
+      productFilterState.genresIdArray,
+      productFilterState.platformsIdArray,
+      productFilterState.storesIdArray,
+    ];
+
+    return filters.reduce((acc, current) => {
+      return acc + (current.some((value) => value > 0) ? 1 : 0);
+    }, 0);
+  }, [productFilterState]);
 
   React.useEffect(() => {
-    const totalFilters =
-      hasFilters(productFilterState.publishersIdArray) +
-      hasFilters(productFilterState.genresIdArray) +
-      hasFilters(productFilterState.platformsIdArray) +
-      hasFilters(productFilterState.storesIdArray);
     setHasFiltersNumber(totalFilters);
-  }, [
-    productFilterState.genresIdArray,
-    productFilterState.platformsIdArray,
-    productFilterState.publishersIdArray,
-    productFilterState.storesIdArray,
-  ]);
+    handleFetchProductsWithFilters(productFilterState.page);
+  }, [totalFilters, productFilterState.page]);
 
-  console.log(hasFiltersNumber);
   return (
     <div className="scrollbar-filters-selected-filters relative overflow-x-auto md:overflow-visible">
       <ul className="relative flex items-center flex-nowrap gap-[10px] pb-[25px]">

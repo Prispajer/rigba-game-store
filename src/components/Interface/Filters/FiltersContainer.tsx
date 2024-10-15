@@ -10,7 +10,7 @@ import useCustomRouter from "@/hooks/useCustomRouter";
 import useFetchGameData from "@/hooks/useFetchGameData";
 
 export default function FiltersContainer() {
-  const { getUrlParams } = useCustomRouter();
+  const { params, getUrlParams, pushOrderingToUrl } = useCustomRouter();
   const {
     productFilterState,
     handleFetchProductsWithFilters,
@@ -21,13 +21,28 @@ export default function FiltersContainer() {
     handleFilterSortChange,
   } = useFetchGameData();
 
+  console.log(productFilterState);
+
   React.useEffect(() => {
     handleSetGenresIdArray(getUrlParams("genres"));
     handleSetPlatformsIdArray(getUrlParams("platforms"));
     handleSetStoresIdArray(getUrlParams("stores"));
     handleSetPublishersIdArray(getUrlParams("publishers"));
+    if (productFilterState.ordering) {
+      pushOrderingToUrl(productFilterState.ordering);
+    }
+  }, [params, getUrlParams, productFilterState.ordering, pushOrderingToUrl]);
+
+  React.useEffect(() => {
     handleFetchProductsWithFilters(productFilterState.page);
-  }, []);
+  }, [
+    productFilterState.genresIdArray,
+    productFilterState.platformsIdArray,
+    productFilterState.publishersIdArray,
+    productFilterState.storesIdArray,
+    productFilterState.ordering,
+    productFilterState.page,
+  ]);
 
   return (
     <main className="flex items-center w-full h-full bg-primaryColor mx-auto">

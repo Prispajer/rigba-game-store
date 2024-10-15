@@ -100,8 +100,6 @@ export default function ReviewContainer({
                   />
                 </div>
               </div>
-              <FormSuccess message={success} />
-              <FormError message={error} />
             </div>
             <div className="grid row-start-2 col-start-1 col-end-3 md:row-start-auto md:col-start-auto md:col-end-auto">
               <h2 className="mb-[20px] text-[26px] text-[#FFFFFF] font-bold leading-[30px]">
@@ -128,6 +126,10 @@ export default function ReviewContainer({
                   {errors.review.message as React.ReactNode}
                 </p>
               )}
+              <div className="mb-[10px] flex justify-end">
+                <FormSuccess message={success} />
+                <FormError message={error} />
+              </div>
               <div className="flex justify-end">
                 <button className="min-w-[200px] min-h-[35px] bg-buttonBackground text-buttonTextColor">
                   <span>Confirm</span>

@@ -266,14 +266,18 @@ export default class ProductService implements IProductService {
     addReviewToProductDTO: AddReviewToProductDTO
   ): Promise<RequestResponse<Review | null>> {
     try {
+      let productId: string;
+
       const { externalProductId } = addReviewToProductDTO;
+
       const getUserByEmailResponse =
         await this._checkerService.checkDataExistsAndReturnUser(
           addReviewToProductDTO
         );
 
-      if (getUserByEmailResponse && !getUserByEmailResponse.success)
+      if (getUserByEmailResponse && !getUserByEmailResponse.success) {
         return getUserByEmailResponse;
+      }
 
       const getReviewProductResponse =
         await this._checkerService.checkDataExistsAndReturnProduct({
@@ -281,37 +285,43 @@ export default class ProductService implements IProductService {
           userId: null,
         });
 
-      if (getReviewProductResponse && !getReviewProductResponse.success)
-        await this._productRepository.createProductToReview(
-          addReviewToProductDTO
-        );
+      if (getReviewProductResponse && !getReviewProductResponse.success) {
+        const createdProduct =
+          await this._productRepository.createProductToReview(
+            addReviewToProductDTO
+          );
+        productId = createdProduct.id;
+      } else {
+        productId = getReviewProductResponse.data.id;
+      }
 
       const checkIsSameReviewResponse =
         await this._checkerService.checkIsSameReview(
           getUserByEmailResponse.data,
-          getReviewProductResponse.data
+          { id: productId, ...getReviewProductResponse }
         );
 
       if (checkIsSameReviewResponse && !checkIsSameReviewResponse.success) {
         return checkIsSameReviewResponse;
-      } else {
-        const createdReview = await this._productRepository.createReview({
-          ...addReviewToProductDTO,
-          userId: getUserByEmailResponse.data.id,
-          productId: getReviewProductResponse.data.id,
-        });
-
-        await this._productRepository.createRating({
-          ...addReviewToProductDTO,
-          reviewId: createdReview.id,
-        });
       }
+
+      const createdReview = await this._productRepository.createReview({
+        ...addReviewToProductDTO,
+        userId: getUserByEmailResponse.data.id,
+        productId: productId,
+      });
+
+      await this._productRepository.createRating({
+        ...addReviewToProductDTO,
+        reviewId: createdReview.id,
+      });
 
       return this._checkerService.handleSuccess(
         "Review was added successfully to product!",
         null
       );
     } catch (error) {
+      console.error("Error while adding review:", error);
       return this._checkerService.handleError("Error while adding review!");
     }
   }

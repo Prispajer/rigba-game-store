@@ -7,7 +7,9 @@ export const FormError = ({ message }: { message?: string }) => {
 
   return (
     <div className="flex items-center p-3  cursor-default bg-red-100 text-red-900">
-      <IoWarningSharp />
+      <p className="mr-1">
+        <IoWarningSharp />
+      </p>
       <p className="ml-2">{message}</p>
     </div>
   );

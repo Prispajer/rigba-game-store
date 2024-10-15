@@ -183,6 +183,8 @@ export default class CheckerService implements ICheckerService {
       },
     });
 
+    console.log("XDasdasdasdasd", isSameReview);
+
     if (isSameReview)
       return this.handleError(
         "User has already written a review for this game!"

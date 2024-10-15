@@ -1,9 +1,21 @@
 "use client";
+import React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export default function useCustomRouter() {
   const router = useRouter();
   const params = useSearchParams();
+
+  const getUrlParams = React.useCallback(
+    (filterCategory: string): number[] => {
+      return params.get(filterCategory)?.split(",").map(Number) || [];
+    },
+    [params]
+  );
+
+  const customEncode = (word: string) => {
+    return word.replace(/,/g, "%");
+  };
 
   const redirectToGame = (
     name: string,
@@ -20,22 +32,43 @@ export default function useCustomRouter() {
     router.push(`/review/${name}`);
   };
 
-  const pushGenresToUrl = (genresId: number[]): void => {
-    return router.push(`/filters?genres=${genresId.join(",")}`);
+  const updateUrlParams = (newParams: Record<string, string | number[]>) => {
+    const currentUrl = new URL(window.location.href);
+
+    console.log(
+      currentUrl.searchParams.get("genres"),
+      currentUrl.searchParams.get("platforms"),
+      currentUrl.searchParams.get("publishers"),
+      currentUrl.searchParams.get("stores")
+    );
+    Object.entries(newParams).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        currentUrl.searchParams.set(key, customEncode(value.join(",")));
+      } else {
+        currentUrl.searchParams.set(key, value);
+      }
+    });
+
+    router.push(currentUrl.pathname + currentUrl.search);
   };
 
-  const pushOrderingToUrl = (ordering: string): void => {
-    return router.push(`/filters?ordering=${ordering}`);
-  };
+  const pushGenresToUrl = React.useCallback(
+    (genresId: string | number[]): void => {
+      updateUrlParams({ genres: genresId });
+      router.push(`/filters/?genres=${genresId}`);
+    },
+    []
+  );
 
-  const getUrlParams = (filterCategory: string): number[] => {
-    return params.get(filterCategory)?.split(",").map(Number) || [];
-  };
+  const pushOrderingToUrl = React.useCallback((ordering: string): void => {
+    updateUrlParams({ ordering });
+  }, []);
 
   return {
+    params,
+    getUrlParams,
     redirectToReview,
     redirectToGame,
-    getUrlParams,
     pushGenresToUrl,
     pushOrderingToUrl,
   };

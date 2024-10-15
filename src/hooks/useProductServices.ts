@@ -1,7 +1,5 @@
 import React from "react";
-import { useSearchParams } from "next/navigation";
-import useCurrentUser from "./useCurrentUser";
-import useWindowVisibility from "./useWindowVisibility";
+import { z } from "zod";
 import requestService from "@/services/RequestService";
 import { generateRandomValue } from "@/utils/prices";
 import { ReviewSchema } from "@/utils/schemas/product";
@@ -9,8 +7,13 @@ import { GameAPIResponse } from "@/utils/helpers/types";
 import { User, RatingTitle } from "@prisma/client";
 
 export default function useProductServices() {
-  const [error, setError] = React.useState<string | undefined>();
-  const [success, setSuccess] = React.useState<string | undefined>();
+  const [error, setError] = React.useState<string | null>();
+  const [success, setSuccess] = React.useState<string | null>();
+
+  const clearMessages = () => {
+    setError(null);
+    setSuccess(null);
+  };
 
   function useProductActions() {
     const submitReviewForm = async (
@@ -21,7 +24,7 @@ export default function useProductServices() {
     ) => {
       const { review, rating } = data;
       const title = ratingsKeys[rating as keyof typeof ratingsKeys];
-
+      clearMessages();
       try {
         const response = await requestService.postMethod(
           "products/endpoints/productManagement/addReviewToProduct",

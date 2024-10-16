@@ -7,6 +7,7 @@ import useSearchText from "@/hooks/useSearchText";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import UtilsService from "@/services/UtilsService";
 import IUtilsService from "@/interfaces/IUtilsService";
+import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
 export default function FilterModalContainer({

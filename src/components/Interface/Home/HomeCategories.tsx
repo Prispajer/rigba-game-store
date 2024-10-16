@@ -8,7 +8,7 @@ import useCustomRouter from "@/hooks/useCustomRouter";
 export default function HomeCategories() {
   const { productGenresState, handleFetchGenres, handleLoadMore } =
     useFetchGameData();
-  const { pushGenresToUrl } = useCustomRouter();
+  const { redirectToFilters } = useCustomRouter();
 
   React.useEffect(() => {
     handleFetchGenres(productGenresState.page_size);
@@ -24,7 +24,7 @@ export default function HomeCategories() {
               {productGenresState.genresArray.map((genre) => (
                 <div
                   key={genre.id}
-                  onClick={() => pushGenresToUrl([genre.id as number])}
+                  onClick={() => redirectToFilters([genre.id as number])}
                   className="flex h-[140px] flex-col items-center bg-[#5389b7] text-[#ffffff] hover:bg-categoryGenresHover transition ease-in-out delay-70  px-[5px] shadow-lg cursor-pointer"
                 >
                   <div className="flex flex-1 items-center font-medium text-[14px] ">

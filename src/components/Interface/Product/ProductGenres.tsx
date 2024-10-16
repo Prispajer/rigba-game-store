@@ -4,10 +4,10 @@ import { GameAPIResponse } from "@/utils/helpers/types";
 
 export default function ProductGenres({
   product,
-  pushGenresToUrl,
+  redirectToFilters,
 }: {
   product: GameAPIResponse;
-  pushGenresToUrl: (genresId: number[]) => void;
+  redirectToFilters: (genresId: number[]) => void;
 }) {
   return (
     <section className="flex flex-col max-w-[1240px] md:mx-auto pb-[15px] bg-primaryColor">
@@ -15,7 +15,7 @@ export default function ProductGenres({
         {product ? (
           product.genres?.map((genre) => (
             <li
-              onClick={() => pushGenresToUrl([genre.id])}
+              onClick={() => redirectToFilters([genre.id])}
               key={genre.id ?? ""}
               className="inline-block mr-[5px] mb-[5px] rounded-full hover:bg-tertiaryColor bg-secondaryColor transition-animation cursor-pointer"
             >

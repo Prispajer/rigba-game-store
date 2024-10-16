@@ -1,36 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { productService } from "@/utils/injector";
 import { RequestResponse } from "@/utils/helpers/types";
+import { WishList } from "@prisma/client";
 
 export async function POST(request: NextRequest) {
-  const {
-    email,
-    externalProductId,
-    name,
-    description,
-    price,
-    background_image,
-    rating,
-    slug,
-    released,
-    added,
-  } = await request.json();
+  const addProductToWishListClientData = await request.json();
 
   const addProductToWishlistResponse =
-    await productService.addProductToWishList({
-      email,
-      externalProductId,
-      name,
-      description,
-      price,
-      background_image,
-      rating,
-      slug,
-      released,
-      added,
-    });
+    await productService.addProductToWishList(addProductToWishListClientData);
 
-  return NextResponse.json<RequestResponse<LoggedUserProduct>>({
+  return NextResponse.json<RequestResponse<WishList>>({
     success: addProductToWishlistResponse?.success,
     message: addProductToWishlistResponse?.message,
     data: addProductToWishlistResponse?.data,

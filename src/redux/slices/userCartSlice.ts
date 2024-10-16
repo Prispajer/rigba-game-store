@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import RequestService from "@/services/RequestService";
+import requestService from "@/services/RequestService";
 import { RequestResponse, UserCart } from "@/utils/helpers/types";
 import {
   FetchAddUserProductToCart,
@@ -31,7 +31,7 @@ export const fetchUserCart = createAsyncThunk<
     const fetchUserCartResponse: RequestResponse<{
       products: UserCart[];
       message: string;
-    }> = await RequestService.postMethod(
+    }> = await requestService.postMethod(
       "products/endpoints/productManagement/getCart",
       {
         email,
@@ -59,7 +59,7 @@ export const fetchAddUserProductToCart = createAsyncThunk<
   "userCart/fetchAddUserProductToCart",
   async (fetchAddUserProductToCart, { rejectWithValue }) => {
     try {
-      const response = await RequestService.postMethod(
+      const response = await requestService.postMethod(
         "products/endpoints/productManagement/addProductToCart",
 
         fetchAddUserProductToCart
@@ -78,13 +78,13 @@ export const fetchAddUserProductToCart = createAsyncThunk<
 
 export const fetchDeleteUserProductFromCart = createAsyncThunk<
   UserCart[],
-  { email: string | null | undefined; externalProductId: number },
+  { email: string; externalProductId: number },
   { rejectValue: string }
 >(
   "userCart/fetchDeleteUserProductFromCart",
   async ({ email, externalProductId }, { rejectWithValue }) => {
     try {
-      const response = await RequestService.deleteMethod(
+      const response = await requestService.deleteMethod(
         "products/endpoints/productManagement/deleteProductFromCart",
         { email, externalProductId }
       );
@@ -99,14 +99,14 @@ export const fetchDeleteUserProductFromCart = createAsyncThunk<
 );
 
 export const fetchIncreaseQuantityUserProductFromCart = createAsyncThunk<
-  LoggedUserCart[],
+  UserCart[],
   { email: string | null | undefined; externalProductId: number },
   { rejectValue: string }
 >(
   "userCart/fetchIncreaseQuantityUserProductFromCart",
   async ({ email, externalProductId }, { rejectWithValue }) => {
     try {
-      const response = await RequestService.patchMethod(
+      const response = await requestService.patchMethod(
         "products/endpoints/productManagement/increaseProductQuantity",
         { email, externalProductId }
       );
@@ -128,7 +128,7 @@ export const fetchDecreaseQuantityUserProductFromCart = createAsyncThunk<
   "userCart/fetchDecreaseQuantityUserProductFromCart",
   async ({ email, externalProductId }, { rejectWithValue }) => {
     try {
-      const response = await RequestService.patchMethod(
+      const response = await requestService.patchMethod(
         "products/endpoints/productManagement/decreaseProductQuantity",
         { email, externalProductId }
       );

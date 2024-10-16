@@ -41,7 +41,7 @@ export const fetchProductsWithFilters = createAsyncThunk<
     previous: string | null;
   },
   { page: number },
-  { rejectValue: string }
+  { rejectValue: string; getState: () => ProductFilterState }
 >(
   "productFilter/fetchProductsWithFilters",
   async ({ page = 1 }, { rejectWithValue, getState }) => {

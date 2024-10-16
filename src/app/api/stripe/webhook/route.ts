@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { Resend } from "resend";
 import { postgres } from "@/data/database/publicSQL/postgres";
-import { generateGameKey } from "@/utils/prices";
+import { generateGameKey } from "@/utils/keys";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 

@@ -140,7 +140,6 @@ export type GetProductByExternalProductIdDTO = {
 
 export type GetProductReviewsDTO = {
   externalProductId: number;
-  userId: number;
 };
 
 export type GetUserCartProductDTO = {
@@ -271,13 +270,11 @@ export type CreateProductToReviewDTO = {
 };
 
 export type DeleteProductFromCartDTO = {
-  id: string;
   email: string;
   externalProductId: number;
 };
 
 export type DeleteProductFromWishListDTO = {
-  id: string;
   email: string;
   externalProductId: number;
 };
@@ -308,19 +305,16 @@ export type DeleteReviewLikerDTO = {
 
 export type IncreaseProductQuantityDTO = {
   email: string;
-  userId: string;
   externalProductId: number;
 };
 
 export type DecreaseProductQuantityDTO = {
   email: string;
-  userId: string;
   externalProductId: number;
 };
 
 export type UserProductQuantityDTO = {
   id: string;
-  userId: string;
   quantity: number;
 };
 

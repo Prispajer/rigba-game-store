@@ -41,7 +41,7 @@ export default function useFetchGameData() {
     (state: RootState) => state.productStores
   );
 
-  const { pushOrderingToUrl } = useCustomRouter();
+  const { redirectToFilters } = useCustomRouter();
 
   const handleFetchProductsWithFilters = React.useCallback(
     (page: number) => {
@@ -117,9 +117,9 @@ export default function useFetchGameData() {
   const handleSetOrdering = React.useCallback(
     (ordering: string): void => {
       dispatch(setOrdering(ordering));
-      pushOrderingToUrl(ordering);
+      redirectToFilters(ordering);
     },
-    [dispatch, pushOrderingToUrl]
+    [dispatch, redirectToFilters]
   );
 
   const handleFilterChange = React.useCallback(

@@ -31,7 +31,7 @@ export default function ProductContainer({
   screenshots: GameAPIResponse["screenshots"];
 }) {
   const { handleOpen } = useWindowVisibility();
-  const { redirectToReview, pushGenresToUrl } = useCustomRouter();
+  const { redirectToReview, redirectToFilters } = useCustomRouter();
   const { handleAddUserProductToCart } = useUserCart();
   const { handleAddLocalProductToCart } = useLocalStorage("localCart");
   const { user } = useCurrentUser();
@@ -86,7 +86,10 @@ export default function ProductContainer({
             ""
           )}
           <ProductHeaders headerText="Product description" />
-          <ProductGenres product={product} pushGenresToUrl={pushGenresToUrl} />
+          <ProductGenres
+            product={product}
+            redirectToFilters={redirectToFilters}
+          />
           <ProductDescription product={product} />
           <ProductHeaders headerText="System requirements" />
           <ProductRequirements product={product} />

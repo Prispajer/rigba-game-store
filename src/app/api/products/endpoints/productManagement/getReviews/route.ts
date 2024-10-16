@@ -4,11 +4,11 @@ import { RequestResponse } from "@/utils/helpers/types";
 import { Review } from "@prisma/client";
 
 export async function POST(request: NextRequest) {
-  const { externalProductId } = await request.json();
+  const getReviewsClientData = await request.json();
 
-  const getReviewsResponse = await productService.getProductReviews({
-    externalProductId,
-  });
+  const getReviewsResponse = await productService.getProductReviews(
+    getReviewsClientData
+  );
 
   return NextResponse.json<RequestResponse<Review>>({
     success: getReviewsResponse.success,

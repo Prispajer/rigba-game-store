@@ -10,7 +10,7 @@ import useCustomRouter from "@/hooks/useCustomRouter";
 import useFetchGameData from "@/hooks/useFetchGameData";
 
 export default function FiltersContainer() {
-  const { params, getUrlParams, pushOrderingToUrl } = useCustomRouter();
+  const { params, getUrlParams, pushDataToUrl } = useCustomRouter();
   const {
     productFilterState,
     handleFetchProductsWithFilters,
@@ -21,19 +21,21 @@ export default function FiltersContainer() {
     handleFilterSortChange,
   } = useFetchGameData();
 
-  console.log(productFilterState);
-
   React.useEffect(() => {
     handleSetGenresIdArray(getUrlParams("genres"));
     handleSetPlatformsIdArray(getUrlParams("platforms"));
     handleSetStoresIdArray(getUrlParams("stores"));
     handleSetPublishersIdArray(getUrlParams("publishers"));
-    if (productFilterState.ordering) {
-      pushOrderingToUrl(productFilterState.ordering);
-    }
-  }, [params, getUrlParams, productFilterState.ordering, pushOrderingToUrl]);
+  }, [params]);
 
   React.useEffect(() => {
+    pushDataToUrl({
+      ordering: productFilterState.ordering,
+      stores: productFilterState.storesIdArray,
+      genres: productFilterState.genresIdArray,
+      platforms: productFilterState.platformsIdArray,
+      publishers: productFilterState.publishersIdArray,
+    });
     handleFetchProductsWithFilters(productFilterState.page);
   }, [
     productFilterState.genresIdArray,

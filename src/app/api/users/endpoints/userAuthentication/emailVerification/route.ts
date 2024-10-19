@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { userService } from "@/utils/injector";
-import { RequestResponse, EmailVerificationToken } from "@/utils/helpers/types";
+import { RequestResponse } from "@/utils/helpers/types";
+import { EmailVerificationToken } from "@prisma/client";
 
 export async function POST(request: NextRequest) {
-  const { token } = await request.json();
+  const emailVerificationClientData = await request.json();
 
-  const emailVerificationResponse = await userService.confirmEmailVerification({
-    token,
-  });
+  const emailVerificationResponse = await userService.confirmEmailVerification(
+    emailVerificationClientData
+  );
 
   return NextResponse.json<RequestResponse<EmailVerificationToken>>({
     success: emailVerificationResponse?.success,

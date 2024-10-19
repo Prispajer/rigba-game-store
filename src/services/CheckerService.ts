@@ -2,10 +2,14 @@ import "reflect-metadata";
 import bcrypt from "bcryptjs";
 import { inject, injectable } from "inversify";
 import { postgres } from "@/data/database/publicSQL/postgres";
-import { RequestResponse } from "../utils/helpers/types";
 import type ICheckerService from "../interfaces/ICheckerService";
 import type IUserRepository from "@/interfaces/IUserRepository";
 import type IProductRepository from "@/interfaces/IProductRepository";
+import type ITokenRepository from "@/interfaces/ITokenRepository";
+import type IWishListRepository from "@/interfaces/IWishListRepository";
+import type ICartRepository from "@/interfaces/ICartRepository";
+import type IReviewRepository from "@/interfaces/IReviewRepository";
+import { RequestResponse } from "../utils/helpers/types";
 import { CLASSTYPES } from "../utils/helpers/types";
 import {
   CheckDataExistsAndReturnProductDTO,
@@ -17,20 +21,89 @@ import {
   CheckIsUserPasswordCorrectDTO,
   CheckDataExistsAndReturnReviewDTO,
   CheckDataExistsAndReturnReviewLikersDTO,
+  CheckIsTokenValidDTO,
 } from "@/utils/helpers/backendDTO";
-import { Cart, Product, Review, WishList, User } from "@prisma/client";
+import {
+  Cart,
+  Product,
+  Review,
+  WishList,
+  User,
+  ReviewLikers,
+} from "@prisma/client";
+import { reviewRepository } from "@/utils/injector";
 
 @injectable()
 export default class CheckerService implements ICheckerService {
   private readonly _userRepository: IUserRepository;
+  private readonly _cartRepository: ICartRepository;
+  private readonly _wishListRepository: IWishListRepository;
+  private readonly _reviewRepository: IReviewRepository;
   private readonly _productRepository: IProductRepository;
+  private readonly _tokenRepository: ITokenRepository;
 
   constructor(
     @inject(CLASSTYPES.IUserRepository) userRepository: IUserRepository,
-    @inject(CLASSTYPES.IProductRepository) productRepository: IProductRepository
+    @inject(CLASSTYPES.ICartRepository)
+    cartRepository: ICartRepository,
+    @inject(CLASSTYPES.IWishListRepository)
+    wishListRepository: IWishListRepository,
+    @inject(CLASSTYPES.IReviewRepository)
+    reviewRepository: IReviewRepository,
+    @inject(CLASSTYPES.IProductRepository)
+    productRepository: IProductRepository,
+    @inject(CLASSTYPES.ITokenRepository) tokenRepository: ITokenRepository
   ) {
     this._userRepository = userRepository;
+    this._cartRepository = cartRepository;
+    this._wishListRepository = wishListRepository;
+    this._reviewRepository = reviewRepository;
     this._productRepository = productRepository;
+    this._tokenRepository = tokenRepository;
+  }
+
+  async getUserEntity<T, R>(
+    {
+      email,
+    }: {
+      email: string;
+    },
+    checkEntityExists: (user: User) => Promise<RequestResponse<T | null>>,
+    createEntity: (user: User) => Promise<R | null>,
+    entityName: string
+  ): Promise<RequestResponse<User | T | null>> {
+    try {
+      const getUserByEmailResponse = await this.checkDataExistsAndReturnUser({
+        email,
+      });
+
+      if (
+        (getUserByEmailResponse && !getUserByEmailResponse.success) ||
+        !getUserByEmailResponse.data
+      ) {
+        return getUserByEmailResponse;
+      }
+
+      const getEntityResponse = await checkEntityExists(
+        getUserByEmailResponse.data
+      );
+
+      if (
+        (getEntityResponse && !getEntityResponse.success) ||
+        !getEntityResponse.data
+      ) {
+        await createEntity(getUserByEmailResponse.data);
+      }
+
+      return this.handleSuccess(
+        getEntityResponse.success
+          ? `${entityName} retrieved successfully!`
+          : `${entityName} not found, creating new one!`,
+        getEntityResponse.data || null
+      );
+    } catch (error) {
+      return this.handleError(`Error while retrieving ${entityName}!`);
+    }
   }
 
   async checkDataExistsAndReturn<T, R>(
@@ -80,9 +153,7 @@ export default class CheckerService implements ICheckerService {
   ): Promise<RequestResponse<Cart | null>> {
     const getUserCart = await this.checkDataExistsAndReturn(
       (checkDataExistsAndReturnUserCartDTO) =>
-        this._productRepository.getUserCart(
-          checkDataExistsAndReturnUserCartDTO
-        ),
+        this._cartRepository.getUserCart(checkDataExistsAndReturnUserCartDTO),
       checkDataExistsAndReturnUserCartDTO,
       "Cart not found!"
     );
@@ -95,7 +166,7 @@ export default class CheckerService implements ICheckerService {
   ): Promise<RequestResponse<WishList | null>> {
     const getUserWishList = await this.checkDataExistsAndReturn(
       (checkDataExistsAndReturnUserWishListDTO) =>
-        this._productRepository.getUserWishList(
+        this._wishListRepository.getUserWishList(
           checkDataExistsAndReturnUserWishListDTO
         ),
       checkDataExistsAndReturnUserWishListDTO,
@@ -107,10 +178,10 @@ export default class CheckerService implements ICheckerService {
 
   async checkDataExistsAndReturnProductReviews(
     checkDataExistsAndReturnProductReviewsDTO: CheckDataExistsAndReturnProductReviewsDTO
-  ): Promise<RequestResponse<Review | null>> {
+  ): Promise<RequestResponse<Product | null>> {
     const getProductReviews = await this.checkDataExistsAndReturn(
       (checkDataExistsAndReturnProductReviewsDTO) =>
-        this._productRepository.getProductReviews(
+        this._reviewRepository.getProductReviews(
           checkDataExistsAndReturnProductReviewsDTO
         ),
       checkDataExistsAndReturnProductReviewsDTO,
@@ -125,7 +196,7 @@ export default class CheckerService implements ICheckerService {
   ): Promise<RequestResponse<Review | null>> {
     const getReview = await this.checkDataExistsAndReturn(
       (checkDataExistsAndReturnReviewDTO) =>
-        this._productRepository.getReview(checkDataExistsAndReturnReviewDTO),
+        this._reviewRepository.getReview(checkDataExistsAndReturnReviewDTO),
       checkDataExistsAndReturnReviewDTO,
       "Review not found!"
     );
@@ -135,10 +206,10 @@ export default class CheckerService implements ICheckerService {
 
   async checkDataExistsAndReturnReviewLikers(
     checkDataExistsAndReturnReviewLikersDTO: CheckDataExistsAndReturnReviewLikersDTO
-  ): Promise<RequestResponse<Review | null>> {
+  ): Promise<RequestResponse<ReviewLikers | null>> {
     const getReviewLikers = await this.checkDataExistsAndReturn(
       (checkDataExistsAndReturnReviewDTO) =>
-        this._productRepository.getReviewLikers(
+        this._reviewRepository.getReviewLikers(
           checkDataExistsAndReturnReviewDTO
         ),
       checkDataExistsAndReturnReviewLikersDTO,
@@ -179,16 +250,36 @@ export default class CheckerService implements ICheckerService {
     const isSameReview = await postgres.review.findFirst({
       where: {
         userId: user.id,
-        productId: product?.id,
+        productId: product.id,
       },
     });
-
-    console.log("XDasdasdasdasd", isSameReview);
 
     if (isSameReview)
       return this.handleError(
         "User has already written a review for this game!"
       );
+  }
+
+  async checkIsTokenValid(
+    CheckIsTokenValidDTO: CheckIsTokenValidDTO
+  ): Promise<RequestResponse<null> | void> {
+    const twoFactorToken = await this._tokenRepository.getTwoFactorTokenByEmail(
+      CheckIsTokenValidDTO.email
+    );
+
+    if (!twoFactorToken || twoFactorToken.token !== CheckIsTokenValidDTO.code) {
+      return this.handleError("Invalid code!");
+    }
+
+    const hasExpired = new Date(twoFactorToken.expires) < new Date();
+
+    if (hasExpired) {
+      return this.handleError("Code expired!");
+    }
+
+    await postgres.twoFactorToken.delete({
+      where: { id: twoFactorToken.id },
+    });
   }
 
   handleSuccess<T>(message: string, data: T): RequestResponse<T> {

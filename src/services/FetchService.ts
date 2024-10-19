@@ -42,7 +42,7 @@ export class FetchService implements IFetchService {
 
   async getProductsByOrdering(
     ordering: string,
-    quantity?: number
+    quantity: number = 4
   ): Promise<GameAPIResponse[]> {
     const url = `${this.baseUrl}/games?key=${
       this.apiKey

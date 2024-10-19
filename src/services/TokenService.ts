@@ -11,14 +11,12 @@ import {
   sendTwoFactorTokenEmail,
   sendPasswordResetEmail,
 } from "@/data/database/publicSQL/mail";
+import { RequestResponse, User, CLASSTYPES } from "../utils/helpers/types";
 import {
-  RequestResponse,
-  User,
   EmailVerificationToken,
   TwoFactorToken,
-  ResetPasswordToken,
-  CLASSTYPES,
-} from "../utils/helpers/types";
+  PasswordResetToken,
+} from "@prisma/client";
 import {
   SendResetPasswordTokenDTO,
   SendChangePasswordTokenDTO,
@@ -58,7 +56,7 @@ export default class TokenService implements ITokenService {
 
   async sendResetPasswordToken(
     sendResetPasswordTokenDTO: SendResetPasswordTokenDTO
-  ): Promise<RequestResponse<ResetPasswordToken | null>> {
+  ): Promise<RequestResponse<PasswordResetToken | null>> {
     try {
       const userExistsResponse = await this._checkerService.checkUserExists(
         sendResetPasswordTokenDTO

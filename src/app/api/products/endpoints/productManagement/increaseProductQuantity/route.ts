@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { productService } from "@/utils/injector";
+import { cartService } from "@/utils/injector";
 import { RequestResponse } from "@/utils/helpers/types";
 import { Cart } from "@prisma/client";
 
@@ -7,7 +7,7 @@ export async function PATCH(request: NextRequest) {
   const increaseProductQuantityClientData = await request.json();
 
   const increaseProductQuantityResponse =
-    await productService.increaseProductQuantity(
+    await cartService.increaseProductQuantity(
       increaseProductQuantityClientData
     );
 

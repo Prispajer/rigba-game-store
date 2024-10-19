@@ -1,10 +1,9 @@
 export type CheckDataExistsAndReturnUserDTO = {
   email: string;
-  externalProductId: number;
 };
 
 export type CheckDataExistsAndReturnProductDTO = {
-  userId: string;
+  userId: string | null;
   externalProductId: number;
 };
 
@@ -19,11 +18,12 @@ export type CheckDataExistsAndReturnUserWishListDTO = {
 };
 
 export type CheckDataExistsAndReturnProductReviewsDTO = {
+  userId: string | null;
   externalProductId: number;
 };
 
 export type CheckDataExistsAndReturnReviewDTO = {
-  userId: string;
+  reviewId: string;
   productId: string;
 };
 
@@ -51,10 +51,15 @@ export type CheckIsEmailInUseDTO = {
   email: string;
 };
 
+export type CheckIsTokenValidDTO = {
+  email: string;
+  code: string;
+};
+
 export type LoginUserDTO = {
   email: string;
-  password?: string;
-  code?: string;
+  password: string;
+  code: string;
 };
 
 export type RegisterUserDTO = {
@@ -63,8 +68,15 @@ export type RegisterUserDTO = {
 };
 
 export type ConfirmEmailVerificationDTO = {
-  email?: string;
+  email: string;
   token: string;
+};
+
+export type ConfirmTwoFactorAuthenticationDTO = {
+  id: string;
+  email: string;
+  isTwoFactorEnabled: boolean;
+  code: string;
 };
 
 export type SetNewPasswordDTO = {
@@ -127,18 +139,21 @@ export type GetUserByIdDTO = {
 
 export type GetUserCartDTO = {
   email: string;
+  id: string;
 };
 
 export type GetUserWishListDTO = {
+  id: string;
   email: string;
 };
 
 export type GetProductByExternalProductIdDTO = {
-  userId: string;
+  userId: string | null;
   externalProductId: number;
 };
 
 export type GetProductReviewsDTO = {
+  userId: string | null;
   externalProductId: number;
 };
 
@@ -195,7 +210,6 @@ export type AddReviewToProductDTO = {
   externalProductId: number;
   reviewId: string;
   userId: string;
-  productId: string;
   name: string;
   price: number;
   background_image: string;
@@ -204,7 +218,7 @@ export type AddReviewToProductDTO = {
   slug: string;
   percent: number;
   released: string;
-  added: string;
+  added: number;
   title: string;
   likes: number;
 };
@@ -243,7 +257,7 @@ export type CreateUserCartProductDTO = {
   added: number;
 };
 
-export type CreateUserWishListProductDTO = {
+export type CreateUserProductWishListDTO = {
   wishListId: string;
   userId: string;
   externalProductId: number;
@@ -281,19 +295,16 @@ export type DeleteProductFromWishListDTO = {
 
 export type DeleteUserProductFromCartDTO = {
   id: string;
-  email: string;
   externalProductId: number;
 };
 
 export type DeleteUserProductFromWishListDTO = {
   id: string;
-  email: string;
   externalProductId: number;
 };
 
 export type DeleteUserProductDTO = {
   id: string;
-  email: string;
   externalProductId: number;
 };
 
@@ -315,7 +326,8 @@ export type DecreaseProductQuantityDTO = {
 
 export type UserProductQuantityDTO = {
   id: string;
-  quantity: number;
+  userId: string;
+  quantity: number | null;
 };
 
 export type LikeReviewDTO = {

@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { productService } from "@/utils/injector";
+import { cartService } from "@/utils/injector";
 import { RequestResponse } from "@/utils/helpers/types";
 import { Cart } from "@prisma/client";
 
 export async function POST(request: NextRequest) {
   const getCartClientData = await request.json();
 
-  const getCartResponse = await productService.getUserCart(getCartClientData);
+  const getCartResponse = await cartService.getUserCart(getCartClientData);
 
   return NextResponse.json<RequestResponse<Cart | null>>({
     success: getCartResponse.success,

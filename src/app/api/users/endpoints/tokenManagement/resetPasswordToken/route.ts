@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { tokenService } from "@/utils/injector";
-import { RequestResponse, ResetPasswordToken } from "@/utils/helpers/types";
+import { RequestResponse } from "@/utils/helpers/types";
 
 export async function POST(request: NextRequest, response: NextResponse) {
   const { email } = await request.json();

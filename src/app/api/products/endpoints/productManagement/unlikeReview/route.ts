@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { productService } from "@/utils/injector";
+import { reviewService } from "@/utils/injector";
 import { RequestResponse } from "@/utils/helpers/types";
 import { Review } from "@prisma/client";
 
 export async function PATCH(request: NextRequest) {
   const unLikeReviewClientData = await request.json();
 
-  const unlikeReviewResponse = await productService.unLikeReview(
+  const unlikeReviewResponse = await reviewService.unLikeReview(
     unLikeReviewClientData
   );
 

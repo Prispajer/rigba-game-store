@@ -1,10 +1,9 @@
 import {
-  RequestResponse,
   User,
   EmailVerificationToken,
+  PasswordResetToken,
   TwoFactorToken,
-  ResetPasswordToken,
-} from "@/utils/helpers/types";
+} from "@prisma/client";
 import {
   LoginUserDTO,
   RegisterUserDTO,
@@ -21,13 +20,14 @@ export default interface IUserService {
   ): Promise<RequestResponse<
     User | EmailVerificationToken | TwoFactorToken
   > | void>;
-  registerUser(userDTO: UserDTO): Promise<RequestResponse<RegisterUserDTO>>;
+  registerUser(
+    registerUserDTO: RegisterUserDTO
+  ): Promise<RequestResponse<RegisterUserDTO | User | null>>;
   confirmEmailVerification(
     confirmEmailVerification: ConfirmEmailVerificationDTO
-  ): Promise<RequestResponse<EmailVerificationToken> | void>;
+  ): Promise<RequestResponse<User | EmailVerificationToken | null> | void>;
   confirmTwoFactorAuthentication(
-    user: User | null,
-    code?: string
+    confirmTwoFactorAuthenticationDTO: ConfirmTwoFactorAuthenticationDTO
   ): Promise<RequestResponse<TwoFactorToken> | void>;
   setNewPassword(
     userDTO: UserDTO

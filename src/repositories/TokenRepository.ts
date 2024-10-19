@@ -2,15 +2,14 @@ import { injectable, inject } from "inversify";
 import { v4 as uuid4 } from "uuid";
 import crypto from "crypto";
 import { postgres } from "@/data/database/publicSQL/postgres";
-import ITokenRepository from "@/interfaces/ITokenRepository";
+import type ITokenRepository from "@/interfaces/ITokenRepository";
+import type ITokenUtils from "@/interfaces/ITokenUtils";
+import { RequestResponse, Token, CLASSTYPES } from "@/utils/helpers/types";
 import {
-  RequestResponse,
   EmailVerificationToken,
-  ResetPasswordToken,
+  PasswordResetToken,
   TwoFactorToken,
-  CLASSTYPES,
-} from "@/utils/helpers/types";
-import ITokenUtils from "@/interfaces/ITokenUtils";
+} from "@prisma/client";
 
 @injectable()
 export default class TokenRepository implements ITokenRepository {
@@ -47,7 +46,7 @@ export default class TokenRepository implements ITokenRepository {
     );
   }
 
-  async generatePasswordResetToken(email: string): Promise<ResetPasswordToken> {
+  async generatePasswordResetToken(email: string): Promise<PasswordResetToken> {
     return await this._tokenUtils.generateToken(
       email,
       this.getPasswordResetTokenByEmail,

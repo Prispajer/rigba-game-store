@@ -17,8 +17,8 @@ export interface Token {
 }
 
 export interface Product {
-  id?: string | number;
-  externalProductId?: number | string;
+  id: string | number;
+  externalProductId: number;
   name: string;
   price: number;
   background_image: string;
@@ -121,6 +121,12 @@ export const CLASSTYPES = {
   ITokenService: Symbol.for("ITokenService"),
   ITokenRepository: Symbol.for("ITokenRepository"),
   ITokenUtils: Symbol.for("ITokenUtils"),
+  ICartService: Symbol.for("ICartService"),
+  ICartRepository: Symbol.for("ICartRepository"),
+  IWishListService: Symbol.for("IWishListService"),
+  IWishListRepository: Symbol.for("IWishListRepository"),
+  IReviewService: Symbol.for("IReviewService"),
+  IReviewRepository: Symbol.for("IReviewRepository"),
   IProductService: Symbol.for("IProductService"),
   IProductRepository: Symbol.for("IProductRepository"),
   IProductUtils: Symbol.for("IProductUtils"),

@@ -1,26 +1,18 @@
-import { RequestResponse } from "@/utils/helpers/types";
+import { Review, ReviewLikers, Rating, Product } from "@prisma/client";
 import {
-  CreateUserCartProductDTO,
-  GetUserCartDTO,
-  GetUserWishListDTO,
   GetProductReviewsDTO,
-  GetProductByExternalProductIdDTO,
-  UserProductQuantityDTO,
-  CreateProductToReviewDTO,
-  CreateReviewDTO,
-  CreateRatingDTO,
-  DeleteUserProductFromCartDTO,
-  DeleteUserProductDTO,
   GetReviewDTO,
   GetReviewLikerDTO,
+  CreateReviewDTO,
+  CreateRatingDTO,
+  CreateProductToReviewDTO,
   CreateReviewLikerDTO,
+  DeleteReviewLikerDTO,
   UpdateReviewLikeDTO,
   UpdateReviewUnLikeDTO,
-  DeleteReviewLikerDTO,
 } from "@/utils/helpers/backendDTO";
-import { User, Product, Cart, Review, WishList } from "@prisma/client";
 
-export default interface IProductRepository {
+export default interface IReviewRepository {
   getProductReviews(
     getProductReviewsDTO: GetProductReviewsDTO
   ): Promise<Product | null>;
@@ -28,9 +20,6 @@ export default interface IProductRepository {
   getReviewLikers(
     getReviewLikerDTO: GetReviewLikerDTO
   ): Promise<ReviewLikers | null>;
-  getProductByExternalProductId(
-    getProductByExternalProductIdDTO: GetProductByExternalProductIdDTO
-  ): Promise<Product | null>;
   createReview(createReviewDTO: CreateReviewDTO): Promise<Review | null>;
   createRating(createRatingDTO: CreateRatingDTO): Promise<Rating | null>;
   createProductToReview(
@@ -39,9 +28,6 @@ export default interface IProductRepository {
   createReviewLiker(
     createReviewLikerDTO: CreateReviewLikerDTO
   ): Promise<ReviewLikers | null>;
-  deleteUserProduct(
-    deleteUserProductDTO: DeleteUserProductDTO
-  ): Promise<Product | null>;
   deleteReviewLiker(
     deleteReviewLikerDTO: DeleteReviewLikerDTO
   ): Promise<ReviewLikers | null>;

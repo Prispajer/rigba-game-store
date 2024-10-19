@@ -1,31 +1,27 @@
 import { injectable, inject } from "inversify";
-import { User, Product, Cart, Review, WishList } from "@prisma/client";
-import type IUserRepository from "@/interfaces/IUserRepository";
-import type IProductService from "../interfaces/IProductService";
 import type ICheckerService from "@/interfaces/ICheckerService";
-import type IProductRepository from "@/interfaces/IProductRepository";
-import type { RequestResponse } from "../utils/helpers/types";
-import { CLASSTYPES } from "../utils/helpers/types";
+import type IReviewRepository from "@/interfaces/IReviewRepository";
+import type IReviewService from "@/interfaces/IReviewService";
+import { User, Review, Product } from "@prisma/client";
+import { RequestResponse, CLASSTYPES } from "@/utils/helpers/types";
 import {
-  AddReviewToProductDTO,
   GetProductReviewsDTO,
+  AddReviewToProductDTO,
   LikeReviewDTO,
   UnLikeReviewDTO,
 } from "@/utils/helpers/backendDTO";
 
 @injectable()
-export default class ProductService implements IProductService {
+export default class ReviewService implements IReviewService {
   private readonly _checkerService: ICheckerService;
-  private readonly _productRepository: IProductRepository;
-
+  private readonly _reviewRepository: IReviewRepository;
   constructor(
     @inject(CLASSTYPES.ICheckerService) checkerService: ICheckerService,
-    @inject(CLASSTYPES.IProductRepository)
-    productRepository: IProductRepository,
-    @inject(CLASSTYPES.IUserRepository) userRepository: IUserRepository
+    @inject(CLASSTYPES.IReviewRepository)
+    reviewRepository: IReviewRepository
   ) {
     this._checkerService = checkerService;
-    this._productRepository = productRepository;
+    this._reviewRepository = reviewRepository;
   }
 
   async getProductReviews(
@@ -99,7 +95,7 @@ export default class ProductService implements IProductService {
         !getReviewProductResponse.data
       ) {
         const createdProduct =
-          await this._productRepository.createProductToReview(
+          await this._reviewRepository.createProductToReview(
             addReviewToProductDTO
           );
 
@@ -121,14 +117,14 @@ export default class ProductService implements IProductService {
         return checkIsSameReviewResponse;
       }
 
-      const createdReview = await this._productRepository.createReview({
+      const createdReview = await this._reviewRepository.createReview({
         productId,
         ...addReviewToProductDTO,
         userId: getUserByEmailResponse.data.id,
       });
 
       if (createdReview)
-        await this._productRepository.createRating({
+        await this._reviewRepository.createRating({
           ...addReviewToProductDTO,
           reviewId: createdReview.id,
         });
@@ -199,13 +195,13 @@ export default class ProductService implements IProductService {
       }
 
       if (getReviewLikersResponse && !getReviewLikersResponse.success) {
-        await this._productRepository.createReviewLiker({
+        await this._reviewRepository.createReviewLiker({
           userId: getUserByEmailResponse.data.id,
           productId: getProductResponse.data.id,
           reviewId: getReviewResponse.data.id,
         });
 
-        await this._productRepository.updateReviewLike({
+        await this._reviewRepository.updateReviewLike({
           id: getReviewResponse.data.id,
           likes: getReviewResponse.data.likes,
         });
@@ -268,11 +264,11 @@ export default class ProductService implements IProductService {
         });
 
       if (getReviewLikersResponse && getReviewLikersResponse.data?.isLiked) {
-        await this._productRepository.deleteReviewLiker(
+        await this._reviewRepository.deleteReviewLiker(
           getReviewLikersResponse.data
         );
 
-        await this._productRepository.updateReviewUnLike({
+        await this._reviewRepository.updateReviewUnLike({
           id: getReviewResponse.data.id,
           likes: getReviewResponse.data.likes,
         });

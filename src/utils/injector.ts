@@ -20,7 +20,18 @@ import ProductUtils from "@/data/utils/ProductUtils";
 import type IProductUtils from "@/interfaces/IProductUtils";
 import CheckerService from "../services/CheckerService";
 import type ICheckerService from "@/interfaces/ICheckerService";
-
+import WishListService from "@/services/WishListService";
+import type IWishListService from "@/interfaces/IWishListService";
+import WishListRepository from "@/repositories/WishListRepository";
+import type IWishListRepository from "@/interfaces/IWishListRepository";
+import CartService from "@/services/CartService";
+import type ICartService from "@/interfaces/ICartService";
+import CartRepository from "@/repositories/CartRepository";
+import type ICartRepository from "@/interfaces/ICartRepository";
+import ReviewService from "@/services/ReviewService";
+import type IReviewService from "@/interfaces/IReviewService";
+import ReviewRepository from "@/repositories/ReviewRepository";
+import type IReviewRepository from "@/interfaces/IReviewRepository";
 import { CLASSTYPES } from "@/utils/helpers/types";
 
 const container = new Container();
@@ -37,6 +48,18 @@ container.bind<IProductService>(CLASSTYPES.IProductService).to(ProductService);
 container
   .bind<IProductRepository>(CLASSTYPES.IProductRepository)
   .to(ProductRepository);
+container.bind<ICartService>(CLASSTYPES.ICartService).to(CartService);
+container.bind<ICartRepository>(CLASSTYPES.ICartRepository).to(CartRepository);
+container
+  .bind<IWishListService>(CLASSTYPES.IWishListService)
+  .to(WishListService);
+container
+  .bind<IWishListRepository>(CLASSTYPES.IWishListRepository)
+  .to(WishListRepository);
+container.bind<IReviewService>(CLASSTYPES.IReviewService).to(ReviewService);
+container
+  .bind<IReviewRepository>(CLASSTYPES.IReviewRepository)
+  .to(ReviewRepository);
 container.bind<IProductUtils>(CLASSTYPES.IProductUtils).to(ProductUtils);
 container.bind<ICheckerService>(CLASSTYPES.ICheckerService).to(CheckerService);
 
@@ -52,6 +75,22 @@ export const tokenRepository = container.get<ITokenRepository>(
   CLASSTYPES.ITokenRepository
 );
 export const tokenUtils = container.get<ITokenUtils>(CLASSTYPES.ITokenUtils);
+export const cartService = container.get<ICartService>(CLASSTYPES.ICartService);
+export const cartRepository = container.get<ICartRepository>(
+  CLASSTYPES.ICartRepository
+);
+export const wishListService = container.get<IWishListService>(
+  CLASSTYPES.IWishListService
+);
+export const wishListRepository = container.get<IWishListRepository>(
+  CLASSTYPES.IWishListRepository
+);
+export const reviewService = container.get<IReviewService>(
+  CLASSTYPES.IReviewService
+);
+export const reviewRepository = container.get<IReviewRepository>(
+  CLASSTYPES.IReviewRepository
+);
 export const productService = container.get<IProductService>(
   CLASSTYPES.IProductService
 );

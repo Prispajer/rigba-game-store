@@ -1,55 +1,52 @@
 import { RequestResponse } from "@/utils/helpers/types";
-import { RatingTitle, Product, Cart, Review, WishList } from "@prisma/client";
-import {,
-  GetUserCartDTO,
-  GetUserWishListDTO,
-  GetProductReviewsDTO,
+import { User, Product, Cart, Review, WishList } from "@prisma/client";
+import {
   AddProductToCartDTO,
   AddProductToWishListDTO,
   AddReviewToProductDTO,
+  DecreaseProductQuantityDTO,
   DeleteProductFromCartDTO,
   DeleteProductFromWishListDTO,
+  GetProductReviewsDTO,
+  GetUserCartDTO,
+  GetUserWishListDTO,
   IncreaseProductQuantityDTO,
-  DecreaseProductQuantityDTO,
   LikeReviewDTO,
-  UnLikeReviewDTO
+  UnLikeReviewDTO,
 } from "@/utils/helpers/backendDTO";
 
 export default interface IProductService {
   getUserCart(
     getUserCartDTO: GetUserCartDTO
-  ): Promise<RequestResponse<Cart | null>>;
-  getUserWishList(
-    getUserWishListDTO: GetUserWishListDTO
-  ): Promise<RequestResponse<WishList | null>>;
+  ): Promise<RequestResponse<User | Cart | null>>;
   getProductReviews(
     getProductReviewsDTO: GetProductReviewsDTO
-  ): Promise<RequestResponse<Review | null>>;
+  ): Promise<RequestResponse<Product | Review | null>>;
   addProductToCart(
     addProductToCartDTO: AddProductToCartDTO
-  ): Promise<RequestResponse<Cart | null>>;
+  ): Promise<RequestResponse<User | Cart | null>>;
   addProductToWishList(
     addProductToWishListDTO: AddProductToWishListDTO
-  ): Promise<RequestResponse<WishList | null>>;
+  ): Promise<RequestResponse<User | WishList | null>>;
   addReviewToProduct(
     addReviewToProductDTO: AddReviewToProductDTO
-  ): Promise<RequestResponse<Review | null>>;
+  ): Promise<RequestResponse<User | Review | null>>;
   deleteProductFromCart(
     deleteProductFromCartDTO: DeleteProductFromCartDTO
-  ): Promise<RequestResponse<Cart | null>>;
+  ): Promise<RequestResponse<User | Product | Cart | null>>;
   deleteProductFromWishList(
     deleteProductFromWishListDTO: DeleteProductFromWishListDTO
-  ): Promise<RequestResponse<WishList | null>>;
+  ): Promise<RequestResponse<User | Product | WishList | null>>;
   increaseProductQuantity(
     increaseProductQuantityDTO: IncreaseProductQuantityDTO
-  ): Promise<RequestResponse<Cart | null>>;
+  ): Promise<RequestResponse<User | Product | Cart | null>>;
   decreaseProductQuantity(
     decreaseProductQuantityDTO: DecreaseProductQuantityDTO
-  ): Promise<RequestResponse<Cart | null>>;
+  ): Promise<RequestResponse<User | Product | Cart | null>>;
   likeReview(
     likeReviewDTO: LikeReviewDTO
-  ): Promise<RequestResponse<Review | null>>;
+  ): Promise<RequestResponse<User | Product | Review | null>>;
   unLikeReview(
     unLikeReviewDTO: UnLikeReviewDTO
-  ): Promise<RequestResponse<Review | null>>;
+  ): Promise<RequestResponse<User | Product | Review | null>>;
 }

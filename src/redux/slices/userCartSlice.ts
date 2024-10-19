@@ -100,7 +100,7 @@ export const fetchDeleteUserProductFromCart = createAsyncThunk<
 
 export const fetchIncreaseQuantityUserProductFromCart = createAsyncThunk<
   UserCart[],
-  { email: string | null | undefined; externalProductId: number },
+  { email: string; externalProductId: number },
   { rejectValue: string }
 >(
   "userCart/fetchIncreaseQuantityUserProductFromCart",

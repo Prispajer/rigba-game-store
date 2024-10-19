@@ -3,7 +3,11 @@ import { injectable, inject } from "inversify";
 import type IUserRepository from "@/interfaces/IUserRepository";
 import type IUserUtils from "@/interfaces/IUserUtils";
 import { CLASSTYPES } from "@/utils/helpers/types";
-import { User, TwoFactorConfirmation } from "@prisma/client";
+import {
+  User,
+  TwoFactorConfirmation,
+  EmailVerificationToken,
+} from "@prisma/client";
 import {
   GetTwoFactorConfirmationByUserIdDTO,
   GetUserByEmailDTO,
@@ -48,10 +52,12 @@ export default class UserRepository implements IUserRepository {
   }
 
   async createUser(registerUserDTO: RegisterUserDTO): Promise<RegisterUserDTO> {
+    const hashedPassword = await this._userUtils.hashPassword(registerUserDTO);
+
     const createdUser = await postgres.user.create({
       data: {
         email: registerUserDTO.email,
-        password: registerUserDTO.password,
+        password: hashedPassword,
       },
     });
 
@@ -59,5 +65,21 @@ export default class UserRepository implements IUserRepository {
       email: createdUser.email,
       password: createdUser.password as string,
     };
+  }
+
+  async updateEmailVerification(
+    user: User,
+    emailVerificationToken: EmailVerificationToken
+  ): Promise<User> {
+    const emailVerification = await postgres.user.update({
+      where: { id: user.id },
+      data: { emailVerified: new Date() },
+    });
+
+    await postgres.emailVerificationToken.delete({
+      where: { id: emailVerificationToken?.id },
+    });
+
+    return emailVerification;
   }
 }

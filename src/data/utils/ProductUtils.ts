@@ -1,7 +1,5 @@
-import { postgres } from "../database/publicSQL/postgres";
 import { injectable } from "inversify";
-import IProductUtils from "@/interfaces/IProductUtils";
-import { User } from "@/utils/helpers/types";
+import type IProductUtils from "@/interfaces/IProductUtils";
 
 @injectable()
 export default class ProductUtils implements IProductUtils {
@@ -13,7 +11,6 @@ export default class ProductUtils implements IProductUtils {
       const dataByProperty = await findDataByProperty(property);
       return dataByProperty;
     } catch (error) {
-      console.error("Error during database operation:", error);
       return null;
     }
   }

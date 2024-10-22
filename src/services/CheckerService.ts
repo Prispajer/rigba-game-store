@@ -21,7 +21,7 @@ import {
   CheckIsUserPasswordCorrectDTO,
   CheckDataExistsAndReturnReviewDTO,
   CheckDataExistsAndReturnReviewLikersDTO,
-  CheckIsTokenValidDTO,
+  CheckIsTokenValidAndReturnTwoFactorTokenDTO,
 } from "@/utils/helpers/backendDTO";
 import {
   Cart,
@@ -30,8 +30,8 @@ import {
   WishList,
   User,
   ReviewLikers,
+  TwoFactorToken,
 } from "@prisma/client";
-import { reviewRepository } from "@/utils/injector";
 
 @injectable()
 export default class CheckerService implements ICheckerService {
@@ -62,16 +62,16 @@ export default class CheckerService implements ICheckerService {
     this._tokenRepository = tokenRepository;
   }
 
-  async getUserEntity<T, R>(
+  async getUserEntity<T>(
     {
       email,
     }: {
       email: string;
     },
     checkEntityExists: (user: User) => Promise<RequestResponse<T | null>>,
-    createEntity: (user: User) => Promise<R | null>,
+    createEntity: (user: User) => Promise<T | null>,
     entityName: string
-  ): Promise<RequestResponse<User | T | null>> {
+  ): Promise<RequestResponse<T | null>> {
     try {
       const getUserByEmailResponse = await this.checkDataExistsAndReturnUser({
         email,
@@ -81,7 +81,7 @@ export default class CheckerService implements ICheckerService {
         (getUserByEmailResponse && !getUserByEmailResponse.success) ||
         !getUserByEmailResponse.data
       ) {
-        return getUserByEmailResponse;
+        return this.handleError("User not found!");
       }
 
       const getEntityResponse = await checkEntityExists(
@@ -219,6 +219,34 @@ export default class CheckerService implements ICheckerService {
     return getReviewLikers;
   }
 
+  async checkIsTokenValidAndReturnTwoFactorToken(
+    checkIsTokenValidAndReturnTwoFactorTokenDTO: CheckIsTokenValidAndReturnTwoFactorTokenDTO
+  ): Promise<RequestResponse<TwoFactorToken | null>> {
+    const getTwoFactorToken =
+      await this._tokenRepository.getTwoFactorTokenByEmail(
+        checkIsTokenValidAndReturnTwoFactorTokenDTO.email
+      );
+
+    if (
+      !getTwoFactorToken ||
+      getTwoFactorToken.token !==
+        checkIsTokenValidAndReturnTwoFactorTokenDTO.code
+    ) {
+      return this.handleError("Invalid code!");
+    }
+
+    const hasExpired = new Date(getTwoFactorToken.expires) < new Date();
+
+    if (hasExpired) {
+      return this.handleError("Code expired!");
+    }
+
+    return this.handleSuccess(
+      "Two Factor token has been found!",
+      getTwoFactorToken
+    );
+  }
+
   async checkIsUserPasswordCorrect(
     user: User,
     checkIsUserPasswordCorrectDTO: CheckIsUserPasswordCorrectDTO
@@ -260,28 +288,6 @@ export default class CheckerService implements ICheckerService {
       );
   }
 
-  async checkIsTokenValid(
-    CheckIsTokenValidDTO: CheckIsTokenValidDTO
-  ): Promise<RequestResponse<null> | void> {
-    const twoFactorToken = await this._tokenRepository.getTwoFactorTokenByEmail(
-      CheckIsTokenValidDTO.email
-    );
-
-    if (!twoFactorToken || twoFactorToken.token !== CheckIsTokenValidDTO.code) {
-      return this.handleError("Invalid code!");
-    }
-
-    const hasExpired = new Date(twoFactorToken.expires) < new Date();
-
-    if (hasExpired) {
-      return this.handleError("Code expired!");
-    }
-
-    await postgres.twoFactorToken.delete({
-      where: { id: twoFactorToken.id },
-    });
-  }
-
   handleSuccess<T>(message: string, data: T): RequestResponse<T> {
     return {
       success: true,
@@ -296,5 +302,13 @@ export default class CheckerService implements ICheckerService {
       message,
       data: null,
     };
+  }
+
+  async responseReturnFalse<T>(
+    callback: (DTO: Record<string, T>) => Promise<RequestResponse<T>>
+  ): Promise<any> {
+    const boundFunc = await callback.bind(this);
+
+    if ((boundFunc && !boundFunc.success) || !boundFunc.data) return boundFunc;
   }
 }

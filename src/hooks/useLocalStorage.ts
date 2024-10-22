@@ -13,7 +13,7 @@ import {
   setLocalOrdering,
 } from "@/redux/slices/localStorageSlice";
 import { RootState } from "@/redux/store";
-import { Product } from "@/utils/helpers/types";
+import { GameAPIProduct } from "@/utils/helpers/types";
 
 export default function useLocalStorage(key: string) {
   const [isLoaded, setIsLoaded] = React.useState(false);
@@ -25,11 +25,11 @@ export default function useLocalStorage(key: string) {
     (state: RootState) => state.localStorage.localWishList
   );
 
-  const handleAddLocalProductToCart = (product: Product): void => {
+  const handleAddLocalProductToCart = (product: GameAPIProduct): void => {
     dispatch(addLocalProductToCart(product));
   };
 
-  const handleAddLocalProductToWishList = (product: Product): void => {
+  const handleAddLocalProductToWishList = (product: GameAPIProduct): void => {
     dispatch(addLocalProductToWishList(product));
   };
 

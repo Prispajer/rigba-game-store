@@ -11,6 +11,6 @@ export async function POST(request: NextRequest) {
   return NextResponse.json<RequestResponse<Cart | null>>({
     success: getCartResponse.success,
     message: getCartResponse.message,
-    data: getCartResponse.data,
+    data: (getCartResponse.data as Cart) || null,
   });
 }

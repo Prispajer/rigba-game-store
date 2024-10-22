@@ -10,9 +10,9 @@ export async function DELETE(request: NextRequest) {
     deleteProductFromCartClientData
   );
 
-  return NextResponse.json<RequestResponse<Cart>>({
+  return NextResponse.json<RequestResponse<Cart | null>>({
     success: deleteProductFromCartResponse.success,
     message: deleteProductFromCartResponse.message,
-    data: deleteProductFromCartResponse.data,
+    data: (deleteProductFromCartResponse.data as Cart) || null,
   });
 }

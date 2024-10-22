@@ -26,10 +26,14 @@ export default class UserRepository implements IUserRepository {
   async getUserByEmail(
     getUserByEmailDTO: GetUserByEmailDTO
   ): Promise<User | null> {
-    return await this._userUtils.getUserByProperty(
-      "email",
-      getUserByEmailDTO.email
-    );
+    if (getUserByEmailDTO.email) {
+      return await this._userUtils.getUserByProperty(
+        "email",
+        getUserByEmailDTO.email
+      );
+    } else {
+      return null;
+    }
   }
 
   async getUserById(getUserByIdDTO: GetUserByIdDTO): Promise<User | null> {

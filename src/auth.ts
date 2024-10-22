@@ -2,9 +2,12 @@ import NextAuth, { DefaultSession } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { postgres } from "@/data/database/publicSQL/postgres";
 import authConfig from "./auth.config";
-import { userRepository, productRepository } from "./utils/injector";
+import {
+  userRepository,
+  cartRepository,
+  wishListRepository,
+} from "./utils/injector";
 import { Cart, UserRole, WishList } from "@prisma/client";
-import { UserCart, UserWishList } from "./utils/helpers/types";
 
 export type ExtendedUser = DefaultSession["user"] & {
   id: string;
@@ -13,8 +16,8 @@ export type ExtendedUser = DefaultSession["user"] & {
   role: UserRole;
   cartId: string | null;
   wishListId: string | null;
-  cart: UserCart | null;
-  wishList: UserWishList | null;
+  cart: Cart | null;
+  wishList: WishList | null;
 };
 
 declare module "next-auth" {
@@ -47,7 +50,9 @@ export const {
         return true;
       }
 
-      const existingUser = await userRepository.getUserById(user);
+      const existingUser = await userRepository.getUserById({
+        id: user.id as string,
+      });
 
       if (!existingUser?.emailVerified) {
         return false;
@@ -81,14 +86,14 @@ export const {
         return token;
       }
 
-      const existingUser = await userRepository.getUserById(token.sub);
+      const existingUser = await userRepository.getUserById({ id: token.sub });
 
       if (!existingUser) {
         return token;
       }
 
-      const userCart = await productRepository.getUserCart(existingUser);
-      const userWishList = await productRepository.getUserWishList(
+      const userCart = await cartRepository.getUserCart(existingUser);
+      const userWishList = await wishListRepository.getUserWishList(
         existingUser
       );
 
@@ -111,10 +116,10 @@ export const {
           token.emailVerificationDate as Date;
 
         if (session.user.cartId) {
-          session.user.cart = await productRepository.getUserCart(session.user);
+          session.user.cart = await cartRepository.getUserCart(session.user);
         }
         if (session.user.wishListId) {
-          session.user.wishList = await productRepository.getUserWishList(
+          session.user.wishList = await wishListRepository.getUserWishList(
             session.user
           );
         }

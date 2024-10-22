@@ -1,3 +1,13 @@
+import { User, Cart, Product } from "@prisma/client";
+import { RequestResponse } from "@/utils/helpers/types";
+import {
+  GetUserCartDTO,
+  AddProductToCartDTO,
+  DeleteProductFromCartDTO,
+  IncreaseProductQuantityDTO,
+  DecreaseProductQuantityDTO,
+} from "@/utils/helpers/backendDTO";
+
 export default interface ICartService {
   getUserCart(
     getUserCartDTO: GetUserCartDTO

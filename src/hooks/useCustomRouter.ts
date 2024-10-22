@@ -13,16 +13,19 @@ export default function useCustomRouter() {
     [params]
   );
 
-  const redirectToGame = (
-    name: string,
-    callback?: (element: string) => void,
-    element?: string
-  ): void => {
-    router.push(`/product/${name}`);
-    if (callback) {
-      callback(element || "");
-    }
-  };
+  const redirectToGame = React.useCallback(
+    (
+      name: string,
+      callback?: (element: string) => void,
+      element?: string
+    ): void => {
+      router.push(`/product/${name}`);
+      if (callback) {
+        callback(element || "");
+      }
+    },
+    [params]
+  );
 
   const redirectToReview = (name: string): void => {
     router.push(`/review/${name}`);

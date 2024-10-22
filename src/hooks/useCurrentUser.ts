@@ -1,10 +1,8 @@
 "use client";
-import React from "react";
 import { signIn } from "next-auth/react";
 import { DEFAULT_LOGIN_REDIRECT } from "../../routes";
 import { useSession } from "next-auth/react";
 import { SignInProvider } from "@/utils/helpers/types";
-import { User } from "@/utils/helpers/types";
 
 export const signInAccount = async (
   provider: SignInProvider,
@@ -26,7 +24,7 @@ export default function useCurrentUser() {
   const { data, status, update } = useSession();
 
   return {
-    user: data?.user as User | null,
+    user: data ? data.user : null,
     status,
     update,
   };

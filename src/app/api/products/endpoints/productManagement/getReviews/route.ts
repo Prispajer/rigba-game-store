@@ -10,9 +10,9 @@ export async function POST(request: NextRequest) {
     getReviewsClientData
   );
 
-  return NextResponse.json<RequestResponse<Review>>({
+  return NextResponse.json<RequestResponse<Review | null>>({
     success: getReviewsResponse.success,
     message: getReviewsResponse.message,
-    data: getReviewsResponse.data,
+    data: (getReviewsResponse.data as Review) || null,
   });
 }

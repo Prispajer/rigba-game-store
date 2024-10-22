@@ -10,20 +10,20 @@ import {
   CheckIsUserPasswordCorrectDTO,
   CheckDataExistsAndReturnReviewDTO,
   CheckDataExistsAndReturnReviewLikersDTO,
-  CheckIsTokenValidDTO,
+  CheckIsTokenValidAndReturnTwoFactorTokenDTO,
 } from "@/utils/helpers/backendDTO";
 
 export default interface ICheckerService {
-  getUserEntity<T, R>(
+  getUserEntity<T>(
     {
       email,
     }: {
       email: string;
     },
     checkEntityExists: (user: User) => Promise<RequestResponse<T | null>>,
-    createEntity: (user: User) => Promise<R | null>,
+    createEntity: (user: User) => Promise<T | null>,
     entityName: string
-  ): Promise<RequestResponse<User | T | null>>;
+  ): Promise<RequestResponse<T | null>>;
   checkDataExistsAndReturn<T, R>(
     checkDataExists: (data: R) => Promise<T | null>,
     data: R,
@@ -50,6 +50,9 @@ export default interface ICheckerService {
   checkDataExistsAndReturnReviewLikers(
     checkDataExistsAndReturnReviewLikersDTO: CheckDataExistsAndReturnReviewLikersDTO
   ): Promise<RequestResponse<ReviewLikers | null>>;
+  checkIsTokenValidAndReturnTwoFactorToken(
+    checkIsTokenValidAndReturnTwoFactorTokenDTO: CheckIsTokenValidAndReturnTwoFactorTokenDTO
+  ): Promise<RequestResponse<TwoFactorToken | null>>;
   checkIsUserPasswordCorrect(
     user: User,
     checkIsUserPasswordCorrectDTO: CheckIsUserPasswordCorrectDTO
@@ -61,9 +64,6 @@ export default interface ICheckerService {
     user: User,
     product: Product
   ): Promise<RequestResponse<Review | null> | void>;
-  checkIsTokenValid(
-    CheckIsTokenValidDTO: CheckIsTokenValidDTO
-  ): Promise<RequestResponse<null> | void>;
   handleSuccess<T>(message: string, data: T): RequestResponse<T>;
   handleError(message: string): RequestResponse<null>;
 }

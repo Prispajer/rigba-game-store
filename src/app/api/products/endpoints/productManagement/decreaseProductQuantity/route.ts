@@ -11,9 +11,9 @@ export async function PATCH(request: NextRequest) {
       decreaseProductQuantityClientData
     );
 
-  return NextResponse.json<RequestResponse<Cart>>({
+  return NextResponse.json<RequestResponse<Cart | null>>({
     success: decreaseProductQuantityResponse.success,
     message: decreaseProductQuantityResponse.message,
-    data: decreaseProductQuantityResponse.data,
+    data: (decreaseProductQuantityResponse.data as Cart) || null,
   });
 }

@@ -175,45 +175,4 @@ export default class TokenRepository implements ITokenRepository {
       return null;
     }
   }
-
-  async validateTwoFactorTokenByEmail(
-    email: string,
-    code?: string
-  ): Promise<RequestResponse<TwoFactorToken>> {
-    const twoFactorToken = await this.getTwoFactorTokenByEmail(email);
-
-    if (!twoFactorToken) {
-      return {
-        success: false,
-        message: "Token not found!",
-        data: undefined,
-      };
-    }
-
-    if (twoFactorToken.token !== code) {
-      return {
-        success: false,
-        message: "Invalid code!",
-        data: undefined,
-      };
-    }
-
-    const hasExpired = new Date(twoFactorToken.expires) < new Date();
-    if (hasExpired) {
-      await postgres.twoFactorToken.delete({
-        where: { id: twoFactorToken.id },
-      });
-      return {
-        success: false,
-        message: "Code expired!",
-        data: undefined,
-      };
-    }
-
-    return {
-      success: true,
-      message: "Two-factor token has been deleted!",
-      data: undefined,
-    };
-  }
 }

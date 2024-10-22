@@ -20,7 +20,7 @@ export default function HeaderUserNavigation({}) {
   const { user } = useCurrentUser();
   const { userCartState } = useUserCart();
   const { resolutionState, handleOpen } = useWindowVisibility();
-  const { localCartState } = useLocalStorage("LocalCart");
+  const { localCartState } = useLocalStorage("localCart");
   const cartLength = user ? userCartState.products : localCartState;
 
   React.useEffect(() => {

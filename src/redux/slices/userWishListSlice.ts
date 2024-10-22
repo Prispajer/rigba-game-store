@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import requestService from "@/services/RequestService";
 import { RequestResponse, UserWishList } from "@/utils/helpers/types";
 
-interface UserWishListSlice {
+export interface UserWishListSlice {
   products: UserWishList[];
   status: string;
   error: string | null;
@@ -26,10 +26,7 @@ export const fetchUserWishList = createAsyncThunk<
   { rejectValue: string }
 >("userCart/fetchUserWishList", async ({ email }, { rejectWithValue }) => {
   try {
-    const fetchUserWishListResponse: RequestResponse<{
-      products: UserWishList[];
-      message: string;
-    }> = await requestService.postMethod(
+    const fetchUserWishListResponse = await requestService.postMethod(
       "products/endpoints/productManagement/getWishList",
       {
         email,

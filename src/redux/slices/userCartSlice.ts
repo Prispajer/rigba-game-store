@@ -1,10 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import requestService from "@/services/RequestService";
 import { RequestResponse, UserCart } from "@/utils/helpers/types";
-import {
-  FetchAddUserProductToCart,
-  FetchUserCart,
-} from "@/utils/helpers/frontendDTO";
+import { UserCartProductDTO } from "@/utils/helpers/frontendDTO";
 
 interface UserCartState {
   products: UserCart[];
@@ -28,17 +25,14 @@ export const fetchUserCart = createAsyncThunk<
   { rejectValue: string }
 >("userCart/fetchUserCart", async ({ email }, { rejectWithValue }) => {
   try {
-    const fetchUserCartResponse: RequestResponse<{
-      products: UserCart[];
-      message: string;
-    }> = await requestService.postMethod(
+    const fetchUserCartResponse = await requestService.postMethod(
       "products/endpoints/productManagement/getCart",
       {
         email,
       }
     );
 
-    if (fetchUserCartResponse.success) {
+    if (fetchUserCartResponse && fetchUserCartResponse.success) {
       return {
         products: fetchUserCartResponse.data?.products,
         message: fetchUserCartResponse.message,
@@ -52,8 +46,8 @@ export const fetchUserCart = createAsyncThunk<
 });
 
 export const fetchAddUserProductToCart = createAsyncThunk<
-  UserCart[],
-  FetchAddUserProductToCart,
+  { products: UserCart[]; message: string },
+  UserCartProductDTO,
   { rejectValue: string }
 >(
   "userCart/fetchAddUserProductToCart",
@@ -172,7 +166,7 @@ const userCartSlice = createSlice({
       })
       .addCase(fetchAddUserProductToCart.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.products = action.payload.sort((a, b) =>
+        state.products = action.payload.products.sort((a, b) =>
           a.id.localeCompare(b.id)
         );
       })

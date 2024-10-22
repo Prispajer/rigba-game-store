@@ -1,11 +1,16 @@
-import useLocalStorage from "@/hooks/useLocalStorage";
-import useCurrentUser from "@/hooks/useCurrentUser";
-import useUserWishList from "@/hooks/useUserWishList";
+import { ExtendedUser } from "@/auth";
+import { UserWishListSlice } from "@/redux/slices/userWishListSlice";
+import { LocalStorageSlice } from "@/redux/slices/localStorageSlice";
 
-export default function WishListCounter() {
-  const { user } = useCurrentUser();
-  const { userWishListState } = useUserWishList();
-  const { localWishListState } = useLocalStorage("localWishList");
+export default function WishListCounter({
+  user,
+  localWishListState,
+  userWishListState,
+}: {
+  user: ExtendedUser | null;
+  localWishListState: LocalStorageSlice["localWishList"];
+  userWishListState: UserWishListSlice;
+}) {
   const displayByRole = user ? userWishListState.products : localWishListState;
 
   return (

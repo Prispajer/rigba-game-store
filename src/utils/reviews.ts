@@ -1,5 +1,7 @@
+import { UserReviews } from "./helpers/types";
+
 export const processReviews = (
-  reviews: UserReview[]
+  reviews: UserReviews[]
 ): Array<{ count: number; id: number; percent: number; title: string }> => {
   const groupedReviews: Record<
     string,

@@ -13,6 +13,6 @@ export async function PATCH(request: NextRequest) {
   return NextResponse.json<RequestResponse<Review | null>>({
     success: likeReviewResponse.success,
     message: likeReviewResponse.message,
-    data: likeReviewResponse.data,
+    data: (likeReviewResponse.data as Review) || null,
   });
 }

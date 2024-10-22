@@ -10,9 +10,9 @@ export async function POST(request: NextRequest) {
     getWishListClientData
   );
 
-  return NextResponse.json<RequestResponse<WishList>>({
+  return NextResponse.json<RequestResponse<WishList | null>>({
     success: getUserWishListResponse.success,
     message: getUserWishListResponse.message,
-    data: getUserWishListResponse.data,
+    data: (getUserWishListResponse.data as WishList) || null,
   });
 }

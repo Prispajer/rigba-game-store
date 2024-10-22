@@ -1,13 +1,27 @@
-export type AddUserProductToCart = {
+export type UserCartProductDTO = {
   email: string;
-  id: number;
+  externalProductId: number;
   name: string;
-  description: string;
+  price: number;
   background_image: string;
-  rating: number;
-  slug: string;
-  released: string;
-  added: number;
+  description?: string;
+  rating?: number;
+  slug?: string;
+  released?: string;
+  added?: number;
+};
+
+export type LocalCartProductDTO = {
+  externalProductId: number;
+  name: string;
+  price: number;
+  background_image: string;
+  description?: string;
+  rating?: number;
+  slug?: string;
+  released?: string;
+  added?: number;
+  quantity: number;
 };
 
 export type AddUserReviewToProduct = {
@@ -27,17 +41,4 @@ export type AddUserReviewToProduct = {
 
 export type FetchUserCart = {
   email: string;
-};
-
-export type FetchAddUserProductToCart = {
-  email: string;
-  externalProductId: number;
-  name: string;
-  description: string;
-  price: number;
-  background_image: string;
-  rating: number;
-  slug: string;
-  released: string;
-  added: number;
 };

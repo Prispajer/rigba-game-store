@@ -33,7 +33,7 @@ export default class CartService implements ICartService {
 
   async getUserCart(
     getUserCartDTO: GetUserCartDTO
-  ): Promise<RequestResponse<User | Cart | null>> {
+  ): Promise<RequestResponse<Cart | null>> {
     return await this._checkerService.getUserEntity(
       getUserCartDTO,
       this._checkerService.checkDataExistsAndReturnUserCart.bind(
@@ -110,7 +110,6 @@ export default class CartService implements ICartService {
         getUserCartResponse.data || null
       );
     } catch (error) {
-      console.error("Error while adding product to cart:", error);
       return this._checkerService.handleError(
         "Error while adding product to the cart!"
       );

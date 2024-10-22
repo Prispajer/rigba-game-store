@@ -13,6 +13,6 @@ export async function POST(request: NextRequest) {
   return NextResponse.json<RequestResponse<Review | null>>({
     success: addReviewToProductResponse.success,
     message: addReviewToProductResponse.message,
-    data: addReviewToProductResponse.data as Review,
+    data: (addReviewToProductResponse.data as Review) || null,
   });
 }

@@ -3,7 +3,11 @@
 import React from "react";
 import { FaCartPlus } from "react-icons/fa";
 import { generateRandomValue } from "@/utils/prices";
-import { Product, User } from "@/utils/helpers/types";
+import { GameAPIProduct, User } from "@/utils/helpers/types";
+import {
+  LocalCartProductDTO,
+  UserCartProductDTO,
+} from "@/utils/helpers/frontendDTO";
 
 export default function ProductBuyOrAdd({
   product,
@@ -11,10 +15,10 @@ export default function ProductBuyOrAdd({
   handleAddUserProductToCart,
   handleAddLocalProductToCart,
 }: {
-  product: Product;
+  product: GameAPIProduct;
   user: User | null;
-  handleAddUserProductToCart: (product: Product) => void;
-  handleAddLocalProductToCart: (product: Product) => void;
+  handleAddUserProductToCart: (product: UserCartProductDTO) => void;
+  handleAddLocalProductToCart: (product: LocalCartProductDTO) => void;
 }) {
   return (
     <>
@@ -38,18 +42,19 @@ export default function ProductBuyOrAdd({
               className="flex items-center min-h-[35px] px-[10px] bg-transparent border-[2px] cursor-pointer"
               onClick={
                 user
-                  ? () => handleAddUserProductToCart(product)
-                  : () =>
-                      handleAddLocalProductToCart({
-                        externalProductId: product.id,
-                        name: product.name,
+                  ? () =>
+                      handleAddUserProductToCart({
+                        ...product,
+                        email: user.email,
+                        externalProductId: parseInt(product.id),
                         description: product.description_raw,
                         price: generateRandomValue(),
-                        background_image: product.background_image,
-                        rating: product?.rating,
-                        slug: product?.slug,
-                        released: product?.released,
-                        added: product?.added,
+                      })
+                  : () =>
+                      handleAddLocalProductToCart({
+                        ...product,
+                        externalProductId: parseInt(product.id),
+                        price: generateRandomValue(),
                         quantity: 1,
                       })
               }

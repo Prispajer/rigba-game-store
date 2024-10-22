@@ -12,7 +12,7 @@ import useCurrentUser from "./useCurrentUser";
 import { generateRandomValue } from "@/utils/prices";
 import debounce from "@/utils/debounce";
 import { AppDispatch, RootState } from "@/redux/store";
-import { AddUserProductToCart } from "@/utils/helpers/frontendDTO";
+import { UserCartProductDTO } from "@/utils/helpers/frontendDTO";
 
 export default function useUserCart() {
   const { user, update } = useCurrentUser();
@@ -26,22 +26,9 @@ export default function useUserCart() {
   }, [dispatch, user?.email]);
 
   const handleAddUserProductToCart = React.useCallback(
-    debounce(async (AddUserProductToCart: AddUserProductToCart) => {
+    debounce(async (userCartProductDTO: UserCartProductDTO) => {
       if (user?.email) {
-        await dispatch(
-          fetchAddUserProductToCart({
-            email: user.email,
-            externalProductId: AddUserProductToCart.id,
-            name: AddUserProductToCart.name,
-            description: AddUserProductToCart.description,
-            price: generateRandomValue(),
-            background_image: AddUserProductToCart.background_image,
-            rating: AddUserProductToCart.rating,
-            slug: AddUserProductToCart.slug,
-            released: AddUserProductToCart.released,
-            added: AddUserProductToCart.added,
-          })
-        );
+        await dispatch(fetchAddUserProductToCart(userCartProductDTO));
       }
       update();
     }, 1000),

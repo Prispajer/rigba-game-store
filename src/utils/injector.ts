@@ -12,8 +12,6 @@ import TokenRepository from "@/repositories/TokenRepository";
 import type ITokenRepository from "@/interfaces/ITokenRepository";
 import TokenUtils from "@/data/utils/TokenUtils";
 import type ITokenUtils from "@/interfaces/ITokenUtils";
-import ProductService from "@/services/ProductService";
-import type IProductService from "@/interfaces/IProductService";
 import ProductRepository from "@/repositories/ProductRepository";
 import type IProductRepository from "@/interfaces/IProductRepository";
 import ProductUtils from "@/data/utils/ProductUtils";
@@ -44,7 +42,6 @@ container
   .bind<ITokenRepository>(CLASSTYPES.ITokenRepository)
   .to(TokenRepository);
 container.bind<ITokenUtils>(CLASSTYPES.ITokenUtils).to(TokenUtils);
-container.bind<IProductService>(CLASSTYPES.IProductService).to(ProductService);
 container
   .bind<IProductRepository>(CLASSTYPES.IProductRepository)
   .to(ProductRepository);
@@ -90,9 +87,6 @@ export const reviewService = container.get<IReviewService>(
 );
 export const reviewRepository = container.get<IReviewRepository>(
   CLASSTYPES.IReviewRepository
-);
-export const productService = container.get<IProductService>(
-  CLASSTYPES.IProductService
 );
 export const productRepository = container.get<IProductRepository>(
   CLASSTYPES.IProductRepository

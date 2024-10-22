@@ -1,3 +1,5 @@
+import { UserRole } from "@prisma/client";
+
 export type CheckDataExistsAndReturnUserDTO = {
   email: string;
 };
@@ -51,7 +53,7 @@ export type CheckIsEmailInUseDTO = {
   email: string;
 };
 
-export type CheckIsTokenValidDTO = {
+export type CheckIsTokenValidAndReturnTwoFactorTokenDTO = {
   email: string;
   code: string;
 };
@@ -73,8 +75,13 @@ export type ConfirmEmailVerificationDTO = {
 };
 
 export type ConfirmTwoFactorAuthenticationDTO = {
+  name: string | null;
   id: string;
   email: string;
+  emailVerified: Date | null;
+  password: string | null;
+  role: UserRole;
+  image: string | null;
   isTwoFactorEnabled: boolean;
   code: string;
 };

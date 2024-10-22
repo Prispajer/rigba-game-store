@@ -16,20 +16,17 @@ export interface Token {
   expires: Date;
 }
 
-export interface Product {
-  id: string | number;
-  externalProductId: number;
+export interface GameAPIProduct {
+  id: string;
   name: string;
   price: number;
   background_image: string;
-  quantity?: number;
+  description_raw?: string;
   rating?: number;
   slug?: string;
-  added?: number;
   released?: string;
+  added?: number;
   ratings_count?: number;
-  description?: string;
-  description_raw?: string;
 }
 
 export interface ProductInformations {
@@ -54,6 +51,31 @@ export interface UserCart {
   productsInformations: Product;
 }
 
+export interface LocalWishList {
+  externalProductId: number;
+  name: string;
+  price: number;
+  background_image: string;
+  description: string | undefined;
+  rating: number | undefined;
+  slug: string | undefined;
+  released: string | undefined;
+  added: number | undefined;
+}
+
+export interface LocalCart {
+  externalProductId: number;
+  name: string;
+  price: number;
+  background_image: string;
+  description: string | undefined;
+  rating: number | undefined;
+  slug: string | undefined;
+  released: string | undefined;
+  added: number | undefined;
+  quantity: number;
+}
+
 export interface UserReviews {
   id: string;
   createdAt: Date;
@@ -61,6 +83,8 @@ export interface UserReviews {
   rating: {
     description: string;
     rating: number;
+    percent: number;
+    title: string;
   };
   user: {
     email: string;
@@ -74,7 +98,7 @@ export interface RequestResponse<T> {
   message?: string;
   twoFactor?: boolean;
 }
-export interface GameAPIResponse extends Product {
+export interface GameAPIResponse extends GameAPIProduct {
   image_background?: string;
   games_count?: number;
   playtime?: number;

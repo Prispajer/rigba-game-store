@@ -149,7 +149,7 @@ export default class UserService implements IUserService {
 
   async confirmEmailVerification(
     confirmEmailVerification: ConfirmEmailVerificationDTO
-  ): Promise<RequestResponse<User | EmailVerificationToken | null> | void> {
+  ): Promise<RequestResponse<User | EmailVerificationToken | null>> {
     try {
       const getEmailVerificationTokenByTokenResponse =
         await this._tokenRepository.getEmailVerificationTokenByToken(
@@ -164,9 +164,8 @@ export default class UserService implements IUserService {
       if (
         (getUserByEmailResponse && !getUserByEmailResponse.success) ||
         !getUserByEmailResponse.data
-      ) {
+      )
         return getUserByEmailResponse;
-      }
 
       const updateEmailVerificationResponse =
         await this._userRepository.updateEmailVerification(
@@ -187,16 +186,29 @@ export default class UserService implements IUserService {
 
   async confirmTwoFactorAuthentication(
     confirmTwoFactorAuthenticationDTO: ConfirmTwoFactorAuthenticationDTO
-  ): Promise<RequestResponse<TwoFactorToken> | void> {
+  ): Promise<RequestResponse<TwoFactorToken | null> | void> {
     if (
       confirmTwoFactorAuthenticationDTO?.isTwoFactorEnabled &&
       confirmTwoFactorAuthenticationDTO?.email
     ) {
+      console.log(confirmTwoFactorAuthenticationDTO);
       if (confirmTwoFactorAuthenticationDTO.code) {
         const twoFactorConfirmationByUserId =
           await this._userRepository.getTwoFactorConfirmationByUserId(
             confirmTwoFactorAuthenticationDTO
           );
+
+        const getTwoFactorTokenByEmailResponse =
+          await this._checkerService.checkIsTokenValidAndReturnTwoFactorToken(
+            confirmTwoFactorAuthenticationDTO
+          );
+
+        if (
+          (getTwoFactorTokenByEmailResponse &&
+            !getTwoFactorTokenByEmailResponse.success) ||
+          !getTwoFactorTokenByEmailResponse.data
+        )
+          return getTwoFactorTokenByEmailResponse;
 
         if (twoFactorConfirmationByUserId) {
           await postgres.twoFactorConfirmation.delete({
@@ -205,12 +217,14 @@ export default class UserService implements IUserService {
         }
         await postgres.twoFactorConfirmation.create({
           data: {
-            userId: user.id as string,
+            userId: confirmTwoFactorAuthenticationDTO?.id as string,
           },
         });
       } else {
         const twoFactorToken =
-          await this._tokenRepository.generateTwoFactorToken(user.email);
+          await this._tokenRepository.generateTwoFactorToken(
+            confirmTwoFactorAuthenticationDTO.email
+          );
         await sendTwoFactorTokenEmail(
           twoFactorToken.email,
           twoFactorToken.token

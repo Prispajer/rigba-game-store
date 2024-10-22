@@ -1,13 +1,13 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Product } from "@/utils/helpers/types";
+import { LocalCart, LocalWishList } from "@/utils/helpers/types";
 
-interface CartState {
-  localCart: Product[];
-  localWishList: Product[];
+export interface LocalStorageSlice {
+  localCart: LocalCart[];
+  localWishList: LocalWishList[];
   ordering: string | null;
 }
 
-const initialState: CartState = {
+const initialState: LocalStorageSlice = {
   localCart: [],
   localWishList: [],
   ordering: null,
@@ -17,10 +17,10 @@ const localStorageSlice = createSlice({
   name: "localStorage",
   initialState,
   reducers: {
-    setLocalCart: (state, action: PayloadAction<Product[]>) => {
+    setLocalCart: (state, action: PayloadAction<LocalCart[]>) => {
       state.localCart = action.payload;
     },
-    setLocalWishList: (state, action: PayloadAction<Product[]>) => {
+    setLocalWishList: (state, action: PayloadAction<LocalWishList[]>) => {
       state.localWishList = [...action.payload];
       if (state.ordering) {
         state.localWishList = sortWishList(state.localWishList, state.ordering);
@@ -30,7 +30,7 @@ const localStorageSlice = createSlice({
       state.ordering = action.payload;
       state.localWishList = sortWishList(state.localWishList, state.ordering);
     },
-    addLocalProductToCart: (state, action: PayloadAction<Product>) => {
+    addLocalProductToCart: (state, action: PayloadAction<LocalCart>) => {
       const productIndex = state.localCart.findIndex(
         (product) =>
           product.externalProductId === action.payload.externalProductId
@@ -43,7 +43,10 @@ const localStorageSlice = createSlice({
         state.localCart = [...state.localCart, action.payload];
       }
     },
-    addLocalProductToWishList: (state, action: PayloadAction<Product>) => {
+    addLocalProductToWishList: (
+      state,
+      action: PayloadAction<LocalWishList>
+    ) => {
       const isProductInWishList = state.localWishList.some(
         (product) =>
           product.externalProductId === action.payload.externalProductId
@@ -101,9 +104,9 @@ const localStorageSlice = createSlice({
 });
 
 const sortWishList = (
-  wishlist: Product[],
+  wishlist: LocalWishList[],
   ordering: string | null
-): Product[] => {
+): LocalWishList[] => {
   switch (ordering) {
     case "price":
       return [...wishlist].sort((a, b) => (a.price || 0) - (b.price || 0));

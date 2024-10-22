@@ -9,7 +9,7 @@ import {
 export default interface IWishListService {
   getUserWishList(
     getUserWishListDTO: GetUserWishListDTO
-  ): Promise<RequestResponse<User | WishList | null>>;
+  ): Promise<RequestResponse<WishList | null>>;
   addProductToWishList(
     addProductToWishListDTO: AddProductToWishListDTO
   ): Promise<RequestResponse<User | WishList | null>>;

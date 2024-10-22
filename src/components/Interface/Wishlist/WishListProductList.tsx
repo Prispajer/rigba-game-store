@@ -4,24 +4,32 @@ import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
 import { MdOutlineSignalCellularNodata } from "react-icons/md";
 import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
-import useCustomRouter from "@/hooks/useCustomRouter";
-import useLocalStorage from "@/hooks/useLocalStorage";
-import useCurrentUser from "@/hooks/useCurrentUser";
-import useUserWishList from "@/hooks/useUserWishList";
-import { UserWishList, Product } from "@/utils/helpers/types";
+import { UserWishList, GameAPIProduct } from "@/utils/helpers/types";
+import { LocalStorageSlice } from "@/redux/slices/localStorageSlice";
+import { UserWishListSlice } from "@/redux/slices/userWishListSlice";
+import { ExtendedUser } from "@/auth";
 
-export default function WishListProductList() {
-  const { user } = useCurrentUser();
-  const { userWishListState } = useUserWishList();
-  const { localWishListState } = useLocalStorage("localWishList");
-  const { redirectToGame } = useCustomRouter();
-
-  const displayByCondition: UserWishList[] | Product[] = user
+export default function WishListProductList({
+  user,
+  localWishListState,
+  userWishListState,
+  redirectToGame,
+}: {
+  user: ExtendedUser | null;
+  localWishListState: LocalStorageSlice["localWishList"];
+  userWishListState: UserWishListSlice;
+  redirectToGame: (
+    name: string,
+    callback?: (element: string) => void,
+    element?: string
+  ) => void;
+}) {
+  const displayByCondition = user
     ? userWishListState.products
     : localWishListState;
 
   const isUserProduct = (
-    product: UserWishList | Product
+    product: UserWishList | GameAPIProduct
   ): product is UserWishList => {
     return (product as UserWishList).productsInformations.slug !== undefined;
   };

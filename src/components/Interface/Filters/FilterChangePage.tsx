@@ -62,7 +62,7 @@ export default function ChangePage() {
           key={page}
           className="p-[10px] text-[20px] cursor-pointer"
         >
-          {page === "previousPage" ? "..." : "nextPage" ? "..." : page}
+          {page === "previousPage" || "nextPage" ? "..." : page}
         </li>
       ) : (
         <li

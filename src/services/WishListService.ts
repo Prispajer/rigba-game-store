@@ -31,7 +31,7 @@ export default class WishListService implements IWishListService {
 
   async getUserWishList(
     getUserWishListDTO: GetUserWishListDTO
-  ): Promise<RequestResponse<User | WishList | null>> {
+  ): Promise<RequestResponse<WishList | null>> {
     return await this._checkerService.getUserEntity(
       getUserWishListDTO,
       this._checkerService.checkDataExistsAndReturnUserWishList.bind(
@@ -82,12 +82,8 @@ export default class WishListService implements IWishListService {
           getUserProductResponse.data.wishListId === null
         ) {
           await prisma?.product.update({
-            where: {
-              id: getUserProductResponse.data.id,
-            },
-            data: {
-              wishListId: getUserWishListResponse.data.id,
-            },
+            where: { id: getUserProductResponse.data.id },
+            data: { wishListId: getUserWishListResponse.data.id },
           });
         }
         return this._checkerService.handleError(
@@ -103,10 +99,9 @@ export default class WishListService implements IWishListService {
 
       return this._checkerService.handleSuccess(
         "Product added to wishlist successfully!",
-        getUserWishListResponse.data
+        getUserWishListResponse.data || null
       );
     } catch (error) {
-      console.error("Error while adding product to wishlist:", error);
       return this._checkerService.handleError(
         "Error while adding product to the wishlist!"
       );
@@ -164,7 +159,7 @@ export default class WishListService implements IWishListService {
       }
 
       return this._checkerService.handleSuccess(
-        "Product added to wishlist successfully!",
+        "Product deleted from wishlist successfully!",
         getUserWishListResponse.data
       );
     } catch (error) {

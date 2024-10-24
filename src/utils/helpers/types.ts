@@ -17,7 +17,8 @@ export interface Token {
 }
 
 export interface GameAPIProduct {
-  id: string;
+  id: number;
+  externalProductId: number | null;
   name: string;
   price: number;
   background_image: string;
@@ -30,25 +31,25 @@ export interface GameAPIProduct {
 }
 
 export interface ProductInformations {
-  id: string;
-  productId: string | null;
   name: string;
-  slug: string;
-  description: string | null;
-  rating: number | null;
   price: number;
-  background_image: string | null;
+  background_image: string;
+  description: string | undefined;
+  rating: number | undefined;
+  slug: string;
+  released: string | undefined;
+  added: number | undefined;
 }
 
 export interface UserWishList {
   id: string;
   externalProductId: number;
-  productsInformations: Product;
+  productsInformations: ProductInformations;
 }
 export interface UserCart {
   id: string;
   externalProductId: number;
-  productsInformations: Product;
+  productsInformations: ProductInformations;
 }
 
 export interface LocalWishList {

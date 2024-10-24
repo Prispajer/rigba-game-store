@@ -17,11 +17,17 @@ const localStorageSlice = createSlice({
   name: "localStorage",
   initialState,
   reducers: {
-    setLocalCart: (state, action: PayloadAction<LocalCart[]>) => {
+    setLocalCart: (
+      state,
+      action: PayloadAction<LocalStorageSlice["localCart"]>
+    ) => {
       state.localCart = action.payload;
     },
-    setLocalWishList: (state, action: PayloadAction<LocalWishList[]>) => {
-      state.localWishList = [...action.payload];
+    setLocalWishList: (
+      state,
+      action: PayloadAction<LocalStorageSlice["localWishList"]>
+    ) => {
+      state.localWishList = action.payload;
       if (state.ordering) {
         state.localWishList = sortWishList(state.localWishList, state.ordering);
       }
@@ -104,7 +110,7 @@ const localStorageSlice = createSlice({
 });
 
 const sortWishList = (
-  wishlist: LocalWishList[],
+  wishlist: LocalStorageSlice["localWishList"],
   ordering: string | null
 ): LocalWishList[] => {
   switch (ordering) {

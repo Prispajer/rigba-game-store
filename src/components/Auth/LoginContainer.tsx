@@ -8,7 +8,6 @@ import { FaDiscord } from "react-icons/fa";
 import { LoginSchema } from "@/utils/schemas/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useSearchParams } from "next/navigation";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import useCurrentUser from "@/hooks/useCurrentUser";

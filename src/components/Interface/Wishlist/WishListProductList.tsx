@@ -4,7 +4,7 @@ import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
 import { MdOutlineSignalCellularNodata } from "react-icons/md";
 import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
-import { UserWishList, GameAPIProduct } from "@/utils/helpers/types";
+import { UserWishList, LocalWishList } from "@/utils/helpers/types";
 import { LocalStorageSlice } from "@/redux/slices/localStorageSlice";
 import { UserWishListSlice } from "@/redux/slices/userWishListSlice";
 import { ExtendedUser } from "@/auth";
@@ -29,9 +29,9 @@ export default function WishListProductList({
     : localWishListState;
 
   const isUserProduct = (
-    product: UserWishList | GameAPIProduct
+    product: UserWishList | LocalWishList
   ): product is UserWishList => {
-    return (product as UserWishList).productsInformations.slug !== undefined;
+    return (product as UserWishList).productsInformations !== undefined;
   };
 
   return (
@@ -39,7 +39,9 @@ export default function WishListProductList({
       {displayByCondition && displayByCondition.length > 0 ? (
         displayByCondition.map((game) => (
           <div
-            key={game.externalProductId}
+            key={
+              isUserProduct(game) ? game.productsInformations.slug : game.slug
+            }
             onClick={() =>
               redirectToGame(
                 isUserProduct(game)
@@ -47,31 +49,19 @@ export default function WishListProductList({
                   : (game.slug as string)
               )
             }
-            className={`relative my-[10px] flex sm:flex-col bg-tertiaryColor 
-             cursor-pointer`}
+            className={`relative my-[10px] flex sm:flex-col bg-tertiaryColor cursor-pointer`}
           >
             <div className="relative min-w-[95px] sm:h-[250px]">
-              {game.productsInformations?.background_image ||
-              game.background_image ? (
+              {isUserProduct(game) ? (
                 <Image
-                  src={
-                    isUserProduct(game)
-                      ? (game.productsInformations?.background_image as string)
-                      : (game.background_image as string)
-                  }
+                  src={game.productsInformations.background_image}
                   layout="fill"
                   alt="game"
                 />
               ) : (
-                <div className="relative flex flex-col items-center justify-center max-w-[95px] h-full sm:h-[250px] sm:min-w-full">
-                  <span>
-                    <MdOutlineSignalCellularNodata
-                      className="sm:h-[250px]"
-                      size="fill"
-                      color="green"
-                    />
-                  </span>
-                </div>
+                game.background_image && (
+                  <Image src={game.background_image} layout="fill" alt="game" />
+                )
               )}
             </div>
             <div className="max-w-[50%] sm:max-w-[100%] my-[10px] px-[15px]">
@@ -97,7 +87,7 @@ export default function WishListProductList({
                   $
                   {isUserProduct(game)
                     ? game.productsInformations?.price
-                    : game.price}{" "}
+                    : game.price}
                 </div>
                 <div className="flex items-center">
                   <CiHeart className="ml-[-3px] mr-[3px]" size="20px" />

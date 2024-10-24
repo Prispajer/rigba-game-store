@@ -243,6 +243,8 @@ export default class CartService implements ICartService {
           decreaseProductQuantityDTO
         );
 
+      console.log(getUserByEmailResponse);
+
       if (
         (getUserByEmailResponse && !getUserByEmailResponse.success) ||
         !getUserByEmailResponse.data
@@ -253,6 +255,8 @@ export default class CartService implements ICartService {
         await this._checkerService.checkDataExistsAndReturnUserCart(
           getUserByEmailResponse.data
         );
+
+      console.log(getUserCartResponse);
 
       if (
         (getUserCartResponse && !getUserCartResponse.success) ||
@@ -266,6 +270,7 @@ export default class CartService implements ICartService {
           userId: getUserByEmailResponse.data.id,
         });
 
+      console.log(getUserProductResponse);
       if (
         (getUserProductResponse && !getUserProductResponse.success) ||
         !getUserProductResponse.data

@@ -27,41 +27,50 @@ export default function useCustomRouter() {
     [params]
   );
 
-  const redirectToReview = (name: string): void => {
-    router.push(`/review/${name}`);
-  };
+  const redirectToReview = React.useCallback(
+    (name: string): void => {
+      router.push(`/review/${name}`);
+    },
+    [params]
+  );
 
-  const redirectToFilters = (data: number[] | string): void => {
-    if (typeof data === "string") {
-      updateUrlParams({ ordering: data });
-      router.push(`/filters/?ordering=${data}`);
-    } else {
-      updateUrlParams({ genres: data });
-      router.push(`/filters/?genres=${data}`);
-    }
-  };
-
-  const updateUrlParams = (newParams: Record<string, string | number[]>) => {
-    const currentUrl = new URL(window.location.href);
-
-    Object.entries(newParams).forEach(([key, value]) => {
-      if ((Array.isArray(value) && value.length === 0) || value === "") {
-        currentUrl.searchParams.delete(key);
-      } else if (typeof value === "string") {
-        currentUrl.searchParams.set(key, value);
+  const redirectToFilters = React.useCallback(
+    (data: number[] | string): void => {
+      if (typeof data === "string") {
+        updateUrlParams({ ordering: data });
+        router.push(`/filters/?ordering=${data}`);
       } else {
-        currentUrl.searchParams.set(key, value.join(","));
+        updateUrlParams({ genres: data });
+        router.push(`/filters/?genres=${data}`);
       }
-    });
+    },
+    [params]
+  );
 
-    router.push(currentUrl.pathname + currentUrl.search);
-  };
+  const updateUrlParams = React.useCallback(
+    (newParams: Record<string, string | number[]>) => {
+      const currentUrl = new URL(window.location.href);
+
+      Object.entries(newParams).forEach(([key, value]) => {
+        if ((Array.isArray(value) && value.length === 0) || value === "") {
+          currentUrl.searchParams.delete(key);
+        } else if (typeof value === "string") {
+          currentUrl.searchParams.set(key, value);
+        } else {
+          currentUrl.searchParams.set(key, value.join(","));
+        }
+      });
+
+      router.push(currentUrl.pathname + currentUrl.search);
+    },
+    [params]
+  );
 
   const pushDataToUrl = React.useCallback(
     (data: Record<string, string | number[]>): void => {
       updateUrlParams(data);
     },
-    []
+    [params]
   );
 
   return {

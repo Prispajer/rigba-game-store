@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
 import { CiHeart } from "react-icons/ci";
-import { Product } from "@/utils/helpers/types";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useUserWishList from "@/hooks/useUserWishList";
 import { generateRandomValue } from "@/utils/prices";
+import { GameAPIProduct } from "@/utils/helpers/types";
 
 export default function AddToWishList({
   game,
@@ -13,7 +13,7 @@ export default function AddToWishList({
   added,
   deleted,
 }: {
-  game: Product;
+  game: GameAPIProduct;
   position: string;
   added: string;
   deleted: string;
@@ -30,6 +30,8 @@ export default function AddToWishList({
     handleAddLocalProductToWishList,
     handleDeleteLocalProductFromWishList,
   } = useLocalStorage("localWishList");
+
+  console.log(localWishListState);
 
   const isInLocalWishList = localWishListState.some(
     (product) =>
@@ -51,16 +53,18 @@ export default function AddToWishList({
           (game.externalProductId as number) || (game.id as number)
         );
       } else {
-        handleAddUserProductToWishList(
-          game.id as string,
-          game.name,
-          game.description_raw as string,
-          game.background_image,
-          game.rating as number,
-          game.slug as string,
-          game.released as string,
-          game.added as number
-        );
+        handleAddUserProductToWishList({
+          email: user.email,
+          externalProductId: game.id,
+          name: game.name,
+          description: game.description_raw,
+          background_image: game.background_image,
+          price: generateRandomValue(),
+          rating: game.rating,
+          slug: game.slug,
+          released: game.released,
+          added: game.added,
+        });
       }
     } else {
       if (isInWishList) {
@@ -71,7 +75,7 @@ export default function AddToWishList({
         handleAddLocalProductToWishList({
           externalProductId: game.id,
           name: game.name,
-          description_raw: game.description_raw,
+          description: game.description_raw,
           price: generateRandomValue(),
           background_image: game.background_image,
           rating: game.rating,

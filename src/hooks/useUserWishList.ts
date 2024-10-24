@@ -9,6 +9,7 @@ import useCurrentUser from "./useCurrentUser";
 import { fetchUserWishList } from "@/redux/slices/userWishListSlice";
 import { generateRandomValue } from "@/utils/prices";
 import { AppDispatch, RootState } from "@/redux/store";
+import { LocalWishList, UserWishList } from "@/utils/helpers/types";
 
 export default function useUserWishList() {
   const { user, update } = useCurrentUser();
@@ -20,38 +21,18 @@ export default function useUserWishList() {
   const handleSetUserWishListOrdering = React.useCallback(
     (ordering: string) => {
       dispatch(setOrdering(ordering));
-      dispatch(fetchUserWishList(user as User));
+      dispatch(fetchUserWishList({ email: user?.email as string }));
     },
     [dispatch, user]
   );
 
   const handleAddUserProductToWishList = React.useCallback(
-    async (
-      productId: string,
-      productName: string,
-      productDescription: string,
-      image: string,
-      rating: number,
-      slug: string,
-      released: string,
-      added: number
-    ) => {
+    async (dddUserProductToWishListDTO: AddUserProductToWishListDTO) => {
       if (user?.email) {
         await dispatch(
-          fetchAddUserProductToWishList({
-            email: user.email,
-            externalProductId: productId,
-            name: productName,
-            description: productDescription,
-            price: generateRandomValue(),
-            background_image: image,
-            rating,
-            slug,
-            released,
-            added,
-          })
+          fetchAddUserProductToWishList(dddUserProductToWishListDTO)
         );
-        await dispatch(fetchUserWishList(user as User));
+        await dispatch(fetchUserWishList({ email: user?.email as string }));
         await update();
       }
     },
@@ -67,7 +48,7 @@ export default function useUserWishList() {
             externalProductId,
           })
         );
-        await dispatch(fetchUserWishList(user as User));
+        await dispatch(fetchUserWishList({ email: user?.email as string }));
         await update();
       }
     },

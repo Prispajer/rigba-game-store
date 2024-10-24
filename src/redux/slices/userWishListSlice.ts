@@ -21,7 +21,7 @@ const initialState: UserWishListSlice = {
 };
 
 export const fetchUserWishList = createAsyncThunk<
-  { products: UserWishList[]; message: string },
+  { products: UserWishListSlice["products"]; message: string },
   { email: string },
   { rejectValue: string }
 >("userCart/fetchUserWishList", async ({ email }, { rejectWithValue }) => {
@@ -46,19 +46,8 @@ export const fetchUserWishList = createAsyncThunk<
 });
 
 export const fetchAddUserProductToWishList = createAsyncThunk<
-  { products: UserWishList[]; message: string },
-  {
-    email: string | null | undefined;
-    externalProductId: string | undefined;
-    name: string;
-    description: string | undefined;
-    price: number;
-    background_image: string;
-    rating: number | undefined;
-    slug: string | undefined;
-    released: string | undefined;
-    added: number | undefined;
-  },
+  { products: UserWishListSlice["products"]; message: string },
+  UserWishList,
   { rejectValue: string }
 >(
   "userWishList/fetchAddUserProductToWishList",
@@ -78,24 +67,45 @@ export const fetchAddUserProductToWishList = createAsyncThunk<
     { rejectWithValue }
   ) => {
     try {
-      const fetchAddUserProductToWishListResponse: RequestResponse<{
-        message: string;
-        products: UserWishList[];
-      }> = await requestService.postMethod(
-        "products/endpoints/productManagement/addProductToWishList",
-        {
-          email,
-          externalProductId,
-          name,
-          description,
-          price,
-          background_image,
-          rating,
-          slug,
-          released,
-          added,
-        }
+      console.log(
+        "email:",
+        email,
+        "externalProductId:",
+        externalProductId,
+        "name:",
+        name,
+        "description:",
+        description,
+        "price:",
+        price,
+        "background_image:",
+        background_image,
+        "rating:",
+        rating,
+        "slug:",
+        slug,
+        "released:",
+        released,
+        "added:",
+        added
       );
+
+      const fetchAddUserProductToWishListResponse =
+        await requestService.postMethod(
+          "products/endpoints/productManagement/addProductToWishList",
+          {
+            email,
+            externalProductId,
+            name,
+            description,
+            price,
+            background_image,
+            rating,
+            slug,
+            released,
+            added,
+          }
+        );
 
       if (
         fetchAddUserProductToWishListResponse.success &&
@@ -129,16 +139,14 @@ export const fetchDeleteUserProductFromWishList = createAsyncThunk<
   "userWishList/fetchDeleteUserProductFromWishList",
   async ({ email, externalProductId }, { rejectWithValue }) => {
     try {
-      const fetchDeleteUserProductFromWishListResponse: RequestResponse<{
-        message: string;
-        products: UserWishList[];
-      }> = await requestService.deleteMethod(
-        "products/endpoints/productManagement/deleteProductFromWishList",
-        { email, externalProductId }
-      );
+      const fetchDeleteUserProductFromWishListResponse =
+        await requestService.deleteMethod(
+          "products/endpoints/productManagement/deleteProductFromWishList",
+          { email, externalProductId }
+        );
       if (fetchDeleteUserProductFromWishListResponse.success) {
         return {
-          products: fetchDeleteUserProductFromWishListResponse.data.products,
+          products: fetchDeleteUserProductFromWishListResponse.data?.products,
           message: fetchDeleteUserProductFromWishListResponse.message,
         };
       } else {

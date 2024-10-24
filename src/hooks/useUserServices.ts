@@ -1,4 +1,5 @@
 import React from "react";
+import { z } from "zod";
 import { useSearchParams } from "next/navigation";
 import useCurrentUser from "./useCurrentUser";
 import useWindowVisibility from "./useWindowVisibility";
@@ -10,6 +11,7 @@ import {
   ResetPasswordSchema,
   PersonalDataSchema,
 } from "@/utils/schemas/user";
+import { RequestResponse } from "@/utils/helpers/types";
 
 export default function useUserServices() {
   const [error, setError] = React.useState<string | undefined>();

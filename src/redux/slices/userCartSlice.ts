@@ -55,7 +55,6 @@ export const fetchAddUserProductToCart = createAsyncThunk<
     try {
       const response = await requestService.postMethod(
         "products/endpoints/productManagement/addProductToCart",
-
         fetchAddUserProductToCart
       );
       if (response.success) {

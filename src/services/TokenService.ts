@@ -56,13 +56,18 @@ export default class TokenService implements ITokenService {
 
   async sendResetPasswordToken(
     sendResetPasswordTokenDTO: SendResetPasswordTokenDTO
-  ): Promise<RequestResponse<PasswordResetToken | null>> {
+  ): Promise<RequestResponse<User | PasswordResetToken | null>> {
     try {
-      const userExistsResponse = await this._checkerService.checkUserExists(
-        sendResetPasswordTokenDTO
-      );
+      const userExistsResponse =
+        await this._checkerService.checkDataExistsAndReturnUser(
+          sendResetPasswordTokenDTO
+        );
 
-      if (userExistsResponse && !userExistsResponse.success) {
+      if (
+        userExistsResponse &&
+        !userExistsResponse.success &&
+        !userExistsResponse.data
+      ) {
         return userExistsResponse;
       }
 

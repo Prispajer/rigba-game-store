@@ -22,8 +22,8 @@ export default function AccountNavbar() {
         <Link className="flex items-center max-w-[200px]" href="/">
           <Image
             src="/icons/logo.png"
-            width={60}
-            height={60}
+            width="60"
+            height="60"
             alt="logo"
             priority={true}
           />
@@ -40,8 +40,8 @@ export default function AccountNavbar() {
           </span>
           <Image
             src="/icons/logo.png"
-            width={40}
-            height={40}
+            width="40"
+            height="40"
             alt="user"
           ></Image>
         </button>

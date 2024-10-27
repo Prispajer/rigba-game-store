@@ -64,7 +64,7 @@ export default function NavbarSidebar() {
                 <Image
                   src="/icons/logo.png"
                   width="60"
-                  height={90}
+                  height="90"
                   alt="logo"
                   priority
                 />

@@ -47,7 +47,7 @@ export default function FiltersContainer() {
   ]);
 
   return (
-    <main className="flex items-center w-full h-full bg-primaryColor mx-auto">
+    <section className="flex items-start w-full h-[calc(100vh-60px)] md:h-auto bg-primaryColor mx-auto">
       <section className="flex flex-col w-full max-w-[1240px] mx-auto my-[30px] px-2">
         <div>
           <h2 className="text-[34px] font-bold text-[#ffffff] cursor-default">
@@ -79,6 +79,6 @@ export default function FiltersContainer() {
           </section>
         </div>
       </section>
-    </main>
+    </section>
   );
 }

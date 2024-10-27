@@ -6,13 +6,9 @@ export default function AccountLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>
-        <>
-          <AccountNavbar />
-          {children}
-        </>
-      </body>
-    </html>
+    <div>
+      <AccountNavbar />
+      {children}
+    </div>
   );
 }

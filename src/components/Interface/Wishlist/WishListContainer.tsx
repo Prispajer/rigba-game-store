@@ -20,7 +20,7 @@ export default function WishListContainer() {
 
   return (
     <section className="flex items-start justify-center w-full min-h-[calc(100vh-62px)] md:min-h-[calc(100vh-156px)] bg-primaryColor">
-      <div className="flex flex-col items-center w-full max-w-[1240px]  mx-auto mt-[40px] mb-[100px] px-[20px]">
+      <div className="flex flex-col items-center w-full max-w-[1240px] mx-auto mt-[40px] mb-[100px] px-[20px]">
         {user && <WishListProfile user={user} />}
         <WishListCounter
           user={user}

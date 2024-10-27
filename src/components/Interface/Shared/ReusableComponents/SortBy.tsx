@@ -131,11 +131,11 @@ export default function SortBy({
                     <li
                       key={element.title}
                       className="flex items-center cursor-pointer"
-                      onClick={() => handleSortSelection(element)}
                     >
                       <input
                         className="flex-0 rounded-full"
                         type="checkbox"
+                        onChange={() => handleSortSelection(element)}
                         checked={currentSort.ordering === element.ordering}
                       />
                       <span className="flex-1 px-[10px] font-[600] text-[#FFFFFF]">

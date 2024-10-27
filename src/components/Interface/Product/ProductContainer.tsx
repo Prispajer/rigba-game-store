@@ -43,7 +43,7 @@ export default function ProductContainer({
   } = useUserReviews();
 
   return (
-    <main className="pb-[100px] bg-primaryColor">
+    <section className="pb-[100px] bg-primaryColor">
       <div className="grid grid-cols-1 lg:grid-cols-[calc(100%-380px),380px] max-w-[1600px] mx-auto px-[20px]">
         <div>
           <ProductInformations
@@ -119,6 +119,6 @@ export default function ProductContainer({
           </div>
         </div>
       </div>
-    </main>
+    </section>
   );
 }

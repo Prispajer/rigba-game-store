@@ -61,7 +61,7 @@ export default function LoginContainer() {
   } = loginForm;
 
   return (
-    <main className="flex flex-col lg:flex-row justify-center items-center mx-auto lg:px-[100px] gap-x-[120px]">
+    <section className="flex flex-col lg:flex-row justify-center items-center mx-auto lg:px-[100px] gap-x-[120px]">
       <h1 className="hidden lg:block text-[80px] leading-[90px] font-bold text-[white]">
         Welcome!
         <br />
@@ -241,6 +241,6 @@ export default function LoginContainer() {
           )}
         </>
       </div>
-    </main>
+    </section>
   );
 }

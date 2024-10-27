@@ -42,7 +42,7 @@ export default function ProductList() {
       <div className="grid grid-cols-1 sm:grid-cols-product-list-auto-fit  gap-x-[10px]">
         {newLoadingArray.map((_, index) => (
           <div
-            key={productsByOrdering[index]?.id}
+            key={productsByOrdering[index]?.id ?? index}
             onClick={() => {
               if (productsByOrdering[index]) {
                 redirectToGame(productsByOrdering[index].slug as string);

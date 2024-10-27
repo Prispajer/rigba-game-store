@@ -55,8 +55,8 @@ export default function ProfileModalContainer({
                 <Link className="flex items-center max-w-[200px]" href="/">
                   <Image
                     src="/icons/logo.png"
-                    width={40}
-                    height={40}
+                    width="40"
+                    height="40"
                     alt="logo"
                   />
                   <span className="text-[20px] text-black">RIGBA</span>

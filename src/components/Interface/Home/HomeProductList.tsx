@@ -32,7 +32,7 @@ export default function HomeProductList({ ordering }: { ordering: string }) {
     <>
       {newLoadingArray.map((_, index) => (
         <div
-          key={gamesWithOrdering[index]?.id}
+          key={gamesWithOrdering[index]?.id || index}
           onClick={() => {
             if (gamesWithOrdering[index]) {
               redirectToGame(gamesWithOrdering[index].slug as string);
@@ -53,9 +53,9 @@ export default function HomeProductList({ ordering }: { ordering: string }) {
                   />
                 ) : (
                   <div className="relative flex flex-col items-center justify-center max-w-[95px] h-full sm:h-[250px] sm:min-w-full">
-                    <span>
+                    <span className="w-full h-full">
                       <MdOutlineSignalCellularNodata
-                        size="fill"
+                        style={{ width: "100%", height: "100%" }}
                         color="green"
                       />
                     </span>

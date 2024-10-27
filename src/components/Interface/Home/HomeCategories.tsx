@@ -15,8 +15,8 @@ export default function HomeCategories() {
   }, [productGenresState.page_size]);
 
   return (
-    <main className="bg-secondaryColor py-[15px]">
-      <section className="flex max-w-[1240px] mx-auto px-[20px] py-6">
+    <section className="bg-secondaryColor py-[15px]">
+      <div className="flex max-w-[1240px] mx-auto px-[20px] py-6">
         <div className="flex flex-col w-full">
           <h1 className="text-[30px] text-white font-bold">Categories</h1>
           {productGenresState && (
@@ -49,7 +49,7 @@ export default function HomeCategories() {
             <ShowMoreButton method={handleLoadMore} text="Load more" />
           )}
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
   );
 }

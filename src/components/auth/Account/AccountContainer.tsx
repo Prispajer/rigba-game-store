@@ -18,8 +18,8 @@ export default function AccountContainer() {
               <div>
                 <Image
                   src="/icons/logo.png"
-                  width={40}
-                  height={40}
+                  width="40"
+                  height="40"
                   alt="avatar"
                 />
               </div>
@@ -46,8 +46,8 @@ export default function AccountContainer() {
               <div>
                 <Image
                   src="/icons/logo.png"
-                  width={40}
-                  height={40}
+                  width="40"
+                  height="40"
                   alt="avatar"
                 />
               </div>
@@ -77,30 +77,30 @@ export default function AccountContainer() {
                 <div>
                   <Image
                     src="/icons/logo.png"
-                    width={140}
-                    height={140}
+                    width="140"
+                    height="140"
                     alt="avatar"
                   />
                 </div>
                 <div>
                   <Image
                     src="/icons/logo.png"
-                    width={140}
-                    height={140}
+                    width="140"
+                    height="140"
                     alt="avatar"
                   />
                 </div>
                 <div>
                   <Image
                     src="/icons/logo.png"
-                    width={140}
-                    height={140}
+                    width="140"
+                    height="140"
                     alt="avatar"
                   />
                 </div>
               </div>
               <div className="flex pt-[10px]">
-                <button className="flex items-center ">
+                <div className="flex items-center">
                   <Link href="/orders">
                     <button className="w-[200px] py-[5px] px-[10px] border-[1px] border-[#658fb2]">
                       <span className="text-[#658fb2] font-[600]">
@@ -108,7 +108,7 @@ export default function AccountContainer() {
                       </span>
                     </button>
                   </Link>
-                </button>
+                </div>
               </div>
             </div>
           </div>

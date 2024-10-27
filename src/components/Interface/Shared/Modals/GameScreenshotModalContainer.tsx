@@ -56,7 +56,7 @@ export default function ProductScreenshotModalContainer({
     <>
       {gameScreenshotModalState && screenshots && (
         <OutsideClickHandler handleOutsideClick={handleOutsideClick}>
-          <div className="fixed top-[50%] left-[50%] w-full p-[10px] xxl:w-[80%] translate-y-[-50%] translate-x-[-50%] z-20">
+          <div className="fixed top-[50%] left-[50%] w-[95%] md:w-[90%] xxl:w-[70%] xxxl:w-[60%] mx-auto translate-y-[-50%] translate-x-[-50%] z-20">
             <div className="relative w-full flex justify-center items-center">
               <button
                 className="text-[#FFFFFF] absolute top-2 right-2"
@@ -67,7 +67,7 @@ export default function ProductScreenshotModalContainer({
                   size="30"
                 />
               </button>
-              <div className="flex items-center justify-center w-full">
+              <div className="flex items-center justify-center h-[400px] md:h-[600px]">
                 <button
                   className={`absolute left-0 h-[45px] sm:h-[60px] md:h-[80px] transition duration-300 ease-in-out z-[20] text-[#FFFFFF] hover:bg-[#FFFFFF20]  ${
                     currentImageIndex === 0
@@ -77,13 +77,14 @@ export default function ProductScreenshotModalContainer({
                   onClick={handlePreviousImage}
                   disabled={currentImageIndex === 0}
                 >
-                  <MdKeyboardArrowLeft size="fill" />
+                  <MdKeyboardArrowLeft
+                    style={{ width: "100%", height: "100%" }}
+                  />
                 </button>
                 <Image
                   src={screenshots[currentImageIndex]?.image}
                   alt={screenshots[currentImageIndex]?.image}
-                  width={1800}
-                  height={1800}
+                  layout="fill"
                 />
                 <button
                   className={`absolute right-0 h-[45px] sm:h-[60px] md:h-[80px] transition duration-300 ease-in-out z-[20] text-[#FFFFFF] hover:bg-[#FFFFFF20]  ${
@@ -94,7 +95,9 @@ export default function ProductScreenshotModalContainer({
                   onClick={handleNextImage}
                   disabled={currentImageIndex === screenshots.length - 1}
                 >
-                  <MdKeyboardArrowRight size="fill" />
+                  <MdKeyboardArrowRight
+                    style={{ width: "100%", height: "100%" }}
+                  />
                 </button>
               </div>
             </div>

@@ -15,7 +15,7 @@ export default function EmailVerificationContainer() {
   }, [submitEmailVerification]);
 
   return (
-    <main className="flex-col  justify-center items-center mx-auto p-[20px]  lg:px-[100px] gap-x-[120px]">
+    <section className="flex-col  justify-center items-center mx-auto p-[20px]  lg:px-[100px] gap-x-[120px]">
       <h1 className=" text-[60px] leading-[70px] font-bold text-[white] cursor-default ">
         <span className="flex justify-center text-center">
           Waiting for email address confirmation
@@ -34,6 +34,6 @@ export default function EmailVerificationContainer() {
           Back to login
         </Link>
       </div>
-    </main>
+    </section>
   );
 }

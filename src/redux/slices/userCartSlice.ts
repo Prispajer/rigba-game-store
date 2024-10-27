@@ -70,7 +70,7 @@ export const fetchAddUserProductToCart = createAsyncThunk<
 );
 
 export const fetchDeleteUserProductFromCart = createAsyncThunk<
-  UserCart[],
+  { products: UserCart[]; message: string },
   { email: string; externalProductId: number },
   { rejectValue: string }
 >(
@@ -92,7 +92,7 @@ export const fetchDeleteUserProductFromCart = createAsyncThunk<
 );
 
 export const fetchIncreaseQuantityUserProductFromCart = createAsyncThunk<
-  UserCart[],
+  { products: UserCart[]; message: string },
   { email: string; externalProductId: number },
   { rejectValue: string }
 >(
@@ -114,7 +114,7 @@ export const fetchIncreaseQuantityUserProductFromCart = createAsyncThunk<
 );
 
 export const fetchDecreaseQuantityUserProductFromCart = createAsyncThunk<
-  UserCart[],
+  { products: UserCart[]; message: string },
   { email: string | null | undefined; externalProductId: number },
   { rejectValue: string }
 >(
@@ -152,9 +152,9 @@ const userCartSlice = createSlice({
       })
       .addCase(fetchUserCart.fulfilled, (state, action) => {
         state.status = "Succeeded";
-        state.products = action.payload.products.sort((a, b) =>
-          a.id.localeCompare(b.id)
-        );
+        state.products = action.payload?.products
+          ? action.payload.products.sort((a, b) => a.id.localeCompare(b.id))
+          : [];
       })
       .addCase(fetchUserCart.rejected, (state, action) => {
         state.status = "failed";
@@ -165,9 +165,9 @@ const userCartSlice = createSlice({
       })
       .addCase(fetchAddUserProductToCart.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.products = action.payload.products.sort((a, b) =>
-          a.id.localeCompare(b.id)
-        );
+        state.products = action.payload.products
+          ? action.payload.products.sort((a, b) => a.id.localeCompare(b.id))
+          : [];
       })
       .addCase(fetchAddUserProductToCart.rejected, (state, action) => {
         state.status = "failed";
@@ -178,9 +178,9 @@ const userCartSlice = createSlice({
       })
       .addCase(fetchDeleteUserProductFromCart.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.products = action.payload.sort((a, b) =>
-          a.id.localeCompare(b.id)
-        );
+        state.products = action.payload?.products
+          ? action.payload.products.sort((a, b) => a.id.localeCompare(b.id))
+          : [];
       })
       .addCase(fetchDeleteUserProductFromCart.rejected, (state, action) => {
         state.status = "failed";
@@ -193,9 +193,9 @@ const userCartSlice = createSlice({
         fetchIncreaseQuantityUserProductFromCart.fulfilled,
         (state, action) => {
           state.status = "succeeded";
-          state.products = action.payload.sort((a, b) =>
-            a.id.localeCompare(b.id)
-          );
+          state.products = action.payload?.products
+            ? action.payload.products.sort((a, b) => a.id.localeCompare(b.id))
+            : [];
         }
       )
       .addCase(
@@ -212,9 +212,9 @@ const userCartSlice = createSlice({
         fetchDecreaseQuantityUserProductFromCart.fulfilled,
         (state, action) => {
           state.status = "succeeded";
-          state.products = action.payload.sort((a, b) =>
-            a.id.localeCompare(b.id)
-          );
+          state.products = action.payload?.products
+            ? action.payload.products.sort((a, b) => a.id.localeCompare(b.id))
+            : [];
         }
       )
       .addCase(

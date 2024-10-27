@@ -103,7 +103,7 @@ export default function FilterByCategory({
                         className="flex-0"
                         type="checkbox"
                         checked={selectedFiltersId.includes(filterItem.id)}
-                        onClick={() =>
+                        onChange={() =>
                           handleFilterChange(
                             filterItem.id,
                             selectedFiltersId,

@@ -53,7 +53,7 @@ export default function AccountSidebar() {
                     <Image
                       src="/icons/logo.png"
                       width="60"
-                      height={90}
+                      height="90"
                       alt="logo"
                       priority
                     />

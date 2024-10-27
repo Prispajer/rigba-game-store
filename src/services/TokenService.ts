@@ -91,9 +91,10 @@ export default class TokenService implements ITokenService {
     sendChangePasswordToken: SendChangePasswordTokenDTO,
     code?: string
   ): Promise<RequestResponse<TwoFactorToken> | void> {
-    const userExistsResponse = await this._checkerService.checkUserExists(
-      sendChangePasswordToken
-    );
+    const userExistsResponse =
+      await this._checkerService.checkDataExistsAndReturnUser(
+        sendChangePasswordToken
+      );
 
     if (userExistsResponse.success) {
       return userExistsResponse;
@@ -172,10 +173,11 @@ export default class TokenService implements ITokenService {
   async sendToggleTwoFactorToken(
     sendChangePasswordToken: SendToggleTwoFactorToken,
     code?: string
-  ): Promise<RequestResponse<TwoFactorToken> | void> {
-    const userExistsResponse = await this._checkerService.checkUserExists(
-      sendChangePasswordToken
-    );
+  ): Promise<RequestResponse<User | TwoFactorToken> | void> {
+    const userExistsResponse =
+      await this._checkerService.checkDataExistsAndReturnUser(
+        sendChangePasswordToken
+      );
 
     if (userExistsResponse.success) {
       return userExistsResponse;

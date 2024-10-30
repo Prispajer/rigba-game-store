@@ -53,9 +53,18 @@ export default interface ICheckerService {
   checkIsTokenValidAndReturnTwoFactorToken(
     checkIsTokenValidAndReturnTwoFactorTokenDTO: CheckIsTokenValidAndReturnTwoFactorTokenDTO
   ): Promise<RequestResponse<TwoFactorToken | null>>;
+  checkIsTokenValidAndReturnPasswordResetToken(
+    checkIsTokenValidAndReturnPasswordResetTokenDTO: CheckIsTokenValidAndReturnPasswordResetTokenDTO
+  ): Promise<RequestResponse<PasswordResetToken | null>>;
   checkIsUserPasswordCorrect(
     user: User,
-    checkIsUserPasswordCorrectDTO: CheckIsUserPasswordCorrectDTO
+    checkIsUserPasswordCorrectDTO: CheckIsUserPasswordCorrectDTO,
+    message: string
+  ): Promise<RequestResponse<null> | void>;
+  checkIsUserPasswordPreviousPassword(
+    user: User,
+    checkIsUserPasswordPreviousPasswordDTO: CheckIsUserPasswordPreviousPasswordDTO,
+    message: string
   ): Promise<RequestResponse<null> | void>;
   checkIsEmailInUse(
     CheckIsEmailInUseDTO: CheckIsEmailInUseDTO

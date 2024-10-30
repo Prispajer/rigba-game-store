@@ -243,8 +243,6 @@ export default class CartService implements ICartService {
           decreaseProductQuantityDTO
         );
 
-      console.log(getUserByEmailResponse);
-
       if (
         (getUserByEmailResponse && !getUserByEmailResponse.success) ||
         !getUserByEmailResponse.data
@@ -256,8 +254,6 @@ export default class CartService implements ICartService {
           getUserByEmailResponse.data
         );
 
-      console.log(getUserCartResponse);
-
       if (
         (getUserCartResponse && !getUserCartResponse.success) ||
         !getUserCartResponse.data
@@ -265,27 +261,30 @@ export default class CartService implements ICartService {
         return getUserCartResponse;
 
       const getUserProductResponse =
-        await this._checkerService.checkDataExistsAndReturnProduct({
+        getUserByEmailResponse.data &&
+        (await this._checkerService.checkDataExistsAndReturnProduct({
           externalProductId: decreaseProductQuantityDTO.externalProductId,
           userId: getUserByEmailResponse.data.id,
-        });
+        }));
 
-      console.log(getUserProductResponse);
       if (
         (getUserProductResponse && !getUserProductResponse.success) ||
         !getUserProductResponse.data
       ) {
         return getUserProductResponse;
-      } else if (getUserProductResponse.data.quantity ?? 0 <= 0) {
-        await this._cartRepository.deleteUserProductFromCart(
-          getUserProductResponse.data
-        );
-      } else {
+      } else if (
+        getUserProductResponse &&
+        getUserProductResponse.data.quantity! > 1
+      ) {
         await this._cartRepository.decreaseUserProductQuantity({
           id: getUserProductResponse.data.id,
           userId: getUserByEmailResponse.data.id,
           quantity: getUserProductResponse.data.quantity,
         });
+      } else {
+        await this._cartRepository.deleteUserProductFromCart(
+          getUserProductResponse.data
+        );
       }
 
       return this._checkerService.handleSuccess(

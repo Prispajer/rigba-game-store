@@ -34,11 +34,11 @@ export interface ProductInformations {
   name: string;
   price: number;
   background_image: string;
-  description: string | undefined;
-  rating: number | undefined;
+  description?: string;
+  rating?: number;
   slug: string;
-  released: string | undefined;
-  added: number | undefined;
+  released?: string;
+  added?: number;
 }
 
 export interface UserWishList {
@@ -57,23 +57,14 @@ export interface LocalWishList {
   name: string;
   price: number;
   background_image: string;
-  description: string | undefined;
-  rating: number | undefined;
-  slug: string | undefined;
-  released: string | undefined;
-  added: number | undefined;
+  description?: string;
+  rating?: number;
+  slug?: string;
+  released?: string;
+  added?: number;
 }
 
-export interface LocalCart {
-  externalProductId: number;
-  name: string;
-  price: number;
-  background_image: string;
-  description: string | undefined;
-  rating: number | undefined;
-  slug: string | undefined;
-  released: string | undefined;
-  added: number | undefined;
+export interface LocalCart extends ProductInformations {
   quantity: number;
 }
 

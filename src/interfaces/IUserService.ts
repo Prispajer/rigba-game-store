@@ -9,9 +9,7 @@ import {
 export default interface IUserService {
   loginUser(
     userDTO: UserDTO
-  ): Promise<RequestResponse<
-    User | EmailVerificationToken | TwoFactorToken
-  > | void>;
+  ): Promise<RequestResponse<User | EmailVerificationToken | TwoFactorToken>>;
   registerUser(
     registerUserDTO: RegisterUserDTO
   ): Promise<RequestResponse<RegisterUserDTO | User | null>>;
@@ -20,7 +18,7 @@ export default interface IUserService {
   ): Promise<RequestResponse<User | EmailVerificationToken | null> | void>;
   confirmTwoFactorAuthentication(
     confirmTwoFactorAuthenticationDTO: ConfirmTwoFactorAuthenticationDTO
-  ): Promise<RequestResponse<TwoFactorToken | null> | void>;
+  ): Promise<RequestResponse<TwoFactorToken | null>>;
   setNewPassword(
     userDTO: UserDTO
   ): Promise<RequestResponse<ResetPasswordToken>>;

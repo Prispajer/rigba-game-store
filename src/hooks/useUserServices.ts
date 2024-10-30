@@ -108,6 +108,8 @@ export default function useUserServices() {
             if (response.data?.emailVerified) {
               await callback(email, password);
             }
+
+            console.log(response);
           }
         } catch (error) {
           setError("Something went wrong!");

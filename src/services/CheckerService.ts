@@ -22,6 +22,8 @@ import {
   CheckDataExistsAndReturnReviewDTO,
   CheckDataExistsAndReturnReviewLikersDTO,
   CheckIsTokenValidAndReturnTwoFactorTokenDTO,
+  CheckIsTokenValidAndReturnPasswordResetTokenDTO,
+  CheckIsUserPasswordPreviousPasswordDTO,
 } from "@/utils/helpers/backendDTO";
 import {
   Cart,
@@ -31,6 +33,7 @@ import {
   User,
   ReviewLikers,
   TwoFactorToken,
+  PasswordResetToken,
 } from "@prisma/client";
 
 @injectable()
@@ -227,18 +230,20 @@ export default class CheckerService implements ICheckerService {
         checkIsTokenValidAndReturnTwoFactorTokenDTO.email
       );
 
+    if (!getTwoFactorToken) {
+      return this.handleError("Token doesn't exsist!");
+    }
+
     if (
-      !getTwoFactorToken ||
       getTwoFactorToken.token !==
-        checkIsTokenValidAndReturnTwoFactorTokenDTO.code
+      checkIsTokenValidAndReturnTwoFactorTokenDTO.code
     ) {
       return this.handleError("Invalid code!");
     }
 
     const hasExpired = new Date(getTwoFactorToken.expires) < new Date();
-
     if (hasExpired) {
-      return this.handleError("Code expired!");
+      return this.handleError("Token has expired!");
     }
 
     return this.handleSuccess(
@@ -247,9 +252,40 @@ export default class CheckerService implements ICheckerService {
     );
   }
 
+  async checkIsTokenValidAndReturnPasswordResetToken(
+    checkIsTokenValidAndReturnPasswordResetTokenDTO: CheckIsTokenValidAndReturnPasswordResetTokenDTO
+  ): Promise<RequestResponse<PasswordResetToken | null>> {
+    const getPasswordResetToken =
+      await this._tokenRepository.getPasswordResetTokenByEmail(
+        checkIsTokenValidAndReturnPasswordResetTokenDTO.email
+      );
+
+    if (!getPasswordResetToken) {
+      return this.handleError("Token doesn't exsist!");
+    }
+
+    if (
+      getPasswordResetToken.token !==
+      checkIsTokenValidAndReturnPasswordResetTokenDTO.token
+    ) {
+      return this.handleError("Invalid code!");
+    }
+
+    const hasExpired = new Date(getPasswordResetToken.expires) < new Date();
+    if (hasExpired) {
+      return this.handleError("Token has expired!");
+    }
+
+    return this.handleSuccess(
+      "Password reset token has been found!",
+      getPasswordResetToken
+    );
+  }
+
   async checkIsUserPasswordCorrect(
     user: User,
-    checkIsUserPasswordCorrectDTO: CheckIsUserPasswordCorrectDTO
+    checkIsUserPasswordCorrectDTO: CheckIsUserPasswordCorrectDTO,
+    message: string
   ): Promise<RequestResponse<null> | void> {
     const isPasswordCorrect = await bcrypt.compare(
       checkIsUserPasswordCorrectDTO.password as string,
@@ -257,7 +293,22 @@ export default class CheckerService implements ICheckerService {
     );
 
     if (!isPasswordCorrect) {
-      return this.handleError("Invalid Credentials!");
+      return this.handleError(message);
+    }
+  }
+
+  async checkIsUserPasswordPreviousPassword(
+    user: User,
+    checkIsUserPasswordPreviousPasswordDTO: CheckIsUserPasswordPreviousPasswordDTO,
+    message: string
+  ): Promise<RequestResponse<null> | void> {
+    const isPasswordTheSame = await bcrypt.compare(
+      checkIsUserPasswordPreviousPasswordDTO.password as string,
+      user.password as string
+    );
+
+    if (isPasswordTheSame) {
+      return this.handleError(message);
     }
   }
 
@@ -302,13 +353,5 @@ export default class CheckerService implements ICheckerService {
       message,
       data: null,
     };
-  }
-
-  async responseReturnFalse<T>(
-    callback: (DTO: Record<string, T>) => Promise<RequestResponse<T>>
-  ): Promise<any> {
-    const boundFunc = await callback.bind(this);
-
-    if ((boundFunc && !boundFunc.success) || !boundFunc.data) return boundFunc;
   }
 }

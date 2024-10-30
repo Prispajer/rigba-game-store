@@ -1,8 +1,8 @@
 import {
   EmailVerificationToken,
-  ResetPasswordToken,
+  PasswordResetToken,
   TwoFactorToken,
-} from "@/utils/helpers/types";
+} from "@prisma/client";
 
 export default interface ITokenRepository {
   generateEmailVerificationToken(
@@ -10,7 +10,7 @@ export default interface ITokenRepository {
   ): Promise<EmailVerificationToken>;
   generatePasswordResetToken(
     email: string
-  ): Promise<EmailVerificationToken | ResetPasswordToken | TwoFactorToken>;
+  ): Promise<EmailVerificationToken | PasswordResetToken | TwoFactorToken>;
   generateTwoFactorToken(email: string): Promise<TwoFactorToken>;
   getEmailVerificationTokenByEmail(
     email: string
@@ -26,8 +26,7 @@ export default interface ITokenRepository {
   ): Promise<PasswordResetToken | null>;
   getTwoFactorTokenByEmail(email: string): Promise<TwoFactorToken | null>;
   getTwoFactorTokenByToken(token: string): Promise<TwoFactorToken | null>;
-  validateTwoFactorTokenByEmail(
-    email: string,
-    code?: string
-  ): Promise<RequestResponse<TwoFactorToken>>;
+  deleteTwoFactorConfirmation(id: string): Promise<void>;
+  deleteTwoFactorToken(id: string): Promise<void>;
+  deletePasswordResetToken(id: string): Promise<void>;
 }

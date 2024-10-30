@@ -54,6 +54,7 @@ export default function ProductBuyOrAdd({
                       handleAddLocalProductToCart({
                         ...product,
                         externalProductId: parseInt(product.id),
+                        description: product.description_raw,
                         price: generateRandomValue(),
                         quantity: 1,
                       })

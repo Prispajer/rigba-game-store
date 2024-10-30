@@ -13,8 +13,8 @@ export default function AuthLayout({
           <Link className="flex items-center pl-3 pt-3 max-w-[200px]" href="/">
             <Image
               src="/icons/logo.png"
-              width={90}
-              height={90}
+              width="90"
+              height="90"
               alt="logo"
               priority={true}
             />

@@ -12,8 +12,13 @@ export default interface IUserRepository {
     getTwoFactorConfirmationByUserIdDTO: GetTwoFactorConfirmationByUserIdDTO
   ): Promise<TwoFactorConfirmation | null>;
   createUser(registerUserDTO: RegisterUserDTO): Promise<RegisterUserDTO>;
+  createTwoFactorConfirmation(id: string): Promise<TwoFactorConfirmation>;
   updateEmailVerification(
     user: User,
     emailVerificationToken: EmailVerificationToken
   ): Promise<User>;
+  updatePassword(
+    user: User,
+    updatePasswordDTO: UpdatePasswordDTO
+  ): Promise<UpdatePasswordDTO>;
 }

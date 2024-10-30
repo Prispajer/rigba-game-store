@@ -49,6 +49,10 @@ export type CheckIsUserPasswordCorrectDTO = {
   password: string;
 };
 
+export type CheckIsUserPasswordPreviousPasswordDTO = {
+  password: string;
+};
+
 export type CheckIsEmailInUseDTO = {
   email: string;
 };
@@ -56,6 +60,11 @@ export type CheckIsEmailInUseDTO = {
 export type CheckIsTokenValidAndReturnTwoFactorTokenDTO = {
   email: string;
   code: string;
+};
+
+export type CheckIsTokenValidAndReturnPasswordResetTokenDTO = {
+  email: string;
+  token: string;
 };
 
 export type LoginUserDTO = {
@@ -114,6 +123,21 @@ export type UpdatePersonalDataDTO = {
   phoneNumber?: string;
 };
 
+export type UpdateReviewLikeDTO = {
+  id: string;
+  likes: number;
+};
+
+export type UpdateReviewUnLikeDTO = {
+  id: string;
+  likes: number;
+};
+
+export type UpdatePasswordDTO = {
+  email: string;
+  password: string;
+};
+
 export type TokenDTO = {
   email: string;
 };
@@ -127,7 +151,7 @@ export type SendChangePasswordTokenDTO = {
   password: string;
 };
 
-export type SendToggleTwoFactorToken = {
+export type SendToggleTwoFactorTokenDTO = {
   email: string;
   password: string;
 };
@@ -347,14 +371,4 @@ export type UnLikeReviewDTO = {
   email: string;
   externalProductId: number;
   reviewId: string;
-};
-
-export type UpdateReviewLikeDTO = {
-  id: string;
-  likes: number;
-};
-
-export type UpdateReviewUnLikeDTO = {
-  id: string;
-  likes: number;
 };

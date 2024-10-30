@@ -12,11 +12,7 @@ export default interface ITokenUtils {
     expirationDate: number
   ): Promise<T>;
   getTokenByProperty<T>(
-    findTokenByProperty: (
-      email: string | undefined,
-      token: string | undefined
-    ) => Promise<T | null>,
-    email?: string,
-    token?: string
+    findTokenByProperty: (property: string) => Promise<T | null>,
+    property: string
   ): Promise<T | null>;
 }

@@ -30,6 +30,8 @@ export default function LoginContainer() {
   const { submitLoginForm } = useUserActions();
   const { user } = useCurrentUser();
 
+  console.log(showTwoFactor);
+
   const handleProviderLogin = async (provider: SignInProvider) => {
     try {
       await signInAccount(provider);

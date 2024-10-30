@@ -34,17 +34,13 @@ export default class TokenUtils implements ITokenUtils {
   }
 
   async getTokenByProperty<T>(
-    findTokenByProperty: (
-      email: string | undefined,
-      token: string | undefined
-    ) => Promise<T | null>,
-    email?: string,
-    token?: string
+    findTokenByProperty: (property: string) => Promise<T | null>,
+    property: string
   ): Promise<T | null> {
     try {
-      const existingToken = await findTokenByProperty(email, token);
+      const existingToken = await findTokenByProperty(property);
       return existingToken;
-    } catch {
+    } catch (error) {
       return null;
     }
   }

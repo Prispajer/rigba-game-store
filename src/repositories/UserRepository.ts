@@ -7,12 +7,14 @@ import {
   User,
   TwoFactorConfirmation,
   EmailVerificationToken,
+  TwoFactorToken,
 } from "@prisma/client";
 import {
   GetTwoFactorConfirmationByUserIdDTO,
   GetUserByEmailDTO,
   GetUserByIdDTO,
   RegisterUserDTO,
+  UpdatePasswordDTO,
 } from "@/utils/helpers/backendDTO";
 
 @injectable()
@@ -71,6 +73,18 @@ export default class UserRepository implements IUserRepository {
     };
   }
 
+  async createTwoFactorConfirmation(
+    id: string
+  ): Promise<TwoFactorConfirmation> {
+    const twoFactorConfirmation = await postgres.twoFactorConfirmation.create({
+      data: {
+        userId: id,
+      },
+    });
+
+    return twoFactorConfirmation;
+  }
+
   async updateEmailVerification(
     user: User,
     emailVerificationToken: EmailVerificationToken
@@ -85,5 +99,28 @@ export default class UserRepository implements IUserRepository {
     });
 
     return emailVerification;
+  }
+
+  async updatePassword(
+    user: User,
+    updatedPasswordDTO: UpdatePasswordDTO
+  ): Promise<UpdatePasswordDTO> {
+    const hashedPassword = await this._userUtils.hashPassword(
+      updatedPasswordDTO
+    );
+
+    const updatedPassword = await postgres.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        password: hashedPassword,
+      },
+    });
+
+    return {
+      email: updatedPassword.email,
+      password: updatedPassword.password as string,
+    };
   }
 }

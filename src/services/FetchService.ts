@@ -35,7 +35,7 @@ export class FetchService implements IFetchService {
   async getProducts(searchQuery?: string): Promise<GameAPIResponse[]> {
     const url = `${this.baseUrl}/games?key=${this.apiKey}${
       searchQuery ? `&search=${searchQuery}` : ""
-    }`;
+    }&page_size=${10}`;
     const data = await this.fetchData<{ results: GameAPIResponse[] }>(url);
     return searchQuery && data.results ? data.results : [];
   }

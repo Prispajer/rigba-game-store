@@ -28,6 +28,7 @@ import {
   ChangePasswordDTO,
   ToggleTwoFactorDTO,
   UpdatePersonalDataDTO,
+  UpdatePasswordDTO,
   ConfirmTwoFactorAuthenticationDTO,
 } from "@/utils/helpers/backendDTO";
 
@@ -37,7 +38,6 @@ export default class UserService implements IUserService {
   private readonly _tokenRepository: ITokenRepository;
   private readonly _checkerService: ICheckerService;
   private readonly _userRepository: IUserRepository;
-  private readonly _userUtils: IUserUtils;
 
   constructor(
     @inject(CLASSTYPES.ITokenService) tokenService: ITokenService,
@@ -50,14 +50,13 @@ export default class UserService implements IUserService {
     this._tokenRepository = tokenRepository;
     this._checkerService = checkerService;
     this._userRepository = userRepository;
-    this._userUtils = userUtils;
   }
 
   async loginUser(
     loginUserDTO: LoginUserDTO
-  ): Promise<RequestResponse<
-    User | EmailVerificationToken | TwoFactorToken | null
-  > | void> {
+  ): Promise<
+    RequestResponse<User | EmailVerificationToken | TwoFactorToken | null>
+  > {
     try {
       const getUserByEmailResponse =
         await this._checkerService.checkDataExistsAndReturnUser(loginUserDTO);
@@ -71,7 +70,8 @@ export default class UserService implements IUserService {
       const checkIsUserPasswordResponse =
         await this._checkerService.checkIsUserPasswordCorrect(
           getUserByEmailResponse.data,
-          loginUserDTO
+          loginUserDTO,
+          "Invalid credentials!"
         );
 
       if (checkIsUserPasswordResponse && !checkIsUserPasswordResponse.success)
@@ -96,17 +96,18 @@ export default class UserService implements IUserService {
         });
 
       if (
-        confirmTwoFactorAuthenticationResponse &&
-        confirmTwoFactorAuthenticationResponse.success
-      )
+        (confirmTwoFactorAuthenticationResponse &&
+          !confirmTwoFactorAuthenticationResponse.success) ||
+        confirmTwoFactorAuthenticationResponse.data
+      ) {
         return confirmTwoFactorAuthenticationResponse;
+      }
 
       return this._checkerService.handleSuccess(
         "Login was successful!",
         getUserByEmailResponse.data
       );
     } catch (error) {
-      console.error(error);
       return this._checkerService.handleError(
         "There was problem while logging into user!"
       );
@@ -158,7 +159,7 @@ export default class UserService implements IUserService {
 
       const getUserByEmailResponse =
         await this._checkerService.checkDataExistsAndReturnUser({
-          email: getEmailVerificationTokenByTokenResponse.email,
+          email: getEmailVerificationTokenByTokenResponse?.email as string,
         });
 
       if (
@@ -186,40 +187,42 @@ export default class UserService implements IUserService {
 
   async confirmTwoFactorAuthentication(
     confirmTwoFactorAuthenticationDTO: ConfirmTwoFactorAuthenticationDTO
-  ): Promise<RequestResponse<TwoFactorToken | null> | void> {
+  ): Promise<RequestResponse<TwoFactorToken | null>> {
     if (
-      confirmTwoFactorAuthenticationDTO?.isTwoFactorEnabled &&
-      confirmTwoFactorAuthenticationDTO?.email
+      confirmTwoFactorAuthenticationDTO.isTwoFactorEnabled &&
+      confirmTwoFactorAuthenticationDTO.email
     ) {
-      console.log(confirmTwoFactorAuthenticationDTO);
       if (confirmTwoFactorAuthenticationDTO.code) {
-        const twoFactorConfirmationByUserId =
-          await this._userRepository.getTwoFactorConfirmationByUserId(
-            confirmTwoFactorAuthenticationDTO
-          );
-
         const getTwoFactorTokenByEmailResponse =
           await this._checkerService.checkIsTokenValidAndReturnTwoFactorToken(
             confirmTwoFactorAuthenticationDTO
           );
 
         if (
-          (getTwoFactorTokenByEmailResponse &&
-            !getTwoFactorTokenByEmailResponse.success) ||
-          !getTwoFactorTokenByEmailResponse.data
-        )
+          getTwoFactorTokenByEmailResponse &&
+          !getTwoFactorTokenByEmailResponse.success
+        ) {
           return getTwoFactorTokenByEmailResponse;
+        }
+
+        const twoFactorConfirmationByUserId =
+          await this._userRepository.getTwoFactorConfirmationByUserId(
+            confirmTwoFactorAuthenticationDTO
+          );
 
         if (twoFactorConfirmationByUserId) {
-          await postgres.twoFactorConfirmation.delete({
-            where: { id: twoFactorConfirmationByUserId.id },
-          });
+          await this._tokenRepository.deleteTwoFactorConfirmation(
+            twoFactorConfirmationByUserId.id
+          );
         }
-        await postgres.twoFactorConfirmation.create({
-          data: {
-            userId: confirmTwoFactorAuthenticationDTO?.id as string,
-          },
-        });
+
+        await this._userRepository.createTwoFactorConfirmation(
+          confirmTwoFactorAuthenticationDTO.id
+        );
+
+        await this._tokenRepository.deleteTwoFactorToken(
+          getTwoFactorTokenByEmailResponse.data.id
+        );
       } else {
         const twoFactorToken =
           await this._tokenRepository.generateTwoFactorToken(
@@ -229,90 +232,69 @@ export default class UserService implements IUserService {
           twoFactorToken.email,
           twoFactorToken.token
         );
-        return {
-          success: true,
-          message: "Two Factor token has been sent!",
-          data: twoFactorToken,
-        };
+        return this._checkerService.handleSuccess(
+          "Two Factor token has been sent!",
+          twoFactorToken
+        );
       }
     }
+
+    return this._checkerService.handleSuccess(
+      "Two Factor authentication successful!",
+      null
+    );
   }
 
   async setNewPassword(
-    setNewPassword: SetNewPasswordDTO
-  ): Promise<RequestResponse<ResetPasswordToken>> {
-    const existingToken =
-      await this._tokenRepository.getPasswordResetTokenByToken(
-        setNewPassword.token as string
+    setNewPasswordDTO: SetNewPasswordDTO
+  ): Promise<
+    RequestResponse<UpdatePasswordDTO | User | PasswordResetToken | null>
+  > {
+    const getTwoFactorTokenByEmailResponse =
+      await this._checkerService.checkIsTokenValidAndReturnPasswordResetToken(
+        setNewPasswordDTO
       );
 
-    if (!existingToken) {
-      return {
-        success: false,
-        message: "Token doesn't exsist!",
-        data: null,
-      };
-    }
+    if (
+      getTwoFactorTokenByEmailResponse &&
+      !getTwoFactorTokenByEmailResponse.success
+    )
+      return getTwoFactorTokenByEmailResponse;
 
-    const tokenHasExpired = new Date(existingToken.expires) < new Date();
+    const getUserByEmailResponse =
+      await this._checkerService.checkDataExistsAndReturnUser(
+        getTwoFactorTokenByEmailResponse.data
+      );
 
-    if (tokenHasExpired) {
-      return {
-        success: false,
-        message: "Token has expired!",
-        data: null,
-      };
-    }
+    if (
+      (getUserByEmailResponse && !getUserByEmailResponse.success) ||
+      !getUserByEmailResponse.data
+    )
+      return getUserByEmailResponse;
 
-    const existingUser = await this._userRepository.getUserByEmail(
-      existingToken.email
+    const checkIsUserPasswordResponse =
+      await this._checkerService.checkIsUserPasswordPreviousPassword(
+        getUserByEmailResponse.data,
+        setNewPasswordDTO,
+        "You must provide other password than the old one!"
+      );
+
+    if (checkIsUserPasswordResponse && !checkIsUserPasswordResponse.success)
+      return checkIsUserPasswordResponse;
+
+    const updatedPassword = await this._userRepository.updatePassword(
+      getUserByEmailResponse.data,
+      setNewPasswordDTO
     );
 
-    if (!existingUser) {
-      return {
-        success: false,
-        message: "Email doesn't exist!",
-        data: null,
-      };
-    }
-
-    const passwordMatch = await bcrypt.compare(
-      setNewPassword.password as string,
-      existingUser.password as string
+    await this._tokenRepository.deletePasswordResetToken(
+      getTwoFactorTokenByEmailResponse.data.id
     );
-
-    if (setNewPassword.token && passwordMatch) {
-      return {
-        success: false,
-        message: "You must provide other password than the older one!",
-        data: null,
-      };
-    }
-
-    const hashedPassword = await bcrypt.hash(
-      setNewPassword.password as string,
-      10
-    );
-
-    await postgres.user.update({
-      where: {
-        id: existingUser.id,
-      },
-      data: {
-        password: hashedPassword,
-      },
-    });
-
-    await postgres.passwordResetToken.delete({
-      where: {
-        id: existingToken.id,
-      },
-    });
 
     return {
       success: true,
       message: "Password changed successfully!",
-      data: null,
+      data: updatedPassword,
     };
   }
 
@@ -323,6 +305,8 @@ export default class UserService implements IUserService {
       changePasswordDTO.email as string
     );
 
+    console.log(changePasswordDTO);
+
     if (!twoFactorToken) {
       return {
         success: false,
@@ -332,7 +316,7 @@ export default class UserService implements IUserService {
     }
 
     const existingUser = await this._userRepository.getUserByEmail(
-      twoFactorToken.email as string
+      twoFactorToken
     );
 
     if (!existingUser) {
@@ -386,9 +370,9 @@ export default class UserService implements IUserService {
     toggleTwoFactorDTO: ToggleTwoFactorDTO
   ): Promise<RequestResponse<void>> {
     try {
-      const existingUser = await this._userRepository.getUserByEmail(
-        toggleTwoFactorDTO.email as string
-      );
+      const existingUser = await this._userRepository.getUserByEmail({
+        email: toggleTwoFactorDTO.email as string,
+      });
       if (!existingUser) {
         return {
           success: false,
@@ -456,9 +440,9 @@ export default class UserService implements IUserService {
     updatePersonalData: Partial<UpdatePersonalDataDTO>
   ): Promise<RequestResponse<PersonalData>> {
     try {
-      const existingUser = await this._userRepository.getUserByEmail(
-        updatePersonalData.email as string
-      );
+      const existingUser = await this._userRepository.getUserByEmail({
+        email: updatePersonalData.email as string,
+      });
 
       if (!existingUser) {
         return {

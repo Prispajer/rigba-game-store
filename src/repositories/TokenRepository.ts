@@ -4,7 +4,7 @@ import crypto from "crypto";
 import { postgres } from "@/data/database/publicSQL/postgres";
 import type ITokenRepository from "@/interfaces/ITokenRepository";
 import type ITokenUtils from "@/interfaces/ITokenUtils";
-import { RequestResponse, Token, CLASSTYPES } from "@/utils/helpers/types";
+import { CLASSTYPES } from "@/utils/helpers/types";
 import {
   EmailVerificationToken,
   PasswordResetToken,
@@ -24,7 +24,7 @@ export default class TokenRepository implements ITokenRepository {
   ): Promise<EmailVerificationToken> {
     return await this._tokenUtils.generateToken(
       email,
-      this.getEmailVerificationTokenByEmail,
+      this.getEmailVerificationTokenByEmail.bind(this),
       async (id: string) => {
         await postgres.emailVerificationToken.delete({
           where: {
@@ -49,7 +49,7 @@ export default class TokenRepository implements ITokenRepository {
   async generatePasswordResetToken(email: string): Promise<PasswordResetToken> {
     return await this._tokenUtils.generateToken(
       email,
-      this.getPasswordResetTokenByEmail,
+      this.getPasswordResetTokenByEmail.bind(this),
       async (id: string) => {
         await postgres.passwordResetToken.delete({
           where: {
@@ -74,12 +74,10 @@ export default class TokenRepository implements ITokenRepository {
   async generateTwoFactorToken(email: string): Promise<TwoFactorToken> {
     return await this._tokenUtils.generateToken(
       email,
-      this.getTwoFactorTokenByEmail,
+      this.getTwoFactorTokenByEmail.bind(this),
       async (id: string) => {
         await postgres.twoFactorToken.delete({
-          where: {
-            id: id,
-          },
+          where: { id: id },
         });
       },
       async (data: { email: string; token: string; expires: Date }) => {
@@ -158,7 +156,7 @@ export default class TokenRepository implements ITokenRepository {
         (email) => postgres.twoFactorToken.findFirst({ where: { email } }),
         email
       );
-    } catch {
+    } catch (error) {
       return null;
     }
   }
@@ -171,8 +169,30 @@ export default class TokenRepository implements ITokenRepository {
         (token) => postgres.twoFactorToken.findFirst({ where: { token } }),
         token
       );
-    } catch {
+    } catch (error) {
       return null;
     }
+  }
+
+  async deleteTwoFactorConfirmation(id: string): Promise<void> {
+    await postgres.twoFactorConfirmation.delete({
+      where: { id },
+    });
+  }
+
+  async deleteTwoFactorToken(id: string): Promise<void> {
+    await postgres.twoFactorToken.delete({
+      where: {
+        id,
+      },
+    });
+  }
+
+  async deletePasswordResetToken(id: string): Promise<void> {
+    await postgres.passwordResetToken.delete({
+      where: {
+        id,
+      },
+    });
   }
 }

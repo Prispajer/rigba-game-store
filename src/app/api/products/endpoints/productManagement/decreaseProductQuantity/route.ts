@@ -6,6 +6,7 @@ import { Cart } from "@prisma/client";
 export async function PATCH(request: NextRequest) {
   const decreaseProductQuantityClientData = await request.json();
 
+  console.log(decreaseProductQuantityClientData);
   const decreaseProductQuantityResponse =
     await cartService.decreaseProductQuantity(
       decreaseProductQuantityClientData

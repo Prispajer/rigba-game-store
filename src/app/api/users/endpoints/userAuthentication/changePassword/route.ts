@@ -7,7 +7,7 @@ export async function POST(
 ): Promise<NextResponse<RequestResponse<User>>> {
   const { email, newPassword, code } = await request.json();
 
-  const changePasswordResponse = await userService.changePassword({
+  const changePasswordResponse = await userService.setNewPassword({
     email,
     newPassword,
     code,

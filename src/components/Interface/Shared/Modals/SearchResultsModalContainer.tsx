@@ -4,7 +4,15 @@ import { FaCartPlus } from "react-icons/fa";
 import LoadingAnimation from "../Animations/LoadingAnimation";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useCustomRouter from "@/hooks/useCustomRouter";
+import useUserCart from "@/hooks/useUserCart";
+import useLocalStorage from "@/hooks/useLocalStorage";
+import useCurrentUser from "@/hooks/useCurrentUser";
+import { generateRandomValue } from "@/utils/prices";
 import { GameAPIResponse } from "@/utils/helpers/types";
+import {
+  LocalCartProductDTO,
+  UserCartProductDTO,
+} from "@/utils/helpers/frontendDTO";
 
 export default function SearchResultsModalContainer({
   gamesArray,
@@ -13,8 +21,35 @@ export default function SearchResultsModalContainer({
   gamesArray: GameAPIResponse[];
   loadingState: boolean;
 }) {
+  const { handleAddUserProductToCart } = useUserCart();
+  const { handleAddLocalProductToCart } = useLocalStorage("localCart");
+  const { user } = useCurrentUser();
   const { redirectToGame } = useCustomRouter();
   const { handleClose } = useWindowVisibility();
+
+  const handleAddProductToCart = (
+    game: LocalCartProductDTO | UserCartProductDTO,
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.stopPropagation();
+    if (user) {
+      handleAddUserProductToCart({
+        ...game,
+        email: user.email,
+        externalProductId: parseInt(game.id),
+        description: game.description_raw,
+        price: generateRandomValue(),
+      });
+    } else {
+      handleAddLocalProductToCart({
+        ...game,
+        externalProductId: parseInt(game.id),
+        description: game.description_raw,
+        price: generateRandomValue(),
+        quantity: 1,
+      });
+    }
+  };
 
   return (
     <div className="absolute top-[67px] left-0 w-full bg-primaryColor ">
@@ -37,7 +72,7 @@ export default function SearchResultsModalContainer({
                 <div className="flex">
                   <div className="relative min-w-[72px] min-h-[100px]">
                     <Image
-                      src={game?.background_image ?? ""}
+                      src={game?.background_image ?? "/placeholder.jpg"}
                       layout="fill"
                       alt={game?.name}
                     />
@@ -60,7 +95,10 @@ export default function SearchResultsModalContainer({
                   <span className="mt-[-2px] text-buttonBackground font-bold">
                     21,41zł
                   </span>
-                  <button className="flex items-center justify-center w-[100%] h-[35px] mt-[10px] border-2 border-[#FFFFFFF] hover:bg-buttonTextColor">
+                  <button
+                    onClick={(event) => handleAddProductToCart(game, event)}
+                    className="flex items-center justify-center w-[100%] h-[35px] mt-[10px] border-2 border-[#FFFFFFF] hover:bg-buttonTextColor"
+                  >
                     <FaCartPlus size="20px" color="#ffffff" />
                   </button>
                 </div>

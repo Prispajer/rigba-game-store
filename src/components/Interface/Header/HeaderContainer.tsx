@@ -13,10 +13,7 @@ export default function HeaderContainer() {
   const { resolutionState, handleToggleScreen } = useWindowVisibility();
   const dispatch = useDispatch();
 
-  const [isClient, setIsClient] = React.useState(false);
-
   React.useEffect(() => {
-    setIsClient(true);
     const windowScreen = window.innerWidth >= 768;
     dispatch(toggleScreen(windowScreen));
     window.addEventListener("resize", handleToggleScreen(768));
@@ -28,10 +25,10 @@ export default function HeaderContainer() {
   return (
     <header
       className={`md:border-b-0 border-b-2 border-secondaryColor bg-primaryColor z-[10] ${
-        !isClient ? "" : !resolutionState ? "sticky top-0" : "flex"
+        !resolutionState ? "sticky top-0" : "flex"
       }`}
     >
-      {isClient && !resolutionState && <NavbarSidebar />}
+      {!resolutionState && <NavbarSidebar />}
       <div className="relative flex flex-wrap items-center max-w-[1240px] w-full mx-auto  md:py-2">
         <HeaderLogo />
         <HeaderSearchBar />

@@ -4,6 +4,10 @@ export type CheckDataExistsAndReturnUserDTO = {
   email: string;
 };
 
+export type checkDataExistsAndReturnUserPersonalDataDTO = {
+  id: string;
+};
+
 export type CheckDataExistsAndReturnProductDTO = {
   userId: string | null;
   externalProductId: number;
@@ -111,8 +115,9 @@ export type ToggleTwoFactorDTO = {
   code: string;
 };
 
-export type UpdatePersonalDataDTO = {
+export type UpdateUserDataDTO = {
   email: string;
+  id?: string;
   fullName?: string;
   birthDate?: Date;
   address?: string;
@@ -121,6 +126,21 @@ export type UpdatePersonalDataDTO = {
   city?: string;
   country?: string;
   phoneNumber?: string;
+};
+
+export type PersonalDataToUpdateDTO = {
+  fullName: string | undefined;
+  birthDate: Date | undefined;
+  address: string | undefined;
+  state: string | undefined;
+  zipCode: string | undefined;
+  city: string | undefined;
+  country: string | undefined;
+  phoneNumber: string | undefined;
+};
+
+export type UpdatePersonalDataDTO = {
+  id: string;
 };
 
 export type UpdateReviewLikeDTO = {
@@ -170,6 +190,10 @@ export type GetUserByIdDTO = {
 
 export type GetUserCartDTO = {
   email: string;
+  id: string;
+};
+
+export type GetUserPersonalDataDTO = {
   id: string;
 };
 
@@ -258,6 +282,10 @@ export type CreateReviewDTO = {
   userId: string;
   productId: string;
   likes: number;
+};
+
+export type CreatePersonalDataDTO = {
+  id: string;
 };
 
 export type CreateReviewLikerDTO = {

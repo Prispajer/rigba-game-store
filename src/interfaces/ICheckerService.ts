@@ -32,6 +32,9 @@ export default interface ICheckerService {
   checkDataExistsAndReturnUser(
     checkDataExistsAndReturnUser: CheckDataExistsAndReturnUserDTO
   ): Promise<RequestResponse<User | null>>;
+  checkDataExistsAndReturnUserPersonalData(
+    checkDataExistsAndReturnUserPersonalDataDTO: checkDataExistsAndReturnUserPersonalDataDTO
+  ): Promise<RequestResponse<PersonalData | null>>;
   checkDataExistsAndReturnProduct(
     CheckDataExistsAndReturnProductDTO: CheckDataExistsAndReturnProductDTO
   ): Promise<RequestResponse<Product | null>>;

@@ -27,9 +27,9 @@ import {
   SetNewPasswordDTO,
   ChangePasswordDTO,
   ToggleTwoFactorDTO,
-  UpdatePersonalDataDTO,
   UpdatePasswordDTO,
   ConfirmTwoFactorAuthenticationDTO,
+  UpdateUserDataDTO,
 } from "@/utils/helpers/backendDTO";
 
 @injectable()
@@ -250,20 +250,20 @@ export default class UserService implements IUserService {
   ): Promise<
     RequestResponse<UpdatePasswordDTO | User | PasswordResetToken | null>
   > {
-    const getTwoFactorTokenByEmailResponse =
+    const getPasswordResetTokenByEmailResponse =
       await this._checkerService.checkIsTokenValidAndReturnPasswordResetToken(
         setNewPasswordDTO
       );
 
     if (
-      getTwoFactorTokenByEmailResponse &&
-      !getTwoFactorTokenByEmailResponse.success
+      getPasswordResetTokenByEmailResponse &&
+      !getPasswordResetTokenByEmailResponse.success
     )
-      return getTwoFactorTokenByEmailResponse;
+      return getPasswordResetTokenByEmailResponse;
 
     const getUserByEmailResponse =
       await this._checkerService.checkDataExistsAndReturnUser(
-        getTwoFactorTokenByEmailResponse.data
+        getPasswordResetTokenByEmailResponse.data
       );
 
     if (
@@ -288,7 +288,7 @@ export default class UserService implements IUserService {
     );
 
     await this._tokenRepository.deletePasswordResetToken(
-      getTwoFactorTokenByEmailResponse.data.id
+      getPasswordResetTokenByEmailResponse.data.id
     );
 
     return {
@@ -300,194 +300,162 @@ export default class UserService implements IUserService {
 
   async changePassword(
     changePasswordDTO: ChangePasswordDTO
-  ): Promise<RequestResponse<User>> {
-    const twoFactorToken = await this._tokenRepository.getTwoFactorTokenByEmail(
-      changePasswordDTO.email as string
+  ): Promise<RequestResponse<User | null>> {
+    const getTwoFactorTokenByEmailResponse =
+      await this._checkerService.checkIsTokenValidAndReturnTwoFactorToken(
+        changePasswordDTO
+      );
+
+    if (
+      getTwoFactorTokenByEmailResponse &&
+      !getTwoFactorTokenByEmailResponse.success
+    )
+      return getTwoFactorTokenByEmailResponse;
+
+    const getUserByEmailResponse =
+      await this._checkerService.checkDataExistsAndReturnUser(
+        getTwoFactorTokenByEmailResponse.data
+      );
+
+    if (
+      (getUserByEmailResponse && !getUserByEmailResponse.success) ||
+      !getUserByEmailResponse.data
+    )
+      return getUserByEmailResponse;
+
+    const checkIsUserPasswordResponse =
+      await this._checkerService.checkIsUserPasswordPreviousPassword(
+        getUserByEmailResponse.data,
+        { password: changePasswordDTO.newPassword },
+        "You must provide other password than the old one!"
+      );
+
+    if (checkIsUserPasswordResponse && !checkIsUserPasswordResponse.success)
+      return checkIsUserPasswordResponse;
+
+    const updatedPassword = await this._userRepository.updatePassword(
+      getUserByEmailResponse.data,
+      { password: changePasswordDTO.newPassword }
     );
 
-    console.log(changePasswordDTO);
-
-    if (!twoFactorToken) {
-      return {
-        success: false,
-        message: "Token is missing!",
-        data: null,
-      };
-    }
-
-    const existingUser = await this._userRepository.getUserByEmail(
-      twoFactorToken
+    await this._tokenRepository.deleteTwoFactorToken(
+      getTwoFactorTokenByEmailResponse.data.id
     );
-
-    if (!existingUser) {
-      return {
-        success: false,
-        message: "User not found!",
-        data: null,
-      };
-    }
-
-    const tokenHasExpired = new Date(twoFactorToken.expires) < new Date();
-
-    if (tokenHasExpired) {
-      return {
-        success: false,
-        message: "Token has expired!",
-        data: null,
-      };
-    }
-
-    if (!twoFactorToken || twoFactorToken.token !== changePasswordDTO.code) {
-      return {
-        success: false,
-        message: "Invalid code!",
-        data: null,
-      };
-    }
-
-    const hashedPassword = await bcrypt.hash(
-      changePasswordDTO.newPassword as string,
-      10
-    );
-
-    await postgres.user.update({
-      where: { id: existingUser.id },
-      data: { password: hashedPassword },
-    });
-
-    await postgres.twoFactorToken.delete({
-      where: { id: twoFactorToken.id },
-    });
 
     return {
       success: true,
       message: "Password changed successfully!",
-      data: null,
+      data: updatedPassword,
     };
   }
 
   async toggleTwoFactor(
     toggleTwoFactorDTO: ToggleTwoFactorDTO
-  ): Promise<RequestResponse<void>> {
+  ): Promise<RequestResponse<User | null>> {
     try {
-      const existingUser = await this._userRepository.getUserByEmail({
-        email: toggleTwoFactorDTO.email as string,
-      });
-      if (!existingUser) {
-        return {
-          success: false,
-          message: "User doesn't exist!",
-          data: null,
-        };
-      }
-      const twoFactorToken =
-        await this._tokenRepository.getTwoFactorTokenByEmail(
-          existingUser.email as string
+      const getUserByEmailResponse =
+        await this._checkerService.checkDataExistsAndReturnUser(
+          toggleTwoFactorDTO
         );
-      if (!twoFactorToken || twoFactorToken.token !== toggleTwoFactorDTO.code) {
-        return {
-          success: false,
-          message: "Invalid code!",
-          data: null,
-        };
-      }
 
-      const hasExpired = new Date(twoFactorToken.expires) < new Date();
-      if (hasExpired) {
-        await postgres.twoFactorToken.delete({
-          where: { id: twoFactorToken.id },
-        });
-        return {
-          success: false,
-          message: "Code expired!",
-          data: null,
-        };
-      }
+      if (
+        (getUserByEmailResponse && !getUserByEmailResponse.success) ||
+        !getUserByEmailResponse.data
+      )
+        return getUserByEmailResponse;
 
-      await postgres.twoFactorToken.delete({
-        where: { id: twoFactorToken.id },
-      });
+      const getTwoFactorTokenByEmailResponse =
+        await this._checkerService.checkIsTokenValidAndReturnTwoFactorToken(
+          toggleTwoFactorDTO
+        );
 
-      if (existingUser.isTwoFactorEnabled) {
+      if (
+        getTwoFactorTokenByEmailResponse &&
+        !getTwoFactorTokenByEmailResponse.success
+      )
+        return getTwoFactorTokenByEmailResponse;
+
+      await this._tokenRepository.deleteTwoFactorToken(
+        getTwoFactorTokenByEmailResponse.data.id
+      );
+
+      if (getUserByEmailResponse.data.isTwoFactorEnabled) {
         await postgres.user.update({
-          where: { id: existingUser.id },
+          where: { id: getUserByEmailResponse.data.id },
           data: { isTwoFactorEnabled: false },
         });
       } else {
         await postgres.user.update({
-          where: { id: existingUser.id },
+          where: { id: getUserByEmailResponse.data.id },
           data: { isTwoFactorEnabled: true },
         });
       }
 
-      return {
-        success: true,
-        message: existingUser.isTwoFactorEnabled
+      return this._checkerService.handleSuccess(
+        getUserByEmailResponse.data.isTwoFactorEnabled
           ? "Two-factor authentication has been disabled!"
           : "Two-factor authentication has been enabled!",
-        data: null,
-      };
+        null
+      );
     } catch (error) {
-      return {
-        success: false,
-        message: "Something went wrong!",
-        data: null,
-      };
+      return this._checkerService.handleError(
+        "There was an error while toggling two factor"
+      );
     }
   }
 
-  async updatePersonalData(
-    updatePersonalData: Partial<UpdatePersonalDataDTO>
-  ): Promise<RequestResponse<PersonalData>> {
+  async updateUserData(
+    updateUserDataDTO: UpdateUserDataDTO
+  ): Promise<RequestResponse<User | PersonalData | null>> {
     try {
-      const existingUser = await this._userRepository.getUserByEmail({
-        email: updatePersonalData.email as string,
-      });
+      const getUserByEmailResponse =
+        await this._checkerService.checkDataExistsAndReturnUser(
+          updateUserDataDTO
+        );
 
-      if (!existingUser) {
-        return {
-          success: false,
-          message: "User doesn't exist!",
-          data: null,
-        };
-      }
+      if (
+        (getUserByEmailResponse && !getUserByEmailResponse.success) ||
+        !getUserByEmailResponse.data
+      )
+        return getUserByEmailResponse;
 
-      let personalData = await postgres.personalData.findUnique({
-        where: { userId: existingUser.id },
-      });
+      const getPersonalDataResponse =
+        await this._checkerService.checkDataExistsAndReturnUserPersonalData(
+          getUserByEmailResponse.data
+        );
 
-      if (personalData) {
-        const updatedUser = await postgres.personalData.update({
-          where: { userId: existingUser.id },
-          data: { ...updatePersonalData },
-        });
+      const { email, ...personalDataToUpdate } = updateUserDataDTO;
 
-        return {
-          success: true,
-          message: "User was updated successfully!",
-          data: updatedUser,
-        };
+      if (
+        (getPersonalDataResponse && getPersonalDataResponse.success) ||
+        getPersonalDataResponse.data
+      ) {
+        const updatedPersonalData =
+          await this._userRepository.updatePersonalData(
+            getUserByEmailResponse.data,
+            personalDataToUpdate
+          );
+
+        return this._checkerService.handleSuccess(
+          "User personal data was updated successfully!",
+          updatedPersonalData
+        );
       } else {
-        const newUserData = await postgres.personalData.create({
-          data: {
-            userId: existingUser.id,
-            ...updatePersonalData,
-          },
-        });
+        const createdPersonalData =
+          await this._userRepository.createPersonalData(
+            getUserByEmailResponse.data,
+            personalDataToUpdate
+          );
 
-        return {
-          success: true,
-          message: "User personal data was created successfully!",
-          data: newUserData,
-        };
+        return this._checkerService.handleSuccess(
+          "User personal data was created successfully!",
+          createdPersonalData
+        );
       }
     } catch (error) {
-      console.error("Error updating or creating personal data:", error);
-      return {
-        success: false,
-        message: "An error occurred while updating user data!",
-        data: undefined,
-      };
+      return this._checkerService.handleError(
+        "An error occurred while updating personal data!"
+      );
     }
   }
 }

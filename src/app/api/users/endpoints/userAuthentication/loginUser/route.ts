@@ -1,11 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { userService } from "@/utils/injector";
-import {
-  RequestResponse,
-  User,
-  EmailVerificationToken,
-  TwoFactorToken,
-} from "@/utils/helpers/types";
+import { RequestResponse, User } from "@/utils/helpers/types";
 
 export async function POST(request: NextRequest) {
   const { email, password, code } = await request.json();

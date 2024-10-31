@@ -219,7 +219,7 @@ export default function useUserServices() {
       }
     };
 
-    const submitUpdatePersonalData = async (
+    const submitUpdateData = async (
       data: z.infer<typeof PersonalDataSchema>
     ) => {
       clearMessages();
@@ -235,7 +235,7 @@ export default function useUserServices() {
       } = data;
       try {
         const response = await requestService.postMethod(
-          "users/endpoints/userAuthentication/updatePersonalData",
+          "users/endpoints/userAuthentication/updateData",
           {
             email: user?.email,
             fullName,
@@ -264,7 +264,7 @@ export default function useUserServices() {
       submitNewPasswordForm,
       submitResetPasswordForm,
       submitChangePasswordForm,
-      submitUpdatePersonalData,
+      submitUpdateData,
     };
   }
 

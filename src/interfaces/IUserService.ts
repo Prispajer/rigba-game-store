@@ -1,4 +1,9 @@
-import { User, EmailVerificationToken, TwoFactorToken } from "@prisma/client";
+import {
+  User,
+  EmailVerificationToken,
+  TwoFactorToken,
+  PersonalData,
+} from "@prisma/client";
 import {
   RegisterUserDTO,
   ConfirmEmailVerificationDTO,
@@ -28,7 +33,7 @@ export default interface IUserService {
   toggleTwoFactor(
     toggleTwoFactorDTO: ToggleTwoFactorDTO
   ): Promise<RequestResponse<void>>;
-  updatePersonalData(
-    userData: Partial<PersonalData>
-  ): Promise<RequestResponse<PersonalData>>;
+  updateUserData(
+    updateUserDataDTO: UpdateUserDataDTO
+  ): Promise<RequestResponse<User | PersonalData | null>>;
 }

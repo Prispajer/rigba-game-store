@@ -8,13 +8,18 @@ import {
   TwoFactorConfirmation,
   EmailVerificationToken,
   TwoFactorToken,
+  PersonalData,
 } from "@prisma/client";
 import {
+  CreatePersonalDataDTO,
   GetTwoFactorConfirmationByUserIdDTO,
   GetUserByEmailDTO,
   GetUserByIdDTO,
+  GetUserPersonalDataDTO,
+  PersonalDataToUpdateDTO,
   RegisterUserDTO,
   UpdatePasswordDTO,
+  UpdatePersonalDataDTO,
 } from "@/utils/helpers/backendDTO";
 
 @injectable()
@@ -40,6 +45,14 @@ export default class UserRepository implements IUserRepository {
 
   async getUserById(getUserByIdDTO: GetUserByIdDTO): Promise<User | null> {
     return await this._userUtils.getUserByProperty("id", getUserByIdDTO.id);
+  }
+
+  async getUserPersonalData(
+    getUserPersonalDataDTO: GetUserPersonalDataDTO
+  ): Promise<PersonalData | null> {
+    return await postgres.personalData.findUnique({
+      where: { userId: getUserPersonalDataDTO.id },
+    });
   }
 
   async getTwoFactorConfirmationByUserId(
@@ -85,6 +98,18 @@ export default class UserRepository implements IUserRepository {
     return twoFactorConfirmation;
   }
 
+  async createPersonalData(
+    createPersonalDataDTO: CreatePersonalDataDTO,
+    dataToUpdate: PersonalDataToUpdateDTO
+  ): Promise<PersonalData> {
+    return await postgres.personalData.create({
+      data: {
+        userId: createPersonalDataDTO.id,
+        ...dataToUpdate,
+      },
+    });
+  }
+
   async updateEmailVerification(
     user: User,
     emailVerificationToken: EmailVerificationToken
@@ -122,5 +147,15 @@ export default class UserRepository implements IUserRepository {
       email: updatedPassword.email,
       password: updatedPassword.password as string,
     };
+  }
+
+  async updatePersonalData(
+    updatePersonalDataDTO: UpdatePersonalDataDTO,
+    personalDataToUpdate: PersonalDataToUpdateDTO
+  ): Promise<PersonalData> {
+    return await postgres.personalData.update({
+      where: { userId: updatePersonalDataDTO.id },
+      data: { ...personalDataToUpdate },
+    });
   }
 }

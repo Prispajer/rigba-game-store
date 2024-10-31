@@ -17,7 +17,7 @@ export default function PersonalDataContainer() {
   const [date, setDate] = React.useState<Value>(new Date());
 
   const { success, error, useUserActions } = useUserServices();
-  const { submitUpdatePersonalData } = useUserActions();
+  const { submitUpdateData } = useUserActions();
 
   const calendarRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -68,10 +68,10 @@ export default function PersonalDataContainer() {
   return (
     <div className="flex-col justify-center items-center pt-[40px] px-[40px] pb-[80px] bg-[#e9eff4]">
       <h1 className="flex justify-start mb-[20px] text-[#1A396E] text-[20px] font-[700] cursor-default">
-        PERSONAL DATA
+        USER DATA
       </h1>
       <form
-        onSubmit={handleSubmit(submitUpdatePersonalData)}
+        onSubmit={handleSubmit(submitUpdateData)}
         className="flex flex-col max-w-[450px] w-full"
       >
         <label className="flex flex-col mb-[20px] font-[600]">

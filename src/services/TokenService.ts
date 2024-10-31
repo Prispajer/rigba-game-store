@@ -230,7 +230,6 @@ export default class TokenService implements ITokenService {
         const newToken = await this._tokenRepository.generateTwoFactorToken(
           getUserByEmailResponse.data?.email as string
         );
-        console.log(newToken);
         await sendTwoFactorTokenEmail(newToken.email, newToken.token);
 
         return {

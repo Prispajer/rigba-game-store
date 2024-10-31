@@ -15,6 +15,7 @@ import {
   CheckDataExistsAndReturnProductDTO,
   CheckDataExistsAndReturnProductReviewsDTO,
   CheckDataExistsAndReturnUserDTO,
+  checkDataExistsAndReturnUserPersonalDataDTO,
   CheckDataExistsAndReturnUserCartDTO,
   CheckDataExistsAndReturnUserWishListDTO,
   CheckIsEmailInUseDTO,
@@ -34,6 +35,7 @@ import {
   ReviewLikers,
   TwoFactorToken,
   PasswordResetToken,
+  PersonalData,
 } from "@prisma/client";
 
 @injectable()
@@ -134,6 +136,21 @@ export default class CheckerService implements ICheckerService {
     );
 
     return getUserByEmail;
+  }
+
+  async checkDataExistsAndReturnUserPersonalData(
+    checkDataExistsAndReturnUserPersonalDataDTO: checkDataExistsAndReturnUserPersonalDataDTO
+  ): Promise<RequestResponse<PersonalData | null>> {
+    const getPersonalData = await this.checkDataExistsAndReturn(
+      (checkDataExistsAndReturnUserPersonalDataDTO) =>
+        this._userRepository.getUserPersonalData(
+          checkDataExistsAndReturnUserPersonalDataDTO
+        ),
+      checkDataExistsAndReturnUserPersonalDataDTO,
+      "Personal data not found!"
+    );
+
+    return getPersonalData;
   }
 
   async checkDataExistsAndReturnProduct(

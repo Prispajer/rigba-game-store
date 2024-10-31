@@ -3,7 +3,8 @@
 import React from "react";
 import { FaCartPlus } from "react-icons/fa";
 import { generateRandomValue } from "@/utils/prices";
-import { GameAPIProduct, User } from "@/utils/helpers/types";
+import { GameAPIProduct } from "@/utils/helpers/types";
+import { User } from "next-auth";
 import {
   LocalCartProductDTO,
   UserCartProductDTO,
@@ -46,14 +47,14 @@ export default function ProductBuyOrAdd({
                       handleAddUserProductToCart({
                         ...product,
                         email: user.email,
-                        externalProductId: parseInt(product.id),
+                        externalProductId: product.id,
                         description: product.description_raw,
                         price: generateRandomValue(),
                       })
                   : () =>
                       handleAddLocalProductToCart({
                         ...product,
-                        externalProductId: parseInt(product.id),
+                        externalProductId: product.id,
                         description: product.description_raw,
                         price: generateRandomValue(),
                         quantity: 1,

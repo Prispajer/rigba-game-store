@@ -1,12 +1,12 @@
 export type UserCartProductDTO = {
-  email: string;
+  email?: string | null;
   externalProductId: number;
   name: string;
   price: number;
   background_image: string;
   description?: string;
   rating?: number;
-  slug?: string;
+  slug: string;
   released?: string;
   added?: number;
 };
@@ -18,7 +18,7 @@ export type LocalCartProductDTO = {
   background_image: string;
   description?: string;
   rating?: number;
-  slug?: string;
+  slug: string;
   released?: string;
   added?: number;
   quantity: number;

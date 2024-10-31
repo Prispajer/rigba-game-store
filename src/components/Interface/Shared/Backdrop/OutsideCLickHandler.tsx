@@ -11,6 +11,7 @@ const OutsideClickHandler = ({
 }) => {
   const wrapperRef = React.useRef<HTMLDivElement>(null);
   React.useEffect(() => {
+    console.log(wrapperRef);
     const handleClickOutside = (event: MouseEvent) => {
       if (!wrapperRef.current?.contains(event.target as Node)) {
         handleOutsideClick();

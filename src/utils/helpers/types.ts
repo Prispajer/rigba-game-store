@@ -18,13 +18,13 @@ export interface Token {
 
 export interface GameAPIProduct {
   id: number;
-  externalProductId: number | null;
+  externalProductId: number | string;
   name: string;
   price: number;
   background_image: string;
   description_raw?: string;
   rating?: number;
-  slug?: string;
+  slug: string;
   released?: string;
   added?: number;
   ratings_count?: number;
@@ -65,6 +65,7 @@ export interface LocalWishList {
 }
 
 export interface LocalCart extends ProductInformations {
+  externalProductId: number;
   quantity: number;
 }
 

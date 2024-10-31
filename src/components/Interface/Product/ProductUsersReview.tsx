@@ -4,7 +4,7 @@ import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { generateStars } from "@/utils/ratings";
 import { GameAPIResponse } from "@/utils/helpers/types";
 import { UserReviewsSlice } from "@/redux/slices/userReviewsSlice";
-import { User } from "@prisma/client";
+import { User } from "next-auth";
 
 export default function ProductUsersReview({
   product,

@@ -8,11 +8,7 @@ import useUserCart from "@/hooks/useUserCart";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { generateRandomValue } from "@/utils/prices";
-import { GameAPIResponse } from "@/utils/helpers/types";
-import {
-  LocalCartProductDTO,
-  UserCartProductDTO,
-} from "@/utils/helpers/frontendDTO";
+import { GameAPIProduct, GameAPIResponse } from "@/utils/helpers/types";
 
 export default function SearchResultsModalContainer({
   gamesArray,
@@ -28,7 +24,7 @@ export default function SearchResultsModalContainer({
   const { handleClose } = useWindowVisibility();
 
   const handleAddProductToCart = (
-    game: LocalCartProductDTO | UserCartProductDTO,
+    game: GameAPIProduct,
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     event.stopPropagation();
@@ -36,14 +32,14 @@ export default function SearchResultsModalContainer({
       handleAddUserProductToCart({
         ...game,
         email: user.email,
-        externalProductId: parseInt(game.id),
+        externalProductId: game.id,
         description: game.description_raw,
         price: generateRandomValue(),
       });
     } else {
       handleAddLocalProductToCart({
         ...game,
-        externalProductId: parseInt(game.id),
+        externalProductId: game.id,
         description: game.description_raw,
         price: generateRandomValue(),
         quantity: 1,
@@ -88,12 +84,12 @@ export default function SearchResultsModalContainer({
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col w-[60px]">
                   <span className="text-[14px] text-right font-bold text-[#FFFFFF96]">
                     Od
                   </span>
-                  <span className="mt-[-2px] text-buttonBackground font-bold">
-                    21,41zł
+                  <span className="mt-[-2px] text-buttonBackground font-bold text-end">
+                    ${generateRandomValue()}
                   </span>
                   <button
                     onClick={(event) => handleAddProductToCart(game, event)}
@@ -108,7 +104,7 @@ export default function SearchResultsModalContainer({
         ))
       ) : (
         <div className="px-[15px] py-[10px] text-white">
-          <span>Brak wyników wyszukiwania</span>
+          <span>No results found</span>
         </div>
       )}
     </div>

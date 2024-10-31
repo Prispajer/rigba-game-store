@@ -4,9 +4,7 @@ import { IoCloseSharp } from "react-icons/io5";
 import SearchResultsModalContainer from "../Shared/Modals/SearchResultsModalContainer";
 import OutsideClickHandler from "../Shared/Backdrop/OutsideCLickHandler";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
-import FetchService from "@/services/FetchService";
-import UtilsService from "@/services/UtilsService";
-import IUtilsService from "@/interfaces/IUtilsService";
+import fetchService from "@/services/FetchService";
 import debounce from "@/utils/debounce";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
@@ -15,15 +13,14 @@ export default function HeaderSearchBar() {
   const [gamesArray, setGamesArray] = React.useState<GameAPIResponse[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
 
+  const searchBarInput = React.useRef<HTMLInputElement>(null);
   const { searchBarState, resolutionState, handleClose, handleToggle } =
     useWindowVisibility();
-
-  const utilsService: IUtilsService = new UtilsService(searchText.trim());
 
   const fetchGames = React.useCallback(async (searchText: string) => {
     setIsLoading(true);
     if (searchText.trim() !== "") {
-      setGamesArray(await FetchService.getProducts(searchText));
+      setGamesArray(await fetchService.getProducts(searchText));
     } else {
       setGamesArray([]);
     }
@@ -38,10 +35,28 @@ export default function HeaderSearchBar() {
     }
   }, [searchText]);
 
+  React.useEffect(() => {
+    if (searchBarState && searchBarInput.current) {
+      searchBarInput.current.focus();
+    }
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        handleClose("searchBarModal");
+      }
+    };
+
+    if (searchBarState) {
+      document.addEventListener("keydown", handleEscape);
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [searchBarState]);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    utilsService.setSearchText(value);
-    setSearchText(value);
+    setSearchText(event.target.value);
   };
 
   const handleOutsideClick = () => {
@@ -63,6 +78,7 @@ export default function HeaderSearchBar() {
           <div className="flex items-center gap-y-[10px] py-[20px] bg-primaryColor font-medium border-b-secondaryColor border-b-2">
             <FaSearch size="30px" color="white" className="mx-2" />
             <input
+              ref={searchBarInput}
               className="text-[white] border-none outline-none bg-transparent w-[100%]"
               type="text"
               name="text"
@@ -90,6 +106,7 @@ export default function HeaderSearchBar() {
           <div className="relative hidden md:flex items-center flex-1 p-[20px] border-[white] border-[2px] z-20">
             <FaSearch size="25px" color="white" className="mr-3" />
             <input
+              ref={searchBarInput}
               className="text-[white] border-none outline-none bg-transparent w-[100%]"
               type="text"
               name="text"
@@ -117,6 +134,7 @@ export default function HeaderSearchBar() {
         <div className="relative hidden md:flex items-center flex-1 p-[20px] border-[white] border-[2px] bg-transparent ">
           <FaSearch size="25px" color="white" className="mr-3" />
           <input
+            ref={searchBarInput}
             className="text-[white] border-none outline-none bg-transparent w-[100%]"
             onChange={debounce(handleChange, 1000)}
             onFocus={handleOutsideClick}

@@ -13,8 +13,8 @@ import { calculateTotalPrice } from "@/utils/prices";
 
 export default function PaymentPage() {
   const [stripePromise, setStripePromise] = React.useState<any>(null);
-  const [clientSecret, setClientSecret] = React.useState("");
-
+  const [clientSecret, setClientSecret] = React.useState<string | null>(null);
+  const [loading, setLoading] = React.useState<boolean>(true);
   const { userCartState } = useUserCart();
   const { localCartState } = useLocalStorage("localCart");
   const { user } = useCurrentUser();
@@ -22,26 +22,39 @@ export default function PaymentPage() {
   const productsByRole = user ? userCartState.products : localCartState;
 
   const loadStripeConfig = React.useCallback(async () => {
-    const response = await fetch("/api/stripe/config");
-    const { publishableKey } = await response.json();
-    setStripePromise(loadStripe(publishableKey));
+    try {
+      const response = await fetch("/api/stripe/config");
+      const { publishableKey } = await response.json();
+      const stripe = await loadStripe(publishableKey);
+      setStripePromise(stripe);
+    } catch (error) {
+      console.error("Failed to load Stripe config:", error);
+    }
   }, []);
 
   const createPaymentIntent = React.useCallback(async () => {
-    if (!clientSecret) {
-      const response = await fetch("/api/stripe/create-payment-intent", {
-        method: "POST",
-        body: JSON.stringify({
-          email: user?.email,
-          cart: productsByRole,
-          amount: parseFloat(calculateTotalPrice(productsByRole)),
-        }),
-      });
-
-      const { clientSecret: newClientSecret } = await response.json();
-      setClientSecret(newClientSecret);
+    if (productsByRole.length > 0) {
+      try {
+        const response = await fetch("/api/stripe/create-payment-intent", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: user?.email || null,
+            cart: productsByRole,
+            amount: parseFloat(calculateTotalPrice(productsByRole)),
+          }),
+        });
+        const { clientSecret: newClientSecret } = await response.json();
+        setClientSecret(newClientSecret);
+      } catch (error) {
+        console.error("Failed to create payment intent:", error);
+      } finally {
+        setLoading(false);
+      }
     }
-  }, [user?.email, productsByRole, clientSecret]);
+  }, [user?.email, productsByRole]);
 
   React.useEffect(() => {
     if (!stripePromise) {
@@ -50,12 +63,13 @@ export default function PaymentPage() {
   }, [stripePromise, loadStripeConfig]);
 
   React.useEffect(() => {
-    if (productsByRole.length > 0) {
+    if (productsByRole.length > 0 && !clientSecret) {
+      setLoading(true);
       createPaymentIntent();
     }
   }, [productsByRole, clientSecret, createPaymentIntent]);
 
-  if (!clientSecret || !stripePromise) {
+  if (loading || !clientSecret || !stripePromise) {
     return (
       <div className="flex flex-col items-center justify-center w-[100vw] h-[100vh] mx-auto bg-primaryColor">
         <LoadingAnimation />

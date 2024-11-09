@@ -52,17 +52,16 @@ export default function WishListProductList({
             className={`relative my-[10px] flex sm:flex-col bg-tertiaryColor cursor-pointer`}
           >
             <div className="relative min-w-[95px] sm:h-[250px]">
-              {isUserProduct(game) ? (
-                <Image
-                  src={game.productsInformations.background_image}
-                  layout="fill"
-                  alt="game"
-                />
-              ) : (
-                game.background_image && (
-                  <Image src={game.background_image} layout="fill" alt="game" />
-                )
-              )}
+              <Image
+                src={
+                  isUserProduct(game)
+                    ? game.productsInformations.background_image ??
+                      "/icons/logo.png"
+                    : game.background_image ?? "/icons/logo.png"
+                }
+                layout="fill"
+                alt="game"
+              />
             </div>
             <div className="max-w-[50%] sm:max-w-[100%] my-[10px] px-[15px]">
               <div className="flex flex-col">

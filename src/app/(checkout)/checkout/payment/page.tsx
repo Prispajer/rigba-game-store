@@ -25,8 +25,7 @@ export default function PaymentPage() {
     try {
       const response = await fetch("/api/stripe/config");
       const { publishableKey } = await response.json();
-      const stripe = await loadStripe(publishableKey);
-      setStripePromise(stripe);
+      setStripePromise(await loadStripe(publishableKey));
     } catch (error) {
       console.error("Failed to load Stripe config:", error);
     }
@@ -64,10 +63,12 @@ export default function PaymentPage() {
 
   React.useEffect(() => {
     if (productsByRole.length > 0 && !clientSecret) {
-      setLoading(true);
-      createPaymentIntent();
+      if (!loading) {
+        setLoading(true);
+        createPaymentIntent();
+      }
     }
-  }, [productsByRole, clientSecret, createPaymentIntent]);
+  }, [productsByRole, clientSecret, loading, createPaymentIntent]);
 
   if (loading || !clientSecret || !stripePromise) {
     return (

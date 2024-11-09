@@ -239,7 +239,7 @@ const userWishListSlice = createSlice({
             break;
           }
           default:
-            state.products = [...action.payload.products];
+            state.products = [...(action.payload.products || [])];
         }
       })
       .addCase(fetchUserWishList.rejected, (state, action) => {

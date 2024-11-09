@@ -115,6 +115,7 @@ model Cart {
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
   products  Product[]
+  order     Order[]
   user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -182,13 +183,16 @@ model Product {
 model Order {
   id               String   @id @default(cuid())
   userId           String
+  cartId           String   
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
   status           String   
   title            String   
   paymentMethod    String
+  paymentIntentId  String
   total            Float
   user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cart             Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
   keys             Key[] 
 }
 

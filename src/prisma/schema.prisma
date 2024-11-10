@@ -32,6 +32,8 @@ model User {
   accounts              Account[]
   personalData          PersonalData?
   cart                  Cart?
+  cartHistory           CartHistory[]
+  orderHistory          OrderHistory[]
   wishList              WishList?
   order                 Order[]
   reviews               Review[]
@@ -119,6 +121,19 @@ model Cart {
   user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model CartHistory {
+  id        String           @id @default(cuid())
+  userId    String
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  products  ProductHistory[]
+  orderHistory OrderHistory[]
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+
 model WishList {
   id        String      @id @default(cuid())
   userId    String      @unique
@@ -174,10 +189,20 @@ model Product {
   quantity             Int?
   productsInformations ProductInformations? 
   reviewLikers         ReviewLikers[]
-  reviews              Review[]             
+  reviews              Review[]     
   cart                 Cart?                 @relation(fields: [cartId], references: [id], onDelete: Cascade)
   wishList             WishList?             @relation(fields: [wishListId], references: [id], onDelete: Cascade)
-  keys     Key[]
+}
+
+model ProductHistory {
+  id                   String                @id @default(cuid())
+  externalProductId    Int                   
+  cartId               String    
+  userId               String
+  quantity             Int
+  productsInformations ProductInformations? 
+  cartHistory          CartHistory          @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  keys                 Key[]
 }
 
 model Order {
@@ -193,24 +218,41 @@ model Order {
   total            Float
   user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   cart             Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  keys             Key[] 
 }
+
+model OrderHistory {
+  id             String        @id @default(cuid())
+  userId         String
+  cartHistoryId  String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  status         String
+  title          String
+  paymentMethod  String
+  paymentIntentId String
+  total          Float
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cartHistory    CartHistory   @relation(fields: [cartHistoryId], references: [id], onDelete: Cascade)
+  keys           Key[]
+}
+
 
 model Key {
   id        String   @id @default(cuid())
-  orderId   String
-  productId String   
+  orderHistoryId   String
+  productHistoryId String   
   key       String    
   createdAt DateTime  @default(now())
-  order     Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  orderHistory    OrderHistory     @relation(fields: [orderHistoryId], references: [id], onDelete: Cascade)
+  productHistory    ProductHistory   @relation(fields: [productHistoryId], references: [id], onDelete: Cascade)
 }
 
 
 model ProductInformations {
-  id                   String       @id @default(cuid())
-  productId            String       
-  name                 String
+  id                   String        @id @default(cuid())
+  productId            String?   @unique
+  productHistoryId     String?  @unique
+  name                 String       
   slug                 String
   description          String?
   rating               Float?
@@ -218,9 +260,9 @@ model ProductInformations {
   added                Float?
   price                Float
   background_image     String?
-  product              Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product              Product?      @relation(fields: [productId], references: [id])
+  productHistory       ProductHistory?  @relation(fields: [productHistoryId], references: [id])
 
-  @@unique([productId])
 }
 
 

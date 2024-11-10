@@ -63,12 +63,10 @@ export default function PaymentPage() {
 
   React.useEffect(() => {
     if (productsByRole.length > 0 && !clientSecret) {
-      if (!loading) {
-        setLoading(true);
-        createPaymentIntent();
-      }
+      setLoading(true);
+      createPaymentIntent();
     }
-  }, [productsByRole, clientSecret, loading, createPaymentIntent]);
+  }, [productsByRole, clientSecret, createPaymentIntent]);
 
   if (loading || !clientSecret || !stripePromise) {
     return (

@@ -9,10 +9,13 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "", {
 
 export async function POST(request: NextRequest) {
   const { email, amount, cart } = await request.json();
+
+  if (!email) {
+    return NextResponse.json({ error: "Email is required" }, { status: 400 });
+  }
+
   const orderExpirationDate = 20 * 60 * 1000;
   const currentTime = new Date().getTime();
-
-  console.log(email, cart);
 
   const user = await postgres.user.findUnique({ where: { email } });
 
@@ -24,51 +27,47 @@ export async function POST(request: NextRequest) {
     where: {
       userId: user.id,
       status: "Pending",
-      cartId: cart[0].cartId,
+      cartId: cart[0]?.cartId,
     },
     orderBy: { createdAt: "desc" },
   });
+
   if (pendingOrder) {
     const orderCreationTime = new Date(pendingOrder.createdAt).getTime();
+    const paymentIntent = await stripe.paymentIntents.retrieve(
+      pendingOrder.paymentIntentId
+    );
+
     if (
-      currentTime - orderCreationTime >= orderExpirationDate ||
-      pendingOrder.paymentIntentId !== cart[0].paymentIntentId
+      currentTime - orderCreationTime < orderExpirationDate &&
+      paymentIntent?.status === "requires_payment_method"
     ) {
-      await postgres.order.update({
-        where: { id: pendingOrder.id },
-        data: { status: "Canceled" },
+      return NextResponse.json({
+        clientSecret: paymentIntent.client_secret,
+        existingOrder: pendingOrder,
       });
-    } else {
-      const paymentIntent = await stripe.paymentIntents.retrieve(
-        pendingOrder.paymentIntentId
-      );
-      if (paymentIntent && paymentIntent.status === "requires_payment_method") {
-        return NextResponse.json({
-          clientSecret: paymentIntent.client_secret,
-          existingOrder: pendingOrder,
-        });
-      }
     }
+
+    await postgres.order.update({
+      where: { id: pendingOrder.id },
+      data: { status: "Canceled" },
+    });
   }
 
-  if (
-    !pendingOrder ||
-    pendingOrder.status === "Canceled" ||
-    pendingOrder.status === "Completed"
-  ) {
-    const newOrder = await postgres.order.create({
-      data: {
-        userId: user.id,
-        status: "Pending",
-        title: cart[0]?.productsInformations?.name || "Order",
-        paymentMethod: "Card",
-        paymentIntentId: "",
-        total: amount,
-        cartId: cart[0].cartId,
-      },
-    });
+  const newOrder = await postgres.order.create({
+    data: {
+      userId: user.id,
+      status: "Pending",
+      title: cart[0]?.productsInformations?.name || "Order",
+      paymentMethod: "Card",
+      paymentIntentId: "",
+      total: amount,
+      cartId: cart[0].cartId,
+    },
+  });
 
-    const paymentIntent = await stripe.paymentIntents.create({
+  const paymentIntent = await stripe.paymentIntents.create(
+    {
       currency: "USD",
       amount: Math.round(amount * 100),
       metadata: {
@@ -76,20 +75,21 @@ export async function POST(request: NextRequest) {
         cartId: cart[0].cartId,
         orderId: newOrder.id,
       },
-    });
+    },
+    { idempotencyKey: `order_${newOrder.id}_user_${user.id}` }
+  );
 
-    if (!paymentIntent.client_secret) {
-      throw new Error("Failed to create payment intent");
-    }
-
-    await postgres.order.update({
-      where: { id: newOrder.id },
-      data: { paymentIntentId: paymentIntent.id },
-    });
-
-    return NextResponse.json({
-      clientSecret: paymentIntent.client_secret,
-      newOrder,
-    });
+  if (!paymentIntent.client_secret) {
+    throw new Error("Failed to create payment intent");
   }
+
+  await postgres.order.update({
+    where: { id: newOrder.id },
+    data: { paymentIntentId: paymentIntent.id },
+  });
+
+  return NextResponse.json({
+    clientSecret: paymentIntent.client_secret,
+    newOrder,
+  });
 }

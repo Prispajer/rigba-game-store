@@ -1,7 +1,22 @@
 import { RequestResponse } from "@/utils/helpers/types";
-import { User, Product, Cart, Review } from "@prisma/client";
+import {
+  User,
+  Product,
+  Cart,
+  WishList,
+  Review,
+  ReviewLikers,
+  ProductHistory,
+  OrderHistory,
+  PasswordResetToken,
+  PersonalData,
+  TwoFactorToken,
+} from "@prisma/client";
 import {
   CheckDataExistsAndReturnProductDTO,
+  CheckDataExistsAndReturnUserPersonalDataDTO,
+  CheckDataExistsAndReturnUserOrderHistoryDTO,
+  CheckDataExistsAndReturnUserProductHistoryDTO,
   CheckDataExistsAndReturnProductReviewsDTO,
   CheckDataExistsAndReturnUserDTO,
   CheckDataExistsAndReturnUserCartDTO,
@@ -11,6 +26,8 @@ import {
   CheckDataExistsAndReturnReviewDTO,
   CheckDataExistsAndReturnReviewLikersDTO,
   CheckIsTokenValidAndReturnTwoFactorTokenDTO,
+  CheckIsTokenValidAndReturnPasswordResetTokenDTO,
+  CheckIsUserPasswordPreviousPasswordDTO,
 } from "@/utils/helpers/backendDTO";
 
 export default interface ICheckerService {
@@ -33,7 +50,7 @@ export default interface ICheckerService {
     checkDataExistsAndReturnUser: CheckDataExistsAndReturnUserDTO
   ): Promise<RequestResponse<User | null>>;
   checkDataExistsAndReturnUserPersonalData(
-    checkDataExistsAndReturnUserPersonalDataDTO: checkDataExistsAndReturnUserPersonalDataDTO
+    checkDataExistsAndReturnUserPersonalDataDTO: CheckDataExistsAndReturnUserPersonalDataDTO
   ): Promise<RequestResponse<PersonalData | null>>;
   checkDataExistsAndReturnProduct(
     CheckDataExistsAndReturnProductDTO: CheckDataExistsAndReturnProductDTO
@@ -53,6 +70,12 @@ export default interface ICheckerService {
   checkDataExistsAndReturnReviewLikers(
     checkDataExistsAndReturnReviewLikersDTO: CheckDataExistsAndReturnReviewLikersDTO
   ): Promise<RequestResponse<ReviewLikers | null>>;
+  checkDataExistsAndReturnUserProductHistory(
+    checkDataExistsAndReturnUserProductHistoryDTO: CheckDataExistsAndReturnUserProductHistoryDTO
+  ): Promise<RequestResponse<ProductHistory[] | null>>;
+  checkDataExistsAndReturnUserOrderHistory(
+    checkDataExistsAndReturnUserOrderHistoryDTO: CheckDataExistsAndReturnUserOrderHistoryDTO
+  ): Promise<RequestResponse<OrderHistory[] | null>>;
   checkIsTokenValidAndReturnTwoFactorToken(
     checkIsTokenValidAndReturnTwoFactorTokenDTO: CheckIsTokenValidAndReturnTwoFactorTokenDTO
   ): Promise<RequestResponse<TwoFactorToken | null>>;

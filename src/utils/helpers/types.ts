@@ -148,4 +148,6 @@ export const CLASSTYPES = {
   IProductRepository: Symbol.for("IProductRepository"),
   IProductUtils: Symbol.for("IProductUtils"),
   ICheckerService: Symbol.for("ICheckerService"),
+  IPurchaseHistoryService: Symbol.for("IPurchaseHistoryService"),
+  IPurchaseHistoryRepository: Symbol.for("IPurchaseHistoryRepository"),
 };

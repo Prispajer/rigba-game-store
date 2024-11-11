@@ -31,6 +31,10 @@ import type IReviewService from "@/interfaces/IReviewService";
 import ReviewRepository from "@/repositories/ReviewRepository";
 import type IReviewRepository from "@/interfaces/IReviewRepository";
 import { CLASSTYPES } from "@/utils/helpers/types";
+import IPurchaseHistoryRepository from "@/interfaces/IPurchaseHistoryRepository";
+import PurchaseHistoryService from "@/repositories/PurchaseHistoryRepository";
+import PurchaseHistoryRepository from "@/repositories/PurchaseHistoryRepository";
+import IPurchaseHistoryService from "@/interfaces/IPurchaseHistoryService";
 
 const container = new Container();
 
@@ -59,6 +63,12 @@ container
   .to(ReviewRepository);
 container.bind<IProductUtils>(CLASSTYPES.IProductUtils).to(ProductUtils);
 container.bind<ICheckerService>(CLASSTYPES.ICheckerService).to(CheckerService);
+container
+  .bind<IPurchaseHistoryService>(CLASSTYPES.IPurchaseHistoryService)
+  .to(PurchaseHistoryService);
+container
+  .bind<IPurchaseHistoryRepository>(CLASSTYPES.IPurchaseHistoryRepository)
+  .to(PurchaseHistoryRepository);
 
 export const userService = container.get<IUserService>(CLASSTYPES.IUserService);
 export const userRepository = container.get<IUserRepository>(
@@ -97,5 +107,12 @@ export const productUtils = container.get<IProductUtils>(
 export const checkerService = container.get<ICheckerService>(
   CLASSTYPES.ICheckerService
 );
+export const purchaseHistoryService = container.get<IPurchaseHistoryService>(
+  CLASSTYPES.IPurchaseHistoryService
+);
+export const purchaseHistoryRepository =
+  container.get<IPurchaseHistoryRepository>(
+    CLASSTYPES.IPurchaseHistoryRepository
+  );
 
 export { container };

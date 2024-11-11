@@ -9,19 +9,22 @@ import type ITokenRepository from "@/interfaces/ITokenRepository";
 import type IWishListRepository from "@/interfaces/IWishListRepository";
 import type ICartRepository from "@/interfaces/ICartRepository";
 import type IReviewRepository from "@/interfaces/IReviewRepository";
+import type IPurchaseHistoryRepository from "@/interfaces/IPurchaseHistoryRepository";
 import { RequestResponse } from "../utils/helpers/types";
 import { CLASSTYPES } from "../utils/helpers/types";
 import {
   CheckDataExistsAndReturnProductDTO,
   CheckDataExistsAndReturnProductReviewsDTO,
   CheckDataExistsAndReturnUserDTO,
-  checkDataExistsAndReturnUserPersonalDataDTO,
+  CheckDataExistsAndReturnUserPersonalDataDTO,
   CheckDataExistsAndReturnUserCartDTO,
   CheckDataExistsAndReturnUserWishListDTO,
   CheckIsEmailInUseDTO,
   CheckIsUserPasswordCorrectDTO,
   CheckDataExistsAndReturnReviewDTO,
   CheckDataExistsAndReturnReviewLikersDTO,
+  CheckDataExistsAndReturnUserProductHistoryDTO,
+  CheckDataExistsAndReturnUserOrderHistoryDTO,
   CheckIsTokenValidAndReturnTwoFactorTokenDTO,
   CheckIsTokenValidAndReturnPasswordResetTokenDTO,
   CheckIsUserPasswordPreviousPasswordDTO,
@@ -36,6 +39,8 @@ import {
   TwoFactorToken,
   PasswordResetToken,
   PersonalData,
+  ProductHistory,
+  OrderHistory,
 } from "@prisma/client";
 
 @injectable()
@@ -46,6 +51,7 @@ export default class CheckerService implements ICheckerService {
   private readonly _reviewRepository: IReviewRepository;
   private readonly _productRepository: IProductRepository;
   private readonly _tokenRepository: ITokenRepository;
+  private readonly _purchaseHistoryRepository: IPurchaseHistoryRepository;
 
   constructor(
     @inject(CLASSTYPES.IUserRepository) userRepository: IUserRepository,
@@ -57,7 +63,9 @@ export default class CheckerService implements ICheckerService {
     reviewRepository: IReviewRepository,
     @inject(CLASSTYPES.IProductRepository)
     productRepository: IProductRepository,
-    @inject(CLASSTYPES.ITokenRepository) tokenRepository: ITokenRepository
+    @inject(CLASSTYPES.ITokenRepository) tokenRepository: ITokenRepository,
+    @inject(CLASSTYPES.IPurchaseHistoryRepository)
+    purchaseHistoryRepository: IPurchaseHistoryRepository
   ) {
     this._userRepository = userRepository;
     this._cartRepository = cartRepository;
@@ -65,6 +73,7 @@ export default class CheckerService implements ICheckerService {
     this._reviewRepository = reviewRepository;
     this._productRepository = productRepository;
     this._tokenRepository = tokenRepository;
+    this._purchaseHistoryRepository = purchaseHistoryRepository;
   }
 
   async getUserEntity<T>(
@@ -139,7 +148,7 @@ export default class CheckerService implements ICheckerService {
   }
 
   async checkDataExistsAndReturnUserPersonalData(
-    checkDataExistsAndReturnUserPersonalDataDTO: checkDataExistsAndReturnUserPersonalDataDTO
+    checkDataExistsAndReturnUserPersonalDataDTO: CheckDataExistsAndReturnUserPersonalDataDTO
   ): Promise<RequestResponse<PersonalData | null>> {
     const getPersonalData = await this.checkDataExistsAndReturn(
       (checkDataExistsAndReturnUserPersonalDataDTO) =>
@@ -222,6 +231,36 @@ export default class CheckerService implements ICheckerService {
     );
 
     return getReview;
+  }
+
+  async checkDataExistsAndReturnUserProductHistory(
+    checkDataExistsAndReturnUserProductHistoryDTO: CheckDataExistsAndReturnUserProductHistoryDTO
+  ): Promise<RequestResponse<ProductHistory[] | null>> {
+    const getUserProductHistory = await this.checkDataExistsAndReturn(
+      (checkDataExistsAndReturnUserProductHistoryDTO) =>
+        this._purchaseHistoryRepository.getUserProductHistory(
+          checkDataExistsAndReturnUserProductHistoryDTO
+        ),
+      checkDataExistsAndReturnUserProductHistoryDTO,
+      "Product history not found!"
+    );
+
+    return getUserProductHistory;
+  }
+
+  async checkDataExistsAndReturnUserOrderHistory(
+    checkDataExistsAndReturnUserOrderHistoryDTO: CheckDataExistsAndReturnUserOrderHistoryDTO
+  ): Promise<RequestResponse<OrderHistory[] | null>> {
+    const getUserOrderHistory = await this.checkDataExistsAndReturn(
+      (checkDataExistsAndReturnUserOrderHistoryDTO) =>
+        this._purchaseHistoryRepository.getUserOrderHistory(
+          checkDataExistsAndReturnUserOrderHistoryDTO
+        ),
+      checkDataExistsAndReturnUserOrderHistoryDTO,
+      "Order history not found!"
+    );
+
+    return getUserOrderHistory;
   }
 
   async checkDataExistsAndReturnReviewLikers(

@@ -4,7 +4,7 @@ export type CheckDataExistsAndReturnUserDTO = {
   email: string;
 };
 
-export type checkDataExistsAndReturnUserPersonalDataDTO = {
+export type CheckDataExistsAndReturnUserPersonalDataDTO = {
   id: string;
 };
 
@@ -39,14 +39,18 @@ export type CheckDataExistsAndReturnReviewLikersDTO = {
   reviewId: string;
 };
 
-export type CheckDataExistsAndReturnUserCartProductDTO = {
-  id: string;
-  externalProductId: number;
+export type CheckDataExistsAndReturnReviewLikersDTO = {
+  userId: string;
+  productId: string;
+  reviewId: string;
 };
 
-export type CheckDataExistsAndReturnUserWishListProductDTO = {
-  id: string;
-  externalProductId: number;
+export type CheckDataExistsAndReturnUserProductHistoryDTO = {
+  email: string;
+};
+
+export type CheckDataExistsAndReturnUserOrderHistoryDTO = {
+  email: string;
 };
 
 export type CheckIsUserPasswordCorrectDTO = {
@@ -191,6 +195,14 @@ export type GetUserByIdDTO = {
 export type GetUserCartDTO = {
   email: string;
   id: string;
+};
+
+export type GetUserProductHistoryDTO = {
+  userId: string;
+};
+
+export type GetUserOrderHistoryDTO = {
+  userId: string;
 };
 
 export type GetUserPersonalDataDTO = {

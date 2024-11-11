@@ -18,6 +18,7 @@ export default class CartRepository implements ICartRepository {
   constructor(@inject(CLASSTYPES.IProductUtils) productUtils: IProductUtils) {
     this._productUtils = productUtils;
   }
+
   async getUserCart(getUserCartDTO: GetUserCartDTO): Promise<Cart | null> {
     try {
       return await this._productUtils.executeOperation(

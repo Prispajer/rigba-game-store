@@ -30,6 +30,8 @@ export const endpointsRoutes: string[] = [
   "/api/products/endpoints/productManagement/getCart",
   "/api/products/endpoints/productManagement/getReviews",
   "/api/products/endpoints/productManagement/getWishList",
+  "/api/products/endpoints/productManagement/getProductHistory",
+  "/api/products/endpoints/productManagement/getOrderHistory",
   "/api/products/endpoints/productManagement/addProductToCart",
   "/api/products/endpoints/productManagement/deleteProductFromCart",
   "/api/products/endpoints/productManagement/addProductToWishList",

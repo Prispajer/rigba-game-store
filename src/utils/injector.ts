@@ -32,7 +32,7 @@ import ReviewRepository from "@/repositories/ReviewRepository";
 import type IReviewRepository from "@/interfaces/IReviewRepository";
 import { CLASSTYPES } from "@/utils/helpers/types";
 import IPurchaseHistoryRepository from "@/interfaces/IPurchaseHistoryRepository";
-import PurchaseHistoryService from "@/repositories/PurchaseHistoryRepository";
+import PurchaseHistoryService from "@/services/PurchaseHistoryService";
 import PurchaseHistoryRepository from "@/repositories/PurchaseHistoryRepository";
 import IPurchaseHistoryService from "@/interfaces/IPurchaseHistoryService";
 

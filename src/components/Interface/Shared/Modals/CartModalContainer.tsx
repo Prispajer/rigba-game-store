@@ -54,114 +54,186 @@ export default function CartModalContainer() {
               </button>
             </div>
             <ul className="flex flex-col w-full">
-              {productsByRole.map((product) => (
-                <li
-                  key={product.externalProductId}
-                  className="flex w-full p-[20px] gap-2 border-b-[1px] border-[#ffffff1a]"
-                >
-                  <div className="relative flex flex-0 min-w-[50px] items-center h-[100px] cursor-pointer">
-                    <Image
-                      onClick={() =>
-                        redirectToGame(
-                          product.productsInformations?.slug || product.slug,
-                          handleClose,
-                          "cartModal"
-                        )
-                      }
-                      src={
-                        product.productsInformations?.background_image ||
-                        product.background_image
-                      }
-                      layout="fill"
-                      alt={product.productsInformations?.name || product.name}
-                    />
-                  </div>
-                  <div className="flex flex-1 flex-col px-2 gap-y-[10px] text-white">
-                    <div
-                      onClick={() =>
-                        redirectToGame(
-                          product.productsInformations?.slug || product.slug,
-                          handleClose,
-                          "cartModal"
-                        )
-                      }
-                      className="flex flex-0  font-medium hover:text-modalHover cursor-pointer"
+              {productsByRole.map((product) => {
+                if ("productsInformations" in product) {
+                  return (
+                    <li
+                      key={product.externalProductId}
+                      className="flex w-full p-[20px] gap-2 border-b-[1px] border-[#ffffff1a]"
                     >
-                      {product.productsInformations?.name || product.name}
-                    </div>
-                    <div className="flex items-center text-[#ffffffb3] text-[16px]">
-                      <span className="mr-1 cursor-default">
-                        Digital product
-                      </span>
-                      <span className="mt-1 hover:text-modalHover">
-                        <HiMiniQuestionMarkCircle />
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center w-full text-white">
-                      <div>
-                        <button
-                          className="mr-2 hover:text-modalHover"
-                          onClick={
-                            user
-                              ? () =>
-                                  handleDecreaseQuantityUserProductFromCart(
-                                    product.externalProductId
-                                  )
-                              : () =>
-                                  handleDecreaseQuantityLocalProductFromCart(
-                                    product.externalProductId
-                                  )
+                      <div className="relative flex flex-0 min-w-[50px] items-center h-[100px] cursor-pointer">
+                        <Image
+                          onClick={() =>
+                            redirectToGame(
+                              product.productsInformations?.slug,
+                              handleClose,
+                              "cartModal"
+                            )
                           }
-                        >
-                          -
-                        </button>
-                        <span className="cursor-default">
-                          {product.quantity || 1}
-                        </span>
-                        <button
-                          className="ml-2 hover:text-modalHover"
-                          onClick={
-                            user
-                              ? () =>
-                                  handleIncreaseQuantityUserProductFromCart(
-                                    product.externalProductId
-                                  )
-                              : () =>
-                                  handleIncreaseQuantityLocalProductFromCart(
-                                    product.externalProductId
-                                  )
+                          src={
+                            product.productsInformations.background_image ?? ""
                           }
-                        >
-                          +
-                        </button>
+                          layout="fill"
+                          alt={product.productsInformations.name}
+                        />
                       </div>
-                      <button
-                        onClick={
-                          user
-                            ? () =>
-                                handleDeleteUserProductFromCart(
+                      <div className="flex flex-1 flex-col px-2 gap-y-[10px] text-white">
+                        <div
+                          onClick={() =>
+                            redirectToGame(
+                              product.productsInformations.slug,
+                              handleClose,
+                              "cartModal"
+                            )
+                          }
+                          className="flex flex-0 font-medium hover:text-modalHover cursor-pointer"
+                        >
+                          {product.productsInformations.name}
+                        </div>
+                        <div className="flex items-center text-[#ffffffb3] text-[16px]">
+                          <span className="mr-1 cursor-default">
+                            Digital product
+                          </span>
+                          <span className="mt-1 hover:text-modalHover">
+                            <HiMiniQuestionMarkCircle />
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center w-full text-white">
+                          <div>
+                            <button
+                              className="mr-2 hover:text-modalHover"
+                              onClick={() =>
+                                handleDecreaseQuantityUserProductFromCart({
+                                  email: user?.email,
+                                  externalProductId: product.externalProductId,
+                                })
+                              }
+                            >
+                              -
+                            </button>
+                            <span className="cursor-default">
+                              {product.quantity || 1}
+                            </span>
+                            <button
+                              className="ml-2 hover:text-modalHover"
+                              onClick={() =>
+                                handleIncreaseQuantityUserProductFromCart({
+                                  email: user?.email,
+                                  externalProductId: product.externalProductId,
+                                })
+                              }
+                            >
+                              +
+                            </button>
+                          </div>
+                          <button
+                            onClick={() =>
+                              handleDeleteUserProductFromCart({
+                                email: user?.email,
+                                externalProductId: product.externalProductId,
+                              })
+                            }
+                            className="text-[14px] hover:text-modalHover"
+                          >
+                            <FaRegTrashAlt />
+                          </button>
+                          <div>
+                            <strong className="cursor-default">
+                              ${product.productsInformations?.price}
+                            </strong>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  );
+                } else {
+                  return (
+                    <li
+                      key={product.externalProductId}
+                      className="flex w-full p-[20px] gap-2 border-b-[1px] border-[#ffffff1a]"
+                    >
+                      <div className="relative flex flex-0 min-w-[50px] items-center h-[100px] cursor-pointer">
+                        <Image
+                          onClick={() =>
+                            redirectToGame(
+                              product.slug,
+                              handleClose,
+                              "cartModal"
+                            )
+                          }
+                          src={product.background_image ?? ""}
+                          layout="fill"
+                          alt={product.name}
+                        />
+                      </div>
+                      <div className="flex flex-1 flex-col px-2 gap-y-[10px] text-white">
+                        <div
+                          onClick={() =>
+                            redirectToGame(
+                              product.slug,
+                              handleClose,
+                              "cartModal"
+                            )
+                          }
+                          className="flex flex-0 font-medium hover:text-modalHover cursor-pointer"
+                        >
+                          {product.name}
+                        </div>
+                        <div className="flex items-center text-[#ffffffb3] text-[16px]">
+                          <span className="mr-1 cursor-default">
+                            Digital product
+                          </span>
+                          <span className="mt-1 hover:text-modalHover">
+                            <HiMiniQuestionMarkCircle />
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center w-full text-white">
+                          <div>
+                            <button
+                              className="mr-2 hover:text-modalHover"
+                              onClick={() =>
+                                handleDecreaseQuantityLocalProductFromCart(
                                   product.externalProductId
                                 )
-                            : () =>
-                                handleDeleteLocalProductFromCart(
+                              }
+                            >
+                              -
+                            </button>
+                            <span className="cursor-default">
+                              {product.quantity || 1}
+                            </span>
+                            <button
+                              className="ml-2 hover:text-modalHover"
+                              onClick={() =>
+                                handleIncreaseQuantityLocalProductFromCart(
                                   product.externalProductId
                                 )
-                        }
-                        className="text-[14px] hover:text-modalHover"
-                      >
-                        <FaRegTrashAlt />
-                      </button>
-
-                      <div>
-                        <strong className="cursor-default">
-                          $
-                          {product.productsInformations?.price || product.price}
-                        </strong>
+                              }
+                            >
+                              +
+                            </button>
+                          </div>
+                          <button
+                            onClick={() =>
+                              handleDeleteLocalProductFromCart(
+                                product.externalProductId
+                              )
+                            }
+                            className="text-[14px] hover:text-modalHover"
+                          >
+                            <FaRegTrashAlt />
+                          </button>
+                          <div>
+                            <strong className="cursor-default">
+                              ${product.price}
+                            </strong>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </li>
-              ))}
+                    </li>
+                  );
+                }
+              })}
             </ul>
             {productsByRole.length ? (
               <div className="p-[20px]">

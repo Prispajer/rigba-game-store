@@ -6,16 +6,54 @@ import {
   fetchDeleteUserProductFromWishList,
 } from "@/redux/slices/userWishListSlice";
 import useCurrentUser from "./useCurrentUser";
+import debounce from "@/utils/debounce";
 import { fetchUserWishList } from "@/redux/slices/userWishListSlice";
-import { generateRandomValue } from "@/utils/prices";
 import { AppDispatch, RootState } from "@/redux/store";
-import { LocalWishList, UserWishList } from "@/utils/helpers/types";
+import {
+  AddUserProductToWishListDTO,
+  DeleteUserProductFromWishListDTO,
+} from "@/utils/helpers/frontendDTO";
 
 export default function useUserWishList() {
   const { user, update } = useCurrentUser();
   const dispatch = useDispatch<AppDispatch>();
+
   const userWishListState = useSelector(
     (state: RootState) => state.userWishList
+  );
+
+  const handleAddUserProductToWishList = React.useCallback(
+    debounce(
+      async (addUserProductToWishListDTO: AddUserProductToWishListDTO) => {
+        if (user?.email) {
+          await dispatch(
+            fetchAddUserProductToWishList(addUserProductToWishListDTO)
+          );
+          await dispatch(fetchUserWishList({ email: user?.email as string }));
+          await update();
+        }
+      },
+      1000
+    ),
+    [dispatch, user?.email, update]
+  );
+
+  const handleDeleteUserProductFromWishList = React.useCallback(
+    debounce(
+      async (
+        deleteUserProductFromWishListDTO: DeleteUserProductFromWishListDTO
+      ) => {
+        if (user?.email) {
+          await dispatch(
+            fetchDeleteUserProductFromWishList(deleteUserProductFromWishListDTO)
+          );
+          await dispatch(fetchUserWishList({ email: user?.email as string }));
+          await update();
+        }
+      },
+      1000
+    ),
+    [dispatch, user?.email, update]
   );
 
   const handleSetUserWishListOrdering = React.useCallback(
@@ -26,39 +64,10 @@ export default function useUserWishList() {
     [dispatch, user]
   );
 
-  const handleAddUserProductToWishList = React.useCallback(
-    async (dddUserProductToWishListDTO: AddUserProductToWishListDTO) => {
-      if (user?.email) {
-        await dispatch(
-          fetchAddUserProductToWishList(dddUserProductToWishListDTO)
-        );
-        await dispatch(fetchUserWishList({ email: user?.email as string }));
-        await update();
-      }
-    },
-    [dispatch, user?.email, update]
-  );
-
-  const handleRemoveUserProductFromWishList = React.useCallback(
-    async (externalProductId: number) => {
-      if (user?.email) {
-        await dispatch(
-          fetchDeleteUserProductFromWishList({
-            email: user.email,
-            externalProductId,
-          })
-        );
-        await dispatch(fetchUserWishList({ email: user?.email as string }));
-        await update();
-      }
-    },
-    [dispatch, user?.email, update]
-  );
-
   return {
     userWishListState,
-    handleSetUserWishListOrdering,
     handleAddUserProductToWishList,
-    handleRemoveUserProductFromWishList,
+    handleDeleteUserProductFromWishList,
+    handleSetUserWishListOrdering,
   };
 }

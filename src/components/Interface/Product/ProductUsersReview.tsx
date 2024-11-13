@@ -4,6 +4,10 @@ import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { generateStars } from "@/utils/ratings";
 import { GameAPIResponse } from "@/utils/helpers/types";
 import { UserReviewsSlice } from "@/redux/slices/userReviewsSlice";
+import {
+  LikeUserReviewDTO,
+  UnLikeUserReviewDTO,
+} from "@/utils/helpers/frontendDTO";
 import { User } from "next-auth";
 
 export default function ProductUsersReview({
@@ -18,15 +22,9 @@ export default function ProductUsersReview({
   user: User | null;
   userReviewsState: UserReviewsSlice;
   handleFetchUserReviews: (externalProductId: number) => void;
-  handleFetchLikeUserReview: (
-    email: string,
-    externalProductId: number,
-    reviewId: string
-  ) => void;
+  handleFetchLikeUserReview: (likeUserReviewDTO: LikeUserReviewDTO) => void;
   handleFetchUnLikeUserReview: (
-    email: string,
-    externalProductId: number,
-    reviewId: string
+    unLikeUserReviewDTO: UnLikeUserReviewDTO
   ) => void;
 }) {
   React.useEffect(() => {
@@ -54,11 +52,11 @@ export default function ProductUsersReview({
                 <div className="flex items-center">
                   <button
                     onClick={() => {
-                      handleFetchLikeUserReview(
-                        user?.email as string,
-                        product.id as number,
-                        review.id as string
-                      );
+                      handleFetchLikeUserReview({
+                        email: user?.email as string,
+                        externalProductId: product.id as number,
+                        reviewId: review.id as string,
+                      });
                     }}
                     className="ml-[10px]"
                   >
@@ -66,11 +64,11 @@ export default function ProductUsersReview({
                   </button>
                   <button
                     onClick={() => {
-                      handleFetchUnLikeUserReview(
-                        user?.email as string,
-                        product.id as number,
-                        review.id as string
-                      );
+                      handleFetchUnLikeUserReview({
+                        email: user?.email as string,
+                        externalProductId: product.id as number,
+                        reviewId: review.id as string,
+                      });
                     }}
                     className="ml-[10px] mt-[2px]"
                   >

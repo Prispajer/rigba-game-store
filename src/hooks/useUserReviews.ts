@@ -5,13 +5,15 @@ import {
   fetchLikeUserReview,
   fetchUnLikeUserReview,
 } from "@/redux/slices/userReviewsSlice";
+import {
+  LikeUserReviewDTO,
+  UnLikeUserReviewDTO,
+} from "@/utils/helpers/frontendDTO";
 import { AppDispatch, RootState } from "@/redux/store";
 
 export default function useUserReviews() {
   const dispatch = useDispatch<AppDispatch>();
   const userReviewsState = useSelector((state: RootState) => state.userReviews);
-
-  console.log(userReviewsState);
 
   const handleFetchUserReviews = React.useCallback(
     async (externalProductId: number) => {
@@ -21,21 +23,17 @@ export default function useUserReviews() {
   );
 
   const handleFetchLikeUserReview = React.useCallback(
-    async (email: string, externalProductId: number, reviewId: string) => {
-      await dispatch(
-        fetchLikeUserReview({ email, externalProductId, reviewId })
-      );
-      await handleFetchUserReviews(externalProductId);
+    async (likeUserReviewDTO: LikeUserReviewDTO) => {
+      await dispatch(fetchLikeUserReview(likeUserReviewDTO));
+      await handleFetchUserReviews(likeUserReviewDTO.externalProductId);
     },
     [dispatch, handleFetchUserReviews]
   );
 
   const handleFetchUnLikeUserReview = React.useCallback(
-    async (email: string, externalProductId: number, reviewId: string) => {
-      await dispatch(
-        fetchUnLikeUserReview({ email, externalProductId, reviewId })
-      );
-      await handleFetchUserReviews(externalProductId);
+    async (unLikeUserReviewDTO: UnLikeUserReviewDTO) => {
+      await dispatch(fetchUnLikeUserReview(unLikeUserReviewDTO));
+      await handleFetchUserReviews(unLikeUserReviewDTO.externalProductId);
     },
     [dispatch, handleFetchUserReviews]
   );

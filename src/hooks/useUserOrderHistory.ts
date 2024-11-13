@@ -1,0 +1,30 @@
+"use client";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserOrderHistory } from "@/redux/slices/userOrderHistorySlice";
+import useCurrentUser from "./useCurrentUser";
+import { AppDispatch, RootState } from "@/redux/store";
+
+export default function useUserOrderHistory() {
+  const { user } = useCurrentUser();
+
+  const dispatch = useDispatch<AppDispatch>();
+  const userOrderHistoryState = useSelector(
+    (state: RootState) => state.userOrderHistory
+  );
+
+  const handleFetchUserOrderHistory = React.useCallback(async () => {
+    if (user?.email) {
+      await dispatch(fetchUserOrderHistory({ email: user.email }));
+    }
+  }, [dispatch, user?.email]);
+
+  React.useEffect(() => {
+    handleFetchUserOrderHistory();
+  }, [handleFetchUserOrderHistory]);
+
+  return {
+    userOrderHistoryState,
+    handleFetchUserOrderHistory,
+  };
+}

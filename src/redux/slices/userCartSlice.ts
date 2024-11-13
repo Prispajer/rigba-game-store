@@ -1,10 +1,17 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import requestService from "@/services/RequestService";
 import { RequestResponse, UserCart } from "@/utils/helpers/types";
-import { UserCartProductDTO } from "@/utils/helpers/frontendDTO";
+import {
+  AddUserProductToCartDTO,
+  DeleteUserProductFromCartDTO,
+} from "@/utils/helpers/frontendDTO";
+import {
+  DecreaseProductQuantityDTO,
+  IncreaseProductQuantityDTO,
+} from "@/utils/helpers/backendDTO";
 
-interface UserCartState {
-  products: UserCart[];
+export interface UserCartState {
+  products: UserCart["products"];
   status: string;
   error: string | null;
   success: string | null;
@@ -20,25 +27,25 @@ const initialState: UserCartState = {
 };
 
 export const fetchUserCart = createAsyncThunk<
-  { products: UserCart[]; message: string },
+  { products: UserCart["products"]; message: string },
   { email: string },
   { rejectValue: string }
 >("userCart/fetchUserCart", async ({ email }, { rejectWithValue }) => {
   try {
-    const fetchUserCartResponse = await requestService.postMethod(
-      "products/endpoints/productManagement/getCart",
-      {
-        email,
-      }
-    );
-
+    const fetchUserCartResponse: RequestResponse<UserCart> =
+      await requestService.postMethod(
+        "products/endpoints/productManagement/getCart",
+        {
+          email,
+        }
+      );
     if (fetchUserCartResponse && fetchUserCartResponse.success) {
       return {
-        products: fetchUserCartResponse.data?.products,
-        message: fetchUserCartResponse.message,
+        products: fetchUserCartResponse.data?.products || [],
+        message: fetchUserCartResponse.message || "Failed to fetch cart!",
       };
     } else {
-      throw new Error(fetchUserCartResponse.message || "Unknown error");
+      throw new Error(fetchUserCartResponse.message);
     }
   } catch (error) {
     return rejectWithValue((error as Error).message);
@@ -46,45 +53,61 @@ export const fetchUserCart = createAsyncThunk<
 });
 
 export const fetchAddUserProductToCart = createAsyncThunk<
-  { products: UserCart[]; message: string },
-  UserCartProductDTO,
+  { products: UserCart["products"]; message: string },
+  AddUserProductToCartDTO,
   { rejectValue: string }
 >(
   "userCart/fetchAddUserProductToCart",
-  async (fetchAddUserProductToCart, { rejectWithValue }) => {
+  async (fetchAddUserProductToCartDTO, { rejectWithValue }) => {
     try {
-      const response = await requestService.postMethod(
-        "products/endpoints/productManagement/addProductToCart",
-        fetchAddUserProductToCart
-      );
-      if (response.success) {
-        return response.data?.products;
+      const fetchAddUserProductToCartResponse: RequestResponse<UserCart> =
+        await requestService.postMethod(
+          "products/endpoints/productManagement/addProductToCart",
+          fetchAddUserProductToCartDTO
+        );
+      if (
+        fetchAddUserProductToCartResponse &&
+        fetchAddUserProductToCartResponse.success
+      ) {
+        return {
+          products: fetchAddUserProductToCartResponse.data?.products || [],
+          message:
+            fetchAddUserProductToCartResponse.message ||
+            "Failed to add product to cart!",
+        };
       } else {
-        throw new Error(response.message || "Unknown error");
+        throw new Error(fetchAddUserProductToCartResponse.message);
       }
     } catch (error) {
-      console.error("Error adding product to cart:", error);
       return rejectWithValue((error as Error).message);
     }
   }
 );
 
 export const fetchDeleteUserProductFromCart = createAsyncThunk<
-  { products: UserCart[]; message: string },
-  { email: string; externalProductId: number },
+  { products: UserCart["products"]; message: string },
+  DeleteUserProductFromCartDTO,
   { rejectValue: string }
 >(
   "userCart/fetchDeleteUserProductFromCart",
-  async ({ email, externalProductId }, { rejectWithValue }) => {
+  async (deleteUserProductFromCartDTO, { rejectWithValue }) => {
     try {
-      const response = await requestService.deleteMethod(
-        "products/endpoints/productManagement/deleteProductFromCart",
-        { email, externalProductId }
-      );
-      if (response.success) {
-        return response.data?.products;
+      const fetchDeleteUserProductFromCartResponse: RequestResponse<UserCart> =
+        await requestService.deleteMethod(
+          "products/endpoints/productManagement/deleteProductFromCart",
+          deleteUserProductFromCartDTO
+        );
+      if (
+        fetchDeleteUserProductFromCartResponse &&
+        fetchDeleteUserProductFromCartResponse.success
+      ) {
+        return {
+          products: fetchDeleteUserProductFromCartResponse.data?.products || [],
+          message: fetchDeleteUserProductFromCartResponse.message,
+        };
+      } else {
+        throw new Error(fetchDeleteUserProductFromCartResponse.message);
       }
-      throw new Error("Failed to remove product");
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
@@ -92,21 +115,38 @@ export const fetchDeleteUserProductFromCart = createAsyncThunk<
 );
 
 export const fetchIncreaseQuantityUserProductFromCart = createAsyncThunk<
-  { products: UserCart[]; message: string },
-  { email: string; externalProductId: number },
+  { products: UserCart["products"]; message: string },
+  IncreaseProductQuantityDTO,
   { rejectValue: string }
 >(
   "userCart/fetchIncreaseQuantityUserProductFromCart",
-  async ({ email, externalProductId }, { rejectWithValue }) => {
+  async (
+    increaseProductQuantityDTO: IncreaseProductQuantityDTO,
+    { rejectWithValue }
+  ) => {
     try {
-      const response = await requestService.patchMethod(
-        "products/endpoints/productManagement/increaseProductQuantity",
-        { email, externalProductId }
-      );
-      if (response.success) {
-        return response.data?.products;
+      const fetchIncreaseQuantityUserProductFromCartResponse: RequestResponse<UserCart> =
+        await requestService.patchMethod(
+          "products/endpoints/productManagement/increaseProductQuantity",
+          increaseProductQuantityDTO
+        );
+      if (
+        fetchIncreaseQuantityUserProductFromCartResponse &&
+        fetchIncreaseQuantityUserProductFromCartResponse.success
+      ) {
+        return {
+          products:
+            fetchIncreaseQuantityUserProductFromCartResponse.data?.products ||
+            [],
+          message:
+            fetchIncreaseQuantityUserProductFromCartResponse.message ||
+            "Failed to increase user product quantity!",
+        };
+      } else {
+        throw new Error(
+          fetchIncreaseQuantityUserProductFromCartResponse.message
+        );
       }
-      throw new Error("Failed to increase product quantity");
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
@@ -114,21 +154,35 @@ export const fetchIncreaseQuantityUserProductFromCart = createAsyncThunk<
 );
 
 export const fetchDecreaseQuantityUserProductFromCart = createAsyncThunk<
-  { products: UserCart[]; message: string },
-  { email: string | null | undefined; externalProductId: number },
+  { products: UserCart["products"]; message: string },
+  DecreaseProductQuantityDTO,
   { rejectValue: string }
 >(
   "userCart/fetchDecreaseQuantityUserProductFromCart",
-  async ({ email, externalProductId }, { rejectWithValue }) => {
+  async (decreaseProductQuantityDTO, { rejectWithValue }) => {
     try {
-      const response = await requestService.patchMethod(
-        "products/endpoints/productManagement/decreaseProductQuantity",
-        { email, externalProductId }
-      );
-      if (response.success) {
-        return response.data?.products;
+      const fetchDecreaseQuantityUserProductFromCartResponse: RequestResponse<UserCart> =
+        await requestService.patchMethod(
+          "products/endpoints/productManagement/decreaseProductQuantity",
+          decreaseProductQuantityDTO
+        );
+      if (
+        fetchDecreaseQuantityUserProductFromCartResponse &&
+        fetchDecreaseQuantityUserProductFromCartResponse.success
+      ) {
+        return {
+          products:
+            fetchDecreaseQuantityUserProductFromCartResponse.data?.products ||
+            [],
+          message:
+            fetchDecreaseQuantityUserProductFromCartResponse.message ||
+            "Failed to decrease user product quantity!",
+        };
+      } else {
+        throw new Error(
+          fetchDecreaseQuantityUserProductFromCartResponse.message
+        );
       }
-      throw new Error("Failed to decrease product quantity");
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
@@ -152,7 +206,7 @@ const userCartSlice = createSlice({
       })
       .addCase(fetchUserCart.fulfilled, (state, action) => {
         state.status = "Succeeded";
-        state.products = action.payload?.products
+        state.products = action.payload.products
           ? action.payload.products.sort((a, b) => a.id.localeCompare(b.id))
           : [];
       })
@@ -178,7 +232,7 @@ const userCartSlice = createSlice({
       })
       .addCase(fetchDeleteUserProductFromCart.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.products = action.payload?.products
+        state.products = action.payload.products
           ? action.payload.products.sort((a, b) => a.id.localeCompare(b.id))
           : [];
       })
@@ -193,7 +247,7 @@ const userCartSlice = createSlice({
         fetchIncreaseQuantityUserProductFromCart.fulfilled,
         (state, action) => {
           state.status = "succeeded";
-          state.products = action.payload?.products
+          state.products = action.payload.products
             ? action.payload.products.sort((a, b) => a.id.localeCompare(b.id))
             : [];
         }
@@ -212,7 +266,7 @@ const userCartSlice = createSlice({
         fetchDecreaseQuantityUserProductFromCart.fulfilled,
         (state, action) => {
           state.status = "succeeded";
-          state.products = action.payload?.products
+          state.products = action.payload.products
             ? action.payload.products.sort((a, b) => a.id.localeCompare(b.id))
             : [];
         }

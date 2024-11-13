@@ -22,7 +22,7 @@ export default function AddToWishList({
   const {
     userWishListState,
     handleAddUserProductToWishList,
-    handleRemoveUserProductFromWishList,
+    handleDeleteUserProductFromWishList,
   } = useUserWishList();
 
   const {
@@ -31,39 +31,38 @@ export default function AddToWishList({
     handleDeleteLocalProductFromWishList,
   } = useLocalStorage("localWishList");
 
-  console.log(localWishListState);
-
   const isInLocalWishList = localWishListState.some(
     (product) =>
       product.externalProductId === game?.id || game?.externalProductId
   );
 
   const isInUserWishList = userWishListState.products.some(
-    (product) =>
-      product.externalProductId === game?.id || game?.externalProductId
+    (product) => product.externalProductId === game?.id
   );
 
   const isInWishList = user ? isInUserWishList : isInLocalWishList;
 
-  const handleClick = (event: React.MouseEvent) => {
+  const handleWishListAction = (event: React.MouseEvent) => {
     event.stopPropagation();
     if (user) {
       if (isInWishList) {
-        handleRemoveUserProductFromWishList(
-          (game.externalProductId as number) || (game.id as number)
-        );
+        handleDeleteUserProductFromWishList({
+          externalProductId:
+            (game.externalProductId as number) || (game.id as number),
+          email: user.email as string,
+        });
       } else {
         handleAddUserProductToWishList({
-          email: user.email,
+          email: user.email as string,
           externalProductId: game.id,
           name: game.name,
-          description: game.description_raw,
+          description: game.description_raw as string,
           background_image: game.background_image,
           price: generateRandomValue(),
-          rating: game.rating,
+          rating: game.rating as number,
           slug: game.slug,
-          released: game.released,
-          added: game.added,
+          released: game.released as string,
+          added: game.added as number,
         });
       }
     } else {
@@ -89,7 +88,7 @@ export default function AddToWishList({
 
   return (
     <button
-      onClick={(event) => handleClick(event)}
+      onClick={(event: React.MouseEvent) => handleWishListAction(event)}
       className={`${position} p-[6px] md:p-[10px] border transition duration-300 cursor-pointer hover:bg-[#ffffff80] hover:border-[#ffffff] ${
         isInWishList ? `${added}` : `${deleted}`
       }`}

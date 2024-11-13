@@ -45,12 +45,14 @@ export type CheckDataExistsAndReturnReviewLikersDTO = {
   reviewId: string;
 };
 
-export type CheckDataExistsAndReturnUserProductHistoryDTO = {
+export type CheckDataExistsAndReturnUserProductHistoryDTO = {\
   email: string;
+  userId: string;
 };
 
 export type CheckDataExistsAndReturnUserOrderHistoryDTO = {
   email: string;
+  userId: string;
 };
 
 export type CheckIsUserPasswordCorrectDTO = {
@@ -198,10 +200,12 @@ export type GetUserCartDTO = {
 };
 
 export type GetUserProductHistoryDTO = {
+  email: string;
   userId: string;
 };
 
 export type GetUserOrderHistoryDTO = {
+  email: string;
   userId: string;
 };
 

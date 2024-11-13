@@ -9,26 +9,31 @@ import {
   fetchIncreaseQuantityUserProductFromCart,
 } from "@/redux/slices/userCartSlice";
 import useCurrentUser from "./useCurrentUser";
-import { generateRandomValue } from "@/utils/prices";
 import debounce from "@/utils/debounce";
 import { AppDispatch, RootState } from "@/redux/store";
-import { UserCartProductDTO } from "@/utils/helpers/frontendDTO";
+import {
+  AddUserProductToCartDTO,
+  DeleteUserProductFromCartDTO,
+  IncreaseQuantityUserProductFromCartDTO,
+  DecreaseQuantityUserProductFromCartDTO,
+} from "@/utils/helpers/frontendDTO";
 
 export default function useUserCart() {
   const { user, update } = useCurrentUser();
+
   const dispatch = useDispatch<AppDispatch>();
   const userCartState = useSelector((state: RootState) => state.userCart);
 
-  const handleFetchUserCart = React.useCallback(() => {
+  const handleFetchUserCart = React.useCallback(async () => {
     if (user?.email) {
-      dispatch(fetchUserCart({ email: user.email }));
+      await dispatch(fetchUserCart({ email: user.email }));
     }
   }, [dispatch, user?.email]);
 
   const handleAddUserProductToCart = React.useCallback(
-    debounce(async (userCartProductDTO: UserCartProductDTO) => {
+    debounce(async (addUserProductToCartDTO: AddUserProductToCartDTO) => {
       if (user?.email) {
-        await dispatch(fetchAddUserProductToCart(userCartProductDTO));
+        await dispatch(fetchAddUserProductToCart(addUserProductToCartDTO));
       }
       update();
     }, 1000),
@@ -36,47 +41,55 @@ export default function useUserCart() {
   );
 
   const handleDeleteUserProductFromCart = React.useCallback(
-    debounce(async (externalProductId: number) => {
-      if (user?.email) {
-        await dispatch(
-          fetchDeleteUserProductFromCart({
-            email: user.email,
-            externalProductId,
-          })
-        );
-      }
-      update();
-    }, 1000),
+    debounce(
+      async (deleteUserProductFromCartDTO: DeleteUserProductFromCartDTO) => {
+        if (user?.email) {
+          await dispatch(
+            fetchDeleteUserProductFromCart(deleteUserProductFromCartDTO)
+          );
+        }
+        update();
+      },
+      1000
+    ),
     [dispatch, user?.email, update]
   );
 
   const handleIncreaseQuantityUserProductFromCart = React.useCallback(
-    debounce(async (externalProductId: number) => {
-      if (user?.email) {
-        await dispatch(
-          fetchIncreaseQuantityUserProductFromCart({
-            email: user.email,
-            externalProductId,
-          })
-        );
-      }
-      update();
-    }, 1000),
+    debounce(
+      async (
+        increaseQuantityUserProductFromCartDTO: IncreaseQuantityUserProductFromCartDTO
+      ) => {
+        if (user?.email) {
+          await dispatch(
+            fetchIncreaseQuantityUserProductFromCart(
+              increaseQuantityUserProductFromCartDTO
+            )
+          );
+        }
+        update();
+      },
+      1000
+    ),
     [dispatch, user?.email, update]
   );
 
   const handleDecreaseQuantityUserProductFromCart = React.useCallback(
-    debounce(async (externalProductId: number) => {
-      if (user?.email) {
-        await dispatch(
-          fetchDecreaseQuantityUserProductFromCart({
-            email: user.email,
-            externalProductId,
-          })
-        );
-      }
-      update();
-    }, 1000),
+    debounce(
+      async (
+        decreaseQuantityUserProductFromCartDTO: DecreaseQuantityUserProductFromCartDTO
+      ) => {
+        if (user?.email) {
+          await dispatch(
+            fetchDecreaseQuantityUserProductFromCart(
+              decreaseQuantityUserProductFromCartDTO
+            )
+          );
+        }
+        update();
+      },
+      1000
+    ),
     [dispatch, user?.email, update]
   );
 

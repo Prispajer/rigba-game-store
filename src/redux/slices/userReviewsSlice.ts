@@ -19,7 +19,7 @@ const initialState: UserReviewsSlice = {
 };
 
 export const fetchUserReviews = createAsyncThunk<
-  { reviews: UserReviews[]; message?: string },
+  { reviews: UserReviews[]; message: string },
   { externalProductId: number },
   { rejectValue: string }
 >(
@@ -31,8 +31,6 @@ export const fetchUserReviews = createAsyncThunk<
           "products/endpoints/productManagement/getReviews",
           { externalProductId }
         );
-
-      console.log(getReviewsResponse);
 
       if (getReviewsResponse.success) {
         return {
@@ -49,7 +47,7 @@ export const fetchUserReviews = createAsyncThunk<
 );
 
 export const fetchLikeUserReview = createAsyncThunk<
-  { reviews: UserReviews[]; message?: string },
+  { reviews: UserReviews[]; message: string },
   { email: string; externalProductId: number; reviewId: string },
   { rejectValue: string }
 >(

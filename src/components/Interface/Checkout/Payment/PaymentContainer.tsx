@@ -14,11 +14,14 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 import useUserCart from "@/hooks/useUserCart";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useCustomRouter from "@/hooks/useCustomRouter";
+import { UserCartState } from "@/redux/slices/userCartSlice";
+import { LocalStorageState } from "@/redux/slices/localStorageSlice";
 
 export default function PaymentContainer() {
   const [isProcessing, setIsProcessing] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState<string>("");
   const [email, setEmail] = React.useState<string>("");
+
   const stripe = useStripe();
   const elements = useElements();
   const { user } = useCurrentUser();
@@ -37,6 +40,17 @@ export default function PaymentContainer() {
   const { redirectToGame } = useCustomRouter();
 
   const productsByRole = user ? userCartState.products : localCartState;
+
+  const isUserCart = (
+    cart: UserCartState["products"] | LocalStorageState["localCart"]
+  ): cart is UserCartState["products"] => {
+    return cart.some(
+      (item: UserCartState["products"]) => "productsInformations" in item
+    );
+  };
+
+  console.log(isUserCart(productsByRole));
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -53,7 +67,7 @@ export default function PaymentContainer() {
       },
     });
 
-    if (error.type === "card_error" || error.type === "validation_error") {
+    if (error?.type === "card_error" || error?.type === "validation_error") {
       setErrorMessage(error.message as string);
     }
 
@@ -93,7 +107,9 @@ export default function PaymentContainer() {
               <li
                 onClick={() =>
                   redirectToGame(
-                    product.productsInformations?.slug || product.slug
+                    (isUserCart(productsByRole)
+                      ? product.productsInformations?.slug
+                      : product.slug) || product.slug
                   )
                 }
                 key={product.externalProductId}
@@ -103,27 +119,35 @@ export default function PaymentContainer() {
                   <div className="relative h-full w-full">
                     <Image
                       src={
-                        product.productsInformations?.background_image ||
-                        product.background_image
+                        isUserCart(productsByRole)
+                          ? product.productsInformations?.background_image
+                          : product.background_image
                       }
                       layout="fill"
-                      alt={product.productsInformations?.name || product.name}
+                      alt={
+                        isUserCart(productsByRole)
+                          ? product.productsInformations?.name
+                          : product.name
+                      }
                     />
                   </div>
                 </div>
                 <div className="flex flex-col justify-between flex-1">
                   <div className="flex justify-between">
                     <div className="text-[#FFFFFF] font-[700]">
-                      {product.productsInformations?.name || product.name}
+                      {isUserCart(productsByRole)
+                        ? product.productsInformations?.name
+                        : product.name}
                     </div>
                     <div className="absolute right-[20px] top-[20px] text-[#ffffffb3] cursor-pointer">
                       <FaRegTrashAlt
                         onClick={(e) => {
                           e.stopPropagation();
                           user
-                            ? handleDeleteUserProductFromCart(
-                                product.externalProductId
-                              )
+                            ? handleDeleteUserProductFromCart({
+                                email: user.email,
+                                externalProductId: product.externalProductId,
+                              })
                             : handleDeleteLocalProductFromCart(
                                 product.externalProductId
                               );
@@ -155,9 +179,10 @@ export default function PaymentContainer() {
                         onClick={(e) => {
                           e.stopPropagation();
                           user
-                            ? handleDecreaseQuantityUserProductFromCart(
-                                product.externalProductId
-                              )
+                            ? handleDecreaseQuantityUserProductFromCart({
+                                email: user.email,
+                                externalProductId: product.externalProductId,
+                              })
                             : handleDecreaseQuantityLocalProductFromCart(
                                 product.externalProductId
                               );
@@ -173,9 +198,10 @@ export default function PaymentContainer() {
                         onClick={(e) => {
                           e.stopPropagation();
                           user
-                            ? handleIncreaseQuantityUserProductFromCart(
-                                product.externalProductId
-                              )
+                            ? handleIncreaseQuantityUserProductFromCart({
+                                email: user.email,
+                                externalProductId: product.externalProductId,
+                              })
                             : handleIncreaseQuantityLocalProductFromCart(
                                 product.externalProductId
                               );
@@ -187,7 +213,9 @@ export default function PaymentContainer() {
                     </div>
                     <div className="flex-0 text-[#FFFFFF] font-[700]">
                       <span>
-                        {product.productsInformations?.price || product.price}
+                        {isUserCart(productsByRole)
+                          ? product.productsInformations?.price
+                          : product.price}
                         zł
                       </span>
                     </div>

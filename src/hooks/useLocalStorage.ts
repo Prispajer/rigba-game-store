@@ -18,6 +18,7 @@ import { LocalCart, LocalWishList } from "@/utils/helpers/types";
 export default function useLocalStorage(key: string) {
   const [isLoaded, setIsLoaded] = React.useState(false);
   const dispatch = useDispatch();
+
   const localCartState = useSelector(
     (state: RootState) => state.localStorage.localCart
   );

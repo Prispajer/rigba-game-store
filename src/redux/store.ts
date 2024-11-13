@@ -9,6 +9,8 @@ import productPlatformsReducer from "./slices/productPlatformsSlice";
 import userCartReducer from "./slices/userCartSlice";
 import userWishListReducer from "./slices/userWishListSlice";
 import userReviewsReducer from "./slices/userReviewsSlice";
+import userProductHistoryReducer from "./slices/userProductHistorySlice";
+import userOrderHistoryReducer from "./slices/userOrderHistorySlice";
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +24,8 @@ export const store = configureStore({
     userCart: userCartReducer,
     userWishList: userWishListReducer,
     userReviews: userReviewsReducer,
+    userProductHistory: userProductHistoryReducer,
+    userOrderHistory: userOrderHistoryReducer,
   },
 });
 

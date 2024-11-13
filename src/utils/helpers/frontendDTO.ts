@@ -1,16 +1,3 @@
-export type UserCartProductDTO = {
-  email?: string | null;
-  externalProductId: number;
-  name: string;
-  price: number;
-  background_image: string;
-  description?: string;
-  rating?: number;
-  slug: string;
-  released?: string;
-  added?: number;
-};
-
 export type LocalCartProductDTO = {
   externalProductId: number;
   name: string;
@@ -22,6 +9,34 @@ export type LocalCartProductDTO = {
   released?: string;
   added?: number;
   quantity: number;
+};
+
+export type AddUserProductToCartDTO = {
+  email: string;
+  externalProductId: number;
+  name: string;
+  price: number;
+  background_image: string;
+  description: string;
+  rating: number;
+  slug: string;
+  released: string;
+  added: number;
+};
+
+export type DeleteUserProductFromCartDTO = {
+  email: string;
+  externalProductId: number;
+};
+
+export type IncreaseQuantityUserProductFromCartDTO = {
+  email: string;
+  externalProductId: number;
+};
+
+export type DecreaseQuantityUserProductFromCartDTO = {
+  email: string;
+  externalProductId: number;
 };
 
 export type AddUserReviewToProduct = {
@@ -52,6 +67,19 @@ export type AddUserProductToWishListDTO = {
   added: number;
 };
 
-export type FetchUserCart = {
+export type DeleteUserProductFromWishListDTO = {
   email: string;
+  externalProductId: number;
+};
+
+export type LikeUserReviewDTO = {
+  email: string;
+  externalProductId: number;
+  reviewId: string;
+};
+
+export type UnLikeUserReviewDTO = {
+  email: string;
+  externalProductId: number;
+  reviewId: string;
 };

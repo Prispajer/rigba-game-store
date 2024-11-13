@@ -33,21 +33,21 @@ export class RequestService implements IRequestService {
 
   public async postMethod<T>(
     endpoint: string,
-    body?: unknown
+    body: unknown
   ): Promise<RequestResponse<T>> {
     return await this.request(endpoint, "POST", body);
   }
 
   public async deleteMethod<T>(
     endpoint: string,
-    body?: unknown
+    body: unknown
   ): Promise<RequestResponse<T>> {
     return await this.request(endpoint, "DELETE", body);
   }
 
   public async patchMethod<T>(
     endpoint: string,
-    body?: unknown
+    body: unknown
   ): Promise<RequestResponse<T>> {
     return await this.request(endpoint, "PATCH", body);
   }

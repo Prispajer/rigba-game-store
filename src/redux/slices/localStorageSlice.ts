@@ -1,13 +1,13 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { LocalCart, LocalWishList } from "@/utils/helpers/types";
 
-export interface LocalStorageSlice {
+export interface LocalStorageState {
   localCart: LocalCart[];
   localWishList: LocalWishList[];
   ordering: string | null;
 }
 
-const initialState: LocalStorageSlice = {
+const initialState: LocalStorageState = {
   localCart: [],
   localWishList: [],
   ordering: null,
@@ -19,13 +19,13 @@ const localStorageSlice = createSlice({
   reducers: {
     setLocalCart: (
       state,
-      action: PayloadAction<LocalStorageSlice["localCart"]>
+      action: PayloadAction<LocalStorageState["localCart"]>
     ) => {
       state.localCart = action.payload;
     },
     setLocalWishList: (
       state,
-      action: PayloadAction<LocalStorageSlice["localWishList"]>
+      action: PayloadAction<LocalStorageState["localWishList"]>
     ) => {
       state.localWishList = action.payload;
       if (state.ordering) {
@@ -110,7 +110,7 @@ const localStorageSlice = createSlice({
 });
 
 const sortWishList = (
-  wishlist: LocalStorageSlice["localWishList"],
+  wishlist: LocalStorageState["localWishList"],
   ordering: string | null
 ): LocalWishList[] => {
   switch (ordering) {

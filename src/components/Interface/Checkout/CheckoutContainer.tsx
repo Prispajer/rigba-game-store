@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { use } from "react";
 import Image from "next/image";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
@@ -68,12 +68,13 @@ export default function CheckoutContainer() {
                     </div>
                     <div className="absolute right-[20px] top-[20px] text-[#ffffffb3] cursor-pointer">
                       <FaRegTrashAlt
-                        onClick={(e) => {
-                          e.stopPropagation();
+                        onClick={(event: React.MouseEvent) => {
+                          event.stopPropagation();
                           user
-                            ? handleDeleteUserProductFromCart(
-                                product.externalProductId
-                              )
+                            ? handleDeleteUserProductFromCart({
+                                email: user.email,
+                                externalProductId: product.externalProductId,
+                              })
                             : handleDeleteLocalProductFromCart(
                                 product.externalProductId
                               );
@@ -105,9 +106,10 @@ export default function CheckoutContainer() {
                         onClick={(e) => {
                           e.stopPropagation();
                           user
-                            ? handleDecreaseQuantityUserProductFromCart(
-                                product.externalProductId
-                              )
+                            ? handleDecreaseQuantityUserProductFromCart({
+                                email: user.email,
+                                externalProductId: product.externalProductId,
+                              })
                             : handleDecreaseQuantityLocalProductFromCart(
                                 product.externalProductId
                               );
@@ -123,9 +125,10 @@ export default function CheckoutContainer() {
                         onClick={(e) => {
                           e.stopPropagation();
                           user
-                            ? handleIncreaseQuantityUserProductFromCart(
-                                product.externalProductId
-                              )
+                            ? handleIncreaseQuantityUserProductFromCart({
+                                email: user.email,
+                                externalProductId: product.externalProductId,
+                              })
                             : handleIncreaseQuantityLocalProductFromCart(
                                 product.externalProductId
                               );

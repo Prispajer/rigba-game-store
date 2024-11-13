@@ -23,18 +23,15 @@ export default class PurchaseHistoryRepository
     getUserProductHistoryDTO: GetUserProductHistoryDTO
   ): Promise<ProductHistory[] | null> {
     try {
-      console.log("Product history response:", getUserProductHistoryDTO);
-
-      return await this._productUtils.executeOperation(
+      const result = await this._productUtils.executeOperation(
         (getUserProductHistoryDTO) =>
           postgres.productHistory.findMany({
             where: { userId: getUserProductHistoryDTO?.userId },
-            include: {
-              keys: true,
-            },
+            include: { keys: true, productsInformations: true },
           }),
         getUserProductHistoryDTO
       );
+      return result;
     } catch (error) {
       return null;
     }
@@ -44,13 +41,14 @@ export default class PurchaseHistoryRepository
     getUserOrderHistoryDTO: GetUserOrderHistoryDTO
   ): Promise<OrderHistory[] | null> {
     try {
-      return await this._productUtils.executeOperation(
-        (getUserOrderHistoryDTO) =>
+      const result = await this._productUtils.executeOperation(
+        (getUserProductHistoryDTO) =>
           postgres.orderHistory.findMany({
-            where: { userId: getUserOrderHistoryDTO?.userId },
+            where: { userId: getUserProductHistoryDTO?.userId },
           }),
         getUserOrderHistoryDTO
       );
+      return result;
     } catch (error) {
       return null;
     }

@@ -1,4 +1,5 @@
 import { IconType } from "react-icons/lib";
+import { Product, Key } from "@prisma/client";
 export interface User {
   id: string;
   name?: string | null;
@@ -40,15 +41,38 @@ export interface ProductInformations {
   released?: string;
   added?: number;
 }
-
-export interface UserWishList {
-  id: string;
-  externalProductId: number;
-  productsInformations: ProductInformations;
-}
 export interface UserCart {
   id: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
+  products: UserProduct[];
+}
+export interface UserWishList {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
+  products: UserProduct[];
+}
+
+export interface UserProduct {
+  id: string;
   externalProductId: number;
+  cartId: string | null;
+  userId: string | null;
+  quantity: number | null;
+  wishListId: string | null;
+  productsInformations: ProductInformations;
+}
+
+export interface UserProductHistory {
+  id: string;
+  externalProductId: number;
+  cartId: string;
+  userId: string;
+  quantity: number;
+  keys: Key[];
   productsInformations: ProductInformations;
 }
 
@@ -86,9 +110,9 @@ export interface UserReviews {
   };
 }
 export interface RequestResponse<T> {
-  data?: T | null;
-  success?: boolean;
-  message?: string;
+  data: T | null;
+  success: boolean;
+  message: string;
   twoFactor?: boolean;
 }
 export interface GameAPIResponse extends GameAPIProduct {

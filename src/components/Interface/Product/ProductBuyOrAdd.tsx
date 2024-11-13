@@ -7,7 +7,7 @@ import { GameAPIProduct } from "@/utils/helpers/types";
 import { User } from "next-auth";
 import {
   LocalCartProductDTO,
-  UserCartProductDTO,
+  AddUserProductToCartDTO,
 } from "@/utils/helpers/frontendDTO";
 
 export default function ProductBuyOrAdd({
@@ -18,7 +18,7 @@ export default function ProductBuyOrAdd({
 }: {
   product: GameAPIProduct;
   user: User | null;
-  handleAddUserProductToCart: (product: UserCartProductDTO) => void;
+  handleAddUserProductToCart: (product: AddUserProductToCartDTO) => void;
   handleAddLocalProductToCart: (product: LocalCartProductDTO) => void;
 }) {
   return (
@@ -46,9 +46,12 @@ export default function ProductBuyOrAdd({
                   ? () =>
                       handleAddUserProductToCart({
                         ...product,
-                        email: user.email,
+                        email: user.email as string,
                         externalProductId: product.id,
-                        description: product.description_raw,
+                        description: product.description_raw as string,
+                        rating: product.rating as number,
+                        released: product.released as string,
+                        added: product.added as number,
                         price: generateRandomValue(),
                       })
                   : () =>

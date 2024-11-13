@@ -1,9 +1,13 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import requestService from "@/services/RequestService";
+import {
+  AddUserProductToWishListDTO,
+  DeleteUserProductFromWishListDTO,
+} from "@/utils/helpers/frontendDTO";
 import { RequestResponse, UserWishList } from "@/utils/helpers/types";
 
 export interface UserWishListSlice {
-  products: UserWishList[];
+  products: UserWishList["products"];
   status: string;
   error: string | null;
   success: string | null;
@@ -21,24 +25,27 @@ const initialState: UserWishListSlice = {
 };
 
 export const fetchUserWishList = createAsyncThunk<
-  { products: UserWishListSlice["products"]; message: string },
+  { products: UserWishList["products"]; message: string },
   { email: string },
   { rejectValue: string }
->("userCart/fetchUserWishList", async ({ email }, { rejectWithValue }) => {
+>("userWishList/fetchUserWishList", async ({ email }, { rejectWithValue }) => {
   try {
-    const fetchUserWishListResponse = await requestService.postMethod(
-      "products/endpoints/productManagement/getWishList",
-      {
-        email,
-      }
-    );
-    if (fetchUserWishListResponse.success) {
+    const fetchUserWishListResponse: RequestResponse<UserWishList> =
+      await requestService.postMethod(
+        "products/endpoints/productManagement/getWishList",
+        {
+          email,
+        }
+      );
+    if (fetchUserWishListResponse && fetchUserWishListResponse.success) {
       return {
-        products: fetchUserWishListResponse.data?.products,
+        products: fetchUserWishListResponse.data?.products || [],
         message: fetchUserWishListResponse.message,
       };
     } else {
-      throw new Error(fetchUserWishListResponse.message || "Unknown error");
+      throw new Error(
+        fetchUserWishListResponse.message || "Failed to fetch wishlist!"
+      );
     }
   } catch (error) {
     return rejectWithValue((error as Error).message);
@@ -46,74 +53,25 @@ export const fetchUserWishList = createAsyncThunk<
 });
 
 export const fetchAddUserProductToWishList = createAsyncThunk<
-  { products: UserWishListSlice["products"]; message: string },
-  UserWishList,
+  { products: UserWishList["products"]; message: string },
+  AddUserProductToWishListDTO,
   { rejectValue: string }
 >(
   "userWishList/fetchAddUserProductToWishList",
-  async (
-    {
-      email,
-      externalProductId,
-      name,
-      description,
-      price,
-      background_image,
-      rating,
-      slug,
-      released,
-      added,
-    },
-    { rejectWithValue }
-  ) => {
+  async (addUserProductToWishListDTO, { rejectWithValue }) => {
     try {
-      console.log(
-        "email:",
-        email,
-        "externalProductId:",
-        externalProductId,
-        "name:",
-        name,
-        "description:",
-        description,
-        "price:",
-        price,
-        "background_image:",
-        background_image,
-        "rating:",
-        rating,
-        "slug:",
-        slug,
-        "released:",
-        released,
-        "added:",
-        added
-      );
-
-      const fetchAddUserProductToWishListResponse =
+      const fetchAddUserProductToWishListResponse: RequestResponse<UserWishList> =
         await requestService.postMethod(
           "products/endpoints/productManagement/addProductToWishList",
-          {
-            email,
-            externalProductId,
-            name,
-            description,
-            price,
-            background_image,
-            rating,
-            slug,
-            released,
-            added,
-          }
+          addUserProductToWishListDTO
         );
-
       if (
         fetchAddUserProductToWishListResponse.success &&
         fetchAddUserProductToWishListResponse.data &&
         fetchAddUserProductToWishListResponse.data.products
       ) {
         return {
-          products: fetchAddUserProductToWishListResponse.data.products,
+          products: fetchAddUserProductToWishListResponse.data.products || [],
           message: fetchAddUserProductToWishListResponse.message,
         };
       } else {
@@ -129,24 +87,22 @@ export const fetchAddUserProductToWishList = createAsyncThunk<
 );
 
 export const fetchDeleteUserProductFromWishList = createAsyncThunk<
-  { products: UserWishList[]; message: string },
-  {
-    email: string | null | undefined;
-    externalProductId: number;
-  },
+  { products: UserWishList["products"]; message: string },
+  DeleteUserProductFromWishListDTO,
   { rejectValue: string }
 >(
   "userWishList/fetchDeleteUserProductFromWishList",
-  async ({ email, externalProductId }, { rejectWithValue }) => {
+  async (deleteUserProductFromWishListDTO, { rejectWithValue }) => {
     try {
-      const fetchDeleteUserProductFromWishListResponse =
+      const fetchDeleteUserProductFromWishListResponse: RequestResponse<UserWishList> =
         await requestService.deleteMethod(
           "products/endpoints/productManagement/deleteProductFromWishList",
-          { email, externalProductId }
+          deleteUserProductFromWishListDTO
         );
       if (fetchDeleteUserProductFromWishListResponse.success) {
         return {
-          products: fetchDeleteUserProductFromWishListResponse.data?.products,
+          products:
+            fetchDeleteUserProductFromWishListResponse.data?.products || [],
           message: fetchDeleteUserProductFromWishListResponse.message,
         };
       } else {
@@ -156,14 +112,13 @@ export const fetchDeleteUserProductFromWishList = createAsyncThunk<
         );
       }
     } catch (error) {
-      console.error("Error deleting product from wishlist:", error);
       return rejectWithValue((error as Error).message);
     }
   }
 );
 
 const userWishListSlice = createSlice({
-  name: "userWishlist",
+  name: "userWishList",
   initialState,
   reducers: {
     setOrdering: (state, action: PayloadAction<string>) => {

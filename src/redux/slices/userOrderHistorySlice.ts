@@ -9,6 +9,7 @@ export interface UserOrderHistoryState {
   error: string | null;
   success: string | null;
   message: string | null;
+  isLoading: boolean;
 }
 
 const initialState: UserOrderHistoryState = {
@@ -17,6 +18,7 @@ const initialState: UserOrderHistoryState = {
   error: null,
   success: null,
   message: null,
+  isLoading: false,
 };
 
 export const fetchUserOrderHistory = createAsyncThunk<
@@ -30,22 +32,21 @@ export const fetchUserOrderHistory = createAsyncThunk<
       const fetchUserOrderHistoryResponse: RequestResponse<OrderHistory[]> =
         await requestService.postMethod(
           "products/endpoints/productManagement/getOrderHistory",
-          {
-            email,
-          }
+          { email }
         );
-      if (
-        fetchUserOrderHistoryResponse &&
-        fetchUserOrderHistoryResponse.success
-      ) {
+
+      if (fetchUserOrderHistoryResponse?.success) {
         return {
           data: fetchUserOrderHistoryResponse.data || [],
           message:
             fetchUserOrderHistoryResponse.message ||
-            "Failed to fetch order history!",
+            "Order history fetched successfully!",
         };
       } else {
-        throw new Error(fetchUserOrderHistoryResponse.message);
+        throw new Error(
+          fetchUserOrderHistoryResponse.message ||
+            "Failed to fetch order history!"
+        );
       }
     } catch (error) {
       return rejectWithValue((error as Error).message);
@@ -60,21 +61,30 @@ const userOrderHistorySlice = createSlice({
     clearMessages: (state) => {
       state.error = null;
       state.success = null;
+      state.message = null;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchUserOrderHistory.pending, (state) => {
         state.status = "Loading";
+        state.isLoading = true;
+        state.error = null;
+        state.success = null;
+        state.message = null;
         clearMessages();
       })
       .addCase(fetchUserOrderHistory.fulfilled, (state, action) => {
         state.status = "Succeeded";
         state.orderHistoryArray = action.payload.data;
+        state.success = "Order history fetched successfully!";
+        state.message = action.payload.message;
+        state.isLoading = false;
       })
       .addCase(fetchUserOrderHistory.rejected, (state, action) => {
         state.status = "Failed";
-        state.error = action.payload as string;
+        state.isLoading = false;
+        state.error = action.payload || "Failed to fetch order history.";
       });
   },
 });

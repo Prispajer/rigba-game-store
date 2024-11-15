@@ -2,17 +2,12 @@
 
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { MdOutlineSupervisorAccount } from "react-icons/md";
 import { BiCartDownload } from "react-icons/bi";
 import { IoKeySharp } from "react-icons/io5";
 import { IoMdSettings } from "react-icons/io";
-import { IoCloseSharp } from "react-icons/io5";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
 
 export default function AccountNavbarContainer() {
-  const { resolutionState } = useWindowVisibility();
-
   return (
     <aside className="hidden md:flex flex-col w-[240px] h-[calc(100vh-76px)] bg-primaryColor">
       <nav className="flex flex-col font-medium">

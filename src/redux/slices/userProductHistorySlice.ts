@@ -8,6 +8,7 @@ export interface UserProductHistoryState {
   error: string | null;
   success: string | null;
   message: string | null;
+  isLoading: boolean;
 }
 
 const initialState: UserProductHistoryState = {
@@ -16,6 +17,7 @@ const initialState: UserProductHistoryState = {
   error: null,
   success: null,
   message: null,
+  isLoading: false,
 };
 
 export const fetchUserProductHistory = createAsyncThunk<
@@ -66,15 +68,24 @@ const userProductHistorySlice = createSlice({
     builder
       .addCase(fetchUserProductHistory.pending, (state) => {
         state.status = "Loading";
+        state.isLoading = true;
+        state.error = null;
+        state.success = null;
+        state.message = null;
         clearMessages();
       })
       .addCase(fetchUserProductHistory.fulfilled, (state, action) => {
         state.status = "Succeeded";
+        state.success = "Product history fetched successfully!";
         state.productHistoryArray = action.payload.data;
+        state.message = action.payload.message;
+        state.isLoading = false;
       })
       .addCase(fetchUserProductHistory.rejected, (state, action) => {
         state.status = "Failed";
-        state.error = action.payload as string;
+        state.isLoading = false;
+        state.error =
+          (action.payload as string) || "Failed to fetch product history.";
       });
   },
 });

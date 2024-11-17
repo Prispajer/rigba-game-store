@@ -1,26 +1,22 @@
-import {
-  RequestResponse,
-  User,
-  EmailVerificationToken,
-  TwoFactorToken,
-  ResetPasswordToken,
-} from "@/utils//helpers/types";
+import { RequestResponse } from "@/utils/helpers/types";
+import { User, PasswordResetToken, TwoFactorToken } from "@prisma/client";
 import {
   SendResetPasswordTokenDTO,
   SendChangePasswordTokenDTO,
+  SendToggleTwoFactorTokenDTO,
 } from "@/utils/helpers/backendDTO";
 
 export default interface ITokenService {
   sendEmailVerificationToken(user: User): Promise<RequestResponse<null>>;
   sendResetPasswordToken(
     sendResetPasswordTokenDTO: SendResetPasswordTokenDTO
-  ): Promise<RequestResponse<ResetPasswordToken | null>>;
+  ): Promise<RequestResponse<User | PasswordResetToken | null>>;
   sendChangePasswordToken(
-    sendChangePasswordToken: SendChangePasswordTokenDTO,
+    sendChangePasswordTokenDTO: SendChangePasswordTokenDTO,
     code?: string
-  ): Promise<RequestResponse<TwoFactorToken> | void>;
+  ): Promise<RequestResponse<User | TwoFactorToken | null> | void>;
   sendToggleTwoFactorToken(
-    sendChangePasswordToken: SendToggleTwoFactorToken,
+    sendChangePasswordTokenDTO: SendToggleTwoFactorTokenDTO,
     code?: string
-  ): Promise<RequestResponse<TwoFactorToken> | void>;
+  ): Promise<RequestResponse<User | TwoFactorToken | null> | void>;
 }

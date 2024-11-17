@@ -1,8 +1,28 @@
+import { Metadata } from "next";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
 import CheckoutHeader from "@/components/Interface/Checkout/CheckoutHeader";
 import RedeemContainer from "@/components/Interface/Checkout/Redeem/RedeemContainer";
 
-export default async function RedeemPage() {
+export const generateMetadata = async (data: {
+  params: Promise<{ redeemId: string }>;
+}): Promise<Metadata> => {
+  const params = await data.params;
+  const title = await new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(`${params.redeemId}`);
+    }, 100);
+  });
+
+  return {
+    title: `Buy ${title}`,
+  };
+};
+
+export default async function RedeemPage(data: {
+  params: Promise<{ redeemId: string }>;
+}) {
+  const params = await data.params;
+
   return (
     <>
       <CheckoutHeader
@@ -21,7 +41,7 @@ export default async function RedeemPage() {
         stepTwoContentStyles="text-secondaryColor bg-[#00cf9f]"
         stepThreeContentStyles="text-[#FFFFFF] bg-[#00cf9f]"
       />
-      <RedeemContainer />
+      <RedeemContainer params={params} />
     </>
   );
 }

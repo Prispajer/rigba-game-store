@@ -1,8 +1,10 @@
-import useUserOrderHistory from "@/hooks/useUserOrderHistory";
 import LoadingAnimation from "@/components/Interface/Shared/Animations/LoadingAnimation";
+import useUserOrderHistory from "@/hooks/useUserOrderHistory";
+import useCustomRouter from "@/hooks/useCustomRouter";
 
 export default function OrdersContainer() {
   const { userOrderHistoryState } = useUserOrderHistory();
+  const { redirectToOrder } = useCustomRouter();
 
   return (
     <div className="flex-col justify-center items-center pt-[40px] px-[40px] pb-[80px] bg-[#e9eff4]">
@@ -93,7 +95,10 @@ export default function OrdersContainer() {
                   ${order.total}
                 </div>
               </div>
-              <div className="flex justify-end pt-[5px] lg:pt-[0px] text-[12px] lg:text-[14px] font-bold text-[#658fb2] hover:underline cursor-pointer">
+              <div
+                onClick={() => redirectToOrder(order.id)}
+                className="flex justify-end pt-[5px] lg:pt-[0px] text-[12px] lg:text-[14px] font-bold text-[#658fb2] hover:underline cursor-pointer"
+              >
                 Details
               </div>
             </div>

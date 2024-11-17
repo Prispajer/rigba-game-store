@@ -3,15 +3,15 @@ import { userService } from "@/utils/injector";
 import { RequestResponse, User } from "@/utils/helpers/types";
 
 export async function POST(request: NextRequest) {
-  const { email, password, code } = await request.json();
+  const loginUserClientData = await request.json();
 
-  const loginResponse = await userService.loginUser({ email, password, code });
+  const loginUserResponse = await userService.loginUser(loginUserClientData);
 
   return NextResponse.json<
     RequestResponse<User | EmailVerificationToken | TwoFactorToken>
   >({
-    success: loginResponse?.success,
-    message: loginResponse?.message,
-    data: loginResponse?.data,
+    success: loginUserResponse.success,
+    message: loginUserResponse.message,
+    data: loginUserResponse.data,
   });
 }

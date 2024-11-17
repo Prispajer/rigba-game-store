@@ -7,29 +7,11 @@ export async function POST(
   request: NextRequest,
   response: NextResponse
 ): Promise<NextResponse<RequestResponse<PersonalData>>> {
-  const {
-    email,
-    fullName,
-    birthDate,
-    address,
-    state,
-    zipCode,
-    city,
-    country,
-    phoneNumber,
-  } = await request.json();
+  const updateDataClientData = await request.json();
 
-  const updateDataResponse = await userService.updateUserData({
-    email,
-    fullName,
-    birthDate,
-    address,
-    state,
-    zipCode,
-    city,
-    country,
-    phoneNumber,
-  });
+  const updateDataResponse = await userService.updateUserData(
+    updateDataClientData
+  );
 
   return NextResponse.json<RequestResponse<PersonalData>>({
     success: updateDataResponse.success,

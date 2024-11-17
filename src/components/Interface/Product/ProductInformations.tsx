@@ -4,7 +4,6 @@ import Image from "next/image";
 import { CiShare1 } from "react-icons/ci";
 import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
 import DigitalProductDetails from "./ProductDigitalProductDetails";
-import useUserReviews from "@/hooks/useUserReviews";
 import { processReviews, mergeReviews } from "@/utils/reviews";
 import { generateStars, calculateOverallRating } from "@/utils/ratings";
 import { GameAPIResponse } from "@/utils/helpers/types";

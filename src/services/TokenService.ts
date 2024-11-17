@@ -1,4 +1,3 @@
-import bcrypt from "bcryptjs";
 import "reflect-metadata";
 import { injectable, inject } from "inversify";
 import { postgres } from "@/data/database/publicSQL/postgres";
@@ -11,8 +10,8 @@ import {
   sendTwoFactorTokenEmail,
   sendPasswordResetEmail,
 } from "@/data/database/publicSQL/mail";
-import { RequestResponse, User, CLASSTYPES } from "../utils/helpers/types";
-import { TwoFactorToken, PasswordResetToken } from "@prisma/client";
+import { RequestResponse, CLASSTYPES } from "../utils/helpers/types";
+import { User, PasswordResetToken, TwoFactorToken } from "@prisma/client";
 import {
   SendResetPasswordTokenDTO,
   SendChangePasswordTokenDTO,
@@ -174,7 +173,7 @@ export default class TokenService implements ITokenService {
   async sendToggleTwoFactorToken(
     sendChangePasswordTokenDTO: SendToggleTwoFactorTokenDTO,
     code?: string
-  ): Promise<RequestResponse<User | TwoFactorToken> | void> {
+  ): Promise<RequestResponse<User | TwoFactorToken | null> | void> {
     const getUserByEmailResponse =
       await this._checkerService.checkDataExistsAndReturnUser(
         sendChangePasswordTokenDTO
@@ -198,8 +197,6 @@ export default class TokenService implements ITokenService {
         await this._tokenRepository.getTwoFactorTokenByEmail(
           getUserByEmailResponse.data?.email as string
         );
-
-      console.log(existingToken);
 
       if (existingToken) {
         const hasExpired = new Date(existingToken.expires) < new Date();

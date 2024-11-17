@@ -27,6 +27,20 @@ export default function useCustomRouter() {
     [params]
   );
 
+  const redirectToKey = React.useCallback(
+    (key: string): void => {
+      router.push(`/checkout/redeem/${key}`);
+    },
+    [params]
+  );
+
+  const redirectToOrder = React.useCallback(
+    (order: string): void => {
+      router.push(`/order/${order}`);
+    },
+    [params]
+  );
+
   const redirectToReview = React.useCallback(
     (name: string): void => {
       router.push(`/review/${name}`);
@@ -78,6 +92,8 @@ export default function useCustomRouter() {
     getUrlParams,
     redirectToReview,
     redirectToGame,
+    redirectToKey,
+    redirectToOrder,
     redirectToFilters,
     pushDataToUrl,
   };

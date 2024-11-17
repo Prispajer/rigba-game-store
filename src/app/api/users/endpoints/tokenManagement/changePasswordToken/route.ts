@@ -5,10 +5,16 @@ import { RequestResponse } from "@/utils/helpers/types";
 export async function POST(
   request: NextRequest
 ): Promise<NextResponse<RequestResponse<ResetPasswordToken>>> {
-  const { email, password, code } = await request.json();
+  const changePasswordTokenClientData = await request.json();
 
   const sendChangePasswordTokenResponse =
-    await tokenService.sendChangePasswordToken({ email, password }, code);
+    await tokenService.sendChangePasswordToken(
+      {
+        email: changePasswordTokenClientData.email,
+        password: changePasswordTokenClientData.password,
+      },
+      changePasswordTokenClientData.code
+    );
 
   return NextResponse.json<RequestResponse<ResetPasswordToken>>({
     success: sendChangePasswordTokenResponse.success,

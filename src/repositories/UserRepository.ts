@@ -7,7 +7,6 @@ import {
   User,
   TwoFactorConfirmation,
   EmailVerificationToken,
-  TwoFactorToken,
   PersonalData,
 } from "@prisma/client";
 import {
@@ -20,6 +19,8 @@ import {
   RegisterUserDTO,
   UpdatePasswordDTO,
   UpdatePersonalDataDTO,
+  UpdatePersonalImageDTO,
+  UpdateUserImageDTO,
 } from "@/utils/helpers/backendDTO";
 
 @injectable()
@@ -156,6 +157,15 @@ export default class UserRepository implements IUserRepository {
     return await postgres.personalData.update({
       where: { userId: updatePersonalDataDTO.id },
       data: { ...personalDataToUpdate },
+    });
+  }
+
+  async updatePersonalImage(
+    updatePersonalImageDTO: UpdatePersonalImageDTO
+  ): Promise<User> {
+    return await postgres.user.update({
+      where: { id: updatePersonalImageDTO.id },
+      data: { image: updatePersonalImageDTO.image },
     });
   }
 }

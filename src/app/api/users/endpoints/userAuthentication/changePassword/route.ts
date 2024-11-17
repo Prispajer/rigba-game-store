@@ -5,13 +5,11 @@ import { RequestResponse, User } from "@/utils/helpers/types";
 export async function POST(
   request: NextRequest
 ): Promise<NextResponse<RequestResponse<User>>> {
-  const { email, newPassword, code } = await request.json();
+  const changePasswordResponseClientData = await request.json();
 
-  const changePasswordResponse = await userService.changePassword({
-    email,
-    newPassword,
-    code,
-  });
+  const changePasswordResponse = await userService.changePassword(
+    changePasswordResponseClientData
+  );
 
   return NextResponse.json<RequestResponse<User>>({
     success: changePasswordResponse.success,

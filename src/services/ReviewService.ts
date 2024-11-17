@@ -2,7 +2,7 @@ import { injectable, inject } from "inversify";
 import type ICheckerService from "@/interfaces/ICheckerService";
 import type IReviewRepository from "@/interfaces/IReviewRepository";
 import type IReviewService from "@/interfaces/IReviewService";
-import { User, Review, Product } from "@prisma/client";
+import { User, Review, Product, ReviewLikers } from "@prisma/client";
 import { RequestResponse, CLASSTYPES } from "@/utils/helpers/types";
 import {
   GetProductReviewsDTO,
@@ -141,7 +141,7 @@ export default class ReviewService implements IReviewService {
 
   async likeReview(
     likeReviewDTO: LikeReviewDTO
-  ): Promise<RequestResponse<User | Product | Review | null>> {
+  ): Promise<RequestResponse<User | Product | Review | ReviewLikers | null>> {
     try {
       const getUserByEmailResponse =
         await this._checkerService.checkDataExistsAndReturnUser(likeReviewDTO);
@@ -218,7 +218,7 @@ export default class ReviewService implements IReviewService {
 
   async unLikeReview(
     unLikeReviewDTO: UnLikeReviewDTO
-  ): Promise<RequestResponse<User | Product | Review | null>> {
+  ): Promise<RequestResponse<User | Product | Review | ReviewLikers | null>> {
     try {
       const getUserByEmailResponse =
         await this._checkerService.checkDataExistsAndReturnUser(

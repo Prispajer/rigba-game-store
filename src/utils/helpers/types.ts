@@ -115,6 +115,7 @@ export interface RequestResponse<T> {
   message: string;
   twoFactor?: boolean;
 }
+
 export interface GameAPIResponse extends GameAPIProduct {
   image_background?: string;
   games_count?: number;

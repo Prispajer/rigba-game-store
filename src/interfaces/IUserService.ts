@@ -36,4 +36,7 @@ export default interface IUserService {
   updateUserData(
     updateUserDataDTO: UpdateUserDataDTO
   ): Promise<RequestResponse<User | PersonalData | null>>;
+  updateUserImage(
+    updateUserDataDTO: UpdateUserImageDTO
+  ): Promise<RequestResponse<User | null>>;
 }

@@ -1,9 +1,13 @@
 import Image from "next/image";
+import Link from "next/link";
 import LoadingAnimation from "@/components/Interface/Shared/Animations/LoadingAnimation";
 import useUserProductHistory from "@/hooks/useUserProductHistory";
+import React from "react";
+import useCustomRouter from "@/hooks/useCustomRouter";
 
 export default function KeysContainer() {
   const { userProductHistoryState } = useUserProductHistory();
+  const { redirectToKey } = useCustomRouter();
 
   return (
     <div className="flex-col justify-center items-center pt-[40px] px-[40px] pb-[80px] bg-[#e9eff4]">
@@ -100,7 +104,10 @@ export default function KeysContainer() {
               <div className="hidden lg:block text-[16px] font-[600] text-ellipsis line-clamp-1 cursor-default ">
                 ${product.productsInformations?.price || "Price not available"}
               </div>
-              <div className="hidden lg:block text-[12px] font-bold text-[#658fb2] hover:underline cursor-pointer">
+              <div
+                onClick={() => redirectToKey(product.id)}
+                className="hidden lg:block text-[14px] font-bold text-[#658fb2] hover:underline cursor-pointer"
+              >
                 Show key
               </div>
             </div>

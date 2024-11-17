@@ -106,6 +106,7 @@ export type ConfirmTwoFactorAuthenticationDTO = {
 };
 
 export type SetNewPasswordDTO = {
+  email: string;
   token: string;
   password: string;
 };
@@ -148,6 +149,16 @@ export type PersonalDataToUpdateDTO = {
 export type UpdatePersonalDataDTO = {
   id: string;
 };
+
+export type UpdatePersonalImageDTO = {
+  id: string;
+  image: string;
+}
+
+export type UpdateUserImageDTO = {
+  email: string;
+  image: string;
+}
 
 export type UpdateReviewLikeDTO = {
   id: string;

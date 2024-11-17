@@ -32,4 +32,5 @@ export default interface IUserRepository {
     updatePersonalDataDTO: UpdatePersonalDataDTO,
     personalDataToUpdate: PersonalDataToUpdateDTO
   ): Promise<PersonalData>;
+  updatePersonalImage(updateUserImageDTO: UpdateUserImageDTO): Promise<User>;
 }

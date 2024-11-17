@@ -30,6 +30,7 @@ import {
   UpdatePasswordDTO,
   ConfirmTwoFactorAuthenticationDTO,
   UpdateUserDataDTO,
+  UpdateUserImageDTO,
 } from "@/utils/helpers/backendDTO";
 
 @injectable()
@@ -220,9 +221,10 @@ export default class UserService implements IUserService {
           confirmTwoFactorAuthenticationDTO.id
         );
 
-        await this._tokenRepository.deleteTwoFactorToken(
-          getTwoFactorTokenByEmailResponse.data.id
-        );
+        getTwoFactorTokenByEmailResponse.data &&
+          (await this._tokenRepository.deleteTwoFactorToken(
+            getTwoFactorTokenByEmailResponse.data.id
+          ));
       } else {
         const twoFactorToken =
           await this._tokenRepository.generateTwoFactorToken(
@@ -263,7 +265,7 @@ export default class UserService implements IUserService {
 
     const getUserByEmailResponse =
       await this._checkerService.checkDataExistsAndReturnUser(
-        getPasswordResetTokenByEmailResponse.data
+        getPasswordResetTokenByEmailResponse.data!
       );
 
     if (
@@ -287,9 +289,10 @@ export default class UserService implements IUserService {
       setNewPasswordDTO
     );
 
-    await this._tokenRepository.deletePasswordResetToken(
-      getPasswordResetTokenByEmailResponse.data.id
-    );
+    getPasswordResetTokenByEmailResponse.data &&
+      (await this._tokenRepository.deletePasswordResetToken(
+        getPasswordResetTokenByEmailResponse.data.id
+      ));
 
     return {
       success: true,
@@ -300,7 +303,7 @@ export default class UserService implements IUserService {
 
   async changePassword(
     changePasswordDTO: ChangePasswordDTO
-  ): Promise<RequestResponse<User | null>> {
+  ): Promise<RequestResponse<User | TwoFactorToken | null>> {
     const getTwoFactorTokenByEmailResponse =
       await this._checkerService.checkIsTokenValidAndReturnTwoFactorToken(
         changePasswordDTO
@@ -314,12 +317,12 @@ export default class UserService implements IUserService {
 
     const getUserByEmailResponse =
       await this._checkerService.checkDataExistsAndReturnUser(
-        getTwoFactorTokenByEmailResponse.data
+        getTwoFactorTokenByEmailResponse.data!
       );
 
     if (
       (getUserByEmailResponse && !getUserByEmailResponse.success) ||
-      !getUserByEmailResponse.data
+      !getUserByEmailResponse?.data
     )
       return getUserByEmailResponse;
 
@@ -338,9 +341,10 @@ export default class UserService implements IUserService {
       { password: changePasswordDTO.newPassword }
     );
 
-    await this._tokenRepository.deleteTwoFactorToken(
-      getTwoFactorTokenByEmailResponse.data.id
-    );
+    getTwoFactorTokenByEmailResponse.data &&
+      (await this._tokenRepository.deleteTwoFactorToken(
+        getTwoFactorTokenByEmailResponse.data.id
+      ));
 
     return {
       success: true,
@@ -351,7 +355,7 @@ export default class UserService implements IUserService {
 
   async toggleTwoFactor(
     toggleTwoFactorDTO: ToggleTwoFactorDTO
-  ): Promise<RequestResponse<User | null>> {
+  ): Promise<RequestResponse<User | TwoFactorToken | null>> {
     try {
       const getUserByEmailResponse =
         await this._checkerService.checkDataExistsAndReturnUser(
@@ -375,9 +379,10 @@ export default class UserService implements IUserService {
       )
         return getTwoFactorTokenByEmailResponse;
 
-      await this._tokenRepository.deleteTwoFactorToken(
-        getTwoFactorTokenByEmailResponse.data.id
-      );
+      getTwoFactorTokenByEmailResponse.data &&
+        (await this._tokenRepository.deleteTwoFactorToken(
+          getTwoFactorTokenByEmailResponse.data.id
+        ));
 
       if (getUserByEmailResponse.data.isTwoFactorEnabled) {
         await postgres.user.update({
@@ -455,6 +460,35 @@ export default class UserService implements IUserService {
     } catch (error) {
       return this._checkerService.handleError(
         "An error occurred while updating personal data!"
+      );
+    }
+  }
+
+  async updateUserImage(
+    updateUserDataDTO: UpdateUserImageDTO
+  ): Promise<RequestResponse<User | null>> {
+    try {
+      const getUserByEmailResponse =
+        await this._checkerService.checkDataExistsAndReturnUser(
+          updateUserDataDTO
+        );
+
+      if (
+        (getUserByEmailResponse && !getUserByEmailResponse.success) ||
+        !getUserByEmailResponse.data
+      )
+        return getUserByEmailResponse;
+
+      const updatedUserPersonalImage =
+        await this._userRepository.updatePersonalImage(updateUserDataDTO);
+
+      return this._checkerService.handleSuccess(
+        "User personal image was updated successfully!",
+        updatedUserPersonalImage
+      );
+    } catch (error) {
+      return this._checkerService.handleError(
+        "An error occurred while updating personal image!"
       );
     }
   }

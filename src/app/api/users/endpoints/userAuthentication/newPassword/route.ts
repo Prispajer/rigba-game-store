@@ -7,12 +7,11 @@ export async function POST(
   request: NextRequest,
   response: NextResponse
 ): Promise<NextResponse<RequestResponse<PasswordResetToken>>> {
-  const { password, token } = await request.json();
+  const setNewPasswordClientData = await request.json();
 
-  const setNewPasswordResponse = await userService.setNewPassword({
-    password,
-    token,
-  });
+  const setNewPasswordResponse = await userService.setNewPassword(
+    setNewPasswordClientData
+  );
 
   return NextResponse.json<RequestResponse<PasswordResetToken>>({
     success: setNewPasswordResponse.success,

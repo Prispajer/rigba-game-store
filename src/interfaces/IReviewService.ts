@@ -16,8 +16,8 @@ export default interface IReviewService {
   ): Promise<RequestResponse<User | Review | null>>;
   likeReview(
     likeReviewDTO: LikeReviewDTO
-  ): Promise<RequestResponse<User | Product | Review | null>>;
+  ): Promise<RequestResponse<User | Product | Review | ReviewLikers | null>>;
   unLikeReview(
     unLikeReviewDTO: UnLikeReviewDTO
-  ): Promise<RequestResponse<User | Product | Review | null>>;
+  ): Promise<RequestResponse<User | Product | Review | ReviewLikers | null>>;
 }

@@ -1,11 +1,24 @@
+"use client";
+
 import Image from "next/image";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
+import useUserOrderHistory from "@/hooks/useUserOrderHistory";
 
-export default function OrderContainer() {
+export default function OrderContainer({
+  params,
+}: {
+  params: { orderId: string };
+}) {
+  const { userOrderHistoryState } = useUserOrderHistory();
+
+  const orderHistory = userOrderHistoryState.orderHistoryArray.find((order) =>
+    order ? order.id === params.orderId : "Could not find order with that ID!"
+  );
+
   return (
     <div className="flex-col justify-center items-center pt-[40px] px-[40px] pb-[80px] bg-[#e9eff4]">
       <h1 className="flex justify-start text-[#1A396E] text-[20px] font-[700] cursor-default ">
-        ORDER O-YPM7SAY
+        {`Order ${orderHistory?.id}`}
       </h1>
       <div className="grid grid-cols-1 max-w-[1840px] mt-[20px]">
         <div className="grid grid-cols-account-orders-auto-fit py-[10px] px-[20px] gap-x-[20px] bg-[#d3dfe9]">
@@ -17,22 +30,20 @@ export default function OrderContainer() {
         <div className="grid grid-cols-account-orders-auto-fit items-center py-[10px] px-[20px] gap-x-[20px] bg-[#FFFFFF]">
           <div className="flex text-[12px] font-bold cursor-default">
             <div className="relative min-w-[64px] mr-[20px]">
-              <Image src="/icons/logo.png" layout="fill" alt="GAME"></Image>
+              <Image src={"/icons/logo.png"} layout="fill" alt="GAME"></Image>
             </div>
             <div>
               <div className="">
-                <span className="text-[14px]">
-                  Little Nightmares II Deluxe Edition (PC) Steam Key EUROPE
-                </span>
+                <span className="text-[14px]">{orderHistory?.title}</span>
               </div>
               <div>
-                <span>30,92 zł</span>
+                <span>{`$${orderHistory?.total}`}</span>
               </div>
             </div>
           </div>
           <div className="flex items-center text-[14px] text-[#00cf9f] font-bold cursor-default">
             <IoCheckmarkCircleSharp className="min-w-[15px] min-h-[15px] mr-[10px] " />
-            ORDER FULFILLED
+            {orderHistory?.status}
           </div>
           <div className="text-[12px] font-bold cursor-default">
             <button className="w-full min-h-[36px] text-[16px] text-buttonTextColor bg-buttonBackground hover:bg-buttonBackgroundHover">
@@ -48,18 +59,32 @@ export default function OrderContainer() {
             </span>
           </div>
           <h2 className="w-full pb-[10px] text-[24px] font-bold text-[#00cf9f]">
-            ORDER FULFILLED
+            {orderHistory?.status === "Completed"
+              ? "ORDER FULFILLED"
+              : "ORDER FAILED"}
           </h2>
           <p className="w-full mb-[20px] text-[18px] text-[#797189]">
-            Payment was successful
+            {orderHistory?.status === "Completed"
+              ? "Payment was successful"
+              : "There was error with payment"}
           </p>
           <p className="w-full text-[14px] text-[#797189]">
-            Payment method:{" "}
-            <span className="font-[600] text-[#000000]">Blik</span>
+            Payment method:
+            <span className="font-[600] text-[#000000]">
+              {" "}
+              {orderHistory?.paymentMethod}
+            </span>
           </p>
           <p className="w-full text-[14px] text-[#797189]">
             Date of payment:{" "}
-            <span className="font-[600] text-[#000000]">14.02.2023, 16:37</span>
+            <span className="font-[600] text-[#000000]">
+              {" "}
+              {orderHistory?.createdAt
+                ? new Date(orderHistory.createdAt).toLocaleDateString(
+                    navigator.language
+                  )
+                : "N/A"}
+            </span>
           </p>
         </div>
         <div className="flex flex-col items-center mt-[10px] p-[20px] bg-[#FFFFFF]">
@@ -68,7 +93,7 @@ export default function OrderContainer() {
           </div>
           <div className="flex justify-between w-full text-[16px] text-[#000000] font-bold cursor-default">
             <span>Total amount:</span>
-            <span>35,16 zł</span>
+            <span>${orderHistory?.total}</span>
           </div>
         </div>
       </div>

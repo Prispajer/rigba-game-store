@@ -1,17 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { tokenService } from "@/utils/injector";
-import { RequestResponse, ResetPasswordToken } from "@/utils/helpers/types";
+import { RequestResponse } from "@/utils/helpers/types";
+import { PasswordResetToken } from "@prisma/client";
 
 export async function POST(request: NextRequest, response: NextResponse) {
-  const { email } = await request.json();
+  const toggleTwoFactorTokenClientData = await request.json();
 
-  const resetPasswordResponse = await tokenService.sendToggleTwoFactorToken({
-    email,
-  });
+  const resetPasswordResponse = await tokenService.sendToggleTwoFactorToken(
+    toggleTwoFactorTokenClientData
+  );
 
-  return NextResponse.json<RequestResponse<ResetPasswordToken>>({
-    success: resetPasswordResponse?.success,
-    message: resetPasswordResponse?.message,
-    data: resetPasswordResponse?.data,
+  return NextResponse.json<RequestResponse<PasswordResetToken>>({
+    success: resetPasswordResponse.success,
+    message: resetPasswordResponse.message,
+    data: resetPasswordResponse.data,
   });
 }

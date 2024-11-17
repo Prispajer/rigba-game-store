@@ -11,8 +11,8 @@ export async function POST(request: NextRequest) {
   );
 
   return NextResponse.json<RequestResponse<EmailVerificationToken>>({
-    success: emailVerificationResponse?.success,
-    message: emailVerificationResponse?.message,
-    data: emailVerificationResponse?.data,
+    success: emailVerificationResponse.success,
+    message: emailVerificationResponse.message,
+    data: emailVerificationResponse.data,
   });
 }

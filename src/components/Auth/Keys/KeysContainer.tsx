@@ -84,7 +84,10 @@ export default function KeysContainer() {
                       "Price not available"}
                   </div>
                 </div>
-                <div className="grid justify-end text-[12px] pt-[5px] font-bold text-[#658fb2] hover:underline cursor-pointer">
+                <div
+                  onClick={() => redirectToKey(product.id)}
+                  className="grid justify-end text-[12px] pt-[5px] font-bold text-[#658fb2] hover:underline cursor-pointer"
+                >
                   Show key
                 </div>
               </div>

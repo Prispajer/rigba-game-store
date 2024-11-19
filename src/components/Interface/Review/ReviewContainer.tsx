@@ -1,4 +1,5 @@
 "use client";
+import { z } from "zod";
 import React from "react";
 import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
@@ -29,7 +30,7 @@ export default function ReviewContainer({
     resolver: zodResolver(ReviewSchema),
     defaultValues: {
       review: "",
-      rating: null,
+      rating: "",
     },
   });
 
@@ -53,7 +54,9 @@ export default function ReviewContainer({
         <div className="grid grid-cols-1 sm:grid-cols-[1fr,200px] mt-[15px] md:mt-[40px] sm:mb-[60px] px-[20px] sm:px-0 gap-x-[20px]">
           <form
             onSubmit={handleSubmit(async (data) => {
-              await submitReviewForm(data, ratingTitles, user as User, product);
+              if (user) {
+                await submitReviewForm(data, ratingTitles, user, product);
+              }
             })}
             className="grid grid-cols-1 md:grid-cols-[180px,1fr] md:gap-x-[40px] mx-[-20px] sm:mx-[0px] p-[20px] lg:py-[30px] lg:px-[40px] bg-secondaryColor"
           >
@@ -127,8 +130,8 @@ export default function ReviewContainer({
                 </p>
               )}
               <div className="mb-[10px] flex justify-end">
-                <FormSuccess message={success} />
-                <FormError message={error} />
+                <FormSuccess message={success as string} />
+                <FormError message={error as string} />
               </div>
               <div className="flex justify-end">
                 <button className="min-w-[200px] min-h-[35px] bg-buttonBackground text-buttonTextColor">

@@ -24,6 +24,7 @@ export const endpointsRoutes: string[] = [
   "/api/users/endpoints/userAuthentication/registerUser",
   "/api/users/endpoints/userAuthentication/toggleTwoFactor",
   "/api/users/endpoints/userAuthentication/updateData",
+  "/api/users/endpoints/userAuthentication/updateImage",
   "/api/users/endpoints/tokenManagement/changePasswordToken",
   "/api/users/endpoints/tokenManagement/resetPasswordToken",
   "/api/users/endpoints/tokenManagement/toggleTwoFactorToken",

@@ -3,50 +3,81 @@
 import Image from "next/image";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
 import useUserOrderHistory from "@/hooks/useUserOrderHistory";
+import useUserProductHistory from "@/hooks/useUserProductHistory";
+import useCustomRouter from "@/hooks/useCustomRouter";
 
 export default function OrderContainer({
   params,
 }: {
   params: { orderId: string };
 }) {
+  const { redirectToKey } = useCustomRouter();
   const { userOrderHistoryState } = useUserOrderHistory();
+  const { userProductHistoryState } = useUserProductHistory();
 
   const orderHistory = userOrderHistoryState.orderHistoryArray.find((order) =>
     order ? order.id === params.orderId : "Could not find order with that ID!"
   );
 
+  const productImage = userProductHistoryState.productHistoryArray.find(
+    (product) => {
+      return product.keys.some((key) => key.orderHistoryId === params.orderId);
+    }
+  );
+
   return (
-    <div className="flex-col justify-center items-center pt-[40px] px-[40px] pb-[80px] bg-[#e9eff4]">
-      <h1 className="flex justify-start text-[#1A396E] text-[20px] font-[700] cursor-default ">
+    <div className="flex-col justify-center items-center pt-[40px] px-[20px] pb-[80px] bg-[#e9eff4]">
+      <h1 className="flex justify-start text-[#1A396E] text-[20px] font-[700] text-ellipsis line-clamp-1 cursor-default ">
         {`Order ${orderHistory?.id}`}
       </h1>
       <div className="grid grid-cols-1 max-w-[1840px] mt-[20px]">
-        <div className="grid grid-cols-account-orders-auto-fit py-[10px] px-[20px] gap-x-[20px] bg-[#d3dfe9]">
+        <div className="hidden lg:grid grid-cols-account-orders-auto-fit py-[10px] px-[20px] gap-x-[20px] bg-[#d3dfe9]">
           <div className="text-[12px] font-bold">ORDERED PRODUCT</div>
           <div className="text-[12px] font-bold">SHIPMENT STATUS</div>
           <div className="text-[12px] font-bold"></div>
           <div className="text-[12px] font-bold"></div>
         </div>
-        <div className="grid grid-cols-account-orders-auto-fit items-center py-[10px] px-[20px] gap-x-[20px] bg-[#FFFFFF]">
-          <div className="flex text-[12px] font-bold cursor-default">
-            <div className="relative min-w-[64px] mr-[20px]">
-              <Image src={"/icons/logo.png"} layout="fill" alt="GAME"></Image>
+        <div className="grid grid-cols-1 lg:grid-cols-account-orders-auto-fit items-center w-full py-[10px] px-[20px] gap-x-[20px] bg-[#FFFFFF]">
+          <div className="grid grid-cols- grid-cols-[1fr_4fr] w-full gap-[20px] py-[5px] lg:gap-0 border-b-[1px] lg:border-none   border-[#00CF9F] text-[12px]  cursor-default">
+            <div className="flex items-center lg:hidden text-[#a09aac] font-[600]">
+              ORDERED PRODUCTS
             </div>
-            <div>
+            <div className="grid grid-cols-[1fr_4fr] font-bold ">
+              <div className="relative w-[64px] h-[90px] mr-[20px]">
+                <Image
+                  src={
+                    productImage?.productsInformations.background_image
+                      ? productImage?.productsInformations.background_image
+                      : "/icons/logo.png"
+                  }
+                  layout="fill"
+                  alt={productImage?.productsInformations.name as string}
+                ></Image>
+              </div>
               <div className="">
-                <span className="text-[14px]">{orderHistory?.title}</span>
-              </div>
-              <div>
-                <span>{`$${orderHistory?.total}`}</span>
+                <div className="">
+                  <span className="text-[14px]">{orderHistory?.title}</span>
+                </div>
+                <div>
+                  <span>{`$${orderHistory?.total}`}</span>
+                </div>
               </div>
             </div>
           </div>
-          <div className="flex items-center text-[14px] text-[#00cf9f] font-bold cursor-default">
-            <IoCheckmarkCircleSharp className="min-w-[15px] min-h-[15px] mr-[10px] " />
-            {orderHistory?.status}
+          <div className="grid grid-cols-[1fr_4fr] items-center gap-[20px] py-[5px] lg:gap-0 border-b-[1px] lg:border-none   border-[#00CF9F] font-bold cursor-default">
+            <div className="flex items-center lg:hidden text-[12px] text-[#a09aac] font-[600]">
+              DELIVERY STATUS
+            </div>
+            <div className="flex items-center text-[14px] text-[#00cf9f] font-bold">
+              <IoCheckmarkCircleSharp className="min-w-[15px] min-h-[15px] mr-[10px] " />
+              {orderHistory?.status}
+            </div>
           </div>
-          <div className="text-[12px] font-bold cursor-default">
-            <button className="w-full min-h-[36px] text-[16px] text-buttonTextColor bg-buttonBackground hover:bg-buttonBackgroundHover">
+          <div className="text-[12px] font-bold cursor-default py-[5px] lg:gap-0 border-b-[1px] lg:border-none border-[#00CF9F]">
+            <button
+              onClick={() => redirectToKey(orderHistory?.id as string)}
+              className="w-full min-h-[36px] text-[16px] text-buttonTextColor bg-buttonBackground hover:bg-buttonBackgroundHover"
+            >
               Show key
             </button>
           </div>

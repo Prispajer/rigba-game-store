@@ -480,7 +480,10 @@ export default class UserService implements IUserService {
         return getUserByEmailResponse;
 
       const updatedUserPersonalImage =
-        await this._userRepository.updatePersonalImage(updateUserDataDTO);
+        await this._userRepository.updatePersonalImage({
+          id: getUserByEmailResponse.data.id,
+          image: updateUserDataDTO.image,
+        });
 
       return this._checkerService.handleSuccess(
         "User personal image was updated successfully!",

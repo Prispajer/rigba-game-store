@@ -9,7 +9,7 @@ import { IoMdSettings } from "react-icons/io";
 
 export default function AccountNavbarContainer() {
   return (
-    <aside className="hidden md:flex flex-col w-[240px] h-[calc(100vh-76px)] bg-primaryColor">
+    <aside className="hidden md:flex flex-col w-[240px] min-h-[calc(100vh-76px)] bg-primaryColor">
       <nav className="flex flex-col font-medium">
         <ul className="w-full">
           <li className="flex w-full">

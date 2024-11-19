@@ -1,9 +1,20 @@
-import { User, TwoFactorConfirmation } from "@prisma/client";
+import {
+  User,
+  TwoFactorConfirmation,
+  PersonalData,
+  EmailVerificationToken,
+} from "@prisma/client";
 import {
   RegisterUserDTO,
   GetUserByEmailDTO,
   GetUserByIdDTO,
   GetTwoFactorConfirmationByUserIdDTO,
+  GetUserPersonalDataDTO,
+  UpdatePersonalImageDTO,
+  CreatePersonalDataDTO,
+  UpdatePersonalDataDTO,
+  PersonalDataToUpdateDTO,
+  UpdatePasswordDTO,
 } from "@/utils/helpers/backendDTO";
 export default interface IUserRepository {
   getUserByEmail(GetUserByEmailDTO: GetUserByEmailDTO): Promise<User | null>;
@@ -32,5 +43,7 @@ export default interface IUserRepository {
     updatePersonalDataDTO: UpdatePersonalDataDTO,
     personalDataToUpdate: PersonalDataToUpdateDTO
   ): Promise<PersonalData>;
-  updatePersonalImage(updateUserImageDTO: UpdateUserImageDTO): Promise<User>;
+  updatePersonalImage(
+    updatePersonalImageDTO: UpdatePersonalImageDTO
+  ): Promise<User>;
 }

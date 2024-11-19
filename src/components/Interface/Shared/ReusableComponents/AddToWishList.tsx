@@ -5,15 +5,34 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useUserWishList from "@/hooks/useUserWishList";
 import { generateRandomValue } from "@/utils/prices";
-import { GameAPIProduct } from "@/utils/helpers/types";
+import { ProductInformations } from "@/utils/helpers/types";
 
-export default function AddToWishList({
+export default function AddToWishList<
+  T extends {
+    id: string | number;
+    externalProductId: number;
+    name: string;
+    description: string;
+    description_raw: string;
+    background_image: string;
+    price: number;
+    rating: number;
+    slug: string;
+    released: string;
+    added: number;
+    cartId: string | null;
+    userId: string | null;
+    quantity: number | null;
+    wishListId: string | null;
+    productsInformations: ProductInformations;
+  }
+>({
   game,
   position,
   added,
   deleted,
 }: {
-  game: GameAPIProduct;
+  game: Partial<T>;
   position: string;
   added: string;
   deleted: string;
@@ -37,7 +56,8 @@ export default function AddToWishList({
   );
 
   const isInUserWishList = userWishListState.products.some(
-    (product) => product.externalProductId === game?.id
+    (product) =>
+      product.externalProductId === game?.id || game?.externalProductId
   );
 
   const isInWishList = user ? isInUserWishList : isInLocalWishList;
@@ -72,11 +92,11 @@ export default function AddToWishList({
         );
       } else {
         handleAddLocalProductToWishList({
-          externalProductId: game.id,
-          name: game.name,
+          externalProductId: parseInt(game.id as string),
+          name: game.name as string,
           description: game.description_raw,
           price: generateRandomValue(),
-          background_image: game.background_image,
+          background_image: game.background_image as string,
           rating: game.rating,
           slug: game.slug,
           released: game.released,

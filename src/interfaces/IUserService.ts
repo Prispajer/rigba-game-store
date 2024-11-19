@@ -3,21 +3,28 @@ import {
   EmailVerificationToken,
   TwoFactorToken,
   PersonalData,
+  PasswordResetToken,
 } from "@prisma/client";
+import { RequestResponse } from "@/utils/helpers/types";
 import {
+  LoginUserDTO,
   RegisterUserDTO,
   ConfirmEmailVerificationDTO,
+  ConfirmTwoFactorAuthenticationDTO,
+  SetNewPasswordDTO,
   ChangePasswordDTO,
+  UpdatePasswordDTO,
   ToggleTwoFactorDTO,
+  UpdateUserDataDTO,
+  UpdateUserImageDTO,
 } from "@/utils/helpers/backendDTO";
 
 export default interface IUserService {
   loginUser(
-    userDTO: UserDTO
-  ): Promise<RequestResponse<User | EmailVerificationToken | TwoFactorToken>>;
-  registerUser(
-    registerUserDTO: RegisterUserDTO
-  ): Promise<RequestResponse<RegisterUserDTO | User | null>>;
+    loginUserDTO: LoginUserDTO
+  ): Promise<
+    RequestResponse<User | EmailVerificationToken | TwoFactorToken | null>
+  >;
   confirmEmailVerification(
     confirmEmailVerification: ConfirmEmailVerificationDTO
   ): Promise<RequestResponse<User | EmailVerificationToken | null> | void>;
@@ -25,14 +32,16 @@ export default interface IUserService {
     confirmTwoFactorAuthenticationDTO: ConfirmTwoFactorAuthenticationDTO
   ): Promise<RequestResponse<TwoFactorToken | null>>;
   setNewPassword(
-    userDTO: UserDTO
-  ): Promise<RequestResponse<ResetPasswordToken>>;
+    setNewPasswordDTO: SetNewPasswordDTO
+  ): Promise<
+    RequestResponse<UpdatePasswordDTO | User | PasswordResetToken | null>
+  >;
   changePassword(
     changePasswordDTO: ChangePasswordDTO
-  ): Promise<RequestResponse<User>>;
+  ): Promise<RequestResponse<User | TwoFactorToken | null>>;
   toggleTwoFactor(
     toggleTwoFactorDTO: ToggleTwoFactorDTO
-  ): Promise<RequestResponse<void>>;
+  ): Promise<RequestResponse<User | TwoFactorToken | null>>;
   updateUserData(
     updateUserDataDTO: UpdateUserDataDTO
   ): Promise<RequestResponse<User | PersonalData | null>>;

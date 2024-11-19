@@ -19,15 +19,16 @@ export interface Token {
 
 export interface GameAPIProduct {
   id: number;
-  externalProductId: number | string;
+  externalProductId: number;
   name: string;
   price: number;
   background_image: string;
-  description_raw?: string;
-  rating?: number;
+  description: string;
+  description_raw: string;
+  rating: number;
   slug: string;
-  released?: string;
-  added?: number;
+  released: string;
+  added: number;
   ratings_count?: number;
 }
 
@@ -63,7 +64,16 @@ export interface UserProduct {
   userId: string | null;
   quantity: number | null;
   wishListId: string | null;
-  productsInformations: ProductInformations;
+  productsInformations: {
+    id?: string | number;
+    description_raw: string;
+    background_image: string;
+    price: number;
+    rating?: number;
+    slug?: string;
+    released?: string;
+    added?: number;
+  };
 }
 
 export interface UserProductHistory {
@@ -74,6 +84,20 @@ export interface UserProductHistory {
   quantity: number;
   keys: Key[];
   productsInformations: ProductInformations;
+}
+
+export interface UserOrderHistory {
+  status: string;
+  id: string;
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  title: string;
+  cartHistoryId: string;
+  paymentMethod: string;
+  paymentIntentId: string;
+  total: number;
+  keys: Key[];
 }
 
 export interface LocalWishList {

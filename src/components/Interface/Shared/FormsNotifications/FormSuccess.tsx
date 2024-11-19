@@ -1,6 +1,6 @@
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
 
-export const FormSuccess = ({ message }: { message?: string }) => {
+export const FormSuccess = ({ message }: { message: string }) => {
   if (!message) {
     return null;
   }

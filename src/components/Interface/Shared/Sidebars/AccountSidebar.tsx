@@ -41,7 +41,7 @@ export default function AccountSidebar() {
         <OutsideClickHandler
           handleOutsideClick={() => handleClose("accountSidebar")}
         >
-          <aside className="fixed md:hidden left-0 top-0 w-[400px] h-[100vh] z-10 bg-primaryColor">
+          <aside className="fixed md:hidden left-0 top-0 w-full max-w-[400px] h-[100vh] z-10 bg-primaryColor">
             <nav className="relative flex flex-col items-center justify-center font-medium">
               <ul className="w-full">
                 <div className="flex items-center justify-between px-4 py-2 border-b border-secondaryColor">

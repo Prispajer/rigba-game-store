@@ -45,6 +45,7 @@ export default class PurchaseHistoryRepository
         (getUserProductHistoryDTO) =>
           postgres.orderHistory.findMany({
             where: { userId: getUserProductHistoryDTO?.userId },
+            include: { keys: true },
           }),
         getUserOrderHistoryDTO
       );

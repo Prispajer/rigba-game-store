@@ -1,6 +1,6 @@
 import { IoWarningSharp } from "react-icons/io5";
 
-export const FormError = ({ message }: { message?: string }) => {
+export const FormError = ({ message }: { message: string }) => {
   if (!message) {
     return null;
   }

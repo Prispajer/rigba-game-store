@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import requestService from "@/services/RequestService";
-import { OrderHistory } from "@prisma/client";
+import { UserOrderHistory } from "@/utils/helpers/types";
 import { RequestResponse } from "@/utils/helpers/types";
 
 export interface UserOrderHistoryState {
-  orderHistoryArray: OrderHistory[];
+  orderHistoryArray: UserOrderHistory[];
   status: string;
   error: string | null;
   success: string | null;
@@ -22,14 +22,14 @@ const initialState: UserOrderHistoryState = {
 };
 
 export const fetchUserOrderHistory = createAsyncThunk<
-  { data: OrderHistory[]; message: string },
+  { data: UserOrderHistory[]; message: string },
   { email: string },
   { rejectValue: string }
 >(
   "orderHistory/fetchUserOrderHistory",
   async ({ email }, { rejectWithValue }) => {
     try {
-      const fetchUserOrderHistoryResponse: RequestResponse<OrderHistory[]> =
+      const fetchUserOrderHistoryResponse: RequestResponse<UserOrderHistory[]> =
         await requestService.postMethod(
           "products/endpoints/productManagement/getOrderHistory",
           { email }

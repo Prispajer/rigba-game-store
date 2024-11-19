@@ -4,7 +4,8 @@ import requestService from "@/services/RequestService";
 import { generateRandomValue } from "@/utils/prices";
 import { ReviewSchema } from "@/utils/schemas/product";
 import { GameAPIResponse } from "@/utils/helpers/types";
-import { User, RatingTitle } from "@prisma/client";
+import { RatingTitle } from "@prisma/client";
+import { User } from "next-auth";
 
 export default function useProductServices() {
   const [error, setError] = React.useState<string | null>();

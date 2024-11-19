@@ -6,7 +6,7 @@ import {
 } from "@/utils/helpers/frontendDTO";
 import { RequestResponse, UserWishList } from "@/utils/helpers/types";
 
-export interface UserWishListSlice {
+export interface UserWishListState {
   products: UserWishList["products"];
   status: string;
   error: string | null;
@@ -15,7 +15,7 @@ export interface UserWishListSlice {
   message: string | null;
 }
 
-const initialState: UserWishListSlice = {
+const initialState: UserWishListState = {
   products: [],
   status: "idle",
   error: null,

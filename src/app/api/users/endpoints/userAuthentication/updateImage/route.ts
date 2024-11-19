@@ -13,7 +13,7 @@ export async function POST(
     updateImageClientData
   );
 
-  return NextResponse.json<RequestResponse<PersonalData>>({
+  return NextResponse.json<RequestResponse<User>>({
     success: updateImageResponse.success,
     message: updateImageResponse.message,
     data: updateImageResponse.data,

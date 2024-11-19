@@ -54,7 +54,7 @@ export default function OrdersContainer() {
                   STATUS
                 </div>
                 <div
-                  className={`text-[12px] font-[600]text-ellipsis line-clamp-1 cursor-default  ${
+                  className={`text-[12px] font-[600] text-ellipsis line-clamp-1 cursor-default  ${
                     order.status.toUpperCase() === "ORDER CANCELED"
                       ? "text-[#ff0000]"
                       : "text-[#00cf9f]"

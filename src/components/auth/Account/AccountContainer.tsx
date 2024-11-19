@@ -11,28 +11,30 @@ export default function AccountContainer() {
   console.log(user);
 
   return (
-    <div className="flex-col justify-center items-center w-full pt-[40px] px-[40px] pb-[80px] bg-[#e9eff4]">
+    <div className="flex-col justify-center items-center w-full min-h-[100vh] pt-[40px] px-[40px] pb-[80px] bg-[#e9eff4]">
       <h1 className="flex justify-start text-[#1A396E] text-[20px] font-[700] cursor-default ">
         MY ACCOUNT
       </h1>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-[20px] max-w-[1240px] mt-[20px]">
         <div className="flex flex-col gap-y-[20px] cursor-default">
-          <div className="flex flex-col justify-between w-full  bg-[white]">
+          <div className="flex flex-col justify-between w-full bg-[white] shadow-md">
             <div className="flex-0 py-[15px] px-[20px] border-b-[1px] font-[600]">
               <h2>PROFILE</h2>
             </div>
-            <div className="flex items-center justify-between py-[15px] px-[20px]">
-              <div>
-                <Image
-                  src="/icons/logo.png"
-                  width="40"
-                  height="40"
-                  alt="avatar"
-                />
-              </div>
-              <div className="flex flex-col flex-1 ml-2 leading-[19px]">
+            <div className="flex items-center justify-between py-[15px] px-[20px] gap-[5px]">
+              <Link href="/upload-image">
+                <div className="min-w-[40px]">
+                  <Image
+                    src={"/icons/logo.png"}
+                    width="40"
+                    height="40"
+                    alt="avatar"
+                  />
+                </div>
+              </Link>
+              <div className="flex flex-col flex-1 ml-2 leading-[19px] text-ellipsis line-clamp-1 ">
                 <span className="text-[#544d60] font-[650]">{user?.name}</span>
-                <span className="text-[#544d60]">{user?.email}</span>
+                <span className="text-[#544d60] text-sm ">{user?.email}</span>
               </div>
               <div className="flex items-center justify-center">
                 <Link href="/settings">
@@ -43,41 +45,76 @@ export default function AccountContainer() {
               </div>
             </div>
           </div>
-          <div className="flex flex-col justify-between w-full bg-[white]">
-            <div className="flex-0 py-[15px] px-[20px] border-b-[1px] font-[600]">
+          <div className="flex flex-col w-full bg-white mb-[15px] border border-gray-200 shadow-md">
+            <div className="py-[15px] px-[20px] border-b font-[600]">
               <h2>USER DATA</h2>
             </div>
-            <div className="flex items-center justify-between py-[15px] px-[20px]">
-              <div className="flex flex-col flex-1 ml-2 leading-[19px]">
-                <span className="text-[#544d60] font-[650]">
-                  Name and surname :
-                </span>
-                <span className="text-[#544d60]">duzykox123@gmail.com</span>
-                <span className="text-[#544d60] font-[650]">
-                  Date of birth :
-                </span>
-                <span className="text-[#544d60]">17.11.2024</span>
-                <span className="text-[#544d60] font-[650]">Address:</span>
-                <span className="text-[#544d60]">Długa 54</span>
-                <span className="text-[#544d60] font-[650]">State :</span>
-                <span className="text-[#544d60]">Świętokrzyskie</span>
-                <span className="text-[#544d60] font-[650]">Zip code :</span>
-                <span className="text-[#544d60]">27-230</span>
-                <span className="text-[#544d60] font-[650]">
-                  City/Countryside :
-                </span>
-                <span className="text-[#544d60]">Krynki</span>
-                <span className="text-[#544d60] font-[650]">Country:</span>
-                <span className="text-[#544d60]">Polska</span>
-                <span className="text-[#544d60] font-[650]">
-                  Phone number :
-                </span>
-                <span className="text-[#544d60]">533331490</span>
+            <div className="flex items-start sm:items-center justify-between py-[15px] px-[20px] gap-[5px]">
+              <div className="flex flex-col space-y-4 text-sm text-gray-700 text-ellipsis line-clamp-1">
+                <div>
+                  <span className="block font-semibold">Name and surname:</span>
+                  <span className="block">
+                    {user?.personalData?.fullName ||
+                      "Missing data - Complete your profile!"}
+                  </span>
+                </div>
+                <div>
+                  <span className="block font-semibold">Date of birth:</span>
+                  <span className="block">
+                    {user?.personalData?.birthDate
+                      ? new Date(
+                          user?.personalData?.birthDate as Date
+                        ).toLocaleDateString()
+                      : "Missing data - Complete your profile!"}
+                  </span>
+                </div>
+                <div>
+                  <span className="block font-semibold">Address:</span>
+                  <span className="block">
+                    {user?.personalData?.address ||
+                      "Missing data - Complete your profile!"}
+                  </span>
+                </div>
+                <div>
+                  <span className="block font-semibold">State:</span>
+                  <span className="block">
+                    {user?.personalData?.state ||
+                      "Missing data - Complete your profile!"}
+                  </span>
+                </div>
+                <div>
+                  <span className="block font-semibold">Zip code:</span>
+                  <span className="block">
+                    {user?.personalData?.zipCode ||
+                      "Missing data - Complete your profile!"}
+                  </span>
+                </div>
+                <div>
+                  <span className="block font-semibold">City/Countryside:</span>
+                  <span className="block">
+                    {user?.personalData?.city ||
+                      "Missing data - Complete your profile!"}
+                  </span>
+                </div>
+                <div>
+                  <span className="block font-semibold">Country:</span>
+                  <span className="block">
+                    {user?.personalData?.country ||
+                      "Missing data - Complete your profile!"}
+                  </span>
+                </div>
+                <div>
+                  <span className="block font-semibold">Phone number:</span>
+                  <span className="block">
+                    {user?.personalData?.phoneNumber ||
+                      "Missing data - Complete your profile!"}
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center justify-center">
+              <div className="flex items-center">
                 <Link href="/personal-data">
-                  <button>
-                    <LuPencil size={15} />
+                  <button className="flex items-center justify-center transition duration-300">
+                    <LuPencil />
                   </button>
                 </Link>
               </div>
@@ -91,7 +128,7 @@ export default function AccountContainer() {
             </div>
             <div className="flex flex-wrap py-[15px] px-[20px] ">
               {userProductHistoryState.productHistoryArray
-                .slice(0, 4)
+                .slice(0, 3)
                 .map((product) => (
                   <div className="flex flex-wrap">
                     <div key={product.id}>
@@ -112,7 +149,7 @@ export default function AccountContainer() {
             <div className="flex justify-end py-[15px] px-[20px] pt-[10px]">
               <div className="flex items-center">
                 <Link href="/orders">
-                  <button className="w-[200px] py-[5px] px-[10px] border-[1px] border-[#658fb2] hover:border-[#658fb2]">
+                  <button className=" py-[5px] px-[10px] border-[1px] border-[#658fb2] hover:border-[#658fb2]">
                     <span className="text-[#658fb2] font-[600]">
                       Show keys library
                     </span>

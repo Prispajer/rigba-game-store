@@ -7,7 +7,7 @@ import {
   cartRepository,
   wishListRepository,
 } from "./utils/injector";
-import { Cart, UserRole, WishList } from "@prisma/client";
+import { Cart, PersonalData, UserRole, WishList } from "@prisma/client";
 
 export type ExtendedUser = DefaultSession["user"] & {
   id: string;
@@ -16,8 +16,10 @@ export type ExtendedUser = DefaultSession["user"] & {
   role: UserRole;
   cartId: string | null;
   wishListId: string | null;
+  personalDataId: string | null;
   cart: Cart | null;
   wishList: WishList | null;
+  personalData: PersonalData | null;
 };
 
 declare module "next-auth" {
@@ -96,10 +98,14 @@ export const {
       const userWishList = await wishListRepository.getUserWishList(
         existingUser
       );
+      const userPersonalData = await userRepository.getUserPersonalData(
+        existingUser
+      );
 
       token.role = existingUser.role;
       token.cartId = userCart?.id || null;
       token.wishListId = userWishList?.id || null;
+      token.personalDataId = userPersonalData?.id || null;
       token.twoFactorEnabled = existingUser.isTwoFactorEnabled;
       token.emailVerificationDate = existingUser.emailVerified;
 
@@ -111,6 +117,7 @@ export const {
         session.user.role = token.role as UserRole;
         session.user.cartId = token.cartId as string;
         session.user.wishListId = token.wishListId as string;
+        session.user.personalDataId = token.personalDataId as string;
         session.user.isTwoFactorEnabled = token.twoFactorEnabled as boolean;
         session.user.emailVerificationDate =
           token.emailVerificationDate as Date;
@@ -120,6 +127,11 @@ export const {
         }
         if (session.user.wishListId) {
           session.user.wishList = await wishListRepository.getUserWishList(
+            session.user
+          );
+        }
+        if (session.user.personalDataId) {
+          session.user.personalData = await userRepository.getUserPersonalData(
             session.user
           );
         }

@@ -25,6 +25,7 @@ export default function PaymentPage() {
     try {
       const response = await fetch("/api/stripe/config");
       const { publishableKey } = await response.json();
+
       setStripePromise(await loadStripe(publishableKey));
     } catch (error) {
       console.error("Failed to load Stripe config:", error);
@@ -34,6 +35,7 @@ export default function PaymentPage() {
   const createPaymentIntent = React.useCallback(async () => {
     if (productsByRole.length > 0) {
       try {
+        const amount = parseFloat(calculateTotalPrice(productsByRole));
         const response = await fetch("/api/stripe/create-payment-intent", {
           method: "POST",
           headers: {
@@ -42,11 +44,11 @@ export default function PaymentPage() {
           body: JSON.stringify({
             email: user?.email || null,
             cart: productsByRole,
-            amount: parseFloat(calculateTotalPrice(productsByRole)),
+            amount: amount,
           }),
         });
-        const { clientSecret: newClientSecret } = await response.json();
-        setClientSecret(newClientSecret);
+        const { clientSecret } = await response.json();
+        setClientSecret(clientSecret);
       } catch (error) {
         console.error("Failed to create payment intent:", error);
       } finally {

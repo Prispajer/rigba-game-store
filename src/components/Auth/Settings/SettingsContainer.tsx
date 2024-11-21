@@ -88,8 +88,8 @@ export default function SettingsContainer() {
               <span> {user?.isTwoFactorEnabled ? "Turn off" : "Turn on"}</span>
             </button>
           </div>
-          <FormSuccess message={success} />
-          <FormError message={error} />
+          <FormSuccess message={success as string} />
+          <FormError message={error as string} />
         </div>
         <TwoFactorModalContainer
           handleSubmit={(code: string) => submitToggleTwoFactor(code)}

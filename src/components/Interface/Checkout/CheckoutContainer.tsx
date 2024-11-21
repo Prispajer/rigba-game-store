@@ -43,7 +43,9 @@ export default function CheckoutContainer() {
               <li
                 onClick={() =>
                   redirectToGame(
-                    product.productsInformations?.slug || product.slug
+                    "productsInformations" in product
+                      ? (product.productsInformations.slug as string)
+                      : product.slug
                   )
                 }
                 key={product.externalProductId}
@@ -53,18 +55,25 @@ export default function CheckoutContainer() {
                   <div className="relative h-full w-full">
                     <Image
                       src={
-                        product.productsInformations?.background_image ||
-                        product.background_image
+                        "productsInformations" in product
+                          ? product.productsInformations?.background_image
+                          : product.background_image
                       }
                       layout="fill"
-                      alt={product.productsInformations?.name || product.name}
+                      alt={
+                        "productsInformations" in product
+                          ? (product.productsInformations.name as string)
+                          : product.name
+                      }
                     />
                   </div>
                 </div>
                 <div className="flex flex-col justify-between flex-1">
                   <div className="flex justify-between">
                     <div className="text-[#FFFFFF] font-[700]">
-                      {product.productsInformations?.name || product.name}
+                      {"productsInformations" in product
+                        ? product.productsInformations?.name
+                        : product.name}
                     </div>
                     <div className="absolute right-[20px] top-[20px] text-[#ffffffb3] cursor-pointer">
                       <FaRegTrashAlt
@@ -140,7 +149,10 @@ export default function CheckoutContainer() {
                     </div>
                     <div className="flex-0 text-[#FFFFFF] font-[700]">
                       <span>
-                        ${product.productsInformations?.price || product.price}
+                        $
+                        {"productsInformations" in product
+                          ? product.productsInformations?.price
+                          : product.price}
                       </span>
                     </div>
                   </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { z } from "zod";
 import React from "react";
 import Link from "next/link";
 import { FaGoogle } from "react-icons/fa";
@@ -94,8 +95,8 @@ export default function RegisterContainer() {
               <p>{errors.confirmPassword.message as React.ReactNode}</p>
             )}
           </div>
-          <FormSuccess message={success} />
-          <FormError message={error} />
+          <FormSuccess message={success as string} />
+          <FormError message={error as string} />
           <div className="flex flex-col items-center justfiy-center py-4">
             <button
               disabled={isPending}

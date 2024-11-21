@@ -10,7 +10,7 @@ import useUserServices from "@/hooks/useUserServices";
 import { NewPasswordSchema } from "@/utils/schemas/user";
 
 export default function ChangePasswordContainer() {
-  const [oldPassword, setOldPassword] = React.useState<string | undefined>();
+  const [oldPassword, setOldPassword] = React.useState<string>();
 
   const { success, error, isPending, useUserActions, useUserToken } =
     useUserServices();

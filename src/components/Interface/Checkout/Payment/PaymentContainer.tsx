@@ -14,8 +14,6 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 import useUserCart from "@/hooks/useUserCart";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useCustomRouter from "@/hooks/useCustomRouter";
-import { UserCartState } from "@/redux/slices/userCartSlice";
-import { LocalStorageState } from "@/redux/slices/localStorageSlice";
 
 export default function PaymentContainer() {
   const [isProcessing, setIsProcessing] = React.useState(false);
@@ -41,16 +39,6 @@ export default function PaymentContainer() {
 
   const productsByRole = user ? userCartState.products : localCartState;
 
-  const isUserCart = (
-    cart: UserCartState["products"] | LocalStorageState["localCart"]
-  ): cart is UserCartState["products"] => {
-    return cart.some(
-      (item: UserCartState["products"]) => "productsInformations" in item
-    );
-  };
-
-  console.log(isUserCart(productsByRole));
-
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -60,7 +48,7 @@ export default function PaymentContainer() {
 
     setIsProcessing(true);
 
-    const { error } = await stripe?.confirmPayment({
+    const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
         return_url: `${process.env.NEXT_PUBLIC_URL}/checkout/redeem`,
@@ -75,7 +63,7 @@ export default function PaymentContainer() {
   };
 
   return (
-    <section className="flex flex-col items-center w-full h-[calc(100vh-96px)] md:py-[20px] md:px-[15px] bg-primaryColor mx-auto">
+    <section className="flex flex-col items-center w-full min-h-[calc(100vh-96px)] md:py-[20px] md:px-[15px] bg-primaryColor mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-2 w-full lg:max-w-[1040px] mx-auto p-[15px] gap-x-[20px] bg-secondaryColor md:bg-primaryColor">
         <div className="h-min p-[20px] text-[#FFFFFF] bg-secondaryColor">
           <form id="payment-form" onSubmit={handleSubmit}>
@@ -85,7 +73,6 @@ export default function PaymentContainer() {
               className="pt-[20px]"
             />
             <button
-              disabled={stripe == null || elements == null || isProcessing}
               className="w-full my-[20px] p-[10px] bg-buttonBackground hover:to-buttonBackgroundHover text-buttonTextColor cursor-pointer"
               id="submit"
             >
@@ -107,9 +94,9 @@ export default function PaymentContainer() {
               <li
                 onClick={() =>
                   redirectToGame(
-                    (isUserCart(productsByRole)
-                      ? product.productsInformations?.slug
-                      : product.slug) || product.slug
+                    "productsInformations" in product
+                      ? (product.productsInformations.slug as string)
+                      : product.slug
                   )
                 }
                 key={product.externalProductId}
@@ -119,14 +106,14 @@ export default function PaymentContainer() {
                   <div className="relative h-full w-full">
                     <Image
                       src={
-                        isUserCart(productsByRole)
-                          ? product.productsInformations?.background_image
+                        "productsInformations" in product
+                          ? product.productsInformations.background_image
                           : product.background_image
                       }
                       layout="fill"
                       alt={
-                        isUserCart(productsByRole)
-                          ? product.productsInformations?.name
+                        "productsInformations" in product
+                          ? (product.productsInformations?.name as string)
                           : product.name
                       }
                     />
@@ -135,8 +122,8 @@ export default function PaymentContainer() {
                 <div className="flex flex-col justify-between flex-1">
                   <div className="flex justify-between">
                     <div className="text-[#FFFFFF] font-[700]">
-                      {isUserCart(productsByRole)
-                        ? product.productsInformations?.name
+                      {"productsInformations" in product
+                        ? product.productsInformations.name
                         : product.name}
                     </div>
                     <div className="absolute right-[20px] top-[20px] text-[#ffffffb3] cursor-pointer">
@@ -212,12 +199,11 @@ export default function PaymentContainer() {
                       </button>
                     </div>
                     <div className="flex-0 text-[#FFFFFF] font-[700]">
-                      <span>
-                        {isUserCart(productsByRole)
-                          ? product.productsInformations?.price
-                          : product.price}
-                        zł
-                      </span>
+                      {"productsInformations" in product ? (
+                        <span>${product.productsInformations?.price}</span>
+                      ) : (
+                        <span>${product.price}</span>
+                      )}
                     </div>
                   </div>
                 </div>

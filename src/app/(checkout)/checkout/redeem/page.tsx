@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { useRouter } from "next/router";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
 import CheckoutHeader from "@/components/Interface/Checkout/CheckoutHeader";
 import RedeemContainer from "@/components/Interface/Checkout/Redeem/RedeemContainer";
@@ -19,11 +18,7 @@ export const generateMetadata = async (data: {
   };
 };
 
-export default async function RedeemPage(data: {
-  params: Promise<{ redeemId: string }>;
-}) {
-  const params = await data.params;
-
+export default async function RedeemPage() {
   return (
     <>
       <CheckoutHeader
@@ -42,7 +37,7 @@ export default async function RedeemPage(data: {
         stepTwoContentStyles="text-secondaryColor bg-[#00cf9f]"
         stepThreeContentStyles="text-[#FFFFFF] bg-[#00cf9f]"
       />
-      <RedeemContainer params={params} />
+      <RedeemContainer />
     </>
   );
 }

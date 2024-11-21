@@ -6,7 +6,7 @@ import { generateGameKey } from "@/utils/keys";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 export async function POST(request: NextRequest) {
-  let event;
+  let event: Stripe.Event;
   let order;
   try {
     const stripeBody = await request.text();
@@ -14,10 +14,10 @@ export async function POST(request: NextRequest) {
     event = await stripe.webhooks.constructEvent(
       stripeBody,
       signature as string,
-      process.env.NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET_KEY as string
+      process.env.WEBHOOK_SECRET_KEY as string
     );
   } catch (error) {
-    return NextResponse.json({ error: "Webhook error" }, { status: 400 });
+    return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
   try {
@@ -120,6 +120,10 @@ export async function POST(request: NextRequest) {
           status: "Failed",
         },
       });
+
+      const redirectUrl = `${process.env.NEXT_PUBLIC_URL}/checkout/redeem/${orderId}`;
+
+      return NextResponse.json({ redirectUrl });
     } else {
       return NextResponse.json(
         { error: "Unhandled event type" },

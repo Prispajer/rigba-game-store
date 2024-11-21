@@ -2,10 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { postgres } from "@/data/database/publicSQL/postgres";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "", {
-  apiVersion: "2024-10-28.acacia",
-  typescript: true,
-});
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "");
 
 export async function POST(request: NextRequest) {
   const { email, amount, cart } = await request.json();
@@ -33,10 +30,20 @@ export async function POST(request: NextRequest) {
   });
 
   if (pendingOrder) {
+    let paymentIntent;
+
     const orderCreationTime = new Date(pendingOrder.createdAt).getTime();
-    const paymentIntent = await stripe.paymentIntents.retrieve(
-      pendingOrder.paymentIntentId
-    );
+
+    try {
+      paymentIntent = await stripe.paymentIntents.retrieve(
+        pendingOrder.paymentIntentId
+      );
+    } catch (error) {
+      return NextResponse.json(
+        { error: "Failed to retrieve payment intent" },
+        { status: 500 }
+      );
+    }
 
     if (
       currentTime - orderCreationTime < orderExpirationDate &&

@@ -25,6 +25,7 @@ export default function NavbarSidebar() {
   const foundCategory = selectedCategory
     ? navLinks.find((element) => element.title === selectedCategory)
     : null;
+
   const foundSubCategory = selectedSubCategory
     ? foundCategory?.links.find((link) => link.category === selectedSubCategory)
     : null;

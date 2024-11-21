@@ -19,7 +19,7 @@
     "@react-icons/all-files": "^4.1.0",
     "@reduxjs/toolkit": "^2.2.7",
     "@stripe/react-stripe-js": "^2.8.0",
-    "@stripe/stripe-js": "^4.8.0",
+    "@stripe/stripe-js": "^5.2.0",
     "add": "^2.0.6",
     "babel-plugin-styled-components": "^2.1.4",
     "bcrypt": "^5.1.1",

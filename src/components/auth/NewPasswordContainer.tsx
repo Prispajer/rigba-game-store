@@ -1,5 +1,6 @@
 "use client";
 
+import { z } from "zod";
 import React from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -78,8 +79,8 @@ export default function ResetPasswordContainer() {
                 At least one number or special character
               </span>
             </div>
-            <FormSuccess message={success} />
-            <FormError message={error} />
+            <FormSuccess message={success as string} />
+            <FormError message={error as string} />
             <div className="flex flex-col items-center justfiy-center w- ">
               <button
                 className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px] mt-4"

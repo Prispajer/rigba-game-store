@@ -66,6 +66,7 @@ export interface UserProduct {
   wishListId: string | null;
   productsInformations: {
     id?: string | number;
+    name?: string;
     description_raw: string;
     background_image: string;
     price: number;

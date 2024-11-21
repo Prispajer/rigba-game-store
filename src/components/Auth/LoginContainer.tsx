@@ -1,5 +1,6 @@
 "use client";
 
+import { z } from "zod";
 import React from "react";
 import Link from "next/link";
 import { FaGoogle } from "react-icons/fa";
@@ -29,8 +30,6 @@ export default function LoginContainer() {
   } = useUserServices();
   const { submitLoginForm } = useUserActions();
   const { user } = useCurrentUser();
-
-  console.log(showTwoFactor);
 
   const handleProviderLogin = async (provider: SignInProvider) => {
     try {
@@ -148,7 +147,7 @@ export default function LoginContainer() {
                   <p>{errors.password.message as React.ReactNode}</p>
                 )}
               </div>
-              <FormSuccess message={success} />
+              <FormSuccess message={success as string} />
               <FormError message={error || providerError} />
               <div className="flex flex-col items-center justfiy-center w- pt-4">
                 <button
@@ -183,7 +182,7 @@ export default function LoginContainer() {
                 />
                 {errors.code && <p>{errors.code.message as React.ReactNode}</p>}
               </div>
-              <FormSuccess message={success} />
+              <FormSuccess message={success as string} />
               <FormError message={error || providerError} />
               <div className="flex flex-col items-center justfiy-center w- pt-4">
                 <button
@@ -220,7 +219,7 @@ export default function LoginContainer() {
                 />
                 {errors.code && <p>{errors.code.message as React.ReactNode}</p>}
               </div>
-              <FormSuccess message={success} />
+              <FormSuccess message={success as string} />
               <FormError message={error || providerError} />
               <div className="flex flex-col items-center justfiy-center w- pt-4">
                 <button

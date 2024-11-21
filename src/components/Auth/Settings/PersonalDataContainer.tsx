@@ -222,8 +222,8 @@ export default function PersonalDataContainer() {
             <span className="text-buttonTextColor font-bold">Save</span>
           </button>
         </div>
-        <FormSuccess message={success} />
-        <FormError message={error} />
+        <FormSuccess message={success as string} />
+        <FormError message={error as string} />
       </form>
     </div>
   );

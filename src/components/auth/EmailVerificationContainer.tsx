@@ -22,8 +22,8 @@ export default function EmailVerificationContainer() {
         </span>
       </h1>
       <div className="flex justify-center text-center mt-[40px]">
-        <FormSuccess message={success} />
-        <FormError message={error} />
+        <FormSuccess message={success as string} />
+        <FormError message={error as string} />
         {!success && !error && <MoonLoader />}
       </div>
       <div className="flex items-center  justify-center w-full mt-[60px]">

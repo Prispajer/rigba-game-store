@@ -1,5 +1,6 @@
 "use client";
 
+import { z } from "zod";
 import React from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -53,8 +54,8 @@ export default function ResetPasswordContainer() {
               />
               {errors.email && <p>{errors.email.message as React.ReactNode}</p>}
             </div>
-            <FormSuccess message={success} />
-            <FormError message={error} />
+            <FormSuccess message={success as string} />
+            <FormError message={error as string} />
             <div className="flex flex-col items-center justfiy-center w- pt-4">
               <button
                 className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px]"

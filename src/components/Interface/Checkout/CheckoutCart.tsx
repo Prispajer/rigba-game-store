@@ -41,7 +41,9 @@ export default function CheckoutSummary() {
                   .reduce(
                     (total: number, product) =>
                       total +
-                      (product.productsInformations?.price || product.price) *
+                      ("productsInformations" in product
+                        ? product.productsInformations?.price
+                        : product.price) *
                         (product.quantity || 1),
                     0
                   )
@@ -59,7 +61,9 @@ export default function CheckoutSummary() {
                 .reduce(
                   (total: number, product) =>
                     total +
-                    (product.productsInformations?.price || product.price) *
+                    ("productsInformations" in product
+                      ? product.productsInformations?.price
+                      : product.price) *
                       (product.quantity || 1),
                   0
                 )

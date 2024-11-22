@@ -1,4 +1,4 @@
-import { GameAPIResponse, Product, UserCart } from "./helpers/types";
+import { GameAPIResponse, LocalCart, UserProduct } from "./helpers/types";
 
 export function generateRandomValue(): number {
   const minValue = 0;
@@ -28,12 +28,28 @@ export async function getGamesWithRandomPrices(
   }));
 }
 
-export const calculateTotalPrice = (productsArray: Product[] | UserCart[]) => {
+export const calculateTotalPrice = (
+  productsArray: LocalCart[] | UserProduct[]
+) => {
   return productsArray
     .reduce((total: number, product) => {
-      const price = product.productsInformations?.price || product.price;
+      const price =
+        "productsInformations" in product
+          ? product.productsInformations.price
+          : product.price;
       const quantity = product.quantity || 1;
       return total + price * quantity;
     }, 0)
     .toFixed(2);
+};
+
+export const paginatePages = <T>(array: T[]): T[][] => {
+  let pages: T[][] = [];
+  const pagesSize: number = 10;
+
+  for (let i = 0; i < array.length; i = i + pagesSize) {
+    pages.push(array.slice(i, i + pagesSize));
+  }
+
+  return pages;
 };

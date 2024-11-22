@@ -11,6 +11,7 @@ import userWishListReducer from "./slices/userWishListSlice";
 import userReviewsReducer from "./slices/userReviewsSlice";
 import userProductHistoryReducer from "./slices/userProductHistorySlice";
 import userOrderHistoryReducer from "./slices/userOrderHistorySlice";
+import paginationReducer from "./slices/paginationSlice";
 
 export const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ export const store = configureStore({
     userReviews: userReviewsReducer,
     userProductHistory: userProductHistoryReducer,
     userOrderHistory: userOrderHistoryReducer,
+    pagination: paginationReducer,
   },
 });
 

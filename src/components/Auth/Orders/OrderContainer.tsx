@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
+import LoadingAnimation from "@/components/Interface/Shared/Animations/LoadingAnimation";
 import useUserOrderHistory from "@/hooks/useUserOrderHistory";
 import useUserProductHistory from "@/hooks/useUserProductHistory";
 import useCustomRouter from "@/hooks/useCustomRouter";
@@ -38,7 +39,7 @@ export default function OrderContainer({
           <div className="text-[12px] font-bold"></div>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-account-orders-auto-fit items-center w-full py-[10px] px-[20px] gap-x-[20px] bg-[#FFFFFF]">
-          <div className="grid grid-cols- grid-cols-[1fr_4fr] w-full gap-[20px] py-[5px] lg:gap-0 border-b-[1px] lg:border-none   border-[#00CF9F] text-[12px]  cursor-default">
+          <div className="grid grid-cols- grid-cols-[1fr_4fr] lg:grid-cols-1 w-full gap-[20px] py-[5px] lg:gap-0 border-b-[1px] lg:border-none   border-[#00CF9F] text-[12px]  cursor-default">
             <div className="flex items-center lg:hidden text-[#a09aac] font-[600]">
               ORDERED PRODUCTS
             </div>

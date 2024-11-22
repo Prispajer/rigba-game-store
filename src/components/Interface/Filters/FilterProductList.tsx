@@ -3,6 +3,7 @@ import React from "react";
 import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
 import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
+import LoadingAnimation from "../Shared/Animations/LoadingAnimation";
 import useFetchGameData from "@/hooks/useFetchGameData";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import useSearchText from "@/hooks/useSearchText";
@@ -32,11 +33,13 @@ export default function FilterProductList() {
             className="relative my-[10px] flex flex-row sm:flex-col bg-tertiaryColor cursor-pointer"
           >
             <div className="relative m-[5px] sm:m-[0px] min-w-[95px] sm:min-h-[250px]">
+              (
               <Image
                 src={game.background_image ?? ""}
                 layout="fill"
                 alt="game"
               />
+              )
             </div>
             <div className="max-w-[50%] sm:max-w-[100%] my-[10px] px-[15px]">
               <div className="flex flex-col justify-between min-h-[60px]">

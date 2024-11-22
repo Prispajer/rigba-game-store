@@ -36,9 +36,6 @@ const initialState: ProductFilterState = {
 export const fetchProductsWithFilters = createAsyncThunk<
   {
     results: GameAPIResponse[];
-    count: number;
-    next: string | null;
-    previous: string | null;
   },
   { page: number },
   { rejectValue: string; getState: () => ProductFilterState }
@@ -126,24 +123,13 @@ const productFiltersSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(
-        fetchProductsWithFilters.fulfilled,
-        (
-          state,
-          action: PayloadAction<{
-            results: GameAPIResponse[];
-            count: number;
-            next: string | null;
-            previous: string | null;
-          }>
-        ) => {
-          state.isLoading = false;
-          state.productsWithFilters = action.payload.results;
-          state.gamesCount = action.payload.count;
-          state.nextPage = action.payload.next;
-          state.previousPage = action.payload.previous;
-        }
-      )
+      .addCase(fetchProductsWithFilters.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.productsWithFilters = action.payload.results;
+        state.gamesCount = action.payload.count;
+        state.nextPage = action.payload.next;
+        state.previousPage = action.payload.previous;
+      })
       .addCase(fetchProductsWithFilters.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;

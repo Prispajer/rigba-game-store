@@ -10,10 +10,12 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 import useUserCart from "@/hooks/useUserCart";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { calculateTotalPrice } from "@/utils/prices";
+import { Order } from "@prisma/client";
 
 export default function PaymentPage() {
   const [stripePromise, setStripePromise] = React.useState<any>(null);
   const [clientSecret, setClientSecret] = React.useState<string | null>(null);
+  const [newOrder, setNewOrder] = React.useState<Order | null>(null);
   const [loading, setLoading] = React.useState<boolean>(true);
   const { userCartState } = useUserCart();
   const { localCartState } = useLocalStorage("localCart");
@@ -25,7 +27,6 @@ export default function PaymentPage() {
     try {
       const response = await fetch("/api/stripe/config");
       const { publishableKey } = await response.json();
-
       setStripePromise(await loadStripe(publishableKey));
     } catch (error) {
       console.error("Failed to load Stripe config:", error);
@@ -47,8 +48,9 @@ export default function PaymentPage() {
             amount: amount,
           }),
         });
-        const { clientSecret } = await response.json();
+        const { clientSecret, newOrder } = await response.json();
         setClientSecret(clientSecret);
+        setNewOrder(newOrder);
       } catch (error) {
         console.error("Failed to create payment intent:", error);
       } finally {
@@ -117,7 +119,7 @@ export default function PaymentPage() {
         stepThreeContentStyles="text-secondaryColor bg-[#ffffff66]"
       />
       <Elements stripe={stripePromise} options={{ clientSecret, appearance }}>
-        <PaymentContainer />
+        <PaymentContainer newOrder={newOrder} />
       </Elements>
     </>
   );

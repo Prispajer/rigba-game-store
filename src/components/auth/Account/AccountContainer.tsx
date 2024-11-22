@@ -130,8 +130,8 @@ export default function AccountContainer() {
               {userProductHistoryState.productHistoryArray
                 .slice(0, 3)
                 .map((product) => (
-                  <div className="flex flex-wrap">
-                    <div key={product.id}>
+                  <div key={product.id} className="flex flex-wrap">
+                    <div>
                       <Image
                         src={
                           product.productsInformations.background_image ||

@@ -65,7 +65,7 @@ export default function CartModalContainer() {
                         <Image
                           onClick={() =>
                             redirectToGame(
-                              product.productsInformations?.slug,
+                              product.productsInformations?.slug as string,
                               handleClose,
                               "cartModal"
                             )
@@ -74,14 +74,14 @@ export default function CartModalContainer() {
                             product.productsInformations.background_image ?? ""
                           }
                           layout="fill"
-                          alt={product.productsInformations.name}
+                          alt={product.productsInformations.name as string}
                         />
                       </div>
                       <div className="flex flex-1 flex-col px-2 gap-y-[10px] text-white">
                         <div
                           onClick={() =>
                             redirectToGame(
-                              product.productsInformations.slug,
+                              product.productsInformations.slug as string,
                               handleClose,
                               "cartModal"
                             )

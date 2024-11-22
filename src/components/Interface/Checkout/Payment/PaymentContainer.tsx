@@ -14,8 +14,13 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 import useUserCart from "@/hooks/useUserCart";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useCustomRouter from "@/hooks/useCustomRouter";
+import { Order } from "@prisma/client";
 
-export default function PaymentContainer() {
+export default function PaymentContainer({
+  newOrder,
+}: {
+  newOrder: Order | null;
+}) {
   const [isProcessing, setIsProcessing] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState<string>("");
   const [email, setEmail] = React.useState<string>("");
@@ -51,7 +56,7 @@ export default function PaymentContainer() {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${process.env.NEXT_PUBLIC_URL}/checkout/redeem`,
+        return_url: `${process.env.NEXT_PUBLIC_URL}/checkout/redeem/${newOrder?.id}`,
       },
     });
 

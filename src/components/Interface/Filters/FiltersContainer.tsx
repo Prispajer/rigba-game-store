@@ -69,13 +69,22 @@ export default function FiltersContainer() {
                 <MoonLoader color="pink" />
               </div>
             ) : productFilterState.error ? (
-              <div className="flex items-center justify-center">
-                Error: {productFilterState.error}
+              <div
+                className="flex items-center justify-center text-[18px]
+              cursor-default"
+              >
+                We couldn't find any games in this category. Please check your
+                filters or try searching in other categories.
               </div>
             ) : (
               <FilterProductList />
             )}
-            <FilterChangePage />
+            {productFilterState.productsWithFilters.length > 0 &&
+            !productFilterState.error ? (
+              <FilterChangePage />
+            ) : (
+              <div></div>
+            )}
           </section>
         </div>
       </section>

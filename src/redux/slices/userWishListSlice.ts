@@ -13,6 +13,7 @@ export interface UserWishListState {
   success: string | null;
   ordering: string | null;
   message: string | null;
+  isLoading: boolean;
 }
 
 const initialState: UserWishListState = {
@@ -22,6 +23,7 @@ const initialState: UserWishListState = {
   success: null,
   ordering: null,
   message: null,
+  isLoading: false,
 };
 
 export const fetchUserWishList = createAsyncThunk<
@@ -37,6 +39,7 @@ export const fetchUserWishList = createAsyncThunk<
           email,
         }
       );
+
     if (fetchUserWishListResponse && fetchUserWishListResponse.success) {
       return {
         products: fetchUserWishListResponse.data?.products || [],
@@ -131,10 +134,12 @@ const userWishListSlice = createSlice({
         state.status = "Loading";
         state.error = null;
         state.message = "Loading...";
+        state.isLoading = true;
       })
       .addCase(fetchUserWishList.fulfilled, (state, action) => {
         state.status = "Succeded";
         state.message = action.payload.message;
+        state.isLoading = false;
         state.products = action.payload.products || [];
         switch (state.ordering) {
           case "price": {
@@ -201,6 +206,7 @@ const userWishListSlice = createSlice({
         state.status = "Failed";
         state.message = action.payload as string;
         state.error = action.payload as string;
+        state.isLoading = false;
         state.products = [];
       })
       .addCase(fetchAddUserProductToWishList.pending, (state) => {

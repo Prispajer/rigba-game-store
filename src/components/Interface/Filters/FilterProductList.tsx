@@ -3,7 +3,6 @@ import React from "react";
 import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
 import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
-import LoadingAnimation from "../Shared/Animations/LoadingAnimation";
 import useFetchGameData from "@/hooks/useFetchGameData";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import useSearchText from "@/hooks/useSearchText";
@@ -57,7 +56,7 @@ export default function FilterProductList() {
                   Od
                 </div>
                 <div className="overflow-hidden overflow-ellipsis line-clamp-1 text-[20px] text-[#ffffff] font-bold">
-                  {game.price} zł
+                  ${game.price}
                 </div>
                 <div className="flex items-center">
                   <CiHeart

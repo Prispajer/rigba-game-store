@@ -21,8 +21,11 @@ const paginationSlice = createSlice({
       state.currentPage = action.payload.currentPage;
       state.totalPages = action.payload.totalPages;
     },
+    setCurrentPage: (state, action: PayloadAction<number>) => {
+      state.currentPage = action.payload;
+    },
     goToNextPage: (state) => {
-      if (state.currentPage < state.totalPages - 1) {
+      if (state.currentPage <= state.totalPages) {
         state.currentPage += 1;
       }
     },
@@ -31,10 +34,19 @@ const paginationSlice = createSlice({
         state.currentPage -= 1;
       }
     },
+    resetPagination: (state) => {
+      state.currentPage = 1;
+      state.totalPages = 0;
+    },
   },
 });
 
-export const { setPagination, goToNextPage, goToPreviousPage } =
-  paginationSlice.actions;
+export const {
+  setPagination,
+  setCurrentPage,
+  goToNextPage,
+  goToPreviousPage,
+  resetPagination,
+} = paginationSlice.actions;
 
 export default paginationSlice.reducer;

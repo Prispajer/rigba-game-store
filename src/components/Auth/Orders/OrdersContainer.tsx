@@ -1,10 +1,19 @@
 import LoadingAnimation from "@/components/Interface/Shared/Animations/LoadingAnimation";
+import Pagination from "@/components/Interface/Shared/ReusableComponents/Pagination";
 import useUserOrderHistory from "@/hooks/useUserOrderHistory";
 import useCustomRouter from "@/hooks/useCustomRouter";
+import usePagination from "@/hooks/usePagination";
 
 export default function OrdersContainer() {
   const { userOrderHistoryState } = useUserOrderHistory();
   const { redirectToOrder } = useCustomRouter();
+  const {
+    pages,
+    paginationState,
+    handleSetCurrentPage,
+    handleNextPage,
+    handlePreviousPage,
+  } = usePagination(userOrderHistoryState.orderHistoryArray);
 
   return (
     <div className="flex-col justify-center items-center pt-[40px] px-[40px] pb-[80px] bg-[#e9eff4]">
@@ -27,7 +36,8 @@ export default function OrdersContainer() {
           </div>
         ) : userOrderHistoryState.orderHistoryArray &&
           userOrderHistoryState.orderHistoryArray.length > 0 ? (
-          userOrderHistoryState.orderHistoryArray.map((order) => (
+          pages.length > paginationState.currentPage &&
+          pages[paginationState.currentPage].map((order) => (
             <div
               key={order.id}
               className="grid grid-cols-1 lg:grid-cols-account-orders-auto-fit items-center p-[20px] lg:py-[10px] lg:px-[20px] gap-x-[20px] border border-b-[3px] border-[#d3dfe9] bg-[#FFFFFF]"
@@ -107,6 +117,16 @@ export default function OrdersContainer() {
           <div className="text-center py-[20px] text-[#1A396E] font-bold">
             No orders found.
           </div>
+        )}
+        {userOrderHistoryState.orderHistoryArray.length >= 11 && (
+          <Pagination
+            loadingState={userOrderHistoryState.isLoading}
+            currentPage={paginationState.currentPage}
+            pages={pages}
+            handleNextPage={handleNextPage}
+            handleCurrentSetPage={handleSetCurrentPage}
+            handlePreviousPage={handlePreviousPage}
+          />
         )}
       </div>
     </div>

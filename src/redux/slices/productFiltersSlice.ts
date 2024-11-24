@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import fetchService from "@/services/FetchService";
 import { getGamesWithRandomPrices } from "@/utils/prices";
-import { GameAPIResponse, RequestResponse } from "@/utils/helpers/types";
+import { GameAPIResponse, GameAPIPagination } from "@/utils/helpers/types";
 
 export interface ProductFilterState {
   productsWithFilters: GameAPIResponse[];
@@ -34,9 +34,7 @@ const initialState: ProductFilterState = {
 };
 
 export const fetchProductsWithFilters = createAsyncThunk<
-  {
-    results: GameAPIResponse[];
-  },
+  GameAPIPagination,
   { page: number },
   { rejectValue: string; getState: () => ProductFilterState }
 >(
@@ -49,6 +47,7 @@ export const fetchProductsWithFilters = createAsyncThunk<
       storesIdArray,
       publishersIdArray,
       ordering,
+      error,
     } = (getState() as { productFilter: ProductFilterState }).productFilter;
 
     try {
@@ -61,10 +60,16 @@ export const fetchProductsWithFilters = createAsyncThunk<
         ordering
       );
 
+      console.log(error);
+
+      console.log(getProductsWithFilters);
+
       const gamesWithPrices = await getGamesWithRandomPrices(
         getProductsWithFilters.results,
         productsWithFilters
       );
+
+      console.log(gamesWithPrices);
 
       if (ordering === "price") {
         gamesWithPrices.sort((a, b) => (a.price ?? 0) - (b.price ?? 0));
@@ -75,6 +80,9 @@ export const fetchProductsWithFilters = createAsyncThunk<
       return {
         ...getProductsWithFilters,
         results: gamesWithPrices,
+        count: getProductsWithFilters.count,
+        next: getProductsWithFilters.next,
+        previous: getProductsWithFilters.previous,
       };
     } catch (error) {
       return rejectWithValue(
@@ -133,6 +141,7 @@ const productFiltersSlice = createSlice({
       .addCase(fetchProductsWithFilters.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
+        state.page = 1;
       });
   },
 });

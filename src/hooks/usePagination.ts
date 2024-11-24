@@ -4,28 +4,41 @@ import {
   setPagination,
   goToNextPage,
   goToPreviousPage,
+  setCurrentPage,
+  resetPagination,
 } from "@/redux/slices/paginationSlice";
 import { paginatePages } from "@/utils/prices";
 import { RootState } from "@/redux/store";
 
-export const usePagination = (data: any[]) => {
+export default function usePagination(data: any[]) {
   const dispatch = useDispatch();
-  const { currentPage, totalPages } = useSelector(
-    (state: RootState) => state.pagination
-  );
+  const paginationState = useSelector((state: RootState) => state.pagination);
 
-  console.log(currentPage, totalPages);
+  const pages = paginatePages(data);
+
+  console.log(data);
+
+  React.useEffect(() => {
+    dispatch(
+      setPagination({
+        currentPage: paginationState.currentPage,
+        totalPages: pages.length - 1,
+      })
+    );
+  }, [data, paginationState.currentPage, dispatch]);
 
   React.useEffect(() => {
     dispatch(
       setPagination({
         currentPage: 0,
-        totalPages: Math.ceil(data.length / 10),
+        totalPages: pages.length - 1,
       })
     );
   }, [data, dispatch]);
 
-  const pages = paginatePages(data);
+  const handleSetCurrentPage = (page: number) => {
+    dispatch(setCurrentPage(page));
+  };
 
   const handleNextPage = () => {
     dispatch(goToNextPage());
@@ -37,9 +50,9 @@ export const usePagination = (data: any[]) => {
 
   return {
     pages,
-    currentPage,
-    totalPages,
+    paginationState,
+    handleSetCurrentPage,
     handleNextPage,
     handlePreviousPage,
   };
-};
+}

@@ -141,6 +141,12 @@ export interface RequestResponse<T> {
   twoFactor?: boolean;
 }
 
+export interface GameAPIPagination {
+  count: number;
+  next: string;
+  previous: string;
+  results: GameAPIResponse[];
+}
 export interface GameAPIResponse extends GameAPIProduct {
   image_background?: string;
   games_count?: number;

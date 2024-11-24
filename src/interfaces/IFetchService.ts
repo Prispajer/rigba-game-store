@@ -1,4 +1,4 @@
-import { GameAPIResponse } from "@/utils/helpers/types";
+import { GameAPIPagination, GameAPIResponse } from "@/utils/helpers/types";
 
 export default interface IFetchService {
   fetchData(url: string): Promise<any>;
@@ -20,5 +20,5 @@ export default interface IFetchService {
     storesId?: number[],
     publishersId?: number[],
     ordering?: string
-  ): Promise<GameAPIResponse>;
+  ): Promise<GameAPIPagination>;
 }

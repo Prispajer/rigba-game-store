@@ -1,21 +1,21 @@
 import React from "react";
 import Image from "next/image";
-import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import LoadingAnimation from "@/components/Interface/Shared/Animations/LoadingAnimation";
+import Pagination from "@/components/Interface/Shared/ReusableComponents/Pagination";
 import useUserProductHistory from "@/hooks/useUserProductHistory";
 import useCustomRouter from "@/hooks/useCustomRouter";
-import { usePagination } from "@/hooks/usePagination";
-import { paginatePages } from "@/utils/prices";
+import usePagination from "@/hooks/usePagination";
 
 export default function KeysContainer() {
   const { userProductHistoryState } = useUserProductHistory();
   const { redirectToKey } = useCustomRouter();
-  const { pages, handleNextPage, handlePreviousPage } = usePagination(
-    userProductHistoryState.productHistoryArray
-  );
-  const [currentPage, setCurrentPage] = React.useState<number>(0);
-
-  console.log(pages);
+  const {
+    pages,
+    paginationState,
+    handleSetCurrentPage,
+    handleNextPage,
+    handlePreviousPage,
+  } = usePagination(userProductHistoryState.productHistoryArray);
 
   return (
     <div className="flex-col justify-center items-center pt-[40px] px-[40px] pb-[80px] bg-[#e9eff4]">
@@ -35,8 +35,10 @@ export default function KeysContainer() {
           <div className="grid grid-cols-1 items-center w-full h-full py-[20px] text-[#1A396E]">
             <LoadingAnimation />
           </div>
-        ) : userProductHistoryState.productHistoryArray?.length > 0 ? (
-          pages[currentPage]?.map((product) => (
+        ) : userProductHistoryState.productHistoryArray &&
+          userProductHistoryState.productHistoryArray?.length > 0 ? (
+          pages.length > paginationState.currentPage &&
+          pages[paginationState.currentPage]?.map((product) => (
             <div
               key={product.id}
               className="grid grid-cols-[1fr_4fr] lg:grid-cols-account-orders-auto-fit items-center p-[15px] lg:p-[0px] gap-x-[20px] border border-b-[3px] border-[#d3dfe9] bg-[#FFFFFF]"
@@ -128,39 +130,16 @@ export default function KeysContainer() {
             No products found.
           </div>
         )}
-        <div className="flex items-center justify-center py-[10px]">
-          {!userProductHistoryState.isLoading && (
-            <ul className="flex items-center text-[#ffffff] font-medium ">
-              <li className="flex items-center p-[10px] mr-[10px] text-[20px] border border-[white]">
-                <button
-                  disabled={currentPage === 0}
-                  onClick={handlePreviousPage}
-                >
-                  <MdKeyboardArrowLeft />
-                </button>
-              </li>
-              {pages.map((_, index) => (
-                <li
-                  key={index}
-                  className={`flex items-center justify-center p-[10px] text-[20px] cursor-pointer hover:text-[#658fb2] ${
-                    currentPage === index ? "text-[#658fb2]" : ""
-                  }`}
-                  onClick={() => setCurrentPage(index)}
-                >
-                  {index + 1}
-                </li>
-              ))}
-              <li className="flex items-center p-[10px] ml-[10px] text-[20px] border border-[white]">
-                <button
-                  disabled={currentPage === pages.length - 1}
-                  onClick={handleNextPage}
-                >
-                  <MdKeyboardArrowRight />
-                </button>
-              </li>
-            </ul>
-          )}
-        </div>
+        {userProductHistoryState.productHistoryArray.length >= 11 && (
+          <Pagination
+            loadingState={userProductHistoryState.isLoading}
+            currentPage={paginationState.currentPage}
+            pages={pages}
+            handleNextPage={handleNextPage}
+            handleCurrentSetPage={handleSetCurrentPage}
+            handlePreviousPage={handlePreviousPage}
+          />
+        )}
       </div>
     </div>
   );

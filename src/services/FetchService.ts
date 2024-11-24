@@ -1,5 +1,5 @@
 import IFetchService from "../interfaces/IFetchService";
-import { GameAPIResponse } from "../utils/helpers/types";
+import { GameAPIPagination, GameAPIResponse } from "../utils/helpers/types";
 
 export class FetchService implements IFetchService {
   public apiKey: string = process.env.NEXT_PUBLIC_RAWG_API_KEY || "";
@@ -94,7 +94,7 @@ export class FetchService implements IFetchService {
     storesId?: number[],
     publishersId?: number[],
     ordering?: string
-  ): Promise<GameAPIResponse> {
+  ): Promise<GameAPIPagination> {
     const genresQuery = genresId.join(",");
     const platformsQuery = platformsId?.join(",");
     const storesQuery = storesId?.join(",");
@@ -106,7 +106,7 @@ export class FetchService implements IFetchService {
     }${
       publishersQuery ? `&publishers=${publishersQuery}` : ""
     }&ordering=${ordering}`;
-    const data = await this.fetchData<GameAPIResponse>(url);
+    const data = await this.fetchData<GameAPIPagination>(url);
     return data || {};
   }
 }

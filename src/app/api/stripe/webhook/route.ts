@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
       if (!order) {
         return NextResponse.json({ error: "Order not found" }, { status: 404 });
       }
-
+      //  retrieve
       const cart = await postgres.cart.findUnique({
         where: { id: cartId, userId: userId },
         include: { products: { include: { productsInformations: true } } },
@@ -114,11 +114,15 @@ export async function POST(request: NextRequest) {
       const userId = paymentIntent.metadata.userId;
       const orderId = paymentIntent.metadata.orderId;
 
-      await postgres.order.update({
+      await postgres.orderHistory.update({
         where: { id: orderId, userId: userId },
         data: {
           status: "Failed",
         },
+      });
+
+      await postgres.order.delete({
+        where: { id: orderId },
       });
 
       const redirectUrl = `${process.env.NEXT_PUBLIC_URL}/checkout/redeem/${orderId}`;

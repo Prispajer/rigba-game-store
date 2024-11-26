@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
       if (!order) {
         return NextResponse.json({ error: "Order not found" }, { status: 404 });
       }
-      //  retrieve
+
       const cart = await postgres.cart.findUnique({
         where: { id: cartId, userId: userId },
         include: { products: { include: { productsInformations: true } } },

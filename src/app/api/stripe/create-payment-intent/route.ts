@@ -49,35 +49,11 @@ export async function POST(request: NextRequest) {
       currentTime - orderCreationTime < orderExpirationDate &&
       paymentIntent.status === "requires_payment_method"
     ) {
-      await postgres.orderHistory.create({
-        data: {
-          userId: pendingOrder.userId,
-          cartHistoryId: pendingOrder.id,
-          status: "Canceled",
-          title: pendingOrder.title,
-          paymentMethod: pendingOrder.paymentMethod,
-          paymentIntentId: pendingOrder.paymentIntentId,
-          total: pendingOrder.total,
-        },
-      });
-
       return NextResponse.json({
         clientSecret: paymentIntent.client_secret,
         existingOrder: pendingOrder,
       });
     }
-
-    await postgres.orderHistory.create({
-      data: {
-        userId: pendingOrder.userId,
-        cartHistoryId: pendingOrder.id,
-        status: "Failed",
-        title: pendingOrder.title,
-        paymentMethod: pendingOrder.paymentMethod,
-        paymentIntentId: pendingOrder.paymentIntentId,
-        total: pendingOrder.total,
-      },
-    });
 
     await postgres.order.delete({
       where: { id: pendingOrder.id },

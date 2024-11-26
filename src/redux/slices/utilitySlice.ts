@@ -9,6 +9,7 @@ const initialState: UIElementState = {
   searchPlatformText: "",
   searchPublisherText: "",
   searchStoreText: "",
+  searchWishListText: "",
   compartmentNumberOne: null,
   compartmentNumberTwo: null,
   resolution: true,

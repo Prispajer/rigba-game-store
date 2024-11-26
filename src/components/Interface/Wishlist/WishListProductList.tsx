@@ -14,6 +14,7 @@ export default function WishListProductList({
   localWishListState,
   userWishListState,
   redirectToGame,
+  searchWistListTextState,
 }: {
   user: ExtendedUser | null;
   localWishListState: LocalStorageState["localWishList"];
@@ -23,6 +24,7 @@ export default function WishListProductList({
     callback?: (element: string) => void,
     element?: string
   ) => void;
+  searchWistListTextState: string;
 }) {
   const displayByCondition = user
     ? userWishListState.products
@@ -36,10 +38,34 @@ export default function WishListProductList({
     handlePreviousPage,
   } = usePagination(displayByCondition);
 
+  const searchWishListByText = (
+    wishListState:
+      | LocalStorageState["localWishList"]
+      | UserWishListState["products"]
+  ): any => {
+    if ("productsInformations" in wishListState) {
+      return userWishListState.products.filter((product) => {
+        return product.productsInformations.name
+          ?.toLowerCase()
+          .trim()
+          .includes(searchWistListTextState);
+      });
+    } else {
+      return localWishListState.filter((product) => {
+        return product.name
+          ?.toLowerCase()
+          .trim()
+          .includes(searchWistListTextState);
+      });
+    }
+  };
+
+  const filteredProducts = searchWishListByText(displayByCondition);
+
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xxl:grid-cols-4 gap-x-[10px]">
-        {displayByCondition && displayByCondition.length > 0 ? (
+        {filteredProducts && filteredProducts.length > 0 ? (
           pages &&
           pages[paginationState.currentPage].map((game) => {
             if ("productsInformations" in game) {

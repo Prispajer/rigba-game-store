@@ -2,13 +2,14 @@
 import React from "react";
 import WishListProfile from "./WishListProfile";
 import WishListCounter from "./WishListCounter";
-import SearchBar from "./WishListSearchBar";
+import WishListSearchBar from "./WishListSearchBar";
 import SortBy from "../Shared/ReusableComponents/SortBy";
 import WishListProductList from "./WishListProductList";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useUserWishList from "@/hooks/useUserWishList";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useCustomRouter from "@/hooks/useCustomRouter";
+import useSearchText from "@/hooks/useSearchText";
 
 export default function WishListContainer() {
   const { user } = useCurrentUser();
@@ -16,6 +17,7 @@ export default function WishListContainer() {
     useLocalStorage("localWishList");
   const { userWishListState, handleSetUserWishListOrdering } =
     useUserWishList();
+  const { searchWistListTextState, handleSetSearchText } = useSearchText();
   const { redirectToGame } = useCustomRouter();
 
   return (
@@ -29,7 +31,7 @@ export default function WishListContainer() {
         />
         <div className="w-full mt-[40px] md:grid grid-cols-[220px,calc(100%-220px)]">
           <aside className="max-h-[120px] bg-[#5389b7] text-white">
-            <SearchBar />
+            <WishListSearchBar handleSetSearchText={handleSetSearchText} />
           </aside>
           <div className="flex flex-col w-full py-[15px] md:px-[15px] md:py-[0px] text-white">
             {user ? (
@@ -52,6 +54,7 @@ export default function WishListContainer() {
               localWishListState={localWishListState}
               userWishListState={userWishListState}
               redirectToGame={redirectToGame}
+              searchWistListTextState={searchWistListTextState as string}
             />
           </div>
         </div>

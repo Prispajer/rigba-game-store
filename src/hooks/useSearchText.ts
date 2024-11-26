@@ -20,6 +20,9 @@ export default function useSearchText() {
   const searchStoreTextState = useSelector(
     (state: RootState) => state.utility.searchStoreText
   );
+  const searchWistListTextState = useSelector(
+    (state: RootState) => state.utility.searchWishListText
+  );
   const compartmentNumberOne = useSelector(
     (state: RootState) => state.utility.compartmentNumberOne
   );
@@ -45,6 +48,7 @@ export default function useSearchText() {
     searchPlatformTextState,
     searchPublisherTextState,
     searchStoreTextState,
+    searchWistListTextState,
     compartmentNumberOne,
     compartmentNumberTwo,
     handleSetSearchText,

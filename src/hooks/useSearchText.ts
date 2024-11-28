@@ -1,12 +1,12 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setSearchText } from "@/redux/slices/utilitySlice";
+import { setSearchText, clearSearchText } from "@/redux/slices/utilitySlice";
 import useFetchGameData from "./useFetchGameData";
 import { RootState } from "../redux/store";
 
 export default function useSearchText() {
-  const { productFilterState } = useFetchGameData();
   const dispatch = useDispatch();
+  const { productFilterState } = useFetchGameData();
 
   const searchGenreTextState = useSelector(
     (state: RootState) => state.utility.searchGenreText
@@ -37,6 +37,10 @@ export default function useSearchText() {
     dispatch(setSearchText({ key, value: event.target.value }));
   };
 
+  const handleClearSearchText = (key: string): void => {
+    dispatch(clearSearchText({ key }));
+  };
+
   const handleComparePrices = (firstNumber: number, secondNumber: number) => {
     return productFilterState.productsWithFilters.filter((game) => {
       return game.price > firstNumber && game.price < secondNumber;
@@ -52,6 +56,7 @@ export default function useSearchText() {
     compartmentNumberOne,
     compartmentNumberTwo,
     handleSetSearchText,
+    handleClearSearchText,
     handleComparePrices,
   };
 }

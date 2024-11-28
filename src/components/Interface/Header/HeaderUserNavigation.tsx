@@ -66,10 +66,10 @@ export default function HeaderUserNavigation({}) {
               </div>
             </>
           ) : (
-            <div className="relative w-[35px] h-[35px] py-[4px] ml-[10px] m-[6px] cursor-pointer">
+            <div className="relative w-[35px] h-[35px] py-[4px] ml-[10px] m-[6px] rounded-full overflow-hidden cursor-pointer">
               <Image
                 onClick={() => handleOpen("profileModal")}
-                src="/icons/logo.png"
+                src={user?.image ?? "/icons/logo.png"}
                 alt="avatar"
                 layout="fill"
               />
@@ -84,10 +84,10 @@ export default function HeaderUserNavigation({}) {
               className="nav-icon"
             />
           ) : (
-            <div className="relative w-[35px] h-[35px] py-[4px] ml-[10px] m-[6px] cursor-pointer">
+            <div className="relative w-[35px] h-[35px] py-[4px] ml-[10px] m-[6px] rounded-full cursor-pointer">
               <Image
                 onClick={() => handleOpen("profileModal")}
-                src="/icons/logo.png"
+                src={user?.image ?? "/icons/logo.png"}
                 alt="avatar"
                 layout="fill"
               />

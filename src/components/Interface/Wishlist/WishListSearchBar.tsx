@@ -1,13 +1,20 @@
+import React from "react";
 import { FiSearch } from "react-icons/fi";
 
 export default function WishListSearchBar({
   handleSetSearchText,
+  handleClearSearchText,
 }: {
   handleSetSearchText: (
     key: string,
     event: React.ChangeEvent<HTMLInputElement>
   ) => void;
+  handleClearSearchText: (key: string) => void;
 }) {
+  React.useEffect(() => {
+    handleClearSearchText("searchWishListText");
+  }, []);
+
   return (
     <form className="pb-[20px]">
       <div className="pt-[15px] px-[20px] pb-[10px]">

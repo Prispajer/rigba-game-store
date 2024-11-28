@@ -60,7 +60,7 @@ export default function SortBy({
   };
 
   return (
-    <div className="flex items-center ">
+    <div className="flex flex-col md:flex-row items-start md:items-center">
       <div className={display}>
         <span className="text-[#FFFFFF]">
           Results found: <span className="font-bold">{sortedGamesCount}</span>
@@ -105,47 +105,26 @@ export default function SortBy({
           </>
         ) : (
           <>
-            <button
-              className="flex items-center justify-between"
-              onClick={() => handleToggle("sortMenu")}
-            >
-              <span className="text-[18px] text-[#FFFFFF] font-bold">
-                Sort elements
-              </span>
-              {sortMenuState ? (
-                <MdKeyboardArrowUp
-                  size="25"
-                  className="text-[#ffffff] cursor-pointer"
-                />
-              ) : (
-                <MdKeyboardArrowDown
-                  size="25"
-                  className="text-[#ffffff] cursor-pointer"
-                />
-              )}
-            </button>
-            {sortMenuState && (
-              <div className="flex">
-                <ul className="flex flex-col pt-[10px] gap-y-[10px]">
-                  {SortByElements.map((element) => (
-                    <li
-                      key={element.title}
-                      className="flex items-center cursor-pointer"
-                    >
-                      <input
-                        className="flex-0 rounded-full"
-                        type="checkbox"
-                        onChange={() => handleSortSelection(element)}
-                        checked={currentSort.ordering === element.ordering}
-                      />
-                      <span className="flex-1 px-[10px] font-[600] text-[#FFFFFF]">
-                        {element.title}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            <div className="flex items-start">
+              <ul className="flex flex-col pt-[10px] gap-y-[10px]">
+                {SortByElements.map((element) => (
+                  <li
+                    key={element.title}
+                    className="flex items-center cursor-pointer"
+                  >
+                    <input
+                      className="flex-0 rounded-full"
+                      type="checkbox"
+                      onChange={() => handleSortSelection(element)}
+                      checked={currentSort.ordering === element.ordering}
+                    />
+                    <span className="flex-1 px-[10px] font-[600] text-[#FFFFFF]">
+                      {element.title}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </>
         )}
       </div>

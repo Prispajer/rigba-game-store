@@ -23,12 +23,12 @@ export default function AccountContainer() {
             </div>
             <div className="flex items-center justify-between py-[15px] px-[20px] gap-[5px]">
               <Link href="/upload-image">
-                <div className="min-w-[40px]">
+                <div className="min-w-[40px] rounded-full overflow-hidden">
                   <Image
-                    src={"/icons/logo.png"}
-                    width="40"
-                    height="40"
-                    alt="avatar"
+                    src={user?.image || "/icons/logo.png"}
+                    width="35"
+                    height="35"
+                    alt={user?.id as string}
                   />
                 </div>
               </Link>

@@ -32,7 +32,7 @@ export default function CheckoutContainer() {
   const productsByRole = user ? userCartState.products : localCartState;
 
   return (
-    <section className="flex flex-col items-center w-full h-min md:py-[20px] md:px-[15px] bg-primaryColor mx-auto">
+    <section className="flex flex-col items-center w-full min-h-[calc(100vh-96px)] md:py-[20px] md:px-[15px] bg-primaryColor mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-[1fr,350px] w-full lg:max-w-[1040px] mx-auto p-[15px] gap-x-[20px] bg-secondaryColor md:bg-primaryColor">
         <div className="w-full bg-secondaryColor md:p-[20px]">
           <h2 className="hidden md:flex text-[18px] mb-[20px] font-bold text-[#ffffff] cursor-default">

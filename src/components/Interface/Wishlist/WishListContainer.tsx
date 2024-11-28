@@ -17,7 +17,11 @@ export default function WishListContainer() {
     useLocalStorage("localWishList");
   const { userWishListState, handleSetUserWishListOrdering } =
     useUserWishList();
-  const { searchWistListTextState, handleSetSearchText } = useSearchText();
+  const {
+    searchWistListTextState,
+    handleSetSearchText,
+    handleClearSearchText,
+  } = useSearchText();
   const { redirectToGame } = useCustomRouter();
 
   return (
@@ -31,7 +35,10 @@ export default function WishListContainer() {
         />
         <div className="w-full mt-[40px] md:grid grid-cols-[220px,calc(100%-220px)]">
           <aside className="max-h-[120px] bg-[#5389b7] text-white">
-            <WishListSearchBar handleSetSearchText={handleSetSearchText} />
+            <WishListSearchBar
+              handleSetSearchText={handleSetSearchText}
+              handleClearSearchText={handleClearSearchText}
+            />
           </aside>
           <div className="flex flex-col w-full py-[15px] md:px-[15px] md:py-[0px] text-white">
             {user ? (

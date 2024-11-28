@@ -59,7 +59,7 @@ export default function ProductScreenshotModalContainer({
           <div className="fixed top-[50%] left-[50%] w-[95%] md:w-[90%] xxl:w-[70%] xxxl:w-[60%] mx-auto translate-y-[-50%] translate-x-[-50%] z-20">
             <div className="relative w-full flex justify-center items-center">
               <button
-                className="text-[#FFFFFF] absolute top-2 right-2"
+                className="absolute top-2 right-2 text-[#FFFFFF] z-10"
                 onClick={() => handleClose("gameScreenshotModal")}
               >
                 <IoCloseSharp

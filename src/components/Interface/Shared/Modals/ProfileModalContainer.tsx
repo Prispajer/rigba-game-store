@@ -50,11 +50,14 @@ export default function ProfileModalContainer({
               profileModalState && `${translateX} ${translateY}`
             }`}
           >
-            <div className="flex md:hidden items-center py-[10px] relative px-[20px]">
+            <div className="flex md:hidden items-center py-[10px] relative  px-[20px]">
               <div className="flex items-center flex-0">
-                <Link className="flex items-center max-w-[200px]" href="/">
+                <Link
+                  className="flex items-center max-w-[200px] rounded-full overflow-hidden"
+                  href="/"
+                >
                   <Image
-                    src="/icons/logo.png"
+                    src={user?.image ?? "/icons/logo.png"}
                     width="40"
                     height="40"
                     alt="logo"
@@ -71,16 +74,16 @@ export default function ProfileModalContainer({
                 </button>
               </div>
             </div>
-            <div className="flex items-center justify-between py-[15px] px-[20px] border-b-[1px]">
-              <div>
+            <div className="flex items-center justify-between py-[15px] px-[20px] rounded-full overflow-hidden border-b-[1px]">
+              <div className="rounded-full overflow-hidden">
                 <Image
-                  src="/icons/logo.png"
+                  src={user?.image ?? "/icons/logo.png"}
                   width={32}
                   height={32}
                   alt="avatar"
                 />
               </div>
-              <div className="flex flex-col text-left flex-1 ml-2 leading-[18px]">
+              <div className="flex flex-col text-left flex-1 ml-2 leading-[18px] cursor-default">
                 <span className="text-[#544d60] text-[14px] font-[650]">
                   {user?.name}
                 </span>

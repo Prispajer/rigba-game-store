@@ -11,7 +11,10 @@ export default function RedeemContainer({
 }) {
   const { userProductHistoryState } = useUserProductHistory();
 
+  console.log(params?.redeemId);
+
   const findMultipleProducts = (redeemId: string) => {
+    if (!redeemId) return [];
     const isProductHistoryId = userProductHistoryState.productHistoryArray.some(
       (productHistory) =>
         productHistory.keys.some((key) => key.productHistoryId === redeemId)
@@ -27,7 +30,7 @@ export default function RedeemContainer({
   };
 
   return (
-    <section className="flex flex-col items-center w-full h-full min-h-[calc(100vh-55px)] md:h-[calc(100vh-96px)] md:py-[20px] bg-primaryColor mx-auto">
+    <section className="flex flex-col items-center w-full h-full min-h-[calc(100vh-55px)] md:min-h-[calc(100vh-96px)] md:py-[20px] bg-primaryColor mx-auto">
       <h1 className="hidden md:flex mt-[10px] mb-[30px] text-[30px] text-[#FFFFFF] font-bold">
         Redeem your product
       </h1>
@@ -37,7 +40,7 @@ export default function RedeemContainer({
             <React.Fragment key={product.id}>
               <ul className="flex flex-col">
                 <li className="flex flex-col items-center jusftify-center  md:mb-[10px] gap-x-[10px] bg-secondaryColor">
-                  <div className="h-[100px] w-[100px]">
+                  <div className="h-[100px] w-[200px] sm:w-[100px] py-[10px] sm:p-[0px]">
                     <div className="relative h-full w-full">
                       <Image
                         src={
@@ -60,18 +63,18 @@ export default function RedeemContainer({
                   {product.keys.map((key) => (
                     <div
                       key={key.key}
-                      className="flex items-center justify-center text-[30px] text-[#FFFFFF]"
+                      className="flex items-center justify-center py-[10px] text-[30px] text-[#FFFFFF] border-b-[2px] border-[#658FB2]"
                     >
                       <strong>{key.key}</strong>
                     </div>
                   ))}
-                  <div className="flex justify-between mt-[20px] pt-[20px] gap-[20px] border-t-[2px] border-[#658FB2]">
-                    <span className="text-[#FFFFFF]">
+                  <div className="flex flex-col lg:flex-row items-center justify-between mt-[20px] gap-[20px]">
+                    <span className="text-[#FFFFFF] text-justify">
                       Don't want to use it now? No problem. You can always find
                       the code in your library!
                     </span>
                     <Link href="/keys">
-                      <button className="min-h-[35px] px-[10px] text-[16px] text-[#FFFFFF] border-[1px] border-[#FFFFFF] hover:border-buttonBackground transition duration-300 font-bold bg-transparent">
+                      <button className="min-h-[35px] p-[10px] text-[16px] text-[#FFFFFF] border-[1px] border-[#FFFFFF] hover:border-buttonBackground transition duration-300 font-bold bg-transparent">
                         My library
                       </button>
                     </Link>

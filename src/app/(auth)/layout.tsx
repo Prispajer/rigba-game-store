@@ -7,7 +7,7 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className="flex h-screen lg:bg-[#122339] bg-primaryColor">
+    <section className="flex min-w-full min-h-full h-screen lg:bg-[#122339] bg-primaryColor">
       <div className="flex flex-col justify-between flex-1 h-full">
         <header>
           <Link className="flex items-center pl-3 pt-3 max-w-[200px]" href="/">

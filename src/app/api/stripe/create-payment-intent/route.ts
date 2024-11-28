@@ -45,19 +45,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (
-      currentTime - orderCreationTime < orderExpirationDate &&
-      paymentIntent.status === "requires_payment_method"
-    ) {
-      return NextResponse.json({
-        clientSecret: paymentIntent.client_secret,
-        existingOrder: pendingOrder,
+    if (currentTime - orderCreationTime < orderExpirationDate) {
+      await postgres.order.delete({
+        where: { id: pendingOrder.id },
       });
     }
-
-    await postgres.order.delete({
-      where: { id: pendingOrder.id },
-    });
   }
 
   const newOrder = await postgres.order.create({
@@ -91,7 +83,9 @@ export async function POST(request: NextRequest) {
 
   await postgres.order.update({
     where: { id: newOrder.id },
-    data: { paymentIntentId: paymentIntent.id },
+    data: {
+      paymentIntentId: paymentIntent.id,
+    },
   });
 
   return NextResponse.json({

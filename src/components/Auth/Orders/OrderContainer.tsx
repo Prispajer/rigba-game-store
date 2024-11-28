@@ -39,7 +39,7 @@ export default function OrderContainer({
           <div className="text-[12px] font-bold"></div>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-account-orders-auto-fit items-center w-full py-[10px] px-[20px] gap-x-[20px] bg-[#FFFFFF]">
-          <div className="grid grid-cols- grid-cols-[1fr_4fr] lg:grid-cols-1 w-full gap-[20px] py-[5px] lg:gap-0 border-b-[1px] lg:border-none   border-[#00CF9F] text-[12px]  cursor-default">
+          <div className="grid grid-cols- grid-cols-[1fr_4fr] lg:grid-cols-1 w-full gap-[20px] py-[5px] lg:gap-0 border-b-[1px] lg:border-none border-[#00CF9F] text-[12px]  cursor-default">
             <div className="flex items-center lg:hidden text-[#a09aac] font-[600]">
               ORDERED PRODUCTS
             </div>
@@ -74,7 +74,7 @@ export default function OrderContainer({
               {orderHistory?.status}
             </div>
           </div>
-          <div className="text-[12px] font-bold cursor-default py-[5px] lg:gap-0 border-b-[1px] lg:border-none border-[#00CF9F]">
+          <div className="text-[12px] font-bold cursor-default py-[5px] lg:gap-0">
             <button
               onClick={() => redirectToKey(orderHistory?.id as string)}
               className="w-full min-h-[36px] text-[16px] text-buttonTextColor bg-buttonBackground hover:bg-buttonBackgroundHover"

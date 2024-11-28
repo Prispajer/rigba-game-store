@@ -5,7 +5,6 @@ import {
   goToNextPage,
   goToPreviousPage,
   setCurrentPage,
-  resetPagination,
 } from "@/redux/slices/paginationSlice";
 import { paginatePages } from "@/utils/prices";
 import { RootState } from "@/redux/store";
@@ -15,8 +14,6 @@ export default function usePagination(data: any[]) {
   const paginationState = useSelector((state: RootState) => state.pagination);
 
   const pages = paginatePages(data);
-
-  console.log(data);
 
   React.useEffect(() => {
     dispatch(
@@ -34,7 +31,7 @@ export default function usePagination(data: any[]) {
         totalPages: pages.length - 1,
       })
     );
-  }, [data, dispatch]);
+  }, []);
 
   const handleSetCurrentPage = (page: number) => {
     dispatch(setCurrentPage(page));

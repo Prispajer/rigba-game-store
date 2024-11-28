@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function ErrorContainer() {
   return (
-    <section className="flex-col  justify-center items-center mx-auto p-[20px] lg:px-[100px] gap-x-[120px]">
+    <section className="flex flex-col justify-center items-center mx-auto p-[20px] lg:px-[100px] gap-x-[120px]">
       <h1 className=" text-[80px] leading-[90px] font-bold text-[white] cursor-default ">
         <span className="flex justify-center">Ups!</span>
         <span className="flex justify-center text-center">

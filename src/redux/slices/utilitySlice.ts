@@ -61,9 +61,18 @@ const utilitySlice = createSlice({
       const { key, value } = action.payload;
       state[key] = value;
     },
+    clearSearchText: (state, action: PayloadAction<{ key: string }>) => {
+      state[action.payload.key] = "";
+    },
   },
 });
 
-export const { close, open, toggle, toggleScreen, setSearchText } =
-  utilitySlice.actions;
+export const {
+  close,
+  open,
+  toggle,
+  toggleScreen,
+  setSearchText,
+  clearSearchText,
+} = utilitySlice.actions;
 export default utilitySlice.reducer;

@@ -2,31 +2,30 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { postgres } from "@/data/database/publicSQL/postgres";
 import { generateGameKey } from "@/utils/keys";
+import { Order } from "@prisma/client";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 export async function POST(request: NextRequest) {
   let event: Stripe.Event;
-  let order;
+  let order: Order | null;
+
+  const stripeBody = await request.text();
+  const signature = await request.headers.get("stripe-signature");
+
   try {
-    const stripeBody = await request.text();
-    const signature = await request.headers.get("stripe-signature");
     event = await stripe.webhooks.constructEvent(
       stripeBody,
       signature as string,
       process.env.WEBHOOK_SECRET_KEY as string
     );
-  } catch (error) {
-    return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
-  }
 
-  try {
+    const paymentIntent = event.data.object as Stripe.PaymentIntent;
+    const userId = paymentIntent.metadata.userId;
+    const cartId = paymentIntent.metadata.cartId;
+    const orderId = paymentIntent.metadata.orderId;
+
     if (event.type === "payment_intent.succeeded") {
-      const paymentIntent = event.data.object as Stripe.PaymentIntent;
-      const userId = paymentIntent.metadata.userId;
-      const cartId = paymentIntent.metadata.cartId;
-      const orderId = paymentIntent.metadata.orderId;
-
       order = await postgres.order.findFirst({
         where: { id: orderId, userId: userId },
       });
@@ -78,7 +77,7 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      await postgres.orderHistory.create({
+      const orderHistory = await postgres.orderHistory.create({
         data: {
           id: order.id,
           userId: order.userId,
@@ -104,35 +103,26 @@ export async function POST(request: NextRequest) {
         }
       }
 
-      await postgres.cart.delete({ where: { id: cartId } });
+      await postgres.order.delete({
+        where: { id: orderId },
+      });
+
+      await postgres.cart.delete({
+        where: { id: paymentIntent.metadata.cartId },
+      });
+
+      return NextResponse.json({ orderHistory });
     } else if (
       event.type === "charge.expired" ||
       event.type === "charge.failed" ||
       event.type === "payment_intent.canceled"
     ) {
-      const paymentIntent = event.data.object as Stripe.PaymentIntent;
-      const userId = paymentIntent.metadata.userId;
-      const orderId = paymentIntent.metadata.orderId;
-
       await postgres.orderHistory.update({
         where: { id: orderId, userId: userId },
         data: {
           status: "Failed",
         },
       });
-
-      await postgres.order.delete({
-        where: { id: orderId },
-      });
-
-      const redirectUrl = `${process.env.NEXT_PUBLIC_URL}/checkout/redeem/${orderId}`;
-
-      return NextResponse.json({ redirectUrl });
-    } else {
-      return NextResponse.json(
-        { error: "Unhandled event type" },
-        { status: 404 }
-      );
     }
   } catch (error) {
     return NextResponse.json({ error: "Processing error" }, { status: 500 });

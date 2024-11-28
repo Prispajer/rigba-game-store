@@ -39,35 +39,31 @@ export default function WishListProductList({
   } = usePagination(displayByCondition);
 
   const searchWishListByText = (
-    wishListState:
-      | LocalStorageState["localWishList"]
-      | UserWishListState["products"]
-  ): any => {
-    if ("productsInformations" in wishListState) {
-      return userWishListState.products.filter((product) => {
-        return product.productsInformations.name
-          ?.toLowerCase()
-          .trim()
-          .includes(searchWistListTextState);
-      });
-    } else {
-      return localWishListState.filter((product) => {
-        return product.name
-          ?.toLowerCase()
-          .trim()
-          .includes(searchWistListTextState);
-      });
-    }
+    array: LocalStorageState["localWishList"] | UserWishListState["products"]
+  ) => {
+    return array.filter((product) => {
+      const name =
+        "productsInformations" in product
+          ? product.productsInformations.name
+          : product.name;
+
+      return name
+        ?.toLowerCase()
+        .trim()
+        .includes(searchWistListTextState.toLowerCase());
+    });
   };
 
-  const filteredProducts = searchWishListByText(displayByCondition);
+  const paginatedWishListState = usePagination(
+    searchWishListByText(displayByCondition)
+  ).pages[paginationState.currentPage];
 
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xxl:grid-cols-4 gap-x-[10px]">
-        {filteredProducts && filteredProducts.length > 0 ? (
-          pages &&
-          pages[paginationState.currentPage].map((game) => {
+        {searchWishListByText(displayByCondition) &&
+        searchWishListByText(displayByCondition).length > 0 ? (
+          paginatedWishListState.map((game) => {
             if ("productsInformations" in game) {
               return (
                 <div
@@ -181,7 +177,7 @@ export default function WishListProductList({
           </div>
         )}
       </div>
-      {displayByCondition.length >= 11 && (
+      {searchWishListByText(displayByCondition).length > 10 && (
         <Pagination
           loadingState={userWishListState.isLoading}
           currentPage={paginationState.currentPage}

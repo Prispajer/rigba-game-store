@@ -223,7 +223,8 @@ model Order {
 model OrderHistory {
   id             String        @id @default(cuid())
   userId         String
-  cartHistoryId  String
+  cartId         String?
+  cartHistoryId  String?
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
   status         String
@@ -232,7 +233,7 @@ model OrderHistory {
   paymentIntentId String
   total          Float
   user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  cartHistory    CartHistory   @relation(fields: [cartHistoryId], references: [id], onDelete: Cascade)
+  cartHistory    CartHistory?   @relation(fields: [cartHistoryId], references: [id], onDelete: Cascade)
   keys           Key[]
 }
 

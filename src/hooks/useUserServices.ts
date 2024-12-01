@@ -20,7 +20,7 @@ export default function useUserServices() {
   const [isPending, startTransition] = React.useTransition();
   const searchParams = useSearchParams();
   const { handleClose } = useWindowVisibility();
-  const { user } = useCurrentUser();
+  const { user, update } = useCurrentUser();
   const token = searchParams.get("token");
   const providerError =
     searchParams.get("error") === "OAuthAccountNotLinked"
@@ -250,6 +250,7 @@ export default function useUserServices() {
         );
         if (response.success) {
           setSuccess(response.message);
+          update(response.data);
         } else {
           setError(response.message);
         }

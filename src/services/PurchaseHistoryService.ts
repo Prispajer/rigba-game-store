@@ -33,9 +33,10 @@ export default class PurchaseHistoryService implements IPurchaseHistoryService {
       return getUserByEmailResponse;
 
     const getUserProductHistoryResponse =
-      await this._checkerService.checkDataExistsAndReturnUserProductHistory(
-        getUserProductHistoryDTO
-      );
+      await this._checkerService.checkDataExistsAndReturnUserProductHistory({
+        email: getUserProductHistoryDTO.email,
+        userId: getUserByEmailResponse.data.id,
+      });
 
     if (
       (getUserProductHistoryResponse &&
@@ -66,9 +67,10 @@ export default class PurchaseHistoryService implements IPurchaseHistoryService {
     }
 
     const getUserOrderHistoryResponse =
-      await this._checkerService.checkDataExistsAndReturnUserOrderHistory(
-        getUserOrderHistoryDTO
-      );
+      await this._checkerService.checkDataExistsAndReturnUserOrderHistory({
+        email: getUserOrderHistoryDTO.email,
+        userId: getUserByEmailResponse.data.id,
+      });
 
     if (
       (getUserOrderHistoryResponse && !getUserOrderHistoryResponse.success) ||

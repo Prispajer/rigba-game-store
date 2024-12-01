@@ -145,7 +145,6 @@ export default class UserRepository implements IUserRepository {
     });
 
     return {
-      email: updatedPassword.email,
       password: updatedPassword.password as string,
     };
   }

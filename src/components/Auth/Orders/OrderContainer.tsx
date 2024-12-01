@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
-import LoadingAnimation from "@/components/Interface/Shared/Animations/LoadingAnimation";
+import { IoCloseCircleSharp } from "react-icons/io5";
 import useUserOrderHistory from "@/hooks/useUserOrderHistory";
 import useUserProductHistory from "@/hooks/useUserProductHistory";
 import useCustomRouter from "@/hooks/useCustomRouter";
@@ -39,7 +39,7 @@ export default function OrderContainer({
           <div className="text-[12px] font-bold"></div>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-account-orders-auto-fit items-center w-full py-[10px] px-[20px] gap-x-[20px] bg-[#FFFFFF]">
-          <div className="grid grid-cols- grid-cols-[1fr_4fr] lg:grid-cols-1 w-full gap-[20px] py-[5px] lg:gap-0 border-b-[1px] lg:border-none border-[#00CF9F] text-[12px]  cursor-default">
+          <div className="grid grid-cols- grid-cols-[1fr_4fr] lg:grid-cols-1 w-full gap-[20px] py-[5px] lg:gap-0  text-[12px]  cursor-default">
             <div className="flex items-center lg:hidden text-[#a09aac] font-[600]">
               ORDERED PRODUCTS
             </div>
@@ -65,40 +65,78 @@ export default function OrderContainer({
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-[1fr_4fr] items-center gap-[20px] py-[5px] lg:gap-0 border-b-[1px] lg:border-none   border-[#00CF9F] font-bold cursor-default">
+          <div className="grid grid-cols-[1fr_4fr] items-center gap-[20px] py-[5px] lg:gap-0  font-bold cursor-default">
             <div className="flex items-center lg:hidden text-[12px] text-[#a09aac] font-[600]">
               DELIVERY STATUS
             </div>
-            <div className="flex items-center text-[14px] text-[#00cf9f] font-bold">
-              <IoCheckmarkCircleSharp className="min-w-[15px] min-h-[15px] mr-[10px] " />
-              {orderHistory?.status}
+            <div
+              className={`flex items-center text-[14px] text-[#00cf9f] font-bold ${
+                orderHistory?.status === "Completed"
+                  ? "text-[#00cf9f]"
+                  : "text-[#E44D4D]"
+              }`}
+            >
+              {orderHistory?.status === "Completed" ? (
+                <IoCheckmarkCircleSharp className="min-w-[15px] min-h-[15px] mr-[10px]" />
+              ) : (
+                <IoCloseCircleSharp className="min-w-[15px] min-h-[15px] mr-[10px] " />
+              )}
+              {(() => {
+                switch (orderHistory?.status) {
+                  case "Completed":
+                    return "ORDER FULFILLED";
+                  case "Canceled":
+                    return "ORDER CANCELED";
+                  default:
+                    return "ORDER FAILED";
+                }
+              })()}
             </div>
           </div>
           <div className="text-[12px] font-bold cursor-default py-[5px] lg:gap-0">
-            <button
-              onClick={() => redirectToKey(orderHistory?.id as string)}
-              className="w-full min-h-[36px] text-[16px] text-buttonTextColor bg-buttonBackground hover:bg-buttonBackgroundHover"
-            >
-              Show key
-            </button>
+            {orderHistory?.status === "Completed" && (
+              <button
+                onClick={() => redirectToKey(orderHistory?.id as string)}
+                className="w-full min-h-[36px] text-[16px] text-buttonTextColor bg-buttonBackground hover:bg-buttonBackgroundHover"
+              >
+                Show key
+              </button>
+            )}
           </div>
         </div>
         <div className="flex flex-col items-center mt-[10px] p-[20px] bg-[#FFFFFF]">
           <div className="flex justify-between w-full text-[12px] font-bold cursor-default">
             <span>PAYMENT DETAILS</span>
             <span className="flex items-center justify-center">
-              <IoCheckmarkCircleSharp className="min-w-[30px] min-h-[30px] text-[#00cf9f]" />
+              {orderHistory?.status === "Completed" ? (
+                <IoCheckmarkCircleSharp className="min-w-[30px] min-h-[30px] text-[#00cf9f]" />
+              ) : (
+                <IoCloseCircleSharp className="min-w-[30px] min-h-[30px] text-[#E44D4D]" />
+              )}
             </span>
           </div>
-          <h2 className="w-full pb-[10px] text-[24px] font-bold text-[#00cf9f]">
+          <h2
+            className={`w-full pb-[10px] text-[24px] font-bold ${
+              orderHistory?.status === "Completed"
+                ? "text-[#00cf9f]"
+                : "text-[#E44D4D]"
+            } `}
+          >
             {orderHistory?.status === "Completed"
               ? "ORDER FULFILLED"
               : "ORDER FAILED"}
           </h2>
           <p className="w-full mb-[20px] text-[18px] text-[#797189]">
-            {orderHistory?.status === "Completed"
-              ? "Payment was successful"
-              : "There was error with payment"}
+            {(() => {
+              switch (orderHistory?.status) {
+                case "Completed":
+                  return "Payment was successful";
+                case "Canceled":
+                  return "Payment processing time has expired";
+                default:
+                  return "There was problem with payment";
+              }
+            })()}
           </p>
           <p className="w-full text-[14px] text-[#797189]">
             Payment method:
@@ -125,7 +163,10 @@ export default function OrderContainer({
           </div>
           <div className="flex justify-between w-full text-[16px] text-[#000000] font-bold cursor-default">
             <span>Total amount:</span>
-            <span>${orderHistory?.total}</span>
+            <span>
+              $
+              {orderHistory?.status === "Completed" ? orderHistory?.total : "0"}
+            </span>
           </div>
         </div>
       </div>

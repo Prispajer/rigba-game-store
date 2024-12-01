@@ -68,7 +68,7 @@ export default function LoginContainer() {
         <br />
         Good to see you!
       </h1>
-      <div className="min-w-[300px] lg:min-w-[400px] py-[30px] px-[20px] lg:px-[40px] lg:bg-primaryColor">
+      <div className="min-w-[300px] lg:min-w-[400px]  py-[30px] px-[20px] lg:px-[40px] lg:bg-primaryColor">
         <div>
           <h2 className="text-[22px] font-bold tracking-wide text-[white] cursor-default">
             Login

@@ -58,7 +58,7 @@ export default class CartRepository implements ICartRepository {
           cartId: createUserCartProductDTO.cartId,
           userId: createUserCartProductDTO.userId,
           externalProductId: createUserCartProductDTO.externalProductId,
-          quantity: 1,
+          quantity: createUserCartProductDTO.quantity || 1,
           productsInformations: {
             create: {
               name: createUserCartProductDTO.name,

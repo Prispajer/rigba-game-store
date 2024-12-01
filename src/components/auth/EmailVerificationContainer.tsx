@@ -15,7 +15,7 @@ export default function EmailVerificationContainer() {
   }, [submitEmailVerification]);
 
   return (
-    <section className="flex flex-col lg:flex-row justify-center items-center mx-auto lg:px-[50px] xl:px-[100px] gap-x-[120px]">
+    <section className="flex flex-col justify-center items-center mx-auto lg:px-[50px] xl:px-[100px] gap-x-[120px]">
       <h1 className=" text-[60px] leading-[70px] font-bold text-[white] cursor-default ">
         <span className="flex justify-center text-center">
           Waiting for email address confirmation

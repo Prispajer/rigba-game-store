@@ -14,6 +14,7 @@ export type LocalCartProductDTO = {
 export type AddUserProductToCartDTO = {
   email: string;
   externalProductId: number;
+  quantity: number | undefined;
   name: string;
   price: number;
   background_image: string;

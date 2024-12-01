@@ -68,7 +68,7 @@ export default function PaymentContainer({
   };
 
   return (
-    <section className="flex flex-col items-center w-full min-h-[calc(100vh-96px)] md:py-[20px] md:px-[15px] bg-primaryColor mx-auto">
+    <section className="flex flex-col items-center w-full min-h-[calc(100vh-96px)] h-screen md:py-[20px] md:px-[15px] bg-primaryColor mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-2 w-full lg:max-w-[1040px] mx-auto p-[15px] gap-x-[20px] bg-secondaryColor md:bg-primaryColor">
         <div className="h-min p-[20px] text-[#FFFFFF] bg-secondaryColor">
           <form id="payment-form" onSubmit={handleSubmit}>

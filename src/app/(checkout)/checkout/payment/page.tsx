@@ -81,8 +81,6 @@ export default function PaymentPage() {
     );
   }
 
-  console.log(newOrder);
-
   const appearance = {
     variables: {
       colorPrimary: "#bc558e",

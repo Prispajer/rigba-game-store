@@ -18,6 +18,7 @@ export default function CartModalContainer() {
   const { cartModalState, handleClose } = useWindowVisibility();
   const {
     userCartState,
+    handleAddUserProductToCart,
     handleDeleteUserProductFromCart,
     handleDecreaseQuantityUserProductFromCart,
     handleIncreaseQuantityUserProductFromCart,
@@ -36,7 +37,7 @@ export default function CartModalContainer() {
     }
   };
 
-  const productsByRole = user ? userCartState.products : localCartState;
+  const currentCart = user ? userCartState.products : localCartState;
 
   return (
     <>
@@ -54,7 +55,7 @@ export default function CartModalContainer() {
               </button>
             </div>
             <ul className="flex flex-col w-full">
-              {productsByRole.map((product) => {
+              {currentCart.map((product) => {
                 if ("productsInformations" in product) {
                   return (
                     <li
@@ -235,12 +236,12 @@ export default function CartModalContainer() {
                 }
               })}
             </ul>
-            {productsByRole.length ? (
+            {currentCart.length ? (
               <div className="p-[20px]">
                 <div className="flex justify-between items-center w-full text-white">
                   <strong className="cursor-default">Summary</strong>
                   <strong className="text-[30px] pb-[8px] cursor-default">
-                    ${calculateTotalPrice(productsByRole)}
+                    ${calculateTotalPrice(currentCart)}
                   </strong>
                 </div>
                 <div className="w-full">

@@ -6,13 +6,12 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "");
 
 export async function POST(request: NextRequest) {
   const { email, amount, cart } = await request.json();
+  const orderExpirationDate = 20 * 60 * 1000;
+  const currentTime = new Date().getTime();
 
   if (!email) {
     return NextResponse.json({ error: "Email is required" }, { status: 400 });
   }
-
-  const orderExpirationDate = 20 * 60 * 1000;
-  const currentTime = new Date().getTime();
 
   const user = await postgres.user.findUnique({ where: { email } });
 
@@ -20,7 +19,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
-  const pendingOrder = await postgres.order.findFirst({
+  const existingPendingOrder = await postgres.order.findFirst({
     where: {
       userId: user.id,
       status: "Pending",
@@ -29,26 +28,43 @@ export async function POST(request: NextRequest) {
     orderBy: { createdAt: "desc" },
   });
 
-  if (pendingOrder) {
-    let paymentIntent;
+  if (existingPendingOrder) {
+    const orderCreationTime = new Date(
+      existingPendingOrder.createdAt
+    ).getTime();
 
-    const orderCreationTime = new Date(pendingOrder.createdAt).getTime();
-
-    try {
-      paymentIntent = await stripe.paymentIntents.retrieve(
-        pendingOrder.paymentIntentId
-      );
-    } catch (error) {
-      return NextResponse.json(
-        { error: "Failed to retrieve payment intent" },
-        { status: 500 }
-      );
-    }
-
-    if (currentTime - orderCreationTime < orderExpirationDate) {
-      await postgres.order.delete({
-        where: { id: pendingOrder.id },
+    if (currentTime - orderCreationTime > orderExpirationDate) {
+      await postgres.orderHistory.create({
+        data: {
+          id: existingPendingOrder.id,
+          userId: existingPendingOrder.userId,
+          cartId: existingPendingOrder.cartId,
+          status: "Canceled",
+          title: existingPendingOrder.title,
+          paymentMethod: existingPendingOrder.paymentMethod,
+          paymentIntentId: existingPendingOrder.paymentIntentId,
+          total: existingPendingOrder.total,
+        },
       });
+
+      await postgres.order.delete({
+        where: { id: existingPendingOrder.id },
+      });
+    } else {
+      try {
+        const paymentIntent = await stripe.paymentIntents.retrieve(
+          existingPendingOrder.paymentIntentId
+        );
+        return NextResponse.json({
+          clientSecret: paymentIntent.client_secret,
+          newOrder: existingPendingOrder,
+        });
+      } catch (error) {
+        return NextResponse.json(
+          { error: "Failed to retrieve payment intent" },
+          { status: 500 }
+        );
+      }
     }
   }
 
@@ -56,7 +72,7 @@ export async function POST(request: NextRequest) {
     data: {
       userId: user.id,
       status: "Pending",
-      title: cart[0]?.productsInformations?.name || "Order",
+      title: cart[0].productsInformations?.name,
       paymentMethod: "Card",
       paymentIntentId: "",
       total: amount,

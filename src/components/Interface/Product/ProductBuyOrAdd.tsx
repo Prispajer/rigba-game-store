@@ -56,11 +56,16 @@ export default function ProductBuyOrAdd({
                       })
                   : () =>
                       handleAddLocalProductToCart({
-                        ...product,
                         externalProductId: product.id,
                         description: product.description_raw,
                         price: generateRandomValue(),
                         quantity: 1,
+                        name: product.name,
+                        background_image: product.background_image,
+                        rating: product.rating,
+                        released: product.released,
+                        slug: product.slug,
+                        added: product.added,
                       })
               }
             >

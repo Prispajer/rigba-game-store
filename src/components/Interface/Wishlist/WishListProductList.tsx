@@ -26,7 +26,7 @@ export default function WishListProductList({
   ) => void;
   searchWistListTextState: string;
 }) {
-  const displayByCondition = user
+  const currentWishList = user
     ? userWishListState.products
     : localWishListState;
 
@@ -36,7 +36,7 @@ export default function WishListProductList({
     handleSetCurrentPage,
     handleNextPage,
     handlePreviousPage,
-  } = usePagination(displayByCondition);
+  } = usePagination(currentWishList);
 
   const searchWishListByText = (
     array: LocalStorageState["localWishList"] | UserWishListState["products"]
@@ -55,14 +55,15 @@ export default function WishListProductList({
   };
 
   const paginatedWishListState = usePagination(
-    searchWishListByText(displayByCondition)
+    searchWishListByText(currentWishList)
   ).pages[paginationState.currentPage];
 
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xxl:grid-cols-4 gap-x-[10px]">
-        {searchWishListByText(displayByCondition) &&
-        searchWishListByText(displayByCondition).length > 0 ? (
+        {paginatedWishListState &&
+        Array.isArray(paginatedWishListState) &&
+        paginatedWishListState.length > 0 ? (
           paginatedWishListState.map((game) => {
             if ("productsInformations" in game) {
               return (
@@ -177,7 +178,7 @@ export default function WishListProductList({
           </div>
         )}
       </div>
-      {searchWishListByText(displayByCondition).length > 10 && (
+      {searchWishListByText(currentWishList).length > 10 && (
         <Pagination
           loadingState={userWishListState.isLoading}
           currentPage={paginationState.currentPage}

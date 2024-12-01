@@ -38,7 +38,7 @@ export default interface IUserService {
   >;
   changePassword(
     changePasswordDTO: ChangePasswordDTO
-  ): Promise<RequestResponse<User | TwoFactorToken | null>>;
+  ): Promise<RequestResponse<User | TwoFactorToken | UpdatePasswordDTO | null>>;
   toggleTwoFactor(
     toggleTwoFactorDTO: ToggleTwoFactorDTO
   ): Promise<RequestResponse<User | TwoFactorToken | null>>;

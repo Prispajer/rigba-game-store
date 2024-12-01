@@ -1,3 +1,4 @@
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { LuPencil } from "react-icons/lu";
@@ -7,8 +8,6 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 export default function AccountContainer() {
   const { userProductHistoryState } = useUserProductHistory();
   const { user } = useCurrentUser();
-
-  console.log(user);
 
   return (
     <div className="flex-col justify-center items-center w-full min-h-[100vh] pt-[40px] px-[40px] pb-[80px] bg-[#e9eff4]">

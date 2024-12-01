@@ -39,13 +39,7 @@ export type CheckDataExistsAndReturnReviewLikersDTO = {
   reviewId: string;
 };
 
-export type CheckDataExistsAndReturnReviewLikersDTO = {
-  userId: string;
-  productId: string;
-  reviewId: string;
-};
-
-export type CheckDataExistsAndReturnUserProductHistoryDTO = {\
+export type CheckDataExistsAndReturnUserProductHistoryDTO = {
   email: string;
   userId: string;
 };
@@ -136,14 +130,14 @@ export type UpdateUserDataDTO = {
 };
 
 export type PersonalDataToUpdateDTO = {
-  fullName: string | undefined;
-  birthDate: Date | undefined;
-  address: string | undefined;
-  state: string | undefined;
-  zipCode: string | undefined;
-  city: string | undefined;
-  country: string | undefined;
-  phoneNumber: string | undefined;
+  fullName?: string;
+  birthDate?: Date;
+  address?: string;
+  state?: string;
+  zipCode?: string;
+  city?: string;
+  country?: string;
+  phoneNumber?: string;
 };
 
 export type UpdatePersonalDataDTO = {
@@ -153,12 +147,12 @@ export type UpdatePersonalDataDTO = {
 export type UpdatePersonalImageDTO = {
   id: string;
   image: string;
-}
+};
 
 export type UpdateUserImageDTO = {
   email: string;
   image: string;
-}
+};
 
 export type UpdateReviewLikeDTO = {
   id: string;
@@ -171,7 +165,6 @@ export type UpdateReviewUnLikeDTO = {
 };
 
 export type UpdatePasswordDTO = {
-  email: string;
   password: string;
 };
 
@@ -268,6 +261,7 @@ export type AddProductToCartDTO = {
   price: number;
   background_image: string;
   rating: number;
+  quantity?: number;
   slug: string;
   released: string;
   added: number;
@@ -337,6 +331,7 @@ export type CreateUserCartProductDTO = {
   description: string;
   price: number;
   background_image: string;
+  quantity?: number;
   rating: number;
   slug: string;
   released: string;

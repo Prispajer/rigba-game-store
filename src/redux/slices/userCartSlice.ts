@@ -39,6 +39,7 @@ export const fetchUserCart = createAsyncThunk<
           email,
         }
       );
+
     if (fetchUserCartResponse && fetchUserCartResponse.success) {
       return {
         products: fetchUserCartResponse.data?.products || [],

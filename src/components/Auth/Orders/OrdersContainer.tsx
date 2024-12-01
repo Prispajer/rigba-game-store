@@ -65,7 +65,7 @@ export default function OrdersContainer() {
                 </div>
                 <div
                   className={`text-[12px] font-[600] text-ellipsis line-clamp-1 cursor-default  ${
-                    order.status.toUpperCase() === "ORDER CANCELED"
+                    order.status.toUpperCase() === "CANCELED"
                       ? "text-[#ff0000]"
                       : "text-[#00cf9f]"
                   }`}
@@ -102,7 +102,7 @@ export default function OrdersContainer() {
                   TOTAL AMOUNT
                 </div>
                 <div className="text-[16px] text-ellipsis line-clamp-1 font-[600] cursor-default ">
-                  ${order.total}
+                  ${order?.status === "Completed" ? order?.total : "0"}
                 </div>
               </div>
               <div

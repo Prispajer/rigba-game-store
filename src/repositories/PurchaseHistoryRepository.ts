@@ -41,6 +41,7 @@ export default class PurchaseHistoryRepository
     getUserOrderHistoryDTO: GetUserOrderHistoryDTO
   ): Promise<OrderHistory[] | null> {
     try {
+      console.log(getUserOrderHistoryDTO);
       const result = await this._productUtils.executeOperation(
         (getUserProductHistoryDTO) =>
           postgres.orderHistory.findMany({

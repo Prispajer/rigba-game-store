@@ -51,17 +51,16 @@ export default function ProfileModalContainer({
             }`}
           >
             <div className="flex md:hidden items-center py-[10px] relative  px-[20px]">
-              <div className="flex items-center flex-0">
-                <Link
-                  className="flex items-center max-w-[200px] rounded-full overflow-hidden"
-                  href="/"
-                >
-                  <Image
-                    src={user?.image ?? "/icons/logo.png"}
-                    width="40"
-                    height="40"
-                    alt="logo"
-                  />
+              <div className="flex items-center flex-0 ">
+                <Link className="flex items-center max-w-[200px] " href="/">
+                  <div className="rounded-full overflow-hidden">
+                    <Image
+                      src={user?.image ?? "/icons/logo.png"}
+                      width="40"
+                      height="40"
+                      alt="logo"
+                    />
+                  </div>
                   <span className="text-[20px] text-black">RIGBA</span>
                 </Link>
               </div>
@@ -74,12 +73,12 @@ export default function ProfileModalContainer({
                 </button>
               </div>
             </div>
-            <div className="flex items-center justify-between py-[15px] px-[20px] rounded-full overflow-hidden border-b-[1px]">
+            <div className="flex items-center justify-between py-[15px] px-[20px] border-b-[1px]">
               <div className="rounded-full overflow-hidden">
                 <Image
                   src={user?.image ?? "/icons/logo.png"}
-                  width={32}
-                  height={32}
+                  width="32"
+                  height="32"
                   alt="avatar"
                 />
               </div>

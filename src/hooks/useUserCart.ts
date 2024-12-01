@@ -31,12 +31,12 @@ export default function useUserCart() {
   }, [dispatch, user?.email]);
 
   const handleAddUserProductToCart = React.useCallback(
-    debounce(async (addUserProductToCartDTO: AddUserProductToCartDTO) => {
+    async (addUserProductToCartDTO: AddUserProductToCartDTO) => {
       if (user?.email) {
         await dispatch(fetchAddUserProductToCart(addUserProductToCartDTO));
       }
       update();
-    }, 1000),
+    },
     [dispatch, user?.email, update]
   );
 

@@ -32,16 +32,16 @@ export default function UploadProfileImage() {
 
     setLoading(true);
 
-    const reader = new FileReader();
-    reader.onloadend = async () => {
-      const imageBase64 = reader.result;
+    const formData = new FormData();
+    formData.append("image", image);
+    formData.append("email", user?.email || "");
 
+    try {
       const response = await fetch(
         "/api/users/endpoints/userAuthentication/updateImage",
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: user?.email, image: imageBase64 }),
+          body: formData,
         }
       );
 
@@ -50,11 +50,11 @@ export default function UploadProfileImage() {
       } else {
         alert("Failed to update profile image.");
       }
-
+    } catch (error) {
+      alert("An error occurred while uploading the image.");
+    } finally {
       setLoading(false);
-    };
-
-    reader.readAsDataURL(image);
+    }
   };
 
   return (

@@ -24,18 +24,15 @@ export default function useUserWishList() {
   );
 
   const handleAddUserProductToWishList = React.useCallback(
-    debounce(
-      async (addUserProductToWishListDTO: AddUserProductToWishListDTO) => {
-        if (user?.email) {
-          await dispatch(
-            fetchAddUserProductToWishList(addUserProductToWishListDTO)
-          );
-          await dispatch(fetchUserWishList({ email: user?.email as string }));
-          await update();
-        }
-      },
-      1000
-    ),
+    async (addUserProductToWishListDTO: AddUserProductToWishListDTO) => {
+      if (user?.email) {
+        await dispatch(
+          fetchAddUserProductToWishList(addUserProductToWishListDTO)
+        );
+        await dispatch(fetchUserWishList({ email: user?.email as string }));
+        await update();
+      }
+    },
     [dispatch, user?.email, update]
   );
 

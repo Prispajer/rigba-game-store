@@ -82,7 +82,7 @@ body {
 }
 
 .cart-modal {
-  @apply fixed md:absolute w-full sm:w-[360px] h-full md:h-auto top-0 right-0 z-20 transform md:translate-y-[65px] bg-primaryColor;
+  @apply fixed md:absolute w-full sm:w-[360px] h-full md:h-auto top-0 right-0 z-20 transform md:translate-y-[65px] overflow-y-auto bg-primaryColor;
 }
 
 .cart-modal::before {

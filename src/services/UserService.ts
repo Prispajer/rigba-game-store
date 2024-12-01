@@ -172,7 +172,7 @@ export default class UserService implements IUserService {
       const updateEmailVerificationResponse =
         await this._userRepository.updateEmailVerification(
           getUserByEmailResponse.data,
-          getEmailVerificationTokenByTokenResponse
+          getEmailVerificationTokenByTokenResponse!
         );
 
       return this._checkerService.handleSuccess(
@@ -303,7 +303,9 @@ export default class UserService implements IUserService {
 
   async changePassword(
     changePasswordDTO: ChangePasswordDTO
-  ): Promise<RequestResponse<User | TwoFactorToken | null>> {
+  ): Promise<
+    RequestResponse<User | TwoFactorToken | UpdatePasswordDTO | null>
+  > {
     const getTwoFactorTokenByEmailResponse =
       await this._checkerService.checkIsTokenValidAndReturnTwoFactorToken(
         changePasswordDTO

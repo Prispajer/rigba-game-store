@@ -8,6 +8,7 @@ export default function WishListProfile({
 }: {
   user: ExtendedUser | null;
 }) {
+  console.log(user);
   return (
     <div className="flex items-center w-full mb-[40px]">
       <div className="relative h-[64px] w-[64px]">
@@ -21,7 +22,7 @@ export default function WishListProfile({
       </div>
       <div className="flex flex-1 items-center h-[64px] ml-[10px] text-white">
         <span className="font-medium text-[28px] cursor-default">
-          {user?.name ?? "Set Nickname"}
+          {user?.name || user?.personalData?.fullName || "Set Nickname"}
         </span>
         <Link href="/login">
           <button className="mt-3 ml-[10px]">

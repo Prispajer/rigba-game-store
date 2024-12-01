@@ -25,15 +25,15 @@ export async function POST(request: NextRequest) {
     const cartId = paymentIntent.metadata.cartId;
     const orderId = paymentIntent.metadata.orderId;
 
+    order = await postgres.order.findFirst({
+      where: { id: orderId, userId: userId },
+    });
+
+    if (!order) {
+      return NextResponse.json({ error: "Order not found" }, { status: 404 });
+    }
+
     if (event.type === "payment_intent.succeeded") {
-      order = await postgres.order.findFirst({
-        where: { id: orderId, userId: userId },
-      });
-
-      if (!order) {
-        return NextResponse.json({ error: "Order not found" }, { status: 404 });
-      }
-
       const cart = await postgres.cart.findUnique({
         where: { id: cartId, userId: userId },
         include: { products: { include: { productsInformations: true } } },
@@ -117,11 +117,21 @@ export async function POST(request: NextRequest) {
       event.type === "charge.failed" ||
       event.type === "payment_intent.canceled"
     ) {
-      await postgres.orderHistory.update({
-        where: { id: orderId, userId: userId },
+      await postgres.orderHistory.create({
         data: {
+          id: order.id,
+          userId: order.userId,
+          cartId: order.cartId,
           status: "Failed",
+          title: order.title,
+          paymentMethod: order.paymentMethod,
+          paymentIntentId: order.paymentIntentId,
+          total: order.total,
         },
+      });
+
+      await postgres.order.delete({
+        where: { id: orderId },
       });
     }
   } catch (error) {

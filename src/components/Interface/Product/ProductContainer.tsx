@@ -61,7 +61,7 @@ export default function ProductContainer({
           </div>
           <ProductDigitalProductDetails display="xl:hidden w-full" />
           <ProductScreenshots
-            screenshots={screenshots}
+            screenshots={product.screenshots}
             handleOpen={handleOpen}
           />
           <ProductHeaders headerText="Gamers also viewed" />

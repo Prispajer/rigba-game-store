@@ -85,11 +85,12 @@ export default function ProductUsersReview({
               </div>
               <div className="flex items-center mb-[10px]">
                 <Image
+                  loading="lazy"
                   className="flex-0 mr-[10px] rounded-full"
                   src={review.user.image || "/icons/logo.png"}
                   width="22"
                   height="22"
-                  alt="user-avatar"
+                  alt={review.user.image || "/icons/logo.png"}
                 />
                 <strong className="flex-0 mr-[10px] text-[16px] text-[#FFFFFF]">
                   {review.user.name || review.user.email}

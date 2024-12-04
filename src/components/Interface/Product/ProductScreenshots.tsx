@@ -2,7 +2,6 @@
 import React from "react";
 import Image from "next/image";
 import ProductScreenshotModalContainer from "../Shared/Modals/GameScreenshotModalContainer";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
 export default function ProductScreenshots({
@@ -35,6 +34,7 @@ export default function ProductScreenshots({
                 className="relative w-[176px] h-[100px]"
               >
                 <Image
+                  loading="lazy"
                   src={screenshot.image ?? "/icons/logo.png"}
                   alt={screenshot.image}
                   layout="fill"

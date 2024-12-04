@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { tokenService } from "@/utils/injector";
+import { PasswordResetToken } from "@prisma/client";
 import { RequestResponse } from "@/utils/helpers/types";
 
 export async function POST(
   request: NextRequest
-): Promise<NextResponse<RequestResponse<ResetPasswordToken>>> {
+): Promise<NextResponse<RequestResponse<PasswordResetToken>>> {
   const changePasswordTokenClientData = await request.json();
 
   const sendChangePasswordTokenResponse =
@@ -16,9 +17,17 @@ export async function POST(
       changePasswordTokenClientData.code
     );
 
-  return NextResponse.json<RequestResponse<ResetPasswordToken>>({
+  if (!sendChangePasswordTokenResponse) {
+    return NextResponse.json<RequestResponse<PasswordResetToken>>({
+      success: false,
+      message: "Something went wrong, no response from service.",
+      data: null,
+    });
+  }
+
+  return NextResponse.json<RequestResponse<PasswordResetToken>>({
     success: sendChangePasswordTokenResponse.success,
     message: sendChangePasswordTokenResponse.message,
-    data: sendChangePasswordTokenResponse.data,
+    data: sendChangePasswordTokenResponse.data as PasswordResetToken | null,
   });
 }

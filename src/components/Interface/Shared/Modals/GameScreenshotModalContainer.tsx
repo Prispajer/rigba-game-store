@@ -82,6 +82,7 @@ export default function ProductScreenshotModalContainer({
                   />
                 </button>
                 <Image
+                  loading="lazy"
                   src={screenshots[currentImageIndex]?.image}
                   alt={screenshots[currentImageIndex]?.image}
                   layout="fill"

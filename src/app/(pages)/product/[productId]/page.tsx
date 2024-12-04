@@ -21,10 +21,10 @@ export default async function ProductPage(data: {
   params: Promise<{ productId: string }>;
 }) {
   const params = await data.params;
-  const [product, screenshots] = await Promise.all([
-    fetchService.getProduct(params.productId),
-    fetchService.getScreenshotsForProduct(params.productId),
-  ]);
+
+  const product = await fetchService.getProduct(params.productId);
+
+  const screenshots = product.screenshots;
 
   return <ProductContainer product={product} screenshots={screenshots} />;
 }

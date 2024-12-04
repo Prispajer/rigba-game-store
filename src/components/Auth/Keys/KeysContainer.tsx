@@ -45,6 +45,7 @@ export default function KeysContainer() {
             >
               <div>
                 <Image
+                  loading="lazy"
                   src={
                     product.productsInformations?.background_image ||
                     "/icons/logo.png"

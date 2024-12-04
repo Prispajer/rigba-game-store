@@ -11,8 +11,6 @@ export default function RedeemContainer({
 }) {
   const { userProductHistoryState } = useUserProductHistory();
 
-  console.log(params?.redeemId);
-
   const findMultipleProducts = (redeemId: string) => {
     if (!redeemId) return [];
     const isProductHistoryId = userProductHistoryState.productHistoryArray.some(
@@ -43,6 +41,7 @@ export default function RedeemContainer({
                   <div className="h-[100px] w-[200px] sm:w-[100px] py-[10px] sm:p-[0px]">
                     <div className="relative h-full w-full">
                       <Image
+                        loading="lazy"
                         src={
                           product.productsInformations?.background_image || ""
                         }

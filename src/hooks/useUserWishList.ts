@@ -23,6 +23,8 @@ export default function useUserWishList() {
     (state: RootState) => state.userWishList
   );
 
+  const debouncedUpdate = React.useMemo(() => debounce(update, 300), [update]);
+
   const handleAddUserProductToWishList = React.useCallback(
     async (addUserProductToWishListDTO: AddUserProductToWishListDTO) => {
       if (user?.email) {
@@ -30,7 +32,7 @@ export default function useUserWishList() {
           fetchAddUserProductToWishList(addUserProductToWishListDTO)
         );
         await dispatch(fetchUserWishList({ email: user?.email as string }));
-        await update();
+        debouncedUpdate();
       }
     },
     [dispatch, user?.email, update]
@@ -46,7 +48,7 @@ export default function useUserWishList() {
             fetchDeleteUserProductFromWishList(deleteUserProductFromWishListDTO)
           );
           await dispatch(fetchUserWishList({ email: user?.email as string }));
-          await update();
+          debouncedUpdate();
         }
       },
       1000

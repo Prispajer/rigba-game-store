@@ -8,16 +8,16 @@ export default function WishListProfile({
 }: {
   user: ExtendedUser | null;
 }) {
-  console.log(user);
   return (
     <div className="flex items-center w-full mb-[40px]">
       <div className="relative h-[64px] w-[64px]">
         <Image
+          loading="lazy"
           className="rounded-full"
           src={user?.image ?? "/icons/logo.png"}
           objectFit="cover"
           layout="fill"
-          alt="avatar"
+          alt={user?.image ?? "/icons/logo.png"}
         />
       </div>
       <div className="flex flex-1 items-center h-[64px] ml-[10px] text-white">

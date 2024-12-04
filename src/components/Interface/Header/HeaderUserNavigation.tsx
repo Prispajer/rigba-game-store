@@ -33,7 +33,7 @@ export default function HeaderUserNavigation({}) {
       dispatch(fetchUserWishList({ email: user.email }));
       dispatch(fetchUserCart({ email: user.email }));
     }
-  }, [user?.email]);
+  }, []);
 
   React.useEffect(() => {
     if (localCartState.length > 0 && user) {
@@ -120,9 +120,10 @@ export default function HeaderUserNavigation({}) {
           ) : (
             <div className="relative w-[35px] h-[35px] py-[4px] ml-[10px] m-[6px] rounded-full overflow-hidden cursor-pointer">
               <Image
+                loading="lazy"
                 onClick={() => handleOpen("profileModal")}
                 src={user?.image ?? "/icons/logo.png"}
-                alt="avatar"
+                alt={user?.image ?? "/icons/logo.png"}
                 layout="fill"
               />
             </div>
@@ -138,9 +139,10 @@ export default function HeaderUserNavigation({}) {
           ) : (
             <div className="relative w-[35px] h-[35px] py-[4px] ml-[10px] m-[6px] rounded-full overflow-hidden cursor-pointer">
               <Image
+                loading="lazy"
                 onClick={() => handleOpen("profileModal")}
                 src={user?.image ?? "/icons/logo.png"}
-                alt="avatar"
+                alt={user?.image ?? "/icons/logo.png"}
                 layout="fill"
               />
             </div>

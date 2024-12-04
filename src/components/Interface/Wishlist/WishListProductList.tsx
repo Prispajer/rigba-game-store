@@ -76,12 +76,16 @@ export default function WishListProductList({
                 >
                   <div className="relative min-w-[95px] sm:h-[250px]">
                     <Image
+                      loading="lazy"
                       src={
                         game.productsInformations.background_image ??
                         "/icons/logo.png"
                       }
                       layout="fill"
-                      alt="game"
+                      alt={
+                        game.productsInformations.background_image ??
+                        "/icons/logo.png"
+                      }
                     />
                   </div>
                   <div className="max-w-[50%] sm:max-w-[100%] my-[10px] px-[15px]">

@@ -18,7 +18,6 @@ export default function CartModalContainer() {
   const { cartModalState, handleClose } = useWindowVisibility();
   const {
     userCartState,
-    handleAddUserProductToCart,
     handleDeleteUserProductFromCart,
     handleDecreaseQuantityUserProductFromCart,
     handleIncreaseQuantityUserProductFromCart,
@@ -64,6 +63,7 @@ export default function CartModalContainer() {
                     >
                       <div className="relative flex flex-0 min-w-[50px] items-center h-[100px] cursor-pointer">
                         <Image
+                          loading="lazy"
                           onClick={() =>
                             redirectToGame(
                               product.productsInformations?.slug as string,
@@ -155,6 +155,7 @@ export default function CartModalContainer() {
                     >
                       <div className="relative flex flex-0 min-w-[50px] items-center h-[100px] cursor-pointer">
                         <Image
+                          loading="lazy"
                           onClick={() =>
                             redirectToGame(
                               product.slug,

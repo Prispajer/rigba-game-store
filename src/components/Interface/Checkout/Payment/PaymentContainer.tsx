@@ -110,6 +110,7 @@ export default function PaymentContainer({
                 <div className="flex-0 h-[70px] w-[50px] md:h-[130px] max-w-[60px] md:w-[90px] md:max-w-[90px]">
                   <div className="relative h-full w-full">
                     <Image
+                      loading="lazy"
                       src={
                         "productsInformations" in product
                           ? product.productsInformations.background_image

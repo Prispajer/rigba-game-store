@@ -1,5 +1,8 @@
 import IFetchService from "../interfaces/IFetchService";
 import { GameAPIPagination, GameAPIResponse } from "../utils/helpers/types";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 export class FetchService implements IFetchService {
   public apiKey: string = process.env.NEXT_PUBLIC_RAWG_API_KEY || "";
@@ -22,14 +25,6 @@ export class FetchService implements IFetchService {
   async getProduct(productSlug: string): Promise<GameAPIResponse> {
     const url = `${this.baseUrl}/games/${productSlug}?key=${this.apiKey}`;
     return this.fetchData(url);
-  }
-
-  async getScreenshotsForProduct(
-    productId: string
-  ): Promise<GameAPIResponse[]> {
-    const url = `${this.baseUrl}/games/${productId}/screenshots?key=${this.apiKey}`;
-    const data = await this.fetchData<{ results: GameAPIResponse[] }>(url);
-    return data.results || [];
   }
 
   async getProducts(searchQuery?: string): Promise<GameAPIResponse[]> {

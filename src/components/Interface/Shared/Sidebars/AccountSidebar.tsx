@@ -51,6 +51,7 @@ export default function AccountSidebar() {
                     className="flex items-center"
                   >
                     <Image
+                      loading="lazy"
                       src="/icons/logo.png"
                       width="60"
                       height="90"

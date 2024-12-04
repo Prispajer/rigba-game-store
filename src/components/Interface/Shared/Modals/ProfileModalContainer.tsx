@@ -55,10 +55,11 @@ export default function ProfileModalContainer({
                 <Link className="flex items-center max-w-[200px] " href="/">
                   <div className="rounded-full overflow-hidden">
                     <Image
+                      loading="lazy"
                       src={user?.image ?? "/icons/logo.png"}
                       width="40"
                       height="40"
-                      alt="logo"
+                      alt={user?.image ?? "/icons/logo.png"}
                     />
                   </div>
                   <span className="text-[20px] text-black">RIGBA</span>
@@ -76,10 +77,11 @@ export default function ProfileModalContainer({
             <div className="flex items-center justify-between py-[15px] px-[20px] border-b-[1px]">
               <div className="rounded-full overflow-hidden">
                 <Image
+                  loading="lazy"
                   src={user?.image ?? "/icons/logo.png"}
                   width="32"
                   height="32"
-                  alt="avatar"
+                  alt={user?.image ?? "/icons/logo.png"}
                 />
               </div>
               <div className="flex flex-col text-left flex-1 ml-2 leading-[18px] cursor-default">

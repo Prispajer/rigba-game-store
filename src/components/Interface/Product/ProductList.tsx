@@ -57,6 +57,7 @@ export default function ProductList() {
               <>
                 <div className="relative m-[5px] sm:m-[0px] min-w-[95px] sm:min-h-[250px]">
                   <Image
+                    loading="lazy"
                     src={
                       productsByOrdering[index].background_image ||
                       productsByOrdering[index].productsInformations
@@ -64,7 +65,12 @@ export default function ProductList() {
                       ""
                     }
                     layout="fill"
-                    alt="game"
+                    alt={
+                      productsByOrdering[index].background_image ||
+                      productsByOrdering[index].productsInformations
+                        ?.background_image ||
+                      ""
+                    }
                   />
                 </div>
                 <div className="max-w-[50%] sm:max-w-[100%] my-[10px] px-[15px]">

@@ -149,9 +149,10 @@ export default function ReviewContainer({
               <>
                 <div className="relative m-[5px] sm:m-[0px] min-w-[95px] sm:min-h-[250px]">
                   <Image
+                    loading="lazy"
                     src={product.background_image}
                     layout="fill"
-                    alt="game"
+                    alt={product.background_image}
                   />
                 </div>
                 <div className="max-w-[50%] sm:max-w-[100%] my-[10px] px-[15px]">

@@ -1,7 +1,10 @@
-"use client";
 import AccountContainer from "@/components/Auth/Account/AccountContainer";
 import AccountNavbarContainer from "@/components/Interface/Navbar/AccountNavbarContainer";
 import AccountSidebar from "@/components/Interface/Shared/Sidebars/AccountSidebar";
+
+export const metadata = {
+  title: "My Account | RIGBA",
+};
 
 export default function AccountPage() {
   return (

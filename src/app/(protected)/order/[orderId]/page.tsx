@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-
 import AccountSidebar from "@/components/Interface/Shared/Sidebars/AccountSidebar";
 import AccountNavbarContainer from "@/components/Interface/Navbar/AccountNavbarContainer";
 import OrderContainer from "@/components/Auth/Orders/OrderContainer";

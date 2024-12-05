@@ -1,4 +1,5 @@
 import { injectable, inject } from "inversify";
+import { postgres } from "@/data/database/publicSQL/postgres";
 import type ICartService from "@/interfaces/ICartService";
 import type ICheckerService from "@/interfaces/ICheckerService";
 import type ICartRepository from "@/interfaces/ICartRepository";
@@ -82,7 +83,7 @@ export default class CartService implements ICartService {
           getUserProductResponse.data &&
           getUserProductResponse.data.cartId === null
         ) {
-          await prisma?.product.update({
+          await postgres.product.update({
             where: {
               id: getUserProductResponse.data.id,
             },

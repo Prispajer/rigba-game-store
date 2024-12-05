@@ -1,4 +1,4 @@
-import { User, Review, Product } from "@prisma/client";
+import { User, Review, Product, ReviewLikers } from "@prisma/client";
 import { RequestResponse } from "@/utils/helpers/types";
 import {
   GetProductReviewsDTO,

@@ -105,7 +105,7 @@ export default function CartModalContainer() {
                               className="mr-2 hover:text-modalHover"
                               onClick={() =>
                                 handleDecreaseQuantityUserProductFromCart({
-                                  email: user?.email,
+                                  email: user?.email as string,
                                   externalProductId: product.externalProductId,
                                 })
                               }
@@ -119,7 +119,7 @@ export default function CartModalContainer() {
                               className="ml-2 hover:text-modalHover"
                               onClick={() =>
                                 handleIncreaseQuantityUserProductFromCart({
-                                  email: user?.email,
+                                  email: user?.email as string,
                                   externalProductId: product.externalProductId,
                                 })
                               }
@@ -130,7 +130,7 @@ export default function CartModalContainer() {
                           <button
                             onClick={() =>
                               handleDeleteUserProductFromCart({
-                                email: user?.email,
+                                email: user?.email as string,
                                 externalProductId: product.externalProductId,
                               })
                             }

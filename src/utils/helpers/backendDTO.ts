@@ -165,6 +165,7 @@ export type UpdateReviewUnLikeDTO = {
 };
 
 export type UpdatePasswordDTO = {
+  email?: string;
   password: string;
 };
 

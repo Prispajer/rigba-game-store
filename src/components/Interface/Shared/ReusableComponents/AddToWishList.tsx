@@ -74,13 +74,13 @@ export default function AddToWishList<
       } else {
         handleAddUserProductToWishList({
           email: user.email as string,
-          externalProductId: game.id,
-          name: game.name,
+          externalProductId: game.id as number,
+          name: game.name as string,
           description: game.description_raw as string,
-          background_image: game.background_image,
+          background_image: game.background_image as string,
           price: generateRandomValue(),
           rating: game.rating as number,
-          slug: game.slug,
+          slug: game.slug as string,
           released: game.released as string,
           added: game.added as number,
         });

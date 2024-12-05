@@ -3,19 +3,15 @@ import ReviewContainer from "@/components/Interface/Review/ReviewContainer";
 import fetchService from "@/services/FetchService";
 
 export const generateMetadata = async (data: {
-  params: Promise<{ productId: string }>;
+  params: { productId: string };
 }): Promise<Metadata> => {
-  const params = await data.params;
-  const title = await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(`${params.productId}`);
-    }, 100);
-  });
+  const product = await fetchService.getProduct(data.params.productId);
 
   return {
-    title: `Buy ${title}`,
+    title: `Review ${product.name}`,
   };
 };
+
 export default async function ReviewPage(props: {
   params: Promise<{ productId: string }>;
 }) {

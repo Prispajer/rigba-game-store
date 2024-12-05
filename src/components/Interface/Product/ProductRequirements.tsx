@@ -14,10 +14,10 @@ export default function ProductRequirements({
   };
 
   const getPlatformRequirements = (platformName: string) => {
-    const platform = product.platforms?.find(
+    const platform = product.platforms.find(
       (p) => p.platform.name.toLowerCase() === platformName.toLowerCase()
     );
-    return platform ? platform.requirements : [];
+    return platform ? platform.requirements : {};
   };
 
   const renderRequirements = (platformName: string) => {

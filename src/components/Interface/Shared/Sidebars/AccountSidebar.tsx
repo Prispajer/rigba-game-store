@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -51,7 +50,6 @@ export default function AccountSidebar() {
                     className="flex items-center"
                   >
                     <Image
-                      loading="lazy"
                       src="/icons/logo.png"
                       width="60"
                       height="90"

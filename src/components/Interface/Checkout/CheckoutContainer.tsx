@@ -7,7 +7,6 @@ import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
 import ProductHeaders from "../Shared/ReusableComponents/ProductHeaders";
 import ProductList from "../Product/ProductList";
 import CheckoutCart from "./CheckoutCart";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useUserCart from "@/hooks/useUserCart";
 import useCurrentUser from "@/hooks/useCurrentUser";
@@ -82,7 +81,7 @@ export default function CheckoutContainer() {
                           event.stopPropagation();
                           user
                             ? handleDeleteUserProductFromCart({
-                                email: user.email,
+                                email: user.email as string,
                                 externalProductId: product.externalProductId,
                               })
                             : handleDeleteLocalProductFromCart(
@@ -117,7 +116,7 @@ export default function CheckoutContainer() {
                           e.stopPropagation();
                           user
                             ? handleDecreaseQuantityUserProductFromCart({
-                                email: user.email,
+                                email: user.email as string,
                                 externalProductId: product.externalProductId,
                               })
                             : handleDecreaseQuantityLocalProductFromCart(
@@ -136,7 +135,7 @@ export default function CheckoutContainer() {
                           e.stopPropagation();
                           user
                             ? handleIncreaseQuantityUserProductFromCart({
-                                email: user.email,
+                                email: user.email as string,
                                 externalProductId: product.externalProductId,
                               })
                             : handleIncreaseQuantityLocalProductFromCart(

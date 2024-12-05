@@ -24,7 +24,7 @@ export default function useProductServices() {
       product: GameAPIResponse
     ) => {
       const { review, rating } = data;
-      const title = ratingsKeys[rating as keyof typeof ratingsKeys];
+      const title = ratingsKeys[rating];
       clearMessages();
       try {
         const response = await requestService.postMethod(

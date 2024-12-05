@@ -1,6 +1,6 @@
 import { ExtendedUser } from "@/auth";
-import { UserWishListSlice } from "@/redux/slices/userWishListSlice";
-import { LocalStorageSlice } from "@/redux/slices/localStorageSlice";
+import { UserWishListState } from "@/redux/slices/userWishListSlice";
+import { LocalStorageState } from "@/redux/slices/localStorageSlice";
 
 export default function WishListCounter({
   user,
@@ -8,8 +8,8 @@ export default function WishListCounter({
   userWishListState,
 }: {
   user: ExtendedUser | null;
-  localWishListState: LocalStorageSlice["localWishList"];
-  userWishListState: UserWishListSlice;
+  localWishListState: LocalStorageState["localWishList"];
+  userWishListState: UserWishListState;
 }) {
   const displayByRole = user ? userWishListState.products : localWishListState;
 

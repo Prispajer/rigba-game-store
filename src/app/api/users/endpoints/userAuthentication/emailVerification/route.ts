@@ -10,9 +10,17 @@ export async function POST(request: NextRequest) {
     emailVerificationClientData
   );
 
+  if (!emailVerificationResponse) {
+    return NextResponse.json<RequestResponse<EmailVerificationToken>>({
+      success: false,
+      message: "Something went wrong, no response from service.",
+      data: null,
+    });
+  }
+
   return NextResponse.json<RequestResponse<EmailVerificationToken>>({
     success: emailVerificationResponse.success,
     message: emailVerificationResponse.message,
-    data: emailVerificationResponse.data,
+    data: emailVerificationResponse.data as EmailVerificationToken | null,
   });
 }

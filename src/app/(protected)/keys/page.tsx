@@ -1,7 +1,10 @@
-"use client";
 import AccountSidebar from "@/components/Interface/Shared/Sidebars/AccountSidebar";
 import AccountNavbarContainer from "@/components/Interface/Navbar/AccountNavbarContainer";
 import KeysContainer from "@/components/Auth/Keys/KeysContainer";
+
+export const metadata = {
+  title: "Keys | RIGBA",
+};
 
 export default function KeysPage() {
   return (

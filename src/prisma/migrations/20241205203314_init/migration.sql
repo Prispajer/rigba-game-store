@@ -199,7 +199,8 @@ CREATE TABLE "Order" (
 CREATE TABLE "OrderHistory" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "cartId" TEXT NOT NULL,
+    "cartId" TEXT,
+    "cartHistoryId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "status" TEXT NOT NULL,
@@ -345,7 +346,7 @@ ALTER TABLE "Order" ADD CONSTRAINT "Order_cartId_fkey" FOREIGN KEY ("cartId") RE
 ALTER TABLE "OrderHistory" ADD CONSTRAINT "OrderHistory_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "OrderHistory" ADD CONSTRAINT "OrderHistory_cartId_fkey" FOREIGN KEY ("cartId") REFERENCES "CartHistory"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "OrderHistory" ADD CONSTRAINT "OrderHistory_cartHistoryId_fkey" FOREIGN KEY ("cartHistoryId") REFERENCES "CartHistory"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Key" ADD CONSTRAINT "Key_orderHistoryId_fkey" FOREIGN KEY ("orderHistoryId") REFERENCES "OrderHistory"("id") ON DELETE CASCADE ON UPDATE CASCADE;

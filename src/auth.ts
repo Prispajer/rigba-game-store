@@ -141,5 +141,6 @@ export const {
   },
   adapter: PrismaAdapter(postgres),
   session: { strategy: "jwt" },
+  trustHost: true,
   ...authConfig,
 });

@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import { postgres } from "../database/publicSQL/postgres";
 import { injectable } from "inversify";
 import IUserUtils from "@/interfaces/IUserUtils";
-import { User } from "@/utils/helpers/types";
+import { User } from "@prisma/client";
 import { RegisterUserDTO } from "@/utils/helpers/backendDTO";
 
 @injectable()

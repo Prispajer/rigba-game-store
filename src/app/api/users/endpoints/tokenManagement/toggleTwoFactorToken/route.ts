@@ -13,7 +13,7 @@ export async function POST(
     toggleTwoFactorTokenClientData
   );
 
-  if (!toggleTwoFactorTokenClientData) {
+  if (!resetPasswordResponse) {
     return NextResponse.json<RequestResponse<TwoFactorToken>>({
       success: false,
       message: "Something went wrong, no response from service.",

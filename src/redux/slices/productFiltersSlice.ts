@@ -60,16 +60,10 @@ export const fetchProductsWithFilters = createAsyncThunk<
         ordering
       );
 
-      console.log(error);
-
-      console.log(getProductsWithFilters);
-
       const gamesWithPrices = await getGamesWithRandomPrices(
         getProductsWithFilters.results,
         productsWithFilters
       );
-
-      console.log(gamesWithPrices);
 
       if (ordering === "price") {
         gamesWithPrices.sort((a, b) => (a.price ?? 0) - (b.price ?? 0));

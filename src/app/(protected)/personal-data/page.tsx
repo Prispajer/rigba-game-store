@@ -1,7 +1,10 @@
-"use client";
 import AccountSidebar from "@/components/Interface/Shared/Sidebars/AccountSidebar";
 import AccountNavbarContainer from "@/components/Interface/Navbar/AccountNavbarContainer";
 import PersonalDataContainer from "@/components/Auth/Settings/PersonalDataContainer";
+
+export const metadata = {
+  title: "Change Personal Data | RIGBA",
+};
 
 export default function PersonalDataPage() {
   return (

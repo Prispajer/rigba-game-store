@@ -51,7 +51,6 @@ export default function PaymentPage() {
         const { clientSecret, newOrder } = await response.json();
         setClientSecret(clientSecret);
         setNewOrder(newOrder);
-        console.log(clientSecret, newOrder);
       } catch (error) {
         console.error("Failed to create payment intent:", error);
       } finally {

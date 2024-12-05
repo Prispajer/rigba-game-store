@@ -1,4 +1,4 @@
-import { ProductInformations } from "@/utils/helpers/types";
+import { GameAPIResponse } from "@/utils/helpers/types";
 
 export default interface IUtilsService {
   getSearchText(): string;

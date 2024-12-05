@@ -31,10 +31,11 @@ export default function SearchResultsModalContainer({
     if (user) {
       handleAddUserProductToCart({
         ...game,
-        email: user.email,
+        email: user.email as string,
         externalProductId: game.id,
         description: game.description_raw,
         price: generateRandomValue(),
+        quantity: null,
       });
     } else {
       handleAddLocalProductToCart({

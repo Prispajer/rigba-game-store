@@ -1,4 +1,5 @@
 import { injectable, inject } from "inversify";
+import { postgres } from "@/data/database/publicSQL/postgres";
 import type IWishListService from "@/interfaces/IWishListService";
 import type ICheckerService from "@/interfaces/ICheckerService";
 import type IWishListRepository from "@/interfaces/IWishListRepository";
@@ -56,8 +57,9 @@ export default class WishListService implements IWishListService {
       if (
         (getUserByEmailResponse && !getUserByEmailResponse.success) ||
         !getUserByEmailResponse.data
-      )
+      ) {
         return getUserByEmailResponse;
+      }
 
       const getUserWishListResponse =
         await this._checkerService.checkDataExistsAndReturnUserWishList(
@@ -67,8 +69,9 @@ export default class WishListService implements IWishListService {
       if (
         (getUserWishListResponse && !getUserWishListResponse.success) ||
         !getUserWishListResponse.data
-      )
+      ) {
         return getUserWishListResponse;
+      }
 
       const getUserProductResponse =
         await this._checkerService.checkDataExistsAndReturnProduct({
@@ -81,7 +84,7 @@ export default class WishListService implements IWishListService {
           getUserProductResponse.data &&
           getUserProductResponse.data.wishListId === null
         ) {
-          await prisma?.product.update({
+          await postgres.product.update({
             where: { id: getUserProductResponse.data.id },
             data: { wishListId: getUserWishListResponse.data.id },
           });
@@ -102,6 +105,7 @@ export default class WishListService implements IWishListService {
         getUserWishListResponse.data || null
       );
     } catch (error) {
+      console.error("Error while adding product to the wishlist:", error);
       return this._checkerService.handleError(
         "Error while adding product to the wishlist!"
       );

@@ -1,7 +1,10 @@
-"use client";
 import AccountSidebar from "@/components/Interface/Shared/Sidebars/AccountSidebar";
 import AccountNavbarContainer from "@/components/Interface/Navbar/AccountNavbarContainer";
 import ChangePasswordContainer from "@/components/Auth/Settings/ChangePasswordContainer";
+
+export const metadata = {
+  title: "Change Password | RIGBA",
+};
 
 export default function OrdersPage() {
   return (

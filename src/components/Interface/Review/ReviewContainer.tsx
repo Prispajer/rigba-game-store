@@ -34,7 +34,7 @@ export default function ReviewContainer({
     },
   });
 
-  const ratingTitles = {
+  const ratingKeys = {
     5: "Exceptional",
     4: "Recommended",
     3: "Meh",
@@ -55,7 +55,7 @@ export default function ReviewContainer({
           <form
             onSubmit={handleSubmit(async (data) => {
               if (user) {
-                await submitReviewForm(data, ratingTitles, user, product);
+                await submitReviewForm(data, ratingKeys, user, product);
               }
             })}
             className="grid grid-cols-1 md:grid-cols-[180px,1fr] md:gap-x-[40px] mx-[-20px] sm:mx-[0px] p-[20px] lg:py-[30px] lg:px-[40px] bg-secondaryColor"

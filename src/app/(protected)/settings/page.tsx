@@ -1,7 +1,10 @@
-"use client";
 import AccountSidebar from "@/components/Interface/Shared/Sidebars/AccountSidebar";
 import AccountNavbarContainer from "@/components/Interface/Navbar/AccountNavbarContainer";
 import SettingsContainer from "@/components/Auth/Settings/SettingsContainer";
+
+export const metadata = {
+  title: "Settings | RIGBA",
+};
 
 export default function SettingsPage() {
   return (

@@ -25,6 +25,9 @@ export default interface IUserService {
   ): Promise<
     RequestResponse<User | EmailVerificationToken | TwoFactorToken | null>
   >;
+  registerUser(
+    registerUserDTO: RegisterUserDTO
+  ): Promise<RequestResponse<RegisterUserDTO | User | null>>;
   confirmEmailVerification(
     confirmEmailVerification: ConfirmEmailVerificationDTO
   ): Promise<RequestResponse<User | EmailVerificationToken | null> | void>;

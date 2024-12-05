@@ -1,9 +1,5 @@
 import IFetchService from "../interfaces/IFetchService";
 import { GameAPIPagination, GameAPIResponse } from "../utils/helpers/types";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-const queryClient = new QueryClient();
-
 export class FetchService implements IFetchService {
   public apiKey: string = process.env.NEXT_PUBLIC_RAWG_API_KEY || "";
   public baseUrl: string = process.env.NEXT_PUBLIC_RAWG_BASE_URL || "";
@@ -33,6 +29,16 @@ export class FetchService implements IFetchService {
     }&page_size=${10}`;
     const data = await this.fetchData<{ results: GameAPIResponse[] }>(url);
     return searchQuery && data.results ? data.results : [];
+  }
+
+  async getScreenshotsForProduct(
+    productId: string
+  ): Promise<GameAPIResponse["screenshots"]> {
+    const url = `${this.baseUrl}/games/${productId}/screenshots?key=${this.apiKey}`;
+    const data = await this.fetchData<{
+      results: GameAPIResponse["screenshots"];
+    }>(url);
+    return data.results || [];
   }
 
   async getProductsByOrdering(

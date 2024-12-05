@@ -30,12 +30,10 @@ export default function SettingsContainer() {
         <div className="flex flex-wrap items-center gap-x-[100px] py-[15px] px-[20px] gap-y-[10px] cursor-default">
           <div>
             <div>
-              <span>Adrian Kozieł</span>
+              <span>{user?.name}</span>
             </div>
             <div className="flex flex-col flex-1 leading-[18px]">
-              <span className="text-[14px] text-[#544d60]">
-                duzykox123@gmail.com
-              </span>
+              <span className="text-[14px] text-[#544d60]">{user?.email}</span>
             </div>
           </div>
           <div>

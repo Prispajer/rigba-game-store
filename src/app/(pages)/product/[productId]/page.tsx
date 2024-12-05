@@ -3,17 +3,12 @@ import ProductContainer from "@/components/Interface/Product/ProductContainer";
 import fetchService from "@/services/FetchService";
 
 export const generateMetadata = async (data: {
-  params: Promise<{ productId: string }>;
+  params: { productId: string };
 }): Promise<Metadata> => {
-  const params = await data.params;
-  const title = await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(`${params.productId}`);
-    }, 100);
-  });
+  const product = await fetchService.getProduct(data.params.productId);
 
   return {
-    title: `Buy ${title}`,
+    title: `Buy ${product.name}`,
   };
 };
 
@@ -22,9 +17,10 @@ export default async function ProductPage(data: {
 }) {
   const params = await data.params;
 
-  const product = await fetchService.getProduct(params.productId);
-
-  const screenshots = product.screenshots;
+  const [product, screenshots] = await Promise.all([
+    fetchService.getProduct(params.productId),
+    fetchService.getScreenshotsForProduct(params.productId),
+  ]);
 
   return <ProductContainer product={product} screenshots={screenshots} />;
 }

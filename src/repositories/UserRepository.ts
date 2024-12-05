@@ -131,9 +131,10 @@ export default class UserRepository implements IUserRepository {
     user: User,
     updatedPasswordDTO: UpdatePasswordDTO
   ): Promise<UpdatePasswordDTO> {
-    const hashedPassword = await this._userUtils.hashPassword(
-      updatedPasswordDTO
-    );
+    const hashedPassword = await this._userUtils.hashPassword({
+      email: updatedPasswordDTO.email as string,
+      password: updatedPasswordDTO.password,
+    });
 
     const updatedPassword = await postgres.user.update({
       where: {

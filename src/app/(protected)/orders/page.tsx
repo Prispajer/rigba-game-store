@@ -1,7 +1,10 @@
-"use client";
 import AccountSidebar from "@/components/Interface/Shared/Sidebars/AccountSidebar";
 import AccountNavbarContainer from "@/components/Interface/Navbar/AccountNavbarContainer";
 import OrdersContainer from "@/components/Auth/Orders/OrdersContainer";
+
+export const metadata = {
+  title: "Orders | RIGBA",
+};
 
 export default function OrdersPage() {
   return (

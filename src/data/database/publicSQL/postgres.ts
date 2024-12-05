@@ -1,9 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 
 declare global {
-  var prisma: PrismaClient | undefined;
+  var postgres: PrismaClient | undefined;
 }
 
-export const postgres = globalThis.prisma || new PrismaClient();
+export const postgres = globalThis.postgres || new PrismaClient();
 
-if (process.env.NODE_ENV !== "production") globalThis.prisma = postgres;
+if (process.env.NODE_ENV !== "production") globalThis.postgres = postgres;

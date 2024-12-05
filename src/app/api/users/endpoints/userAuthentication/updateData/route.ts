@@ -16,6 +16,6 @@ export async function POST(
   return NextResponse.json<RequestResponse<PersonalData>>({
     success: updateDataResponse.success,
     message: updateDataResponse.message,
-    data: updateDataResponse.data,
+    data: updateDataResponse.data as PersonalData | null,
   });
 }

@@ -53,6 +53,7 @@ export default function ProductBuyOrAdd({
                         released: product.released as string,
                         added: product.added as number,
                         price: generateRandomValue(),
+                        quantity: null,
                       })
                   : () =>
                       handleAddLocalProductToCart({

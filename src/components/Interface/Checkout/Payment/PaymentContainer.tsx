@@ -138,7 +138,7 @@ export default function PaymentContainer({
                           e.stopPropagation();
                           user
                             ? handleDeleteUserProductFromCart({
-                                email: user.email,
+                                email: user.email as string,
                                 externalProductId: product.externalProductId,
                               })
                             : handleDeleteLocalProductFromCart(
@@ -173,7 +173,7 @@ export default function PaymentContainer({
                           e.stopPropagation();
                           user
                             ? handleDecreaseQuantityUserProductFromCart({
-                                email: user.email,
+                                email: user.email as string,
                                 externalProductId: product.externalProductId,
                               })
                             : handleDecreaseQuantityLocalProductFromCart(
@@ -192,7 +192,7 @@ export default function PaymentContainer({
                           e.stopPropagation();
                           user
                             ? handleIncreaseQuantityUserProductFromCart({
-                                email: user.email,
+                                email: user.email as string,
                                 externalProductId: product.externalProductId,
                               })
                             : handleIncreaseQuantityLocalProductFromCart(

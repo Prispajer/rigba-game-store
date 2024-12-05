@@ -34,7 +34,7 @@ export default function ProductScreenshots({
                 className="relative w-[176px] h-[100px]"
               >
                 <Image
-                  loading="lazy"
+                  loading="eager"
                   src={screenshot.image ?? "/icons/logo.png"}
                   alt={screenshot.image}
                   layout="fill"

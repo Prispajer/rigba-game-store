@@ -32,7 +32,6 @@ export default function HomeCategories() {
                   </div>
                   <div className="relative min-w-[80px] min-h-[80px] flex flex-1 items-center">
                     <Image
-                      fetchPriority="low"
                       loading="lazy"
                       alt={genre.slug as string}
                       src={genre.image_background as string}

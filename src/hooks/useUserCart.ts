@@ -90,7 +90,13 @@ export default function useUserCart() {
     if (user?.email) {
       handleFetchUserCart();
     }
-  }, [user?.email, handleFetchUserCart]);
+  }, [
+    user?.email,
+    handleAddUserProductToCart,
+    handleDeleteUserProductFromCart,
+    handleIncreaseQuantityUserProductFromCart,
+    handleDecreaseQuantityUserProductFromCart,
+  ]);
 
   return {
     userCartState,

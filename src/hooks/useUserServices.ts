@@ -42,6 +42,7 @@ export default function useUserServices() {
         );
         if (response.success) {
           setSuccess(response.message);
+          update(response.data);
           handleClose("twoFactorModal");
         } else {
           setError(response.message);
@@ -108,8 +109,6 @@ export default function useUserServices() {
             if (response.data?.emailVerified) {
               await callback(email, password);
             }
-
-            console.log(response);
           }
         } catch (error) {
           setError("Something went wrong!");
@@ -293,7 +292,6 @@ export default function useUserServices() {
     ) => {
       clearMessages();
       startTransition(async () => {
-        const { password } = data;
         try {
           const response = await requestService.postMethod(
             "users/endpoints/tokenManagement/changePasswordToken",

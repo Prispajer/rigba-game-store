@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { userService } from "@/utils/injector";
-import { RequestResponse } from "@/utils/helpers/types";
+import { User, RequestResponse } from "@/utils/helpers/types";
 import { PasswordResetToken } from "@prisma/client";
 
 export async function POST(request: NextRequest, response: NextResponse) {
@@ -13,6 +13,6 @@ export async function POST(request: NextRequest, response: NextResponse) {
   return NextResponse.json<RequestResponse<PasswordResetToken>>({
     success: resetPasswordResponse?.success,
     message: resetPasswordResponse?.message,
-    data: resetPasswordResponse?.data,
+    data: resetPasswordResponse?.data as PasswordResetToken | null,
   });
 }

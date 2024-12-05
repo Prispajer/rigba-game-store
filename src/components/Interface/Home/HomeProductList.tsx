@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
 import { MdOutlineSignalCellularNodata } from "react-icons/md";
@@ -11,10 +11,10 @@ import { GameAPIResponse } from "@/utils/helpers/types";
 
 export default function HomeProductList({ ordering }: { ordering: string }) {
   const { redirectToGame } = useCustomRouter();
-  const [games, setGames] = useState<GameAPIResponse[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [games, setGames] = React.useState<GameAPIResponse[]>([]);
+  const [loading, setLoading] = React.useState(true);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const fetchGames = async () => {
       setLoading(true);
       const fetchedGames = await FetchService.getProductsByOrdering(ordering);

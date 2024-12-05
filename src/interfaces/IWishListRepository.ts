@@ -1,4 +1,9 @@
 import { User, WishList, Product } from "@prisma/client";
+import {
+  GetUserWishListDTO,
+  CreateUserProductWishListDTO,
+  DeleteUserProductFromWishListDTO,
+} from "@/utils/helpers/backendDTO";
 
 export default interface IWishListRepository {
   getUserWishList(

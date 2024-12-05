@@ -16,6 +16,6 @@ export async function POST(
   return NextResponse.json<RequestResponse<PasswordResetToken>>({
     success: setNewPasswordResponse.success,
     message: setNewPasswordResponse.message,
-    data: setNewPasswordResponse.data,
+    data: setNewPasswordResponse.data as PasswordResetToken | null,
   });
 }

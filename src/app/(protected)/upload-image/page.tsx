@@ -1,7 +1,10 @@
-"use client";
 import AccountSidebar from "@/components/Interface/Shared/Sidebars/AccountSidebar";
 import AccountNavbarContainer from "@/components/Interface/Navbar/AccountNavbarContainer";
 import UploadImageContainer from "@/components/Auth/Settings/UploadImageContainer";
+
+export const metadata = {
+  title: "Upload Image | RIGBA",
+};
 
 export default function UploadImagePage() {
   return (

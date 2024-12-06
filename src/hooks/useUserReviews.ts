@@ -12,6 +12,8 @@ import {
 import { AppDispatch, RootState } from "@/redux/store";
 
 export default function useUserReviews() {
+  const [isLoading, setIsLoading] = React.useState(false);
+
   const dispatch = useDispatch<AppDispatch>();
   const userReviewsState = useSelector((state: RootState) => state.userReviews);
 
@@ -40,6 +42,7 @@ export default function useUserReviews() {
 
   return {
     userReviewsState,
+    isLoading,
     handleFetchUserReviews,
     handleFetchLikeUserReview,
     handleFetchUnLikeUserReview,

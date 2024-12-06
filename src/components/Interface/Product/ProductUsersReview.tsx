@@ -85,7 +85,7 @@ export default function ProductUsersReview({
               </div>
               <div className="flex items-center mb-[10px]">
                 <Image
-                  loading="lazy"
+                  loading="eager"
                   className="flex-0 mr-[10px] rounded-full"
                   src={review.user.image || "/icons/logo.png"}
                   width="22"

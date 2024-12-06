@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { CiShare1 } from "react-icons/ci";
 import ProductInformations from "./ProductInformations";
 import ProductBuyOrAdd from "./ProductBuyOrAdd";
 import ProductPaymentWays from "./ProductPaymentWays";
@@ -11,6 +10,7 @@ import ProductUsersReview from "./ProductUsersReview";
 import ProductGenres from "./ProductGenres";
 import ProductDescription from "./ProductDescription";
 import ProductRequirements from "./ProductRequirements";
+import ProductShareButton from "./ProductShareButton";
 import ProductHeaders from "../Shared/ReusableComponents/ProductHeaders";
 import ProductRemainingDetails from "./ProductRemainingDetails";
 import ShowMoreButton from "../Shared/Buttons/ShowMoreButton";
@@ -31,8 +31,9 @@ export default function ProductContainer({
   screenshots: GameAPIResponse["screenshots"];
 }) {
   const { handleOpen } = useWindowVisibility();
-  const { redirectToReview, redirectToFilters } = useCustomRouter();
-  const { handleAddUserProductToCart } = useUserCart();
+  const { redirectToReview, redirectToFilters, redirectToCheckout } =
+    useCustomRouter();
+  const { handleAddUserProductToCart, isLoading } = useUserCart();
   const { handleAddLocalProductToCart } = useLocalStorage("localCart");
   const { user } = useCurrentUser();
   const {
@@ -54,8 +55,10 @@ export default function ProductContainer({
             <ProductBuyOrAdd
               product={product}
               user={user}
+              isLoading={isLoading}
               handleAddUserProductToCart={handleAddUserProductToCart}
               handleAddLocalProductToCart={handleAddLocalProductToCart}
+              redirectToCheckout={redirectToCheckout}
             />
             <ProductPaymentWays />
           </div>
@@ -98,22 +101,14 @@ export default function ProductContainer({
         </div>
         <div className="hidden lg:flex flex-col">
           <div className="lg:sticky top-[20px]">
-            <div className="flex items-center justify-between my-[15px] px-[20px]">
-              <span className="text-[#FFFFFF] font-[700] text-[13px]">
-                Share with someone who would like this!
-              </span>
-              <button className="flex items-center p-[6px] bg-[#487CBD]">
-                <span className="text-[14px] text-[#FFFFFF]">Share</span>
-                <span className="text-[14px] text-[#FFFFFF] ml-[6px]">
-                  <CiShare1 />
-                </span>
-              </button>
-            </div>
+            <ProductShareButton />
             <ProductBuyOrAdd
               product={product}
               user={user}
+              isLoading={isLoading}
               handleAddUserProductToCart={handleAddUserProductToCart}
               handleAddLocalProductToCart={handleAddLocalProductToCart}
+              redirectToCheckout={redirectToCheckout}
             />
             <ProductPaymentWays />
           </div>

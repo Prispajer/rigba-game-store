@@ -16,6 +16,8 @@ export default function PaymentPage() {
   const [stripePromise, setStripePromise] = React.useState<any>(null);
   const [clientSecret, setClientSecret] = React.useState<string | null>(null);
   const [newOrder, setNewOrder] = React.useState<Order | null>(null);
+  const [isPaymentIntentCreated, setIsPaymentIntentCreated] =
+    React.useState(false);
   const [loading, setLoading] = React.useState<boolean>(true);
   const { userCartState } = useUserCart();
   const { localCartState } = useLocalStorage("localCart");
@@ -66,11 +68,17 @@ export default function PaymentPage() {
   }, [stripePromise, loadStripeConfig]);
 
   React.useEffect(() => {
-    if (productsByRole.length > 0 && !clientSecret) {
+    if (productsByRole.length > 0 && !clientSecret && !isPaymentIntentCreated) {
       setLoading(true);
       createPaymentIntent();
+      setIsPaymentIntentCreated(true);
     }
-  }, [productsByRole, clientSecret, createPaymentIntent]);
+  }, [
+    productsByRole,
+    clientSecret,
+    isPaymentIntentCreated,
+    createPaymentIntent,
+  ]);
 
   if (loading || !clientSecret || !stripePromise) {
     return (

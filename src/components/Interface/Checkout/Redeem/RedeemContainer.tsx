@@ -2,6 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import LoadingAnimation from "../../Shared/Animations/LoadingAnimation";
 import useUserProductHistory from "@/hooks/useUserProductHistory";
 
 export default function RedeemContainer({
@@ -9,10 +10,9 @@ export default function RedeemContainer({
 }: {
   params?: { redeemId: string };
 }) {
-  const { userProductHistoryState } = useUserProductHistory();
+  const { userProductHistoryState, isLoading } = useUserProductHistory();
 
   const findMultipleProducts = (redeemId: string) => {
-    if (!redeemId) return [];
     const isProductHistoryId = userProductHistoryState.productHistoryArray.some(
       (productHistory) =>
         productHistory.keys.some((key) => key.productHistoryId === redeemId)
@@ -26,6 +26,14 @@ export default function RedeemContainer({
           productHistory.keys.some((key) => key.orderHistoryId === redeemId)
         );
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col justify-center items-center w-full min-h-[calc(100vh-55px)] md:min-h-[calc(100vh-96px)] bg-primaryColor">
+        <LoadingAnimation />
+      </div>
+    );
+  }
 
   return (
     <section className="flex flex-col items-center w-full h-full min-h-[calc(100vh-55px)] md:min-h-[calc(100vh-96px)] md:py-[20px] bg-primaryColor mx-auto">

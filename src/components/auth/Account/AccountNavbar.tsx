@@ -40,7 +40,7 @@ export default function AccountNavbar() {
           </span>
           <div className="rounded-full overflow-hidden">
             <Image
-              loading="lazy"
+              loading="eager"
               src={user?.image || "/icons/logo.png"}
               width="35"
               height="35"

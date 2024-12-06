@@ -4,6 +4,7 @@ import Image from "next/image";
 import { CiShare1 } from "react-icons/ci";
 import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
 import DigitalProductDetails from "./ProductDigitalProductDetails";
+import ProductShareButton from "./ProductShareButton";
 import { processReviews, mergeReviews } from "@/utils/reviews";
 import { generateStars, calculateOverallRating } from "@/utils/ratings";
 import { GameAPIResponse } from "@/utils/helpers/types";
@@ -78,12 +79,7 @@ export default function ProductInformations({
             </div>
             <DigitalProductDetails display="hidden xl:flex flex-col" />
             <div className="lg:hidden">
-              <button className="flex items-center p-[6px] bg-[#487CBD]">
-                <span className="text-[14px] text-[#FFFFFF]">Share</span>
-                <span className="text-[14px] text-[#FFFFFF] ml-[6px]">
-                  <CiShare1 />
-                </span>
-              </button>
+              <ProductShareButton />
             </div>
           </div>
         </div>

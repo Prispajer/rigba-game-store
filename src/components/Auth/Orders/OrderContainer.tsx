@@ -46,7 +46,7 @@ export default function OrderContainer({
             <div className="grid grid-cols-[1fr_4fr] font-bold ">
               <div className="relative w-[64px] h-[90px] mr-[20px]">
                 <Image
-                  loading="lazy"
+                  loading="eager"
                   src={
                     productImage?.productsInformations.background_image
                       ? productImage?.productsInformations.background_image

@@ -24,7 +24,7 @@ export default function ReviewContainer({
 }) {
   const { user } = useCurrentUser();
   const { redirectToGame } = useCustomRouter();
-  const { success, error, useProductActions } = useProductServices();
+  const { success, error, setError, useProductActions } = useProductServices();
   const { submitReviewForm } = useProductActions();
   const reviewObject = useForm<z.infer<typeof ReviewSchema>>({
     resolver: zodResolver(ReviewSchema),
@@ -54,9 +54,11 @@ export default function ReviewContainer({
         <div className="grid grid-cols-1 sm:grid-cols-[1fr,200px] mt-[15px] md:mt-[40px] sm:mb-[60px] px-[20px] sm:px-0 gap-x-[20px]">
           <form
             onSubmit={handleSubmit(async (data) => {
-              if (user) {
-                await submitReviewForm(data, ratingKeys, user, product);
+              if (!user) {
+                setError("User must be logged in to submit a review!");
+                return;
               }
+              await submitReviewForm(data, ratingKeys, user, product);
             })}
             className="grid grid-cols-1 md:grid-cols-[180px,1fr] md:gap-x-[40px] mx-[-20px] sm:mx-[0px] p-[20px] lg:py-[30px] lg:px-[40px] bg-secondaryColor"
           >

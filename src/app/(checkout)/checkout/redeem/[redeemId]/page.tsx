@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { useRouter } from "next/router";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
 import CheckoutHeader from "@/components/Interface/Checkout/CheckoutHeader";
 import RedeemContainer from "@/components/Interface/Checkout/Redeem/RedeemContainer";
@@ -15,7 +14,7 @@ export const generateMetadata = async (data: {
   });
 
   return {
-    title: `Buy ${title}`,
+    title: `Order ${title}`,
   };
 };
 

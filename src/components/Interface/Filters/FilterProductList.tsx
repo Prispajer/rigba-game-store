@@ -34,7 +34,7 @@ export default function FilterProductList() {
             <div className="relative m-[5px] sm:m-[0px] min-w-[95px] sm:min-h-[250px]">
               (
               <Image
-                loading="lazy"
+                loading="eager"
                 src={game.background_image ?? ""}
                 layout="fill"
                 alt={game.background_image ?? ""}

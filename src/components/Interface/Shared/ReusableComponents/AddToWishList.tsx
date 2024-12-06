@@ -40,6 +40,7 @@ export default function AddToWishList<
   const { user } = useCurrentUser();
   const {
     userWishListState,
+    isLoading,
     handleAddUserProductToWishList,
     handleDeleteUserProductFromWishList,
   } = useUserWishList();
@@ -109,6 +110,7 @@ export default function AddToWishList<
   return (
     <button
       onClick={(event: React.MouseEvent) => handleWishListAction(event)}
+      disabled={isLoading}
       className={`${position} p-[6px] md:p-[10px] border transition duration-300 cursor-pointer hover:bg-[#ffffff80] hover:border-[#ffffff] ${
         isInWishList ? `${added}` : `${deleted}`
       }`}

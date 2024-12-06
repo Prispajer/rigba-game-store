@@ -16,6 +16,8 @@ import {
 } from "@/utils/helpers/frontendDTO";
 
 export default function useUserWishList() {
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
   const { user, update } = useCurrentUser();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -28,12 +30,14 @@ export default function useUserWishList() {
   const handleAddUserProductToWishList = React.useCallback(
     async (addUserProductToWishListDTO: AddUserProductToWishListDTO) => {
       if (user?.email) {
+        setIsLoading(true);
         await dispatch(
           fetchAddUserProductToWishList(addUserProductToWishListDTO)
         );
         await dispatch(fetchUserWishList({ email: user?.email as string }));
         debouncedUpdate();
       }
+      setIsLoading(false);
     },
     [dispatch, user?.email, update]
   );
@@ -44,12 +48,14 @@ export default function useUserWishList() {
         deleteUserProductFromWishListDTO: DeleteUserProductFromWishListDTO
       ) => {
         if (user?.email) {
+          setIsLoading(true);
           await dispatch(
             fetchDeleteUserProductFromWishList(deleteUserProductFromWishListDTO)
           );
           await dispatch(fetchUserWishList({ email: user?.email as string }));
           debouncedUpdate();
         }
+        setIsLoading(false);
       },
       1000
     ),
@@ -66,6 +72,7 @@ export default function useUserWishList() {
 
   return {
     userWishListState,
+    isLoading,
     handleAddUserProductToWishList,
     handleDeleteUserProductFromWishList,
     handleSetUserWishListOrdering,

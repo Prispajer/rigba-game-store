@@ -49,7 +49,7 @@ export default function useProductServices() {
           return response.data;
         } else {
           setError(response.message);
-          throw new Error(response.message || "Unknown error");
+          return response.message || "Unknown error";
         }
       } catch (error) {
         console.error("Error adding review:", error);
@@ -64,6 +64,7 @@ export default function useProductServices() {
   return {
     success,
     error,
+    setError,
     useProductActions,
   };
 }

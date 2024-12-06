@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import Facebook from "next-auth/providers/facebook";
-import Discord from "@auth/core/providers/discord";
+import Discord from "next-auth/providers/discord";
 import type { NextAuthConfig } from "next-auth";
 import { LoginSchema } from "@/utils/schemas/user";
 import { postgres } from "./data/database/publicSQL/postgres";

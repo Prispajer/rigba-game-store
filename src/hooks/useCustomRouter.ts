@@ -4,13 +4,13 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 export default function useCustomRouter() {
   const router = useRouter();
-  const params = useSearchParams();
+  const url = useSearchParams();
 
   const getUrlParams = React.useCallback(
     (filterCategory: string): number[] => {
-      return params.get(filterCategory)?.split(",").map(Number) || [];
+      return url.get(filterCategory)?.split(",").map(Number) || [];
     },
-    [params]
+    [url]
   );
 
   const redirectToGame = React.useCallback(
@@ -24,29 +24,33 @@ export default function useCustomRouter() {
         callback(element || "");
       }
     },
-    [params]
+    [url]
   );
 
   const redirectToKey = React.useCallback(
     (key: string): void => {
       router.push(`/checkout/redeem/${key}`);
     },
-    [params]
+    [url]
   );
 
   const redirectToOrder = React.useCallback(
     (order: string): void => {
       router.push(`/order/${order}`);
     },
-    [params]
+    [url]
   );
 
   const redirectToReview = React.useCallback(
     (name: string): void => {
       router.push(`/review/${name}`);
     },
-    [params]
+    [url]
   );
+
+  const redirectToCheckout = React.useCallback((): void => {
+    router.push("/checkout");
+  }, [url]);
 
   const redirectToFilters = React.useCallback(
     (data: number[] | string): void => {
@@ -58,7 +62,7 @@ export default function useCustomRouter() {
         router.push(`/filters/?genres=${data}`);
       }
     },
-    [params]
+    [url]
   );
 
   const updateUrlParams = React.useCallback(
@@ -77,23 +81,24 @@ export default function useCustomRouter() {
 
       router.push(currentUrl.pathname + currentUrl.search);
     },
-    [params]
+    [url]
   );
 
   const pushDataToUrl = React.useCallback(
     (data: Record<string, string | number[]>): void => {
       updateUrlParams(data);
     },
-    [params]
+    [url]
   );
 
   return {
-    params,
+    url,
     getUrlParams,
     redirectToReview,
     redirectToGame,
     redirectToKey,
     redirectToOrder,
+    redirectToCheckout,
     redirectToFilters,
     pushDataToUrl,
   };

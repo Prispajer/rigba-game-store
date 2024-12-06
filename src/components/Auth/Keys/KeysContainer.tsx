@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import Image from "next/image";
 import LoadingAnimation from "@/components/Interface/Shared/Animations/LoadingAnimation";
@@ -47,7 +46,7 @@ export default function KeysContainer() {
             >
               <div>
                 <Image
-                  loading="lazy"
+                  loading="eager"
                   src={
                     product.productsInformations?.background_image ||
                     "/icons/logo.png"

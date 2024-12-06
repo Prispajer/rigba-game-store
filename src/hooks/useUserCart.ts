@@ -20,11 +20,13 @@ import {
 } from "@/utils/helpers/frontendDTO";
 
 export default function useUserCart() {
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
   const { user, update } = useCurrentUser();
   const dispatch = useDispatch<AppDispatch>();
   const userCartState = useSelector((state: RootState) => state.userCart);
 
-  const debouncedUpdate = React.useMemo(() => debounce(update, 300), [update]);
+  const debouncedUpdate = React.useMemo(() => debounce(update, 1000), [update]);
 
   const handleFetchUserCart = React.useCallback(async () => {
     if (user?.email) {
@@ -35,9 +37,11 @@ export default function useUserCart() {
   const handleAddUserProductToCart = React.useCallback(
     async (addUserProductToCartDTO: AddUserProductToCartDTO) => {
       if (user?.email) {
+        setIsLoading(true);
         await dispatch(fetchAddUserProductToCart(addUserProductToCartDTO));
         debouncedUpdate();
       }
+      setIsLoading(false);
     },
     [dispatch, debouncedUpdate, user?.email]
   );
@@ -45,11 +49,13 @@ export default function useUserCart() {
   const handleDeleteUserProductFromCart = React.useCallback(
     async (deleteUserProductFromCartDTO: DeleteUserProductFromCartDTO) => {
       if (user?.email) {
+        setIsLoading(true);
         await dispatch(
           fetchDeleteUserProductFromCart(deleteUserProductFromCartDTO)
         );
         debouncedUpdate();
       }
+      setIsLoading(false);
     },
     [dispatch, debouncedUpdate, user?.email]
   );
@@ -59,6 +65,7 @@ export default function useUserCart() {
       increaseQuantityUserProductFromCartDTO: IncreaseQuantityUserProductFromCartDTO
     ) => {
       if (user?.email) {
+        setIsLoading(true);
         await dispatch(
           fetchIncreaseQuantityUserProductFromCart(
             increaseQuantityUserProductFromCartDTO
@@ -66,6 +73,7 @@ export default function useUserCart() {
         );
         debouncedUpdate();
       }
+      setIsLoading(false);
     },
     [dispatch, debouncedUpdate, user?.email]
   );
@@ -75,6 +83,7 @@ export default function useUserCart() {
       decreaseQuantityUserProductFromCartDTO: DecreaseQuantityUserProductFromCartDTO
     ) => {
       if (user?.email) {
+        setIsLoading(true);
         await dispatch(
           fetchDecreaseQuantityUserProductFromCart(
             decreaseQuantityUserProductFromCartDTO
@@ -82,6 +91,7 @@ export default function useUserCart() {
         );
         debouncedUpdate();
       }
+      setIsLoading(false);
     },
     [dispatch, debouncedUpdate, user?.email]
   );
@@ -100,6 +110,7 @@ export default function useUserCart() {
 
   return {
     userCartState,
+    isLoading,
     handleFetchUserCart,
     handleAddUserProductToCart,
     handleDeleteUserProductFromCart,

@@ -18,6 +18,7 @@ export default function CartModalContainer() {
   const { cartModalState, handleClose } = useWindowVisibility();
   const {
     userCartState,
+    isLoading,
     handleDeleteUserProductFromCart,
     handleDecreaseQuantityUserProductFromCart,
     handleIncreaseQuantityUserProductFromCart,
@@ -28,7 +29,7 @@ export default function CartModalContainer() {
     handleDecreaseQuantityLocalProductFromCart,
     handleIncreaseQuantityLocalProductFromCart,
   } = useLocalStorage("localCart");
-  const { redirectToGame } = useCustomRouter();
+  const { redirectToGame, redirectToCheckout } = useCustomRouter();
 
   const handleOutsideClick = () => {
     if (cartModalState) {
@@ -102,6 +103,7 @@ export default function CartModalContainer() {
                         <div className="flex justify-between items-center w-full text-white">
                           <div>
                             <button
+                              disabled={isLoading}
                               className="mr-2 hover:text-modalHover"
                               onClick={() =>
                                 handleDecreaseQuantityUserProductFromCart({
@@ -116,6 +118,7 @@ export default function CartModalContainer() {
                               {product.quantity || 1}
                             </span>
                             <button
+                              disabled={isLoading}
                               className="ml-2 hover:text-modalHover"
                               onClick={() =>
                                 handleIncreaseQuantityUserProductFromCart({
@@ -128,6 +131,7 @@ export default function CartModalContainer() {
                             </button>
                           </div>
                           <button
+                            disabled={isLoading}
                             onClick={() =>
                               handleDeleteUserProductFromCart({
                                 email: user?.email as string,
@@ -192,6 +196,7 @@ export default function CartModalContainer() {
                         <div className="flex justify-between items-center w-full text-white">
                           <div>
                             <button
+                              disabled={isLoading}
                               className="mr-2 hover:text-modalHover"
                               onClick={() =>
                                 handleDecreaseQuantityLocalProductFromCart(
@@ -205,6 +210,7 @@ export default function CartModalContainer() {
                               {product.quantity || 1}
                             </span>
                             <button
+                              disabled={isLoading}
                               className="ml-2 hover:text-modalHover"
                               onClick={() =>
                                 handleIncreaseQuantityLocalProductFromCart(
@@ -216,6 +222,7 @@ export default function CartModalContainer() {
                             </button>
                           </div>
                           <button
+                            disabled={isLoading}
                             onClick={() =>
                               handleDeleteLocalProductFromCart(
                                 product.externalProductId
@@ -246,11 +253,12 @@ export default function CartModalContainer() {
                   </strong>
                 </div>
                 <div className="w-full">
-                  <Link href="/checkout">
-                    <button className="w-[100%] min-h-[35px] transition duration-300 font-medium text-buttonTextColor bg-buttonBackground hover:bg-buttonBackgroundHover">
-                      Show cart
-                    </button>
-                  </Link>
+                  <button
+                    onClick={redirectToCheckout}
+                    className="w-[100%] min-h-[35px] transition duration-300 font-medium text-buttonTextColor bg-buttonBackground hover:bg-buttonBackgroundHover"
+                  >
+                    Show cart
+                  </button>
                 </div>
               </div>
             ) : (

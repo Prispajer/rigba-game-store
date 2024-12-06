@@ -10,7 +10,7 @@ import useCustomRouter from "@/hooks/useCustomRouter";
 import useFetchGameData from "@/hooks/useFetchGameData";
 
 export default function FiltersContainer() {
-  const { params, getUrlParams, pushDataToUrl } = useCustomRouter();
+  const { url, getUrlParams, pushDataToUrl } = useCustomRouter();
   const {
     productFilterState,
     handleFetchProductsWithFilters,
@@ -26,7 +26,7 @@ export default function FiltersContainer() {
     handleSetPlatformsIdArray(getUrlParams("platforms"));
     handleSetStoresIdArray(getUrlParams("stores"));
     handleSetPublishersIdArray(getUrlParams("publishers"));
-  }, [params]);
+  }, [url]);
 
   React.useEffect(() => {
     pushDataToUrl({

@@ -10,7 +10,8 @@ export const generateStars = (rating: number) => {
 
   const partialStar =
     decimalPart > 0 ? (
-      <div
+      <span
+        key={`partial-${decimalPart * 100}`}
         className="rating-star"
         style={{
           background: `linear-gradient(to right, gold ${
@@ -19,7 +20,7 @@ export const generateStars = (rating: number) => {
           WebkitBackgroundClip: "text",
           color: "transparent",
         }}
-      ></div>
+      ></span>
     ) : null;
 
   const emptyStar = Array(5 - fullStars - (decimalPart > 0 ? 1 : 0))
@@ -37,15 +38,15 @@ export const generateStars = (rating: number) => {
   );
 };
 
-export const calculateOverallRating = (
-  data: {
+export const calculateAverageRating = (
+  mergedReviews: {
     count: number;
     id: number;
     title: string;
     percent: number;
   }[]
 ): number => {
-  const starRatings: { [key: number]: number } = {
+  const ratingValues: { [key: number]: number } = {
     5: 5,
     4: 4,
     3: 3,
@@ -53,15 +54,19 @@ export const calculateOverallRating = (
     1: 1,
   };
 
-  const totalWeightedRating = data.reduce(
-    (acc, review) => acc + starRatings[review.id] * review.count,
+  const totalWeightedRating = mergedReviews.reduce(
+    (acc, mergedReview) =>
+      acc + ratingValues[mergedReview.id] * mergedReview.count,
     0
   );
 
-  const totalRatingsCount = data.reduce((acc, review) => acc + review.count, 0);
+  const totalReviewsCount = mergedReviews.reduce(
+    (acc, mergedReview) => acc + mergedReview.count,
+    0
+  );
 
   const averageRating =
-    totalRatingsCount > 0 ? totalWeightedRating / totalRatingsCount : 0;
+    totalReviewsCount > 0 ? totalWeightedRating / totalReviewsCount : 0;
 
   return Number(averageRating.toFixed(2));
 };

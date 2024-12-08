@@ -1,6 +1,7 @@
 import React from "react";
+import LoadingAnimation from "../Shared/Animations/LoadingAnimation";
 import { generateStars } from "@/utils/ratings";
-import { processReviews, mergeReviews } from "@/utils/reviews";
+import { groupReviewsByRating, mergeReviews } from "@/utils/reviews";
 import { GameAPIResponse } from "@/utils/helpers/types";
 import { UserReviewsSlice } from "@/redux/slices/userReviewsSlice";
 
@@ -10,15 +11,16 @@ export default function ProductReview({
   userReviewsState,
 }: {
   product: GameAPIResponse;
+  isReviewLoading: boolean;
   redirectToReview: (name: string) => void;
   userReviewsState: UserReviewsSlice;
 }) {
-  const processedReviews = React.useMemo(
-    () => processReviews(userReviewsState.reviews),
+  const groupedReviewsByRating = React.useMemo(
+    () => groupReviewsByRating(userReviewsState.reviews),
     [userReviewsState.reviews]
   );
   const mergedReviews = React.useMemo(
-    () => mergeReviews(processedReviews, product.ratings),
+    () => mergeReviews(groupedReviewsByRating, product.ratings),
     [userReviewsState.reviews, product.ratings]
   );
 
@@ -29,7 +31,7 @@ export default function ProductReview({
           <ul className="flex flex-col md:flex-row lg:flex-col xxl:flex-row">
             {mergedReviews.length > 0 ? (
               mergedReviews
-                ?.sort((a, b) => a.percent - b.percent)
+                .sort((a, b) => a.percent - b.percent)
                 .map((rating) => (
                   <li
                     key={rating.id}

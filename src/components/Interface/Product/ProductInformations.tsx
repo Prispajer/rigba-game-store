@@ -5,8 +5,8 @@ import { CiShare1 } from "react-icons/ci";
 import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
 import DigitalProductDetails from "./ProductDigitalProductDetails";
 import ProductShareButton from "./ProductShareButton";
-import { processReviews, mergeReviews } from "@/utils/reviews";
-import { generateStars, calculateOverallRating } from "@/utils/ratings";
+import { groupReviewsByRating, mergeReviews } from "@/utils/reviews";
+import { generateStars, calculateAverageRating } from "@/utils/ratings";
 import { GameAPIResponse } from "@/utils/helpers/types";
 import { UserReviewsSlice } from "@/redux/slices/userReviewsSlice";
 
@@ -17,12 +17,12 @@ export default function ProductInformations({
   product: GameAPIResponse;
   userReviewsState: UserReviewsSlice;
 }) {
-  const processedReviews = React.useMemo(
-    () => processReviews(userReviewsState.reviews),
+  const groupedReviewsByRating = React.useMemo(
+    () => groupReviewsByRating(userReviewsState.reviews),
     [userReviewsState.reviews]
   );
   const mergedReviews = React.useMemo(
-    () => mergeReviews(processedReviews, product.ratings),
+    () => mergeReviews(groupedReviewsByRating, product.ratings),
     [userReviewsState.reviews, product.ratings]
   );
   const mergedRatingsCount = React.useMemo(
@@ -63,12 +63,12 @@ export default function ProductInformations({
             <div className="flex items-center flex-wrap gap-x-[5px] mb-[15px] cursor-default">
               <div>
                 <span className="">
-                  {generateStars(calculateOverallRating(mergedReviews))}
+                  {generateStars(calculateAverageRating(mergedReviews))}
                 </span>
               </div>
               <div className="flex-wrap mt-[5px]">
                 <span className="text-[15px] text-buttonBackground font-[800]">
-                  {calculateOverallRating(mergedReviews)}
+                  {calculateAverageRating(mergedReviews)}
                 </span>
                 <span className="text-[14px] text-[#FFFFFF]">/ 5</span>
                 <span className="text-[14px] text-[#FFFFFF]"> from </span>

@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import { FaCartPlus } from "react-icons/fa";
 import { generateRandomValue } from "@/utils/prices";
 import { GameAPIProduct } from "@/utils/helpers/types";
@@ -14,14 +13,14 @@ import {
 export default function ProductBuyOrAdd({
   product,
   user,
-  isLoading,
+  isCartLoading,
   handleAddUserProductToCart,
   handleAddLocalProductToCart,
   redirectToCheckout,
 }: {
   product: GameAPIProduct;
   user: User | null;
-  isLoading: boolean;
+  isCartLoading: boolean;
   handleAddUserProductToCart: (product: AddUserProductToCartDTO) => void;
   handleAddLocalProductToCart: (product: LocalCartProductDTO) => void;
   redirectToCheckout: () => void;
@@ -79,7 +78,7 @@ export default function ProductBuyOrAdd({
           </div>
           <button
             className="flex items-center min-h-[35px] px-[10px] bg-transparent border-[2px] cursor-pointer"
-            disabled={isLoading}
+            disabled={isCartLoading}
             onClick={handleAddProduct}
           >
             <FaCartPlus size="20px" color="#ffffff" />

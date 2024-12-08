@@ -47,6 +47,7 @@ export default class ReviewRepository implements IReviewRepository {
                 include: {
                   rating: true,
                   user: true,
+                  reviewLikers: true,
                 },
               },
             },

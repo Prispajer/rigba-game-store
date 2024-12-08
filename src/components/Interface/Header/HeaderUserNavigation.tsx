@@ -20,8 +20,7 @@ export default function HeaderUserNavigation({}) {
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useCurrentUser();
   const { handleAddUserProductToWishList } = useUserWishList();
-  const { userCartState, isLoading, handleAddUserProductToCart } =
-    useUserCart();
+  const { userCartState, handleAddUserProductToCart } = useUserCart();
   const { resolutionState, handleOpen } = useWindowVisibility();
   const { localCartState, handleDeleteLocalProductFromCart } =
     useLocalStorage("localCart");

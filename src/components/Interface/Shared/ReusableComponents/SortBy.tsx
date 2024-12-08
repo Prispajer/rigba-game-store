@@ -41,14 +41,10 @@ export default function SortBy({
   position: string;
   display: string;
 }) {
-  const {
-    sortModalState,
-    resolutionState,
-    sortMenuState,
-    handleToggle,
-    handleClose,
-  } = useWindowVisibility();
   const [currentSort, setCurrentSort] = React.useState(SortByElements[0]);
+
+  const { sortModalState, resolutionState, handleToggle, handleClose } =
+    useWindowVisibility();
 
   const handleSortSelection = (sortOption: {
     title: string;

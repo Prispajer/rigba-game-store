@@ -6,7 +6,7 @@ import {
   goToPreviousPage,
   setCurrentPage,
 } from "@/redux/slices/paginationSlice";
-import { paginatePages } from "@/utils/prices";
+import { paginatePages } from "@/utils/pages";
 import { RootState } from "@/redux/store";
 
 export default function usePagination(data: any[]) {

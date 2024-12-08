@@ -33,11 +33,12 @@ export default function ProductContainer({
   const { handleOpen } = useWindowVisibility();
   const { redirectToReview, redirectToFilters, redirectToCheckout } =
     useCustomRouter();
-  const { handleAddUserProductToCart, isLoading } = useUserCart();
+  const { handleAddUserProductToCart, isCartLoading } = useUserCart();
   const { handleAddLocalProductToCart } = useLocalStorage("localCart");
   const { user } = useCurrentUser();
   const {
     userReviewsState,
+    isReviewLoading,
     handleFetchUserReviews,
     handleFetchLikeUserReview,
     handleFetchUnLikeUserReview,
@@ -55,7 +56,7 @@ export default function ProductContainer({
             <ProductBuyOrAdd
               product={product}
               user={user}
-              isLoading={isLoading}
+              isCartLoading={isCartLoading}
               handleAddUserProductToCart={handleAddUserProductToCart}
               handleAddLocalProductToCart={handleAddLocalProductToCart}
               redirectToCheckout={redirectToCheckout}
@@ -72,11 +73,13 @@ export default function ProductContainer({
           <ProductHeaders headerText="Reviews" />
           <ProductReview
             product={product}
+            isReviewLoading={isReviewLoading}
             redirectToReview={redirectToReview}
             userReviewsState={userReviewsState}
           />
           <ProductUsersReview
             product={product}
+            isReviewLoading={isReviewLoading}
             user={user}
             userReviewsState={userReviewsState}
             handleFetchUserReviews={handleFetchUserReviews}
@@ -105,7 +108,7 @@ export default function ProductContainer({
             <ProductBuyOrAdd
               product={product}
               user={user}
-              isLoading={isLoading}
+              isCartLoading={isCartLoading}
               handleAddUserProductToCart={handleAddUserProductToCart}
               handleAddLocalProductToCart={handleAddLocalProductToCart}
               redirectToCheckout={redirectToCheckout}

@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import LoadingAnimation from "../Shared/Animations/LoadingAnimation";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { generateStars } from "@/utils/ratings";
 import { GameAPIResponse } from "@/utils/helpers/types";
@@ -12,6 +13,7 @@ import { User } from "next-auth";
 
 export default function ProductUsersReview({
   product,
+  isReviewLoading,
   user,
   userReviewsState,
   handleFetchUserReviews,
@@ -19,6 +21,7 @@ export default function ProductUsersReview({
   handleFetchUnLikeUserReview,
 }: {
   product: GameAPIResponse;
+  isReviewLoading: boolean;
   user: User | null;
   userReviewsState: UserReviewsSlice;
   handleFetchUserReviews: (externalProductId: number) => void;
@@ -29,17 +32,18 @@ export default function ProductUsersReview({
 }) {
   React.useEffect(() => {
     handleFetchUserReviews(product.id as number);
-  }, [
-    product,
-    handleFetchUserReviews,
-    handleFetchLikeUserReview,
-    handleFetchUnLikeUserReview,
-  ]);
+  }, [product, handleFetchUserReviews]);
+
+  console.log(userReviewsState);
 
   return (
     <div className="flex flex-col max-w-[1240px] md:mx-auto mx-[-20px] border-t-[2px] border-primaryColor bg-secondaryColor">
-      <div className="flex flex-col justify-center">
-        {userReviewsState.reviews.length > 0 ? (
+      <div className="flex flex-col justify-center ">
+        {isReviewLoading ? (
+          <div className="flex justify-center items-center px-[20px] py-[15px]">
+            <LoadingAnimation />
+          </div>
+        ) : userReviewsState.reviews.length > 0 ? (
           userReviewsState.reviews.map((review) => (
             <div
               key={review.id}
@@ -59,6 +63,7 @@ export default function ProductUsersReview({
                       });
                     }}
                     className="ml-[10px]"
+                    disabled={isReviewLoading}
                   >
                     <AiFillLike size="22px" color="#FFFFFF" />
                   </button>
@@ -71,6 +76,7 @@ export default function ProductUsersReview({
                       });
                     }}
                     className="ml-[10px] mt-[2px]"
+                    disabled={isReviewLoading}
                   >
                     <AiFillDislike size="22px" color="#FFFFFF" />
                   </button>

@@ -47,7 +47,6 @@ export const fetchProductsWithFilters = createAsyncThunk<
       storesIdArray,
       publishersIdArray,
       ordering,
-      error,
     } = (getState() as { productFilter: ProductFilterState }).productFilter;
 
     try {

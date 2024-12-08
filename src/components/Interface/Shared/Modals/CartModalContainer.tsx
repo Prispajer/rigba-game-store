@@ -18,7 +18,7 @@ export default function CartModalContainer() {
   const { cartModalState, handleClose } = useWindowVisibility();
   const {
     userCartState,
-    isLoading,
+    isCartLoading,
     handleDeleteUserProductFromCart,
     handleDecreaseQuantityUserProductFromCart,
     handleIncreaseQuantityUserProductFromCart,
@@ -103,7 +103,7 @@ export default function CartModalContainer() {
                         <div className="flex justify-between items-center w-full text-white">
                           <div>
                             <button
-                              disabled={isLoading}
+                              disabled={isCartLoading}
                               className="mr-2 hover:text-modalHover"
                               onClick={() =>
                                 handleDecreaseQuantityUserProductFromCart({
@@ -118,7 +118,7 @@ export default function CartModalContainer() {
                               {product.quantity || 1}
                             </span>
                             <button
-                              disabled={isLoading}
+                              disabled={isCartLoading}
                               className="ml-2 hover:text-modalHover"
                               onClick={() =>
                                 handleIncreaseQuantityUserProductFromCart({
@@ -131,7 +131,7 @@ export default function CartModalContainer() {
                             </button>
                           </div>
                           <button
-                            disabled={isLoading}
+                            disabled={isCartLoading}
                             onClick={() =>
                               handleDeleteUserProductFromCart({
                                 email: user?.email as string,
@@ -196,7 +196,7 @@ export default function CartModalContainer() {
                         <div className="flex justify-between items-center w-full text-white">
                           <div>
                             <button
-                              disabled={isLoading}
+                              disabled={isCartLoading}
                               className="mr-2 hover:text-modalHover"
                               onClick={() =>
                                 handleDecreaseQuantityLocalProductFromCart(
@@ -210,7 +210,7 @@ export default function CartModalContainer() {
                               {product.quantity || 1}
                             </span>
                             <button
-                              disabled={isLoading}
+                              disabled={isCartLoading}
                               className="ml-2 hover:text-modalHover"
                               onClick={() =>
                                 handleIncreaseQuantityLocalProductFromCart(
@@ -222,7 +222,7 @@ export default function CartModalContainer() {
                             </button>
                           </div>
                           <button
-                            disabled={isLoading}
+                            disabled={isCartLoading}
                             onClick={() =>
                               handleDeleteLocalProductFromCart(
                                 product.externalProductId

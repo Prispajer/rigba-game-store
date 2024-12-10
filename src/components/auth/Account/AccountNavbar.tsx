@@ -38,14 +38,14 @@ export default function AccountNavbar() {
           <span className="hidden md:flex pr-3 text-[#ffffff] font-[600]">
             {user?.email}
           </span>
-          <div className="rounded-full overflow-hidden">
+          <div className="relative min-w-[40px] min-h-[40px] rounded-full overflow-hidden">
             <Image
-              loading="eager"
               src={user?.image || "/icons/logo.png"}
-              width="35"
-              height="35"
-              alt={user?.id as string}
-            ></Image>
+              alt={(user?.image as string) || "image"}
+              loading="eager"
+              layout="fill"
+              className="min-w-[40px] min-h-[40px]"
+            />
           </div>
         </button>
         <ProfileModalContainer />

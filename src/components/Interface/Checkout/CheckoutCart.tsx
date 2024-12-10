@@ -7,10 +7,10 @@ import useLocalStorage from "@/hooks/useLocalStorage";
 import useUserCart from "@/hooks/useUserCart";
 import useCurrentUser from "@/hooks/useCurrentUser";
 
-export default function CheckoutSummary() {
+export default function CheckoutCart() {
   const { resolutionState } = useWindowVisibility();
   const { user } = useCurrentUser();
-  const { userCartState, isLoading } = useUserCart();
+  const { userCartState } = useUserCart();
   const { localCartState } = useLocalStorage("localCart");
 
   const productsByRole = user ? userCartState.products : localCartState;

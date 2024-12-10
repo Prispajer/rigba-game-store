@@ -107,21 +107,22 @@ export default function PaymentContainer({
                 key={product.externalProductId}
                 className="bg-tertiaryColor relative flex p-[20px] mb-[10px] gap-x-[10px] cursor-pointer"
               >
-                <div className="flex-0 h-[70px] w-[50px] md:h-[130px] max-w-[60px] md:w-[90px] md:max-w-[90px]">
+                <div className="flex-0 w-[50px] md:w-[90px] h-[70px] md:h-[130px]">
                   <div className="relative h-full w-full">
                     <Image
-                      loading="lazy"
+                      loading="eager"
                       src={
                         "productsInformations" in product
-                          ? product.productsInformations.background_image
+                          ? product.productsInformations?.background_image
                           : product.background_image
                       }
-                      layout="fill"
                       alt={
                         "productsInformations" in product
-                          ? (product.productsInformations?.name as string)
+                          ? (product.productsInformations.name as string)
                           : product.name
                       }
+                      layout="fill"
+                      sizes="(max-width: 768px) 50px, 90px"
                     />
                   </div>
                 </div>

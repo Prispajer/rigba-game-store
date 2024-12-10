@@ -44,17 +44,16 @@ export default function KeysContainer() {
               key={product.id}
               className="grid grid-cols-[1fr_4fr] lg:grid-cols-account-orders-auto-fit items-center p-[15px] lg:p-[0px] gap-x-[20px] border border-b-[3px] border-[#d3dfe9] bg-[#FFFFFF]"
             >
-              <div>
+              <div className="relative w-full lg:w-[40px] min-h-[100px] lg:min-h-[50px] ">
                 <Image
                   loading="eager"
+                  layout="fill"
                   src={
                     product.productsInformations?.background_image ||
                     "/icons/logo.png"
                   }
-                  width="40"
-                  height="50"
                   alt={product.productsInformations?.name || "Product Image"}
-                  className="min-w-[50px] w-full h-[100px] lg:w-[40px] lg:h-[50px] "
+                  sizes="(max-width: 992px) 100vw, 40px"
                 />
               </div>
               <div className="grid lg:hidden">

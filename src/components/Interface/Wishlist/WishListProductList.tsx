@@ -72,16 +72,16 @@ export default function WishListProductList({
                   onClick={() =>
                     redirectToGame(game.productsInformations.slug as string)
                   }
-                  className={`relative my-[10px] flex sm:flex-col bg-tertiaryColor cursor-pointer`}
+                  className={`relative flex sm:flex-col my-[10px] bg-tertiaryColor cursor-pointer`}
                 >
                   <div className="relative min-w-[95px] sm:h-[250px]">
                     <Image
-                      loading="lazy"
+                      loading="eager"
+                      layout="fill"
                       src={
                         game.productsInformations.background_image ??
                         "/icons/logo.png"
                       }
-                      layout="fill"
                       alt={
                         game.productsInformations.background_image ??
                         "/icons/logo.png"
@@ -129,13 +129,14 @@ export default function WishListProductList({
                 <div
                   key={game.slug}
                   onClick={() => redirectToGame(game.slug as string)}
-                  className={`relative my-[10px] flex sm:flex-col bg-tertiaryColor cursor-pointer`}
+                  className={`relative flex sm:flex-col my-[10px] bg-tertiaryColor cursor-pointer`}
                 >
                   <div className="relative min-w-[95px] sm:h-[250px]">
                     <Image
-                      src={game.background_image ?? "/icons/logo.png"}
+                      loading="eager"
                       layout="fill"
-                      alt="game"
+                      src={game.background_image ?? "/icons/logo.png"}
+                      alt={game.background_image ?? "/icons/logo.png"}
                     />
                   </div>
                   <div className="max-w-[50%] sm:max-w-[100%] my-[10px] px-[15px]">

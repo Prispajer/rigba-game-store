@@ -133,6 +133,11 @@ export interface UserReviews {
     image: string;
     name: string;
   };
+  reviewLikers: {
+    reviewId: string;
+    userId: string;
+    isLiked: boolean;
+  }[];
 }
 export interface RequestResponse<T> {
   data: T | null;

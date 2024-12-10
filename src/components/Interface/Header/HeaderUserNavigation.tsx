@@ -118,13 +118,14 @@ export default function HeaderUserNavigation({}) {
               </div>
             </>
           ) : (
-            <div className="relative w-[35px] h-[35px] py-[4px] ml-[10px] m-[6px] rounded-full overflow-hidden cursor-pointer">
+            <div className="relative min-w-[40px] min-h-[40px] ml-[10px] m-[6px] rounded-full overflow-hidden cursor-pointer">
               <Image
-                loading="lazy"
+                loading="eager"
                 onClick={() => handleOpen("profileModal")}
+                layout="fill"
                 src={user?.image ?? "/icons/logo.png"}
                 alt={user?.image ?? "/icons/logo.png"}
-                layout="fill"
+                className="min-w-[40px] min-h-[40px]"
               />
             </div>
           )}
@@ -137,13 +138,14 @@ export default function HeaderUserNavigation({}) {
               className="nav-icon"
             />
           ) : (
-            <div className="relative w-[35px] h-[35px] py-[4px] ml-[10px] m-[6px] rounded-full overflow-hidden cursor-pointer">
+            <div className="relative min-w-[40px] min-h-[40px] ml-[10px] m-[6px] rounded-full overflow-hidden cursor-pointer">
               <Image
-                loading="lazy"
+                loading="eager"
                 onClick={() => handleOpen("profileModal")}
+                layout="fill"
                 src={user?.image ?? "/icons/logo.png"}
                 alt={user?.image ?? "/icons/logo.png"}
-                layout="fill"
+                className="min-w-[40px] min-h-[40px]"
               />
             </div>
           )}

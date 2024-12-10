@@ -46,15 +46,16 @@ export default function RedeemContainer({
             <React.Fragment key={product.id}>
               <ul className="flex flex-col">
                 <li className="flex flex-col items-center jusftify-center  md:mb-[10px] gap-x-[10px] bg-secondaryColor">
-                  <div className="h-[100px] w-[200px] sm:w-[100px] py-[10px] sm:p-[0px]">
+                  <div className="w-[200px] sm:w-[100px] h-[100px] py-[10px] sm:p-[0px]">
                     <div className="relative h-full w-full">
                       <Image
-                        loading="lazy"
+                        loading="eager"
+                        layout="fill"
                         src={
                           product.productsInformations?.background_image || ""
                         }
                         alt={product.productsInformations?.name || ""}
-                        layout="fill"
+                        sizes="(max-width: 576px) 200px, 100px"
                       />
                     </div>
                   </div>

@@ -69,9 +69,9 @@ export default function SearchResultsModalContainer({
                 <div className="flex">
                   <div className="relative min-w-[72px] min-h-[100px]">
                     <Image
-                      loading="lazy"
-                      src={game?.background_image ?? "/placeholder.jpg"}
+                      loading="eager"
                       layout="fill"
+                      src={game?.background_image ?? "/placeholder.jpg"}
                       alt={game?.name}
                     />
                   </div>

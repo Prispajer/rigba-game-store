@@ -44,10 +44,10 @@ export default function HomeProductList({ ordering }: { ordering: string }) {
                 <Image
                   fetchPriority="high"
                   loading="eager"
-                  src={game.background_image}
-                  sizes="100vw"
                   layout="fill"
+                  src={game.background_image}
                   alt={game.background_image}
+                  sizes="(max-width: 576px) 95px, 200px"
                 />
               ) : (
                 <div className="relative flex flex-col items-center justify-center max-w-[95px] h-full sm:h-[250px] sm:min-w-full">

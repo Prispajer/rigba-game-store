@@ -83,9 +83,9 @@ export default function ProductScreenshotModalContainer({
                 </button>
                 <Image
                   loading="eager"
+                  layout="fill"
                   src={screenshots[currentImageIndex]?.image}
                   alt={screenshots[currentImageIndex]?.image}
-                  layout="fill"
                 />
                 <button
                   className={`absolute right-0 h-[45px] sm:h-[60px] md:h-[80px] transition duration-300 ease-in-out z-[20] text-[#FFFFFF] hover:bg-[#FFFFFF20]  ${

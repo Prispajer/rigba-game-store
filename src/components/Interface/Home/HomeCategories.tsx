@@ -32,11 +32,12 @@ export default function HomeCategories() {
                   </div>
                   <div className="relative min-w-[80px] min-h-[80px] flex flex-1 items-center">
                     <Image
-                      loading="lazy"
+                      loading="eager"
                       alt={genre.slug as string}
                       src={genre.image_background as string}
                       layout="fill"
                       objectFit="cover"
+                      priority={true}
                     />
                   </div>
                   <div className="flex flex-1 items-center px-[4px] font-medium text-[14px] text-center leading-3">

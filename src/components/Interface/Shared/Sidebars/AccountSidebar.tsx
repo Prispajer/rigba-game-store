@@ -23,10 +23,17 @@ export default function AccountSidebar() {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    const windowScreen = window.innerWidth >= 768;
-    dispatch(toggleScreen(windowScreen));
+    const handleResize = () => {
+      const windowScreen = window.innerWidth >= 768;
+      dispatch(toggleScreen(windowScreen));
 
-    const handleResize = () => handleToggleScreen(768);
+      if (windowScreen) {
+        handleClose("accountSidebar");
+      }
+    };
+
+    handleResize();
+
     window.addEventListener("resize", handleResize);
 
     return () => {
@@ -50,9 +57,10 @@ export default function AccountSidebar() {
                     className="flex items-center"
                   >
                     <Image
+                      loading="eager"
                       src="/icons/logo.png"
                       width="60"
-                      height="90"
+                      height="60"
                       alt="logo"
                       priority
                     />

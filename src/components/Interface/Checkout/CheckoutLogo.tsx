@@ -16,8 +16,10 @@ export default function CheckoutLogo({
         <div className="relative w-[60px] h-[55px] md:w-[80px] md:h-[80px]">
           <Image
             src="/icons/logo.png"
+            loading="eager"
             layout="fill"
             alt="logo"
+            sizes="(max-width: 768px) 60px, 80px"
             priority={true}
           />
         </div>

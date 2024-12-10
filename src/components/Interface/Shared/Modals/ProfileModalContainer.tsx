@@ -8,6 +8,7 @@ import { LuGamepad2 } from "react-icons/lu";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import { generateRandomName } from "@/utils/names";
 import { signOut } from "next-auth/react";
 import { ProfileModalContainerProps } from "@/utils/helpers/types";
 
@@ -50,16 +51,16 @@ export default function ProfileModalContainer({
               profileModalState && `${translateX} ${translateY}`
             }`}
           >
-            <div className="flex md:hidden items-center py-[10px] relative  px-[20px]">
-              <div className="flex items-center flex-0 ">
-                <Link className="flex items-center max-w-[200px] " href="/">
-                  <div className="rounded-full overflow-hidden">
+            <div className="relative flex items-center py-[10px] px-[20px] md:hidden">
+              <div className="flex-0 flex items-center">
+                <Link className="flex items-center max-w-[200px]" href="/">
+                  <div className="relative min-w-[40px] min-h-[40px] mr-[5px] rounded-full overflow-hidden cursor-pointer">
                     <Image
-                      loading="lazy"
+                      loading="eager"
+                      layout="fill"
                       src={user?.image ?? "/icons/logo.png"}
-                      width="40"
-                      height="40"
                       alt={user?.image ?? "/icons/logo.png"}
+                      className="min-w-[40px] min-h-[40px]"
                     />
                   </div>
                   <span className="text-[20px] text-black">RIGBA</span>
@@ -75,18 +76,22 @@ export default function ProfileModalContainer({
               </div>
             </div>
             <div className="flex items-center justify-between py-[15px] px-[20px] border-b-[1px]">
-              <div className="rounded-full overflow-hidden">
+              <div className="relative min-w-[32px] min-h-[32px] rounded-full overflow-hidden cursor-pointer">
                 <Image
-                  loading="lazy"
+                  loading="eager"
+                  layout="fill"
                   src={user?.image ?? "/icons/logo.png"}
-                  width="32"
-                  height="32"
                   alt={user?.image ?? "/icons/logo.png"}
+                  className="min-w-[32px] min-h-[32px]"
                 />
               </div>
               <div className="flex flex-col text-left flex-1 ml-2 leading-[18px] cursor-default">
                 <span className="text-[#544d60] text-[14px] font-[650]">
-                  {user?.name}
+                  {user?.name ?? (
+                    <span className="text-[#544d60] font-[650]">
+                      {`rigban_${generateRandomName()}`}
+                    </span>
+                  )}
                 </span>
                 <span className="text-[#544d60] text-[14px]">
                   {user?.email}

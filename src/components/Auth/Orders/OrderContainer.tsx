@@ -43,8 +43,8 @@ export default function OrderContainer({
             <div className="flex items-center lg:hidden text-[#a09aac] font-[600]">
               ORDERED PRODUCTS
             </div>
-            <div className="grid grid-cols-[1fr_4fr] font-bold ">
-              <div className="relative w-[64px] h-[90px] mr-[20px]">
+            <div className="grid grid-cols-[1fr_4fr] font-bold">
+              <div className="mr-[20px]">
                 <Image
                   loading="eager"
                   src={
@@ -52,7 +52,9 @@ export default function OrderContainer({
                       ? productImage?.productsInformations.background_image
                       : "/icons/logo.png"
                   }
-                  layout="fill"
+                  height="90"
+                  width="64"
+                  className="min-w-[64px] min-h-[90px] "
                   alt={productImage?.productsInformations.name as string}
                 ></Image>
               </div>

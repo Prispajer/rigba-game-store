@@ -33,13 +33,14 @@ export default function ProductInformations({
   return (
     <>
       {product && (
-        <div className="flex flex-0 py-[20px] ">
-          <div className="relative min-w-[72px] lg:min-w-[150px] lg:h-[225px] xl:min-w-[200px] xl:h-[300px] xxl:min-w-[225px] xxl:min-h-[315px] ">
+        <div className="flex flex-0 py-[20px]">
+          <div className="relative min-w-[72px] lg:min-w-[150px] xl:min-w-[200px] xxl:min-w-[225px] lg:h-[225px] xl:h-[300px] xxl:min-h-[315px]">
             <Image
-              loading="lazy"
-              src={product.background_image ?? "/icons/logo.png"}
+              loading="eager"
               layout="fill"
-              alt={product.background_image}
+              src={product.background_image ?? "/icons/logo.png"}
+              alt={product.background_image ?? ""}
+              sizes="(max-width: 992px) 72px, (max-width: 1100px) 150px, (max-width: 1400px) 200px, 225px"
             />
           </div>
           <div className="flex flex-1 flex-col pl-[15px] lg:pl-[30px] leading-[28px]">

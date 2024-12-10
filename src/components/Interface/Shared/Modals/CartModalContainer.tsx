@@ -62,9 +62,9 @@ export default function CartModalContainer() {
                       key={product.externalProductId}
                       className="flex w-full p-[20px] gap-2 border-b-[1px] border-[#ffffff1a]"
                     >
-                      <div className="relative flex flex-0 min-w-[50px] items-center h-[100px] cursor-pointer">
+                      <div className="relative flex flex-0 items-center min-w-[50px] min-h-[100px] cursor-pointer">
                         <Image
-                          loading="lazy"
+                          loading="eager"
                           onClick={() =>
                             redirectToGame(
                               product.productsInformations?.slug as string,
@@ -72,11 +72,13 @@ export default function CartModalContainer() {
                               "cartModal"
                             )
                           }
+                          layout="fill"
                           src={
                             product.productsInformations.background_image ?? ""
                           }
-                          layout="fill"
-                          alt={product.productsInformations.name as string}
+                          alt={
+                            (product.productsInformations.name as string) ?? ""
+                          }
                         />
                       </div>
                       <div className="flex flex-1 flex-col px-2 gap-y-[10px] text-white">
@@ -157,9 +159,9 @@ export default function CartModalContainer() {
                       key={product.externalProductId}
                       className="flex w-full p-[20px] gap-2 border-b-[1px] border-[#ffffff1a]"
                     >
-                      <div className="relative flex flex-0 min-w-[50px] items-center h-[100px] cursor-pointer">
+                      <div className="relative flex flex-0 items-center min-w-[50px] min-h-[100px] cursor-pointer">
                         <Image
-                          loading="lazy"
+                          loading="eager"
                           onClick={() =>
                             redirectToGame(
                               product.slug,
@@ -167,8 +169,8 @@ export default function CartModalContainer() {
                               "cartModal"
                             )
                           }
-                          src={product.background_image ?? ""}
                           layout="fill"
+                          src={product.background_image ?? ""}
                           alt={product.name}
                         />
                       </div>

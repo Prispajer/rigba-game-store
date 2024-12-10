@@ -57,12 +57,14 @@ export default function ProductList() {
               <LoadingAnimation />
             ) : (
               <>
-                <div className="relative m-[5px] sm:m-[0px] min-w-[95px] sm:min-h-[250px]">
+                <div className="relative min-w-[95px] sm:min-h-[250px] m-[5px] sm:m-[0px]">
                   <Image
+                    fetchPriority="high"
                     loading="eager"
-                    src={productsByOrdering[index].background_image || ""}
                     layout="fill"
+                    src={productsByOrdering[index].background_image || ""}
                     alt={productsByOrdering[index].background_image || ""}
+                    sizes="(max-width: 576px) 95px, 200px"
                   />
                 </div>
                 <div className="max-w-[50%] sm:max-w-[100%] my-[10px] px-[15px]">

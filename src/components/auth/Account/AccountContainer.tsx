@@ -5,14 +5,11 @@ import Image from "next/image";
 import { LuPencil } from "react-icons/lu";
 import useUserProductHistory from "@/hooks/useUserProductHistory";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import { generateRandomName } from "@/utils/names";
 
 export default function AccountContainer() {
   const { userProductHistoryState } = useUserProductHistory();
   const { user } = useCurrentUser();
-
-  const generateRandomNumbers = (): string => {
-    return Math.random().toString(36).substring(2);
-  };
 
   return (
     <div className="flex-col justify-center items-center w-full min-h-[100vh] pt-[40px] px-[40px] pb-[80px] bg-[#e9eff4]">
@@ -26,19 +23,21 @@ export default function AccountContainer() {
               <h2>PROFILE</h2>
             </div>
             <div className="flex items-center justify-between py-[15px] px-[20px] gap-[5px]">
-              <Link href="/upload-image">
-                <div className="min-w-[40px] rounded-full overflow-hidden">
-                  <Image
-                    src={user?.image || "/icons/logo.png"}
-                    width="35"
-                    height="35"
-                    alt={user?.id as string}
-                  />
-                </div>
+              <Link
+                className="relative min-w-[40px] min-h-[40px] rounded-full overflow-hidden"
+                href="/upload-image"
+              >
+                <Image
+                  src={user?.image || "/icons/logo.png"}
+                  alt={(user?.image as string) || "image"}
+                  loading="eager"
+                  layout="fill"
+                  className="min-w-[40px] min-h-[40px]"
+                />
               </Link>
               <div className="flex flex-col flex-1 ml-2 leading-[19px] text-ellipsis line-clamp-1 ">
                 <span className="text-[#544d60] font-[650]">
-                  {user?.name || `rigban_${generateRandomNumbers()}`}
+                  {user?.name || `rigban_${generateRandomName()}`}
                 </span>
                 <span className="text-[#544d60] text-sm">{user?.email}</span>
               </div>

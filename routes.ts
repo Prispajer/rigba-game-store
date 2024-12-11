@@ -25,6 +25,7 @@ export const endpointsRoutes: string[] = [
   "/api/users/endpoints/userAuthentication/toggleTwoFactor",
   "/api/users/endpoints/userAuthentication/updateData",
   "/api/users/endpoints/userAuthentication/updateImage",
+  "/api/users/endpoints/userAuthentication/updateName",
   "/api/users/endpoints/tokenManagement/changePasswordToken",
   "/api/users/endpoints/tokenManagement/resetPasswordToken",
   "/api/users/endpoints/tokenManagement/toggleTwoFactorToken",
@@ -46,8 +47,7 @@ export const endpointsRoutes: string[] = [
   "/api/stripe/config",
   "/api/stripe/create-payment-intent",
   "/api/stripe/webhook",
-  "/api/uploadthing/core",
-  "/api/uploadthing/route",
+  "/api/uploadthing",
 ];
 
 export function handleDynamicId(route: string): boolean {

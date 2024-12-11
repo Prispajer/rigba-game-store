@@ -3,12 +3,12 @@
 import { z } from "zod";
 import React from "react";
 import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { FaGoogle } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
 import { FaDiscord } from "react-icons/fa";
 import { RegisterSchema } from "@/utils/schemas/user";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import { signInAccount } from "@/hooks/useCurrentUser";
@@ -67,7 +67,11 @@ export default function RegisterContainer() {
               placeholder="E-mail"
               autoComplete="off"
             />
-            {errors.email && <p>{errors.email.message as React.ReactNode}</p>}
+            {errors.email && (
+              <p className="text-red-500">
+                {errors.email.message as React.ReactNode}
+              </p>
+            )}
           </div>
           <div className="pt-4 text-white">
             <input
@@ -79,7 +83,9 @@ export default function RegisterContainer() {
               autoComplete="off"
             />
             {errors.password && (
-              <p>{errors.password.message as React.ReactNode}</p>
+              <p className="text-red-500">
+                {errors.password.message as React.ReactNode}
+              </p>
             )}
           </div>
           <div className="py-4 text-white">
@@ -92,7 +98,9 @@ export default function RegisterContainer() {
               autoComplete="off"
             />
             {errors.confirmPassword && (
-              <p>{errors.confirmPassword.message as React.ReactNode}</p>
+              <p className="text-red-500">
+                {errors.confirmPassword.message as React.ReactNode}
+              </p>
             )}
           </div>
           <FormSuccess message={success as string} />

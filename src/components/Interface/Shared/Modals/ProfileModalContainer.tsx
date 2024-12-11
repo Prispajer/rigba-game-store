@@ -8,7 +8,6 @@ import { LuGamepad2 } from "react-icons/lu";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import { generateRandomName } from "@/utils/names";
 import { signOut } from "next-auth/react";
 import { ProfileModalContainerProps } from "@/utils/helpers/types";
 
@@ -87,11 +86,7 @@ export default function ProfileModalContainer({
               </div>
               <div className="flex flex-col text-left flex-1 ml-2 leading-[18px] cursor-default">
                 <span className="text-[#544d60] text-[14px] font-[650]">
-                  {user?.name ?? (
-                    <span className="text-[#544d60] font-[650]">
-                      {`rigban_${generateRandomName()}`}
-                    </span>
-                  )}
+                  {user?.name}
                 </span>
                 <span className="text-[#544d60] text-[14px]">
                   {user?.email}

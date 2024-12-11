@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { LuPencil } from "react-icons/lu";
-import { generateRandomName } from "@/utils/names";
 import { ExtendedUser } from "@/auth";
 
 export default function WishListProfile({
@@ -22,7 +21,7 @@ export default function WishListProfile({
       </div>
       <div className="flex flex-1 items-center h-[64px] ml-[10px] text-white">
         <span className="font-medium text-[28px] cursor-default">
-          {user?.name || `rigban_${generateRandomName()}`}
+          {user?.name}
         </span>
         <Link href="/login">
           <button className="mt-3 ml-[10px]">

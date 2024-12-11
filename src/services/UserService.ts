@@ -29,6 +29,7 @@ import {
   ToggleTwoFactorDTO,
   UpdatePasswordDTO,
   ConfirmTwoFactorAuthenticationDTO,
+  UpdateUserNameDTO,
   UpdateUserDataDTO,
   UpdateUserImageDTO,
 } from "@/utils/helpers/backendDTO";
@@ -407,6 +408,37 @@ export default class UserService implements IUserService {
     } catch (error) {
       return this._checkerService.handleError(
         "There was an error while toggling two factor"
+      );
+    }
+  }
+
+  async updateUserName(
+    updateUserNameDTO: UpdateUserNameDTO
+  ): Promise<RequestResponse<User | null>> {
+    try {
+      const getUserByEmailResponse =
+        await this._checkerService.checkDataExistsAndReturnUser(
+          updateUserNameDTO
+        );
+
+      if (
+        (getUserByEmailResponse && !getUserByEmailResponse.success) ||
+        !getUserByEmailResponse.data
+      )
+        return getUserByEmailResponse;
+
+      const updatedName = await this._userRepository.updateUserName({
+        email: getUserByEmailResponse.data.email,
+        name: updateUserNameDTO.name,
+      });
+
+      return this._checkerService.handleSuccess(
+        "User name was updated successfully!",
+        updatedName
+      );
+    } catch (error) {
+      return this._checkerService.handleError(
+        "An error occurred while updating user name!"
       );
     }
   }

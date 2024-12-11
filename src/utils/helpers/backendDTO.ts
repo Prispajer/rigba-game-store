@@ -140,6 +140,11 @@ export type PersonalDataToUpdateDTO = {
   phoneNumber?: string;
 };
 
+export type UpdateUserNameDTO = {
+  email: string;
+  name: string;
+};
+
 export type UpdatePersonalDataDTO = {
   id: string;
 };

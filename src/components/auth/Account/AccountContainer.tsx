@@ -5,11 +5,20 @@ import Image from "next/image";
 import { LuPencil } from "react-icons/lu";
 import useUserProductHistory from "@/hooks/useUserProductHistory";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import useUserServices from "@/hooks/useUserServices";
 import { generateRandomName } from "@/utils/names";
 
 export default function AccountContainer() {
   const { userProductHistoryState } = useUserProductHistory();
+  const { useUserActions } = useUserServices();
+  const { submitUpdateName } = useUserActions();
   const { user } = useCurrentUser();
+
+  React.useEffect(() => {
+    if (user && !user.name) {
+      submitUpdateName({ name: `rigban_${generateRandomName()}` });
+    }
+  }, []);
 
   return (
     <div className="flex-col justify-center items-center w-full min-h-[100vh] pt-[40px] px-[40px] pb-[80px] bg-[#e9eff4]">
@@ -36,9 +45,7 @@ export default function AccountContainer() {
                 />
               </Link>
               <div className="flex flex-col flex-1 ml-2 leading-[19px] text-ellipsis line-clamp-1 ">
-                <span className="text-[#544d60] font-[650]">
-                  {user?.name || `rigban_${generateRandomName()}`}
-                </span>
+                <span className="text-[#544d60] font-[650]">{user?.name}</span>
                 <span className="text-[#544d60] text-sm">{user?.email}</span>
               </div>
               <div className="flex items-center justify-center">
@@ -156,7 +163,7 @@ export default function AccountContainer() {
             <div className="flex justify-end py-[15px] px-[20px] pt-[10px]">
               <div className="flex items-center">
                 <Link href="/orders">
-                  <button className="py-[5px] px-[10px] border-[1px] text-[14px] border-[#1871ac] transition duration-300">
+                  <button className="py-[5px] px-[10px] border-[1px] text-[14px] border-[#1871ac] hover:border-[#a5b0b6] transition duration-300">
                     <span className="font-[500]">Show keys library</span>
                   </button>
                 </Link>

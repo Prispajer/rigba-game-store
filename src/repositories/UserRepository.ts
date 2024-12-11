@@ -21,6 +21,7 @@ import {
   UpdatePersonalDataDTO,
   UpdatePersonalImageDTO,
   UpdateUserImageDTO,
+  UpdateUserNameDTO,
 } from "@/utils/helpers/backendDTO";
 
 @injectable()
@@ -148,6 +149,13 @@ export default class UserRepository implements IUserRepository {
     return {
       password: updatedPassword.password as string,
     };
+  }
+
+  async updateUserName(updateUserNameDTO: UpdateUserNameDTO): Promise<User> {
+    return await postgres.user.update({
+      where: { email: updateUserNameDTO.email },
+      data: { name: updateUserNameDTO.name },
+    });
   }
 
   async updatePersonalData(

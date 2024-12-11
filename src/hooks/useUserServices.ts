@@ -1,5 +1,5 @@
 import React from "react";
-import { z } from "zod";
+import { set, z } from "zod";
 import { useSearchParams } from "next/navigation";
 import useCurrentUser from "./useCurrentUser";
 import useWindowVisibility from "./useWindowVisibility";
@@ -10,6 +10,7 @@ import {
   NewPasswordSchema,
   ResetPasswordSchema,
   PersonalDataSchema,
+  UpdateNameSchema,
 } from "@/utils/schemas/user";
 import { RequestResponse } from "@/utils/helpers/types";
 
@@ -17,6 +18,7 @@ export default function useUserServices() {
   const [error, setError] = React.useState<string | undefined>();
   const [success, setSuccess] = React.useState<string | undefined>();
   const [showTwoFactor, setShowTwoFactor] = React.useState(false);
+  const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const [isPending, startTransition] = React.useTransition();
   const searchParams = useSearchParams();
   const { handleClose } = useWindowVisibility();
@@ -44,6 +46,9 @@ export default function useUserServices() {
           setSuccess(response.message);
           update(response.data);
           handleClose("twoFactorModal");
+          setTimeout(() => {
+            clearMessages();
+          }, 3000);
         } else {
           setError(response.message);
         }
@@ -218,6 +223,29 @@ export default function useUserServices() {
       }
     };
 
+    const submitUpdateName = async (data: z.infer<typeof UpdateNameSchema>) => {
+      clearMessages();
+      const { name } = data;
+      try {
+        const response = await requestService.postMethod(
+          "users/endpoints/userAuthentication/updateName",
+          {
+            email: user?.email,
+            name,
+          }
+        );
+        if (response.success) {
+          setSuccess(response.message);
+          update(response.data);
+          setIsEditing(false);
+        } else {
+          setError(response.message);
+        }
+      } catch (error) {
+        setError("Something went wrong!");
+      }
+    };
+
     const submitUpdateData = async (
       data: z.infer<typeof PersonalDataSchema>
     ) => {
@@ -264,6 +292,7 @@ export default function useUserServices() {
       submitNewPasswordForm,
       submitResetPasswordForm,
       submitChangePasswordForm,
+      submitUpdateName,
       submitUpdateData,
     };
   }
@@ -326,6 +355,8 @@ export default function useUserServices() {
     showTwoFactor,
     setShowTwoFactor,
     isPending,
+    setIsEditing,
+    isEditing,
     providerError,
     useUserSecurity,
     useUserActions,

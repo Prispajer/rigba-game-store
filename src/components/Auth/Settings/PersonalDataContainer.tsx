@@ -1,15 +1,14 @@
 "use client";
+import "react-calendar/dist/Calendar.css";
 import React from "react";
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { FormSuccess } from "@/components/Interface/Shared/FormsNotifications/FormSuccess";
 import { FormError } from "@/components/Interface/Shared/FormsNotifications/FormError";
 import useUserServices from "@/hooks/useUserServices";
-import useCurrentUser from "@/hooks/useCurrentUser";
-import { PersonalDataSchema } from "@/utils/schemas/user";
+import { PersonalDataSchema, UpdateNameSchema } from "@/utils/schemas/user";
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -34,6 +33,13 @@ export default function PersonalDataContainer() {
       city: "",
       country: "",
       phoneNumber: "",
+    },
+  });
+
+  const updateNameForm = useForm<z.infer<typeof UpdateNameSchema>>({
+    resolver: zodResolver(UpdateNameSchema),
+    defaultValues: {
+      name: "",
     },
   });
 

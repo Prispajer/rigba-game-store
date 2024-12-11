@@ -83,3 +83,10 @@ export const PersonalDataSchema = z.object({
     .min(8, { message: "Phone number must be at least 8 characters long!" })
     .max(20, { message: "Phone number must be at most 20 characters long!" }),
 });
+
+export const UpdateNameSchema = z.object({
+  name: z
+    .string()
+    .min(8, { message: "Name must be at least 8 characters long!" })
+    .max(20, { message: "Name must be at most 20 characters long!" }),
+});

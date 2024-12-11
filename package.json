@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.4.2",
+    "@codemod/cli": "^3.3.0",
     "@hookform/resolvers": "^3.9.0",
     "@prisma/client": "^5.22.0",
     "@reduxjs/toolkit": "^2.2.7",
@@ -19,6 +20,7 @@
     "autoprefixer": "^10.4.20",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
+    "effect": "^3.10.3",
     "inversify": "^6.0.2",
     "mysql2": "^3.11.0",
     "next": "^14.2.16",
@@ -35,7 +37,7 @@
     "resend": "^4.0.0",
     "sharp": "^0.33.5",
     "stripe": "^17.2.1",
-    "uploadthing": "^7.4.0",
+    "uploadthing": "7.2",
     "uuid": "^11.0.3",
     "zod": "^3.23.8"
   },

@@ -52,7 +52,11 @@ export default function ResetPasswordContainer() {
                 placeholder="E-mail"
                 autoCorrect="off"
               />
-              {errors.email && <p>{errors.email.message as React.ReactNode}</p>}
+              {errors.email && (
+                <p className="text-red-500">
+                  {errors.email.message as React.ReactNode}
+                </p>
+              )}
             </div>
             <FormSuccess message={success as string} />
             <FormError message={error as string} />

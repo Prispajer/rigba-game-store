@@ -15,6 +15,7 @@ import {
   ChangePasswordDTO,
   UpdatePasswordDTO,
   ToggleTwoFactorDTO,
+  UpdateUserNameDTO,
   UpdateUserDataDTO,
   UpdateUserImageDTO,
 } from "@/utils/helpers/backendDTO";
@@ -45,6 +46,9 @@ export default interface IUserService {
   toggleTwoFactor(
     toggleTwoFactorDTO: ToggleTwoFactorDTO
   ): Promise<RequestResponse<User | TwoFactorToken | null>>;
+  updateUserName(
+    updateUserNameDTO: UpdateUserNameDTO
+  ): Promise<RequestResponse<User | null>>;
   updateUserData(
     updateUserDataDTO: UpdateUserDataDTO
   ): Promise<RequestResponse<User | PersonalData | null>>;

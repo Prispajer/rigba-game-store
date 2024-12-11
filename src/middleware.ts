@@ -18,7 +18,7 @@ export default auth((req) => {
   const isApiRoute = req.nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = handleDynamicId(req.nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(req.nextUrl.pathname);
-  const isBreakpointRoute = endpointsRoutes.includes(req.nextUrl.pathname);
+  const isEndpointRoute = endpointsRoutes.includes(req.nextUrl.pathname);
 
   if (isApiRoute) {
     return;
@@ -33,7 +33,7 @@ export default auth((req) => {
     return;
   }
 
-  if (!isLoggedIn && !isPublicRoute && !isBreakpointRoute) {
+  if (!isLoggedIn && !isPublicRoute && !isEndpointRoute) {
     return NextResponse.redirect(new URL("/login", req.nextUrl));
   }
 
@@ -41,5 +41,10 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+  matcher: [
+    "/((?!.+\\.[\\w]+$|_next).*)",
+    "/",
+    "/(api|trpc)(.*)",
+    "/api/uploadthing",
+  ],
 };

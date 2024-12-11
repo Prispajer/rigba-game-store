@@ -57,7 +57,9 @@ export default function ResetPasswordContainer() {
                 autoCorrect="off"
               />
               {errors.password && (
-                <p>{errors.password.message as React.ReactNode}</p>
+                <p className="text-red-500">
+                  {errors.password.message as React.ReactNode}
+                </p>
               )}
             </div>
             <div className="pt-4 text-white">
@@ -70,7 +72,9 @@ export default function ResetPasswordContainer() {
                 autoCorrect="off"
               />
               {errors.confirmPassword && (
-                <p>{errors.confirmPassword.message as React.ReactNode}</p>
+                <p className="text-red-500">
+                  {errors.confirmPassword.message as React.ReactNode}
+                </p>
               )}
             </div>
             <div className="flex flex-col py-4 leading-[16px] cursor-default">

@@ -13,6 +13,7 @@ import {
   UpdatePersonalImageDTO,
   CreatePersonalDataDTO,
   UpdatePersonalDataDTO,
+  UpdateUserNameDTO,
   PersonalDataToUpdateDTO,
   UpdatePasswordDTO,
 } from "@/utils/helpers/backendDTO";
@@ -39,6 +40,7 @@ export default interface IUserRepository {
     user: User,
     updatePasswordDTO: UpdatePasswordDTO
   ): Promise<UpdatePasswordDTO>;
+  updateUserName(updateUserNameDTO: UpdateUserNameDTO): Promise<User>;
   updatePersonalData(
     updatePersonalDataDTO: UpdatePersonalDataDTO,
     personalDataToUpdate: PersonalDataToUpdateDTO

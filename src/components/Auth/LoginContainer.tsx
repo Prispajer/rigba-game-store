@@ -131,7 +131,9 @@ export default function LoginContainer() {
                   autoCorrect="off"
                 />
                 {errors.email && (
-                  <p>{errors.email.message as React.ReactNode}</p>
+                  <p className="text-red-500">
+                    {errors.email.message as React.ReactNode}
+                  </p>
                 )}
               </div>
               <div className="py-4 text-white">
@@ -144,7 +146,9 @@ export default function LoginContainer() {
                   autoCorrect="off"
                 />
                 {errors.password && (
-                  <p>{errors.password.message as React.ReactNode}</p>
+                  <p className="text-red-500">
+                    {errors.password.message as React.ReactNode}
+                  </p>
                 )}
               </div>
               <FormSuccess message={success as string} />
@@ -180,7 +184,11 @@ export default function LoginContainer() {
                   placeholder="Two Factor Code"
                   autoCorrect="off"
                 />
-                {errors.code && <p>{errors.code.message as React.ReactNode}</p>}
+                {errors.code && (
+                  <p className="text-red-500">
+                    {errors.code.message as React.ReactNode}
+                  </p>
+                )}
               </div>
               <FormSuccess message={success as string} />
               <FormError message={error || providerError} />
@@ -217,7 +225,11 @@ export default function LoginContainer() {
                   placeholder="Two Factor Code"
                   autoCorrect="off"
                 />
-                {errors.code && <p>{errors.code.message as React.ReactNode}</p>}
+                {errors.code && (
+                  <p className="text-red-500">
+                    {errors.code.message as React.ReactNode}
+                  </p>
+                )}
               </div>
               <FormSuccess message={success as string} />
               <FormError message={error || providerError} />

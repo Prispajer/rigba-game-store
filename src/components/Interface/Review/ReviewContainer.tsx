@@ -55,7 +55,10 @@ export default function ReviewContainer({
           <form
             onSubmit={handleSubmit(async (data) => {
               if (!user) {
-                setError("User must be logged in to submit a review!");
+                setError({
+                  message: "User must be logged in to submit a review!",
+                  origin: "Review",
+                });
                 return;
               }
               await submitReviewForm(data, ratingKeys, user, product);
@@ -89,22 +92,6 @@ export default function ReviewContainer({
                     : ""}
                 </p>
               )}
-              <div className="flex flex-col mt-[10px] mb-[20px]">
-                <div>
-                  <span className="pb-[5x] text-[14px] text-[#FFFFFF]">
-                    Nickname
-                  </span>
-                </div>
-                <div>
-                  <input
-                    className="min-h-[40px] px-[10px] text-[16px] text-[white] border-none outline-none bg-tertiaryColor w-[100%]"
-                    type="text"
-                    id="nickname"
-                    placeholder="Optional"
-                    autoComplete="off"
-                  />
-                </div>
-              </div>
             </div>
             <div className="grid row-start-2 col-start-1 col-end-3 md:row-start-auto md:col-start-auto md:col-end-auto">
               <h2 className="mb-[20px] text-[26px] text-[#FFFFFF] font-bold leading-[30px]">
@@ -132,8 +119,18 @@ export default function ReviewContainer({
                 </p>
               )}
               <div className="mb-[10px] flex justify-end">
-                <FormSuccess message={success as string} />
-                <FormError message={error as string} />
+                <FormSuccess
+                  message={
+                    success?.origin === "Review"
+                      ? (success.message as string)
+                      : ""
+                  }
+                />
+                <FormError
+                  message={
+                    error?.origin === "Review" ? (error.message as string) : ""
+                  }
+                />
               </div>
               <div className="flex justify-end">
                 <button className="min-w-[200px] min-h-[35px] bg-buttonBackground text-buttonTextColor">

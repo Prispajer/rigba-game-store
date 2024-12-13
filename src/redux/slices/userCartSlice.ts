@@ -194,7 +194,7 @@ const userCartSlice = createSlice({
   name: "userCart",
   initialState,
   reducers: {
-    clearMessages: (state) => {
+    clearNotifications: (state) => {
       state.error = null;
       state.success = null;
     },
@@ -203,7 +203,7 @@ const userCartSlice = createSlice({
     builder
       .addCase(fetchUserCart.pending, (state) => {
         state.status = "Loading";
-        clearMessages();
+        clearNotifications();
       })
       .addCase(fetchUserCart.fulfilled, (state, action) => {
         state.status = "Succeeded";
@@ -282,6 +282,6 @@ const userCartSlice = createSlice({
   },
 });
 
-export const { clearMessages } = userCartSlice.actions;
+export const { clearNotifications } = userCartSlice.actions;
 
 export default userCartSlice.reducer;

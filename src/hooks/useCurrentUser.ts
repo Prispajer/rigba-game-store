@@ -23,7 +23,6 @@ export const signInAccount = async (
 export default function useCurrentUser() {
   const { data, status, update } = useSession();
 
-  console.log(data);
   return {
     user: data ? data.user : null,
     status,

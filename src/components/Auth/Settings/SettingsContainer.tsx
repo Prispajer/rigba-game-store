@@ -117,16 +117,14 @@ export default function SettingsContainer() {
           </div>
           <FormSuccess
             message={
-              success === "User name was updated successfully!"
-                ? (success as string)
+              success?.origin === "UpdateName"
+                ? (success.message as string)
                 : ""
             }
           />
           <FormError
             message={
-              error === "An error occurred while updating user name!"
-                ? (error as string)
-                : ""
+              error?.origin === "UpdateName" ? (error.message as string) : ""
             }
           />
         </div>
@@ -159,15 +157,19 @@ export default function SettingsContainer() {
           </div>
           <FormSuccess
             message={
-              success === "Existing token is still valid" ||
-              "Two-factor authentication has been enabled!" ||
-              "Two-factor token has been sent!"
-                ? (success as string)
+              success?.origin === "ToggleTwoFactor" ||
+              success?.origin === "ToggleTwoFactorToken"
+                ? (success.message as string)
                 : ""
             }
           />
           <FormError
-            message={error === "Invalid code!" ? (error as string) : ""}
+            message={
+              error?.origin === "ToggleTwoFactor" ||
+              error?.origin === "ToggleTwoFactorToken"
+                ? (error.message as string)
+                : ""
+            }
           />
         </div>
         <TwoFactorModalContainer

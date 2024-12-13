@@ -25,7 +25,6 @@ export default function LoginContainer() {
     setShowTwoFactor,
     isPending,
     providerError,
-    clearMessages,
     useUserActions,
   } = useUserServices();
   const { submitLoginForm } = useUserActions();
@@ -35,7 +34,7 @@ export default function LoginContainer() {
     try {
       await signInAccount(provider);
     } catch (error) {
-      setError("Login failed. Please try again.");
+      setError({ message: "Login failed. Please try again.", origin: "Login" });
     }
   };
 
@@ -151,8 +150,18 @@ export default function LoginContainer() {
                   </p>
                 )}
               </div>
-              <FormSuccess message={success as string} />
-              <FormError message={error || providerError} />
+              <FormSuccess
+                message={
+                  success?.origin === "Login" ? (success.message as string) : ""
+                }
+              />
+              <FormError
+                message={
+                  (error?.origin === "Login"
+                    ? (error.message as string)
+                    : "") || providerError
+                }
+              />
               <div className="flex flex-col items-center justfiy-center w- pt-4">
                 <button
                   disabled={isPending}
@@ -190,8 +199,18 @@ export default function LoginContainer() {
                   </p>
                 )}
               </div>
-              <FormSuccess message={success as string} />
-              <FormError message={error || providerError} />
+              <FormSuccess
+                message={
+                  success?.origin === "Login" ? (success.message as string) : ""
+                }
+              />
+              <FormError
+                message={
+                  (error?.origin === "Login"
+                    ? (error.message as string)
+                    : "") || providerError
+                }
+              />
               <div className="flex flex-col items-center justfiy-center w- pt-4">
                 <button
                   disabled={isPending}
@@ -202,9 +221,7 @@ export default function LoginContainer() {
                 </button>
                 <button
                   className="text-[14px] font-medium text-[#E2999B]"
-                  onClick={() => {
-                    clearMessages(), setShowTwoFactor(false);
-                  }}
+                  onClick={() => setShowTwoFactor(false)}
                 >
                   Back to login
                 </button>
@@ -231,8 +248,18 @@ export default function LoginContainer() {
                   </p>
                 )}
               </div>
-              <FormSuccess message={success as string} />
-              <FormError message={error || providerError} />
+              <FormSuccess
+                message={
+                  success?.origin === "Login" ? (success.message as string) : ""
+                }
+              />
+              <FormError
+                message={
+                  (error?.origin === "Login"
+                    ? (error.message as string)
+                    : "") || providerError
+                }
+              />
               <div className="flex flex-col items-center justfiy-center w- pt-4">
                 <button
                   disabled={isPending}
@@ -243,9 +270,7 @@ export default function LoginContainer() {
                 </button>
                 <button
                   className="text-[14px] font-medium text-[#E2999B]"
-                  onClick={() => {
-                    clearMessages(), setShowTwoFactor(false);
-                  }}
+                  onClick={() => setShowTwoFactor(false)}
                 >
                   Back to login
                 </button>

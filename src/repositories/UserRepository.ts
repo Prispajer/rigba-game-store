@@ -20,7 +20,6 @@ import {
   UpdatePasswordDTO,
   UpdatePersonalDataDTO,
   UpdatePersonalImageDTO,
-  UpdateUserImageDTO,
   UpdateUserNameDTO,
 } from "@/utils/helpers/backendDTO";
 

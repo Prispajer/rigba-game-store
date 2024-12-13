@@ -159,6 +159,13 @@ export default class UserService implements IUserService {
           confirmEmailVerification.token
         );
 
+      if (
+        confirmEmailVerification.token !==
+        getEmailVerificationTokenByTokenResponse?.token
+      ) {
+        return this._checkerService.handleError("Missing token!");
+      }
+
       const getUserByEmailResponse =
         await this._checkerService.checkDataExistsAndReturnUser({
           email: getEmailVerificationTokenByTokenResponse?.email as string,

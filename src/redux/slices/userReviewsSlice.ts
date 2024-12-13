@@ -108,7 +108,7 @@ const userReviewsSlice = createSlice({
   name: "userReviews",
   initialState,
   reducers: {
-    clearMessages: (state) => {
+    clearNotifications: (state) => {
       state.message = null;
       state.error = null;
       state.success = null;
@@ -179,6 +179,6 @@ const userReviewsSlice = createSlice({
   },
 });
 
-export const { clearMessages } = userReviewsSlice.actions;
+export const { clearNotifications } = userReviewsSlice.actions;
 
 export default userReviewsSlice.reducer;

@@ -83,8 +83,18 @@ export default function ResetPasswordContainer() {
                 At least one number or special character
               </span>
             </div>
-            <FormSuccess message={success as string} />
-            <FormError message={error as string} />
+            <FormSuccess
+              message={
+                success?.origin === "NewPassword"
+                  ? (success.message as string)
+                  : ""
+              }
+            />
+            <FormError
+              message={
+                error?.origin === "NewPassword" ? (error.message as string) : ""
+              }
+            />
             <div className="flex flex-col items-center justfiy-center w- ">
               <button
                 className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px] mt-4"

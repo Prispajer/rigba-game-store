@@ -219,7 +219,7 @@ export default class TokenService implements ITokenService {
         } else {
           return {
             success: true,
-            message: "Existing token is still valid.",
+            message: "Existing token is still valid!",
             data: existingToken,
           };
         }

@@ -36,13 +36,6 @@ export default function PersonalDataContainer() {
     },
   });
 
-  const updateNameForm = useForm<z.infer<typeof UpdateNameSchema>>({
-    resolver: zodResolver(UpdateNameSchema),
-    defaultValues: {
-      name: "",
-    },
-  });
-
   const {
     register,
     handleSubmit,
@@ -230,8 +223,16 @@ export default function PersonalDataContainer() {
             <span className="text-buttonTextColor font-bold">Save</span>
           </button>
         </div>
-        <FormSuccess message={success as string} />
-        <FormError message={error as string} />
+        <FormSuccess
+          message={
+            success?.origin === "UpdateData" ? (success.message as string) : ""
+          }
+        />
+        <FormError
+          message={
+            error?.origin === "UpdateData" ? (error.message as string) : ""
+          }
+        />
       </form>
     </div>
   );

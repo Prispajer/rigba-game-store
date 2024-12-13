@@ -10,7 +10,7 @@ import {
 import { Cart, PersonalData, UserRole, WishList } from "@prisma/client";
 
 export type ExtendedUser = DefaultSession["user"] & {
-  id: string;
+  password: string;
   isTwoFactorEnabled: boolean;
   emailVerificationDate: Date;
   role: UserRole;
@@ -157,7 +157,23 @@ export const {
             session.user
           );
         }
+        if (session.user.email) {
+          const user = await userRepository.getUserByEmail(session.user);
+
+          session.user = {
+            ...session.user,
+            id: user?.id as string,
+            name: user?.name,
+            email: user?.email as string,
+            emailVerified: user?.emailVerified as Date,
+            image: user?.image,
+            password: user?.password as string,
+            role: user?.role as UserRole,
+            isTwoFactorEnabled: user?.isTwoFactorEnabled as boolean,
+          };
+        }
       }
+
       return session;
     },
   },

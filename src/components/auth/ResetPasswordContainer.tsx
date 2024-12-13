@@ -58,8 +58,20 @@ export default function ResetPasswordContainer() {
                 </p>
               )}
             </div>
-            <FormSuccess message={success as string} />
-            <FormError message={error as string} />
+            <FormSuccess
+              message={
+                success?.origin === "ResetPassword"
+                  ? (success.message as string)
+                  : ""
+              }
+            />
+            <FormError
+              message={
+                error?.origin === "ResetPassword"
+                  ? (error.message as string)
+                  : ""
+              }
+            />
             <div className="flex flex-col items-center justfiy-center w- pt-4">
               <button
                 className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px]"

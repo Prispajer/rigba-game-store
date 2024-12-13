@@ -10,7 +10,8 @@ export default function RedeemContainer({
 }: {
   params?: { redeemId: string };
 }) {
-  const { userProductHistoryState, isLoading } = useUserProductHistory();
+  const { userProductHistoryState, isProductHistoryLoading } =
+    useUserProductHistory();
 
   const findMultipleProducts = (redeemId: string) => {
     const isProductHistoryId = userProductHistoryState.productHistoryArray.some(
@@ -27,7 +28,7 @@ export default function RedeemContainer({
         );
   };
 
-  if (isLoading) {
+  if (isProductHistoryLoading) {
     return (
       <div className="flex flex-col justify-center items-center w-full min-h-[calc(100vh-55px)] md:min-h-[calc(100vh-96px)] bg-primaryColor">
         <LoadingAnimation />

@@ -92,8 +92,22 @@ export default function ChangePasswordContainer() {
             <p className="text-[FF0000]">{errors.confirmPassword.message}</p>
           )}
         </label>
-        {success && <FormSuccess message={success} />}
-        {error && <FormError message={error} />}
+        <FormSuccess
+          message={
+            success?.origin === "ChangePassword" ||
+            success?.origin === "ChangePasswordToken"
+              ? (success.message as string)
+              : ""
+          }
+        />
+        <FormError
+          message={
+            error?.origin === "ChangePassword" ||
+            error?.origin === "ChangePasswordToken"
+              ? (error.message as string)
+              : ""
+          }
+        />
         <div className="max-w-[180px] pt-[20px]">
           <button
             onClick={() => handleOpen("twoFactorModal")}

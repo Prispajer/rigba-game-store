@@ -1,10 +1,6 @@
 {
   "compilerOptions": {
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "allowJs": true,
@@ -24,9 +20,7 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     },
     "target": "ES2017"
   },
@@ -39,9 +33,9 @@
     "src/data/database.js",
     "src/utils/autocomplete.js",
     "src/utils/utils.ts",
-    "src/app/(pages)/api/registerData.js"
+    "src/app/(pages)/api/registerData.js",
+    "src/**/*",
+    "tests/**/*"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

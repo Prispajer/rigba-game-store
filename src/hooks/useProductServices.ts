@@ -8,13 +8,29 @@ import { RatingTitle } from "@prisma/client";
 import { User } from "next-auth";
 
 export default function useProductServices() {
-  const [error, setError] = React.useState<string | null>();
-  const [success, setSuccess] = React.useState<string | null>();
+  const [success, setSuccess] = React.useState<{
+    message?: string;
+    origin?: string;
+  } | null>();
+  const [error, setError] = React.useState<{
+    message?: string;
+    origin?: string;
+  } | null>();
 
-  const clearMessages = () => {
+  const clearNotifications = () => {
     setError(null);
     setSuccess(null);
   };
+
+  React.useEffect(() => {
+    if (success || error) {
+      const timer = setTimeout(() => {
+        clearNotifications();
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [success, error]);
 
   function useProductActions() {
     const submitReviewForm = async (
@@ -25,7 +41,6 @@ export default function useProductServices() {
     ) => {
       const { review, rating } = data;
       const title = ratingsKeys[rating];
-      clearMessages();
       try {
         const response = await requestService.postMethod(
           "products/endpoints/productManagement/addReviewToProduct",
@@ -45,14 +60,21 @@ export default function useProductServices() {
           }
         );
         if (response.success) {
-          setSuccess(response.message);
-          return response.data;
+          setSuccess({
+            message: response.message,
+            origin: "Review",
+          });
         } else {
-          setError(response.message);
-          return response.message || "Unknown error";
+          setError({
+            message: response.message,
+            origin: "Review",
+          });
         }
       } catch (error) {
-        console.error("Error adding review:", error);
+        setError({
+          message: "There was a problem while writing a review!",
+          origin: "Review",
+        });
       }
     };
 

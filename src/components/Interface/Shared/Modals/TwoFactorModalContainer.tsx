@@ -43,7 +43,6 @@ export default function TwoFactorModalContainer({
                     setCode(event.target.value)
                   }
                   className="w-full min-h-[36px] px-[15px] outline-none border-[1px] border-[#658fb2] hover:bg-[#eaebec]"
-                  type="number"
                 />
               </div>
               <div className="flex justify-end gap-x-[20px]">

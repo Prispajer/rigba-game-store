@@ -6,6 +6,9 @@ import useCurrentUser from "./useCurrentUser";
 import { AppDispatch, RootState } from "@/redux/store";
 
 export default function useUserOrderHistory() {
+  const [isOrderHistoryLoading, setIsOrderHistoryLoading] =
+    React.useState(true);
+
   const { user } = useCurrentUser();
 
   const dispatch = useDispatch<AppDispatch>();
@@ -16,6 +19,7 @@ export default function useUserOrderHistory() {
   const handleFetchUserOrderHistory = React.useCallback(async () => {
     if (user?.email) {
       await dispatch(fetchUserOrderHistory({ email: user.email }));
+      setIsOrderHistoryLoading(false);
     }
   }, [dispatch, user?.email]);
 
@@ -26,5 +30,6 @@ export default function useUserOrderHistory() {
   return {
     userOrderHistoryState,
     handleFetchUserOrderHistory,
+    isOrderHistoryLoading,
   };
 }

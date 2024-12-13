@@ -103,8 +103,16 @@ export default function RegisterContainer() {
               </p>
             )}
           </div>
-          <FormSuccess message={success as string} />
-          <FormError message={error as string} />
+          <FormSuccess
+            message={
+              success?.origin === "Register" ? (success.message as string) : ""
+            }
+          />
+          <FormError
+            message={
+              error?.origin === "Register" ? (error.message as string) : ""
+            }
+          />
           <div className="flex flex-col items-center justfiy-center py-4">
             <button
               disabled={isPending}

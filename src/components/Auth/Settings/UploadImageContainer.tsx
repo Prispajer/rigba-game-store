@@ -4,7 +4,7 @@ import { UploadButton } from "@/utils/uploadthing";
 import useCurrentUser from "@/hooks/useCurrentUser";
 
 export default function UploadProfileImage() {
-  const { user } = useCurrentUser();
+  const { user, update } = useCurrentUser();
 
   const headers = (): HeadersInit | undefined => {
     return user ? { Authorization: user?.id as string } : undefined;
@@ -16,6 +16,7 @@ export default function UploadProfileImage() {
         endpoint="imageUploader"
         headers={headers()}
         onClientUploadComplete={(res) => {
+          update(res);
           alert("Upload Completed");
         }}
         onUploadError={(error: Error) => {

@@ -3,13 +3,15 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { LuPencil } from "react-icons/lu";
+import LoadingAnimation from "@/components/Interface/Shared/Animations/LoadingAnimation";
 import useUserProductHistory from "@/hooks/useUserProductHistory";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useUserServices from "@/hooks/useUserServices";
 import { generateRandomName } from "@/utils/names";
 
 export default function AccountContainer() {
-  const { userProductHistoryState } = useUserProductHistory();
+  const { userProductHistoryState, isProductHistoryLoading } =
+    useUserProductHistory();
   const { useUserActions } = useUserServices();
   const { submitUpdateName } = useUserActions();
   const { user } = useCurrentUser();
@@ -139,26 +141,32 @@ export default function AccountContainer() {
               <h2>LAST PURCHASES</h2>
             </div>
             <div className="flex flex-wrap py-[15px] px-[20px]">
-              {userProductHistoryState.productHistoryArray.length > 0
-                ? userProductHistoryState.productHistoryArray
-                    .slice(0, 3)
-                    .map((product) => (
-                      <div key={product.id} className="flex flex-wrap">
-                        <div>
-                          <Image
-                            src={
-                              product.productsInformations.background_image ||
-                              "/icons/logo.png"
-                            }
-                            width="140"
-                            height="140"
-                            alt={product.productsInformations.background_image}
-                            className="w-[140px] h-[140px] m-[1px]"
-                          />
-                        </div>
+              {isProductHistoryLoading ? (
+                <div className="flex justify-center items-center w-full px-[20px] py-[15px]">
+                  <LoadingAnimation />
+                </div>
+              ) : userProductHistoryState.productHistoryArray.length > 0 ? (
+                userProductHistoryState.productHistoryArray
+                  .slice(0, 3)
+                  .map((product) => (
+                    <div key={product.id} className="flex flex-wrap">
+                      <div>
+                        <Image
+                          src={
+                            product.productsInformations.background_image ||
+                            "/icons/logo.png"
+                          }
+                          width="140"
+                          height="140"
+                          alt={product.productsInformations.background_image}
+                          className="w-[140px] h-[140px] m-[1px]"
+                        />
                       </div>
-                    ))
-                : "You have no purchase history!"}
+                    </div>
+                  ))
+              ) : (
+                "You have no purchase history!"
+              )}
             </div>
             <div className="flex justify-end py-[15px] px-[20px] pt-[10px]">
               <div className="flex items-center">

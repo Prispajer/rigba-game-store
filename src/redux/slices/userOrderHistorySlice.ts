@@ -58,7 +58,7 @@ const userOrderHistorySlice = createSlice({
   name: "userOrderHistory",
   initialState,
   reducers: {
-    clearMessages: (state) => {
+    clearNotifications: (state) => {
       state.error = null;
       state.success = null;
       state.message = null;
@@ -72,7 +72,7 @@ const userOrderHistorySlice = createSlice({
         state.error = null;
         state.success = null;
         state.message = null;
-        clearMessages();
+        clearNotifications();
       })
       .addCase(fetchUserOrderHistory.fulfilled, (state, action) => {
         state.status = "Succeeded";
@@ -89,6 +89,6 @@ const userOrderHistorySlice = createSlice({
   },
 });
 
-export const { clearMessages } = userOrderHistorySlice.actions;
+export const { clearNotifications } = userOrderHistorySlice.actions;
 
 export default userOrderHistorySlice.reducer;

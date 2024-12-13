@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { Container } from "inversify";
+import { Container, injectable } from "inversify";
 import UserService from "../services/UserService";
 import type IUserService from "@/interfaces/IUserService";
 import UserRepository from "@/repositories/UserRepository";

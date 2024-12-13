@@ -1,5 +1,5 @@
 import React from "react";
-import { set, z } from "zod";
+import { z } from "zod";
 import { useSearchParams } from "next/navigation";
 import useCurrentUser from "./useCurrentUser";
 import useWindowVisibility from "./useWindowVisibility";
@@ -15,51 +15,66 @@ import {
 import { RequestResponse } from "@/utils/helpers/types";
 
 export default function useUserServices() {
-  const [error, setError] = React.useState<string | undefined>();
-  const [success, setSuccess] = React.useState<string | undefined>();
+  const [success, setSuccess] = React.useState<{
+    message?: string;
+    origin?: string;
+  } | null>();
+  const [error, setError] = React.useState<{
+    message?: string;
+    origin?: string;
+  } | null>();
   const [showTwoFactor, setShowTwoFactor] = React.useState(false);
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
   const [isPending, startTransition] = React.useTransition();
   const searchParams = useSearchParams();
   const { handleClose } = useWindowVisibility();
-  const { user, update } = useCurrentUser();
+  const { user } = useCurrentUser();
   const token = searchParams.get("token");
   const providerError =
     searchParams.get("error") === "OAuthAccountNotLinked"
       ? "Email already in use with different provider!"
       : "";
 
-  const clearMessages = () => {
-    setError("");
-    setSuccess("");
+  const clearNotifications = () => {
+    setError(undefined);
+    setSuccess(undefined);
   };
+
+  React.useEffect(() => {
+    if (success || error) {
+      const timer = setTimeout(() => {
+        clearNotifications();
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [success, error]);
 
   function useUserSecurity() {
     const submitToggleTwoFactor = async (code: string) => {
-      clearMessages();
       try {
         const response = await requestService.postMethod(
           "users/endpoints/userAuthentication/toggleTwoFactor",
           { email: user?.email, code }
         );
         if (response.success) {
-          setSuccess(response.message);
-          update(response.data);
+          setSuccess({ message: response.message, origin: "ToggleTwoFactor" });
           handleClose("twoFactorModal");
-          setTimeout(() => {
-            clearMessages();
-          }, 3000);
         } else {
-          setError(response.message);
+          setError({ message: response.message, origin: "ToggleTwoFactor" });
         }
       } catch (error) {
-        setError("Something went wrong!");
+        setError({
+          message:
+            "There was a problem while toggling two-factor authentication!",
+          origin: "ToggleTwoFactor",
+        });
       }
     };
 
     const submitEmailVerification = React.useCallback(async () => {
       if (!token) {
-        setError("Missing token!");
+        setError({ message: "Missing token!", origin: "EmailVerification" });
         return;
       }
       try {
@@ -68,13 +83,18 @@ export default function useUserServices() {
           { token }
         );
         if (!response.success) {
-          setError(response.message);
-        }
-        if (response.success) {
-          setSuccess(response.message);
+          setError({ message: response.message, origin: "EmailVerification" });
+        } else {
+          setSuccess({
+            message: response.message,
+            origin: "EmailVerification",
+          });
         }
       } catch (error) {
-        setError("Something went wrong!");
+        setError({
+          message: "There was a problem while verifying email!",
+          origin: "EmailVerification",
+        });
       }
     }, [token]);
 
@@ -90,7 +110,6 @@ export default function useUserServices() {
       callback: (email: string, password: string) => Promise<void>
     ) => {
       startTransition(async () => {
-        clearMessages();
         const { email, password, code } = data;
         try {
           const response: RequestResponse<{
@@ -102,43 +121,43 @@ export default function useUserServices() {
           );
 
           if (!response.success) {
-            setError(response.message);
-          }
-          if (response.success) {
-            setSuccess(response.message);
-
+            setError({ message: response.message, origin: "Login" });
+          } else {
+            setSuccess({ message: response.message, origin: "Login" });
             if (response.data?.token) {
               setShowTwoFactor(true);
             }
-
             if (response.data?.emailVerified) {
               await callback(email, password);
             }
           }
         } catch (error) {
-          setError("Something went wrong!");
+          setError({
+            message: "There was a problem while logging in!",
+            origin: "Login",
+          });
         }
       });
     };
 
     const submitRegisterForm = async (data: z.infer<typeof RegisterSchema>) => {
       startTransition(async () => {
-        clearMessages();
         const { email, password } = data;
         try {
           const response = await requestService.postMethod(
             "users/endpoints/userAuthentication/registerUser",
             { email, password }
           );
-
           if (!response.success) {
-            setError(response.message);
-          }
-          if (response.success) {
-            setSuccess(response.message);
+            setError({ message: response.message, origin: "Register" });
+          } else {
+            setSuccess({ message: response.message, origin: "Register" });
           }
         } catch (error) {
-          setError("Something went wrong!");
+          setError({
+            message: "There was a problem while registering!",
+            origin: "Register",
+          });
         }
       });
     };
@@ -147,30 +166,29 @@ export default function useUserServices() {
       data: z.infer<typeof NewPasswordSchema>
     ) => {
       startTransition(async () => {
-        clearMessages();
         const { password } = data;
 
         if (!token) {
-          setError("Missing token!");
+          setError({ message: "Missing token!", origin: "NewPassword" });
           return;
         }
 
         try {
           const response = await requestService.postMethod(
             "users/endpoints/userAuthentication/newPassword",
-            {
-              password,
-              token,
-            }
+            { password, token }
           );
 
           if (response.success) {
-            setSuccess(response.message);
+            setSuccess({ message: response.message, origin: "NewPassword" });
           } else {
-            setError(response.message);
+            setError({ message: response.message, origin: "NewPassword" });
           }
         } catch (error) {
-          setError("Something went wrong!");
+          setError({
+            message: "There was a problem while setting a new password!",
+            origin: "NewPassword",
+          });
         }
       });
     };
@@ -179,7 +197,6 @@ export default function useUserServices() {
       data: z.infer<typeof ResetPasswordSchema>
     ) => {
       startTransition(async () => {
-        clearMessages();
         const { email } = data;
         try {
           const response = await requestService.postMethod(
@@ -187,12 +204,15 @@ export default function useUserServices() {
             { email }
           );
           if (response.success) {
-            setSuccess(response.message);
+            setSuccess({ message: response.message, origin: "ResetPassword" });
           } else {
-            setError(response.message);
+            setError({ message: response.message, origin: "ResetPassword" });
           }
         } catch (error) {
-          setError("Something went wrong!");
+          setError({
+            message: "There was a problem while reseting the password!",
+            origin: "ResetPassword",
+          });
         }
       });
     };
@@ -201,55 +221,50 @@ export default function useUserServices() {
       code: string,
       data: z.infer<typeof NewPasswordSchema>
     ) => {
-      clearMessages();
       const { password } = data;
       try {
         const response = await requestService.postMethod(
           "users/endpoints/userAuthentication/changePassword",
-          {
-            email: user?.email,
-            newPassword: password,
-            code,
-          }
+          { email: user?.email, newPassword: password, code }
         );
         if (response.success) {
-          setSuccess(response.message);
+          setSuccess({ message: response.message, origin: "ChangePassword" });
           handleClose("twoFactorModal");
         } else {
-          setError(response.message);
+          setError({ message: response.message, origin: "ChangePassword" });
         }
       } catch (error) {
-        setError("Something went wrong!");
+        setError({
+          message: "There was a problem while changing the password!",
+          origin: "ChangePassword",
+        });
       }
     };
 
     const submitUpdateName = async (data: z.infer<typeof UpdateNameSchema>) => {
-      clearMessages();
       const { name } = data;
       try {
         const response = await requestService.postMethod(
           "users/endpoints/userAuthentication/updateName",
-          {
-            email: user?.email,
-            name,
-          }
+          { email: user?.email, name }
         );
         if (response.success) {
-          setSuccess(response.message);
-          update(response.data);
+          setSuccess({ message: response.message, origin: "UpdateName" });
           setIsEditing(false);
         } else {
-          setError(response.message);
+          setError({ message: response.message, origin: "UpdateName" });
         }
       } catch (error) {
-        setError("Something went wrong!");
+        setError({
+          message: "There was a problem while updating your name!",
+          origin: "UpdateName",
+        });
       }
     };
 
     const submitUpdateData = async (
       data: z.infer<typeof PersonalDataSchema>
     ) => {
-      clearMessages();
       const {
         fullName,
         birthDate,
@@ -276,13 +291,15 @@ export default function useUserServices() {
           }
         );
         if (response.success) {
-          setSuccess(response.message);
-          update(response.data);
+          setSuccess({ message: response.message, origin: "UpdateData" });
         } else {
-          setError(response.message);
+          setError({ message: response.message, origin: "UpdateData" });
         }
       } catch (error) {
-        setError("Something went wrong!");
+        setError({
+          message: "There was a problem while updating your data!",
+          origin: "UpdateData",
+        });
       }
     };
 
@@ -299,19 +316,27 @@ export default function useUserServices() {
 
   function useUserToken() {
     const sendToggleTwoFactorToken = async () => {
-      clearMessages();
       try {
         const response = await requestService.postMethod(
           "users/endpoints/tokenManagement/toggleTwoFactorToken",
           { email: user?.email }
         );
         if (response.success) {
-          setSuccess(response.message);
+          setSuccess({
+            message: response.message,
+            origin: "ToggleTwoFactorToken",
+          });
         } else {
-          setError(response.message);
+          setError({
+            message: response.message,
+            origin: "ToggleTwoFactorToken",
+          });
         }
       } catch (error) {
-        setError("Something went wrong!");
+        setError({
+          message: "There was a problem while sending the two-factor token!",
+          origin: "ToggleTwoFactorToken",
+        });
       }
     };
 
@@ -319,23 +344,29 @@ export default function useUserServices() {
       data: z.infer<typeof NewPasswordSchema>,
       oldPassword: string
     ) => {
-      clearMessages();
       startTransition(async () => {
         try {
           const response = await requestService.postMethod(
             "users/endpoints/tokenManagement/changePasswordToken",
-            {
-              email: user?.email,
-              password: oldPassword,
-            }
+            { email: user?.email, password: oldPassword }
           );
           if (response.success) {
-            setSuccess(response.message);
+            setSuccess({
+              message: response.message,
+              origin: "ChangePasswordToken",
+            });
           } else {
-            setError(response.message);
+            setError({
+              message: response.message,
+              origin: "ChangePasswordToken",
+            });
           }
         } catch (error) {
-          setError("Something went wrong!");
+          setError({
+            message:
+              "There was a problem while sending the change password token!",
+            origin: "ChangePasswordToken",
+          });
         }
       });
     };
@@ -347,7 +378,7 @@ export default function useUserServices() {
   }
 
   return {
-    clearMessages,
+    clearNotifications,
     success,
     setSuccess,
     error,

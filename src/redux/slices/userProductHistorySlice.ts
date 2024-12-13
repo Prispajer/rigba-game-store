@@ -59,7 +59,7 @@ const userProductHistorySlice = createSlice({
   name: "userProductHistory",
   initialState,
   reducers: {
-    clearMessages: (state) => {
+    clearNotifications: (state) => {
       state.error = null;
       state.success = null;
     },
@@ -72,7 +72,7 @@ const userProductHistorySlice = createSlice({
         state.error = null;
         state.success = null;
         state.message = null;
-        clearMessages();
+        clearNotifications();
       })
       .addCase(fetchUserProductHistory.fulfilled, (state, action) => {
         state.status = "Succeeded";
@@ -90,6 +90,6 @@ const userProductHistorySlice = createSlice({
   },
 });
 
-export const { clearMessages } = userProductHistorySlice.actions;
+export const { clearNotifications } = userProductHistorySlice.actions;
 
 export default userProductHistorySlice.reducer;

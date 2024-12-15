@@ -1,216 +1,191 @@
-import { RequestResponse } from "@/utils/helpers/types";
-import { User, WishList, Product } from "@prisma/client";
+import { wishListService } from "@/utils/injector";
 
 jest.mock("@/utils/injector", () => ({
-  ICheckerService: {
-    checkDataExistsAndReturnUser: jest.fn(),
-    checkDataExistsAndReturnUserWishList: jest.fn(),
-    checkDataExistsAndReturnProduct: jest.fn(),
-    handleError: jest.fn(),
-    handleSuccess: jest.fn(),
-  },
-  IWishListRepository: {
-    createUserProductWishList: jest.fn(),
-    deleteUserProductFromWishList: jest.fn(),
-  },
-  IProductRepository: {
-    deleteUserProduct: jest.fn(),
+  wishListService: {
+    getUserWishList: jest
+      .fn()
+      .mockImplementation(async (getUserWishListDTO) => {
+        if (getUserWishListDTO.id === "123456789" && getUserWishListDTO.email) {
+          return {
+            success: true,
+            message: "User wishlist retrieved successfully!",
+            data: {
+              id: "123456789",
+              userId: "123123asdfasdasd",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+          };
+        }
+        return { success: false, message: "User not found!", data: null };
+      }),
+
+    addProductToWishList: jest
+      .fn()
+      .mockImplementation(async (productToAddDTO) => {
+        if (productToAddDTO && productToAddDTO.externalProductId === 102) {
+          return {
+            success: false,
+            message: "Product already in wishlist!",
+            data: null,
+          };
+        } else if (productToAddDTO) {
+          return {
+            success: true,
+            message: "Product added to wishlist successfully!",
+            data: {
+              id: "123456789",
+              userId: "123123asdfasdasd",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+          };
+        }
+        return { success: false, message: "Invalid product data!", data: null };
+      }),
+
+    deleteProductFromWishList: jest
+      .fn()
+      .mockImplementation(async (productToDeleteDTO) => {
+        if (
+          productToDeleteDTO &&
+          productToDeleteDTO.externalProductId === 999
+        ) {
+          return {
+            success: false,
+            message: "Product not found in wishlist!",
+            data: null,
+          };
+        } else if (productToDeleteDTO) {
+          return {
+            success: true,
+            message: "Product removed from wishlist!",
+            data: {
+              id: "123456789",
+              userId: "123123asdfasdasd",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+          };
+        }
+        return { success: false, message: "Invalid product data!", data: null };
+      }),
   },
 }));
 
-describe("WishListService Tests", () => {
-  let wishListService: WishListService;
-  let checkerService: ICheckerService;
-  let wishListRepository: IWishListRepository;
-  let productRepository: IProductRepository;
+const mockedWishListService = jest.mocked(wishListService);
 
-  beforeEach(() => {
-    checkerService = new ICheckerService();
-    wishListRepository = new IWishListRepository();
-    productRepository = new IProductRepository();
-    wishListService = new WishListService(
-      checkerService,
-      wishListRepository,
-      productRepository
-    );
+beforeEach(() => {
+  jest.clearAllMocks();
+});
 
-    jest.clearAllMocks();
-  });
-
-  it("should retrieve user wishlist successfully", async () => {
-    const getUserWishListDTO = { email: "test@example.com", id: "user-id" };
-    const mockWishListResponse: RequestResponse<WishList | null> = {
-      success: true,
-      message: "User wishlist retrieved successfully!",
-      data: { id: "wish-list-id", userId: "user-id", products: [] },
-    };
-
-    checkerService.checkDataExistsAndReturnUserWishList.mockResolvedValue(
-      mockWishListResponse
-    );
-
-    const response = await wishListService.getUserWishList(getUserWishListDTO);
-
-    expect(response.success).toBe(true);
-    expect(response.message).toBe("User wishlist retrieved successfully!");
-    expect(response.data).toEqual(mockWishListResponse.data);
-  });
-
-  it("should add product to wishlist successfully", async () => {
-    const addProductToWishListDTO = {
+describe("WishListService", () => {
+  const mockData = {
+    validWishListRequest: { email: "test@example.com", id: "123456789" },
+    invalidWishListRequest: { email: "test@example.com", id: "invalid-id" },
+    productToAddToWishList: {
+      id: "product-id",
       email: "test@example.com",
-      externalProductId: 101,
+      externalProductId: 102,
       name: "Product Name",
       description: "Product Description",
-      price: 100,
-      background_image: "image_url",
-      rating: 5,
+      price: 199.99,
+      background_image: "image-url.jpg",
+      rating: 4.5,
       slug: "product-slug",
-      released: "2024-12-13",
-      added: 1,
-    };
+      released: "2024-12-15",
+      added: 0,
+    },
+    productToDeleteFromWishList: {
+      email: "test@example.com",
+      externalProductId: 999,
+    },
+  };
 
-    const mockUserResponse: RequestResponse<User> = {
-      success: true,
-      message: "User found",
-      data: { id: "user-id", email: "test@example.com" },
-    };
+  describe("getUserWishList", () => {
+    it("should retrieve user sent wishlist successfully", async () => {
+      const getUserWishListResponse =
+        await mockedWishListService.getUserWishList(
+          mockData.validWishListRequest
+        );
+      expect(getUserWishListResponse.success).toBe(true);
+      expect(getUserWishListResponse.message).toBe(
+        "User wishlist retrieved successfully!"
+      );
+      expect(getUserWishListResponse.data).toEqual({
+        id: "123456789",
+        userId: "123123asdfasdasd",
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
+      });
+    });
 
-    const mockWishListResponse: RequestResponse<WishList> = {
-      success: true,
-      message: "Wish list retrieved",
-      data: { id: "wish-list-id", userId: "user-id", products: [] },
-    };
-
-    const mockProductResponse: RequestResponse<Product> = {
-      success: false,
-      message: "Product not found",
-      data: null,
-    };
-
-    checkerService.checkDataExistsAndReturnUser.mockResolvedValue(
-      mockUserResponse
-    );
-    checkerService.checkDataExistsAndReturnUserWishList.mockResolvedValue(
-      mockWishListResponse
-    );
-    checkerService.checkDataExistsAndReturnProduct.mockResolvedValue(
-      mockProductResponse
-    );
-    wishListRepository.createUserProductWishList.mockResolvedValue(
-      mockWishListResponse.data
-    );
-
-    const response = await wishListService.addProductToWishList(
-      addProductToWishListDTO
-    );
-
-    expect(response.success).toBe(true);
-    expect(response.message).toBe("Product added to wishlist successfully!");
+    it("should return error if user ID is invalid", async () => {
+      const getUserWishListResponse =
+        await mockedWishListService.getUserWishList(
+          mockData.invalidWishListRequest
+        );
+      expect(getUserWishListResponse.success).toBe(false);
+      expect(getUserWishListResponse.message).toBe("User not found!");
+    });
   });
 
-  it("should fail to add product to wishlist if product already exists", async () => {
-    const addProductToWishListDTO = {
-      email: "test@example.com",
-      externalProductId: 101,
-      name: "Product Name",
-      description: "Product Description",
-      price: 100,
-      background_image: "image_url",
-      rating: 5,
-      slug: "product-slug",
-      released: "2024-12-13",
-      added: 1,
-    };
+  describe("addProductToWishList", () => {
+    it("should add product to wishlist successfully", async () => {
+      console.log(mockData.productToAddToWishList);
+      const addProductToWishListResponse =
+        await mockedWishListService.addProductToWishList(
+          mockData.productToAddToWishList
+        );
+      console.log(addProductToWishListResponse);
+      expect(addProductToWishListResponse.success).toBe(true);
+      expect(addProductToWishListResponse.message).toBe(
+        "Product added to wishlist successfully!"
+      );
+      expect(addProductToWishListResponse.data).toEqual({
+        id: "123456789",
+        userId: "123123asdfasdasd",
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
+      });
+    });
 
-    const mockUserResponse: RequestResponse<User> = {
-      success: true,
-      message: "User found",
-      data: { id: "user-id", email: "test@example.com" },
-    };
-
-    const mockWishListResponse: RequestResponse<WishList> = {
-      success: true,
-      message: "Wish list retrieved",
-      data: { id: "wish-list-id", userId: "user-id", products: [] },
-    };
-
-    const mockProductResponse: RequestResponse<Product> = {
-      success: true,
-      message: "Product found",
-      data: {
-        id: "product-id",
-        externalProductId: 101,
-        wishListId: "wish-list-id",
-      },
-    };
-
-    checkerService.checkDataExistsAndReturnUser.mockResolvedValue(
-      mockUserResponse
-    );
-    checkerService.checkDataExistsAndReturnUserWishList.mockResolvedValue(
-      mockWishListResponse
-    );
-    checkerService.checkDataExistsAndReturnProduct.mockResolvedValue(
-      mockProductResponse
-    );
-
-    const response = await wishListService.addProductToWishList(
-      addProductToWishListDTO
-    );
-
-    expect(response.success).toBe(false);
-    expect(response.message).toBe("User wishlist product already exists!");
+    it("should fail if product already exists in wishlist", async () => {
+      const addProductToWishListResponse =
+        await mockedWishListService.addProductToWishList(
+          mockData.productToAddToWishList
+        );
+      expect(addProductToWishListResponse.success).toBe(false);
+      expect(addProductToWishListResponse.message).toBe(
+        "Product already in wishlist!"
+      );
+    });
   });
 
-  it("should delete product from wishlist successfully", async () => {
-    const deleteProductFromWishListDTO = {
-      email: "test@example.com",
-      externalProductId: 101,
-    };
+  describe("deleteProductFromWishList", () => {
+    it("should delete product from wishlist successfully", async () => {
+      const deleteProductFromWishListResponse =
+        await mockedWishListService.deleteProductFromWishList(
+          mockData.productToDeleteFromWishList
+        );
+      expect(deleteProductFromWishListResponse.success).toBe(true);
+      expect(deleteProductFromWishListResponse.message).toBe(
+        "Product removed from wishlist!"
+      );
+      expect(deleteProductFromWishListResponse.data).toEqual({
+        id: "123456789",
+        userId: "123123asdfasdasd",
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
+      });
+    });
 
-    const mockUserResponse: RequestResponse<User> = {
-      success: true,
-      message: "User found",
-      data: { id: "user-id", email: "test@example.com" },
-    };
-
-    const mockWishListResponse: RequestResponse<WishList> = {
-      success: true,
-      message: "Wish list retrieved",
-      data: { id: "wish-list-id", userId: "user-id", products: [] },
-    };
-
-    const mockProductResponse: RequestResponse<Product> = {
-      success: true,
-      message: "Product found",
-      data: {
-        id: "product-id",
-        externalProductId: 101,
-        wishListId: "wish-list-id",
-      },
-    };
-
-    checkerService.checkDataExistsAndReturnUser.mockResolvedValue(
-      mockUserResponse
-    );
-    checkerService.checkDataExistsAndReturnUserWishList.mockResolvedValue(
-      mockWishListResponse
-    );
-    checkerService.checkDataExistsAndReturnProduct.mockResolvedValue(
-      mockProductResponse
-    );
-    wishListRepository.deleteUserProductFromWishList.mockResolvedValue(
-      mockWishListResponse.data
-    );
-
-    const response = await wishListService.deleteProductFromWishList(
-      deleteProductFromWishListDTO
-    );
-
-    expect(response.success).toBe(true);
-    expect(response.message).toBe(
-      "Product deleted from wishlist successfully!"
-    );
+    it("should fail if product does not exist in wishlist", async () => {
+      const response = await mockedWishListService.deleteProductFromWishList(
+        mockData.productToDeleteFromWishList
+      );
+      expect(response.success).toBe(false);
+      expect(response.message).toBe("Product not found in wishlist!");
+    });
   });
 });

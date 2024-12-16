@@ -5,31 +5,49 @@ jest.mock("@/utils/injector", () => ({
     getProductReviews: jest
       .fn()
       .mockImplementation(async (getProductReviewsDTO) => {
-        if (getProductReviewsDTO.externalProductId === "123") {
+        if (getProductReviewsDTO.externalProductId === 123) {
           return {
             success: true,
             message: "Reviews retrieved successfully!",
             data: [{ review: "Great product!" }],
           };
+        } else if (getProductReviewsDTO.externalProductId === 999) {
+          return {
+            success: false,
+            message: "Product not found!",
+            data: null,
+          };
         }
         return {
           success: false,
-          message: "Product not found!",
-          data: null,
+          message: "Reviews not found!",
+          data: [],
         };
       }),
 
     addReviewToProduct: jest
       .fn()
       .mockImplementation(async (addReviewToProductDTO) => {
-        if (addReviewToProductDTO.externalProductId === "123") {
+        if (addReviewToProductDTO.description === "") {
           return {
-            success: true,
-            message: "Review was added successfully to product!",
+            success: false,
+            message: "Review description is required!",
+            data: null,
+          };
+        }
+
+        if (addReviewToProductDTO.externalProductId === 999) {
+          return {
+            success: false,
+            message: "Review wasn't added!",
             data: { id: "review-1" },
           };
         }
-        return { success: false, message: "Invalid product data!", data: null };
+        return {
+          success: true,
+          message: "Review was added successfully to product!",
+          data: { id: "review-1" },
+        };
       }),
 
     likeReview: jest.fn().mockImplementation(async (likeReviewDTO) => {
@@ -62,10 +80,10 @@ beforeEach(() => {
 
 describe("ReviewService", () => {
   const mockData = {
-    getProductReviewsDTO: { externalProductId: "123" },
+    getProductReviewsDTO: { userId: "132123", externalProductId: 123 },
     addReviewToProductDTO: {
       email: "test@example.com",
-      externalProductId: "123",
+      externalProductId: 123,
       reviewId: "review-1",
       userId: "user-123",
       name: "Product A",
@@ -82,94 +100,126 @@ describe("ReviewService", () => {
     },
     likeReviewDTO: {
       reviewId: "review-1",
-      externalProductId: "123",
-      userId: "user-123",
+      externalProductId: 123,
+      email: "user-123",
     },
     unLikeReviewDTO: {
       reviewId: "review-1",
-      externalProductId: "123",
-      userId: "user-123",
+      externalProductId: 123,
+      email: "user-123",
     },
   };
 
   describe("getProductReviews", () => {
     it("should retrieve reviews for valid product", async () => {
-      const response = await mockedReviewService.getProductReviews(
-        mockData.getProductReviewsDTO
+      const getProductReviewsResponse =
+        await mockedReviewService.getProductReviews(
+          mockData.getProductReviewsDTO
+        );
+      expect(getProductReviewsResponse.success).toBe(true);
+      expect(getProductReviewsResponse.message).toBe(
+        "Reviews retrieved successfully!"
       );
-      expect(response.success).toBe(true);
-      expect(response.message).toBe("Reviews retrieved successfully!");
-      expect(response.data).toEqual([{ review: "Great product!" }]);
+      expect(getProductReviewsResponse.data).toEqual([
+        { review: "Great product!" },
+      ]);
     });
 
     it("should return error if product not found", async () => {
-      const response = await mockedReviewService.getProductReviews({
-        externalProductId: "999",
-      });
-      expect(response.success).toBe(false);
-      expect(response.message).toBe("Product not found!");
+      const getProductReviewsResponse =
+        await mockedReviewService.getProductReviews({
+          ...mockData.getProductReviewsDTO,
+          externalProductId: 999,
+        });
+      expect(getProductReviewsResponse.success).toBe(false);
+      expect(getProductReviewsResponse.message).toBe("Product not found!");
+    });
+
+    it("should return empty data when product has no reviews", async () => {
+      const getProductReviewsResponse =
+        await mockedReviewService.getProductReviews({
+          externalProductId: 456,
+          userId: "132123",
+        });
+      expect(getProductReviewsResponse.success).toBe(false);
+      expect(getProductReviewsResponse.message).toBe("Reviews not found!");
+      expect(getProductReviewsResponse.data).toEqual([]);
     });
   });
 
   describe("addReviewToProduct", () => {
     it("should add a review to product successfully", async () => {
-      const response = await mockedReviewService.addReviewToProduct(
-        mockData.addReviewToProductDTO
-      );
-      expect(response.success).toBe(true);
-      expect(response.message).toBe(
+      const addReviewToProductResponse =
+        await mockedReviewService.addReviewToProduct(
+          mockData.addReviewToProductDTO
+        );
+      expect(addReviewToProductResponse.success).toBe(true);
+      expect(addReviewToProductResponse.message).toBe(
         "Review was added successfully to product!"
       );
+      expect(addReviewToProductResponse.data?.id).toBe("review-1");
     });
 
     it("should fail if product data is invalid", async () => {
-      const response = await mockedReviewService.addReviewToProduct({
-        externalProductId: "999",
-        review: "Bad product!",
-        userId: "user-999",
-      });
-      expect(response.success).toBe(false);
-      expect(response.message).toBe("Invalid product data!");
+      const addReviewToProductResponse =
+        await mockedReviewService.addReviewToProduct({
+          ...mockData.addReviewToProductDTO,
+          externalProductId: 999,
+        });
+      expect(addReviewToProductResponse.success).toBe(false);
+      expect(addReviewToProductResponse.message).toBe("Review wasn't added!");
+    });
+
+    it("should fail if description is empty", async () => {
+      const addReviewToProductResponse =
+        await mockedReviewService.addReviewToProduct({
+          ...mockData.addReviewToProductDTO,
+          description: "",
+        });
+      expect(addReviewToProductResponse.success).toBe(false);
+      expect(addReviewToProductResponse.message).toBe(
+        "Review description is required!"
+      );
     });
   });
 
   describe("likeReview", () => {
     it("should successfully like a review", async () => {
-      const response = await mockedReviewService.likeReview(
+      const likeReviewResponse = await mockedReviewService.likeReview(
         mockData.likeReviewDTO
       );
-      expect(response.success).toBe(true);
-      expect(response.message).toBe("Review liked successfully!");
+      expect(likeReviewResponse.success).toBe(true);
+      expect(likeReviewResponse.message).toBe("Review liked successfully!");
     });
 
     it("should fail if review not found", async () => {
-      const response = await mockedReviewService.likeReview({
+      const likeReviewResponse = await mockedReviewService.likeReview({
         reviewId: "999",
-        externalProductId: "123",
-        userId: "user-123",
+        externalProductId: 123,
+        email: "user-123",
       });
-      expect(response.success).toBe(false);
-      expect(response.message).toBe("Review not found!");
+      expect(likeReviewResponse.success).toBe(false);
+      expect(likeReviewResponse.message).toBe("Review not found!");
     });
   });
 
   describe("unLikeReview", () => {
     it("should successfully unlike a review", async () => {
-      const response = await mockedReviewService.unLikeReview(
+      const unLikeReviewResponse = await mockedReviewService.unLikeReview(
         mockData.unLikeReviewDTO
       );
-      expect(response.success).toBe(true);
-      expect(response.message).toBe("Review unliked successfully!");
+      expect(unLikeReviewResponse.success).toBe(true);
+      expect(unLikeReviewResponse.message).toBe("Review unliked successfully!");
     });
 
     it("should fail if review not found", async () => {
-      const response = await mockedReviewService.unLikeReview({
+      const unLikeReviewResponse = await mockedReviewService.unLikeReview({
         reviewId: "999",
-        externalProductId: "123",
-        userId: "user-123",
+        externalProductId: 123,
+        email: "user-123",
       });
-      expect(response.success).toBe(false);
-      expect(response.message).toBe("Review not found!");
+      expect(unLikeReviewResponse.success).toBe(false);
+      expect(unLikeReviewResponse.message).toBe("Review not found!");
     });
   });
 });

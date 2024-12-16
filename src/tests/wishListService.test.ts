@@ -22,53 +22,41 @@ jest.mock("@/utils/injector", () => ({
 
     addProductToWishList: jest
       .fn()
-      .mockImplementation(async (productToAddDTO) => {
-        if (productToAddDTO && productToAddDTO.externalProductId === 102) {
+      .mockImplementation(async (addProductToWishListDTO) => {
+        if (addProductToWishListDTO.externalProductId === 102) {
           return {
             success: false,
             message: "Product already in wishlist!",
             data: null,
           };
-        } else if (productToAddDTO) {
-          return {
-            success: true,
-            message: "Product added to wishlist successfully!",
-            data: {
-              id: "123456789",
-              userId: "123123asdfasdasd",
-              createdAt: new Date(),
-              updatedAt: new Date(),
-            },
-          };
         }
-        return { success: false, message: "Invalid product data!", data: null };
+        return {
+          success: true,
+          message: "Product added to wishlist successfully!",
+          data: {
+            id: "123456789",
+            userId: "123123asdfasdasd",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+        };
       }),
 
     deleteProductFromWishList: jest
       .fn()
-      .mockImplementation(async (productToDeleteDTO) => {
-        if (
-          productToDeleteDTO &&
-          productToDeleteDTO.externalProductId === 999
-        ) {
+      .mockImplementation(async (deleteProductFromWishListDTO) => {
+        if (deleteProductFromWishListDTO.externalProductId === 999) {
           return {
             success: false,
             message: "Product not found in wishlist!",
             data: null,
           };
-        } else if (productToDeleteDTO) {
-          return {
-            success: true,
-            message: "Product removed from wishlist!",
-            data: {
-              id: "123456789",
-              userId: "123123asdfasdasd",
-              createdAt: new Date(),
-              updatedAt: new Date(),
-            },
-          };
         }
-        return { success: false, message: "Invalid product data!", data: null };
+        return {
+          success: true,
+          message: "Product removed from wishlist!",
+          data: null,
+        };
       }),
   },
 }));
@@ -132,12 +120,11 @@ describe("WishListService", () => {
 
   describe("addProductToWishList", () => {
     it("should add product to wishlist successfully", async () => {
-      console.log(mockData.productToAddToWishList);
       const addProductToWishListResponse =
-        await mockedWishListService.addProductToWishList(
-          mockData.productToAddToWishList
-        );
-      console.log(addProductToWishListResponse);
+        await mockedWishListService.addProductToWishList({
+          ...mockData.productToAddToWishList,
+          externalProductId: 103,
+        });
       expect(addProductToWishListResponse.success).toBe(true);
       expect(addProductToWishListResponse.message).toBe(
         "Product added to wishlist successfully!"
@@ -163,29 +150,29 @@ describe("WishListService", () => {
   });
 
   describe("deleteProductFromWishList", () => {
-    it("should delete product from wishlist successfully", async () => {
-      const deleteProductFromWishListResponse =
-        await mockedWishListService.deleteProductFromWishList(
-          mockData.productToDeleteFromWishList
+    describe("deleteProductFromWishList", () => {
+      it("should delete product from wishlist successfully", async () => {
+        const deleteProductFromWishListResponse =
+          await mockedWishListService.deleteProductFromWishList({
+            ...mockData.productToDeleteFromWishList,
+            externalProductId: 1000,
+          });
+        expect(deleteProductFromWishListResponse.success).toBe(true);
+        expect(deleteProductFromWishListResponse.message).toBe(
+          "Product removed from wishlist!"
         );
-      expect(deleteProductFromWishListResponse.success).toBe(true);
-      expect(deleteProductFromWishListResponse.message).toBe(
-        "Product removed from wishlist!"
-      );
-      expect(deleteProductFromWishListResponse.data).toEqual({
-        id: "123456789",
-        userId: "123123asdfasdasd",
-        createdAt: expect.any(Date),
-        updatedAt: expect.any(Date),
       });
     });
 
     it("should fail if product does not exist in wishlist", async () => {
-      const response = await mockedWishListService.deleteProductFromWishList(
-        mockData.productToDeleteFromWishList
+      const deleteProductFromWishListResponse =
+        await mockedWishListService.deleteProductFromWishList(
+          mockData.productToDeleteFromWishList
+        );
+      expect(deleteProductFromWishListResponse.success).toBe(false);
+      expect(deleteProductFromWishListResponse.message).toBe(
+        "Product not found in wishlist!"
       );
-      expect(response.success).toBe(false);
-      expect(response.message).toBe("Product not found in wishlist!");
     });
   });
 });

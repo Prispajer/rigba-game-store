@@ -1,5 +1,4 @@
 import { cartService } from "@/utils/injector";
-import { describe, mock } from "node:test";
 
 jest.mock("@/utils/injector", () => ({
   cartService: {
@@ -142,12 +141,12 @@ describe("CartService", () => {
     });
 
     it("should fail when no email is provided", async () => {
-      const response = await mockedCartService.getUserCart({
+      const getUserCartResponse = await mockedCartService.getUserCart({
         id: "3",
         email: "",
       });
-      expect(response.success).toBe(false);
-      expect(response.message).toBe("User cart not found!");
+      expect(getUserCartResponse.success).toBe(false);
+      expect(getUserCartResponse.message).toBe("User cart not found!");
     });
   });
 

@@ -28,7 +28,7 @@ export default function useUserServices() {
   const [isPending, startTransition] = React.useTransition();
   const searchParams = useSearchParams();
   const { handleClose } = useWindowVisibility();
-  const { user } = useCurrentUser();
+  const { user, update } = useCurrentUser();
   const token = searchParams.get("token");
   const providerError =
     searchParams.get("error") === "OAuthAccountNotLinked"
@@ -52,6 +52,7 @@ export default function useUserServices() {
 
   function useUserSecurity() {
     const submitToggleTwoFactor = async (code: string) => {
+      clearNotifications();
       try {
         const response = await requestService.postMethod(
           "users/endpoints/userAuthentication/toggleTwoFactor",
@@ -73,6 +74,7 @@ export default function useUserServices() {
     };
 
     const submitEmailVerification = React.useCallback(async () => {
+      clearNotifications();
       if (!token) {
         setError({ message: "Missing token!", origin: "EmailVerification" });
         return;
@@ -109,6 +111,7 @@ export default function useUserServices() {
       data: z.infer<typeof LoginSchema>,
       callback: (email: string, password: string) => Promise<void>
     ) => {
+      clearNotifications();
       startTransition(async () => {
         const { email, password, code } = data;
         try {
@@ -141,6 +144,7 @@ export default function useUserServices() {
     };
 
     const submitRegisterForm = async (data: z.infer<typeof RegisterSchema>) => {
+      clearNotifications();
       startTransition(async () => {
         const { email, password } = data;
         try {
@@ -165,6 +169,7 @@ export default function useUserServices() {
     const submitNewPasswordForm = async (
       data: z.infer<typeof NewPasswordSchema>
     ) => {
+      clearNotifications();
       startTransition(async () => {
         const { password } = data;
 
@@ -196,6 +201,7 @@ export default function useUserServices() {
     const submitResetPasswordForm = async (
       data: z.infer<typeof ResetPasswordSchema>
     ) => {
+      clearNotifications();
       startTransition(async () => {
         const { email } = data;
         try {
@@ -221,6 +227,7 @@ export default function useUserServices() {
       code: string,
       data: z.infer<typeof NewPasswordSchema>
     ) => {
+      clearNotifications();
       const { password } = data;
       try {
         const response = await requestService.postMethod(
@@ -242,6 +249,7 @@ export default function useUserServices() {
     };
 
     const submitUpdateName = async (data: z.infer<typeof UpdateNameSchema>) => {
+      clearNotifications();
       const { name } = data;
       try {
         const response = await requestService.postMethod(
@@ -251,6 +259,7 @@ export default function useUserServices() {
         if (response.success) {
           setSuccess({ message: response.message, origin: "UpdateName" });
           setIsEditing(false);
+          update(response.data);
         } else {
           setError({ message: response.message, origin: "UpdateName" });
         }
@@ -265,6 +274,7 @@ export default function useUserServices() {
     const submitUpdateData = async (
       data: z.infer<typeof PersonalDataSchema>
     ) => {
+      clearNotifications();
       const {
         fullName,
         birthDate,
@@ -292,6 +302,7 @@ export default function useUserServices() {
         );
         if (response.success) {
           setSuccess({ message: response.message, origin: "UpdateData" });
+          update(response.data);
         } else {
           setError({ message: response.message, origin: "UpdateData" });
         }
@@ -316,6 +327,7 @@ export default function useUserServices() {
 
   function useUserToken() {
     const sendToggleTwoFactorToken = async () => {
+      clearNotifications();
       try {
         const response = await requestService.postMethod(
           "users/endpoints/tokenManagement/toggleTwoFactorToken",
@@ -344,6 +356,7 @@ export default function useUserServices() {
       data: z.infer<typeof NewPasswordSchema>,
       oldPassword: string
     ) => {
+      clearNotifications();
       startTransition(async () => {
         try {
           const response = await requestService.postMethod(

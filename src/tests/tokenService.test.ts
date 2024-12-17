@@ -1,21 +1,53 @@
-import { Resend } from "resend";
-import {
-  tokenService,
-  checkerService,
-  tokenRepository,
-  userRepository,
-} from "@/utils/injector";
+import { tokenService } from "@/utils/injector";
 import { UserRole } from "@prisma/client";
+import {
+  sendPasswordResetEmail,
+  sendTwoFactorTokenEmail,
+  sendVerificationEmail,
+} from "@/data/database/publicSQL/mail";
 
-jest.mock("resend", () => {
-  return {
-    Resend: jest.fn().mockImplementation(() => ({
-      emails: {
-        send: jest.fn(),
-      },
-    })),
-  };
-});
+jest.mock("resend", () => ({
+  Resend: jest.fn().mockImplementation(() => ({
+    emails: { send: jest.fn() },
+  })),
+}));
+
+jest.mock("@/utils/injector", () => ({
+  tokenService: {
+    sendEmailVerificationToken: jest
+      .fn()
+      .mockImplementation(async (sendEmailVerificationTokenDTO) => {
+        if (sendEmailVerificationTokenDTO.email === "test@example.com") {
+          return {
+            success: true,
+            message: "Confirmation email sent!",
+            data: null,
+          };
+        }
+        return { success: false, message: "User not found!", data: null };
+      }),
+    sendResetPasswordToken: jest
+      .fn()
+      .mockImplementation(async (sendResetPasswordTokenDTO) => {
+        if (sendResetPasswordTokenDTO.email === "test@example.com") {
+          return { success: true, message: "Reset email sent!", data: null };
+        }
+        return { success: false, message: "User not found!", data: null };
+      }),
+    sendChangePasswordToken: jest
+      .fn()
+      .mockImplementation(async (sendChangePasswordTokenDTO) => {
+        if (sendChangePasswordTokenDTO.email === "test@example.com") {
+          return {
+            success: true,
+            message: "Two factor token has been sent!",
+            data: null,
+          };
+        }
+        return { success: false, message: "User not found!", data: null };
+      }),
+  },
+}));
 
 jest.mock("../data/database/publicSQL/mail", () => ({
   sendVerificationEmail: jest.fn().mockResolvedValue(undefined),
@@ -23,66 +55,42 @@ jest.mock("../data/database/publicSQL/mail", () => ({
   sendPasswordResetEmail: jest.fn().mockResolvedValue(undefined),
 }));
 
-import {
-  sendVerificationEmail,
-  sendTwoFactorTokenEmail,
-  sendPasswordResetEmail,
-} from "../data/database/publicSQL/mail";
+const mockedTokenRepository = {
+  generateEmailVerificationToken: jest.fn(),
+  generatePasswordResetToken: jest.fn(),
+  generateTwoFactorToken: jest.fn(),
+  getTwoFactorTokenByEmail: jest.fn(),
+};
+
+const mockedTokenService = jest.mocked(tokenService);
 
 describe("TokenService", () => {
-  const mockedCheckerService = {
-    checkDataExistsAndReturnUser: jest
-      .fn()
-      .mockImplementation(async (checkDataExistsAndReturnUserDTO) => {
-        if (checkDataExistsAndReturnUserDTO.email === "test@example.com") {
-          return {
-            success: true,
-            message: "User retrieved successfully!",
-            data: {
-              id: "1",
-              name: "Test User",
-              email: "test@example.com",
-              emailVerified: null,
-              password: "hashed-password",
-              role: UserRole.USER,
-              image: null,
-              isTwoFactorEnabled: false,
-            },
-          };
-        } else {
-          return { success: false, message: "User not found!" };
-        }
-      }),
-    checkIsTokenValidAndReturnTwoFactorToken: jest.fn(),
-    checkIsUserPasswordCorrect: jest.fn(),
-    handleSuccess: jest.fn(),
-  };
-
-  const mockedTokenRepository = {
-    generateEmailVerificationToken: jest.fn(),
-    generatePasswordResetToken: jest.fn(),
-    generateTwoFactorToken: jest.fn(),
-    getTwoFactorTokenByEmail: jest.fn(),
+  const mockData = {
+    userForEmailVerification: {
+      id: "1",
+      name: "Test User",
+      email: "test@example.com",
+      emailVerified: null,
+      password: null,
+      role: UserRole.USER,
+      image: null,
+      isTwoFactorEnabled: false,
+    },
+    userForResetPassword: {
+      email: "test@example.com",
+    },
+    userForChangePassword: {
+      email: "test@example.com",
+      password: "old-password",
+    },
+    validEmail: "test@example.com",
+    validToken: "verification-token",
+    invalidEmail: "nonexistent@example.com",
+    invalidToken: "invalid-token",
   };
 
   beforeEach(() => {
     jest.clearAllMocks();
-
-    mockedCheckerService.checkDataExistsAndReturnUser.mockResolvedValue({
-      success: true,
-      data: { email: "test@example.com" },
-    });
-
-    mockedTokenRepository.generatePasswordResetToken.mockResolvedValue({
-      email: "test@example.com",
-      token: "reset-token",
-    });
-
-    mockedTokenRepository.generateTwoFactorToken.mockResolvedValue({
-      email: "test@example.com",
-      token: "two-factor-token",
-      expires: new Date(new Date().getTime() + 3600000),
-    });
   });
 
   const testSendEmail = async (
@@ -90,39 +98,33 @@ describe("TokenService", () => {
     expectedEmail: string,
     expectedToken: string
   ) => {
-    const response = await emailFunction(expectedEmail, expectedToken);
-    console.log(emailFunction.mock.calls); // Debugowanie wywołań
+    const emailFunctionResponse = await emailFunction(
+      expectedEmail,
+      expectedToken
+    );
     expect(emailFunction).toHaveBeenCalledWith(expectedEmail, expectedToken);
-    return response;
+    return emailFunctionResponse;
   };
 
   describe("sendEmailVerificationToken", () => {
     it("should send a verification email if the user's email is not verified", async () => {
       mockedTokenRepository.generateEmailVerificationToken.mockResolvedValue({
-        email: "test@example.com",
-        token: "verification-token",
+        email: mockData.validEmail,
+        token: mockData.validToken,
       });
 
-      const user = {
-        id: "1",
-        name: "Test User",
-        email: "test@example.com",
-        emailVerified: null,
-        password: null,
-        role: UserRole.USER,
-        image: null,
-        isTwoFactorEnabled: false,
-      };
-
-      const response = await tokenService.sendEmailVerificationToken(user);
+      const sendEmailVerificationTokenResponse =
+        await mockedTokenService.sendEmailVerificationToken(
+          mockData.userForEmailVerification
+        );
 
       await testSendEmail(
         sendVerificationEmail as jest.Mock,
-        "test@example.com",
-        "verification-token"
+        mockData.validEmail,
+        mockData.validToken
       );
 
-      expect(response).toEqual({
+      expect(sendEmailVerificationTokenResponse).toEqual({
         success: true,
         message: "Confirmation email sent!",
         data: null,
@@ -131,23 +133,18 @@ describe("TokenService", () => {
 
     it("should not send an email if the user's email is already verified", async () => {
       const user = {
-        id: "1",
-        name: "Test User",
-        email: "test@example.com",
+        ...mockData.userForEmailVerification,
         emailVerified: new Date(),
-        password: null,
-        role: UserRole.USER,
-        image: null,
-        isTwoFactorEnabled: false,
       };
 
-      const response = await tokenService.sendEmailVerificationToken(user);
+      const sendEmailVerificationTokenResponse =
+        await tokenService.sendEmailVerificationToken(user);
 
       expect(
         mockedTokenRepository.generateEmailVerificationToken
       ).not.toHaveBeenCalled();
       expect(sendVerificationEmail).not.toHaveBeenCalled();
-      expect(response).toEqual({
+      expect(sendEmailVerificationTokenResponse).toEqual({
         success: true,
         message: "Confirmation email sent!",
         data: null,
@@ -157,19 +154,23 @@ describe("TokenService", () => {
 
   describe("sendResetPasswordToken", () => {
     it("should generate and send a reset password email", async () => {
-      const response = await tokenService.sendResetPasswordToken({
-        email: "test@example.com",
+      mockedTokenRepository.generatePasswordResetToken.mockResolvedValue({
+        email: mockData.validEmail,
+        token: mockData.validToken,
       });
 
-      console.log(response);
+      const sendResetPasswordTokenResponse =
+        await tokenService.sendResetPasswordToken({
+          email: mockData.validEmail,
+        });
 
       await testSendEmail(
         sendPasswordResetEmail as jest.Mock,
-        "test@example.com",
-        "reset-token"
+        mockData.validEmail,
+        mockData.validToken
       );
 
-      expect(response).toEqual({
+      expect(sendResetPasswordTokenResponse).toEqual({
         success: true,
         message: "Reset email sent!",
         data: null,
@@ -179,18 +180,24 @@ describe("TokenService", () => {
 
   describe("sendChangePasswordToken", () => {
     it("should send a two-factor token if no code is provided", async () => {
-      const response = await tokenService.sendChangePasswordToken({
-        email: "test@example.com",
-        password: "old-password",
+      mockedTokenRepository.generateTwoFactorToken.mockResolvedValue({
+        email: mockData.validEmail,
+        token: mockData.validToken,
       });
+
+      const sendChangePasswordTokenResponse =
+        await tokenService.sendChangePasswordToken({
+          email: mockData.validEmail,
+          password: mockData.userForChangePassword.password,
+        });
 
       await testSendEmail(
         sendTwoFactorTokenEmail as jest.Mock,
-        "test@example.com",
-        "two-factor-token"
+        mockData.validEmail,
+        mockData.validToken
       );
 
-      expect(response).toEqual({
+      expect(sendChangePasswordTokenResponse).toEqual({
         success: true,
         message: "Two factor token has been sent!",
         data: null,

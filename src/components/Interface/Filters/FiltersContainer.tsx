@@ -71,7 +71,7 @@ export default function FiltersContainer() {
             ) : productFilterState.error ? (
               <div
                 className="flex items-center justify-center text-[18px]
-              cursor-default"
+              cursor-default text-red-500 font-[600]"
               >
                 We couldn't find any games in this category. Please check your
                 filters or try searching in other categories.

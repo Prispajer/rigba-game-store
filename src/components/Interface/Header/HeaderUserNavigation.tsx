@@ -153,7 +153,7 @@ export default function HeaderUserNavigation({}) {
       )}
       <ProfileModalContainer
         navItems={extendedNavItems}
-        translateX="md:translate-x-[10px]"
+        translateX="md:translate-x-[7px]"
         translateY="md:translate-y-[65px]"
       />
       <CartModalContainer />

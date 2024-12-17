@@ -7,8 +7,8 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className="flex min-w-full min-h-[100vh] h-max lg:bg-[#122339] bg-primaryColor">
-      <div className="flex flex-col justify-between flex-1 h-full">
+    <section className="flex flex-col justify-between min-w-full min-h-[100vh] h-max lg:bg-[#122339] bg-primaryColor">
+      <div className="flex flex-col justify-between flex-1 min-h-[100vh] h-max">
         <header>
           <Link className="flex items-center pl-3 pt-3 max-w-[200px]" href="/">
             <Image

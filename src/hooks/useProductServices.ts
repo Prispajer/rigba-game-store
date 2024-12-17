@@ -39,6 +39,7 @@ export default function useProductServices() {
       user: User,
       product: GameAPIResponse
     ) => {
+      clearNotifications();
       const { review, rating } = data;
       const title = ratingsKeys[rating];
       try {

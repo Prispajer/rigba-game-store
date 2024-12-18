@@ -9,7 +9,7 @@ export default function DigitalProductDetails({
 }) {
   return (
     <div className={display}>
-      <ul className="grid grid-cols-product-digital-products-details-auto-fit pb-[15px] gap-y-[16px] gap-x-[24px] border-b-[1px] border-[#1c4c74] tracking-tighter">
+      <ul className="grid grid-cols-product-digital-products-details-auto-fit pb-[15px] gap-y-[16px] gap-x-[24px] border-b-[1px] border-[#1c4c74] tracking-tighter cursor-default">
         <li className="flex items-center w-full ">
           <div className="w-[35px] h-[35px]">
             <IoMdDoneAll size="35px" color="#ffffff" />
@@ -54,7 +54,7 @@ export default function DigitalProductDetails({
         </li>
       </ul>
       <div className="pt-[10px]">
-        <span className="text-[#FFFFFF96] text-[14px]">
+        <span className="text-[#FFFFFF96] text-[14px] cursor-default">
           Works on: <span className="text-[#ffffff]">Windows</span>
         </span>
       </div>

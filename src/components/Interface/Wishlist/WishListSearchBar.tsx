@@ -18,7 +18,7 @@ export default function WishListSearchBar({
   return (
     <form className="pb-[20px]">
       <div className="pt-[15px] px-[20px] pb-[10px]">
-        <span className="font-bold">Product name</span>
+        <span className="font-bold cursor-default">Product name</span>
       </div>
       <div className="flex items-center mx-[20px] px-[10px] bg-[#2a5286] focus:bg-secondaryColor hover:bg-secondaryColor ">
         <FiSearch className="" size="25px" color="white" />

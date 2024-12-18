@@ -18,7 +18,9 @@ export default function HomeCategories() {
     <section className="bg-secondaryColor py-[15px]">
       <div className="flex max-w-[1240px] mx-auto px-[20px] py-6">
         <div className="flex flex-col w-full">
-          <h1 className="text-[30px] text-white font-bold">Categories</h1>
+          <h1 className="text-[30px] text-white font-bold cursor-default">
+            Categories
+          </h1>
           {productGenresState && (
             <div className="grid grid-cols-2 ty:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 max-w-[1240px] my-6 gap-[20px]">
               {productGenresState.genresArray.map((genre) => (

@@ -23,7 +23,7 @@ export default function HomeSortableGameList({
     <section className={`${background} py-[15px]`}>
       <div className="flex max-w-[1240px] mx-auto px-[20px] py-6">
         <div className="flex flex-col w-full">
-          <h1 className="text-[24px] sm:text-[30px] text-white font-bold">
+          <h1 className="text-[24px] sm:text-[30px] text-white font-bold cursor-default">
             {header}
           </h1>
           <div className="flex flex-col sm:flex-row max-w-[1240px] gap-x-[20px] scrollbar overflow-auto">

@@ -58,7 +58,7 @@ export default function SortBy({
   return (
     <div className="flex flex-col md:flex-row items-start md:items-center">
       <div className={display}>
-        <span className="text-[#FFFFFF]">
+        <span className="text-[#FFFFFF] cursor-default">
           Results found: <span className="font-bold">{sortedGamesCount}</span>
         </span>
       </div>

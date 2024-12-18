@@ -10,12 +10,18 @@ export default function ProductPaymentWays() {
         </span>
       </div>
       <div className="flex gap-x-2">
-        <div className="flex items-center justify-center w-[30px] h-[20px] bg-[#ffffff] rounded-[2px] cursor-help	">
+        <div
+          className="flex items-center justify-center w-[30px] h-[20px] bg-[#ffffff] rounded-[2px] cursor-help"
+          title="MasterCard"
+        >
           <span>
             <FaCcMastercard size="20px" />
           </span>
         </div>
-        <div className="flex items-center justify-center w-[30px] h-[20px] bg-[#ffffff] rounded-[2px] cursor-help	">
+        <div
+          className="flex items-center justify-center w-[30px] h-[20px] bg-[#ffffff] rounded-[2px] cursor-help"
+          title="Visa"
+        >
           <span>
             <FaCcVisa size="20px" />
           </span>

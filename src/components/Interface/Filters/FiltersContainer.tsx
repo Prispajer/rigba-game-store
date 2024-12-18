@@ -69,10 +69,7 @@ export default function FiltersContainer() {
                 <MoonLoader color="pink" />
               </div>
             ) : productFilterState.error ? (
-              <div
-                className="flex items-center justify-center text-[18px]
-              cursor-default text-red-500 font-[600]"
-              >
+              <div className="flex items-center justify-center py-[10px] text-[18px] cursor-default text-red-500 font-[600]">
                 We couldn't find any games in this category. Please check your
                 filters or try searching in other categories.
               </div>

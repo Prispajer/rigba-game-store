@@ -20,6 +20,8 @@ export default function ChangePage() {
     }
   };
 
+  console.log(productFilterState.page);
+
   const renderPagination = () => {
     let pages = [];
     if (productFilterState.page <= 3) {
@@ -60,21 +62,24 @@ export default function ChangePage() {
         <li
           onClick={() => handlePageClick(page)}
           key={page}
-          className="p-[10px] text-[20px] cursor-pointer"
+          className="p-[10px] text-[20px] hover:text-[#e2999b] cursor-pointer"
         >
           {page === "previousPage" || "nextPage" ? "..." : page}
         </li>
       ) : (
         <li
           key={index}
-          className={`p-[10px] text-[20px] hover:text-[#e2999b]
+          className={`p-[10px] text-[20px]  
             ${
               productFilterState.page === page
-                ? " text-[#E2999B] "
+                ? " text-[#E2999B]"
                 : " text-[#FFFFFF]"
             }`}
         >
-          <button onClick={() => handlePageClick(page as number)}>
+          <button
+            className="hover:text-[#e2999b] cursor-pointer"
+            onClick={() => handlePageClick(page as number)}
+          >
             {page}
           </button>
         </li>
@@ -85,7 +90,13 @@ export default function ChangePage() {
   return (
     <div className="flex items-center justify-center pt-[20px]">
       <ul className="flex items-center text-[#ffffff] font-medium ">
-        <li className="flex items-center p-[10px] mr-[10px] text-[20px] border border-[white] ">
+        <li
+          className={`flex items-center p-[10px] mr-[10px] text-[20px] border border-white transition ease-in-out ${
+            productFilterState.page === 1
+              ? "hover:border-[#FFFFFF] hover:bg-transparent cursor-default"
+              : "hover:border-headerHover hover:bg-tertiaryColor cursor-pointer"
+          }`}
+        >
           <button
             onClick={() => handleSetPreviousPage()}
             disabled={productFilterState.page === 1}
@@ -94,7 +105,14 @@ export default function ChangePage() {
           </button>
         </li>
         {renderPagination()}
-        <li className="flex items-center p-[10px] ml-[10px] text-[20px] border border-[white] ">
+        <li
+          className={`flex items-center p-[10px] ml-[10px] text-[20px] border border-white transition ease-in-out cursor-pointer ${
+            productFilterState.page ===
+            productFilterState.productsWithFilters.length
+              ? "hover:border-[#FFFFFF] hover:bg-transparent cursor-default"
+              : "hover:border-headerHover hover:bg-tertiaryColor cursor-pointer"
+          }`}
+        >
           <button
             onClick={() => handleSetNextPage()}
             disabled={

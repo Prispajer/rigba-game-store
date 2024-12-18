@@ -8,7 +8,7 @@ export default function ProductDescription({
   return (
     <section className="flex items-center justify-center z max-w-[1240px] md:mx-auto pb-[15px] mx-[-20px] px-[20px] pt-4 bg-secondaryColor">
       <div className="flex flex-col w-full">
-        <span className="mb-[15px] text-[18px] text-[#FFFFFF] font-bold">
+        <span className="mb-[15px] text-[18px] text-[#FFFFFF] font-bold cursor-default">
           {product.name}
         </span>
         {product.description_raw ? (

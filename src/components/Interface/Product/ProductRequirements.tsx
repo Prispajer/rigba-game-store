@@ -25,7 +25,7 @@ export default function ProductRequirements({
 
     if (!requirements) {
       return (
-        <li className="text-[15px] text-[#DCD8E6]">
+        <li className="text-[15px] text-[#DCD8E6] cursor-default">
           No system requirements available for {platformName}.
         </li>
       );
@@ -35,28 +35,30 @@ export default function ProductRequirements({
       <>
         {requirements.minimum ? (
           <>
-            <h3 className="mb-[10px] text-[17px] text-[#FFFFFF] font-[700]">
+            <h3 className="mb-[10px] text-[17px] text-[#FFFFFF] font-[700] cursor-default">
               Minimum System Requirements
             </h3>
-            <p className="text-[15px] text-[#DCD8E6]">{requirements.minimum}</p>
+            <p className="text-[15px] text-[#DCD8E6] cursor-default">
+              {requirements.minimum}
+            </p>
             <br />
           </>
         ) : (
-          <li className="text-[15px] text-[#DCD8E6]">
+          <li className="text-[15px] text-[#DCD8E6] cursor-default">
             No minimum system requirements for {platformName}.
           </li>
         )}
         {requirements.recommended ? (
           <>
-            <h3 className="mb-[10px] text-[17px] text-[#FFFFFF] font-[700]">
+            <h3 className="mb-[10px] text-[17px] text-[#FFFFFF] font-[700] cursor-default">
               Recommended System Requirements
             </h3>
-            <p className="text-[15px] text-[#DCD8E6]">
+            <p className="text-[15px] text-[#DCD8E6] cursor-default">
               {requirements.recommended}
             </p>
           </>
         ) : (
-          <li className="text-[15px] text-[#DCD8E6]">
+          <li className="text-[15px] text-[#DCD8E6] cursor-default">
             No recommended system requirements for {platformName}.
           </li>
         )}
@@ -89,7 +91,7 @@ export default function ProductRequirements({
         {["PC", "macOS", "Linux"].includes(activeTab) ? (
           renderRequirements(activeTab)
         ) : (
-          <div className="text-[15px] text-[#DCD8E6]">
+          <div className="text-[15px] text-[#DCD8E6] cursor-default">
             System requirements are not applicable for the selected platform.
           </div>
         )}

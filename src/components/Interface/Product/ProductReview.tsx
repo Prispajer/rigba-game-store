@@ -28,7 +28,7 @@ export default function ProductReview({
     <div className="md:mx-auto mx-[-20px] pt-[20px] px-[20px] pb-[15px] md:px-0 lg:px-[20px] xxl:px-0 bg-secondaryColor md:bg-transparent lg:bg-secondaryColor xxl:bg-transparent">
       <div className="sm:flex sm:flex-row w-full gap-4">
         <div className="flex flex-wrap justify-between items-center w-full">
-          <ul className="flex flex-col md:flex-row lg:flex-col xxl:flex-row">
+          <ul className="flex flex-col md:flex-row lg:flex-col xxl:flex-row cursor-default">
             {mergedReviews.length > 0 ? (
               mergedReviews
                 .sort((a, b) => a.percent - b.percent)

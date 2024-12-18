@@ -97,7 +97,7 @@ export default function FilterByCategory({
                   .map((filterItem) => (
                     <li
                       key={filterItem.id}
-                      className="flex justify-between items-center mb-[10px]"
+                      className="flex justify-between items-center mb-[10px] cursor-default"
                     >
                       <input
                         className="flex-0"
@@ -126,16 +126,19 @@ export default function FilterByCategory({
               className="flex items-center w-full text-[#dc8588] hover:text-[#d77174]"
               onClick={toggleVisibleItems}
             >
-              {visibleItemsCount === apiFiltersArray.length ? (
+              {visibleItemsCount === apiFiltersArray.length &&
+              apiFiltersArray.length > 10 ? (
                 <>
                   <span className="font-[700]">Show less</span>
                   <MdKeyboardArrowUp className="mt-[2px]" size="25px" />
                 </>
               ) : (
-                <>
-                  <span className="font-[700]">Show more</span>
-                  <MdKeyboardArrowDown className="mt-[2px]" size="25px" />
-                </>
+                apiFiltersArray.length > 10 && (
+                  <>
+                    <span className="font-[700]">Show more</span>
+                    <MdKeyboardArrowDown className="mt-[2px]" size="25px" />
+                  </>
+                )
               )}
             </button>
           </>

@@ -95,7 +95,7 @@ export default function SearchResultsModalContainer({
                   </span>
                   <button
                     onClick={(event) => handleAddProductToCart(game, event)}
-                    className="flex items-center justify-center w-[100%] h-[35px] mt-[10px] border-2 border-[#FFFFFFF] hover:bg-buttonTextColor"
+                    className="flex items-center justify-center w-[100%] h-[35px] mt-[10px] border-2 border-white hover:bg-tertiaryColor hover:border-headerHover transition ease-in-out"
                   >
                     <FaCartPlus size="20px" color="#ffffff" />
                   </button>

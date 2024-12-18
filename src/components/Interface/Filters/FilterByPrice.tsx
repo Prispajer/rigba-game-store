@@ -32,7 +32,7 @@ export default function FilterByPrice() {
               type="text"
               inputMode="decimal"
             />
-            <strong className="flex-0 px-[10px]">-</strong>
+            <strong className="flex-0 px-[10px] cursor-default">-</strong>
             <input
               onChange={(event) =>
                 handleSetSearchText("compartmentNumberTwo", event)

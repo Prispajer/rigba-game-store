@@ -66,10 +66,12 @@ export default function ReviewContainer({
             className="grid grid-cols-1 md:grid-cols-[180px,1fr] md:gap-x-[40px] mx-[-20px] sm:mx-[0px] p-[20px] lg:py-[30px] lg:px-[40px] bg-secondaryColor"
           >
             <div className="sm:mb-[55px] mb-[20px]">
-              <h2 className="mb-[20px] text-[26px] text-[#FFFFFF] font-bold leading-[30px]">
+              <h2 className="mb-[20px] text-[26px] text-[#FFFFFF] font-bold leading-[30px] cursor-default">
                 Detailed review
               </h2>
-              <div className="text-[14px] text-[#FFFFFF]">Overall rating</div>
+              <div className="text-[14px] text-[#FFFFFF] cursor-default">
+                Overall rating
+              </div>
               <div className="rating-container">
                 {["5", "4", "3", "2", "1"].map((value) => (
                   <React.Fragment key={value}>
@@ -94,17 +96,17 @@ export default function ReviewContainer({
               )}
             </div>
             <div className="grid row-start-2 col-start-1 col-end-3 md:row-start-auto md:col-start-auto md:col-end-auto">
-              <h2 className="mb-[20px] text-[26px] text-[#FFFFFF] font-bold leading-[30px]">
+              <h2 className="mb-[20px] text-[26px] text-[#FFFFFF] font-bold leading-[30px] cursor-default">
                 Review
               </h2>
-              <p className="mb-[15px] text-[#ffffff80] text-[15px] text-justify">
+              <p className="mb-[15px] text-[#ffffff80] text-[15px] text-justify cursor-default">
                 Help other players make a choice! This review should include
                 your opinion on the gameplay, graphics, soundtrack and story. If
                 you would like to express your opinion on Eneba, consider
                 leaving a review on Trustpilot. If you need help from support,
                 select create a ticket
               </p>
-              <p className="mb-[15px] text-[#ffffff80] text-[15px] text-justify">
+              <p className="mb-[15px] text-[#ffffff80] text-[15px] text-justify cursor-default">
                 Your review must be at least 150 characters long.
               </p>
               <textarea
@@ -133,7 +135,7 @@ export default function ReviewContainer({
                 />
               </div>
               <div className="flex justify-end">
-                <button className="min-w-[200px] min-h-[35px] bg-buttonBackground text-buttonTextColor">
+                <button className="min-w-[200px] min-h-[35px] transition duration-300 font-medium text-buttonTextColor bg-buttonBackground hover:bg-buttonBackgroundHover">
                   <span>Confirm</span>
                 </button>
               </div>

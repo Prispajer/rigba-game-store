@@ -69,7 +69,7 @@ export default function FilterModalContainer({
           autoComplete="off"
         />
       </div>
-      <ul className="scrollbar-filters-modal md:max-h-[210px] pr-[8px] overflow-y-auto">
+      <ul className="scrollbar-filters-modal md:max-h-[210px] pr-[8px] overflow-y-auto cursor-default">
         {utilsService.searchByString(apiFiltersArray).map((filter) => (
           <li
             key={filter.id}
@@ -97,7 +97,7 @@ export default function FilterModalContainer({
       <div className="flex items-center justify-center py-[10px] border-t-[2px] border-[#ffffff1a]">
         <button
           onClick={() => handleClearSelectedFilter(setSelectedFiltersId)}
-          className="text-[18px] text-modalHover"
+          className="text-[18px] font-medium text-buttonTextColor hover:text-headerHover transition duration-300"
         >
           Clear all
         </button>
@@ -158,7 +158,7 @@ export default function FilterModalContainer({
         <div className="grid grid-cols-2 py-[10px] gap-x-[10px] border-t-[2px] border-[#ffffff1a]">
           <button
             onClick={() => handleClearSelectedFilter(setSelectedFiltersId)}
-            className="min-h-[35px] text-[16px] border-[1px] border-[#FFFFFF] bg-transparent text-[#FFFFFF] font-[700]"
+            className="min-h-[35px] text-[18px] font-medium text-buttonTextColor hover:text-headerHover transition duration-300"
           >
             Clear all
           </button>

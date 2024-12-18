@@ -46,7 +46,7 @@ export default function ProductInformations({
           <div className="flex flex-1 flex-col pl-[15px] lg:pl-[30px] leading-[28px]">
             <div className="flex justify-between mb-[20px]">
               <div className="pr-[20px]">
-                <h1 className="text-[18px] sm:text-[22px] md:text-[24px] lg:text-[26px] text-[#FFFFFF] font-[600]">
+                <h1 className="text-[18px] sm:text-[22px] md:text-[24px] lg:text-[26px] text-[#FFFFFF] font-[600] cursor-default">
                   {product.name}
                 </h1>
               </div>
@@ -63,7 +63,7 @@ export default function ProductInformations({
             </div>
             <div className="flex items-center flex-wrap gap-x-[5px] mb-[15px] cursor-default">
               <div>
-                <span className="">
+                <span>
                   {generateStars(calculateAverageRating(mergedReviews))}
                 </span>
               </div>

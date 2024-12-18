@@ -59,7 +59,7 @@ export default function ProductBuyOrAdd({
       <div className="max-w-[350px]">
         <div className="flex w-[70px]">
           <div className="flex min-w-[200px] mb-[10px]">
-            <span className="w-full font-[700] text-[18px] text-[#ffffff]">
+            <span className="w-full font-[700] text-[18px] text-[#ffffff] cursor-default">
               {`$${generateRandomValue()}`}
             </span>
           </div>
@@ -71,13 +71,13 @@ export default function ProductBuyOrAdd({
                 handleAddProduct();
                 redirectToCheckout();
               }}
-              className="w-full min-h-[35px] bg-buttonBackground text-buttonTextColor"
+              className="w-full min-h-[35px] transition duration-300 font-medium text-buttonTextColor bg-buttonBackground hover:bg-buttonBackgroundHover"
             >
               Buy now
             </button>
           </div>
           <button
-            className="flex items-center min-h-[35px] px-[10px] bg-transparent border-[2px] cursor-pointer"
+            className="flex items-center min-h-[35px] px-[10px] bg-transparent border-[2px] cursor-pointer border-white hover:bg-tertiaryColor hover:border-headerHover transition ease-in-out"
             disabled={isCartLoading}
             onClick={handleAddProduct}
           >

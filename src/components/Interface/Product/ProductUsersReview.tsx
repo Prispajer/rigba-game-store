@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import LoadingAnimation from "../Shared/Animations/LoadingAnimation";
+import { FormError } from "../Shared/FormsNotifications/FormError";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { generateStars } from "@/utils/ratings";
 import { GameAPIResponse } from "@/utils/helpers/types";
@@ -83,18 +84,22 @@ export default function ProductUsersReview({
                     <button
                       onClick={() => handleLikeClick(review.id)}
                       className="ml-[10px]"
-                      disabled={isReviewLoading || findReviewLiker(review.id)}
+                      disabled={
+                        isReviewLoading || findReviewLiker(review.id) || !user
+                      }
                     >
                       <AiFillLike size="22px" color="#FFFFFF" />
                     </button>
                     <button
                       onClick={() => handleDislikeClick(review.id)}
                       className="ml-[10px] mt-[2px]"
-                      disabled={isReviewLoading || !findReviewLiker(review.id)}
+                      disabled={
+                        isReviewLoading || !findReviewLiker(review.id) || !user
+                      }
                     >
                       <AiFillDislike size="22px" color="#FFFFFF" />
                     </button>
-                    <span className="ml-[10px] text-[green] text-[14px]">
+                    <span className="ml-[10px] text-[green] text-[14px] cursor-default">
                       {review.likes === 0
                         ? `${review.likes}`
                         : review.likes > 0
@@ -112,10 +117,10 @@ export default function ProductUsersReview({
                     width="22"
                     height="22"
                   />
-                  <strong className="flex-0 mr-[10px] text-[16px] text-[#FFFFFF]">
+                  <strong className="flex-0 mr-[10px] text-[16px] text-[#FFFFFF] cursor-default">
                     {review.user.name || review.user.email}
                   </strong>
-                  <span className="flex-1 text-[#C3DAC9] text-[12px]">
+                  <span className="flex-1 text-[#C3DAC9] text-[12px] cursor-default">
                     {new Date(review.createdAt).toLocaleDateString()}
                   </span>
                 </div>
@@ -126,9 +131,12 @@ export default function ProductUsersReview({
             );
           })
         ) : (
-          <p className="px-[20px] py-[15px] text-[19px] text-[#FFFFFF] font-[500]">
+          <p className="px-[20px] py-[15px] text-[19px] text-[#FFFFFF] font-[500] cursor-default">
             No reviews available for this product.
           </p>
+        )}
+        {!user && (
+          <FormError message="You must be logged in to like or dislike reviews!" />
         )}
       </div>
     </div>

@@ -14,7 +14,7 @@ export default function ProductRemainingDetails({
 
   return (
     <section className="flex flex-col z max-w-[1240px] md:mx-auto pb-[15px] mx-[-20px] px-[20px] pt-4 bg-secondaryColor">
-      <ul className="flex flex-col gap-y-[8px]">
+      <ul className="flex flex-col gap-y-[8px] cursor-default">
         <li className="flex sm:flex-row flex-col leading-[18px]">
           <div className="text-[15px] text-[#C3DAC9] flex-shrink-0 sm:w-[100px] sm:pr-[20px]">
             Released at

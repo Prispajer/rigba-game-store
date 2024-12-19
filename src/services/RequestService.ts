@@ -4,7 +4,7 @@ import { RequestResponse } from "../utils/helpers/types";
 export class RequestService implements IRequestService {
   private readonly baseUrl: string;
 
-  constructor(baseUrl: string = `${process.env.NEXT_PUBLIC_URL}api/`) {
+  constructor(baseUrl: string = `${process.env.NEXT_PUBLIC_URL}/api/`) {
     this.baseUrl = baseUrl;
   }
 

@@ -12,6 +12,11 @@ export async function POST(request: NextRequest) {
 
   const stripeBody = await request.text();
   const signature = await request.headers.get("stripe-signature");
+  console.log("Received Stripe webhook event:", stripeBody); // Debug log
+
+  if (!signature) {
+    throw new Error("Missing Stripe signature");
+  }
 
   try {
     event = await stripe.webhooks.constructEvent(
@@ -19,6 +24,8 @@ export async function POST(request: NextRequest) {
       signature as string,
       process.env.WEBHOOK_SECRET_KEY as string
     );
+
+    console.log("Stripe event successfully processed:", event); // Debug log
 
     const paymentIntent = event.data.object as Stripe.PaymentIntent;
     const userId = paymentIntent.metadata.userId;
@@ -104,7 +111,7 @@ export async function POST(request: NextRequest) {
       }
 
       await postgres.order.delete({
-        where: { id: orderId },
+        where: { id: orderId, userId: userId },
       });
 
       await postgres.cart.delete({
@@ -131,7 +138,7 @@ export async function POST(request: NextRequest) {
       });
 
       await postgres.order.delete({
-        where: { id: orderId },
+        where: { id: orderId, userId: userId },
       });
     }
   } catch (error) {

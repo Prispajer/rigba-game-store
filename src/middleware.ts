@@ -13,7 +13,7 @@ import {
 const { auth } = NextAuth(authConfig);
 
 export default auth((req) => {
-  const isLoggedIn = !!req.auth;
+  const isLoggedIn = !!req.auth || !!req.cookies.get("authjs.session-token");
 
   const isApiRoute = req.nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = handleDynamicId(req.nextUrl.pathname);
@@ -37,9 +37,9 @@ export default auth((req) => {
     return NextResponse.redirect(new URL("/login", req.nextUrl));
   }
 
-  return;
+  return NextResponse.next();
 });
 
 export const config = {
-  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
+  matcher: ["/account", "/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
 };

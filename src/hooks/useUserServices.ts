@@ -338,6 +338,7 @@ export default function useUserServices() {
             message: response.message,
             origin: "ToggleTwoFactorToken",
           });
+          update(response.data);
         } else {
           setError({
             message: response.message,

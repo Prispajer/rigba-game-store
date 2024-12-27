@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 
 export const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY);
-const baseUrl = process.env.NEXT_PUBLIC_URL;
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 const logoUrl =
   "https://drive.google.com/uc?export=view&id=1wmkx2iglt5ag9WMFwepz-Ulfwr3iNhdy";
 

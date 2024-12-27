@@ -56,7 +56,7 @@ export default function PaymentContainer({
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${process.env.NEXT_PUBLIC_URL}/checkout/redeem/${newOrder?.id}`,
+        return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/redeem/${newOrder?.id}`,
       },
     });
 

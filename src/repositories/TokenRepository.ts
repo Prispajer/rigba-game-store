@@ -1,6 +1,6 @@
 import { injectable, inject } from "inversify";
 import { v4 as uuid4 } from "uuid";
-import crypto from "crypto";
+import * as CryptoJS from "crypto-js"; // Zmieniony import
 import { postgres } from "@/data/database/publicSQL/postgres";
 import type ITokenRepository from "@/interfaces/ITokenRepository";
 import type ITokenUtils from "@/interfaces/ITokenUtils";
@@ -17,6 +17,15 @@ export default class TokenRepository implements ITokenRepository {
 
   constructor(@inject(CLASSTYPES.ITokenUtils) tokenUtils: ITokenUtils) {
     this._tokenUtils = tokenUtils;
+  }
+
+  private generateRandomToken(): string {
+    const randomBytes = CryptoJS.lib.WordArray.random(3);
+    const randomNumber = parseInt(
+      randomBytes.toString(CryptoJS.enc.Hex).slice(0, 6),
+      16
+    );
+    return randomNumber.toString();
   }
 
   async generateEmailVerificationToken(
@@ -89,7 +98,7 @@ export default class TokenRepository implements ITokenRepository {
           },
         });
       },
-      () => crypto.randomInt(100000, 1000000).toString(),
+      () => this.generateRandomToken(),
       5 * 60 * 1000
     );
   }

@@ -51,7 +51,7 @@ export const {
       name: "authjs.session-token",
       options: {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: true,
         sameSite: "lax",
         path: "/",
         maxAge: 60 * 60,
@@ -61,7 +61,7 @@ export const {
       name: "authjs.csrf-token",
       options: {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: true,
         sameSite: "lax",
         path: "/",
         maxAge: 60 * 60,
@@ -178,6 +178,6 @@ export const {
     },
   },
   adapter: PrismaAdapter(postgres) as any,
-  session: { strategy: "jwt" },
+  session: { strategy: "jwt", maxAge: 60 * 60 },
   ...authConfig,
 });

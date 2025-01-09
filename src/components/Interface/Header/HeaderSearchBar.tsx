@@ -1,4 +1,5 @@
 import React from "react";
+import { GetServerSideProps } from "next";
 import { FaSearch } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
 import SearchResultsModalContainer from "../Shared/Modals/SearchResultsModalContainer";
@@ -10,28 +11,39 @@ import { GameAPIResponse } from "@/utils/helpers/types";
 
 export default function HeaderSearchBar() {
   const [searchText, setSearchText] = React.useState("");
-  const [gamesArray, setGamesArray] = React.useState<GameAPIResponse[]>([]);
+  const [productsArray, setProductsArray] = React.useState<GameAPIResponse[]>(
+    []
+  );
   const [isLoading, setIsLoading] = React.useState(false);
 
   const searchBarInput = React.useRef<HTMLInputElement>(null);
   const { searchBarState, resolutionState, handleClose, handleToggle } =
     useWindowVisibility();
 
-  const fetchGames = React.useCallback(async (searchText: string) => {
-    setIsLoading(true);
-    if (searchText.trim() !== "") {
-      setGamesArray(await fetchService.getProducts(searchText));
-    } else {
-      setGamesArray([]);
-    }
-    setIsLoading(false);
-  }, []);
+  const fetchProductsBySearchText = React.useCallback(
+    async (searchText: string) => {
+      setIsLoading(true);
+      if (searchText.trim()) {
+        setProductsArray(await fetchService.getProducts(searchText));
+      } else {
+        setProductsArray([]);
+      }
+      setIsLoading(false);
+    },
+    []
+  );
+
+  const handleOutsideClick = () => {
+    handleToggle("searchBarModal");
+    setSearchText("");
+    setProductsArray([]);
+  };
 
   React.useEffect(() => {
-    if (searchText.trim() !== "") {
-      fetchGames(searchText);
+    if (searchText.trim()) {
+      fetchProductsBySearchText(searchText);
     } else {
-      setGamesArray([]);
+      setProductsArray([]);
     }
   }, [searchText]);
 
@@ -55,16 +67,6 @@ export default function HeaderSearchBar() {
     };
   }, [searchBarState]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchText(event.target.value);
-  };
-
-  const handleOutsideClick = () => {
-    handleToggle("searchBarModal");
-    setSearchText("");
-    setGamesArray([]);
-  };
-
   return (
     <div
       className={`flex-1 ${
@@ -82,7 +84,11 @@ export default function HeaderSearchBar() {
               className="text-[white] border-none outline-none bg-transparent w-[100%]"
               type="text"
               name="text"
-              onChange={debounce(handleChange, 1000)}
+              onChange={debounce(
+                (event: React.ChangeEvent<HTMLInputElement>) =>
+                  setSearchText(event.target.value),
+                1000
+              )}
               placeholder="Szukaj"
               autoComplete="off"
             />
@@ -95,7 +101,7 @@ export default function HeaderSearchBar() {
           </div>
           {searchText && (
             <SearchResultsModalContainer
-              gamesArray={gamesArray}
+              gamesArray={productsArray}
               loadingState={isLoading}
             />
           )}
@@ -110,7 +116,11 @@ export default function HeaderSearchBar() {
               className="text-[white] border-none outline-none bg-transparent w-[100%]"
               type="text"
               name="text"
-              onChange={debounce(handleChange, 1000)}
+              onChange={debounce(
+                (event: React.ChangeEvent<HTMLInputElement>) =>
+                  setSearchText(event.target.value),
+                1000
+              )}
               placeholder="Szukaj"
               autoComplete="off"
             />
@@ -124,7 +134,7 @@ export default function HeaderSearchBar() {
             )}
             {searchText && (
               <SearchResultsModalContainer
-                gamesArray={gamesArray}
+                gamesArray={productsArray}
                 loadingState={isLoading}
               />
             )}
@@ -136,7 +146,11 @@ export default function HeaderSearchBar() {
           <input
             ref={searchBarInput}
             className="text-[white] border-none outline-none bg-transparent w-[100%]"
-            onChange={debounce(handleChange, 1000)}
+            onChange={debounce(
+              (event: React.ChangeEvent<HTMLInputElement>) =>
+                setSearchText(event.target.value),
+              1000
+            )}
             onFocus={handleOutsideClick}
             type="text"
             name="text"

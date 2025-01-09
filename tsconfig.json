@@ -29,13 +29,14 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/app/(pages)/api/hello.js",
+    "src/(pages)/api/hello.js",
     "src/data/database.js",
     "src/utils/autocomplete.js",
     "src/utils/utils.ts",
-    "src/app/(pages)/api/registerData.js",
+    "src/(pages)/api/registerData.js",
     "src/**/*",
-    "tests/**/*"
+    "tests/**/*",
+    "src/app/pages"
   ],
   "exclude": ["node_modules"]
 }

@@ -228,55 +228,6 @@ export default function LoginContainer() {
               </div>
             </form>
           )}
-          {showTwoFactor && user?.isTwoFactorEnabled && (
-            <form
-              onSubmit={handleSubmit((data) =>
-                submitLoginForm(data, handleLogin)
-              )}
-            >
-              <div className="pt-4 text-white">
-                <input
-                  {...register("code")}
-                  disabled={isPending}
-                  className="input"
-                  placeholder="Two Factor Code"
-                  autoCorrect="off"
-                />
-                {errors.code && (
-                  <p className="text-red-500">
-                    {errors.code.message as React.ReactNode}
-                  </p>
-                )}
-              </div>
-              <FormSuccess
-                message={
-                  success?.origin === "Login" ? (success.message as string) : ""
-                }
-              />
-              <FormError
-                message={
-                  (error?.origin === "Login"
-                    ? (error.message as string)
-                    : "") || providerError
-                }
-              />
-              <div className="flex flex-col items-center justfiy-center w- pt-4">
-                <button
-                  disabled={isPending}
-                  className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px]"
-                  type="submit"
-                >
-                  Submit
-                </button>
-                <button
-                  className="text-[14px] font-medium text-[#E2999B]"
-                  onClick={() => setShowTwoFactor(false)}
-                >
-                  Back to login
-                </button>
-              </div>
-            </form>
-          )}
         </>
       </div>
     </section>

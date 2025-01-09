@@ -5,34 +5,35 @@ import { MdOutlineSignalCellularNodata } from "react-icons/md";
 import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
 import LoadingAnimation from "../Shared/Animations/LoadingAnimation";
 import useCustomRouter from "@/hooks/useCustomRouter";
-import FetchService from "@/services/FetchService";
+import fetchService from "@/services/FetchService";
 import { generateRandomValue } from "@/utils/prices";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
 export default function HomeProductList({ ordering }: { ordering: string }) {
   const { redirectToGame } = useCustomRouter();
-  const [games, setGames] = React.useState<GameAPIResponse[]>([]);
-  const [loading, setLoading] = React.useState(true);
+  const [productsArray, setProductsArray] = React.useState<GameAPIResponse[]>(
+    []
+  );
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  const fetchProductsByOrdering = async () => {
+    setIsLoading(true);
+    setProductsArray(await fetchService.getProductsByOrdering(ordering));
+    setIsLoading(false);
+  };
 
   React.useEffect(() => {
-    const fetchGames = async () => {
-      setLoading(true);
-      const fetchedGames = await FetchService.getProductsByOrdering(ordering);
-      setGames(fetchedGames);
-      setLoading(false);
-    };
-
-    fetchGames();
+    fetchProductsByOrdering();
   }, [ordering]);
 
   return (
     <>
-      {loading ? (
+      {isLoading ? (
         <div className="w-full">
           <LoadingAnimation />
         </div>
       ) : (
-        games.map((game, index) => (
+        productsArray.map((game, index) => (
           <div
             rel="preload"
             key={game.id || index}

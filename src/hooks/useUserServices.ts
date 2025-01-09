@@ -61,6 +61,7 @@ export default function useUserServices() {
         if (response.success) {
           setSuccess({ message: response.message, origin: "ToggleTwoFactor" });
           handleClose("twoFactorModal");
+          update(response.data);
         } else {
           setError({ message: response.message, origin: "ToggleTwoFactor" });
         }

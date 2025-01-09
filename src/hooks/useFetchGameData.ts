@@ -20,7 +20,6 @@ import { fetchPlatforms } from "@/redux/slices/productPlatformsSlice";
 import useCustomRouter from "./useCustomRouter";
 import { AppDispatch, RootState } from "@/redux/store";
 import { PayloadAction, ActionCreatorWithPayload } from "@reduxjs/toolkit";
-import debounce from "@/utils/debounce";
 import { array } from "zod";
 
 export default function useFetchGameData() {

@@ -197,23 +197,17 @@ export default class UserService implements IUserService {
   async confirmTwoFactorAuthentication(
     confirmTwoFactorAuthenticationDTO: ConfirmTwoFactorAuthenticationDTO
   ): Promise<RequestResponse<TwoFactorToken | null>> {
+    console.log(confirmTwoFactorAuthenticationDTO);
+    const getTwoFactorTokenByEmailResponse =
+      await this._checkerService.checkIsTokenValidAndReturnTwoFactorToken(
+        confirmTwoFactorAuthenticationDTO
+      );
+
     if (
       confirmTwoFactorAuthenticationDTO.isTwoFactorEnabled &&
       confirmTwoFactorAuthenticationDTO.email
     ) {
       if (confirmTwoFactorAuthenticationDTO.code) {
-        const getTwoFactorTokenByEmailResponse =
-          await this._checkerService.checkIsTokenValidAndReturnTwoFactorToken(
-            confirmTwoFactorAuthenticationDTO
-          );
-
-        if (
-          getTwoFactorTokenByEmailResponse &&
-          !getTwoFactorTokenByEmailResponse.success
-        ) {
-          return getTwoFactorTokenByEmailResponse;
-        }
-
         const twoFactorConfirmationByUserId =
           await this._userRepository.getTwoFactorConfirmationByUserId(
             confirmTwoFactorAuthenticationDTO
@@ -234,18 +228,27 @@ export default class UserService implements IUserService {
             getTwoFactorTokenByEmailResponse.data.id
           ));
       } else {
-        const twoFactorToken =
-          await this._tokenRepository.generateTwoFactorToken(
-            confirmTwoFactorAuthenticationDTO.email
+        if (
+          getTwoFactorTokenByEmailResponse &&
+          !getTwoFactorTokenByEmailResponse.success &&
+          !confirmTwoFactorAuthenticationDTO.code &&
+          confirmTwoFactorAuthenticationDTO.email
+        ) {
+          return this._checkerService.handleError("Invalid code!");
+        } else {
+          const twoFactorToken =
+            await this._tokenRepository.generateTwoFactorToken(
+              confirmTwoFactorAuthenticationDTO.email
+            );
+          await sendTwoFactorTokenEmail(
+            twoFactorToken.email,
+            twoFactorToken.token
           );
-        await sendTwoFactorTokenEmail(
-          twoFactorToken.email,
-          twoFactorToken.token
-        );
-        return this._checkerService.handleSuccess(
-          "Two Factor token has been sent!",
-          twoFactorToken
-        );
+          return this._checkerService.handleSuccess(
+            "Two Factor token has been sent!",
+            twoFactorToken
+          );
+        }
       }
     }
 

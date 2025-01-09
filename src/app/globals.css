@@ -8,6 +8,19 @@ body {
   box-sizing: border-box;
 }
 
+body::-webkit-scrollbar {
+  width: 8px;
+}
+
+body::-webkit-scrollbar-track {
+  background: #1e3a60;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: linear-gradient(240deg, #ffffff 20%, #ffffff 50%);
+  border-radius: 14px;
+}
+
 .requirements::before {
   content: "!";
   display: inline;

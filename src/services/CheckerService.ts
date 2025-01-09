@@ -292,7 +292,8 @@ export default class CheckerService implements ICheckerService {
 
     if (
       getTwoFactorToken.token !==
-      checkIsTokenValidAndReturnTwoFactorTokenDTO.code
+        checkIsTokenValidAndReturnTwoFactorTokenDTO.code ||
+      !checkIsTokenValidAndReturnTwoFactorTokenDTO.code
     ) {
       return this.handleError("Invalid code!");
     }

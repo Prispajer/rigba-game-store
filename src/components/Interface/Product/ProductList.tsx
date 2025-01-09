@@ -1,59 +1,58 @@
 "use client";
 import React from "react";
 import Image from "next/image";
+import { GetServerSideProps } from "next";
 import { CiHeart } from "react-icons/ci";
 import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
 import LoadingAnimation from "../Shared/Animations/LoadingAnimation";
 import ShowMoreButton from "../Shared/Buttons/ShowMoreButton";
 import useCustomRouter from "@/hooks/useCustomRouter";
-import FetchService from "@/services/FetchService";
+import fetchService from "@/services/FetchService";
 import { GameAPIResponse } from "@/utils/helpers/types";
 import { getGamesWithRandomPrices } from "@/utils/prices";
 
 export default function ProductList() {
-  const [productsByOrdering, setProductsByOrdering] = React.useState<
-    GameAPIResponse[]
+  const [productsArray, setProductsArray] = React.useState<GameAPIResponse[]>(
+    []
+  );
+  const [productsQuantity, setProductsQuantity] = React.useState(1);
+  const [loadingProductsArray, setLoadingProductsArray] = React.useState<
+    boolean[]
   >([]);
-  const [quantity, setQuantity] = React.useState(1);
-  const [newLoadingArray, setNewLoadingArray] = React.useState<boolean[]>([]);
 
   const { redirectToGame } = useCustomRouter();
 
-  const loadMore = () => {
-    setQuantity((prevQuantity) => prevQuantity + 1);
-  };
-
   React.useEffect(() => {
     (async () => {
-      const response = await FetchService.getProductsByOrdering(
+      const response = await fetchService.getProductsByOrdering(
         "-rating",
-        quantity
+        productsQuantity
       );
-      const updatedGames = await getGamesWithRandomPrices(
+      const gamesWithRandomPrices = await getGamesWithRandomPrices(
         response,
-        productsByOrdering
+        productsArray
       );
-      setProductsByOrdering(updatedGames);
-      setNewLoadingArray(new Array(5 * quantity).fill(false));
+      setProductsArray(gamesWithRandomPrices);
+      setLoadingProductsArray(new Array(5 * productsQuantity).fill(false));
     })();
-    setNewLoadingArray(new Array(5 * quantity).fill(true));
-  }, [quantity]);
+    setLoadingProductsArray(new Array(5 * productsQuantity).fill(true));
+  }, [productsQuantity]);
 
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-product-list-auto-fit gap-x-[10px]">
-        {newLoadingArray.map((_, index) => (
+        {loadingProductsArray.map((_, index) => (
           <div
-            key={productsByOrdering[index]?.id ?? index}
+            key={productsArray[index]?.id ?? index}
             onClick={() => {
-              if (productsByOrdering[index]) {
-                redirectToGame(productsByOrdering[index].slug as string);
+              if (productsArray[index]) {
+                redirectToGame(productsArray[index].slug as string);
               }
             }}
             className={`relative min-w-[200px] min-h-[150px] sm:min-h-[360px] my-[10px] flex sm:flex-col bg-tertiaryColor 
              cursor-pointer`}
           >
-            {newLoadingArray[index] ? (
+            {loadingProductsArray[index] ? (
               <LoadingAnimation />
             ) : (
               <>
@@ -62,8 +61,8 @@ export default function ProductList() {
                     fetchPriority="high"
                     loading="eager"
                     layout="fill"
-                    src={productsByOrdering[index].background_image || ""}
-                    alt={productsByOrdering[index].background_image || ""}
+                    src={productsArray[index].background_image || ""}
+                    alt={productsArray[index].background_image || ""}
                     sizes="(max-width: 576px) 95px, 200px"
                   />
                 </div>
@@ -71,7 +70,7 @@ export default function ProductList() {
                   <div className="flex flex-col justify-between min-h-[60px]">
                     <div className="leading-none line-clamp-1 text-[#ffffff]">
                       <span className="font-bold text-[14px]">
-                        {productsByOrdering[index].name || ""}
+                        {productsArray[index].name || ""}
                       </span>
                     </div>
                     <div>
@@ -85,7 +84,7 @@ export default function ProductList() {
                       From
                     </div>
                     <div className="overflow-hidden overflow-ellipsis line-clamp-1 text-[20px] text-[#ffffff] font-bold">
-                      ${productsByOrdering[index].price || ""}
+                      ${productsArray[index].price || ""}
                     </div>
                     <div className="flex items-center">
                       <CiHeart
@@ -94,13 +93,13 @@ export default function ProductList() {
                         color="#ffffff80"
                       />
                       <span className="overflow-hidden overflow-ellipsis line-clamp-1 text-[14px] text-[#ffffff80]">
-                        {productsByOrdering[index].rating || ""}
+                        {productsArray[index].rating || ""}
                       </span>
                     </div>
                   </div>
                 </div>
                 <AddToWishList
-                  game={productsByOrdering[index]}
+                  game={productsArray[index]}
                   position="absolute right-[10px] top-0"
                   added="border-[#FFFA84] bg-[#FFFA84]"
                   deleted="bg-[##d3d3d3]"
@@ -111,7 +110,10 @@ export default function ProductList() {
         ))}
       </div>
       <div>
-        <ShowMoreButton text="Load More" method={loadMore} />
+        <ShowMoreButton
+          text="Load More"
+          method={() => setProductsQuantity((prevQuantity) => prevQuantity + 1)}
+        />
       </div>
     </>
   );

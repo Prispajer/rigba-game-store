@@ -8,7 +8,7 @@ export default function useCustomRouter() {
 
   const getUrlParams = React.useCallback(
     (filterCategory: string): number[] => {
-      return url.get(filterCategory)?.split(",").map(Number) || [];
+      return url?.get(filterCategory)?.split(",").map(Number) || [];
     },
     [url]
   );

@@ -122,7 +122,7 @@ export default function HeaderUserNavigation({}) {
               <Image
                 loading="eager"
                 onClick={() => handleOpen("profileModal")}
-                layout="fill"
+                fill={true}
                 src={user?.image ?? "/icons/logo.png"}
                 alt={user?.image ?? "/icons/logo.png"}
                 className="min-w-[40px] min-h-[40px]"
@@ -142,7 +142,7 @@ export default function HeaderUserNavigation({}) {
               <Image
                 loading="eager"
                 onClick={() => handleOpen("profileModal")}
-                layout="fill"
+                fill={true}
                 src={user?.image ?? "/icons/logo.png"}
                 alt={user?.image ?? "/icons/logo.png"}
                 className="min-w-[40px] min-h-[40px]"

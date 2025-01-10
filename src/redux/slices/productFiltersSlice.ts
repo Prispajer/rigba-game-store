@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import fetchService from "@/services/FetchService";
-import { getGamesWithRandomPrices } from "@/utils/prices";
+import { assignPricesToExternalGames } from "@/utils/prices";
 import { GameAPIResponse, GameAPIPagination } from "@/utils/helpers/types";
 
 export interface ProductFilterState {
@@ -59,7 +59,7 @@ export const fetchProductsWithFilters = createAsyncThunk<
         ordering
       );
 
-      const gamesWithPrices = await getGamesWithRandomPrices(
+      const gamesWithPrices = await assignPricesToExternalGames(
         getProductsWithFilters.results,
         productsWithFilters
       );

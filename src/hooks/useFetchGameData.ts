@@ -18,9 +18,9 @@ import { fetchGenres } from "@/redux/slices/productGenresSlice";
 import { fetchStores } from "@/redux/slices/productStoresSlice";
 import { fetchPlatforms } from "@/redux/slices/productPlatformsSlice";
 import useCustomRouter from "./useCustomRouter";
+import debounce from "@/utils/debounce";
 import { AppDispatch, RootState } from "@/redux/store";
 import { PayloadAction, ActionCreatorWithPayload } from "@reduxjs/toolkit";
-import { array } from "zod";
 
 export default function useFetchGameData() {
   const dispatch = useDispatch<AppDispatch>();
@@ -43,10 +43,11 @@ export default function useFetchGameData() {
 
   const { redirectToFilters } = useCustomRouter();
 
-  const handleFetchProductsWithFilters = React.useCallback(
-    (page: number) => {
-      dispatch(fetchProductsWithFilters({ page }));
-    },
+  const handleFetchProductsWithFilters = React.useMemo(
+    () =>
+      debounce(async (page: number) => {
+        await dispatch(fetchProductsWithFilters({ page }));
+      }, 700),
     [dispatch]
   );
 
@@ -134,7 +135,7 @@ export default function useFetchGameData() {
       dispatch(callback(updatedFilters));
       handleFetchProductsWithFilters(productFilterState.page);
     },
-    [dispatch, array]
+    [dispatch]
   );
 
   const handleClearAllFilters = React.useCallback(() => {

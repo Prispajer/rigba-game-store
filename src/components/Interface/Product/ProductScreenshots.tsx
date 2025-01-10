@@ -37,7 +37,7 @@ export default function ProductScreenshots({
                   loading="eager"
                   src={screenshot.image ?? "/icons/logo.png"}
                   alt={screenshot.image}
-                  layout="fill"
+                  fill={true}
                 />
               </button>
             </div>

@@ -17,7 +17,7 @@ export default function CheckoutLogo({
           <Image
             src="/icons/logo.png"
             loading="eager"
-            layout="fill"
+            fill={true}
             alt="logo"
             sizes="(max-width: 768px) 60px, 80px"
             priority={true}

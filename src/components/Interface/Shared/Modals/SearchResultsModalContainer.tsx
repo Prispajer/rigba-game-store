@@ -7,7 +7,7 @@ import useCustomRouter from "@/hooks/useCustomRouter";
 import useUserCart from "@/hooks/useUserCart";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import { generateRandomValue } from "@/utils/prices";
+import { generateRandomPrice } from "@/utils/prices";
 import { GameAPIProduct, GameAPIResponse } from "@/utils/helpers/types";
 
 export default function SearchResultsModalContainer({
@@ -34,7 +34,7 @@ export default function SearchResultsModalContainer({
         email: user.email as string,
         externalProductId: game.id,
         description: game.description_raw,
-        price: generateRandomValue(),
+        price: generateRandomPrice(),
         quantity: null,
       });
     } else {
@@ -42,7 +42,7 @@ export default function SearchResultsModalContainer({
         ...game,
         externalProductId: game.id,
         description: game.description_raw,
-        price: generateRandomValue(),
+        price: generateRandomPrice(),
         quantity: 1,
       });
     }
@@ -70,7 +70,7 @@ export default function SearchResultsModalContainer({
                   <div className="relative min-w-[72px] min-h-[100px]">
                     <Image
                       loading="eager"
-                      layout="fill"
+                      fill={true}
                       src={game?.background_image ?? "/placeholder.jpg"}
                       alt={game?.name}
                     />
@@ -91,7 +91,7 @@ export default function SearchResultsModalContainer({
                     Od
                   </span>
                   <span className="mt-[-2px] text-buttonBackground font-bold text-end">
-                    ${generateRandomValue()}
+                    ${generateRandomPrice()}
                   </span>
                   <button
                     onClick={(event) => handleAddProductToCart(game, event)}

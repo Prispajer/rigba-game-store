@@ -40,8 +40,8 @@ export default function ChangePasswordContainer() {
         CHANGE PASSWORD
       </h1>
       <form
-        onSubmit={handleSubmit((data) =>
-          sendChangePasswordToken(data, oldPassword as string)
+        onSubmit={handleSubmit(() =>
+          sendChangePasswordToken(oldPassword as string)
         )}
         className="flex flex-col max-w-[450px] w-full"
       >
@@ -73,7 +73,7 @@ export default function ChangePasswordContainer() {
             autoCorrect="off"
           />
           {errors.password && (
-            <p className="text-[FF0000]">{errors.password.message}</p>
+            <p className="text-red-500">{errors.password.message}</p>
           )}
         </label>
         <label className="flex flex-col mb-[20px] font-[600]">
@@ -89,7 +89,7 @@ export default function ChangePasswordContainer() {
             autoCorrect="off"
           />
           {errors.confirmPassword && (
-            <p className="text-[FF0000]">{errors.confirmPassword.message}</p>
+            <p className="text-red-500">{errors.confirmPassword.message}</p>
           )}
         </label>
         <FormSuccess

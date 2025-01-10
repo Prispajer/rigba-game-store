@@ -4,7 +4,7 @@ import { CiHeart } from "react-icons/ci";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useUserWishList from "@/hooks/useUserWishList";
-import { generateRandomValue } from "@/utils/prices";
+import { generateRandomPrice } from "@/utils/prices";
 import { ProductInformations } from "@/utils/helpers/types";
 
 export default function AddToWishList<
@@ -79,7 +79,7 @@ export default function AddToWishList<
           name: game.name as string,
           description: game.description_raw as string,
           background_image: game.background_image as string,
-          price: generateRandomValue(),
+          price: generateRandomPrice(),
           rating: game.rating as number,
           slug: game.slug as string,
           released: game.released as string,
@@ -96,7 +96,7 @@ export default function AddToWishList<
           externalProductId: parseInt(game.id as string),
           name: game.name as string,
           description: game.description_raw,
-          price: generateRandomValue(),
+          price: generateRandomPrice(),
           background_image: game.background_image as string,
           rating: game.rating,
           slug: game.slug,

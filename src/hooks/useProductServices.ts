@@ -1,7 +1,7 @@
 import React from "react";
 import { z } from "zod";
 import requestService from "@/services/RequestService";
-import { generateRandomValue } from "@/utils/prices";
+import { generateRandomPrice } from "@/utils/prices";
 import { ReviewSchema } from "@/utils/schemas/product";
 import { GameAPIResponse } from "@/utils/helpers/types";
 import { RatingTitle } from "@prisma/client";
@@ -51,7 +51,7 @@ export default function useProductServices() {
             name: product.name,
             description: review,
             background_image: product.background_image,
-            price: generateRandomValue(),
+            price: generateRandomPrice(),
             rating: parseInt(rating),
             title: title as RatingTitle,
             slug: product.slug,

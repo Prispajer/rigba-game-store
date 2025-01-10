@@ -22,28 +22,30 @@ import {
 export default function useUserCart() {
   const [isCartLoading, setIsCartLoading] = React.useState<boolean>(false);
 
-  const { user, update } = useCurrentUser();
+  const { user } = useCurrentUser();
   const dispatch = useDispatch<AppDispatch>();
   const userCartState = useSelector((state: RootState) => state.userCart);
 
-  const debouncedUpdate = React.useMemo(() => debounce(update, 1000), [update]);
-
-  const handleFetchUserCart = React.useCallback(async () => {
-    if (user?.email) {
-      await dispatch(fetchUserCart({ email: user.email }));
-    }
-  }, [dispatch, user?.email]);
+  const handleFetchUserCart = React.useMemo(
+    () =>
+      debounce(async () => {
+        if (user?.email) {
+          await dispatch(fetchUserCart({ email: user.email }));
+        }
+      }, 700),
+    [dispatch, user?.email]
+  );
 
   const handleAddUserProductToCart = React.useCallback(
     async (addUserProductToCartDTO: AddUserProductToCartDTO) => {
       if (user?.email) {
         setIsCartLoading(true);
         await dispatch(fetchAddUserProductToCart(addUserProductToCartDTO));
-        debouncedUpdate();
+        handleFetchUserCart();
+        setIsCartLoading(false);
       }
-      setIsCartLoading(false);
     },
-    [dispatch, debouncedUpdate, user?.email]
+    [dispatch, user?.email, handleFetchUserCart]
   );
 
   const handleDeleteUserProductFromCart = React.useCallback(
@@ -53,11 +55,11 @@ export default function useUserCart() {
         await dispatch(
           fetchDeleteUserProductFromCart(deleteUserProductFromCartDTO)
         );
-        debouncedUpdate();
+        awahandleFetchUserCart();
+        setIsCartLoading(false);
       }
-      setIsCartLoading(false);
     },
-    [dispatch, debouncedUpdate, user?.email]
+    [dispatch, user?.email, handleFetchUserCart]
   );
 
   const handleIncreaseQuantityUserProductFromCart = React.useCallback(
@@ -71,11 +73,11 @@ export default function useUserCart() {
             increaseQuantityUserProductFromCartDTO
           )
         );
-        debouncedUpdate();
+        handleFetchUserCart();
+        setIsCartLoading(false);
       }
-      setIsCartLoading(false);
     },
-    [dispatch, debouncedUpdate, user?.email]
+    [dispatch, user?.email, handleFetchUserCart]
   );
 
   const handleDecreaseQuantityUserProductFromCart = React.useCallback(
@@ -89,24 +91,18 @@ export default function useUserCart() {
             decreaseQuantityUserProductFromCartDTO
           )
         );
-        debouncedUpdate();
+        handleFetchUserCart();
+        setIsCartLoading(false);
       }
-      setIsCartLoading(false);
     },
-    [dispatch, debouncedUpdate, user?.email]
+    [dispatch, user?.email, handleFetchUserCart]
   );
 
   React.useEffect(() => {
     if (user?.email) {
       handleFetchUserCart();
     }
-  }, [
-    user?.email,
-    handleAddUserProductToCart,
-    handleDeleteUserProductFromCart,
-    handleIncreaseQuantityUserProductFromCart,
-    handleDecreaseQuantityUserProductFromCart,
-  ]);
+  }, [user?.email, handleFetchUserCart]);
 
   return {
     userCartState,

@@ -89,7 +89,7 @@ export default function HeaderSearchBar() {
                   setSearchText(event.target.value),
                 1000
               )}
-              placeholder="Szukaj"
+              placeholder="Search"
               autoComplete="off"
             />
             <IoCloseSharp
@@ -121,7 +121,7 @@ export default function HeaderSearchBar() {
                   setSearchText(event.target.value),
                 1000
               )}
-              placeholder="Szukaj"
+              placeholder="Search"
               autoComplete="off"
             />
             {searchBarState && (
@@ -154,7 +154,7 @@ export default function HeaderSearchBar() {
             onFocus={handleOutsideClick}
             type="text"
             name="text"
-            placeholder="Szukaj"
+            placeholder="Search"
             autoComplete="off"
           />
         </div>

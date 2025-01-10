@@ -77,7 +77,7 @@ export default function WishListProductList({
                   <div className="relative min-w-[95px] sm:h-[250px]">
                     <Image
                       loading="eager"
-                      layout="fill"
+                      fill={true}
                       src={
                         game.productsInformations.background_image ??
                         "/icons/logo.png"
@@ -134,7 +134,7 @@ export default function WishListProductList({
                   <div className="relative min-w-[95px] sm:h-[250px]">
                     <Image
                       loading="eager"
-                      layout="fill"
+                      fill={true}
                       src={game.background_image ?? "/icons/logo.png"}
                       alt={game.background_image ?? "/icons/logo.png"}
                     />

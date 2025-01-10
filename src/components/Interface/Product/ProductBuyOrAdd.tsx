@@ -2,7 +2,7 @@
 
 import React from "react";
 import { FaCartPlus } from "react-icons/fa";
-import { generateRandomValue } from "@/utils/prices";
+import { generateRandomPrice } from "@/utils/prices";
 import { GameAPIProduct } from "@/utils/helpers/types";
 import { User } from "next-auth";
 import {
@@ -35,14 +35,14 @@ export default function ProductBuyOrAdd({
         rating: product.rating as number,
         released: product.released as string,
         added: product.added as number,
-        price: generateRandomValue(),
+        price: generateRandomPrice(),
         quantity: null,
       });
     } else {
       handleAddLocalProductToCart({
         externalProductId: product.id,
         description: product.description_raw,
-        price: generateRandomValue(),
+        price: generateRandomPrice(),
         quantity: 1,
         name: product.name,
         background_image: product.background_image,
@@ -60,7 +60,7 @@ export default function ProductBuyOrAdd({
         <div className="flex w-[70px]">
           <div className="flex min-w-[200px] mb-[10px]">
             <span className="w-full font-[700] text-[18px] text-[#ffffff] cursor-default">
-              {`$${generateRandomValue()}`}
+              {`$${generateRandomPrice()}`}
             </span>
           </div>
         </div>

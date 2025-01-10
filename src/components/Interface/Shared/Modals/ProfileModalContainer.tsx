@@ -56,7 +56,7 @@ export default function ProfileModalContainer({
                   <div className="relative min-w-[40px] min-h-[40px] mr-[5px] rounded-full overflow-hidden cursor-pointer">
                     <Image
                       loading="eager"
-                      layout="fill"
+                      fill={true}
                       src={user?.image ?? "/icons/logo.png"}
                       alt={user?.image ?? "/icons/logo.png"}
                       className="min-w-[40px] min-h-[40px]"
@@ -78,7 +78,7 @@ export default function ProfileModalContainer({
               <div className="relative min-w-[32px] min-h-[32px] rounded-full overflow-hidden cursor-pointer">
                 <Image
                   loading="eager"
-                  layout="fill"
+                  fill={true}
                   src={user?.image ?? "/icons/logo.png"}
                   alt={user?.image ?? "/icons/logo.png"}
                   className="min-w-[32px] min-h-[32px]"

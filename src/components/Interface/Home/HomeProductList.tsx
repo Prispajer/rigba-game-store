@@ -6,7 +6,7 @@ import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
 import LoadingAnimation from "../Shared/Animations/LoadingAnimation";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import fetchService from "@/services/FetchService";
-import { generateRandomValue } from "@/utils/prices";
+import { generateRandomPrice } from "@/utils/prices";
 import { GameAPIResponse } from "@/utils/helpers/types";
 
 export default function HomeProductList({ ordering }: { ordering: string }) {
@@ -45,7 +45,7 @@ export default function HomeProductList({ ordering }: { ordering: string }) {
                 <Image
                   fetchPriority="high"
                   loading="eager"
-                  layout="fill"
+                  fill={true}
                   src={game.background_image}
                   alt={game.background_image}
                   sizes="(max-width: 576px) 95px, 200px"
@@ -75,7 +75,7 @@ export default function HomeProductList({ ordering }: { ordering: string }) {
                   From
                 </div>
                 <div className="overflow-hidden overflow-ellipsis line-clamp-1 text-[20px] text-[#ffffff] font-bold">
-                  ${generateRandomValue()}
+                  ${generateRandomPrice()}
                 </div>
                 <div className="flex items-center">
                   <CiHeart

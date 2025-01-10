@@ -1,6 +1,6 @@
 import { GameAPIResponse, LocalCart, UserProduct } from "./helpers/types";
 
-export function generateRandomValue(): number {
+export function generateRandomPrice(): number {
   const minValue = 0;
   const maxValue = 300;
   const precision = 100;
@@ -11,20 +11,21 @@ export function generateRandomValue(): number {
   return randomValue;
 }
 
-export async function getGamesWithRandomPrices(
-  games: GameAPIResponse[],
+export async function assignPricesToExternalGames(
+  externalGames: GameAPIResponse[],
   existingGames: GameAPIResponse[]
 ): Promise<GameAPIResponse[]> {
-  const existingGamesMap = new Map<number, number>(
+  const existingGamesPriceMap = new Map<number, number>(
     existingGames.map((game) => [
       game.id as number,
-      (game.price as number) ?? generateRandomValue(),
+      (game.price as number) ?? generateRandomPrice(),
     ])
   );
 
-  return games.map((game) => ({
+  return externalGames.map((game) => ({
     ...game,
-    price: existingGamesMap.get(game.id as number) ?? generateRandomValue(),
+    price:
+      existingGamesPriceMap.get(game.id as number) ?? generateRandomPrice(),
   }));
 }
 

@@ -58,12 +58,6 @@ export default function FiltersContainer() {
           <FilterFilters position="hidden md:flex flex-col md:max-w-[220px] min-w-[220px]" />
           <section className="w-full lg:w-[calc(100%-220px)]">
             <FilterSelectedFilters />
-            <SortBy
-              handleSortChange={handleFilterSortChange}
-              sortedGamesCount={productFilterState.gamesCount}
-              position="hidden md:flex relative"
-              display="flex-1"
-            />
             {productFilterState.isLoading ? (
               <div className="flex items-center justify-center">
                 <MoonLoader color="pink" />
@@ -74,13 +68,21 @@ export default function FiltersContainer() {
                 filters or try searching in other categories.
               </div>
             ) : (
-              <FilterProductList />
-            )}
-            {productFilterState.productsWithFilters.length > 0 &&
-            !productFilterState.error ? (
-              <FilterChangePage />
-            ) : (
-              <div></div>
+              <>
+                <SortBy
+                  handleSortChange={handleFilterSortChange}
+                  sortedGamesCount={productFilterState.gamesCount}
+                  position="hidden md:flex relative"
+                  display="flex-1"
+                />
+                <FilterProductList />
+                {productFilterState.productsWithFilters.length > 0 &&
+                !productFilterState.error ? (
+                  <FilterChangePage />
+                ) : (
+                  <div></div>
+                )}
+              </>
             )}
           </section>
         </div>

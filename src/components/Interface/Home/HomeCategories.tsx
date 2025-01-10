@@ -37,7 +37,7 @@ export default function HomeCategories() {
                       loading="eager"
                       alt={genre.slug as string}
                       src={genre.image_background as string}
-                      layout="fill"
+                      fill={true}
                       objectFit="cover"
                       priority={true}
                     />

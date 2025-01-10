@@ -29,9 +29,9 @@ export default function useUserServices() {
   const searchParams = useSearchParams();
   const { handleClose } = useWindowVisibility();
   const { user, update } = useCurrentUser();
-  const token = searchParams.get("token");
+  const token = searchParams?.get("token");
   const providerError =
-    searchParams.get("error") === "OAuthAccountNotLinked"
+    searchParams?.get("error") === "OAuthAccountNotLinked"
       ? "Email already in use with different provider!"
       : "";
 
@@ -115,31 +115,36 @@ export default function useUserServices() {
       clearNotifications();
       startTransition(async () => {
         const { email, password, code } = data;
-        try {
-          const response: RequestResponse<{
-            token: boolean;
-            emailVerified: string;
-          }> = await requestService.postMethod(
-            "users/endpoints/userAuthentication/loginUser",
-            { email, password, code }
-          );
 
-          if (!response.success) {
-            setError({ message: response.message, origin: "Login" });
-          } else {
-            setSuccess({ message: response.message, origin: "Login" });
-            if (response.data?.token) {
-              setShowTwoFactor(true);
+        if (showTwoFactor && !code) {
+          setError({ message: "Invalid code!", origin: "Login" });
+        } else {
+          try {
+            const response: RequestResponse<{
+              token: boolean;
+              emailVerified: string;
+            }> = await requestService.postMethod(
+              "users/endpoints/userAuthentication/loginUser",
+              { email, password, code }
+            );
+
+            if (!response.success) {
+              setError({ message: response.message, origin: "Login" });
+            } else {
+              setSuccess({ message: response.message, origin: "Login" });
+              if (response.data?.token) {
+                setShowTwoFactor(true);
+              }
+              if (response.data?.emailVerified) {
+                await callback(email, password);
+              }
             }
-            if (response.data?.emailVerified) {
-              await callback(email, password);
-            }
+          } catch (error) {
+            setError({
+              message: "There was a problem while logging in!",
+              origin: "Login",
+            });
           }
-        } catch (error) {
-          setError({
-            message: "There was a problem while logging in!",
-            origin: "Login",
-          });
         }
       });
     };
@@ -354,10 +359,7 @@ export default function useUserServices() {
       }
     };
 
-    const sendChangePasswordToken = async (
-      data: z.infer<typeof NewPasswordSchema>,
-      oldPassword: string
-    ) => {
+    const sendChangePasswordToken = async (oldPassword: string) => {
       clearNotifications();
       startTransition(async () => {
         try {

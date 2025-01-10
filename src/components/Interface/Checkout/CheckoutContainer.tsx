@@ -64,7 +64,7 @@ export default function CheckoutContainer() {
                           ? (product.productsInformations.name as string)
                           : product.name
                       }
-                      layout="fill"
+                      fill={true}
                       sizes="(max-width: 768px) 50px, 90px"
                     />
                   </div>

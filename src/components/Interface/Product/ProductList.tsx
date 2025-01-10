@@ -9,7 +9,7 @@ import ShowMoreButton from "../Shared/Buttons/ShowMoreButton";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import fetchService from "@/services/FetchService";
 import { GameAPIResponse } from "@/utils/helpers/types";
-import { getGamesWithRandomPrices } from "@/utils/prices";
+import { assignPricesToExternalGames } from "@/utils/prices";
 
 export default function ProductList() {
   const [productsArray, setProductsArray] = React.useState<GameAPIResponse[]>(
@@ -28,7 +28,7 @@ export default function ProductList() {
         "-rating",
         productsQuantity
       );
-      const gamesWithRandomPrices = await getGamesWithRandomPrices(
+      const gamesWithRandomPrices = await assignPricesToExternalGames(
         response,
         productsArray
       );
@@ -60,7 +60,7 @@ export default function ProductList() {
                   <Image
                     fetchPriority="high"
                     loading="eager"
-                    layout="fill"
+                    fill={true}
                     src={productsArray[index].background_image || ""}
                     alt={productsArray[index].background_image || ""}
                     sizes="(max-width: 576px) 95px, 200px"

@@ -47,7 +47,7 @@ export default function KeysContainer() {
               <div className="relative w-full lg:w-[40px] min-h-[100px] lg:min-h-[50px] ">
                 <Image
                   loading="eager"
-                  layout="fill"
+                  fill={true}
                   src={
                     product.productsInformations?.background_image ||
                     "/icons/logo.png"

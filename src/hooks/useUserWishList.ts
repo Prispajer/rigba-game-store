@@ -18,57 +18,57 @@ import {
 export default function useUserWishList() {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-  const { user, update } = useCurrentUser();
+  const { user } = useCurrentUser();
   const dispatch = useDispatch<AppDispatch>();
 
   const userWishListState = useSelector(
     (state: RootState) => state.userWishList
   );
 
-  const debouncedUpdate = React.useMemo(() => debounce(update, 300), [update]);
+  const handleFetchUserWishList = React.useMemo(
+    () =>
+      debounce(async () => {
+        if (user?.email) {
+          await dispatch(fetchUserWishList({ email: user.email }));
+        }
+      }, 700),
+    [dispatch, user?.email]
+  );
 
-  const handleAddUserProductToWishList = React.useCallback(
+  const handleAddUserProductToWishList = debounce(
     async (addUserProductToWishListDTO: AddUserProductToWishListDTO) => {
       if (user?.email) {
         setIsLoading(true);
         await dispatch(
           fetchAddUserProductToWishList(addUserProductToWishListDTO)
         );
-        await dispatch(fetchUserWishList({ email: user?.email as string }));
-        debouncedUpdate();
-      }
-      setIsLoading(false);
-    },
-    [dispatch, user?.email, update]
-  );
-
-  const handleDeleteUserProductFromWishList = React.useCallback(
-    debounce(
-      async (
-        deleteUserProductFromWishListDTO: DeleteUserProductFromWishListDTO
-      ) => {
-        if (user?.email) {
-          setIsLoading(true);
-          await dispatch(
-            fetchDeleteUserProductFromWishList(deleteUserProductFromWishListDTO)
-          );
-          await dispatch(fetchUserWishList({ email: user?.email as string }));
-          debouncedUpdate();
-        }
+        handleFetchUserWishList();
         setIsLoading(false);
-      },
-      1000
-    ),
-    [dispatch, user?.email, update]
+      }
+    },
+    700
   );
 
-  const handleSetUserWishListOrdering = React.useCallback(
-    (ordering: string) => {
-      dispatch(setOrdering(ordering));
-      dispatch(fetchUserWishList({ email: user?.email as string }));
+  const handleDeleteUserProductFromWishList = debounce(
+    async (
+      deleteUserProductFromWishListDTO: DeleteUserProductFromWishListDTO
+    ) => {
+      if (user?.email) {
+        setIsLoading(true);
+        await dispatch(
+          fetchDeleteUserProductFromWishList(deleteUserProductFromWishListDTO)
+        );
+        handleFetchUserWishList();
+        setIsLoading(false);
+      }
     },
-    [dispatch, user]
+    700
   );
+
+  const handleSetUserWishListOrdering = (ordering: string) => {
+    dispatch(setOrdering(ordering));
+    handleFetchUserWishList();
+  };
 
   return {
     userWishListState,

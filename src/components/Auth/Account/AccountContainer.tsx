@@ -42,7 +42,7 @@ export default function AccountContainer() {
                   src={user?.image || "/icons/logo.png"}
                   alt={(user?.image as string) || "image"}
                   loading="eager"
-                  layout="fill"
+                  fill={true}
                   className="min-w-[40px] min-h-[40px]"
                 />
               </Link>

@@ -13,7 +13,7 @@ export default function WishListProfile({
       <div className="relative min-h-[64px] min-w-[64px] rounded-full overflow-hidden">
         <Image
           loading="eager"
-          layout="fill"
+          fill={true}
           className="min-w-[64px] min-h-[64px]"
           src={user?.image ?? "/icons/logo.png"}
           alt={user?.image ?? "/icons/logo.png"}

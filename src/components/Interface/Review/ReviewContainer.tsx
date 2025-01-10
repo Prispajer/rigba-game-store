@@ -13,7 +13,7 @@ import { FormError } from "../Shared/FormsNotifications/FormError";
 import useProductServices from "@/hooks/useProductServices";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import { generateRandomValue } from "@/utils/prices";
+import { generateRandomPrice } from "@/utils/prices";
 import { GameAPIResponse } from "@/utils/helpers/types";
 import { ReviewSchema } from "@/utils/schemas/product";
 
@@ -152,7 +152,7 @@ export default function ReviewContainer({
                   <Image
                     fetchPriority="high"
                     loading="eager"
-                    layout="fill"
+                    fill={true}
                     src={product.background_image || ""}
                     alt={product.background_image || ""}
                     sizes="(max-width: 576px) 95px, 200px"
@@ -176,7 +176,7 @@ export default function ReviewContainer({
                       From
                     </div>
                     <div className="overflow-hidden overflow-ellipsis line-clamp-1 text-[20px] text-[#ffffff] font-bold">
-                      ${generateRandomValue()}
+                      ${generateRandomPrice()}
                     </div>
                     <div className="flex items-center">
                       <CiHeart

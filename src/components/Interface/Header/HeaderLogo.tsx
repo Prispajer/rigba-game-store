@@ -16,14 +16,13 @@ export default function HeaderLogo() {
       <Link className="flex items-center mr-[20px]" href="/">
         <div className="relative w-[60px] md:w-[80px] h-[60px] md:h-[80px]">
           <Image
-            layout="fill"
+            fill={true}
             src="/icons/logo.png"
             alt="logo"
             sizes="(max-width: 576px) 60px, 80px"
             priority={true}
           />
         </div>
-
         <span className="text-white text-[30px] md:text-[35px]">RIGBA</span>
       </Link>
     </div>

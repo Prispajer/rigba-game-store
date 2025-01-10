@@ -71,7 +71,7 @@ export default function CartModalContainer() {
                               "cartModal"
                             )
                           }
-                          layout="fill"
+                          fill={true}
                           src={
                             product.productsInformations.background_image ?? ""
                           }
@@ -168,7 +168,7 @@ export default function CartModalContainer() {
                               "cartModal"
                             )
                           }
-                          layout="fill"
+                          fill={true}
                           src={product.background_image ?? ""}
                           alt={product.name}
                         />

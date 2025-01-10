@@ -51,7 +51,7 @@ export default function RedeemContainer({
                     <div className="relative h-full w-full">
                       <Image
                         loading="eager"
-                        layout="fill"
+                        fill={true}
                         src={
                           product.productsInformations?.background_image || ""
                         }

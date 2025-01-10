@@ -20,8 +20,6 @@ export default function ChangePage() {
     }
   };
 
-  console.log(productFilterState.page);
-
   const renderPagination = () => {
     let pages = [];
     if (productFilterState.page <= 3) {

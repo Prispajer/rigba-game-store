@@ -34,7 +34,7 @@ export default function FilterProductList() {
             <div className="relative min-w-[95px] sm:min-h-[250px] m-[5px] sm:m-[0px]">
               <Image
                 loading="eager"
-                layout="fill"
+                fill={true}
                 src={game.background_image ?? ""}
                 alt={game.background_image ?? ""}
                 sizes="(max-width: 576px) 95px, 100vw"
@@ -47,13 +47,13 @@ export default function FilterProductList() {
                 </div>
                 <div>
                   <span className="overflow-hidden overflow-ellipsis line-clamp-1 text-[12px] text-[#fffa84] font-bold">
-                    CAŁY ŚWIAT
+                    GLOBAL
                   </span>
                 </div>
               </div>
               <div className="h-[50%] md:h-[75px]">
                 <div className="text-[14px] text-[#ffffff80] font-medium">
-                  Od
+                  From
                 </div>
                 <div className="overflow-hidden overflow-ellipsis line-clamp-1 text-[20px] text-[#ffffff] font-bold">
                   ${game.price}

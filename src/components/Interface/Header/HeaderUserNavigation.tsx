@@ -103,7 +103,7 @@ export default function HeaderUserNavigation({}) {
             <>
               <div className="cursor-pointer flex items-center hover:text-headerHover text-[white]">
                 <Link href="/login" aria-label="Login" className="nav-link">
-                  Zaloguj
+                  Login
                 </Link>
               </div>
               <span className="text-white">|</span>
@@ -113,7 +113,7 @@ export default function HeaderUserNavigation({}) {
                   aria-label="Register"
                   className="nav-link"
                 >
-                  Zarejestruj
+                  Register
                 </Link>
               </div>
             </>

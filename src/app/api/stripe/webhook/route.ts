@@ -12,7 +12,6 @@ export async function POST(request: NextRequest) {
 
   const stripeBody = await request.text();
   const signature = await request.headers.get("stripe-signature");
-  console.log("Received Stripe webhook event:", stripeBody); // Debug log
 
   if (!signature) {
     throw new Error("Missing Stripe signature");
@@ -24,8 +23,6 @@ export async function POST(request: NextRequest) {
       signature as string,
       process.env.WEBHOOK_SECRET_KEY as string
     );
-
-    console.log("Stripe event successfully processed:", event); // Debug log
 
     const paymentIntent = event.data.object as Stripe.PaymentIntent;
     const userId = paymentIntent.metadata.userId;

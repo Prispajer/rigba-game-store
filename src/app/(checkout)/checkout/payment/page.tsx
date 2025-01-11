@@ -28,7 +28,6 @@ export default function PaymentPage() {
   const loadStripeConfig = React.useCallback(async () => {
     try {
       const response = await fetch("/api/stripe/config");
-      console.log("Stripe config response:", response); // Debug log
       const { publishableKey } = await response.json();
       setStripePromise(await loadStripe(publishableKey));
     } catch (error) {
@@ -51,7 +50,6 @@ export default function PaymentPage() {
             amount: amount,
           }),
         });
-        console.log("Create payment intent response:", response); // Debug log
         const { clientSecret, newOrder } = await response.json();
         setClientSecret(clientSecret);
         setNewOrder(newOrder);

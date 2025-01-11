@@ -17,8 +17,6 @@ export default function ProductScreenshotModalContainer({
   const { gameScreenshotModalState, handleClose } = useWindowVisibility();
   const [currentImageIndex, setCurrentImageIndex] = React.useState<number>(0);
 
-  console.log(currentImageId, currentImageIndex);
-
   React.useEffect(() => {
     const screenshotIndex = screenshots?.findIndex(
       (image) => image.id === currentImageId

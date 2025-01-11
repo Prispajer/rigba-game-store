@@ -31,7 +31,7 @@ export default function useUserWishList() {
         if (user?.email) {
           await dispatch(fetchUserWishList({ email: user.email }));
         }
-      }, 700),
+      }, 200),
     [dispatch, user?.email]
   );
 
@@ -46,7 +46,7 @@ export default function useUserWishList() {
         setIsLoading(false);
       }
     },
-    700
+    200
   );
 
   const handleDeleteUserProductFromWishList = debounce(
@@ -62,7 +62,7 @@ export default function useUserWishList() {
         setIsLoading(false);
       }
     },
-    700
+    200
   );
 
   const handleSetUserWishListOrdering = (ordering: string) => {

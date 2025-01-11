@@ -32,77 +32,80 @@ export default function useUserCart() {
         if (user?.email) {
           await dispatch(fetchUserCart({ email: user.email }));
         }
-      }, 700),
+      }, 200),
     [dispatch, user?.email]
   );
 
   const handleAddUserProductToCart = React.useCallback(
-    async (addUserProductToCartDTO: AddUserProductToCartDTO) => {
+    debounce(async (addUserProductToCartDTO: AddUserProductToCartDTO) => {
       if (user?.email) {
         setIsCartLoading(true);
         await dispatch(fetchAddUserProductToCart(addUserProductToCartDTO));
         handleFetchUserCart();
         setIsCartLoading(false);
       }
-    },
+    }, 200),
     [dispatch, user?.email, handleFetchUserCart]
   );
 
   const handleDeleteUserProductFromCart = React.useCallback(
-    async (deleteUserProductFromCartDTO: DeleteUserProductFromCartDTO) => {
-      if (user?.email) {
-        setIsCartLoading(true);
-        await dispatch(
-          fetchDeleteUserProductFromCart(deleteUserProductFromCartDTO)
-        );
-        awahandleFetchUserCart();
-        setIsCartLoading(false);
-      }
-    },
+    debounce(
+      async (deleteUserProductFromCartDTO: DeleteUserProductFromCartDTO) => {
+        if (user?.email) {
+          setIsCartLoading(true);
+          await dispatch(
+            fetchDeleteUserProductFromCart(deleteUserProductFromCartDTO)
+          );
+          handleFetchUserCart();
+          setIsCartLoading(false);
+        }
+      },
+      200
+    ),
     [dispatch, user?.email, handleFetchUserCart]
   );
 
   const handleIncreaseQuantityUserProductFromCart = React.useCallback(
-    async (
-      increaseQuantityUserProductFromCartDTO: IncreaseQuantityUserProductFromCartDTO
-    ) => {
-      if (user?.email) {
-        setIsCartLoading(true);
-        await dispatch(
-          fetchIncreaseQuantityUserProductFromCart(
-            increaseQuantityUserProductFromCartDTO
-          )
-        );
-        handleFetchUserCart();
-        setIsCartLoading(false);
-      }
-    },
+    debounce(
+      async (
+        increaseQuantityUserProductFromCartDTO: IncreaseQuantityUserProductFromCartDTO
+      ) => {
+        if (user?.email) {
+          setIsCartLoading(true);
+          await dispatch(
+            fetchIncreaseQuantityUserProductFromCart(
+              increaseQuantityUserProductFromCartDTO
+            )
+          );
+          handleFetchUserCart();
+          setIsCartLoading(false);
+        }
+      },
+      200
+    ),
     [dispatch, user?.email, handleFetchUserCart]
   );
 
   const handleDecreaseQuantityUserProductFromCart = React.useCallback(
-    async (
-      decreaseQuantityUserProductFromCartDTO: DecreaseQuantityUserProductFromCartDTO
-    ) => {
-      if (user?.email) {
-        setIsCartLoading(true);
-        await dispatch(
-          fetchDecreaseQuantityUserProductFromCart(
-            decreaseQuantityUserProductFromCartDTO
-          )
-        );
-        handleFetchUserCart();
-        setIsCartLoading(false);
-      }
-    },
+    debounce(
+      async (
+        decreaseQuantityUserProductFromCartDTO: DecreaseQuantityUserProductFromCartDTO
+      ) => {
+        if (user?.email) {
+          setIsCartLoading(true);
+          await dispatch(
+            fetchDecreaseQuantityUserProductFromCart(
+              decreaseQuantityUserProductFromCartDTO
+            )
+          );
+          handleFetchUserCart();
+          setIsCartLoading(false);
+        }
+      },
+      200
+    ),
     [dispatch, user?.email, handleFetchUserCart]
   );
-
-  React.useEffect(() => {
-    if (user?.email) {
-      handleFetchUserCart();
-    }
-  }, [user?.email, handleFetchUserCart]);
 
   return {
     userCartState,

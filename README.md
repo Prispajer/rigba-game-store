@@ -1,41 +1,148 @@
 # RIGBA - Game Database and Online Store
 
-## Project Objective
-The goal of the **"RIGBA"** project is to create a modern and functional game database that also serves as an online store. The application provides intuitive navigation, allowing users to browse, rate, add games to their wishlist, and purchase "fake" online game keys. The database stores details about games and available genres. Through integration with public APIs, users can stay updated with the latest news and trends in the gaming world. Additionally, the project includes test payment features to simulate the purchase process and payment system integration.
+## Introduction
+**RIGBA** is a modern and functional web application that combines a game database with an online store experience. It utilizes live data from APIs and features a REST API architecture with services, interfaces, and classes. The application also incorporates React, React hooks, and Custom hooks.
 
-## Project Scope
-The scope of the store's functionality includes:
-- **Cart Management**: Add, remove, and adjust the quantity of games in the cart.
-- **Wishlist Management**: Add and remove games from the wishlist.
-- **Pagination**: All data-related sections use pagination for improved user experience.
-- **Filtering and Sorting**: Sort games and filter them based on current data.
-- **Game Interaction**: Features to write reviews and like/unlike them.
-- **Payments**: Integration with the test payment gateway Stripe, simulating the real payment process with proper messages and steps.
-- **User Management**: Handles authentication and authorization, including registration, login, password reset, email verification, and more.
+### Environments
+- **Local Version**: Provides full functionality but requires downloading and running the app locally.
+- **Live Version**: Offers limited functionality (e.g., restricted Stripe payment processing and email sending via Resend API).
+
+## Key Features
+The application includes a comprehensive set of features for users to enjoy a seamless experience:
+
+### Store Features
+- **Fully Responsive Design**: Optimized for devices of all sizes.
+- **Props Validation**: Ensures data integrity and prevents errors using PropTypes.
+- **Authentication Providers**: Log in with Facebook, Google, or Discord for a secure and fast login experience.
+- **Cart Management**: Add, remove, and adjust the quantity of games in the cart with dynamic updates.
+- **Local Cart and Wishlist Synchronization**: Automatically syncs items between local storage and the database, allowing users to maintain their cart and wishlist across sessions.
+- **Wishlist Management**: Save games for later and easily manage the wishlist.
+- **Pagination**: Divides large amounts of data into manageable chunks, improving performance and user experience.
+- **Filtering and Sorting**: Filter and sort games or wishlist items by genre, price, rating, or release date.
+- **Game Interaction**: Write reviews and like or dislike games to share your opinions and preferences.
+- **Payments**: Stripe integration in test mode for realistic payment simulations.
+- **Purchase Management**: View past purchases and check order status.
+- **Dynamic URL Rendering**: Dynamically updates the URL based on filters and sorting, allowing users to bookmark and share filtered views.
+- **State Management**: Redux for global state management and custom hooks for component state and side effects.
+
+### User Management
+- **Registration and Login**: Secure account creation and login.
+- **Password Reset**: Mechanism for resetting forgotten passwords.
+- **Email Verification**: Ensures account authenticity with email confirmation.
+- **Password Update**: Update passwords via the user dashboard.
+- **Two-Factor Authentication (2FA)**: Enhanced security to prevent unauthorized access.
+
+## Application Screenshots and Demo
+- **Home Page**  
+  ![Home Page](https://drive.google.com/file/d/1K61BzTSIlDpAyfy_h1iXSdiFMxkSgmFi/view?usp=drive_link)
+  
+- **Filters Page**  
+  ![Filters Page](https://drive.google.com/file/d/19cCvUgDr0fglwWn-hhypFOP9tZTWxobK/view?usp=drive_link)
+  
+- **Game Page**  
+  ![Game Page](https://drive.google.com/file/d/1_4p4HM0I0dFNIixbkHHCqs7dO68DxLAY/view?usp=drive_link)
+  
+- **Account Page**  
+  ![Account Page](https://drive.google.com/file/d/1gpi363YrecqHJMzuVDETruX27VTARTKS/view?usp=drive_link)
+  
+- **Login Page**  
+  ![Login Page](https://drive.google.com/file/d/1ZAi3UqKsEYUmeodrY3JaQbCcyQJPwsqG/view?usp=drive_link)
+
+- **Demo**  
+  [Game Store Demo on YouTube](https://www.youtube.com/watch?v=FaoslE0Mqc4&t=87s)
+
+## Application Tech Stack
+  - TypeScript
+  - React
+  - Next.js
+  - NextAuth.js
+  - Tailwind CSS
+  - React Hook Form
+  - Custom React Hooks
+  - Prisma
+  - REST API
+  - PostgreSQL
+  - Zod
+  - Redux Toolkit
+  - Stripe
+  - Jest
+  - Resend
 
 ## Installation Instructions
 
-### 1. Download the ZIP File
-Download the ZIP file containing the application from the `Microservices-Based Applications Programming – Adrian Kozieł 55252` folder.
+### Test Account for Live Version (Test Account without emails and payments)
+- **Username**: `prispajertestdev@gmail.com`
+- **Password**: `123123123123`
 
-### 2. Extract the ZIP File
-Unzip the file to a chosen folder on your computer.
+### Steps to Run Locally
+1. **Download the ZIP File**  
+   Download the ZIP file containing the application from the repository.
 
-### 3. Install Required Dependencies
-1. Open **Visual Studio Code**.
-2. In the top-left corner, click on `File > Open Folder`.
-3. Select the extracted folder named `rigba-game-store`.
-4. Once the folder is open in the Explorer, click `View > Terminal`.
-5. In the terminal, navigate to the folder by typing:
-   - If the folder is on drive C:
+2. **Extract the ZIP File**  
+   Unzip the file to a directory on your computer.
+
+3. **Install Required Dependencies**
+   1. Open **Visual Studio Code**.
+   2. Go to `File > Open Folder` and select the extracted folder (`rigba-game-store`).
+   3. In the top menu, click `View > Terminal` to open the terminal.
+   4. Navigate to the folder in the terminal:
+      - For C drive:
+        ```bash
+        cd C:/Users/YourUser/Desktop/rigba-game-store
+        ```
+      - For other drives (e.g., D drive):
+        ```bash
+        D:
+        cd /Web/rigba-game-store
+        ```
+   5. Once in the correct folder, run:
+      ```bash
+      npm install
+      ```
+   6. After the installation finishes, start the application with:
+      ```bash
+      npm run dev
+      ```
+
+4. **Open the Application**  
+   Open your browser and go to [http://localhost:3000](http://localhost:3000).  
+   - Note: This is the development version, so expect reduced performance and some missing optimizations.
+
+### Third-Party Service Setup
+- **Resend**:  
+  1. Create an account on [Resend](https://resend.com).
+  2. Generate an API key.
+  3. Update the `.env` file with your generated key:
      ```bash
-     cd C:/Users/YourUser/Desktop/rigba-game-store
+     NEXT_PUBLIC_RESEND_API_KEY=your_generated_key
      ```
-   - If it's on another drive (e.g., D):
+  4. The email address used in the Resend account will be used for email-related actions like email verification.
+
+- **Stripe**:  
+  1. Create an account on [Stripe](https://stripe.com).
+  2. Generate API keys for your account.
+  3. Update the `.env` file with the following Stripe variables:
      ```bash
-     D:
-     cd /Web/rigba-game-store
+     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_publishable_key
+     STRIPE_SECRET_KEY=your_secret_key
      ```
-6. Once the terminal shows the correct path, install the required dependencies:
-   ```bash
-   npm install
+  4. Create a `WEBHOOK_SECRET_KEY` by searching for “API” in Stripe and following the steps.
+  5. Download and install [Stripe CLI](https://stripe.com/docs/stripe-cli).
+  6. Open `CMD` and navigate to your Stripe CLI installation directory:
+     ```bash
+     cd /path/to/stripe-cli
+     ```
+  7. Log in to Stripe CLI:
+     ```bash
+     stripe login
+     ```
+  8. Start listening for webhooks:
+     ```bash
+     stripe listen --forward-to localhost:3000/api/stripe/webhook
+     ```
+
+### Testing Payments
+- **Test Card**:
+  - **Card Number**: `4242 4242 4242 4242`
+  - **Expiry Date**: `04/44`
+  - **CVC**: `444`

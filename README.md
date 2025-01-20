@@ -1,6 +1,7 @@
 <div align="center">
   <img src="./public/icons/logo.png" alt="Logo" />
 </div>
+
 # RIGBA - Game Database and Online Store
 
 ## Introduction

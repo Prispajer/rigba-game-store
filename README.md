@@ -1,4 +1,4 @@
-![Logo](./icons/logo.png)
+![Logo](./public/icons/logo.png)
 # RIGBA - Game Database and Online Store
 
 ## Introduction
@@ -37,19 +37,22 @@ The application includes a comprehensive set of features for users to enjoy a se
 
 ## Application Screenshots and Demo
 - **Home Page**  
-  ![Home Page](https://drive.google.com/file/d/1K61BzTSIlDpAyfy_h1iXSdiFMxkSgmFi/view?usp=drive_link)
+  ![Home Page](https://drive.google.com/file/d/1K61BzTSIlDpAyfy_h1iXSdiFMxkSgmFi/view)
   
 - **Filters Page**  
-  ![Filters Page](https://drive.google.com/file/d/19cCvUgDr0fglwWn-hhypFOP9tZTWxobK/view?usp=drive_link)
+  ![Filters Page](https://drive.google.com/file/d/19cCvUgDr0fglwWn-hhypFOP9tZTWxobK/view)
+
+- **Game Page**  
+  ![Game Page](https://drive.google.com/file/d/1_4p4HM0I0dFNIixbkHHCqs7dO68DxLAY/view)
   
 - **Game Page**  
-  ![Game Page](https://drive.google.com/file/d/1_4p4HM0I0dFNIixbkHHCqs7dO68DxLAY/view?usp=drive_link)
+  ![Game Page](https://drive.google.com/file/d/1ONm4_-RPaoNFSacUtxNX1C1omlMi7_FS/view)
   
 - **Account Page**  
-  ![Account Page](https://drive.google.com/file/d/1gpi363YrecqHJMzuVDETruX27VTARTKS/view?usp=drive_link)
+  ![Account Page](https://drive.google.com/file/d/1gpi363YrecqHJMzuVDETruX27VTARTKS/view)
   
 - **Login Page**  
-  ![Login Page](https://drive.google.com/file/d/1ZAi3UqKsEYUmeodrY3JaQbCcyQJPwsqG/view?usp=drive_link)
+  ![Login Page](https://drive.google.com/file/d/1ZAi3UqKsEYUmeodrY3JaQbCcyQJPwsqG/view)
 
 - **Demo**  
   [Game Store Demo on YouTube](https://www.youtube.com/watch?v=FaoslE0Mqc4&t=87s)

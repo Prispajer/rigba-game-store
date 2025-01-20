@@ -1,3 +1,4 @@
+![Logo](./icons/logo.png)
 # RIGBA - Game Database and Online Store
 
 ## Introduction
@@ -31,6 +32,8 @@ The application includes a comprehensive set of features for users to enjoy a se
 - **Email Verification**: Ensures account authenticity with email confirmation.
 - **Password Update**: Update passwords via the user dashboard.
 - **Two-Factor Authentication (2FA)**: Enhanced security to prevent unauthorized access.
+- **Image Update**: Mechanism for updating account image profile.
+
 
 ## Application Screenshots and Demo
 - **Home Page**  

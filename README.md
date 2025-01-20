@@ -1,8 +1,7 @@
 <div align="center">
-  <img src="./public/icons/logo.png" alt="Logo" />
+  <img src="./public/icons/logo.png" alt="Logo" width="80" height="80" style="vertical-align: middle;"/>
+  <h1 style="display: inline; vertical-align: middle;">RIGBA - Game Database and Online Store</h1>
 </div>
-
-# RIGBA - Game Database and Online Store
 
 ## Introduction
 **RIGBA** is a modern and functional web application that combines a game database with an online store experience. It utilizes live data from APIs and features a REST API architecture with services, interfaces, and classes. The application also incorporates React, React hooks, and Custom hooks.
@@ -40,22 +39,22 @@ The application includes a comprehensive set of features for users to enjoy a se
 
 ## Application Screenshots and Demo
 - **Home Page**  
-  ![Home Page](https://drive.google.com/file/d/1K61BzTSIlDpAyfy_h1iXSdiFMxkSgmFi/view)
+  ![Home Page](https://drive.usercontent.google.com/download?id=1K61BzTSIlDpAyfy_h1iXSdiFMxkSgmFi&export=view&authuser=0)
   
 - **Filters Page**  
-  ![Filters Page](https://drive.google.com/file/d/19cCvUgDr0fglwWn-hhypFOP9tZTWxobK/view)
+  ![Filters Page](https://drive.usercontent.google.com/download?id=19cCvUgDr0fglwWn-hhypFOP9tZTWxobK&export=view&authuser=0)
 
 - **Game Page**  
-  ![Game Page](https://drive.google.com/file/d/1_4p4HM0I0dFNIixbkHHCqs7dO68DxLAY/view)
+  ![Game Page](https://drive.usercontent.google.com/download?id=1_4p4HM0I0dFNIixbkHHCqs7dO68DxLAY&export=view&authuser=0)
   
 - **Game Page**  
   ![Game Page](https://drive.usercontent.google.com/download?id=1ONm4_-RPaoNFSacUtxNX1C1omlMi7_FS&export=view&authuser=0)
   
 - **Account Page**  
-  ![Account Page](https://drive.google.com/file/d/1gpi363YrecqHJMzuVDETruX27VTARTKS/view)
+  ![Account Page](https://drive.usercontent.google.com/download?id=1gpi363YrecqHJMzuVDETruX27VTARTKS&export=view&authuser=0)
   
 - **Login Page**  
-  ![Login Page](https://drive.google.com/file/d/1ZAi3UqKsEYUmeodrY3JaQbCcyQJPwsqG/view)
+  ![Login Page](https://drive.usercontent.google.com/download?id=1ZAi3UqKsEYUmeodrY3JaQbCcyQJPwsqG&export=view&authuser=0)
 
 - **Demo**  
   [Game Store Demo on YouTube](https://www.youtube.com/watch?v=FaoslE0Mqc4&t=87s)

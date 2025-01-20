@@ -1,4 +1,6 @@
-![Logo](./public/icons/logo.png)
+<div align="center">
+  <img src="./public/icons/logo.png" alt="Logo" />
+</div>
 # RIGBA - Game Database and Online Store
 
 ## Introduction
@@ -46,7 +48,7 @@ The application includes a comprehensive set of features for users to enjoy a se
   ![Game Page](https://drive.google.com/file/d/1_4p4HM0I0dFNIixbkHHCqs7dO68DxLAY/view)
   
 - **Game Page**  
-  ![Game Page](https://drive.google.com/file/d/1ONm4_-RPaoNFSacUtxNX1C1omlMi7_FS/view)
+  ![Game Page](https://drive.usercontent.google.com/download?id=1ONm4_-RPaoNFSacUtxNX1C1omlMi7_FS&export=view&authuser=0)
   
 - **Account Page**  
   ![Account Page](https://drive.google.com/file/d/1gpi363YrecqHJMzuVDETruX27VTARTKS/view)

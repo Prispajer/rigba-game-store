@@ -4,7 +4,7 @@
 </div>
 
 # Introduction
-**RIGBA** is a modern and functional web application that combines a game database with an online store experience. It utilizes live data from APIs and features a REST API architecture with services, interfaces, and classes. The application also incorporates React, React hooks, and Custom hooks.
+**RIGBA** is a modern and functional web application that combines a game database with an online store experience. It utilizes live data from APIs and features a **REST API architecture with services, interfaces, and classes**. The application also incorporates **React, React hooks, Custom hooks and including Dependency Injection (DI)**.
 
 # Environments
 - **Local Version**: Provides full functionality but requires downloading and running the app locally.
@@ -67,8 +67,9 @@ The application includes a comprehensive set of features for users to enjoy a se
 # Application Tech Stack
   - TypeScript
   - React
-  - Next.js
-  - NextAuth.js
+  - NextJS
+  - NextAuthJS
+  - InversifyJS
   - Tailwind CSS
   - React Hook Form
   - Custom React Hooks

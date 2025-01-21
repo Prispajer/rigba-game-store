@@ -57,8 +57,12 @@ The application includes a comprehensive set of features for users to enjoy a se
 - **Login Page**  
   ![Login Page](https://drive.usercontent.google.com/download?id=1ZAi3UqKsEYUmeodrY3JaQbCcyQJPwsqG&export=view&authuser=0)
 
-- **Demo**  
-  [![Game Store Demo on YouTube](https://img.youtube.com/vi/FaoslE0Mqc4/0.jpg)](https://www.youtube.com/watch?v=FaoslE0Mqc4)
+- **Demo**
+ <div align="center">
+  <a href="https://www.youtube.com/watch?v=FaoslE0Mqc4" target="_blank">
+    <img src="https://img.youtube.com/vi/FaoslE0Mqc4/0.jpg" alt="Game Store Demo on YouTube" />
+  </a>
+</div>
 
 ## Application Tech Stack
   - TypeScript
@@ -239,18 +243,18 @@ AUTH_SECRET=your_auth_secret_key
    2. Go to `File > Open Folder` and select the extracted folder (`rigba-game-store`).
    3. In the top menu, click `View > Terminal` to open the terminal.
    4. Navigate to (`rigba-game-store`) folder in the terminal:
-      - For C drive:
-        ```bash
-        cd C:/Users/YourUser/Desktop/rigba-game-store
-        ```
-      - For other drives (e.g., D drive):
-        ```bash
-        D:
-        cd /Web/rigba-game-store
-        ```
-   5. Once in the correct folder, run:
-      ```bash
-      npm install
+     - If you are on the **C drive**:
+     ```bash
+     cd C:/Users/YourUser/Desktop/rigba-game-store
+     ```
+     - If you are on another drive (e.g., D drive):
+     ```bash
+     D:
+     cd /Web/rigba-game-store
+     ```
+   5. Once you are in the correct folder, run:
+     ```bash
+   npm install
       ```
    6. After the installation finishes, start the application with:
       ```bash

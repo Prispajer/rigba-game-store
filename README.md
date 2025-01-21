@@ -95,9 +95,11 @@ The application includes a comprehensive set of features for users to enjoy a se
 # Installation Local Environments 
 This guide walks you through the process of setting up accounts, APIs, and credentials for various services required to run **Rigba Game Store**.
 
-## ⚠️ IMPORTANT: YOU NEED TO CREATE A `.env` FILE IN THE ROOT FOLDER OF `rigba-game-store`
-## 🔑 AND PASTE THE ENVIRONMENT KEYS PROVIDED BELOW!
-## 🌐 YOU NEED TO CREATE ACCOUNTS ON EACH SITE!
+> ⚠️ **IMPORTANT:** YOU NEED TO CREATE A `.env` FILE IN THE ROOT FOLDER OF `rigba-game-store`.
+> 
+> 🔑 **AND PASTE THE ENVIRONMENT KEYS PROVIDED BELOW!**
+> 
+> 🌐 **YOU NEED TO CREATE ACCOUNTS ON EACH SITE!**
 
 ## 1. NeonTech (Database Setup)
 1. Go to [NeonTech](https://neon.tech).
@@ -243,37 +245,34 @@ AUTH_SECRET=your_auth_secret_key
 ```
 
 # Installation Instructions
+### 🛠️ Installation Instructions
+
 1. **Download the ZIP File**  
-   Download the ZIP file containing the application from the repository.
+   - Download the ZIP file containing the application from the repository.
 
 2. **Extract the ZIP File**  
-   Unzip the file to a directory on your computer.
+   - Unzip the file to a directory on your computer.
 
-3. **Install Required Dependencies**
+3. **Install Required Dependencies**  
    - Open **Visual Studio Code**.
    - Go to `File > Open Folder` and select the extracted folder (`rigba-game-store`).
-   - In the top menu, click `View > Terminal` to open the terminal.
-   - Navigate to (`rigba-game-store`) folder in the terminal:
-     - If you are on the **C drive**:
+   - Open the terminal:
+     - **For C drive:**
+       ```bash
+       cd C:/Users/YourUser/Desktop/rigba-game-store
+       ```
+     - **For other drives (e.g., D drive):**
+       ```bash
+       D:
+       cd /Web/rigba-game-store
+       ```
+   - Run the following commands:
      ```bash
-     cd C:/Users/YourUser/Desktop/rigba-game-store
-     ```
-     - If you are on another drive (e.g., D drive):
-     ```bash
-     D:
-     cd /Web/rigba-game-store
-     ```
-   - Once you are in the correct folder, run:
-      ```bash
      npm install
+     npm run dev
      ```
-   - After the installation finishes, start the application with:
-      ```bash
-      npm run dev
-      ```
 
 4. **Open the Application**  
-   Open your browser and go to [http://localhost:3000](http://localhost:3000).  
+   - Open your browser and go to `http://localhost:3000`.
    - Note: This is the development version, so expect reduced performance and some missing optimizations.
-
 

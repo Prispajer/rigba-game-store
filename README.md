@@ -84,6 +84,7 @@ The application includes a comprehensive set of features for users to enjoy a se
 # Installation Local Environments 
 This guide walks you through the process of setting up accounts, APIs, and credentials for various services required to run **Rigba Game Store**.
 
+**YOU NEED TO CREATE A **.env** FILE IN THE ROOT FOLDER OF **rigba-game-store** AND PASTE THE ENVIRONMENT KEYS PROVIDED BELOW!**
 **YOU NEED TO CREATE ACCOUNTS ON EACH SITE!**
 
 ## 1. NeonTech (Database Setup)
@@ -242,11 +243,11 @@ AUTH_SECRET=your_auth_secret_key
    - Go to `File > Open Folder` and select the extracted folder (`rigba-game-store`).
    - In the top menu, click `View > Terminal` to open the terminal.
    - Navigate to (`rigba-game-store`) folder in the terminal:
-     -- If you are on the **C drive**:
+     - If you are on the **C drive**:
      ```bash
      cd C:/Users/YourUser/Desktop/rigba-game-store
      ```
-     -- If you are on another drive (e.g., D drive):
+     - If you are on another drive (e.g., D drive):
      ```bash
      D:
      cd /Web/rigba-game-store

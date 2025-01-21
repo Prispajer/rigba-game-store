@@ -3,17 +3,17 @@
   <h1 style="display: inline; vertical-align: middle;">RIGBA - Game Database and Online Store</h1>
 </div>
 
-## Introduction
+# Introduction
 **RIGBA** is a modern and functional web application that combines a game database with an online store experience. It utilizes live data from APIs and features a REST API architecture with services, interfaces, and classes. The application also incorporates React, React hooks, and Custom hooks.
 
-### Environments
+# Environments
 - **Local Version**: Provides full functionality but requires downloading and running the app locally.
 - **Live Version**: Offers limited functionality (e.g., Stripe payment processing and email sending via the Resend API are not supported).
 
-## Key Features
+# Key Features
 The application includes a comprehensive set of features for users to enjoy a seamless experience:
 
-### Store Features
+## Store Features
 - **Fully Responsive Design**: Optimized for devices of all sizes.
 - **Props Validation**: Ensures data integrity and prevents errors using PropTypes.
 - **Authentication Providers**: Log in with Facebook, Google, or Discord for a secure and fast login experience.
@@ -28,7 +28,7 @@ The application includes a comprehensive set of features for users to enjoy a se
 - **Dynamic URL Rendering**: Dynamically updates the URL based on filters and sorting, allowing users to bookmark and share filtered views.
 - **State Management**: Redux for global state management and custom hooks for component state and side effects.
 
-### User Management
+## User Management
 - **Registration and Login**: Secure account creation and login.
 - **Password Reset**: Mechanism for resetting forgotten passwords.
 - **Email Verification**: Ensures account authenticity with email confirmation.
@@ -38,7 +38,7 @@ The application includes a comprehensive set of features for users to enjoy a se
 - **Image Update**: Mechanism for updating account image profile.
 
 
-## Application Screenshots and Demo
+# Application Screenshots and Demo
 - **Home Page**  
   ![Home Page](https://drive.usercontent.google.com/download?id=1K61BzTSIlDpAyfy_h1iXSdiFMxkSgmFi&export=view&authuser=0)
   
@@ -64,7 +64,7 @@ The application includes a comprehensive set of features for users to enjoy a se
   </a>
 </div>
 
-## Application Tech Stack
+# Application Tech Stack
   - TypeScript
   - React
   - Next.js
@@ -82,7 +82,6 @@ The application includes a comprehensive set of features for users to enjoy a se
   - Resend
 
 # Installation Local Environments 
-
 This guide walks you through the process of setting up accounts, APIs, and credentials for various services required to run **Rigba Game Store**.
 
 **YOU NEED TO CREATE ACCOUNTS ON EACH SITE!**
@@ -239,24 +238,24 @@ AUTH_SECRET=your_auth_secret_key
    Unzip the file to a directory on your computer.
 
 3. **Install Required Dependencies**
-   1. Open **Visual Studio Code**.
-   2. Go to `File > Open Folder` and select the extracted folder (`rigba-game-store`).
-   3. In the top menu, click `View > Terminal` to open the terminal.
-   4. Navigate to (`rigba-game-store`) folder in the terminal:
-     - If you are on the **C drive**:
+   - Open **Visual Studio Code**.
+   - Go to `File > Open Folder` and select the extracted folder (`rigba-game-store`).
+   - In the top menu, click `View > Terminal` to open the terminal.
+   - Navigate to (`rigba-game-store`) folder in the terminal:
+     -- If you are on the **C drive**:
      ```bash
      cd C:/Users/YourUser/Desktop/rigba-game-store
      ```
-     - If you are on another drive (e.g., D drive):
+     -- If you are on another drive (e.g., D drive):
      ```bash
      D:
      cd /Web/rigba-game-store
      ```
-   5. Once you are in the correct folder, run:
-     ```bash
-   npm install
-      ```
-   6. After the installation finishes, start the application with:
+   - Once you are in the correct folder, run:
+      ```bash
+     npm install
+     ```
+   - After the installation finishes, start the application with:
       ```bash
       npm run dev
       ```
@@ -265,13 +264,13 @@ AUTH_SECRET=your_auth_secret_key
    Open your browser and go to [http://localhost:3000](http://localhost:3000).  
    - Note: This is the development version, so expect reduced performance and some missing optimizations.
 
-### Testing Payments
+## Testing Payments
 - **Test Card**:
   - **Card Number**: `4242 4242 4242 4242`
   - **Expiry Date**: `04/44`
   - **CVC**: `444`
  
-### Test Account for Live Version (Test Account without emails and payments)
+## Test Account for Live Version (Test Account without emails and payments)
 - **Username**: `prispajertestdev@gmail.com`
 - **Password**: `123123123123`
 

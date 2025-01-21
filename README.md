@@ -37,7 +37,6 @@ The application includes a comprehensive set of features for users to enjoy a se
 - **Two-Factor Authentication (2FA)**: Enhanced security to prevent unauthorized access.
 - **Image Update**: Mechanism for updating account image profile.
 
-
 # Application Screenshots and Demo
 - **Home Page**  
   ![Home Page](https://drive.usercontent.google.com/download?id=1K61BzTSIlDpAyfy_h1iXSdiFMxkSgmFi&export=view&authuser=0)
@@ -82,6 +81,17 @@ The application includes a comprehensive set of features for users to enjoy a se
   - Jest
   - Resend
 
+# Testing Data
+## Testing Payments
+- **Test Card**:
+  - **Card Number**: `4242 4242 4242 4242`
+  - **Expiry Date**: `04/44`
+  - **CVC**: `444`
+ 
+## Test Account for Live Version (Test Account without emails and payments)
+- **Username**: `prispajertestdev@gmail.com`
+- **Password**: `123123123123`
+    
 # Installation Local Environments 
 This guide walks you through the process of setting up accounts, APIs, and credentials for various services required to run **Rigba Game Store**.
 
@@ -233,7 +243,6 @@ AUTH_SECRET=your_auth_secret_key
 ```
 
 # Installation Instructions
-
 1. **Download the ZIP File**  
    Download the ZIP file containing the application from the repository.
 
@@ -266,15 +275,5 @@ AUTH_SECRET=your_auth_secret_key
 4. **Open the Application**  
    Open your browser and go to [http://localhost:3000](http://localhost:3000).  
    - Note: This is the development version, so expect reduced performance and some missing optimizations.
-
-## Testing Payments
-- **Test Card**:
-  - **Card Number**: `4242 4242 4242 4242`
-  - **Expiry Date**: `04/44`
-  - **CVC**: `444`
- 
-## Test Account for Live Version (Test Account without emails and payments)
-- **Username**: `prispajertestdev@gmail.com`
-- **Password**: `123123123123`
 
 

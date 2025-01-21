@@ -84,8 +84,9 @@ The application includes a comprehensive set of features for users to enjoy a se
 # Installation Local Environments 
 This guide walks you through the process of setting up accounts, APIs, and credentials for various services required to run **Rigba Game Store**.
 
-**YOU NEED TO CREATE A **.env** FILE IN THE ROOT FOLDER OF **rigba-game-store** AND PASTE THE ENVIRONMENT KEYS PROVIDED BELOW!**
-**YOU NEED TO CREATE ACCOUNTS ON EACH SITE!**
+## ⚠️ IMPORTANT: YOU NEED TO CREATE A `.env` FILE IN THE ROOT FOLDER OF `rigba-game-store`
+## 🔑 AND PASTE THE ENVIRONMENT KEYS PROVIDED BELOW!
+## 🌐 YOU NEED TO CREATE ACCOUNTS ON EACH SITE!
 
 ## 1. NeonTech (Database Setup)
 1. Go to [NeonTech](https://neon.tech).

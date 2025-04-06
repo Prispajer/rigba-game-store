@@ -22,13 +22,13 @@ export default function AuthSidebar() {
                 className="flex items-center justify-center w-[200px] h-[35px] bg-transparent text-[#ffffff] border border-[#ffffff]"
                 href="/login"
               >
-                Zaloguj
+                Login
               </Link>
               <Link
                 className="flex items-center justify-center w-[200px] h-[35px] bg-headerHover text-buttonTextColor"
                 href="/register"
               >
-                Zarejestruj
+                Register
               </Link>
               <IoCloseSharp
                 onClick={() => handleClose("authSidebar")}

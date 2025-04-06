@@ -24,15 +24,15 @@ export default function AuthLayout({
         {children}
         <footer className="text-center p-[5px] ">
           <div className="flex flex-col lg:flex-row justify-center items-center m-4 gap-6 lg:gap-8 text-[white] text-[14px]">
-            <button>Zmień język</button>
+            <button>Change language</button>
             <Link className="font-bold" href={"/terms-and-conditions"}>
-              Regulamin
+              Terms & Conditions
             </Link>
             <Link className="font-bold" href={"/support"}>
-              Pomoc
+              Support
             </Link>
             <span className="cursor-default">
-              Copyright @ 2024 Rigba. Wszelkie prawa zastrzeżone
+              Copyright @ 2024 Rigba. All Rights Reserved.
             </span>
           </div>
         </footer>

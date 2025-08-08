@@ -5,7 +5,7 @@ import Facebook from "next-auth/providers/facebook";
 import Discord from "next-auth/providers/discord";
 import type { NextAuthConfig } from "next-auth";
 import { LoginSchema } from "@/utils/schemas/user";
-import { postgres } from "./data/database/publicSQL/postgres";
+import { postgres } from "./lib/db";
 
 export default {
   providers: [

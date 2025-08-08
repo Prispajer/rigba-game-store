@@ -10,24 +10,26 @@ const OutsideClickHandler = ({
   handleOutsideClick: () => void;
 }) => {
   const wrapperRef = React.useRef<HTMLDivElement>(null);
+
   React.useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleOutsideClickHandler = (event: MouseEvent) => {
       if (!wrapperRef.current?.contains(event.target as Node)) {
         handleOutsideClick();
       }
     };
 
-    document.addEventListener("click", handleClickOutside);
-
+    document.addEventListener("click", handleOutsideClickHandler);
     return () => {
-      document.removeEventListener("click", handleClickOutside);
+      document.removeEventListener("click", handleOutsideClickHandler);
     };
   }, [handleOutsideClick]);
 
   return (
     <>
       <Backdrop />
-      <div ref={wrapperRef}>{children}</div>
+      <div className="outside-click-modal" ref={wrapperRef}>
+        {children}
+      </div>
     </>
   );
 };

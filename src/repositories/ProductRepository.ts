@@ -1,5 +1,5 @@
 import { injectable, inject } from "inversify";
-import { postgres } from "@/data/database/publicSQL/postgres";
+import { postgres } from "@/lib/db";
 import type IProductRepository from "@/interfaces/IProductRepository";
 import type IProductUtils from "@/interfaces/IProductUtils";
 import { Product } from "@prisma/client";

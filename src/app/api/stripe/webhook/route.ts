@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { postgres } from "@/data/database/publicSQL/postgres";
+import { postgres } from "@/lib/db";
 import { generateGameKey } from "@/utils/keys";
 import { Order } from "@prisma/client";
 

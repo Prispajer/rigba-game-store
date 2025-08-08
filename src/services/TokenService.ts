@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { injectable, inject } from "inversify";
-import { postgres } from "@/data/database/publicSQL/postgres";
+import { postgres } from "@/lib/db";
 import type ITokenService from "../interfaces/ITokenService";
 import type ICheckerService from "@/interfaces/ICheckerService";
 import type IUserRepository from "@/interfaces/IUserRepository";
@@ -9,7 +9,7 @@ import {
   sendVerificationEmail,
   sendTwoFactorTokenEmail,
   sendPasswordResetEmail,
-} from "@/data/database/publicSQL/mail";
+} from "@/lib/mail";
 import { RequestResponse, CLASSTYPES } from "../utils/helpers/types";
 import { User, PasswordResetToken, TwoFactorToken } from "@prisma/client";
 import {

@@ -5,7 +5,7 @@ import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import { IoCloseSharp } from "react-icons/io5";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
-import { navLinks } from "@/utils/helpers/links";
+import { navLinks } from "@/data/links";
 import { NavCurrentElement } from "@/utils/helpers/types";
 
 export default function NavbarSidebar() {

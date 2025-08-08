@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import bcrypt from "bcryptjs";
 import { inject, injectable } from "inversify";
-import { postgres } from "@/data/database/publicSQL/postgres";
+import { postgres } from "@/lib/db";
 import type ICheckerService from "../interfaces/ICheckerService";
 import type IUserRepository from "@/interfaces/IUserRepository";
 import type IProductRepository from "@/interfaces/IProductRepository";

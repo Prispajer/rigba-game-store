@@ -19,9 +19,10 @@ import useCustomRouter from "@/hooks/useCustomRouter";
 import useUserCart from "@/hooks/useUserCart";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import useUserReviews from "@/hooks/useUserReviews";
+import useReviewActions from "@/features/reviews/hooks/useReviewActions";
 import { GameAPIResponse } from "@/utils/helpers/types";
 import ProductList from "./ProductList";
+import useProductReviews from "@/features/reviews/hooks/useProductReviews";
 
 export default function ProductContainer({
   product,
@@ -36,22 +37,18 @@ export default function ProductContainer({
   const { handleAddUserProductToCart, isCartLoading } = useUserCart();
   const { handleAddLocalProductToCart } = useLocalStorage("localCart");
   const { user } = useCurrentUser();
+  const { reviews, refetch } = useProductReviews(product.id);
   const {
-    userReviewsState,
-    isReviewLoading,
-    handleFetchUserReviews,
-    handleFetchLikeUserReview,
-    handleFetchUnLikeUserReview,
-  } = useUserReviews();
+    isLoading: isReviewLoading,
+    likeReview,
+    unlikeReview,
+  } = useReviewActions(refetch);
 
   return (
     <section className="pb-[100px] bg-primaryColor">
       <div className="grid grid-cols-1 lg:grid-cols-[calc(100%-380px),380px] max-w-[1600px] mx-auto px-[20px]">
         <div>
-          <ProductInformations
-            product={product}
-            userReviewsState={userReviewsState}
-          />
+          <ProductInformations product={product} userReviewsState={reviews} />
           <div className="mx-[-20px] lg:hidden">
             <ProductBuyOrAdd
               product={product}
@@ -73,20 +70,18 @@ export default function ProductContainer({
           <ProductHeaders headerText="Reviews" />
           <ProductReview
             product={product}
-            isReviewLoading={isReviewLoading}
             redirectToReview={redirectToReview}
-            userReviewsState={userReviewsState}
+            userReviewsState={reviews}
           />
           <ProductUsersReview
             product={product}
-            isReviewLoading={isReviewLoading}
+            isReviewLoading={isReviewLoading["likeReview"]}
             user={user}
-            userReviewsState={userReviewsState}
-            handleFetchUserReviews={handleFetchUserReviews}
-            handleFetchLikeUserReview={handleFetchLikeUserReview}
-            handleFetchUnLikeUserReview={handleFetchUnLikeUserReview}
+            userReviewsState={reviews}
+            handleFetchLikeUserReview={likeReview}
+            handleFetchUnLikeUserReview={unlikeReview}
           />
-          {userReviewsState.reviews.length > 5 ? (
+          {reviews.reviews.length > 5 ? (
             <ShowMoreButton text="Load more reviews" />
           ) : (
             ""

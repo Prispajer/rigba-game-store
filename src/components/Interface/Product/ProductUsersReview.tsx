@@ -17,7 +17,6 @@ export default function ProductUsersReview({
   isReviewLoading,
   user,
   userReviewsState,
-  handleFetchUserReviews,
   handleFetchLikeUserReview,
   handleFetchUnLikeUserReview,
 }: {
@@ -25,16 +24,11 @@ export default function ProductUsersReview({
   isReviewLoading: boolean;
   user: User | null;
   userReviewsState: UserReviewsSlice;
-  handleFetchUserReviews: (externalProductId: number) => void;
   handleFetchLikeUserReview: (likeUserReviewDTO: LikeUserReviewDTO) => void;
   handleFetchUnLikeUserReview: (
     unLikeUserReviewDTO: UnLikeUserReviewDTO
   ) => void;
 }) {
-  React.useEffect(() => {
-    handleFetchUserReviews(product.id as number);
-  }, [product, handleFetchUserReviews]);
-
   const findReviewLiker = (reviewId: string) => {
     return userReviewsState.reviews.some((review) =>
       review.reviewLikers.some(

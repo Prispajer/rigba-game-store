@@ -1,4 +1,4 @@
-import { postgres } from "@/data/database/publicSQL/postgres";
+import { postgres } from "@/lib/db";
 import { injectable, inject } from "inversify";
 import type IUserRepository from "@/interfaces/IUserRepository";
 import type IUserUtils from "@/interfaces/IUserUtils";

@@ -1,17 +1,14 @@
 import bcrypt from "bcryptjs";
 import { injectable, inject } from "inversify";
 import { PersonalData } from "@prisma/client";
-import { postgres } from "@/data/database/publicSQL/postgres";
+import { postgres } from "@/lib/db";
 import type IUserService from "@/interfaces/IUserService";
 import type ICheckerService from "../interfaces/ICheckerService";
 import type ITokenService from "../interfaces/ITokenService";
 import type IUserRepository from "@/interfaces/IUserRepository";
 import type ITokenRepository from "@/interfaces/ITokenRepository";
 import type IUserUtils from "@/interfaces/IUserUtils";
-import {
-  sendTwoFactorTokenEmail,
-  sendVerificationEmail,
-} from "@/data/database/publicSQL/mail";
+import { sendTwoFactorTokenEmail, sendVerificationEmail } from "@/lib/mail";
 import { User } from "@prisma/client";
 import { RequestResponse } from "../utils/helpers/types";
 import {

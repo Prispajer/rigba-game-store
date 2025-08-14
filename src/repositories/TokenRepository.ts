@@ -1,7 +1,7 @@
 import { injectable, inject } from "inversify";
 import { v4 as uuid4 } from "uuid";
 import * as CryptoJS from "crypto-js"; // Zmieniony import
-import { postgres } from "@/data/database/publicSQL/postgres";
+import { postgres } from "@/lib/db";
 import type ITokenRepository from "@/interfaces/ITokenRepository";
 import type ITokenUtils from "@/interfaces/ITokenUtils";
 import { CLASSTYPES } from "@/utils/helpers/types";

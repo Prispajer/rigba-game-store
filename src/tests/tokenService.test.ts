@@ -4,7 +4,7 @@ import {
   sendPasswordResetEmail,
   sendTwoFactorTokenEmail,
   sendVerificationEmail,
-} from "@/data/database/publicSQL/mail";
+} from "@/lib/mail";
 
 jest.mock("resend", () => ({
   Resend: jest.fn().mockImplementation(() => ({

@@ -11,7 +11,6 @@ export default function ProductReview({
   userReviewsState,
 }: {
   product: GameAPIResponse;
-  isReviewLoading: boolean;
   redirectToReview: (name: string) => void;
   userReviewsState: UserReviewsSlice;
 }) {

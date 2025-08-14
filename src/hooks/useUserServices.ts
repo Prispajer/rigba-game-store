@@ -74,7 +74,7 @@ export default function useUserServices() {
       }
     };
 
-    const submitEmailVerification = React.useCallback(async () => {
+    const submitEmailVerification = async () => {
       clearNotifications();
       if (!token) {
         setError({ message: "Missing token!", origin: "EmailVerification" });
@@ -99,7 +99,7 @@ export default function useUserServices() {
           origin: "EmailVerification",
         });
       }
-    }, [token]);
+    };
 
     return {
       submitToggleTwoFactor,

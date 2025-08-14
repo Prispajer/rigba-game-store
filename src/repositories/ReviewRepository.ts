@@ -1,5 +1,5 @@
 import { injectable, inject } from "inversify";
-import { postgres } from "@/data/database/publicSQL/postgres";
+import { postgres } from "@/lib/db";
 import IReviewRepository from "@/interfaces/IReviewRepository";
 import type IProductUtils from "@/interfaces/IProductUtils";
 import {

@@ -1,5 +1,5 @@
 import { injectable, inject } from "inversify";
-import { postgres } from "@/data/database/publicSQL/postgres";
+import { postgres } from "@/lib/db";
 import type IWishListService from "@/interfaces/IWishListService";
 import type ICheckerService from "@/interfaces/ICheckerService";
 import type IWishListRepository from "@/interfaces/IWishListRepository";

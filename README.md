@@ -13,6 +13,36 @@
 # Key Features
 The application includes a comprehensive set of features for users to enjoy a seamless experience:
 
+## Roadmap
+### 🔐 Authentication & User Management
+✅ Registration and Login with NextAuth  
+✅ OAuth Integration (Google, Facebook, Discord)  
+✅ Email Verification via Resend  
+✅ Two-Factor Authentication (2FA)  
+✅ Password Reset Functionality  
+✅ Password Change via Dashboard  
+✅ User Profile Update (name, phone, zip code, etc.)  
+✅ Profile Image Upload  
+✅ Session Management and Data Synchronization between Local Storage and Account  
+
+### 🛒 Store Features
+✅ Stripe Payment Integration (Test Mode)  
+✅ Resend Email API Setup  
+✅ Review and Rating System  
+✅ Game Filtering by Tags, Platforms, and Publishers  
+✅ Fully Responsive Design for Desktop and Mobile  
+✅ Cart and Wishlist Management  
+✅ Dynamic URL Rendering for Filters and Sorting  
+✅ Purchase History and Order Status  
+
+### 🧪 Infrastructure & Testing
+✅ Unit Tests for Core Features  
+✅ Final Deployment on Vercel  
+
+### 🔧 Planned Improvements
+🔧 Full Refactor of Project Structure  
+🔧 Accessibility Enhancements  
+
 ## Store Features
 - **Fully Responsive Design**: Optimized for devices of all sizes.
 - **Props Validation**: Ensures data integrity and prevents errors using PropTypes.

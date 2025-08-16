@@ -8,8 +8,8 @@ import ProductHeaders from "../Shared/ReusableComponents/ProductHeaders";
 import ProductList from "../Product/ProductList";
 import CheckoutCart from "./CheckoutCart";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import useUserCart from "@/hooks/useUserCart";
-import useCurrentUser from "@/hooks/useCurrentUser";
+import useUserCart from "@/features/cart/hooks/useUserCart";
+import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import useCustomRouter from "@/hooks/useCustomRouter";
 
 export default function CheckoutContainer() {

@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserReviews } from "@/redux/slices/userReviewsSlice";
+import { fetchUserReviews } from "@/features/reviews/redux/slices/reviews/reviewsSlice";
 import { AppDispatch, RootState } from "@/redux/store";
 import executeWithLoading from "@/shared/executeWithLoading";
 

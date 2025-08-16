@@ -12,9 +12,9 @@ import { FormSuccess } from "../Shared/FormsNotifications/FormSuccess";
 import { FormError } from "../Shared/FormsNotifications/FormError";
 import useProductServices from "@/hooks/useProductServices";
 import useCustomRouter from "@/hooks/useCustomRouter";
-import useCurrentUser from "@/hooks/useCurrentUser";
+import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import { generateRandomPrice } from "@/utils/prices";
-import { GameAPIResponse } from "@/utils/helpers/types";
+import { GameAPIResponse } from "@/types/types";
 import { ReviewSchema } from "@/utils/schemas/product";
 
 export default function ReviewContainer({

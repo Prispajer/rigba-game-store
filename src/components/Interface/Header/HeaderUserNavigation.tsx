@@ -9,11 +9,11 @@ import { extendedNavItems } from "../Shared/Modals/ProfileModalContainer";
 import ProfileModalContainer from "../Shared/Modals/ProfileModalContainer";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import useCurrentUser from "@/hooks/useCurrentUser";
-import useUserCart from "@/hooks/useUserCart";
-import useUserWishList from "@/hooks/useUserWishList";
-import { fetchUserCart } from "@/redux/slices/userCartSlice";
-import { fetchUserWishList } from "@/redux/slices/userWishListSlice";
+import useCurrentUser from "@/features/user/hooks/useCurrentUser";
+import useUserCart from "@/features/cart/hooks/useUserCart";
+import useUserWishList from "@/features/wishlist/hooks/useUserWishList";
+import { fetchUserCart } from "@/features/cart/redux/slices/cart/cartSlice";
+import { fetchUserWishList } from "@/features/wishlist/redux/slices/wishlist/wishlistSlice";
 import { AppDispatch } from "@/redux/store";
 
 export default function HeaderUserNavigation({}) {

@@ -5,7 +5,7 @@ import {
   PersonalData,
   PasswordResetToken,
 } from "@prisma/client";
-import { RequestResponse } from "@/utils/helpers/types";
+import { RequestResponse } from "@/types/types";
 import {
   LoginUserDTO,
   RegisterUserDTO,

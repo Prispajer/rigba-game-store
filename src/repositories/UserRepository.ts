@@ -2,7 +2,7 @@ import { postgres } from "@/lib/db";
 import { injectable, inject } from "inversify";
 import type IUserRepository from "@/interfaces/IUserRepository";
 import type IUserUtils from "@/interfaces/IUserUtils";
-import { CLASSTYPES } from "@/utils/helpers/types";
+import { CLASSTYPES } from "@/types/types";
 import {
   User,
   TwoFactorConfirmation,

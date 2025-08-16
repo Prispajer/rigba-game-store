@@ -2,8 +2,8 @@ import React from "react";
 import LoadingAnimation from "../Shared/Animations/LoadingAnimation";
 import { generateStars } from "@/utils/ratings";
 import { groupReviewsByRating, mergeReviews } from "@/utils/reviews";
-import { GameAPIResponse } from "@/utils/helpers/types";
-import { UserReviewsSlice } from "@/redux/slices/userReviewsSlice";
+import { GameAPIResponse } from "@/types/types";
+import { UserReviewsSlice } from "@/features/reviews/redux/slices/reviews/reviewsSlice";
 
 export default function ProductReview({
   product,

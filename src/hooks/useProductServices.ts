@@ -3,7 +3,7 @@ import { z } from "zod";
 import requestService from "@/services/RequestService";
 import { generateRandomPrice } from "@/utils/prices";
 import { ReviewSchema } from "@/utils/schemas/product";
-import { GameAPIResponse } from "@/utils/helpers/types";
+import { GameAPIResponse } from "@/types/types";
 import { RatingTitle } from "@prisma/client";
 import { User } from "next-auth";
 

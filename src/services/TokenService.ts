@@ -10,7 +10,7 @@ import {
   sendTwoFactorTokenEmail,
   sendPasswordResetEmail,
 } from "@/lib/mail";
-import { RequestResponse, CLASSTYPES } from "../utils/helpers/types";
+import { RequestResponse, CLASSTYPES } from "../types/types";
 import { User, PasswordResetToken, TwoFactorToken } from "@prisma/client";
 import {
   SendResetPasswordTokenDTO,

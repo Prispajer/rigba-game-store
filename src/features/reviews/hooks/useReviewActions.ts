@@ -4,7 +4,7 @@ import {
   fetchUserReviews,
   fetchLikeUserReview,
   fetchUnLikeUserReview,
-} from "@/redux/slices/userReviewsSlice";
+} from "@/features/reviews/redux/slices/reviews/reviewsSlice";
 import executeWithLoading from "@/shared/executeWithLoading";
 import {
   LikeUserReviewDTO,

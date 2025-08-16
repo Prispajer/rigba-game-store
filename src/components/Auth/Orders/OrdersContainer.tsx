@@ -10,7 +10,7 @@ export default function OrdersContainer() {
   const { redirectToOrder } = useCustomRouter();
   const {
     pages,
-    paginationState,
+    pagination,
     handleSetCurrentPage,
     handleNextPage,
     handlePreviousPage,
@@ -37,8 +37,8 @@ export default function OrdersContainer() {
           </div>
         ) : userOrderHistoryState.orderHistoryArray &&
           userOrderHistoryState.orderHistoryArray.length > 0 ? (
-          pages.length > paginationState.currentPage &&
-          pages[paginationState.currentPage].map((order) => (
+          pages.length > pagination.currentPage &&
+          pages[pagination.currentPage].map((order) => (
             <div
               key={order.id}
               className="grid grid-cols-1 lg:grid-cols-account-orders-auto-fit items-center p-[20px] lg:py-[10px] lg:px-[20px] gap-x-[20px] border border-b-[3px] border-[#d3dfe9] bg-[#FFFFFF]"
@@ -122,7 +122,7 @@ export default function OrdersContainer() {
         {userOrderHistoryState.orderHistoryArray.length >= 11 && (
           <Pagination
             loadingState={userOrderHistoryState.isLoading}
-            currentPage={paginationState.currentPage}
+            currentPage={pagination.currentPage}
             pages={pages}
             handleNextPage={handleNextPage}
             handleCurrentSetPage={handleSetCurrentPage}

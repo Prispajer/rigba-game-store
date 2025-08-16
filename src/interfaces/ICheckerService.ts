@@ -1,4 +1,4 @@
-import { RequestResponse } from "@/utils/helpers/types";
+import { RequestResponse } from "@/types/types";
 import {
   User,
   Product,

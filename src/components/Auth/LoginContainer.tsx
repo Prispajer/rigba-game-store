@@ -11,10 +11,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
-import useCurrentUser from "@/hooks/useCurrentUser";
+import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import useUserServices from "@/hooks/useUserServices";
-import { signInAccount } from "@/hooks/useCurrentUser";
-import { SignInProvider } from "@/utils/helpers/types";
+import { signInAccount } from "@/features/user/hooks/useCurrentUser";
+import { SignInProvider } from "@/types/types";
 
 export default function LoginContainer() {
   const {

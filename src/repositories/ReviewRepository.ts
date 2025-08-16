@@ -9,7 +9,7 @@ import {
   RatingTitle,
   Product,
 } from "@prisma/client";
-import { CLASSTYPES } from "@/utils/helpers/types";
+import { CLASSTYPES } from "@/types/types";
 import {
   GetProductReviewsDTO,
   GetReviewDTO,

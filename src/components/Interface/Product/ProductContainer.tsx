@@ -16,11 +16,11 @@ import ProductRemainingDetails from "./ProductRemainingDetails";
 import ShowMoreButton from "../Shared/Buttons/ShowMoreButton";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useCustomRouter from "@/hooks/useCustomRouter";
-import useUserCart from "@/hooks/useUserCart";
+import useUserCart from "@/features/cart/hooks/useUserCart";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import useCurrentUser from "@/hooks/useCurrentUser";
+import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import useReviewActions from "@/features/reviews/hooks/useReviewActions";
-import { GameAPIResponse } from "@/utils/helpers/types";
+import { GameAPIResponse } from "@/types/types";
 import ProductList from "./ProductList";
 import useProductReviews from "@/features/reviews/hooks/useProductReviews";
 

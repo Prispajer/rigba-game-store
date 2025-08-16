@@ -11,9 +11,9 @@ import { FaDiscord } from "react-icons/fa";
 import { RegisterSchema } from "@/utils/schemas/user";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
-import { signInAccount } from "@/hooks/useCurrentUser";
+import { signInAccount } from "@/features/user/hooks/useCurrentUser";
 import useUserServices from "@/hooks/useUserServices";
-import { SignInProvider } from "@/utils/helpers/types";
+import { SignInProvider } from "@/types/types";
 
 export default function RegisterContainer() {
   const { success, error, isPending, useUserActions } = useUserServices();

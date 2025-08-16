@@ -30,7 +30,7 @@ import ReviewService from "@/services/ReviewService";
 import type IReviewService from "@/interfaces/IReviewService";
 import ReviewRepository from "@/repositories/ReviewRepository";
 import type IReviewRepository from "@/interfaces/IReviewRepository";
-import { CLASSTYPES } from "@/utils/helpers/types";
+import { CLASSTYPES } from "@/types/types";
 import IPurchaseHistoryRepository from "@/interfaces/IPurchaseHistoryRepository";
 import PurchaseHistoryService from "@/services/PurchaseHistoryService";
 import PurchaseHistoryRepository from "@/repositories/PurchaseHistoryRepository";

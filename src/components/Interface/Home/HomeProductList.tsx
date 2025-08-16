@@ -7,7 +7,7 @@ import LoadingAnimation from "../Shared/Animations/LoadingAnimation";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import fetchService from "@/services/FetchService";
 import { generateRandomPrice } from "@/utils/prices";
-import { GameAPIResponse } from "@/utils/helpers/types";
+import { GameAPIResponse } from "@/types/types";
 
 export default function HomeProductList({ ordering }: { ordering: string }) {
   const { redirectToGame } = useCustomRouter();

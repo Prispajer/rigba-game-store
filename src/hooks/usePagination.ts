@@ -1,53 +1,54 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setPagination,
-  goToNextPage,
-  goToPreviousPage,
-  setCurrentPage,
-} from "@/redux/slices/paginationSlice";
+  showPagination,
+  nextPage,
+  prevPage,
+  goToPage,
+} from "@/redux/slices/pagination/paginationSlice";
 import { paginatePages } from "@/utils/pagination";
 import { RootState } from "@/redux/store";
 
-export default function usePagination(data: any[]) {
+export default function usePagination<T>(data: T[]) {
   const dispatch = useDispatch();
-  const paginationState = useSelector((state: RootState) => state.pagination);
+
+  const pagination = useSelector((state: RootState) => state.pagination);
 
   const pages = paginatePages(data);
 
   React.useEffect(() => {
     dispatch(
-      setPagination({
-        currentPage: paginationState.currentPage,
+      showPagination({
+        currentPage: pagination.currentPage,
         totalPages: pages.length - 1,
       })
     );
-  }, [data, paginationState.currentPage, dispatch]);
+  }, [data, pagination.currentPage, dispatch]);
 
   React.useEffect(() => {
     dispatch(
-      setPagination({
+      showPagination({
         currentPage: 0,
-        totalPages: pages.length - 1,
+        totalPages: pages.length,
       })
     );
   }, []);
 
   const handleSetCurrentPage = (page: number) => {
-    dispatch(setCurrentPage(page));
+    dispatch(goToPage(page));
   };
 
   const handleNextPage = () => {
-    dispatch(goToNextPage());
+    dispatch(nextPage());
   };
 
   const handlePreviousPage = () => {
-    dispatch(goToPreviousPage());
+    dispatch(prevPage());
   };
 
   return {
     pages,
-    paginationState,
+    pagination,
     handleSetCurrentPage,
     handleNextPage,
     handlePreviousPage,

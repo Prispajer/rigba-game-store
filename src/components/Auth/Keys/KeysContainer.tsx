@@ -12,7 +12,7 @@ export default function KeysContainer() {
   const { redirectToKey } = useCustomRouter();
   const {
     pages,
-    paginationState,
+    pagination,
     handleSetCurrentPage,
     handleNextPage,
     handlePreviousPage,
@@ -38,8 +38,8 @@ export default function KeysContainer() {
           </div>
         ) : userProductHistoryState.productHistoryArray &&
           userProductHistoryState.productHistoryArray?.length > 0 ? (
-          pages.length > paginationState.currentPage &&
-          pages[paginationState.currentPage]?.map((product) => (
+          pages.length > pagination.currentPage &&
+          pages[pagination.currentPage]?.map((product) => (
             <div
               key={product.id}
               className="grid grid-cols-[1fr_4fr] lg:grid-cols-account-orders-auto-fit items-center p-[15px] lg:p-[0px] gap-x-[20px] border border-b-[3px] border-[#d3dfe9] bg-[#FFFFFF]"
@@ -134,7 +134,7 @@ export default function KeysContainer() {
         {userProductHistoryState.productHistoryArray.length >= 11 && (
           <Pagination
             loadingState={userProductHistoryState.isLoading}
-            currentPage={paginationState.currentPage}
+            currentPage={pagination.currentPage}
             pages={pages}
             handleNextPage={handleNextPage}
             handleCurrentSetPage={handleSetCurrentPage}

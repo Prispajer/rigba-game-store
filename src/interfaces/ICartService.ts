@@ -1,5 +1,5 @@
 import { User, Cart, Product } from "@prisma/client";
-import { RequestResponse } from "@/utils/helpers/types";
+import { RequestResponse } from "@/types/types";
 import {
   GetUserCartDTO,
   AddProductToCartDTO,

@@ -4,8 +4,8 @@ import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
 import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
 import Pagination from "../Shared/ReusableComponents/Pagination";
-import { LocalStorageState } from "@/redux/slices/localStorageSlice";
-import { UserWishListState } from "@/redux/slices/userWishListSlice";
+import { LocalStorageState } from "@/redux/slices/localStorage/localStorageSlice";
+import { UserWishListState } from "@/features/wishlist/redux/slices/wishlist/wishlistSlice";
 import usePagination from "@/hooks/usePagination";
 import { ExtendedUser } from "@/auth";
 
@@ -32,7 +32,7 @@ export default function WishListProductList({
 
   const {
     pages,
-    paginationState,
+    pagination,
     handleSetCurrentPage,
     handleNextPage,
     handlePreviousPage,
@@ -56,7 +56,7 @@ export default function WishListProductList({
 
   const paginatedWishListState = usePagination(
     searchWishListByText(currentWishList)
-  ).pages[paginationState.currentPage];
+  ).pages[pagination.currentPage];
 
   return (
     <>
@@ -186,7 +186,7 @@ export default function WishListProductList({
       {searchWishListByText(currentWishList).length > 10 && (
         <Pagination
           loadingState={userWishListState.isLoading}
-          currentPage={paginationState.currentPage}
+          currentPage={pagination.currentPage}
           pages={pages}
           handleNextPage={handleNextPage}
           handleCurrentSetPage={handleSetCurrentPage}

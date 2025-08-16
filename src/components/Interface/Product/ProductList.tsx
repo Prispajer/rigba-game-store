@@ -8,7 +8,7 @@ import LoadingAnimation from "../Shared/Animations/LoadingAnimation";
 import ShowMoreButton from "../Shared/Buttons/ShowMoreButton";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import fetchService from "@/services/FetchService";
-import { GameAPIResponse } from "@/utils/helpers/types";
+import { GameAPIResponse } from "@/types/types";
 import { assignPricesToExternalGames } from "@/utils/prices";
 
 export default function ProductList() {

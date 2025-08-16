@@ -5,7 +5,7 @@ import Image from "next/image";
 import { RxHamburgerMenu } from "react-icons/rx";
 import ProfileModalContainer from "@/components/Interface/Shared/Modals/ProfileModalContainer";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
-import useCurrentUser from "@/hooks/useCurrentUser";
+import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 
 export default function AccountHeader() {
   const { handleOpen } = useWindowVisibility();

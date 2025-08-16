@@ -10,8 +10,8 @@ import type IWishListRepository from "@/interfaces/IWishListRepository";
 import type ICartRepository from "@/interfaces/ICartRepository";
 import type IReviewRepository from "@/interfaces/IReviewRepository";
 import type IPurchaseHistoryRepository from "@/interfaces/IPurchaseHistoryRepository";
-import { RequestResponse } from "../utils/helpers/types";
-import { CLASSTYPES } from "../utils/helpers/types";
+import { RequestResponse } from "../types/types";
+import { CLASSTYPES } from "../types/types";
 import {
   CheckDataExistsAndReturnProductDTO,
   CheckDataExistsAndReturnProductReviewsDTO,

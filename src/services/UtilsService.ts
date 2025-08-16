@@ -1,5 +1,5 @@
 import IUtilsService from "../interfaces/IUtilsService";
-import { GameAPIResponse } from "../utils/helpers/types";
+import { GameAPIResponse } from "../types/types";
 
 export default class UtilsService implements IUtilsService {
   private searchText: string = "";

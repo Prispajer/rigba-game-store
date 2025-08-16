@@ -5,7 +5,7 @@ import Image from "next/image";
 import { LuPencil } from "react-icons/lu";
 import LoadingAnimation from "@/components/Interface/Shared/Animations/LoadingAnimation";
 import useUserProductHistory from "@/hooks/useUserProductHistory";
-import useCurrentUser from "@/hooks/useCurrentUser";
+import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import useUserServices from "@/hooks/useUserServices";
 import { generateRandomName } from "@/utils/names";
 

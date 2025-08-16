@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserOrderHistory } from "@/redux/slices/userOrderHistorySlice";
-import useCurrentUser from "./useCurrentUser";
+import { fetchUserOrderHistory } from "@/features/history/redux/slices/orderHistory/orderHistorySlice";
+import useCurrentUser from "../features/user/hooks/useCurrentUser";
 import { AppDispatch, RootState } from "@/redux/store";
 
 export default function useUserOrderHistory() {

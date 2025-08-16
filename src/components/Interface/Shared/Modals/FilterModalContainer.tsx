@@ -8,7 +8,7 @@ import useWindowVisibility from "@/hooks/useWindowVisibility";
 import UtilsService from "@/services/UtilsService";
 import IUtilsService from "@/interfaces/IUtilsService";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
-import { GameAPIResponse } from "@/utils/helpers/types";
+import { GameAPIResponse } from "@/types/types";
 
 export default function FilterModalContainer({
   filterLabel,

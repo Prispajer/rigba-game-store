@@ -7,8 +7,8 @@ import DigitalProductDetails from "./ProductDigitalProductDetails";
 import ProductShareButton from "./ProductShareButton";
 import { groupReviewsByRating, mergeReviews } from "@/utils/reviews";
 import { generateStars, calculateAverageRating } from "@/utils/ratings";
-import { GameAPIResponse } from "@/utils/helpers/types";
-import { UserReviewsSlice } from "@/redux/slices/userReviewsSlice";
+import { GameAPIResponse } from "@/types/types";
+import { UserReviewsSlice } from "@/features/reviews/redux/slices/reviews/reviewsSlice";
 
 export default function ProductInformations({
   product,

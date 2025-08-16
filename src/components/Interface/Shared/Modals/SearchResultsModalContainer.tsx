@@ -4,11 +4,11 @@ import { FaCartPlus } from "react-icons/fa";
 import LoadingAnimation from "../Animations/LoadingAnimation";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useCustomRouter from "@/hooks/useCustomRouter";
-import useUserCart from "@/hooks/useUserCart";
+import useUserCart from "@/features/cart/hooks/useUserCart";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import useCurrentUser from "@/hooks/useCurrentUser";
+import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import { generateRandomPrice } from "@/utils/prices";
-import { GameAPIProduct, GameAPIResponse } from "@/utils/helpers/types";
+import { GameAPIProduct, GameAPIResponse } from "@/types/types";
 
 export default function SearchResultsModalContainer({
   gamesArray,

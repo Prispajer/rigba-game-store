@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { UploadButton } from "@/utils/uploadthing";
-import useCurrentUser from "@/hooks/useCurrentUser";
+import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 
 export default function UploadProfileImage() {
   const { user, update } = useCurrentUser();

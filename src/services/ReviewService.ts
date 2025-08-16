@@ -3,7 +3,7 @@ import type ICheckerService from "@/interfaces/ICheckerService";
 import type IReviewRepository from "@/interfaces/IReviewRepository";
 import type IReviewService from "@/interfaces/IReviewService";
 import { User, Review, Product, ReviewLikers } from "@prisma/client";
-import { RequestResponse, CLASSTYPES } from "@/utils/helpers/types";
+import { RequestResponse, CLASSTYPES } from "@/types/types";
 import {
   GetProductReviewsDTO,
   AddReviewToProductDTO,

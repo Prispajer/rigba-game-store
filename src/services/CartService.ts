@@ -5,7 +5,7 @@ import type ICheckerService from "@/interfaces/ICheckerService";
 import type ICartRepository from "@/interfaces/ICartRepository";
 import type IProductRepository from "@/interfaces/IProductRepository";
 import { User, Cart, Product } from "@prisma/client";
-import { RequestResponse, CLASSTYPES } from "@/utils/helpers/types";
+import { RequestResponse, CLASSTYPES } from "@/types/types";
 import {
   GetUserCartDTO,
   AddProductToCartDTO,

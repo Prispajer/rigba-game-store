@@ -1,5 +1,5 @@
 import IFetchService from "../interfaces/IFetchService";
-import { GameAPIPagination, GameAPIResponse } from "../utils/helpers/types";
+import { GameAPIPagination, GameAPIResponse } from "../types/types";
 export class FetchService implements IFetchService {
   public apiKey: string = process.env.NEXT_PUBLIC_RAWG_API_KEY || "";
   public baseUrl: string = process.env.NEXT_PUBLIC_RAWG_BASE_URL || "";

@@ -11,9 +11,9 @@ import {
   increaseQuantityLocalProductFromCart,
   decreaseQuantityLocalProductFromCart,
   setLocalOrdering,
-} from "@/redux/slices/localStorageSlice";
+} from "@/redux/slices/localStorage/localStorageSlice";
 import { RootState } from "@/redux/store";
-import { LocalCart, LocalWishList } from "@/utils/helpers/types";
+import { LocalCart, LocalWishList } from "@/types/types";
 
 export default function useLocalStorage(key: string) {
   const [isLoaded, setIsLoaded] = React.useState(false);

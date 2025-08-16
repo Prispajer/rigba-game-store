@@ -3,7 +3,7 @@ import { postgres } from "@/lib/db";
 import type IProductUtils from "@/interfaces/IProductUtils";
 import type IWishListRepository from "@/interfaces/IWishListRepository";
 import { User, WishList, Product } from "@prisma/client";
-import { CLASSTYPES } from "@/utils/helpers/types";
+import { CLASSTYPES } from "@/types/types";
 import {
   GetUserWishListDTO,
   CreateUserProductWishListDTO,

@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setSearchText, clearSearchText } from "@/redux/slices/utilitySlice";
+import { setSearchText, clearSearchText } from "@/redux/slices/ui/uiSlice";
 import useFetchGameData from "./useFetchGameData";
 import { RootState } from "../redux/store";
 
@@ -9,7 +9,7 @@ export default function useSearchText() {
   const { productFilterState } = useFetchGameData();
 
   const searchGenreTextState = useSelector(
-    (state: RootState) => state.utility.searchGenreText
+    (state: RootState) => state.ui.searchGenreText
   );
   const searchPlatformTextState = useSelector(
     (state: RootState) => state.utility.searchPlatformText

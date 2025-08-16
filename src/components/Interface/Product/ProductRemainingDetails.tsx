@@ -1,5 +1,5 @@
 "use client";
-import { GameAPIResponse } from "@/utils/helpers/types";
+import { GameAPIResponse } from "@/types/types";
 import React from "react";
 
 export default function ProductRemainingDetails({

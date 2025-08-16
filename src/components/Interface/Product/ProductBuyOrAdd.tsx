@@ -3,7 +3,7 @@
 import React from "react";
 import { FaCartPlus } from "react-icons/fa";
 import { generateRandomPrice } from "@/utils/prices";
-import { GameAPIProduct } from "@/utils/helpers/types";
+import { GameAPIProduct } from "@/types/types";
 import { User } from "next-auth";
 import {
   LocalCartProductDTO,

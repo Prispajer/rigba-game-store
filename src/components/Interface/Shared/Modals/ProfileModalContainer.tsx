@@ -7,9 +7,9 @@ import { TbShoppingCartCopy } from "react-icons/tb";
 import { LuGamepad2 } from "react-icons/lu";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
-import useCurrentUser from "@/hooks/useCurrentUser";
+import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import { signOut } from "next-auth/react";
-import { ProfileModalContainerProps } from "@/utils/helpers/types";
+import { ProfileModalContainerProps } from "@/types/types";
 
 export const defaultNavItems = [
   { href: "/wishlist", icon: CiHeart, label: "Wishlist" },

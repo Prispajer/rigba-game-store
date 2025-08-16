@@ -1,5 +1,5 @@
 import { User, WishList, Product } from "@prisma/client";
-import { RequestResponse } from "@/utils/helpers/types";
+import { RequestResponse } from "@/types/types";
 import {
   GetUserWishListDTO,
   AddProductToWishListDTO,

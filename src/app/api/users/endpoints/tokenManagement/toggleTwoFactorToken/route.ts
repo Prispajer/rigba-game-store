@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { tokenService } from "@/utils/injector";
-import { RequestResponse } from "@/utils/helpers/types";
+import { RequestResponse } from "@/types/types";
 import { TwoFactorToken } from "@prisma/client";
 
 export async function POST(

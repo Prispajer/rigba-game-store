@@ -3,7 +3,7 @@ import { postgres } from "@/lib/db";
 import type ICartRepository from "@/interfaces/ICartRepository";
 import type IProductUtils from "@/interfaces/IProductUtils";
 import { User, Cart, Product } from "@prisma/client";
-import { CLASSTYPES } from "@/utils/helpers/types";
+import { CLASSTYPES } from "@/types/types";
 import {
   GetUserCartDTO,
   CreateUserCartProductDTO,

@@ -2,10 +2,10 @@
 import React from "react";
 import { CiHeart } from "react-icons/ci";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import useCurrentUser from "@/hooks/useCurrentUser";
-import useUserWishList from "@/hooks/useUserWishList";
+import useCurrentUser from "@/features/user/hooks/useCurrentUser";
+import useUserWishList from "@/features/wishlist/hooks/useUserWishList";
 import { generateRandomPrice } from "@/utils/prices";
-import { ProductInformations } from "@/utils/helpers/types";
+import { ProductInformations } from "@/types/types";
 
 export default function AddToWishList<
   T extends {

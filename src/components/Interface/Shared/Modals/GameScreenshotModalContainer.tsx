@@ -5,7 +5,7 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import { IoCloseSharp } from "react-icons/io5";
-import { GameAPIResponse } from "@/utils/helpers/types";
+import { GameAPIResponse } from "@/types/types";
 
 export default function ProductScreenshotModalContainer({
   currentImageId,

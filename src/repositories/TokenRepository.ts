@@ -4,7 +4,7 @@ import * as CryptoJS from "crypto-js"; // Zmieniony import
 import { postgres } from "@/lib/db";
 import type ITokenRepository from "@/interfaces/ITokenRepository";
 import type ITokenUtils from "@/interfaces/ITokenUtils";
-import { CLASSTYPES } from "@/utils/helpers/types";
+import { CLASSTYPES } from "@/types/types";
 import {
   EmailVerificationToken,
   PasswordResetToken,

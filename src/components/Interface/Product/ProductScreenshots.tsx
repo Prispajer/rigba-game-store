@@ -2,7 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import ProductScreenshotModalContainer from "../Shared/Modals/GameScreenshotModalContainer";
-import { GameAPIResponse } from "@/utils/helpers/types";
+import { GameAPIResponse } from "@/types/types";
 
 export default function ProductScreenshots({
   screenshots,

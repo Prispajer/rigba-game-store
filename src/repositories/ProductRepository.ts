@@ -3,7 +3,7 @@ import { postgres } from "@/lib/db";
 import type IProductRepository from "@/interfaces/IProductRepository";
 import type IProductUtils from "@/interfaces/IProductUtils";
 import { Product } from "@prisma/client";
-import { CLASSTYPES } from "@/utils/helpers/types";
+import { CLASSTYPES } from "@/types/types";
 import {
   GetProductByExternalProductIdDTO,
   DeleteUserProductDTO,

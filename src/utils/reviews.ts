@@ -1,7 +1,7 @@
-import { UserReviews } from "./helpers/types";
+import { Review } from "../types/types";
 
 export const groupReviewsByRating = (
-  reviews: UserReviews[]
+  reviews: Review[]
 ): Array<{ count: number; id: number; percent: number; title: string }> => {
   const reviewsGroupedByRating: Record<
     string,

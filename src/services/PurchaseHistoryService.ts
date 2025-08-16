@@ -2,7 +2,7 @@ import { injectable, inject } from "inversify";
 import type ICheckerService from "@/interfaces/ICheckerService";
 import type IPurchaseHistoryService from "@/interfaces/IPurchaseHistoryService";
 import { User, ProductHistory, OrderHistory } from "@prisma/client";
-import { RequestResponse, CLASSTYPES } from "@/utils/helpers/types";
+import { RequestResponse, CLASSTYPES } from "@/types/types";
 import {
   GetUserProductHistoryDTO,
   GetUserOrderHistoryDTO,

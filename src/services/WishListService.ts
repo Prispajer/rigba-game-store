@@ -5,7 +5,7 @@ import type ICheckerService from "@/interfaces/ICheckerService";
 import type IWishListRepository from "@/interfaces/IWishListRepository";
 import type IProductRepository from "@/interfaces/IProductRepository";
 import { User, WishList, Product } from "@prisma/client";
-import { RequestResponse, CLASSTYPES } from "@/utils/helpers/types";
+import { RequestResponse, CLASSTYPES } from "@/types/types";
 import {
   GetUserWishListDTO,
   AddProductToWishListDTO,

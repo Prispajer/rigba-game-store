@@ -4,7 +4,7 @@ import {
   setPlatformsIdArray,
   setStoresIdArray,
   setPublishersIdArray,
-} from "@/redux/slices/productFiltersSlice";
+} from "@/features/products/redux/slices/filters/filtersSlice";
 import FilterByPrice from "./FilterByPrice";
 import FilterByCategory from "./FilterByCategory";
 import useWindowVisibility from "@/hooks/useWindowVisibility";

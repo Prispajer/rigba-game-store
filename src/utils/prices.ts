@@ -1,4 +1,4 @@
-import { GameAPIResponse, LocalCart, UserProduct } from "./helpers/types";
+import { GameAPIResponse, LocalCart, UserProduct } from "../types/types";
 
 export function generateRandomPrice(): number {
   const minValue = 0;

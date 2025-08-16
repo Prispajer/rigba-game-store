@@ -1,4 +1,4 @@
-import { GameAPIPagination, GameAPIResponse } from "@/utils/helpers/types";
+import { GameAPIPagination, GameAPIResponse } from "@/types/types";
 
 export default interface IFetchService {
   fetchData(url: string): Promise<any>;

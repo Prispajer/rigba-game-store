@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { userService } from "@/utils/injector";
-import { RequestResponse, User } from "@/utils/helpers/types";
+import { RequestResponse, User } from "@/types/types";
 import { UpdatePasswordDTO } from "@/utils/helpers/backendDTO";
 import { TwoFactorToken } from "@prisma/client";
 

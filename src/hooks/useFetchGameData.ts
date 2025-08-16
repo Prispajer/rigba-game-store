@@ -11,12 +11,12 @@ import {
   setPage,
   setNextPage,
   setPreviousPage,
-} from "@/redux/slices/productFiltersSlice";
-import { loadMore } from "@/redux/slices/productGenresSlice";
-import { fetchPublishers } from "@/redux/slices/productPublishersSlice";
-import { fetchGenres } from "@/redux/slices/productGenresSlice";
-import { fetchStores } from "@/redux/slices/productStoresSlice";
-import { fetchPlatforms } from "@/redux/slices/productPlatformsSlice";
+} from "@/features/products/redux/slices/filters/filtersSlice";
+import { loadMore } from "@/features/products/redux/slices/genres/genresSlice";
+import { fetchPublishers } from "@/features/products/redux/slices/publishers/publishersSlice";
+import { fetchGenres } from "@/features/products/redux/slices/genres/genresSlice";
+import { fetchStores } from "@/features/products/redux/slices/stores/storesSlice";
+import { fetchPlatforms } from "@/features/products/redux/slices/platforms/platformsSlice";
 import useCustomRouter from "./useCustomRouter";
 import debounce from "@/utils/debounce";
 import { AppDispatch, RootState } from "@/redux/store";

@@ -7,8 +7,8 @@ import { VscWorkspaceUnknown } from "react-icons/vsc";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import useUserCart from "@/hooks/useUserCart";
-import useCurrentUser from "@/hooks/useCurrentUser";
+import useUserCart from "@/features/cart/hooks/useUserCart";
+import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import { calculateTotalPrice } from "@/utils/prices";
 

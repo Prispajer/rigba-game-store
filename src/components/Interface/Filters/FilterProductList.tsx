@@ -6,7 +6,7 @@ import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
 import useFetchGameData from "@/hooks/useFetchGameData";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import useSearchText from "@/hooks/useSearchText";
-import { GameAPIResponse } from "@/utils/helpers/types";
+import { GameAPIResponse } from "@/types/types";
 
 export default function FilterProductList() {
   const { productFilterState } = useFetchGameData();

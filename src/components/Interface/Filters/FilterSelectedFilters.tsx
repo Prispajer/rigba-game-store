@@ -6,7 +6,7 @@ import {
   setGenresIdArray,
   setPlatformsIdArray,
   setStoresIdArray,
-} from "@/redux/slices/productFiltersSlice";
+} from "@/features/products/redux/slices/filters/filtersSlice";
 import FilterModalContainer from "../Shared/Modals/FilterModalContainer";
 import SortAndFilterSidebar from "../Shared/Sidebars/SortAndFilterSidebar";
 import useFetchGameData from "@/hooks/useFetchGameData";

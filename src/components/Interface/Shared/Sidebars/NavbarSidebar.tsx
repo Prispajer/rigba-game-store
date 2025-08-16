@@ -6,7 +6,7 @@ import { IoCloseSharp } from "react-icons/io5";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import { navLinks } from "@/data/links";
-import { NavCurrentElement } from "@/utils/helpers/types";
+import { NavCurrentElement } from "@/types/types";
 
 export default function NavbarSidebar() {
   const [currentElement, setCurrentElement] = React.useState<

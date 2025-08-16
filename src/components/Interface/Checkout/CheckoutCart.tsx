@@ -4,8 +4,8 @@ import React from "react";
 import Link from "next/link";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import useUserCart from "@/hooks/useUserCart";
-import useCurrentUser from "@/hooks/useCurrentUser";
+import useUserCart from "@/features/cart/hooks/useUserCart";
+import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 
 export default function CheckoutCart() {
   const { resolutionState } = useWindowVisibility();

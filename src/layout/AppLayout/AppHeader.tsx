@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { toggleScreen } from "@/redux/slices/utilitySlice";
+import { toggleScreen } from "@/redux/slices/ui/uiSlice";
 import HeaderLogo from "@/components/Interface/Header/HeaderLogo";
 import HeaderUserNavigation from "@/components/Interface/Header//HeaderUserNavigation";
 import NavbarSidebar from "@/components/Interface/Shared/Sidebars/NavbarSidebar";

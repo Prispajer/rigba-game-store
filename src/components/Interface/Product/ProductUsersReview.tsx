@@ -4,8 +4,8 @@ import LoadingAnimation from "../Shared/Animations/LoadingAnimation";
 import { FormError } from "../Shared/FormsNotifications/FormError";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { generateStars } from "@/utils/ratings";
-import { GameAPIResponse } from "@/utils/helpers/types";
-import { UserReviewsSlice } from "@/redux/slices/userReviewsSlice";
+import { GameAPIResponse } from "@/types/types";
+import { UserReviewsSlice } from "@/features/reviews/redux/slices/reviews/reviewsSlice";
 import {
   LikeUserReviewDTO,
   UnLikeUserReviewDTO,

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { userService } from "@/utils/injector";
-import { RequestResponse, User } from "@/utils/helpers/types";
+import { RequestResponse, User } from "@/types/types";
 import { TwoFactorToken, EmailVerificationToken } from "@prisma/client";
 
 export async function POST(request: NextRequest) {

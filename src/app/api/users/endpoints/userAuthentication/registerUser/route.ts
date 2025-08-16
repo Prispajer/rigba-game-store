@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { userService } from "@/utils/injector";
 import { RegisterUserDTO } from "@/utils/helpers/backendDTO";
-import { RequestResponse, User } from "@/utils/helpers/types";
+import { RequestResponse, User } from "@/types/types";
 
 export async function POST(request: NextRequest, response: NextResponse) {
   const registerUserClientData = await request.json();

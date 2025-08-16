@@ -6,7 +6,7 @@ import { z } from "zod";
 import TwoFactorModalContainer from "@/components/Interface/Shared/Modals/TwoFactorModalContainer";
 import { FormSuccess } from "@/components/Interface/Shared/FormsNotifications/FormSuccess";
 import { FormError } from "@/components/Interface/Shared/FormsNotifications/FormError";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
+import useUIVisibility from "@/hooks/useUIVisibility";
 import useUserServices from "@/hooks/useUserServices";
 import { NewPasswordSchema } from "@/utils/schemas/user";
 
@@ -18,7 +18,7 @@ export default function ChangePasswordContainer() {
   const { submitChangePasswordForm } = useUserActions();
   const { sendChangePasswordToken } = useUserToken();
 
-  const { twoFactorModalState, handleOpen } = useWindowVisibility();
+  const { twoFactorModalState, handleOpen } = useUIVisibility();
 
   const changePasswordForm = useForm<z.infer<typeof NewPasswordSchema>>({
     resolver: zodResolver(NewPasswordSchema),

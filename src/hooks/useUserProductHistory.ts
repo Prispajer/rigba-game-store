@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserProductHistory } from "@/redux/slices/userProductHistorySlice";
-import useCurrentUser from "./useCurrentUser";
+import { fetchUserProductHistory } from "@/features/history/redux/slices/productHistory/productHistorySlice";
+import useCurrentUser from "../features/user/hooks/useCurrentUser";
 import { AppDispatch, RootState } from "@/redux/store";
 
 export default function useUserProductHistory() {

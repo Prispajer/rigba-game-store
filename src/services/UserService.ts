@@ -10,13 +10,13 @@ import type ITokenRepository from "@/interfaces/ITokenRepository";
 import type IUserUtils from "@/interfaces/IUserUtils";
 import { sendTwoFactorTokenEmail, sendVerificationEmail } from "@/lib/mail";
 import { User } from "@prisma/client";
-import { RequestResponse } from "../utils/helpers/types";
+import { RequestResponse } from "../types/types";
 import {
   EmailVerificationToken,
   PasswordResetToken,
   TwoFactorToken,
 } from "@prisma/client";
-import { CLASSTYPES } from "../utils/helpers/types";
+import { CLASSTYPES } from "../types/types";
 import {
   LoginUserDTO,
   RegisterUserDTO,

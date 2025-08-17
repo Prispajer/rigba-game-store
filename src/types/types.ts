@@ -101,7 +101,7 @@ export interface OrderHistory {
   keys: Key[];
 }
 
-export interface LocalWishList {
+export interface LocalWishlist {
   externalProductId: number;
   name: string;
   price: number;

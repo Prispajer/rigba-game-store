@@ -1,56 +1,33 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import FetchService from "@/services/FetchService";
-import { GameAPIResponse } from "@/types/types";
+import { createSlice } from "@reduxjs/toolkit";
+import { getPublishers } from "./publishers.thunk";
+import { PublishersState } from "./publishers.types";
 
-interface ProductPublishersSlice {
-  publishersArray: GameAPIResponse[];
-  isLoading: boolean;
-  error: string | null;
-  page_size: number;
-}
-
-const initialState: ProductPublishersSlice = {
+const initialState: PublishersState = {
   publishersArray: [],
   isLoading: false,
   error: null,
   page_size: 1,
 };
 
-export const fetchPublishers = createAsyncThunk<
-  GameAPIResponse[],
-  { quantity: number },
-  { rejectValue: string }
->(
-  "publishers/fetchPublishers",
-  async ({ quantity = 1 }, { rejectWithValue }) => {
-    try {
-      const response = await FetchService.getPublishersForProducts(quantity);
-      return response;
-    } catch (error) {
-      return rejectWithValue((error as Error).message);
-    }
-  }
-);
-
-const productPublishersSlice = createSlice({
+const publishersSlice = createSlice({
   name: "publishers",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchPublishers.pending, (state) => {
+      .addCase(getPublishers.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchPublishers.fulfilled, (state, action) => {
+      .addCase(getPublishers.fulfilled, (state, action) => {
         state.isLoading = false;
         state.publishersArray = action.payload;
       })
-      .addCase(fetchPublishers.rejected, (state, action) => {
+      .addCase(getPublishers.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload as string | null;
+        state.error = action.payload ?? "Unknown error";
       });
   },
 });
 
-export default productPublishersSlice.reducer;
+export default publishersSlice.reducer;

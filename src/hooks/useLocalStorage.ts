@@ -3,34 +3,34 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setLocalCart,
-  setLocalWishList,
+  setLocalWishlist,
   addLocalProductToCart,
   addLocalProductToWishList,
   deleteLocalProductFromCart,
   deleteLocalProductFromWishList,
   increaseQuantityLocalProductFromCart,
   decreaseQuantityLocalProductFromCart,
-  setLocalOrdering,
+  setLocalWishlistOrdering,
 } from "@/redux/slices/localStorage/localStorageSlice";
 import { RootState } from "@/redux/store";
-import { LocalCart, LocalWishList } from "@/types/types";
+import {
+  selectlocalCart,
+  selectlocalWishlist,
+} from "./../redux/slices/localStorage/localStorage.selectors";
+import { LocalCart, LocalWishlist } from "@/types/types";
 
 export default function useLocalStorage(key: string) {
   const [isLoaded, setIsLoaded] = React.useState(false);
   const dispatch = useDispatch();
 
-  const localCartState = useSelector(
-    (state: RootState) => state.localStorage.localCart
-  );
-  const localWishListState = useSelector(
-    (state: RootState) => state.localStorage.localWishList
-  );
+  const localCartState = useSelector(selectlocalCart);
+  const localWishlistState = useSelector(selectlocalWishlist);
 
   const handleAddLocalProductToCart = (product: LocalCart): void => {
     dispatch(addLocalProductToCart(product));
   };
 
-  const handleAddLocalProductToWishList = (product: LocalWishList): void => {
+  const handleAddLocalProductToWishList = (product: LocalWishlist): void => {
     dispatch(addLocalProductToWishList(product));
   };
 
@@ -59,7 +59,7 @@ export default function useLocalStorage(key: string) {
   };
 
   const handleSetLocalOrdering = (ordering: string): void => {
-    dispatch(setLocalOrdering(ordering));
+    dispatch(setLocalWishlistOrdering(ordering));
   };
 
   React.useEffect(() => {
@@ -68,14 +68,14 @@ export default function useLocalStorage(key: string) {
       const parsedArray = JSON.parse(getLocalArray);
       if (key === "localCart") {
         dispatch(setLocalCart(parsedArray));
-      } else if (key === "localWishList") {
-        dispatch(setLocalWishList(parsedArray));
+      } else if (key === "localWishlist") {
+        dispatch(setLocalWishlist(parsedArray));
       }
     } else {
       if (key === "localCart") {
         dispatch(setLocalCart([]));
-      } else if (key === "localWishList") {
-        dispatch(setLocalWishList([]));
+      } else if (key === "localWishlist") {
+        dispatch(setLocalWishlist([]));
       }
     }
     setIsLoaded(true);
@@ -85,15 +85,15 @@ export default function useLocalStorage(key: string) {
     if (isLoaded) {
       if (key === "localCart") {
         localStorage.setItem(key, JSON.stringify(localCartState));
-      } else if (key === "localWishList") {
-        localStorage.setItem(key, JSON.stringify(localWishListState));
+      } else if (key === "localWishlist") {
+        localStorage.setItem(key, JSON.stringify(localWishlistState));
       }
     }
-  }, [key, localCartState, localWishListState, isLoaded]);
+  }, [key, localCartState, localWishlistState, isLoaded]);
 
   return {
     localCartState,
-    localWishListState,
+    localWishlistState,
     handleAddLocalProductToCart,
     handleAddLocalProductToWishList,
     handleDeleteLocalProductFromCart,

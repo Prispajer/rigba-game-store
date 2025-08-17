@@ -1,11 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { LocalCart, LocalWishList } from "@/types/types";
-
-export interface LocalStorageState {
-  localCart: LocalCart[];
-  localWishList: LocalWishList[];
-  ordering: string | null;
-}
+import { sortWishList } from "./localStorage.helpers";
+import { LocalCart, LocalWishlist } from "@/types/types";
+import { LocalStorageState } from "./localStorage.types";
 
 const initialState: LocalStorageState = {
   localCart: [],
@@ -23,7 +19,7 @@ const localStorageSlice = createSlice({
     ) => {
       state.localCart = action.payload;
     },
-    setLocalWishList: (
+    setLocalWishlist: (
       state,
       action: PayloadAction<LocalStorageState["localWishList"]>
     ) => {
@@ -32,7 +28,7 @@ const localStorageSlice = createSlice({
         state.localWishList = sortWishList(state.localWishList, state.ordering);
       }
     },
-    setLocalOrdering: (state, action: PayloadAction<string>) => {
+    setLocalWishlistOrdering: (state, action: PayloadAction<string>) => {
       state.ordering = action.payload;
       state.localWishList = sortWishList(state.localWishList, state.ordering);
     },
@@ -51,7 +47,7 @@ const localStorageSlice = createSlice({
     },
     addLocalProductToWishList: (
       state,
-      action: PayloadAction<LocalWishList>
+      action: PayloadAction<LocalWishlist>
     ) => {
       const isProductInWishList = state.localWishList.some(
         (product) =>
@@ -109,48 +105,10 @@ const localStorageSlice = createSlice({
   },
 });
 
-const sortWishList = (
-  wishlist: LocalStorageState["localWishList"],
-  ordering: string | null
-): LocalWishList[] => {
-  switch (ordering) {
-    case "price":
-      return [...wishlist].sort((a, b) => (a.price || 0) - (b.price || 0));
-    case "-price":
-      return [...wishlist].sort((a, b) => (b.price || 0) - (a.price || 0));
-    case "released":
-      return [...wishlist].sort(
-        (a, b) =>
-          new Date(a.released || "").getTime() -
-          new Date(b.released || "").getTime()
-      );
-    case "-released":
-      return [...wishlist].sort(
-        (a, b) =>
-          new Date(b.released || "").getTime() -
-          new Date(a.released || "").getTime()
-      );
-    case "added":
-      return [...wishlist].sort((a, b) => (a.added || 0) - (b.added || 0));
-    case "-added":
-      return [...wishlist].sort((a, b) => (b.added || 0) - (a.added || 0));
-    case "name":
-      return [...wishlist].sort((a, b) =>
-        (a.name || "").localeCompare(b.name || "")
-      );
-    case "-name":
-      return [...wishlist].sort((a, b) =>
-        (b.name || "").localeCompare(a.name || "")
-      );
-    default:
-      return [...wishlist].sort((a, b) => (a.price || 0) - (b.price || 0));
-  }
-};
-
 export const {
   setLocalCart,
-  setLocalWishList,
-  setLocalOrdering,
+  setLocalWishlist,
+  setLocalWishlistOrdering,
   addLocalProductToCart,
   addLocalProductToWishList,
   deleteLocalProductFromCart,

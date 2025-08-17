@@ -1,53 +1,33 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import FetchService from "@/services/FetchService";
-import { GameAPIResponse } from "@/types/types";
+import { createSlice } from "@reduxjs/toolkit";
+import { getGenres } from "./genres.thunk";
+import { GenresState } from "./genres.types";
 
-interface ProductGenresState {
-  genresArray: GameAPIResponse[];
-  isLoading: boolean;
-  error: string | null;
-  page_size: number;
-}
-
-const initialState: ProductGenresState = {
+const initialState: GenresState = {
   genresArray: [],
   isLoading: false,
   error: null,
   page_size: 1,
 };
 
-export const fetchGenres = createAsyncThunk<
-  GameAPIResponse[],
-  { quantity: number },
-  { rejectValue: string }
->("genres/fetchGenres", async ({ quantity = 1 }, { rejectWithValue }) => {
-  try {
-    const response = await FetchService.getGenresForProducts(quantity);
-    return response;
-  } catch (error) {
-    return rejectWithValue((error as Error).message);
-  }
-});
-
 const productGenresSlice = createSlice({
   name: "genres",
   initialState,
   reducers: {
-    loadMore: (state) => {
+    incrementPageSize: (state) => {
       state.page_size += 1;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchGenres.pending, (state) => {
+      .addCase(getGenres.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchGenres.fulfilled, (state, action) => {
+      .addCase(getGenres.fulfilled, (state, action) => {
         state.isLoading = false;
         state.genresArray = action.payload;
       })
-      .addCase(fetchGenres.rejected, (state, action) => {
+      .addCase(getGenres.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string | null;
       });
@@ -55,4 +35,4 @@ const productGenresSlice = createSlice({
 });
 
 export default productGenresSlice.reducer;
-export const { loadMore } = productGenresSlice.actions;
+export const { incrementPageSize } = productGenresSlice.actions;

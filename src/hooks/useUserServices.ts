@@ -2,7 +2,7 @@ import React from "react";
 import { z } from "zod";
 import { useSearchParams } from "next/navigation";
 import useCurrentUser from "../features/user/hooks/useCurrentUser";
-import useWindowVisibility from "./useWindowVisibility";
+import useWindowVisibility from "./useUIVisibility";
 import requestService from "@/services/RequestService";
 import { PersonalDataSchema, UpdateNameSchema } from "@/utils/schemas/user";
 

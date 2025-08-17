@@ -1,24 +1,8 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import fetchService from "@/services/FetchService";
-import { assignPricesToExternalGames } from "@/utils/prices";
-import { GameAPIResponse, GameAPIPagination } from "@/types/types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { getProductsWithFilters } from "./filters.thunk";
+import { FiltersState } from "./filters.types";
 
-export interface ProductFilterState {
-  productsWithFilters: GameAPIResponse[];
-  genresIdArray: number[];
-  platformsIdArray: number[];
-  storesIdArray: number[];
-  publishersIdArray: number[];
-  ordering: string;
-  isLoading: boolean;
-  error: string | null;
-  page: number;
-  gamesCount: number;
-  nextPage: string | null;
-  previousPage: string | null;
-}
-
-const initialState: ProductFilterState = {
+const initialState: FiltersState = {
   productsWithFilters: [],
   genresIdArray: [],
   platformsIdArray: [],
@@ -33,60 +17,8 @@ const initialState: ProductFilterState = {
   previousPage: null,
 };
 
-export const fetchProductsWithFilters = createAsyncThunk<
-  GameAPIPagination,
-  { page: number },
-  { rejectValue: string; getState: () => ProductFilterState }
->(
-  "productFilter/fetchProductsWithFilters",
-  async ({ page = 1 }, { rejectWithValue, getState }) => {
-    const {
-      productsWithFilters,
-      genresIdArray,
-      platformsIdArray,
-      storesIdArray,
-      publishersIdArray,
-      ordering,
-    } = (getState() as { productFilter: ProductFilterState }).productFilter;
-
-    try {
-      const getProductsWithFilters = await fetchService.getProductsWithFilters(
-        genresIdArray,
-        page,
-        platformsIdArray,
-        storesIdArray,
-        publishersIdArray,
-        ordering
-      );
-
-      const gamesWithPrices = await assignPricesToExternalGames(
-        getProductsWithFilters.results,
-        productsWithFilters
-      );
-
-      if (ordering === "price") {
-        gamesWithPrices.sort((a, b) => (a.price ?? 0) - (b.price ?? 0));
-      } else if (ordering === "-price") {
-        gamesWithPrices.sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
-      }
-
-      return {
-        ...getProductsWithFilters,
-        results: gamesWithPrices,
-        count: getProductsWithFilters.count,
-        next: getProductsWithFilters.next,
-        previous: getProductsWithFilters.previous,
-      };
-    } catch (error) {
-      return rejectWithValue(
-        error instanceof Error ? error.message : "An unknown error occurred"
-      );
-    }
-  }
-);
-
-const productFiltersSlice = createSlice({
-  name: "gamesFilter",
+const filtersSlice = createSlice({
+  name: "filters",
   initialState,
   reducers: {
     setGenresIdArray: (state, action: PayloadAction<number[]>) => {
@@ -120,18 +52,18 @@ const productFiltersSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchProductsWithFilters.pending, (state) => {
+      .addCase(getProductsWithFilters.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchProductsWithFilters.fulfilled, (state, action) => {
+      .addCase(getProductsWithFilters.fulfilled, (state, action) => {
         state.isLoading = false;
         state.productsWithFilters = action.payload.results;
         state.gamesCount = action.payload.count;
         state.nextPage = action.payload.next;
         state.previousPage = action.payload.previous;
       })
-      .addCase(fetchProductsWithFilters.rejected, (state, action) => {
+      .addCase(getProductsWithFilters.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
         state.page = 1;
@@ -148,5 +80,6 @@ export const {
   setPage,
   setNextPage,
   setPreviousPage,
-} = productFiltersSlice.actions;
-export default productFiltersSlice.reducer;
+} = filtersSlice.actions;
+
+export default filtersSlice.reducer;

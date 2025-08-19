@@ -2,9 +2,9 @@ import React from "react";
 import Image from "next/image";
 import { FaCartPlus } from "react-icons/fa";
 import LoadingAnimation from "../Animations/LoadingAnimation";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
+import useUIVisibility from "@/hooks/useUIVisibility";
 import useCustomRouter from "@/hooks/useCustomRouter";
-import useUserCart from "@/features/cart/hooks/useUserCart";
+import useUserCart from "@/features/cart/hooks/useCart";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import { generateRandomPrice } from "@/utils/prices";
@@ -21,7 +21,7 @@ export default function SearchResultsModalContainer({
   const { handleAddLocalProductToCart } = useLocalStorage("localCart");
   const { user } = useCurrentUser();
   const { redirectToGame } = useCustomRouter();
-  const { handleClose } = useWindowVisibility();
+  const { handleClose } = useUIVisibility();
 
   const handleAddProductToCart = (
     game: GameAPIProduct,

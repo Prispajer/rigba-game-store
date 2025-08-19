@@ -7,7 +7,7 @@ import FilterProductList from "./FilterProductList";
 import FilterChangePage from "./FilterChangePage";
 import SortBy from "../Shared/ReusableComponents/SortBy";
 import useCustomRouter from "@/hooks/useCustomRouter";
-import useFetchGameData from "@/hooks/useFetchGameData";
+import useFetchGameData from "@/features/products/hooks/useFetchGameData";
 
 export default function FiltersContainer() {
   const { url, getUrlParams, pushDataToUrl } = useCustomRouter();

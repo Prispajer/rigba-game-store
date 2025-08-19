@@ -4,8 +4,8 @@ import Image from "next/image";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
 import { IoCloseCircleSharp } from "react-icons/io5";
 import LoadingAnimation from "@/components/Interface/Shared/Animations/LoadingAnimation";
-import useUserOrderHistory from "@/hooks/useUserOrderHistory";
-import useUserProductHistory from "@/hooks/useUserProductHistory";
+import useUserOrderHistory from "@/features/history/hooks/useUserOrderHistory";
+import useUserProductHistory from "@/features/history/hooks/useUserProductHistory";
 import useCustomRouter from "@/hooks/useCustomRouter";
 
 export default function OrderContainer({

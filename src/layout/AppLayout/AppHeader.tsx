@@ -6,10 +6,10 @@ import HeaderLogo from "@/components/Interface/Header/HeaderLogo";
 import HeaderUserNavigation from "@/components/Interface/Header//HeaderUserNavigation";
 import NavbarSidebar from "@/components/Interface/Shared/Sidebars/NavbarSidebar";
 import HeaderSearchBar from "@/components/Interface/Header/HeaderSearchBar";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
+import useUIVisibility from "@/hooks/useUIVisibility";
 
 export default function AppHeader() {
-  const { resolutionState, handleToggleScreen } = useWindowVisibility();
+  const { resolutionState, handleToggleScreen } = useUIVisibility();
   const dispatch = useDispatch();
 
   React.useEffect(() => {

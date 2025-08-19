@@ -6,7 +6,7 @@ import { IoReload, IoCloseSharp, IoPersonOutline } from "react-icons/io5";
 import { TbShoppingCartCopy } from "react-icons/tb";
 import { LuGamepad2 } from "react-icons/lu";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
+import useUIVisibility from "@/hooks/useUIVisibility";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import { signOut } from "next-auth/react";
 import { ProfileModalContainerProps } from "@/types/types";
@@ -28,7 +28,7 @@ export default function ProfileModalContainer({
   translateX = "md:translate-x-[-2px]",
   translateY = "md:translate-y-[80px]",
 }: ProfileModalContainerProps) {
-  const { profileModalState, handleClose } = useWindowVisibility();
+  const { profileModalState, handleClose } = useUIVisibility();
   const { user } = useCurrentUser();
 
   const handleLogout = () => {

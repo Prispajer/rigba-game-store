@@ -8,7 +8,7 @@ export class RequestService implements IRequestService {
     this.baseUrl = baseUrl;
   }
 
-  public async request<T>(
+  private async request<T>(
     endpoint: string,
     method: string,
     body?: unknown

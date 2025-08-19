@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserOrderHistory } from "@/features/history/redux/slices/orderHistory/orderHistorySlice";
-import useCurrentUser from "../features/user/hooks/useCurrentUser";
+import { getOrderHistory } from "@/features/history/redux/slices/orderHistory/orderHistory.thunk";
+import useCurrentUser from "../../user/hooks/useCurrentUser";
 import { AppDispatch, RootState } from "@/redux/store";
 
 export default function useUserOrderHistory() {
@@ -18,7 +18,7 @@ export default function useUserOrderHistory() {
 
   const handleFetchUserOrderHistory = React.useCallback(async () => {
     if (user?.email) {
-      await dispatch(fetchUserOrderHistory({ email: user.email }));
+      await dispatch(getOrderHistory({ email: user.email }));
       setIsOrderHistoryLoading(false);
     }
   }, [dispatch, user?.email]);

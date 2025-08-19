@@ -4,7 +4,7 @@ import { FaSearch } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
 import SearchResultsModalContainer from "../Shared/Modals/SearchResultsModalContainer";
 import OutsideClickHandler from "../Shared/Backdrop/OutsideCLickHandler";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
+import useUIVisibility from "@/hooks/useUIVisibility";
 import fetchService from "@/services/FetchService";
 import debounce from "@/utils/debounce";
 import { GameAPIResponse } from "@/types/types";
@@ -18,7 +18,7 @@ export default function HeaderSearchBar() {
 
   const searchBarInput = React.useRef<HTMLInputElement>(null);
   const { searchBarState, resolutionState, handleClose, handleToggle } =
-    useWindowVisibility();
+    useUIVisibility();
 
   const fetchProductsBySearchText = React.useCallback(
     async (searchText: string) => {

@@ -1,6 +1,6 @@
 import React from "react";
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
-import useFetchGameData from "@/hooks/useFetchGameData";
+import useFetchGameData from "@/features/products/hooks/useFetchGameData";
 
 export default function ChangePage() {
   const {

@@ -7,13 +7,13 @@ import AuthSidebar from "../Shared/Sidebars/AuthSidebar";
 import CartModalContainer from "../Shared/Modals/CartModalContainer";
 import { extendedNavItems } from "../Shared/Modals/ProfileModalContainer";
 import ProfileModalContainer from "../Shared/Modals/ProfileModalContainer";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
+import useUIVisibility from "@/hooks/useUIVisibility";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
-import useUserCart from "@/features/cart/hooks/useUserCart";
+import useUserCart from "@/features/cart/hooks/useCart";
 import useUserWishList from "@/features/wishlist/hooks/useUserWishList";
-import { fetchUserCart } from "@/features/cart/redux/slices/cart/cartSlice";
-import { fetchUserWishList } from "@/features/wishlist/redux/slices/wishlist/wishlistSlice";
+import { getCart } from "@/features/cart/redux/slices/cart/cart.thunk";
+import { getWishlist } from "@/features/wishlist/redux/slices/wishlist/wishlist.thunk";
 import { AppDispatch } from "@/redux/store";
 
 export default function HeaderUserNavigation({}) {
@@ -21,17 +21,17 @@ export default function HeaderUserNavigation({}) {
   const { user } = useCurrentUser();
   const { handleAddUserProductToWishList } = useUserWishList();
   const { userCartState, handleAddUserProductToCart } = useUserCart();
-  const { resolutionState, handleOpen } = useWindowVisibility();
+  const { resolutionState, handleOpen } = useUIVisibility();
   const { localCartState, handleDeleteLocalProductFromCart } =
     useLocalStorage("localCart");
-  const { localWishListState, handleDeleteLocalProductFromWishList } =
+  const { localWishlistState, handleDeleteLocalProductFromWishList } =
     useLocalStorage("localWishList");
   const cartLength = user ? userCartState.products : localCartState;
 
   React.useEffect(() => {
     if (user?.email) {
-      dispatch(fetchUserWishList({ email: user.email }));
-      dispatch(fetchUserCart({ email: user.email }));
+      dispatch(getWishlist({ email: user.email }));
+      dispatch(getCart({ email: user.email }));
     }
   }, []);
 
@@ -57,8 +57,8 @@ export default function HeaderUserNavigation({}) {
   }, [localCartState]);
 
   React.useEffect(() => {
-    if (localWishListState.length > 0 && user) {
-      localWishListState.forEach((localWishListProduct) => {
+    if (localWishlistState.length > 0 && user) {
+      localWishlistState.forEach((localWishListProduct) => {
         handleAddUserProductToWishList({
           email: user.email as string,
           externalProductId: localWishListProduct.externalProductId,
@@ -76,7 +76,7 @@ export default function HeaderUserNavigation({}) {
         );
       });
     }
-  }, [localWishListState]);
+  }, [localWishlistState]);
 
   return (
     <div className="flex flex-1 justify-end items-center relative">

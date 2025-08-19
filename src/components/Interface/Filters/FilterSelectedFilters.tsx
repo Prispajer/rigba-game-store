@@ -9,7 +9,7 @@ import {
 } from "@/features/products/redux/slices/filters/filtersSlice";
 import FilterModalContainer from "../Shared/Modals/FilterModalContainer";
 import SortAndFilterSidebar from "../Shared/Sidebars/SortAndFilterSidebar";
-import useFetchGameData from "@/hooks/useFetchGameData";
+import useFetchGameData from "@/features/products/hooks/useFetchGameData";
 import useSearchText from "@/hooks/useSearchText";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 

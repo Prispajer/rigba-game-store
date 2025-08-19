@@ -8,7 +8,7 @@ import {
 import FilterByPrice from "./FilterByPrice";
 import FilterByCategory from "./FilterByCategory";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
-import useFetchGameData from "@/hooks/useFetchGameData";
+import useFetchGameData from "@/features/products/hooks/useFetchGameData";
 import useSearchText from "@/hooks/useSearchText";
 
 export default function FilterFilters({ position }: { position: string }) {

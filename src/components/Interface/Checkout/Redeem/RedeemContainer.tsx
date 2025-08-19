@@ -3,7 +3,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import LoadingAnimation from "../../Shared/Animations/LoadingAnimation";
-import useUserProductHistory from "@/hooks/useUserProductHistory";
+import useUserProductHistory from "@/features/history/hooks/useUserProductHistory";
 
 export default function RedeemContainer({
   params,

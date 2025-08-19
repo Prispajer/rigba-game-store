@@ -2,9 +2,9 @@ import React from "react";
 import { FaSearch } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
-import useFetchGameData from "@/hooks/useFetchGameData";
+import useFetchGameData from "@/features/products/hooks/useFetchGameData";
 import useSearchText from "@/hooks/useSearchText";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
+import useUIVisibility from "@/hooks/useUIVisibility";
 import UtilsService from "@/services/UtilsService";
 import IUtilsService from "@/interfaces/IUtilsService";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
@@ -30,7 +30,7 @@ export default function FilterModalContainer({
   const modalRef = React.useRef<HTMLDivElement>(null);
   const { handleFilterChange, handleClearSelectedFilter } = useFetchGameData();
   const { handleSetSearchText } = useSearchText();
-  const { resolutionState, handleClose } = useWindowVisibility();
+  const { resolutionState, handleClose } = useUIVisibility();
   const utilsService: IUtilsService = new UtilsService(searchState as string);
 
   React.useEffect(() => {

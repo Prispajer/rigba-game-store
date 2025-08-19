@@ -7,7 +7,7 @@ import CheckoutHeader from "@/components/Interface/Checkout/CheckoutHeader";
 import PaymentContainer from "@/components/Interface/Checkout/Payment/PaymentContainer";
 import LoadingAnimation from "@/components/Interface/Shared/Animations/LoadingAnimation";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import useUserCart from "@/features/cart/hooks/useUserCart";
+import useUserCart from "@/features/cart/hooks/useCart";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import { calculateTotalPrice } from "@/utils/prices";
 import { Order } from "@prisma/client";

@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { LuPencil } from "react-icons/lu";
 import LoadingAnimation from "@/components/Interface/Shared/Animations/LoadingAnimation";
-import useUserProductHistory from "@/hooks/useUserProductHistory";
+import useUserProductHistory from "@/features/history/hooks/useUserProductHistory";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import useUserServices from "@/hooks/useUserServices";
 import { generateRandomName } from "@/utils/names";

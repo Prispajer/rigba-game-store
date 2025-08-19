@@ -1,14 +1,14 @@
 "use client";
 
+import {
+  getCart,
+  addToCart,
+  removeFromCart,
+  decreaseQuantity,
+  increaseQuantity,
+} from "../redux/slices/cart/cart.thunk";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchUserCart,
-  fetchAddUserProductToCart,
-  fetchDeleteUserProductFromCart,
-  fetchDecreaseQuantityUserProductFromCart,
-  fetchIncreaseQuantityUserProductFromCart,
-} from "@/features/cart/redux/slices/cart/cartSlice";
 import useCurrentUser from "../../user/hooks/useCurrentUser";
 import debounce from "@/utils/debounce";
 import { AppDispatch, RootState } from "@/redux/store";
@@ -19,18 +19,18 @@ import {
   DecreaseQuantityUserProductFromCartDTO,
 } from "@/utils/helpers/frontendDTO";
 
-export default function useUserCart() {
+export default function useCart() {
   const [isCartLoading, setIsCartLoading] = React.useState<boolean>(false);
 
   const { user } = useCurrentUser();
   const dispatch = useDispatch<AppDispatch>();
-  const userCartState = useSelector((state: RootState) => state.userCart);
+  const userCartState = useSelector((state: RootState) => state.cart);
 
   const handleFetchUserCart = React.useMemo(
     () =>
       debounce(async () => {
         if (user?.email) {
-          await dispatch(fetchUserCart({ email: user.email }));
+          await dispatch(getCart({ email: user.email }));
         }
       }, 200),
     [dispatch, user?.email]
@@ -40,7 +40,7 @@ export default function useUserCart() {
     debounce(async (addUserProductToCartDTO: AddUserProductToCartDTO) => {
       if (user?.email) {
         setIsCartLoading(true);
-        await dispatch(fetchAddUserProductToCart(addUserProductToCartDTO));
+        await dispatch(addToCart(addUserProductToCartDTO));
         handleFetchUserCart();
         setIsCartLoading(false);
       }
@@ -53,9 +53,7 @@ export default function useUserCart() {
       async (deleteUserProductFromCartDTO: DeleteUserProductFromCartDTO) => {
         if (user?.email) {
           setIsCartLoading(true);
-          await dispatch(
-            fetchDeleteUserProductFromCart(deleteUserProductFromCartDTO)
-          );
+          await dispatch(removeFromCart(deleteUserProductFromCartDTO));
           handleFetchUserCart();
           setIsCartLoading(false);
         }
@@ -73,9 +71,7 @@ export default function useUserCart() {
         if (user?.email) {
           setIsCartLoading(true);
           await dispatch(
-            fetchIncreaseQuantityUserProductFromCart(
-              increaseQuantityUserProductFromCartDTO
-            )
+            increaseQuantity(increaseQuantityUserProductFromCartDTO)
           );
           handleFetchUserCart();
           setIsCartLoading(false);
@@ -94,9 +90,7 @@ export default function useUserCart() {
         if (user?.email) {
           setIsCartLoading(true);
           await dispatch(
-            fetchDecreaseQuantityUserProductFromCart(
-              decreaseQuantityUserProductFromCartDTO
-            )
+            decreaseQuantity(decreaseQuantityUserProductFromCartDTO)
           );
           handleFetchUserCart();
           setIsCartLoading(false);

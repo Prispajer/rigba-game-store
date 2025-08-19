@@ -4,7 +4,7 @@ import Link from "next/link";
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import { IoCloseSharp } from "react-icons/io5";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
+import useUIVisibility from "@/hooks/useUIVisibility";
 import { navLinks } from "@/data/links";
 import { NavCurrentElement } from "@/types/types";
 
@@ -20,7 +20,7 @@ export default function NavbarSidebar() {
   const [selectedSubCategory, setSelectedSubCategory] = React.useState<
     string | null
   >(null);
-  const { navSidebarState, handleClose } = useWindowVisibility();
+  const { navSidebarState, handleClose } = useUIVisibility();
 
   const foundCategory = selectedCategory
     ? navLinks.find((element) => element.title === selectedCategory)

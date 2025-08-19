@@ -12,29 +12,28 @@ import { useForm } from "react-hook-form";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
-import useUserServices from "@/hooks/useUserServices";
+import useAuthActions from "@/features/auth/hooks/useAuthActions";
 import { signInAccount } from "@/features/user/hooks/useCurrentUser";
 import { SignInProvider } from "@/types/types";
+import useNotification from "@/hooks/useNotification";
+import { NotificationOrigin } from "@/redux/slices/notification/notification.types";
 
 export default function LoginContainer() {
   const {
-    success,
-    error,
-    setError,
+    submitLoginForm,
     showTwoFactor,
     setShowTwoFactor,
     isPending,
     providerError,
-    useUserActions,
-  } = useUserServices();
-  const { submitLoginForm } = useUserActions();
+  } = useAuthActions();
+  const { notification, handleError } = useNotification();
   const { user } = useCurrentUser();
 
   const handleProviderLogin = async (provider: SignInProvider) => {
     try {
       await signInAccount(provider);
     } catch (error) {
-      setError({ message: "Login failed. Please try again.", origin: "Login" });
+      handleError("Login failed. Please try again.", NotificationOrigin.Login);
     }
   };
 
@@ -152,13 +151,15 @@ export default function LoginContainer() {
               </div>
               <FormSuccess
                 message={
-                  success?.origin === "Login" ? (success.message as string) : ""
+                  notification.success && notification?.origin === "Login"
+                    ? (notification.message as string)
+                    : ""
                 }
               />
               <FormError
                 message={
-                  (error?.origin === "Login"
-                    ? (error.message as string)
+                  (!notification.success && notification?.origin === "Login"
+                    ? (notification.message as string)
                     : "") || providerError
                 }
               />
@@ -201,13 +202,15 @@ export default function LoginContainer() {
               </div>
               <FormSuccess
                 message={
-                  success?.origin === "Login" ? (success.message as string) : ""
+                  notification.success && notification?.origin === "Login"
+                    ? (notification.message as string)
+                    : ""
                 }
               />
               <FormError
                 message={
-                  (error?.origin === "Login"
-                    ? (error.message as string)
+                  (!notification.success && notification?.origin === "Login"
+                    ? (notification.message as string)
                     : "") || providerError
                 }
               />

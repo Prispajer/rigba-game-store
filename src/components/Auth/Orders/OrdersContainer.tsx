@@ -1,7 +1,7 @@
 "use client";
 import LoadingAnimation from "@/components/Interface/Shared/Animations/LoadingAnimation";
 import Pagination from "@/components/Interface/Shared/ReusableComponents/Pagination";
-import useUserOrderHistory from "@/hooks/useUserOrderHistory";
+import useUserOrderHistory from "@/features/history/hooks/useUserOrderHistory";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import usePagination from "@/hooks/usePagination";
 

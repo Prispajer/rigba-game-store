@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 import LoadingAnimation from "@/components/Interface/Shared/Animations/LoadingAnimation";
 import Pagination from "@/components/Interface/Shared/ReusableComponents/Pagination";
-import useUserProductHistory from "@/hooks/useUserProductHistory";
+import useUserProductHistory from "@/features/history/hooks/useUserProductHistory";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import usePagination from "@/hooks/usePagination";
 

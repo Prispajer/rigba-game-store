@@ -11,7 +11,7 @@ import { IoCloseSharp } from "react-icons/io5";
 import { FormSuccess } from "@/components/Interface/Shared/FormsNotifications/FormSuccess";
 import { FormError } from "@/components/Interface/Shared/FormsNotifications/FormError";
 import TwoFactorModalContainer from "@/components/Interface/Shared/Modals/TwoFactorModalContainer";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
+import useWindowVisibility from "@/hooks/useUIVisibility";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import useUserServices from "@/hooks/useUserServices";
 import { UpdateNameSchema } from "@/utils/schemas/user";

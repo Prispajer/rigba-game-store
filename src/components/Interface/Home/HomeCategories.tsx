@@ -2,7 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import ShowMoreButton from "../Shared/Buttons/ShowMoreButton";
-import useFetchGameData from "@/hooks/useFetchGameData";
+import useFetchGameData from "@/features/products/hooks/useFetchGameData";
 import useCustomRouter from "@/hooks/useCustomRouter";
 
 export default function HomeCategories() {

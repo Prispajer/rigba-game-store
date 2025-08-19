@@ -1,18 +1,18 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserReviews } from "@/features/reviews/redux/slices/reviews/reviewsSlice";
+import { getReviews } from "./../redux/slices/reviews/reviews.thunk";
 import { AppDispatch, RootState } from "@/redux/store";
 import executeWithLoading from "@/shared/executeWithLoading";
 
-export default function useProductReviews(externalProductId: number) {
+export default function useReviews(externalProductId: number) {
   const dispatch = useDispatch<AppDispatch>();
   const [isLoading, setIsLoading] = React.useState<Record<string, boolean>>({});
 
-  const reviews = useSelector((state: RootState) => state.userReviews);
+  const reviews = useSelector((state: RootState) => state.reviews);
 
   const refetch = async () => {
     await executeWithLoading("fetchReviews", setIsLoading, () =>
-      dispatch(fetchUserReviews({ externalProductId }))
+      dispatch(getReviews({ externalProductId }))
     );
   };
 

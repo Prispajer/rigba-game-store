@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
 import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
-import useFetchGameData from "@/hooks/useFetchGameData";
+import useFetchGameData from "@/features/products/hooks/useFetchGameData";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import useSearchText from "@/hooks/useSearchText";
 import { GameAPIResponse } from "@/types/types";

@@ -11,7 +11,7 @@ import { PaymentElement } from "@stripe/react-stripe-js";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import useUserCart from "@/features/cart/hooks/useUserCart";
+import useUserCart from "@/features/cart/hooks/useCart";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import { Order } from "@prisma/client";

@@ -1,8 +1,8 @@
 "use client";
+
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchProductsWithFilters,
   setGenresIdArray,
   setPlatformsIdArray,
   setStoresIdArray,
@@ -12,15 +12,16 @@ import {
   setNextPage,
   setPreviousPage,
 } from "@/features/products/redux/slices/filters/filtersSlice";
-import { loadMore } from "@/features/products/redux/slices/genres/genresSlice";
-import { fetchPublishers } from "@/features/products/redux/slices/publishers/publishersSlice";
-import { fetchGenres } from "@/features/products/redux/slices/genres/genresSlice";
-import { fetchStores } from "@/features/products/redux/slices/stores/storesSlice";
-import { fetchPlatforms } from "@/features/products/redux/slices/platforms/platformsSlice";
-import useCustomRouter from "./useCustomRouter";
+import { incrementPageSize } from "@/features/products/redux/slices/genres/genresSlice";
+import { getProductsWithFilters } from "../redux/slices/filters/filters.thunk";
+import useCustomRouter from "../../../hooks/useCustomRouter";
 import debounce from "@/utils/debounce";
 import { AppDispatch, RootState } from "@/redux/store";
 import { PayloadAction, ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import { getPublishers } from "@/features/products/redux/slices/publishers/publishers.thunk";
+import { getStores } from "@/features/products/redux/slices/stores/stores.thunk";
+import { getPlatforms } from "@/features/products/redux/slices/platforms/platforms.thunk";
+import { getGenres } from "@/features/products/redux/slices/genres/genres.thunk";
 
 export default function useFetchGameData() {
   const dispatch = useDispatch<AppDispatch>();
@@ -29,52 +30,48 @@ export default function useFetchGameData() {
     (state: RootState) => state.productFilter
   );
   const productPublishersState = useSelector(
-    (state: RootState) => state.productPublishers
+    (state: RootState) => state.publishers
   );
   const productPlatformsState = useSelector(
-    (state: RootState) => state.productPlatforms
+    (state: RootState) => state.platforms
   );
-  const productGenresState = useSelector(
-    (state: RootState) => state.productGenres
-  );
-  const productStoresState = useSelector(
-    (state: RootState) => state.productStores
-  );
+  const productGenresState = useSelector((state: RootState) => state.genres);
+  const productStoresState = useSelector((state: RootState) => state.stores);
 
   const { redirectToFilters } = useCustomRouter();
 
   const handleFetchProductsWithFilters = React.useMemo(
     () =>
       debounce(async (page: number) => {
-        await dispatch(fetchProductsWithFilters({ page }));
+        await dispatch(getProductsWithFilters({ page }));
       }, 700),
     [dispatch]
   );
 
   const handleFetchPublishers = React.useCallback(
     (quantity: number) => {
-      dispatch(fetchPublishers({ quantity }));
+      dispatch(getPublishers({ quantity }));
     },
     [dispatch]
   );
 
   const handleFetchGenres = React.useCallback(
     (quantity: number) => {
-      dispatch(fetchGenres({ quantity }));
+      dispatch(getGenres({ quantity }));
     },
     [dispatch]
   );
 
   const handleFetchPlatforms = React.useCallback(
     (quantity: number) => {
-      dispatch(fetchPlatforms({ quantity }));
+      dispatch(getPlatforms({ quantity }));
     },
     [dispatch]
   );
 
   const handleFetchStores = React.useCallback(
     (quantity: number) => {
-      dispatch(fetchStores({ quantity }));
+      dispatch(getStores({ quantity }));
     },
     [dispatch]
   );
@@ -183,7 +180,7 @@ export default function useFetchGameData() {
   }, [dispatch, productFilterState.page, handleFetchProductsWithFilters]);
 
   const handleLoadMore = React.useCallback(() => {
-    dispatch(loadMore());
+    dispatch(incrementPageSize());
   }, [dispatch]);
 
   return {

@@ -192,6 +192,13 @@ export enum NavCurrentElement {
   Link = "link",
 }
 
+export enum HttpMethod {
+  GET = "get",
+  POST = "post",
+  PATCH = "patch",
+  DELETE = "delete",
+}
+
 export const CLASSTYPES = {
   IUserService: Symbol.for("IUserService"),
   IUserRepository: Symbol.for("IUserRepository"),

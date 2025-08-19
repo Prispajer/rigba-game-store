@@ -8,7 +8,7 @@ import ProductHeaders from "../Shared/ReusableComponents/ProductHeaders";
 import ProductList from "../Product/ProductList";
 import CheckoutCart from "./CheckoutCart";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import useUserCart from "@/features/cart/hooks/useUserCart";
+import useUserCart from "@/features/cart/hooks/useCart";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import useCustomRouter from "@/hooks/useCustomRouter";
 

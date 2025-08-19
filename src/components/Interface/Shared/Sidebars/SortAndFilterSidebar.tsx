@@ -4,7 +4,7 @@ import FilterFilters from "../../Filters/FilterFilters";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import SortBy from "../ReusableComponents/SortBy";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
-import useFetchGameData from "@/hooks/useFetchGameData";
+import useFetchGameData from "@/features/products/hooks/useFetchGameData";
 
 export default function SortAndFilterSidebar() {
   const { productFilterState, handleFilterSortChange } = useFetchGameData();

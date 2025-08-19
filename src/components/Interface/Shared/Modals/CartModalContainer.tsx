@@ -5,16 +5,16 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
 import { VscWorkspaceUnknown } from "react-icons/vsc";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
+import useUIVisibility from "@/hooks/useUIVisibility";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import useUserCart from "@/features/cart/hooks/useUserCart";
+import useUserCart from "@/features/cart/hooks/useCart";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import { calculateTotalPrice } from "@/utils/prices";
 
 export default function CartModalContainer() {
   const { user } = useCurrentUser();
-  const { cartModalState, handleClose } = useWindowVisibility();
+  const { cartModalState, handleClose } = useUIVisibility();
   const {
     userCartState,
     isCartLoading,

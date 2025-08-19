@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { RxHamburgerMenu } from "react-icons/rx";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
+import useUIVisibility from "@/hooks/useUIVisibility";
 
 export default function HeaderLogo() {
-  const { handleOpen } = useWindowVisibility();
+  const { handleOpen } = useUIVisibility();
 
   return (
     <div className="flex items-center flex-0">

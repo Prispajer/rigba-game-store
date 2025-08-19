@@ -2,7 +2,7 @@
 import React from "react";
 import HomeProductList from "./HomeProductList";
 import ShowMoreButton from "../Shared/Buttons/ShowMoreButton";
-import useFetchGameData from "@/hooks/useFetchGameData";
+import useFetchGameData from "@/features/products/hooks/useFetchGameData";
 
 export default function HomeSortableGameList({
   header,

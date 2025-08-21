@@ -8,7 +8,7 @@ import {
 } from "@/utils/schemas/user";
 import { useSearchParams } from "next/navigation";
 import submitRequest from "@/lib/submitRequest";
-import useNotifications from "@/hooks/useNotification";
+import useNotification from "@/hooks/useNotification";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import { NotificationOrigin } from "@/redux/slices/notification/notification.types";
 import { HttpMethod } from "@/types/types";
@@ -16,7 +16,7 @@ import { HttpMethod } from "@/types/types";
 export default function useAuthActions() {
   const [showTwoFactor, setShowTwoFactor] = React.useState(false);
   const [isPending, startTransition] = React.useTransition();
-  const { handleSuccess, handleError, handleReset } = useNotifications();
+  const { handleSuccess, handleError, handleReset } = useNotification();
   const searchParams = useSearchParams();
   const { user } = useCurrentUser();
   const token = searchParams?.get("token");

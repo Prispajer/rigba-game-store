@@ -15,4 +15,7 @@ export enum NotificationOrigin {
   NewPassword = "NewPassword",
   ResetPassword = "ResetPassword",
   ChangePassword = "ChangePassword",
+  UpdateName = "UpdateName",
+  UpdateData = "UpdateData",
+  AddReviewToProduct = "AddReviewToProduct",
 }

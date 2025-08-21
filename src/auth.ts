@@ -10,6 +10,7 @@ import {
 import { Cart, PersonalData, UserRole, WishList } from "@prisma/client";
 
 export type ExtendedUser = DefaultSession["user"] & {
+  email: string;
   password: string;
   isTwoFactorEnabled: boolean;
   emailVerificationDate: Date;

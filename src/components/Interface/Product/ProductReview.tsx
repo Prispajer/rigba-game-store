@@ -3,7 +3,7 @@ import LoadingAnimation from "../Shared/Animations/LoadingAnimation";
 import { generateStars } from "@/utils/ratings";
 import { groupReviewsByRating, mergeReviews } from "@/utils/reviews";
 import { GameAPIResponse } from "@/types/types";
-import { UserReviewsSlice } from "@/features/reviews/redux/slices/reviews/reviewsSlice";
+import { UserReviewsSlice } from "@/features/reviews/redux/slices/userReviews/userReviewsSlice";
 
 export default function ProductReview({
   product,

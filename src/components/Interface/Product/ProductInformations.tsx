@@ -8,7 +8,7 @@ import ProductShareButton from "./ProductShareButton";
 import { groupReviewsByRating, mergeReviews } from "@/utils/reviews";
 import { generateStars, calculateAverageRating } from "@/utils/ratings";
 import { GameAPIResponse } from "@/types/types";
-import { UserReviewsSlice } from "@/features/reviews/redux/slices/reviews/reviewsSlice";
+import { UserReviewsSlice } from "@/features/reviews/redux/slices/userReviews/userReviewsSlice";
 
 export default function ProductInformations({
   product,

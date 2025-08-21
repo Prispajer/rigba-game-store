@@ -4,7 +4,7 @@ import { FaCartPlus } from "react-icons/fa";
 import LoadingAnimation from "../Animations/LoadingAnimation";
 import useUIVisibility from "@/hooks/useUIVisibility";
 import useCustomRouter from "@/hooks/useCustomRouter";
-import useUserCart from "@/features/cart/hooks/useCart";
+import useUserCart from "@/features/cart/hooks/userCart/useUserCart";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import { generateRandomPrice } from "@/utils/prices";

@@ -1,38 +1,38 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
-  fetchUserReviews,
-  fetchLikeUserReview,
-  fetchUnLikeUserReview,
-} from "@/features/reviews/redux/slices/reviews/reviewsSlice";
-import executeWithLoading from "@/shared/executeWithLoading";
-import {
-  LikeUserReviewDTO,
-  UnLikeUserReviewDTO,
-} from "@/utils/helpers/frontendDTO";
-import { AppDispatch, RootState } from "@/redux/store";
+  likeUserReviewThunk,
+  unlikeUserReviewThunk,
+} from "../redux/slices/userReviews/userReviews.thunk";
+import useActionWithLoading from "@/hooks/useAsyncActionWithLoading";
+import { AppDispatch } from "@/redux/store";
 
-export default function useUserReviews(refetch: () => Promise<void>) {
+export default function useReviewActions() {
   const dispatch = useDispatch<AppDispatch>();
-  const [isLoading, setIsLoading] = React.useState<Record<string, boolean>>({});
+  const { isLoading, executeWithLoading } = useActionWithLoading();
 
-  const likeReview = async (likeUserReviewDTO: LikeUserReviewDTO) => {
-    await executeWithLoading("likeReview", setIsLoading, () =>
-      dispatch(fetchLikeUserReview(likeUserReviewDTO))
+  const likeUserReviewAction = (
+    email: string,
+    externalProductId: number,
+    reviewId: string
+  ) => {
+    executeWithLoading("likeUserReview", () =>
+      dispatch(likeUserReviewThunk({ email, externalProductId, reviewId }))
     );
-    await refetch();
   };
 
-  const unlikeReview = async (unLikeUserReviewDTO: UnLikeUserReviewDTO) => {
-    await executeWithLoading("unlikeReview", setIsLoading, () =>
-      dispatch(fetchUnLikeUserReview(unLikeUserReviewDTO))
+  const unlikeUserReviewAction = (
+    email: string,
+    externalProductId: number,
+    reviewId: string
+  ) => {
+    executeWithLoading("unlikeUserReview", () =>
+      dispatch(unlikeUserReviewThunk({ email, externalProductId, reviewId }))
     );
-    await refetch();
   };
 
   return {
     isLoading,
-    likeReview,
-    unlikeReview,
+    likeUserReviewAction,
+    unlikeUserReviewAction,
   };
 }

@@ -6,7 +6,7 @@ import WishListSearchBar from "./WishListSearchBar";
 import SortBy from "../Shared/ReusableComponents/SortBy";
 import WishListProductList from "./WishListProductList";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
-import useUserWishList from "@/features/wishlist/hooks/useUserWishList";
+import useUserWishList from "@/features/wishlist/hooks/userWishlist/useUserWishList";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import useSearchText from "@/hooks/useSearchText";

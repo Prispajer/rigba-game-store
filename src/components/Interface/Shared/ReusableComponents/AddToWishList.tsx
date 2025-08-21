@@ -3,7 +3,7 @@ import React from "react";
 import { CiHeart } from "react-icons/ci";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
-import useUserWishList from "@/features/wishlist/hooks/useUserWishList";
+import useUserWishList from "@/features/wishlist/hooks/userWishlist/useUserWishList";
 import { generateRandomPrice } from "@/utils/prices";
 import { ProductInformations } from "@/types/types";
 

@@ -16,7 +16,7 @@ import ProductRemainingDetails from "./ProductRemainingDetails";
 import ShowMoreButton from "../Shared/Buttons/ShowMoreButton";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useCustomRouter from "@/hooks/useCustomRouter";
-import useUserCart from "@/features/cart/hooks/useCart";
+import useUserCart from "@/features/cart/hooks/userCart/useUserCart";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import useReviewActions from "@/features/reviews/hooks/useReviewActions";

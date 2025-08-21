@@ -5,7 +5,7 @@ import { CiHeart } from "react-icons/ci";
 import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
 import Pagination from "../Shared/ReusableComponents/Pagination";
 import { LocalStorageState } from "@/redux/slices/localStorage/localStorageSlice";
-import { UserWishListState } from "@/features/wishlist/redux/slices/wishlist/wishlistSlice";
+import { UserWishListState } from "@/features/wishlist/redux/slices/userWishlist/userWishlistSlice";
 import usePagination from "@/hooks/usePagination";
 import { ExtendedUser } from "@/auth";
 

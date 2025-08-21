@@ -4,7 +4,7 @@ import { open, close, toggleScreen, toggle } from "@/redux/slices/ui/uiSlice";
 import { RootState } from "../redux/store";
 import { Root } from "postcss";
 
-export default function useWindowVisibility() {
+export default function useUIVisibility() {
   const dispatch = useDispatch();
 
   const authSidebarState = useSelector(

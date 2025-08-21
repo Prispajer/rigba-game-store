@@ -5,7 +5,7 @@ import { FormError } from "../Shared/FormsNotifications/FormError";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { generateStars } from "@/utils/ratings";
 import { GameAPIResponse } from "@/types/types";
-import { UserReviewsSlice } from "@/features/reviews/redux/slices/reviews/reviewsSlice";
+import { UserReviewsSlice } from "@/features/reviews/redux/slices/userReviews/userReviewsSlice";
 import {
   LikeUserReviewDTO,
   UnLikeUserReviewDTO,

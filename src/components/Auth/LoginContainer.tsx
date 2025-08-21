@@ -12,7 +12,7 @@ import { useForm } from "react-hook-form";
 import { FormError } from "../Interface/Shared/FormsNotifications/FormError";
 import { FormSuccess } from "../Interface/Shared/FormsNotifications/FormSuccess";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
-import useAuthActions from "@/features/auth/hooks/useAuthActions";
+import useAuthActions from "@/features/auth/hooks/useAuthHandlers";
 import { signInAccount } from "@/features/user/hooks/useCurrentUser";
 import { SignInProvider } from "@/types/types";
 import useNotification from "@/hooks/useNotification";

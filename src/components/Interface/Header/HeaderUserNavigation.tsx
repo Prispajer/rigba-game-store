@@ -10,10 +10,10 @@ import ProfileModalContainer from "../Shared/Modals/ProfileModalContainer";
 import useUIVisibility from "@/hooks/useUIVisibility";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
-import useUserCart from "@/features/cart/hooks/useCart";
-import useUserWishList from "@/features/wishlist/hooks/useUserWishList";
-import { getCart } from "@/features/cart/redux/slices/cart/cart.thunk";
-import { getWishlist } from "@/features/wishlist/redux/slices/wishlist/wishlist.thunk";
+import useUserCart from "@/features/cart/hooks/userCart/useUserCart";
+import useUserWishList from "@/features/wishlist/hooks/userWishlist/useUserWishList";
+import { getCart } from "@/features/cart/redux/slices/userCart/userCart.thunk";
+import { getWishlist } from "@/features/wishlist/redux/slices/userWishlist/userWishlist.thunk";
 import { AppDispatch } from "@/redux/store";
 
 export default function HeaderUserNavigation({}) {

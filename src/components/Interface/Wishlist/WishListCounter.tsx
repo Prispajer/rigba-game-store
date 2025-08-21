@@ -1,5 +1,5 @@
 import { ExtendedUser } from "@/auth";
-import { UserWishListState } from "@/features/wishlist/redux/slices/wishlist/wishlistSlice";
+import { UserWishListState } from "@/features/wishlist/redux/slices/userWishlist/userWishlistSlice";
 import { LocalStorageState } from "@/redux/slices/localStorage/localStorageSlice";
 
 export default function WishListCounter({

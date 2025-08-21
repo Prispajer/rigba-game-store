@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import { signIn } from "next-auth/react";
 import { DEFAULT_LOGIN_REDIRECT } from "../../../../routes";
 import { useSession } from "next-auth/react";

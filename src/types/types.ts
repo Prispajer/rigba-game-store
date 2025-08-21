@@ -42,14 +42,14 @@ export interface ProductInformations {
   released?: string;
   added?: number;
 }
-export interface Cart {
+export interface UserCart {
   id: string;
   createdAt: string;
   updatedAt: string;
   userId: string;
   products: UserProduct[];
 }
-export interface Wishlist {
+export interface UserWishlist {
   id: string;
   createdAt: string;
   updatedAt: string;
@@ -101,24 +101,7 @@ export interface OrderHistory {
   keys: Key[];
 }
 
-export interface LocalWishlist {
-  externalProductId: number;
-  name: string;
-  price: number;
-  background_image: string;
-  description?: string;
-  rating?: number;
-  slug?: string;
-  released?: string;
-  added?: number;
-}
-
-export interface LocalCart extends ProductInformations {
-  externalProductId: number;
-  quantity: number;
-}
-
-export interface Review {
+export interface UserReview {
   id: string;
   createdAt: Date;
   likes: number;

@@ -10,7 +10,7 @@ import ProductHeaders from "../Shared/ReusableComponents/ProductHeaders";
 import ProductList from "../Product/ProductList";
 import { FormSuccess } from "../Shared/FormsNotifications/FormSuccess";
 import { FormError } from "../Shared/FormsNotifications/FormError";
-import useProductServices from "@/hooks/useProductServices";
+import useProductServices from "@/features/reviews/hooks/useProductServices";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import { generateRandomPrice } from "@/utils/prices";

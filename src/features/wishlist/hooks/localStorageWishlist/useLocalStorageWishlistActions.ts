@@ -11,25 +11,25 @@ import LocalStorageWishlistProduct from "../../types/localStorageWishlistProduct
 export default function useLocalStorageWishlistActions() {
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleAddLocalProductToWishList = (
+  const handleAddLocalStorageProductToWishList = (
     product: LocalStorageWishlistProduct
   ): void => {
     dispatch(addLocalStorageProductToWishList(product));
   };
 
-  const handleDeleteLocalProductFromWishList = (
+  const handleDeleteLocalStorageProductFromWishList = (
     externalProductId: number
   ): void => {
     dispatch(deleteLocalStorageProductFromWishList(externalProductId));
   };
 
-  const handleSetLocalWishlistOrdering = (ordering: string): void => {
+  const handleSetLocalStorageWishlistOrdering = (ordering: string): void => {
     dispatch(setLocalStorageWishlistOrdering(ordering));
   };
 
   return {
-    handleAddLocalProductToWishList,
-    handleDeleteLocalProductFromWishList,
-    handleSetLocalWishlistOrdering,
+    handleAddLocalStorageProductToWishList,
+    handleDeleteLocalStorageProductFromWishList,
+    handleSetLocalStorageWishlistOrdering,
   };
 }

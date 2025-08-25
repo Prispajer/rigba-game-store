@@ -1,4 +1,4 @@
-import WishlistContainer from "@/components/Interface/Wishlist/WishListContainer";
+import WishlistContainer from "@/features/wishlist/components/Wishlist/WishListContainer";
 
 export const metadata = {
   title: "Wish list | RIGBA",

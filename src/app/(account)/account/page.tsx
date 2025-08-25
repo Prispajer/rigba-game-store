@@ -1,4 +1,4 @@
-import AccountContainer from "@/components/Auth/Account/AccountContainer";
+import AccountContainer from "@/features/auth/components/Auth/Account/AccountContainer";
 
 export const metadata = {
   title: "My Account | RIGBA",

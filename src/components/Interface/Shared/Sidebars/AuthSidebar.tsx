@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { IoCloseSharp } from "react-icons/io5";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
-import useUIVisibility from "@/hooks/useUIVisibility";
+import useUIVisibility from "@/hooks/useWindowVisibility";
 
 export default function AuthSidebar() {
   const { authSidebarState, handleClose } = useUIVisibility();

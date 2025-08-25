@@ -1,4 +1,4 @@
-import UploadImageContainer from "@/components/Auth/Settings/UploadImageContainer";
+import UploadImageContainer from "@/features/auth/components/Auth/Settings/UploadImageContainer";
 
 export const metadata = {
   title: "Upload Image | RIGBA",

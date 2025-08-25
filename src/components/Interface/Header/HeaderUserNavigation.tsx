@@ -7,76 +7,75 @@ import AuthSidebar from "../Shared/Sidebars/AuthSidebar";
 import CartModalContainer from "../Shared/Modals/CartModalContainer";
 import { extendedNavItems } from "../Shared/Modals/ProfileModalContainer";
 import ProfileModalContainer from "../Shared/Modals/ProfileModalContainer";
-import useUIVisibility from "@/hooks/useUIVisibility";
-import useLocalStorage from "@/hooks/useLocalStorage";
-import useCurrentUser from "@/features/user/hooks/useCurrentUser";
+import useUIVisibility from "@/hooks/useWindowVisibility";
+import useUserCartActions from "@/features/cart/hooks/userCart/useUserCartActions";
+import useUserWishlistActions from "@/features/wishlist/hooks/userWishlist/useUserWishlistActions";
 import useUserCart from "@/features/cart/hooks/userCart/useUserCart";
-import useUserWishList from "@/features/wishlist/hooks/userWishlist/useUserWishList";
-import { getCart } from "@/features/cart/redux/slices/userCart/userCart.thunk";
-import { getWishlist } from "@/features/wishlist/redux/slices/userWishlist/userWishlist.thunk";
+import useLocalStorageCart from "@/features/cart/hooks/localStorageCart/useLocalStorageCart";
+import useLocalStorageWishlist from "@/features/wishlist/hooks/localStorageWishlist/useLocalStorageWishlist";
+import useLocalStorageCartActions from "@/features/cart/hooks/localStorageCart/useLocalStorageCartActions";
+import useLocalStorageWishlistActions from "@/features/wishlist/hooks/localStorageWishlist/useLocalStorageWishlistActions";
+import useCurrentUser from "@/features/user/hooks/useCurrentUser";
+import { getUserCartThunk } from "@/features/cart/redux/slices/userCart/userCart.thunk";
+import { getUserWishlistThunk } from "@/features/wishlist/redux/slices/userWishlist/userWishlist.thunk";
 import { AppDispatch } from "@/redux/store";
+import mapProductToAddToCartDTO from "@/features/cart/mappers/mapProductToAddToCartDTO";
+import mapProductToAddToWishlistDTO from "@/features/wishlist/mappers/mapProductToAddToWishlistDTO";
 
 export default function HeaderUserNavigation({}) {
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useCurrentUser();
-  const { handleAddUserProductToWishList } = useUserWishList();
-  const { userCartState, handleAddUserProductToCart } = useUserCart();
+  const { userCartState } = useUserCart();
+  const localStorageCartState = useLocalStorageCart("localStorageCart");
+  const localStorageWishlistState = useLocalStorageWishlist(
+    "localStorageWishlist"
+  );
+  const { handleAddUserProductToCart } = useUserCartActions();
+  const { handleAddUserProductToWishlist } = useUserWishlistActions();
+  const { handleDeleteLocalStorageProductFromCart } =
+    useLocalStorageCartActions();
+  const { handleDeleteLocalStorageProductFromWishList } =
+    useLocalStorageWishlistActions();
   const { resolutionState, handleOpen } = useUIVisibility();
-  const { localCartState, handleDeleteLocalProductFromCart } =
-    useLocalStorage("localCart");
-  const { localWishlistState, handleDeleteLocalProductFromWishList } =
-    useLocalStorage("localWishList");
-  const cartLength = user ? userCartState.products : localCartState;
+
+  const cartLength = user
+    ? userCartState.products
+    : localStorageCartState.localStorageCart;
 
   React.useEffect(() => {
     if (user?.email) {
-      dispatch(getWishlist({ email: user.email }));
-      dispatch(getCart({ email: user.email }));
+      dispatch(getUserCartThunk({ email: user.email }));
+      dispatch(getUserWishlistThunk({ email: user.email }));
     }
   }, []);
 
   React.useEffect(() => {
-    if (localCartState.length > 0 && user) {
-      localCartState.forEach((localCartProduct) => {
-        handleAddUserProductToCart({
-          email: user.email as string,
-          externalProductId: localCartProduct.externalProductId,
-          quantity: localCartProduct.quantity,
-          name: localCartProduct.name,
-          price: localCartProduct.price,
-          background_image: localCartProduct.background_image,
-          description: localCartProduct.description as string,
-          rating: localCartProduct.rating as number,
-          slug: localCartProduct.slug,
-          released: localCartProduct.released as string,
-          added: localCartProduct.added as number,
-        });
-        handleDeleteLocalProductFromCart(localCartProduct.externalProductId);
-      });
-    }
-  }, [localCartState]);
-
-  React.useEffect(() => {
-    if (localWishlistState.length > 0 && user) {
-      localWishlistState.forEach((localWishListProduct) => {
-        handleAddUserProductToWishList({
-          email: user.email as string,
-          externalProductId: localWishListProduct.externalProductId,
-          name: localWishListProduct.name,
-          price: localWishListProduct.price,
-          background_image: localWishListProduct.background_image,
-          description: localWishListProduct.description as string,
-          rating: localWishListProduct.rating as number,
-          slug: localWishListProduct.slug as string,
-          released: localWishListProduct.released as string,
-          added: localWishListProduct.added as number,
-        });
-        handleDeleteLocalProductFromWishList(
-          localWishListProduct.externalProductId
+    if (localStorageCartState.localStorageCart.length > 0 && user) {
+      localStorageCartState.localStorageCart.forEach((localCartProduct) => {
+        handleAddUserProductToCart(
+          mapProductToAddToCartDTO(localCartProduct, user.email)
+        );
+        handleDeleteLocalStorageProductFromCart(
+          localCartProduct.externalProductId
         );
       });
     }
-  }, [localWishlistState]);
+  }, [localStorageCartState.localStorageCart]);
+
+  React.useEffect(() => {
+    if (localStorageWishlistState.localStorageWishlist.length > 0 && user) {
+      localStorageWishlistState.localStorageWishlist.forEach(
+        (localWishListProduct) => {
+          handleAddUserProductToWishlist(
+            mapProductToAddToWishlistDTO(localWishListProduct, user.email)
+          );
+          handleDeleteLocalStorageProductFromWishList(
+            localWishListProduct.externalProductId
+          );
+        }
+      );
+    }
+  }, [localStorageWishlistState.localStorageWishlist]);
 
   return (
     <div className="flex flex-1 justify-end items-center relative">

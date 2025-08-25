@@ -2,13 +2,13 @@ import React from "react";
 import Image from "next/image";
 import { FaCartPlus } from "react-icons/fa";
 import LoadingAnimation from "../Animations/LoadingAnimation";
-import useUIVisibility from "@/hooks/useUIVisibility";
+import useUIVisibility from "@/hooks/useWindowVisibility";
 import useCustomRouter from "@/hooks/useCustomRouter";
-import useUserCart from "@/features/cart/hooks/userCart/useUserCart";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import { generateRandomPrice } from "@/utils/prices";
 import { GameAPIProduct, GameAPIResponse } from "@/types/types";
+import useUserCartActions from "@/features/cart/hooks/userCart/useUserCartActions";
+import useLocalStorageCartActions from "@/features/cart/hooks/localStorageCart/useLocalStorageCartActions";
 
 export default function SearchResultsModalContainer({
   gamesArray,
@@ -17,8 +17,8 @@ export default function SearchResultsModalContainer({
   gamesArray: GameAPIResponse[];
   loadingState: boolean;
 }) {
-  const { handleAddUserProductToCart } = useUserCart();
-  const { handleAddLocalProductToCart } = useLocalStorage("localCart");
+  const { handleAddUserProductToCart } = useUserCartActions();
+  const { handleAddLocalStorageProductToCart } = useLocalStorageCartActions();
   const { user } = useCurrentUser();
   const { redirectToGame } = useCustomRouter();
   const { handleClose } = useUIVisibility();
@@ -38,9 +38,9 @@ export default function SearchResultsModalContainer({
         quantity: null,
       });
     } else {
-      handleAddLocalProductToCart({
+      handleAddLocalStorageProductToCart({
         ...game,
-        externalProductId: game.id,
+        externalProductId: game.id as number,
         description: game.description_raw,
         price: generateRandomPrice(),
         quantity: 1,

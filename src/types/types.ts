@@ -18,13 +18,13 @@ export interface Token {
 }
 
 export interface GameAPIProduct {
-  id: number;
+  id?: number;
   externalProductId: number;
   name: string;
   price: number;
   background_image: string;
-  description: string;
-  description_raw: string;
+  description?: string;
+  description_raw?: string;
   rating: number;
   slug: string;
   released: string;
@@ -37,11 +37,12 @@ export interface ProductInformations {
   price: number;
   background_image: string;
   description?: string;
-  rating?: number;
+  rating: number;
   slug: string;
-  released?: string;
-  added?: number;
+  released: string;
+  added: number;
 }
+
 export interface UserCart {
   id: string;
   createdAt: string;
@@ -77,7 +78,7 @@ export interface UserProduct {
   };
 }
 
-export interface ProductHistory {
+export interface UserProductHistory {
   id: string;
   externalProductId: number;
   cartId: string;
@@ -87,7 +88,7 @@ export interface ProductHistory {
   productsInformations: ProductInformations;
 }
 
-export interface OrderHistory {
+export interface UserOrderHistory {
   status: string;
   id: string;
   userId: string;

@@ -1,4 +1,4 @@
-import ChangePasswordContainer from "@/components/Auth/Settings/ChangePasswordContainer";
+import ChangePasswordContainer from "@/features/auth/components/Auth/Settings/ChangePasswordContainer";
 
 export const metadata = {
   title: "Change Password | RIGBA",

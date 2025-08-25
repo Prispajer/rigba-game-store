@@ -5,7 +5,7 @@ import Image from "next/image";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
 import ProductHeaders from "../Shared/ReusableComponents/ProductHeaders";
-import ProductList from "../Product/ProductList";
+import ProductList from "../../../features/products/components/Product/ProductList";
 import CheckoutCart from "./CheckoutCart";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import useUserCart from "@/features/cart/hooks/userCart/useUserCart";

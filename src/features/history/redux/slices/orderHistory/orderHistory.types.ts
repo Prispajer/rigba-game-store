@@ -1,7 +1,7 @@
-import { OrderHistory } from "@/types/types";
+import { UserOrderHistory } from "@/types/types";
 
-export interface OrderHistoryState {
-  orderHistoryArray: OrderHistory[];
+export interface UserOrderHistoryState {
+  orderHistoryArray: UserOrderHistory[];
   status: string;
   error: string | null;
   success: string | null;

@@ -6,7 +6,7 @@ import { IoReload, IoCloseSharp, IoPersonOutline } from "react-icons/io5";
 import { TbShoppingCartCopy } from "react-icons/tb";
 import { LuGamepad2 } from "react-icons/lu";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
-import useUIVisibility from "@/hooks/useUIVisibility";
+import useUIVisibility from "@/hooks/useWindowVisibility";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import { signOut } from "next-auth/react";
 import { ProfileModalContainerProps } from "@/types/types";

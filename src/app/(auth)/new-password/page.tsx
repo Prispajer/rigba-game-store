@@ -1,4 +1,4 @@
-import NewPasswordContainer from "@/components/Auth/NewPasswordContainer";
+import NewPasswordContainer from "@/features/auth/components/Auth/NewPasswordContainer";
 
 export default function NewPasswordPage() {
   return <NewPasswordContainer />;

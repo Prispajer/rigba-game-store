@@ -8,7 +8,7 @@ import { BiCartDownload } from "react-icons/bi";
 import { IoKeySharp } from "react-icons/io5";
 import { IoMdSettings } from "react-icons/io";
 import { IoCloseSharp } from "react-icons/io5";
-import { toggleScreen } from "@/redux/slices/ui/uiSlice";
+import { toggleScreen } from "@/redux/slices/window/windowSlice";
 import OutsideClickHandler from "@/components/Interface/Shared/Backdrop/OutsideCLickHandler";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 

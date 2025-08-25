@@ -8,9 +8,9 @@ export default function mapProductToAddToWishlistDTO(
 ): AddUserProductToWishListDTO {
   return {
     email,
-    externalProductId: product.id,
+    externalProductId: product.id as number,
     name: product.name,
-    description: product.description_raw,
+    description: product.description_raw as string,
     background_image: product.background_image,
     price: generateRandomPrice(),
     rating: product.rating,

@@ -1,4 +1,4 @@
-import KeysContainer from "@/components/Auth/Keys/KeysContainer";
+import KeysContainer from "@/features/auth/components/Auth/Keys/KeysContainer";
 
 export const metadata = {
   title: "Keys | RIGBA",

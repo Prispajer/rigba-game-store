@@ -1,12 +1,12 @@
 "use client";
 import React from "react";
 import { useDispatch } from "react-redux";
-import { toggleScreen } from "@/redux/slices/ui/uiSlice";
+import { toggleScreen } from "@/redux/slices/window/windowSlice";
 import HeaderLogo from "@/components/Interface/Header/HeaderLogo";
 import HeaderUserNavigation from "@/components/Interface/Header//HeaderUserNavigation";
 import NavbarSidebar from "@/components/Interface/Shared/Sidebars/NavbarSidebar";
 import HeaderSearchBar from "@/components/Interface/Header/HeaderSearchBar";
-import useUIVisibility from "@/hooks/useUIVisibility";
+import useUIVisibility from "@/hooks/useWindowVisibility";
 
 export default function AppHeader() {
   const { resolutionState, handleToggleScreen } = useUIVisibility();

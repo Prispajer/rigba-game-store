@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getOrderHistory } from "./orderHistory.thunk";
-import { OrderHistoryState } from "./orderHistory.types";
+import { getUserOrderHistory } from "./orderHistory.thunk";
+import { UserOrderHistoryState } from "./orderHistory.types";
 
-const initialState: OrderHistoryState = {
+const initialState: UserOrderHistoryState = {
   orderHistoryArray: [],
   status: "Idle",
   error: null,
@@ -17,21 +17,21 @@ const orderHistorySlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getOrderHistory.pending, (state) => {
+      .addCase(getUserOrderHistory.pending, (state) => {
         state.status = "Loading";
         state.isLoading = true;
         state.error = null;
         state.success = null;
         state.message = null;
       })
-      .addCase(getOrderHistory.fulfilled, (state, action) => {
+      .addCase(getUserOrderHistory.fulfilled, (state, action) => {
         state.status = "Succeeded";
         state.orderHistoryArray = action.payload.data;
         state.success = "Order history fetched successfully!";
         state.message = action.payload.message;
         state.isLoading = false;
       })
-      .addCase(getOrderHistory.rejected, (state, action) => {
+      .addCase(getUserOrderHistory.rejected, (state, action) => {
         state.status = "Failed";
         state.isLoading = false;
         state.error = action.payload || "Failed to fetch order history.";

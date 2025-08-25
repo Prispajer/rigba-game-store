@@ -2,7 +2,7 @@
 
 import React, { ReactNode } from "react";
 import { useDispatch } from "react-redux";
-import { toggleScreen } from "@/redux/slices/ui/uiSlice";
+import { toggleScreen } from "@/redux/slices/window/windowSlice";
 import CheckoutLogo from "@/components/Interface/Checkout/CheckoutLogo";
 import CheckoutStatus from "@/components/Interface/Checkout/CheckoutStatus";
 import useWindowVisibility from "@/hooks/useWindowVisibility";

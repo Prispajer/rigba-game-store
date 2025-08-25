@@ -4,7 +4,7 @@ import { FaSearch } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
 import SearchResultsModalContainer from "../Shared/Modals/SearchResultsModalContainer";
 import OutsideClickHandler from "../Shared/Backdrop/OutsideCLickHandler";
-import useUIVisibility from "@/hooks/useUIVisibility";
+import useUIVisibility from "@/hooks/useWindowVisibility";
 import fetchService from "@/services/FetchService";
 import debounce from "@/utils/debounce";
 import { GameAPIResponse } from "@/types/types";

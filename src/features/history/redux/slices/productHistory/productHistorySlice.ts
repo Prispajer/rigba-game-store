@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getProductHistory } from "./productHistory.thunk";
-import { ProductHistoryState } from "./productHistory.types";
+import { getUserProductHistory } from "./productHistory.thunk";
+import { UserProductHistoryState } from "./productHistory.types";
 
-const initialState: ProductHistoryState = {
+const initialState: UserProductHistoryState = {
   productHistoryArray: [],
   status: "idle",
   error: null,
@@ -17,21 +17,21 @@ const productHistorySlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getProductHistory.pending, (state) => {
+      .addCase(getUserProductHistory.pending, (state) => {
         state.status = "Loading";
         state.isLoading = true;
         state.error = null;
         state.success = null;
         state.message = null;
       })
-      .addCase(getProductHistory.fulfilled, (state, action) => {
+      .addCase(getUserProductHistory.fulfilled, (state, action) => {
         state.status = "Succeeded";
         state.success = "Product history fetched successfully!";
         state.productHistoryArray = action.payload.data;
         state.message = action.payload.message;
         state.isLoading = false;
       })
-      .addCase(getProductHistory.rejected, (state, action) => {
+      .addCase(getUserProductHistory.rejected, (state, action) => {
         state.status = "Failed";
         state.isLoading = false;
         state.error =

@@ -4,7 +4,7 @@ import { IoCloseSharp } from "react-icons/io5";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import useFetchGameData from "@/features/products/hooks/useFetchGameData";
 import useSearchText from "@/hooks/useSearchText";
-import useUIVisibility from "@/hooks/useUIVisibility";
+import useUIVisibility from "@/hooks/useWindowVisibility";
 import UtilsService from "@/services/UtilsService";
 import IUtilsService from "@/interfaces/IUtilsService";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";

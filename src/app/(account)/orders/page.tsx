@@ -1,4 +1,4 @@
-import OrdersContainer from "@/components/Auth/Orders/OrdersContainer";
+import OrdersContainer from "@/features/auth/components/Auth/Orders/OrdersContainer";
 
 export const metadata = {
   title: "Orders | RIGBA",

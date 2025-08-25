@@ -13,12 +13,14 @@ import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import { NotificationOrigin } from "@/redux/slices/notification/notification.types";
 import { HttpMethod } from "@/types/types";
 
-export default function useAuthActions() {
+export default function useAuthHandlers() {
   const [showTwoFactor, setShowTwoFactor] = React.useState(false);
   const [isPending, startTransition] = React.useTransition();
-  const { handleSuccess, handleError, handleReset } = useNotification();
+
   const searchParams = useSearchParams();
+  const { handleSuccess, handleError, handleReset } = useNotification();
   const { user } = useCurrentUser();
+
   const token = searchParams?.get("token");
   const providerError =
     searchParams?.get("error") === "OAuthAccountNotLinked"
@@ -134,8 +136,8 @@ export default function useAuthActions() {
   };
 
   return {
-    showTwoFactor,
     isPending,
+    showTwoFactor,
     providerError,
     setShowTwoFactor,
     handleLoginSubmit,

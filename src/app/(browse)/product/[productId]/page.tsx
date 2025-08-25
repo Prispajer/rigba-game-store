@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import ProductContainer from "@/components/Interface/Product/ProductContainer";
+import ProductContainer from "@/features/products/components/Product/ProductContainer";
 import fetchService from "@/services/FetchService";
 
 export const generateMetadata = async (data: {

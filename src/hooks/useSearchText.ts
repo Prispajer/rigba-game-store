@@ -1,6 +1,9 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setSearchText, clearSearchText } from "@/redux/slices/ui/uiSlice";
+import {
+  setSearchText,
+  clearSearchText,
+} from "@/redux/slices/window/windowSlice";
 import useFetchGameData from "../features/products/hooks/useFetchGameData";
 import { RootState } from "../redux/store";
 
@@ -9,25 +12,25 @@ export default function useSearchText() {
   const { productFilterState } = useFetchGameData();
 
   const searchGenreTextState = useSelector(
-    (state: RootState) => state.ui.searchGenreText
+    (state: RootState) => state.window.searchGenreText
   );
   const searchPlatformTextState = useSelector(
-    (state: RootState) => state.utility.searchPlatformText
+    (state: RootState) => state.window.searchPlatformText
   );
   const searchPublisherTextState = useSelector(
-    (state: RootState) => state.utility.searchPublisherText
+    (state: RootState) => state.window.searchPublisherText
   );
   const searchStoreTextState = useSelector(
-    (state: RootState) => state.utility.searchStoreText
+    (state: RootState) => state.window.searchStoreText
   );
   const searchWistListTextState = useSelector(
-    (state: RootState) => state.utility.searchWishListText
+    (state: RootState) => state.window.searchWishListText
   );
   const compartmentNumberOne = useSelector(
-    (state: RootState) => state.utility.compartmentNumberOne
+    (state: RootState) => state.window.compartmentNumberOne
   );
   const compartmentNumberTwo = useSelector(
-    (state: RootState) => state.utility.compartmentNumberTwo
+    (state: RootState) => state.window.compartmentNumberTwo
   );
 
   const handleSetSearchText = (

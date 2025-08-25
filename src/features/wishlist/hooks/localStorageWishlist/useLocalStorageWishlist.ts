@@ -2,7 +2,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setLocalStorageWishlist } from "../../redux/slices/localStorageWishlist/localStorageWishlistSlice";
-import { selectLocalStorageWishlist } from "./../../redux/slices/localStorageWishlist/localStorageWishlist.selectors";
+import { selectLocalStorageWishlistState } from "./../../redux/slices/localStorageWishlist/localStorageWishlist.selectors";
 import { AppDispatch } from "@/redux/store";
 
 export default function useLocalStorageWishlist(key: string) {
@@ -10,13 +10,16 @@ export default function useLocalStorageWishlist(key: string) {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const localStorageWishlistState = useSelector(selectLocalStorageWishlist);
+  const localStorageWishlistState = useSelector(
+    selectLocalStorageWishlistState
+  );
 
   React.useEffect(() => {
-    const getLocalArray = JSON.parse(localStorage.getItem(key) ?? "");
+    const getLocalArray = localStorage.getItem(key);
     if (getLocalArray) {
+      const parsedArray = JSON.parse(getLocalArray);
       if (key === "localStorageWishlist") {
-        dispatch(setLocalStorageWishlist(getLocalArray));
+        dispatch(setLocalStorageWishlist(parsedArray));
       }
     } else {
       if (key === "localStorageWishlist") {
@@ -29,7 +32,10 @@ export default function useLocalStorageWishlist(key: string) {
   React.useEffect(() => {
     if (isLoaded) {
       if (key === "localStorageWishlist") {
-        localStorage.setItem(key, JSON.stringify(localStorageWishlistState));
+        localStorage.setItem(
+          key,
+          JSON.stringify(localStorageWishlistState.localStorageWishlist)
+        );
       }
     }
   }, [key, localStorageWishlistState, isLoaded]);

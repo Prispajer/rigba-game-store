@@ -1,11 +1,13 @@
 "use client";
 import React from "react";
 import { CiHeart } from "react-icons/ci";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
-import useUserWishList from "@/features/wishlist/hooks/userWishlist/useUserWishList";
+import useUserWishlist from "@/features/wishlist/hooks/userWishlist/useUserWishlist";
 import { generateRandomPrice } from "@/utils/prices";
 import { ProductInformations } from "@/types/types";
+import useUserWishlistActions from "@/features/wishlist/hooks/userWishlist/useUserWishlistActions";
+import useLocalStorageWishlistActions from "@/features/wishlist/hooks/localStorageWishlist/useLocalStorageWishlistActions";
+import useLocalStorageWishlist from "@/features/wishlist/hooks/localStorageWishlist/useLocalStorageWishlist";
 
 export default function AddToWishList<
   T extends {
@@ -38,42 +40,40 @@ export default function AddToWishList<
   deleted: string;
 }) {
   const { user } = useCurrentUser();
+  const { isLoading, userWishlistState } = useUserWishlist();
   const {
-    userWishListState,
-    isLoading,
-    handleAddUserProductToWishList,
-    handleDeleteUserProductFromWishList,
-  } = useUserWishList();
-
+    handleAddUserProductToWishlist,
+    handleDeleteUserProductFromWishlist,
+  } = useUserWishlistActions();
+  const localWishlistState = useLocalStorageWishlist("localStorageWishlist");
   const {
-    localWishListState,
-    handleAddLocalProductToWishList,
-    handleDeleteLocalProductFromWishList,
-  } = useLocalStorage("localWishList");
+    handleAddLocalStorageProductToWishList,
+    handleDeleteLocalStorageProductFromWishList,
+  } = useLocalStorageWishlistActions();
 
-  const isInLocalWishList = localWishListState.some(
+  const isInLocalWishlist = localWishlistState.localStorageWishlist.some(
     (product) =>
       product.externalProductId === game?.id || game?.externalProductId
   );
 
-  const isInUserWishList = userWishListState.products.some(
+  const isInUserWishlist = userWishlistState.products.some(
     (product) =>
       product.externalProductId === game?.id || game?.externalProductId
   );
 
-  const isInWishList = user ? isInUserWishList : isInLocalWishList;
+  const isInCurrentWishlist = user ? isInUserWishlist : isInLocalWishlist;
 
   const handleWishListAction = (event: React.MouseEvent) => {
     event.stopPropagation();
     if (user) {
-      if (isInWishList) {
-        handleDeleteUserProductFromWishList({
+      if (isInCurrentWishlist) {
+        handleDeleteUserProductFromWishlist({
           externalProductId:
             (game.externalProductId as number) || (game.id as number),
           email: user.email as string,
         });
       } else {
-        handleAddUserProductToWishList({
+        handleAddUserProductToWishlist({
           email: user.email as string,
           externalProductId: game.id as number,
           name: game.name as string,
@@ -87,21 +87,21 @@ export default function AddToWishList<
         });
       }
     } else {
-      if (isInWishList) {
-        handleDeleteLocalProductFromWishList(
+      if (isInCurrentWishlist) {
+        handleDeleteLocalStorageProductFromWishList(
           (game.externalProductId as number) || (game.id as number)
         );
       } else {
-        handleAddLocalProductToWishList({
+        handleAddLocalStorageProductToWishList({
           externalProductId: parseInt(game.id as string),
           name: game.name as string,
           description: game.description_raw,
           price: generateRandomPrice(),
           background_image: game.background_image as string,
-          rating: game.rating,
-          slug: game.slug,
-          released: game.released,
-          added: game.added,
+          rating: game.rating as number,
+          slug: game.slug as string,
+          released: game.released as string,
+          added: game.added as number,
         });
       }
     }
@@ -110,9 +110,9 @@ export default function AddToWishList<
   return (
     <button
       onClick={(event: React.MouseEvent) => handleWishListAction(event)}
-      disabled={isLoading}
+      disabled={isLoading["userWishlist"]}
       className={`${position} p-[6px] md:p-[10px] border transition duration-300 cursor-pointer hover:bg-[#ffffff80] hover:border-[#ffffff] ${
-        isInWishList ? `${added}` : `${deleted}`
+        isInCurrentWishlist ? `${added}` : `${deleted}`
       }`}
     >
       <CiHeart size="30px" color={"white"} />

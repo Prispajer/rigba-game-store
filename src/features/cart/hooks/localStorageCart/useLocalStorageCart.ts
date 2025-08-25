@@ -2,7 +2,7 @@
 import React from "react";
 import { AppDispatch } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { selectLocalStorageCart } from "../../redux/slices/localStorageCart/localStorageCart.selectors";
+import { selectLocalStorageCartState } from "../../redux/slices/localStorageCart/localStorageCart.selectors";
 import { setLocalStorageCart } from "../../redux/slices/localStorageCart/localStorageCartSlice";
 
 export default function useLocalStorageCart(key: string) {
@@ -10,13 +10,14 @@ export default function useLocalStorageCart(key: string) {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const localStorageCartState = useSelector(selectLocalStorageCart);
+  const localStorageCartState = useSelector(selectLocalStorageCartState);
 
   React.useEffect(() => {
-    const getLocalArray = JSON.parse(localStorage.getItem(key) ?? "");
+    const getLocalArray = localStorage.getItem(key);
     if (getLocalArray) {
       if (key === "localStorageCart") {
-        dispatch(setLocalStorageCart(getLocalArray));
+        const parsedArray = JSON.parse(getLocalArray);
+        dispatch(setLocalStorageCart(parsedArray));
       }
     } else {
       if (key === "localStorageCart") {
@@ -29,7 +30,10 @@ export default function useLocalStorageCart(key: string) {
   React.useEffect(() => {
     if (isLoaded) {
       if (key === "localStorageCart") {
-        localStorage.setItem(key, JSON.stringify(localStorageCartState));
+        localStorage.setItem(
+          key,
+          JSON.stringify(localStorageCartState.localStorageCart)
+        );
       }
     }
   }, [key, localStorageCartState, isLoaded]);

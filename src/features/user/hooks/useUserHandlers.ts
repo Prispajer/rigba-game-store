@@ -1,7 +1,6 @@
 import React from "react";
 import { z } from "zod";
 import { PersonalDataSchema, UpdateNameSchema } from "@/utils/schemas/user";
-import requestService from "@/services/RequestService";
 import submitRequest from "@/lib/submitRequest";
 import useNotification from "@/hooks/useNotification";
 import useCurrentUser from "./useCurrentUser";

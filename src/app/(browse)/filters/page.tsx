@@ -1,4 +1,4 @@
-import FiltersContainer from "@/components/Interface/Filters/FiltersContainer";
+import FiltersContainer from "@/features/products/components/Filters/FiltersContainer";
 
 export const metadata = {
   title: "Filter Games | RIGBA",

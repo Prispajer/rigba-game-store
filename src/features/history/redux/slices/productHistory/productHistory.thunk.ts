@@ -1,30 +1,31 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import requestService from "@/services/RequestService";
-import { RequestResponse, ProductHistory } from "@/types/types";
+import { RequestResponse, UserProductHistory } from "@/types/types";
 
 export const getProductHistory = createAsyncThunk<
-  { data: ProductHistory[]; message: string },
+  { data: UserProductHistory[]; message: string },
   { email: string },
   { rejectValue: string }
 >(
   "productHistory/getProductHistory",
   async ({ email }, { rejectWithValue }) => {
     try {
-      const getProductHistoryResponse: RequestResponse<ProductHistory[]> =
-        await requestService.postMethod(
-          "products/endpoints/productManagement/getProductHistory",
-          { email }
-        );
-      if (getProductHistoryResponse.success) {
+      const getUserProductHistoryResponse: RequestResponse<
+        UserProductHistory[]
+      > = await requestService.postMethod(
+        "products/endpoints/productManagement/getProductHistory",
+        { email }
+      );
+      if (getUserProductHistoryResponse.success) {
         return {
-          data: getProductHistoryResponse.data || [],
+          data: getUserProductHistoryResponse.data || [],
           message:
-            getProductHistoryResponse.message ||
+            getUserProductHistoryResponse.message ||
             "Product history fetched successfully!",
         };
       } else {
         throw new Error(
-          getProductHistoryResponse.message ||
+          getUserProductHistoryResponse.message ||
             "Failed to fetch product history!"
         );
       }

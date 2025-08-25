@@ -1,4 +1,4 @@
-import PersonalDataContainer from "@/components/Auth/Settings/PersonalDataContainer";
+import PersonalDataContainer from "@/features/auth/components/Auth/Settings/PersonalDataContainer";
 
 export const metadata = {
   title: "Change Personal Data | RIGBA",

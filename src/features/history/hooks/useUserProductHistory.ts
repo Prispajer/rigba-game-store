@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserProductHistory } from "@/features/history/redux/slices/productHistory/productHistorySlice";
+import { getUserProductHistory } from "../redux/slices/productHistory/productHistory.thunk";
 import useCurrentUser from "../../user/hooks/useCurrentUser";
 import { AppDispatch, RootState } from "@/redux/store";
 
@@ -18,7 +18,7 @@ export default function useUserProductHistory() {
 
   const handleFetchUserProductHistory = React.useCallback(async () => {
     if (user?.email) {
-      await dispatch(fetchUserProductHistory({ email: user.email }));
+      await dispatch(getUserProductHistory({ email: user.email }));
       setIsProductHistoryLoading(false);
     }
   }, [dispatch, user?.email]);

@@ -5,9 +5,11 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
 import { VscWorkspaceUnknown } from "react-icons/vsc";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
-import useUIVisibility from "@/hooks/useUIVisibility";
-import useLocalStorage from "@/hooks/useLocalStorage";
+import useUIVisibility from "@/hooks/useWindowVisibility";
+import useLocalStorageCart from "@/features/cart/hooks/localStorageCart/useLocalStorageCart";
+import useLocalStorageCartActions from "@/features/cart/hooks/localStorageCart/useLocalStorageCartActions";
 import useUserCart from "@/features/cart/hooks/userCart/useUserCart";
+import useUserCartActions from "@/features/cart/hooks/userCart/useUserCartActions";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import { calculateTotalPrice } from "@/utils/prices";
@@ -15,19 +17,19 @@ import { calculateTotalPrice } from "@/utils/prices";
 export default function CartModalContainer() {
   const { user } = useCurrentUser();
   const { cartModalState, handleClose } = useUIVisibility();
+  const { userCartState, isLoading: isCartLoading } = useUserCart();
   const {
-    userCartState,
-    isCartLoading,
     handleDeleteUserProductFromCart,
     handleDecreaseQuantityUserProductFromCart,
     handleIncreaseQuantityUserProductFromCart,
-  } = useUserCart();
+  } = useUserCartActions();
+
+  const localStorageCartState = useLocalStorageCart("localStorageCart");
   const {
-    localCartState,
-    handleDeleteLocalProductFromCart,
-    handleDecreaseQuantityLocalProductFromCart,
-    handleIncreaseQuantityLocalProductFromCart,
-  } = useLocalStorage("localCart");
+    handleDeleteLocalStorageProductFromCart,
+    handleDecreaseQuantityLocalStorageProductFromCart,
+    handleIncreaseQuantityLocalStorageProductFromCart,
+  } = useLocalStorageCartActions();
   const { redirectToGame, redirectToCheckout } = useCustomRouter();
 
   const handleOutsideClick = () => {
@@ -36,7 +38,9 @@ export default function CartModalContainer() {
     }
   };
 
-  const currentCart = user ? userCartState.products : localCartState;
+  const currentCart = user
+    ? userCartState.products
+    : localStorageCartState.localStorageCart;
 
   return (
     <>
@@ -104,7 +108,7 @@ export default function CartModalContainer() {
                         <div className="flex justify-between items-center w-full text-white">
                           <div>
                             <button
-                              disabled={isCartLoading}
+                              disabled={isCartLoading["getUserCart"]}
                               className="mr-2 hover:text-modalHover"
                               onClick={() =>
                                 handleDecreaseQuantityUserProductFromCart({
@@ -119,7 +123,7 @@ export default function CartModalContainer() {
                               {product.quantity || 1}
                             </span>
                             <button
-                              disabled={isCartLoading}
+                              disabled={isCartLoading["getUserCart"]}
                               className="ml-2 hover:text-modalHover"
                               onClick={() =>
                                 handleIncreaseQuantityUserProductFromCart({
@@ -132,7 +136,7 @@ export default function CartModalContainer() {
                             </button>
                           </div>
                           <button
-                            disabled={isCartLoading}
+                            disabled={isCartLoading["getUserCart"]}
                             onClick={() =>
                               handleDeleteUserProductFromCart({
                                 email: user?.email as string,
@@ -197,10 +201,10 @@ export default function CartModalContainer() {
                         <div className="flex justify-between items-center w-full text-white">
                           <div>
                             <button
-                              disabled={isCartLoading}
+                              disabled={isCartLoading["getUserCart"]}
                               className="mr-2 hover:text-modalHover"
                               onClick={() =>
-                                handleDecreaseQuantityLocalProductFromCart(
+                                handleDecreaseQuantityLocalStorageProductFromCart(
                                   product.externalProductId
                                 )
                               }
@@ -211,10 +215,10 @@ export default function CartModalContainer() {
                               {product.quantity || 1}
                             </span>
                             <button
-                              disabled={isCartLoading}
+                              disabled={isCartLoading["getUserCart"]}
                               className="ml-2 hover:text-modalHover"
                               onClick={() =>
-                                handleIncreaseQuantityLocalProductFromCart(
+                                handleIncreaseQuantityLocalStorageProductFromCart(
                                   product.externalProductId
                                 )
                               }
@@ -223,9 +227,9 @@ export default function CartModalContainer() {
                             </button>
                           </div>
                           <button
-                            disabled={isCartLoading}
+                            disabled={isCartLoading["getUserCart"]}
                             onClick={() =>
-                              handleDeleteLocalProductFromCart(
+                              handleDeleteLocalStorageProductFromCart(
                                 product.externalProductId
                               )
                             }

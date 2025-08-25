@@ -1,4 +1,4 @@
 import { RootState } from "@/redux/store";
 
-export const selectLocalStorageCart = (state: RootState) =>
+export const selectLocalStorageCartState = (state: RootState) =>
   state.localStorageCart;

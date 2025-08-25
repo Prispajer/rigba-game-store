@@ -1,4 +1,4 @@
-import EmailVerificationContainer from "@/components/Auth/EmailVerificationContainer";
+import EmailVerificationContainer from "@/features/auth/components/Auth/EmailVerificationContainer";
 
 export default function EmailVerificationPage() {
   return <EmailVerificationContainer />;

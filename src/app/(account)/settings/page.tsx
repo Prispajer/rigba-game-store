@@ -1,4 +1,4 @@
-import SettingsContainer from "@/components/Auth/Settings/SettingsContainer";
+import SettingsContainer from "@/features/auth/components/Auth/Settings/SettingsContainer";
 
 export const metadata = {
   title: "Settings | RIGBA",

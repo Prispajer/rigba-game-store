@@ -1,6 +1,6 @@
 import { IoCloseSharp } from "react-icons/io5";
 import { MdKeyboardArrowUp, MdKeyboardArrowDown } from "react-icons/md";
-import FilterFilters from "../../Filters/FilterFilters";
+import FilterFilters from "../../../../features/products/components/Filters/FilterFilters";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
 import SortBy from "../ReusableComponents/SortBy";
 import useWindowVisibility from "@/hooks/useWindowVisibility";

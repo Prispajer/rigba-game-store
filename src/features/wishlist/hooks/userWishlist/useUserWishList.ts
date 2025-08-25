@@ -1,17 +1,17 @@
 "use client";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserWishlistThunk } from "./../../redux/slices/userWishlist/userWishlist.thunk";
+import { getUserWishlistThunk } from "../../redux/slices/userWishlist/userWishlist.thunk";
 import debounce from "@/utils/debounce";
 import useCurrentUser from "../../../user/hooks/useCurrentUser";
 import useAsyncActionWithLoading from "@/hooks/useAsyncActionWithLoading";
 import { AppDispatch, RootState } from "@/redux/store";
 
-export default function useUserWishList() {
+export default function useUserWishlist() {
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useCurrentUser();
   const { isLoading, executeWithLoading } = useAsyncActionWithLoading();
-  const userWishListState = useSelector(
+  const userWishlistState = useSelector(
     (state: RootState) => state.userWishlist
   );
 
@@ -29,11 +29,11 @@ export default function useUserWishList() {
 
   React.useEffect(() => {
     getUserWishlist();
-  }, [userWishListState]);
+  }, [userWishlistState]);
 
   return {
     isLoading,
-    userWishListState,
+    userWishlistState,
     getUserWishlist,
   };
 }

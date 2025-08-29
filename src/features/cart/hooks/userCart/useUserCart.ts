@@ -7,28 +7,30 @@ import useCurrentUser from "../../../user/hooks/useCurrentUser";
 import useAsyncActionWithLoading from "@/hooks/useAsyncActionWithLoading";
 import debounce from "@/utils/debounce";
 import { AppDispatch, RootState } from "@/redux/store";
+import { selectUserCartState } from "../../redux/slices/userCart/userCart.selectors";
 
 export default function useUserCart() {
   const dispatch = useDispatch<AppDispatch>();
+
   const { user } = useCurrentUser();
   const { isLoading, executeWithLoading } = useAsyncActionWithLoading();
-  const userCartState = useSelector((state: RootState) => state.userCart);
+
+  const userCartState = useSelector(selectUserCartState);
 
   const getUserCart = React.useCallback(
-    () =>
-      debounce(() => {
-        if (user?.email) {
-          executeWithLoading("getUserCart", () =>
-            dispatch(getUserCartThunk({ email: user.email }))
-          );
-        }
-      }, 200),
+    debounce(async () => {
+      if (user?.email) {
+        await executeWithLoading("getUserCart", () =>
+          dispatch(getUserCartThunk({ email: user.email }))
+        );
+      }
+    }, 200),
     [dispatch, user?.email]
   );
 
   React.useEffect(() => {
     getUserCart();
-  }, [userCartState]);
+  }, []);
 
   return {
     isLoading,

@@ -10,12 +10,15 @@ import ProductHeaders from "../../../../components/Interface/Shared/ReusableComp
 import ProductList from "../../../products/components/Product/ProductList";
 import { FormSuccess } from "../../../../components/Interface/Shared/FormsNotifications/FormSuccess";
 import { FormError } from "../../../../components/Interface/Shared/FormsNotifications/FormError";
-import useProductServices from "@/features/reviews/hooks/useProductServices";
+import useReviewHandlers from "../../hooks/useUserReviewHandlers";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
+import useNotification from "@/hooks/useNotification";
 import { generateRandomPrice } from "@/utils/prices";
 import { GameAPIResponse } from "@/types/types";
 import { ReviewSchema } from "@/utils/schemas/product";
+import { RatingKeys } from "../../types/ratingKeys";
+import { NotificationOrigin } from "@/redux/slices/notification/notification.types";
 
 export default function ReviewContainer({
   product,
@@ -24,12 +27,12 @@ export default function ReviewContainer({
 }) {
   const { user } = useCurrentUser();
   const { redirectToGame } = useCustomRouter();
-  const { success, error, setError, useProductActions } = useProductServices();
-  const { submitReviewForm } = useProductActions();
+  const { handleReviewSubmit } = useReviewHandlers();
+  const { notification, handleError, handleSuccess } = useNotification();
   const reviewObject = useForm<z.infer<typeof ReviewSchema>>({
     resolver: zodResolver(ReviewSchema),
     defaultValues: {
-      review: "",
+      reviewDescription: "",
       rating: "",
     },
   });
@@ -53,15 +56,20 @@ export default function ReviewContainer({
       <div className="flex flex-col w-full max-w-[1240px] mx-auto sm:px-[20px]">
         <div className="grid grid-cols-1 sm:grid-cols-[1fr,200px] mt-[15px] md:mt-[40px] sm:mb-[60px] px-[20px] sm:px-0 gap-x-[20px]">
           <form
-            onSubmit={handleSubmit(async (data) => {
+            onSubmit={handleSubmit(async (payload) => {
               if (!user) {
-                setError({
-                  message: "User must be logged in to submit a review!",
-                  origin: "Review",
-                });
+                handleError(
+                  "User must be logged in to submit a review!",
+                  NotificationOrigin.AddReviewToProduct
+                );
                 return;
               }
-              await submitReviewForm(data, ratingKeys, user, product);
+              await handleReviewSubmit(
+                payload,
+                product,
+                ratingKeys,
+                user.email
+              );
             })}
             className="grid grid-cols-1 md:grid-cols-[180px,1fr] md:gap-x-[40px] mx-[-20px] sm:mx-[0px] p-[20px] lg:py-[30px] lg:px-[40px] bg-secondaryColor"
           >
@@ -110,27 +118,33 @@ export default function ReviewContainer({
                 Your review must be at least 150 characters long.
               </p>
               <textarea
-                {...register("review", { required: true })}
+                {...register("reviewDescription", { required: true })}
                 className="w-full min-h-[250px] mb-[20px] p-[20px] text-[15px] text-[#FFFFFF] outline-none resize-none bg-tertiaryColor"
-                name="review"
-                id="review"
+                name="reviewDescription"
+                id="reviewDescription"
               ></textarea>
-              {errors.review && (
+              {errors.reviewDescription && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.review.message as React.ReactNode}
+                  {errors.reviewDescription.message as React.ReactNode}
                 </p>
               )}
               <div className="mb-[10px] flex justify-end">
                 <FormSuccess
                   message={
-                    success?.origin === "Review"
-                      ? (success.message as string)
+                    notification.success &&
+                    notification.origin ===
+                      NotificationOrigin.AddReviewToProduct
+                      ? (notification.message as string)
                       : ""
                   }
                 />
                 <FormError
                   message={
-                    error?.origin === "Review" ? (error.message as string) : ""
+                    !notification.success &&
+                    notification.origin ===
+                      NotificationOrigin.AddReviewToProduct
+                      ? (notification.message as string)
+                      : ""
                   }
                 />
               </div>

@@ -16,21 +16,23 @@ import useLocalStorageWishlist from "@/features/wishlist/hooks/localStorageWishl
 import useLocalStorageCartActions from "@/features/cart/hooks/localStorageCart/useLocalStorageCartActions";
 import useLocalStorageWishlistActions from "@/features/wishlist/hooks/localStorageWishlist/useLocalStorageWishlistActions";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
-import { getUserCartThunk } from "@/features/cart/redux/slices/userCart/userCart.thunk";
-import { getUserWishlistThunk } from "@/features/wishlist/redux/slices/userWishlist/userWishlist.thunk";
-import { AppDispatch } from "@/redux/store";
 import mapProductToAddToCartDTO from "@/features/cart/mappers/mapProductToAddToCartDTO";
 import mapProductToAddToWishlistDTO from "@/features/wishlist/mappers/mapProductToAddToWishlistDTO";
+import useUserWishlist from "@/features/wishlist/hooks/userWishlist/useUserWishlist";
+import { getUserWishlistThunk } from "@/features/wishlist/redux/slices/userWishlist/userWishlist.thunk";
+import { AppDispatch } from "@/redux/store";
 
 export default function HeaderUserNavigation({}) {
   const dispatch = useDispatch<AppDispatch>();
+
   const { user } = useCurrentUser();
-  const { userCartState } = useUserCart();
+  const { userCartState, getUserCart } = useUserCart();
+  const { getUserWishlist } = useUserWishlist();
   const localStorageCartState = useLocalStorageCart("localStorageCart");
   const localStorageWishlistState = useLocalStorageWishlist(
     "localStorageWishlist"
   );
-  const { handleAddUserProductToCart } = useUserCartActions();
+  const { handleAddUserProductToCart } = useUserCartActions(getUserCart);
   const { handleAddUserProductToWishlist } = useUserWishlistActions();
   const { handleDeleteLocalStorageProductFromCart } =
     useLocalStorageCartActions();
@@ -44,7 +46,6 @@ export default function HeaderUserNavigation({}) {
 
   React.useEffect(() => {
     if (user?.email) {
-      dispatch(getUserCartThunk({ email: user.email }));
       dispatch(getUserWishlistThunk({ email: user.email }));
     }
   }, []);

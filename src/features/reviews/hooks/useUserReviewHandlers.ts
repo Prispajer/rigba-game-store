@@ -4,13 +4,11 @@ import { generateRandomPrice } from "@/utils/prices";
 import useNotification from "@/hooks/useNotification";
 import { ReviewSchema } from "@/utils/schemas/product";
 import { GameAPIResponse } from "@/types/types";
-import { RatingTitle } from "@prisma/client";
-import { User } from "next-auth";
 import { HttpMethod } from "@/types/types";
 import { NotificationOrigin } from "@/redux/slices/notification/notification.types";
 import mapReviewToProductDTO from "../mappers/mapReviewToProductDTO";
 
-export default function useReviewHandlers() {
+export default function useUserReviewHandlers() {
   const { handleSuccess, handleError, handleReset } = useNotification();
 
   const handleReviewSubmit = async (

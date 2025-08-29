@@ -10,7 +10,7 @@ export default function mapReviewToProductDTO(
 ): AddReviewToProductDTO {
   return {
     email,
-    externalProductId: product.id,
+    externalProductId: product.id as number,
     name: product.name,
     description: reviewDescription,
     background_image: product.background_image,

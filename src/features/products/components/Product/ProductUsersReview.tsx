@@ -5,28 +5,30 @@ import { FormError } from "../../../../components/Interface/Shared/FormsNotifica
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { generateStars } from "@/utils/ratings";
 import { GameAPIResponse } from "@/types/types";
-import { UserReviewsSlice } from "@/features/reviews/redux/slices/userReviews/userReviewsSlice";
-import {
-  LikeUserReviewDTO,
-  UnLikeUserReviewDTO,
-} from "@/utils/helpers/frontendDTO";
 import { User } from "next-auth";
+import { UserReviewsState } from "@/features/reviews/redux/slices/userReviews/userReviews.types";
 
 export default function ProductUsersReview({
   product,
   isReviewLoading,
   user,
   userReviewsState,
-  handleFetchLikeUserReview,
-  handleFetchUnLikeUserReview,
+  likeUserReviewAction,
+  unlikeUserReviewAction,
 }: {
   product: GameAPIResponse;
   isReviewLoading: boolean;
   user: User | null;
-  userReviewsState: UserReviewsSlice;
-  handleFetchLikeUserReview: (likeUserReviewDTO: LikeUserReviewDTO) => void;
-  handleFetchUnLikeUserReview: (
-    unLikeUserReviewDTO: UnLikeUserReviewDTO
+  userReviewsState: UserReviewsState;
+  likeUserReviewAction: (
+    email: string,
+    externalProductId: number,
+    reviewId: string
+  ) => void;
+  unlikeUserReviewAction: (
+    email: string,
+    externalProductId: number,
+    reviewId: string
   ) => void;
 }) {
   const findReviewLiker = (reviewId: string) => {
@@ -40,20 +42,16 @@ export default function ProductUsersReview({
 
   const handleLikeClick = (reviewId: string) => {
     if (!user) return;
-    handleFetchLikeUserReview({
-      email: user.email as string,
-      externalProductId: product.id as number,
-      reviewId,
-    });
+    likeUserReviewAction(user.email as string, product.id as number, reviewId);
   };
 
   const handleDislikeClick = (reviewId: string) => {
     if (!user) return;
-    handleFetchUnLikeUserReview({
-      email: user.email as string,
-      externalProductId: product.id as number,
-      reviewId,
-    });
+    unlikeUserReviewAction(
+      user.email as string,
+      product.id as number,
+      reviewId
+    );
   };
 
   return (

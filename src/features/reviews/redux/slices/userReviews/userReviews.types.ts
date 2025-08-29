@@ -1,6 +1,6 @@
 import { UserReview } from "@/types/types";
 
-export type ReviewsState = {
+export type UserReviewsState = {
   reviews: UserReview[];
   status: string;
   error: string | null;

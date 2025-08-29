@@ -17,12 +17,16 @@ import { calculateTotalPrice } from "@/utils/prices";
 export default function CartModalContainer() {
   const { user } = useCurrentUser();
   const { cartModalState, handleClose } = useUIVisibility();
-  const { userCartState, isLoading: isCartLoading } = useUserCart();
+  const {
+    userCartState,
+    isLoading: isCartLoading,
+    getUserCart,
+  } = useUserCart();
   const {
     handleDeleteUserProductFromCart,
     handleDecreaseQuantityUserProductFromCart,
     handleIncreaseQuantityUserProductFromCart,
-  } = useUserCartActions();
+  } = useUserCartActions(getUserCart);
 
   const localStorageCartState = useLocalStorageCart("localStorageCart");
   const {
@@ -111,10 +115,10 @@ export default function CartModalContainer() {
                               disabled={isCartLoading["getUserCart"]}
                               className="mr-2 hover:text-modalHover"
                               onClick={() =>
-                                handleDecreaseQuantityUserProductFromCart({
-                                  email: user?.email as string,
-                                  externalProductId: product.externalProductId,
-                                })
+                                handleDecreaseQuantityUserProductFromCart(
+                                  user?.email as string,
+                                  product.externalProductId
+                                )
                               }
                             >
                               -
@@ -126,10 +130,10 @@ export default function CartModalContainer() {
                               disabled={isCartLoading["getUserCart"]}
                               className="ml-2 hover:text-modalHover"
                               onClick={() =>
-                                handleIncreaseQuantityUserProductFromCart({
-                                  email: user?.email as string,
-                                  externalProductId: product.externalProductId,
-                                })
+                                handleIncreaseQuantityUserProductFromCart(
+                                  user?.email as string,
+                                  product.externalProductId
+                                )
                               }
                             >
                               +
@@ -138,10 +142,10 @@ export default function CartModalContainer() {
                           <button
                             disabled={isCartLoading["getUserCart"]}
                             onClick={() =>
-                              handleDeleteUserProductFromCart({
-                                email: user?.email as string,
-                                externalProductId: product.externalProductId,
-                              })
+                              handleDeleteUserProductFromCart(
+                                user?.email as string,
+                                product.externalProductId
+                              )
                             }
                             className="text-[14px] hover:text-modalHover"
                           >

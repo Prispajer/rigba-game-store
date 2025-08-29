@@ -4,9 +4,9 @@ import {
   likeUserReviewThunk,
   unlikeUserReviewThunk,
 } from "./userReviews.thunk";
-import { ReviewsState } from "./userReviews.types";
+import { UserReviewsState } from "./userReviews.types";
 
-const initialState: ReviewsState = {
+const initialState: UserReviewsState = {
   reviews: [],
   status: "Idle",
   error: null,

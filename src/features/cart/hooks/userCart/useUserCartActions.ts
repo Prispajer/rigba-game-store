@@ -12,51 +12,55 @@ import {
   decreaseUserCartQuantityThunk,
 } from "../../redux/slices/userCart/userCart.thunk";
 
-export default function useUserCartActions() {
+export default function useUserCartActions(onRefresh?: () => void) {
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useCurrentUser();
   const { isLoading, executeWithLoading } = useAsyncActionWithLoading();
 
   const handleAddUserProductToCart = React.useCallback(
-    debounce((addUserProductToCartDTO: AddUserProductToCartDTO) => {
+    debounce(async (addUserProductToCartDTO: AddUserProductToCartDTO) => {
       if (user?.email) {
-        executeWithLoading("addUserProductToCart", () =>
+        await executeWithLoading("addUserProductToCart", () =>
           dispatch(addUserProductToCartThunk(addUserProductToCartDTO))
         );
       }
+      onRefresh?.();
     }, 200),
     [dispatch, user?.email]
   );
 
   const handleDeleteUserProductFromCart = React.useCallback(
-    debounce((email: string, externalProductId: number) => {
+    debounce(async (email: string, externalProductId: number) => {
       if (user?.email) {
-        executeWithLoading("deleteUserProductFromCart", () =>
+        await executeWithLoading("deleteUserProductFromCart", () =>
           dispatch(deleteUserProductFromCartThunk({ email, externalProductId }))
         );
       }
+      onRefresh?.();
     }, 200),
     [dispatch, user?.email]
   );
 
   const handleIncreaseQuantityUserProductFromCart = React.useCallback(
-    debounce((email: string, externalProductId: number) => {
+    debounce(async (email: string, externalProductId: number) => {
       if (user?.email) {
-        executeWithLoading("increaseQuantityUserProductFromCart", () =>
+        await executeWithLoading("increaseQuantityUserProductFromCart", () =>
           dispatch(increaseUserCartQuantityThunk({ email, externalProductId }))
         );
       }
+      onRefresh?.();
     }, 200),
     [dispatch, user?.email]
   );
 
   const handleDecreaseQuantityUserProductFromCart = React.useCallback(
-    debounce((email: string, externalProductId: number) => {
+    debounce(async (email: string, externalProductId: number) => {
       if (user?.email) {
-        executeWithLoading("decreaseQuantityUserProductFromCart", () =>
+        await executeWithLoading("decreaseQuantityUserProductFromCart", () =>
           dispatch(decreaseUserCartQuantityThunk({ email, externalProductId }))
         );
       }
+      onRefresh?.();
     }, 200),
     [dispatch, user?.email]
   );

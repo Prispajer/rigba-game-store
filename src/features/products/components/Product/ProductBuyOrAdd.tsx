@@ -5,24 +5,24 @@ import { FaCartPlus } from "react-icons/fa";
 import { generateRandomPrice } from "@/utils/prices";
 import { GameAPIProduct } from "@/types/types";
 import { User } from "next-auth";
-import {
-  LocalCartProductDTO,
-  AddUserProductToCartDTO,
-} from "@/utils/helpers/frontendDTO";
+import AddUserProductToCartDTO from "@/features/cart/dto/AddUserProductToCartDTO";
+import LocalStorageCartProduct from "@/features/cart/types/localStorageCartProduct";
 
 export default function ProductBuyOrAdd({
   product,
   user,
   isCartLoading,
   handleAddUserProductToCart,
-  handleAddLocalProductToCart,
+  handleAddLocalStorageProductToCart,
   redirectToCheckout,
 }: {
   product: GameAPIProduct;
   user: User | null;
   isCartLoading: boolean;
   handleAddUserProductToCart: (product: AddUserProductToCartDTO) => void;
-  handleAddLocalProductToCart: (product: LocalCartProductDTO) => void;
+  handleAddLocalStorageProductToCart: (
+    product: LocalStorageCartProduct
+  ) => void;
   redirectToCheckout: () => void;
 }) {
   const handleAddProduct = () => {
@@ -30,7 +30,7 @@ export default function ProductBuyOrAdd({
       handleAddUserProductToCart({
         ...product,
         email: user.email as string,
-        externalProductId: product.id,
+        externalProductId: product.id as number,
         description: product.description_raw as string,
         rating: product.rating as number,
         released: product.released as string,
@@ -39,8 +39,8 @@ export default function ProductBuyOrAdd({
         quantity: null,
       });
     } else {
-      handleAddLocalProductToCart({
-        externalProductId: product.id,
+      handleAddLocalStorageProductToCart({
+        externalProductId: product.id as number,
         description: product.description_raw,
         price: generateRandomPrice(),
         quantity: 1,

@@ -11,7 +11,7 @@ export default function useTokenHandlers() {
   const { handleSuccess, handleError, handleReset } = useNotification();
   const { user } = useCurrentUser();
 
-  const sendToggleTwoFactorToken = async () => {
+  const handleSendToggleTwoFactorToken = async () => {
     const response = await submitRequest(
       HttpMethod.POST,
       "users/endpoints/tokenManagement/toggleTwoFactorToken",
@@ -23,7 +23,7 @@ export default function useTokenHandlers() {
     if (!response) return;
   };
 
-  const sendChangePasswordToken = async (oldPassword: string) => {
+  const handleSendChangePasswordToken = async (oldPassword: string) => {
     startTransition(async () => {
       const response = await submitRequest(
         HttpMethod.POST,
@@ -39,7 +39,7 @@ export default function useTokenHandlers() {
 
   return {
     isPending,
-    sendToggleTwoFactorToken,
-    sendChangePasswordToken,
+    handleSendToggleTwoFactorToken,
+    handleSendChangePasswordToken,
   };
 }

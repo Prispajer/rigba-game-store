@@ -78,10 +78,10 @@ export default function FilterModalContainer({
             <input
               className="flex-0"
               type="checkbox"
-              checked={selectedFiltersId.includes(filter.id)}
+              checked={selectedFiltersId.includes(filter.id as number)}
               onChange={() =>
                 handleFilterChange(
-                  filter.id,
+                  filter.id as number,
                   selectedFiltersId,
                   setSelectedFiltersId
                 )
@@ -139,10 +139,10 @@ export default function FilterModalContainer({
               <input
                 className="flex-0"
                 type="checkbox"
-                checked={selectedFiltersId.includes(filter.id)}
+                checked={selectedFiltersId.includes(filter.id as number)}
                 onChange={() =>
                   handleFilterChange(
-                    filter.id,
+                    filter.id as number,
                     selectedFiltersId,
                     setSelectedFiltersId
                   )

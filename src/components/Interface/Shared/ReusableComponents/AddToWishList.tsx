@@ -40,11 +40,11 @@ export default function AddToWishList<
   deleted: string;
 }) {
   const { user } = useCurrentUser();
-  const { isLoading, userWishlistState } = useUserWishlist();
+  const { isLoading, userWishlistState, getUserWishlist } = useUserWishlist();
   const {
     handleAddUserProductToWishlist,
     handleDeleteUserProductFromWishlist,
-  } = useUserWishlistActions();
+  } = useUserWishlistActions(getUserWishlist);
   const localWishlistState = useLocalStorageWishlist("localStorageWishlist");
   const {
     handleAddLocalStorageProductToWishList,
@@ -67,11 +67,10 @@ export default function AddToWishList<
     event.stopPropagation();
     if (user) {
       if (isInCurrentWishlist) {
-        handleDeleteUserProductFromWishlist({
-          externalProductId:
-            (game.externalProductId as number) || (game.id as number),
-          email: user.email as string,
-        });
+        handleDeleteUserProductFromWishlist(
+          user.email,
+          (game.externalProductId as number) || (game.id as number)
+        );
       } else {
         handleAddUserProductToWishlist({
           email: user.email as string,

@@ -11,13 +11,15 @@ import { FaDiscord } from "react-icons/fa";
 import { RegisterSchema } from "@/utils/schemas/user";
 import { FormError } from "../../../../components/Interface/Shared/FormsNotifications/FormError";
 import { FormSuccess } from "../../../../components/Interface/Shared/FormsNotifications/FormSuccess";
+import useAuthHandlers from "../../hooks/useAuthHandlers";
 import { signInAccount } from "@/features/user/hooks/useCurrentUser";
-import useUserServices from "@/hooks/useUserServices";
 import { SignInProvider } from "@/types/types";
+import useNotification from "@/hooks/useNotification";
+import { NotificationOrigin } from "@/redux/slices/notification/notification.types";
 
 export default function RegisterContainer() {
-  const { success, error, isPending, useUserActions } = useUserServices();
-  const { submitRegisterForm } = useUserActions();
+  const { isPending, handleRegisterSubmit } = useAuthHandlers();
+  const { notification } = useNotification();
 
   const registerForm = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
@@ -57,7 +59,7 @@ export default function RegisterContainer() {
             </Link>
           </h3>
         </div>
-        <form onSubmit={handleSubmit(submitRegisterForm)}>
+        <form onSubmit={handleSubmit(handleRegisterSubmit)}>
           <div className="pt-4 text-white">
             <input
               {...register("email")}
@@ -105,12 +107,18 @@ export default function RegisterContainer() {
           </div>
           <FormSuccess
             message={
-              success?.origin === "Register" ? (success.message as string) : ""
+              notification.success &&
+              notification?.origin === NotificationOrigin.Register
+                ? (notification.message as string)
+                : ""
             }
           />
           <FormError
             message={
-              error?.origin === "Register" ? (error.message as string) : ""
+              !notification.success &&
+              notification?.origin === NotificationOrigin.Register
+                ? (notification.message as string)
+                : ""
             }
           />
           <div className="flex flex-col items-center justfiy-center py-4">

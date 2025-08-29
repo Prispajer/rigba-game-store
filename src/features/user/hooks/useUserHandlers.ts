@@ -9,6 +9,7 @@ import { HttpMethod } from "@/types/types";
 
 export default function useUserHandlers() {
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
+
   const { user, update } = useCurrentUser();
   const { handleSuccess, handleError, handleReset } = useNotification();
 

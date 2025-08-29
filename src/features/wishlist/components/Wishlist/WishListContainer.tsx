@@ -15,8 +15,9 @@ import useLocalStorageWishlistActions from "@/features/wishlist/hooks/localStora
 
 export default function WishListContainer() {
   const { user } = useCurrentUser();
-  const { userWishlistState } = useUserWishList();
-  const { handleSetUserWishlistOrdering } = useUserWishlistActions();
+  const { userWishlistState, getUserWishlist } = useUserWishList();
+  const { handleSetUserWishlistOrdering } =
+    useUserWishlistActions(getUserWishlist);
   const localStorageWishlistState = useLocalStorageWishlist(
     "localStorageWishlist"
   );

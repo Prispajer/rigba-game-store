@@ -6,18 +6,19 @@ import { z } from "zod";
 import TwoFactorModalContainer from "@/components/Interface/Shared/Modals/TwoFactorModalContainer";
 import { FormSuccess } from "@/components/Interface/Shared/FormsNotifications/FormSuccess";
 import { FormError } from "@/components/Interface/Shared/FormsNotifications/FormError";
+import useAuthHandlers from "@/features/auth/hooks/useAuthHandlers";
+import useTokenHandlers from "@/features/auth/hooks/useTokenHandlers";
 import useUIVisibility from "@/hooks/useWindowVisibility";
-import useUserServices from "@/hooks/useUserServices";
 import { NewPasswordSchema } from "@/utils/schemas/user";
+import useNotification from "@/hooks/useNotification";
+import { NotificationOrigin } from "@/redux/slices/notification/notification.types";
 
 export default function ChangePasswordContainer() {
   const [oldPassword, setOldPassword] = React.useState<string>();
 
-  const { success, error, isPending, useUserActions, useUserToken } =
-    useUserServices();
-  const { submitChangePasswordForm } = useUserActions();
-  const { sendChangePasswordToken } = useUserToken();
-
+  const { isPending, handleChangePasswordSubmit } = useAuthHandlers();
+  const { handleSendChangePasswordToken } = useTokenHandlers();
+  const { notification } = useNotification();
   const { twoFactorModalState, handleOpen } = useUIVisibility();
 
   const changePasswordForm = useForm<z.infer<typeof NewPasswordSchema>>({
@@ -41,7 +42,7 @@ export default function ChangePasswordContainer() {
       </h1>
       <form
         onSubmit={handleSubmit(() =>
-          sendChangePasswordToken(oldPassword as string)
+          handleSendChangePasswordToken(oldPassword as string)
         )}
         className="flex flex-col max-w-[450px] w-full"
       >
@@ -94,17 +95,19 @@ export default function ChangePasswordContainer() {
         </label>
         <FormSuccess
           message={
-            success?.origin === "ChangePassword" ||
-            success?.origin === "ChangePasswordToken"
-              ? (success.message as string)
+            (notification.success &&
+              notification?.origin === NotificationOrigin.ChangePassword) ||
+            notification?.origin === NotificationOrigin.ChangePasswordToken
+              ? (notification.message as string)
               : ""
           }
         />
         <FormError
           message={
-            error?.origin === "ChangePassword" ||
-            error?.origin === "ChangePasswordToken"
-              ? (error.message as string)
+            (!notification.success &&
+              notification?.origin === NotificationOrigin.ChangePassword) ||
+            notification?.origin === NotificationOrigin.ChangePasswordToken
+              ? (notification.message as string)
               : ""
           }
         />
@@ -118,7 +121,7 @@ export default function ChangePasswordContainer() {
           {twoFactorModalState && (
             <TwoFactorModalContainer
               handleSubmit={(code: string) =>
-                submitChangePasswordForm(code, changePasswordForm.getValues())
+                handleChangePasswordSubmit(code, changePasswordForm.getValues())
               }
             />
           )}

@@ -2,12 +2,12 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import requestService from "@/services/RequestService";
 import { RequestResponse, UserProductHistory } from "@/types/types";
 
-export const getProductHistory = createAsyncThunk<
+export const getUserProductHistory = createAsyncThunk<
   { data: UserProductHistory[]; message: string },
   { email: string },
   { rejectValue: string }
 >(
-  "productHistory/getProductHistory",
+  "productHistory/getUserProductHistory",
   async ({ email }, { rejectWithValue }) => {
     try {
       const getUserProductHistoryResponse: RequestResponse<

@@ -4,21 +4,20 @@ import Link from "next/link";
 import Image from "next/image";
 import { LuPencil } from "react-icons/lu";
 import LoadingAnimation from "@/components/Interface/Shared/Animations/LoadingAnimation";
+import useUserHandlers from "@/features/user/hooks/useUserHandlers";
 import useUserProductHistory from "@/features/history/hooks/useUserProductHistory";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
-import useUserServices from "@/hooks/useUserServices";
 import { generateRandomName } from "@/utils/names";
 
 export default function AccountContainer() {
+  const { handleUpdateNameSubmit } = useUserHandlers();
   const { userProductHistoryState, isProductHistoryLoading } =
     useUserProductHistory();
-  const { useUserActions } = useUserServices();
-  const { submitUpdateName } = useUserActions();
   const { user } = useCurrentUser();
 
   React.useEffect(() => {
     if (user && !user.name) {
-      submitUpdateName({ name: `rigban_${generateRandomName()}` });
+      handleUpdateNameSubmit({ name: `rigban_${generateRandomName()}` });
     }
   }, []);
 
@@ -153,12 +152,12 @@ export default function AccountContainer() {
                       <div>
                         <Image
                           src={
-                            product.productsInformations.background_image ||
+                            product.productsInformations?.background_image ||
                             "/icons/logo.png"
                           }
                           width="140"
                           height="140"
-                          alt={product.productsInformations.background_image}
+                          alt={product.productsInformations?.background_image}
                           className="w-[140px] h-[140px] m-[1px]"
                         />
                       </div>

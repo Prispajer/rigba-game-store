@@ -14,7 +14,7 @@ export default function useSecurityHandlers() {
 
   const token = searchParams?.get("token");
 
-  const submitToggleTwoFactor = async (code: string) => {
+  const handleSubmitToggleTwoFactor = async (code: string) => {
     const response = await submitRequest(
       HttpMethod.POST,
       "users/endpoints/userAuthentication/toggleTwoFactor",
@@ -26,7 +26,7 @@ export default function useSecurityHandlers() {
     if (!response) return;
   };
 
-  const submitEmailVerification = async () => {
+  const handleSubmitEmailVerification = async () => {
     if (!token) {
       handleError("Missing token!", NotificationOrigin.EmailVerification);
       return;
@@ -44,7 +44,7 @@ export default function useSecurityHandlers() {
   };
 
   return {
-    submitToggleTwoFactor,
-    submitEmailVerification,
+    handleSubmitToggleTwoFactor,
+    handleSubmitEmailVerification,
   };
 }

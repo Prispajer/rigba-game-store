@@ -7,8 +7,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { FormSuccess } from "@/components/Interface/Shared/FormsNotifications/FormSuccess";
 import { FormError } from "@/components/Interface/Shared/FormsNotifications/FormError";
-import useUserServices from "@/hooks/useUserServices";
+import useUserHandlers from "@/features/user/hooks/useUserHandlers";
 import { PersonalDataSchema, UpdateNameSchema } from "@/utils/schemas/user";
+import useNotification from "@/hooks/useNotification";
+import { NotificationOrigin } from "@/redux/slices/notification/notification.types";
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -17,8 +19,8 @@ export default function PersonalDataContainer() {
   const [showCalendar, setShowCalendar] = React.useState<boolean>(false);
   const [date, setDate] = React.useState<Value>(new Date());
 
-  const { success, error, useUserActions } = useUserServices();
-  const { submitUpdateData } = useUserActions();
+  const { handleUpdateDataSubmit } = useUserHandlers();
+  const { notification } = useNotification();
 
   const calendarRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -72,7 +74,7 @@ export default function PersonalDataContainer() {
         USER DATA
       </h1>
       <form
-        onSubmit={handleSubmit(submitUpdateData)}
+        onSubmit={handleSubmit(handleUpdateDataSubmit)}
         className="flex flex-col max-w-[450px] w-full"
       >
         <label className="flex flex-col mb-[20px] font-[600]">
@@ -225,12 +227,18 @@ export default function PersonalDataContainer() {
         </div>
         <FormSuccess
           message={
-            success?.origin === "UpdateData" ? (success.message as string) : ""
+            notification.success &&
+            notification?.origin === NotificationOrigin.UpdateData
+              ? (notification.message as string)
+              : ""
           }
         />
         <FormError
           message={
-            error?.origin === "UpdateData" ? (error.message as string) : ""
+            !notification.success &&
+            notification?.origin === NotificationOrigin.UpdateData
+              ? (notification.message as string)
+              : ""
           }
         />
       </form>

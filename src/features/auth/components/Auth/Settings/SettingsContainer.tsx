@@ -11,27 +11,22 @@ import { IoCloseSharp } from "react-icons/io5";
 import { FormSuccess } from "@/components/Interface/Shared/FormsNotifications/FormSuccess";
 import { FormError } from "@/components/Interface/Shared/FormsNotifications/FormError";
 import TwoFactorModalContainer from "@/components/Interface/Shared/Modals/TwoFactorModalContainer";
+import useTokenHandlers from "@/features/auth/hooks/useTokenHandlers";
+import useUserHandlers from "@/features/user/hooks/useUserHandlers";
+import useSecurityHandlers from "@/features/auth/hooks/useSecurityHandlers";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
-import useUserServices from "@/hooks/useUserServices";
+import useNotification from "@/hooks/useNotification";
 import { UpdateNameSchema } from "@/utils/schemas/user";
+import { NotificationOrigin } from "@/redux/slices/notification/notification.types";
 
 export default function SettingsContainer() {
+  const { isEditing, setIsEditing, handleUpdateNameSubmit } = useUserHandlers();
+  const { handleSubmitToggleTwoFactor } = useSecurityHandlers();
+  const { handleSendToggleTwoFactorToken } = useTokenHandlers();
+  const { notification } = useNotification();
   const { handleOpen } = useWindowVisibility();
   const { user } = useCurrentUser();
-  const {
-    success,
-    error,
-    isPending,
-    setIsEditing,
-    isEditing,
-    useUserActions,
-    useUserSecurity,
-    useUserToken,
-  } = useUserServices();
-  const { submitUpdateName } = useUserActions();
-  const { submitToggleTwoFactor } = useUserSecurity();
-  const { sendToggleTwoFactorToken } = useUserToken();
 
   const updateNameForm = useForm<z.infer<typeof UpdateNameSchema>>({
     resolver: zodResolver(UpdateNameSchema),
@@ -63,10 +58,13 @@ export default function SettingsContainer() {
                   {user?.name}
                 </span>
               ) : (
-                <form onSubmit={handleSubmit((data) => submitUpdateName(data))}>
+                <form
+                  onSubmit={handleSubmit((payload) =>
+                    handleUpdateNameSubmit(payload)
+                  )}
+                >
                   <input
                     {...register("name")}
-                    disabled={isPending}
                     className="text-sm outline-none bg-transparent"
                     type="text"
                     placeholder="Nickname"
@@ -117,14 +115,18 @@ export default function SettingsContainer() {
           </div>
           <FormSuccess
             message={
-              success?.origin === "UpdateName"
-                ? (success.message as string)
+              notification.success &&
+              notification?.origin === NotificationOrigin.UpdateName
+                ? (notification.message as string)
                 : ""
             }
           />
           <FormError
             message={
-              error?.origin === "UpdateName" ? (error.message as string) : ""
+              !notification.success &&
+              notification?.origin === NotificationOrigin.UpdateName
+                ? (notification.message as string)
+                : ""
             }
           />
         </div>
@@ -142,7 +144,7 @@ export default function SettingsContainer() {
           <div className="flex-1">
             <button
               onClick={() => {
-                sendToggleTwoFactorToken();
+                handleSendToggleTwoFactorToken();
                 handleOpen("twoFactorModal");
               }}
               className={`flex items-center justify-center min-w-[140px] max-w-[240px] w-full min-h-[36px] gap-x-[6px] border-[2px] tranistion duration-300 ${
@@ -157,23 +159,25 @@ export default function SettingsContainer() {
           </div>
           <FormSuccess
             message={
-              success?.origin === "ToggleTwoFactor" ||
-              success?.origin === "ToggleTwoFactorToken"
-                ? (success.message as string)
+              (notification.success &&
+                notification?.origin === NotificationOrigin.ToggleTwoFactor) ||
+              notification?.origin === NotificationOrigin.ToggleTwoFactorToken
+                ? (notification.message as string)
                 : ""
             }
           />
           <FormError
             message={
-              error?.origin === "ToggleTwoFactor" ||
-              error?.origin === "ToggleTwoFactorToken"
-                ? (error.message as string)
+              (!notification.success &&
+                notification?.origin === NotificationOrigin.ToggleTwoFactor) ||
+              notification?.origin === NotificationOrigin.ToggleTwoFactorToken
+                ? (notification.message as string)
                 : ""
             }
           />
         </div>
         <TwoFactorModalContainer
-          handleSubmit={(code: string) => submitToggleTwoFactor(code)}
+          handleSubmit={(code: string) => handleSubmitToggleTwoFactor(code)}
         />
       </div>
       <div className="relative flex flex-col max-w-[750px] w-full mt-[20px] bg-[white]">

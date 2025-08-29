@@ -7,30 +7,32 @@ import {
 } from "./../../redux/slices/userWishlist/userWishlist.thunk";
 import useCurrentUser from "../../../user/hooks/useCurrentUser";
 import useAsyncActionWithLoading from "@/hooks/useAsyncActionWithLoading";
-import { setLocalStorageWishlistOrdering } from "../../redux/slices/localStorageWishlist/localStorageWishlistSlice";
 import debounce from "@/utils/debounce";
 import AddUserProductToWishListDTO from "../../dto/AddUserProductToWishListDTO";
+import { setUserWishlistOrdering } from "../../redux/slices/userWishlist/userWishlistSlice";
 
-export default function useUserWishlistActions() {
+export default function useUserWishlistActions(onRefresh?: () => void) {
   const dispatch = useDispatch<AppDispatch>();
+
   const { user } = useCurrentUser();
   const { isLoading, executeWithLoading } = useAsyncActionWithLoading();
 
   const handleAddUserProductToWishlist = debounce(
-    (addUserProductToWishListDTO: AddUserProductToWishListDTO) => {
+    async (addUserProductToWishListDTO: AddUserProductToWishListDTO) => {
       if (user?.email) {
-        executeWithLoading("addUserProductToWishlist", () =>
+        await executeWithLoading("addUserProductToWishlist", () =>
           dispatch(addUserProductToWishlistThunk(addUserProductToWishListDTO))
         );
       }
+      onRefresh?.();
     },
     200
   );
 
   const handleDeleteUserProductFromWishlist = debounce(
-    (email: string, externalProductId: number) => {
+    async (email: string, externalProductId: number) => {
       if (user?.email) {
-        executeWithLoading("deleteUserProductFromWishlist", () =>
+        await executeWithLoading("deleteUserProductFromWishlist", () =>
           dispatch(
             deleteUserProductFromWishlistThunk({
               email,
@@ -39,12 +41,14 @@ export default function useUserWishlistActions() {
           )
         );
       }
+      onRefresh?.();
     },
     200
   );
 
   const handleSetUserWishlistOrdering = (ordering: string) => {
-    dispatch(setLocalStorageWishlistOrdering(ordering));
+    dispatch(setUserWishlistOrdering(ordering));
+    onRefresh?.();
   };
 
   return {

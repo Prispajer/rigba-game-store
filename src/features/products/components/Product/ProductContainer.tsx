@@ -12,17 +12,18 @@ import ProductDescription from "./ProductDescription";
 import ProductRequirements from "./ProductRequirements";
 import ProductShareButton from "./ProductShareButton";
 import ProductHeaders from "../../../../components/Interface/Shared/ReusableComponents/ProductHeaders";
+import ProductList from "./ProductList";
 import ProductRemainingDetails from "./ProductRemainingDetails";
 import ShowMoreButton from "../../../../components/Interface/Shared/Buttons/ShowMoreButton";
 import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import useUserCart from "@/features/cart/hooks/userCart/useUserCart";
-import useLocalStorage from "@/hooks/useLocalStorage";
+import useLocalStorageCartActions from "@/features/cart/hooks/localStorageCart/useLocalStorageCartActions";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
-import useReviewActions from "@/features/reviews/hooks/useReviewActions";
+import useUserReviewActions from "@/features/reviews/hooks/useUserReviewActions";
+import useUserReviews from "@/features/reviews/hooks/useUserReviews";
+import useUserCartActions from "@/features/cart/hooks/userCart/useUserCartActions";
 import { GameAPIResponse } from "@/types/types";
-import ProductList from "./ProductList";
-import useProductReviews from "@/features/reviews/hooks/useReviews";
 
 export default function ProductContainer({
   product,
@@ -34,28 +35,36 @@ export default function ProductContainer({
   const { handleOpen } = useWindowVisibility();
   const { redirectToReview, redirectToFilters, redirectToCheckout } =
     useCustomRouter();
-  const { handleAddUserProductToCart, isCartLoading } = useUserCart();
-  const { handleAddLocalProductToCart } = useLocalStorage("localCart");
+  const { isLoading: isCartLoading, getUserCart } = useUserCart();
+  const { handleAddUserProductToCart } = useUserCartActions(getUserCart);
+  const { handleAddLocalStorageProductToCart } = useLocalStorageCartActions();
   const { user } = useCurrentUser();
-  const { reviews, refetch } = useProductReviews(product.id);
+  const { userReviewsState, getUserReviews } = useUserReviews(
+    product.id as number
+  );
   const {
     isLoading: isReviewLoading,
-    likeReview,
-    unlikeReview,
-  } = useReviewActions(refetch);
+    likeUserReviewAction,
+    unlikeUserReviewAction,
+  } = useUserReviewActions(getUserReviews);
 
   return (
     <section className="pb-[100px] bg-primaryColor">
       <div className="grid grid-cols-1 lg:grid-cols-[calc(100%-380px),380px] max-w-[1600px] mx-auto px-[20px]">
         <div>
-          <ProductInformations product={product} userReviewsState={reviews} />
+          <ProductInformations
+            product={product}
+            userReviewsState={userReviewsState}
+          />
           <div className="mx-[-20px] lg:hidden">
             <ProductBuyOrAdd
               product={product}
               user={user}
-              isCartLoading={isCartLoading}
+              isCartLoading={isCartLoading["getUserCart"]}
               handleAddUserProductToCart={handleAddUserProductToCart}
-              handleAddLocalProductToCart={handleAddLocalProductToCart}
+              handleAddLocalStorageProductToCart={
+                handleAddLocalStorageProductToCart
+              }
               redirectToCheckout={redirectToCheckout}
             />
             <ProductPaymentWays />
@@ -71,17 +80,17 @@ export default function ProductContainer({
           <ProductReview
             product={product}
             redirectToReview={redirectToReview}
-            userReviewsState={reviews}
+            userReviewsState={userReviewsState}
           />
           <ProductUsersReview
             product={product}
             isReviewLoading={isReviewLoading["likeReview"]}
             user={user}
-            userReviewsState={reviews}
-            handleFetchLikeUserReview={likeReview}
-            handleFetchUnLikeUserReview={unlikeReview}
+            userReviewsState={userReviewsState}
+            likeUserReviewAction={likeUserReviewAction}
+            unlikeUserReviewAction={unlikeUserReviewAction}
           />
-          {reviews.reviews.length > 5 ? (
+          {userReviewsState.reviews.length > 5 ? (
             <ShowMoreButton text="Load more reviews" />
           ) : (
             ""
@@ -103,9 +112,11 @@ export default function ProductContainer({
             <ProductBuyOrAdd
               product={product}
               user={user}
-              isCartLoading={isCartLoading}
+              isCartLoading={isCartLoading["getUserCart"]}
               handleAddUserProductToCart={handleAddUserProductToCart}
-              handleAddLocalProductToCart={handleAddLocalProductToCart}
+              handleAddLocalStorageProductToCart={
+                handleAddLocalStorageProductToCart
+              }
               redirectToCheckout={redirectToCheckout}
             />
             <ProductPaymentWays />

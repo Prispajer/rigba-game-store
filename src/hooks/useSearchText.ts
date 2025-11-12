@@ -9,7 +9,7 @@ import {
     selectSearchPlatformText,
     selectSearchPublisherText,
     selectSearchStoreText,
-    selectSearchWishListText,
+    selectSearchWishlistText,
     selectCompartmentNumberOne,
     selectCompartmentNumberTwo,
 } from "@/redux/slices/search/search.selectors";
@@ -21,7 +21,7 @@ export default function useSearchText() {
     const searchPlatformTextState = useSelector(selectSearchPlatformText);
     const searchPublisherTextState = useSelector(selectSearchPublisherText);
     const searchStoreTextState = useSelector(selectSearchStoreText);
-    const searchWishListTextState = useSelector(selectSearchWishListText);
+    const searchWishlistTextState = useSelector(selectSearchWishlistText);
     const compartmentNumberOne = useSelector(selectCompartmentNumberOne);
     const compartmentNumberTwo = useSelector(selectCompartmentNumberTwo);
 
@@ -41,7 +41,7 @@ export default function useSearchText() {
         searchPlatformTextState,
         searchPublisherTextState,
         searchStoreTextState,
-        searchWishListTextState,
+        searchWishlistTextState,
         compartmentNumberOne,
         compartmentNumberTwo,
         handleSetSearchText,

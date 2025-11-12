@@ -6,7 +6,7 @@ const initialState: SearchState = {
     searchPlatformText: "",
     searchPublisherText: "",
     searchStoreText: "",
-    searchWishListText: "",
+    searchWishlistText: "",
     compartmentNumberOne: null,
     compartmentNumberTwo: null,
 };

@@ -9,7 +9,7 @@ import useUserWishlistActions from "@/features/wishlist/hooks/userWishlist/useUs
 import useLocalStorageWishlistActions from "@/features/wishlist/hooks/localStorageWishlist/useLocalStorageWishlistActions";
 import useLocalStorageWishlist from "@/features/wishlist/hooks/localStorageWishlist/useLocalStorageWishlist";
 
-export default function AddToWishList<
+export default function AddToWishlist<
   T extends {
     id: string | number;
     externalProductId: number;
@@ -47,8 +47,8 @@ export default function AddToWishList<
   } = useUserWishlistActions(getUserWishlist);
   const localWishlistState = useLocalStorageWishlist("localStorageWishlist");
   const {
-    handleAddLocalStorageProductToWishList,
-    handleDeleteLocalStorageProductFromWishList,
+    handleAddLocalStorageProductToWishlist,
+    handleDeleteLocalStorageProductFromWishlist,
   } = useLocalStorageWishlistActions();
 
   const isInLocalWishlist = localWishlistState.localStorageWishlist.some(
@@ -63,7 +63,7 @@ export default function AddToWishList<
 
   const isInCurrentWishlist = user ? isInUserWishlist : isInLocalWishlist;
 
-  const handleWishListAction = (event: React.MouseEvent) => {
+  const handleWishlistAction = (event: React.MouseEvent) => {
     event.stopPropagation();
     if (user) {
       if (isInCurrentWishlist) {
@@ -87,11 +87,11 @@ export default function AddToWishList<
       }
     } else {
       if (isInCurrentWishlist) {
-        handleDeleteLocalStorageProductFromWishList(
+        handleDeleteLocalStorageProductFromWishlist(
           (game.externalProductId as number) || (game.id as number)
         );
       } else {
-        handleAddLocalStorageProductToWishList({
+        handleAddLocalStorageProductToWishlist({
           externalProductId: parseInt(game.id as string),
           name: game.name as string,
           description: game.description_raw,
@@ -108,7 +108,7 @@ export default function AddToWishList<
 
   return (
     <button
-      onClick={(event: React.MouseEvent) => handleWishListAction(event)}
+      onClick={(event: React.MouseEvent) => handleWishlistAction(event)}
       disabled={isLoading["userWishlist"]}
       className={`${position} p-[6px] md:p-[10px] border transition duration-300 cursor-pointer hover:bg-[#ffffff80] hover:border-[#ffffff] ${
         isInCurrentWishlist ? `${added}` : `${deleted}`

@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 import { GetServerSideProps } from "next";
 import { CiHeart } from "react-icons/ci";
-import AddToWishList from "../../../../components/Interface/Shared/ReusableComponents/AddToWishList";
+import AddToWishlist from "../../../../components/Interface/Shared/ReusableComponents/AddToWishlist";
 import LoadingAnimation from "../../../../components/Interface/Shared/Animations/LoadingAnimation";
 import ShowMoreButton from "../../../../components/Interface/Shared/Buttons/ShowMoreButton";
 import useCustomRouter from "@/hooks/useCustomRouter";
@@ -98,7 +98,7 @@ export default function ProductList() {
                     </div>
                   </div>
                 </div>
-                <AddToWishList
+                <AddToWishlist
                   game={productsArray[index]}
                   position="absolute right-[10px] top-0"
                   added="border-[#FFFA84] bg-[#FFFA84]"

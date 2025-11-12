@@ -6,19 +6,19 @@ import type ICheckerService from "../interfaces/ICheckerService";
 import type IUserRepository from "@/interfaces/IUserRepository";
 import type IProductRepository from "@/interfaces/IProductRepository";
 import type ITokenRepository from "@/interfaces/ITokenRepository";
-import type IWishListRepository from "@/interfaces/IWishListRepository";
+import type IWishlistRepository from "@/interfaces/IWishlistRepository";
 import type ICartRepository from "@/interfaces/ICartRepository";
 import type IReviewRepository from "@/interfaces/IReviewRepository";
 import type IPurchaseHistoryRepository from "@/interfaces/IPurchaseHistoryRepository";
-import { RequestResponse } from "../types/types";
-import { CLASSTYPES } from "../types/types";
+import { RequestResponse } from "@/types/types";
+import { CLASSTYPES } from "@/types/types";
 import {
   CheckDataExistsAndReturnProductDTO,
   CheckDataExistsAndReturnProductReviewsDTO,
   CheckDataExistsAndReturnUserDTO,
   CheckDataExistsAndReturnUserPersonalDataDTO,
   CheckDataExistsAndReturnUserCartDTO,
-  CheckDataExistsAndReturnUserWishListDTO,
+  CheckDataExistsAndReturnUserWishlistDTO,
   CheckIsEmailInUseDTO,
   CheckIsUserPasswordCorrectDTO,
   CheckDataExistsAndReturnReviewDTO,
@@ -33,7 +33,7 @@ import {
   Cart,
   Product,
   Review,
-  WishList,
+  Wishlist,
   User,
   ReviewLikers,
   TwoFactorToken,
@@ -47,7 +47,7 @@ import {
 export default class CheckerService implements ICheckerService {
   private readonly _userRepository: IUserRepository;
   private readonly _cartRepository: ICartRepository;
-  private readonly _wishListRepository: IWishListRepository;
+  private readonly _wishListRepository: IWishlistRepository;
   private readonly _reviewRepository: IReviewRepository;
   private readonly _productRepository: IProductRepository;
   private readonly _tokenRepository: ITokenRepository;
@@ -57,8 +57,8 @@ export default class CheckerService implements ICheckerService {
     @inject(CLASSTYPES.IUserRepository) userRepository: IUserRepository,
     @inject(CLASSTYPES.ICartRepository)
     cartRepository: ICartRepository,
-    @inject(CLASSTYPES.IWishListRepository)
-    wishListRepository: IWishListRepository,
+    @inject(CLASSTYPES.IWishlistRepository)
+    wishListRepository: IWishlistRepository,
     @inject(CLASSTYPES.IReviewRepository)
     reviewRepository: IReviewRepository,
     @inject(CLASSTYPES.IProductRepository)
@@ -190,19 +190,19 @@ export default class CheckerService implements ICheckerService {
     return getUserCart;
   }
 
-  async checkDataExistsAndReturnUserWishList(
-    checkDataExistsAndReturnUserWishListDTO: CheckDataExistsAndReturnUserWishListDTO
-  ): Promise<RequestResponse<WishList | null>> {
-    const getUserWishList = await this.checkDataExistsAndReturn(
-      (checkDataExistsAndReturnUserWishListDTO) =>
-        this._wishListRepository.getUserWishList(
-          checkDataExistsAndReturnUserWishListDTO
+  async checkDataExistsAndReturnUserWishlist(
+    checkDataExistsAndReturnUserWishlistDTO: CheckDataExistsAndReturnUserWishlistDTO
+  ): Promise<RequestResponse<Wishlist | null>> {
+    const getUserWishlist = await this.checkDataExistsAndReturn(
+      (checkDataExistsAndReturnUserWishlistDTO) =>
+        this._wishListRepository.getUserWishlist(
+          checkDataExistsAndReturnUserWishlistDTO
         ),
-      checkDataExistsAndReturnUserWishListDTO,
+      checkDataExistsAndReturnUserWishlistDTO,
       "Wishlist not found!"
     );
 
-    return getUserWishList;
+    return getUserWishlist;
   }
 
   async checkDataExistsAndReturnProductReviews(

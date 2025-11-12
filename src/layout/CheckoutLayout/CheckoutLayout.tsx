@@ -1,4 +1,4 @@
-import AuthFooter from "../AuthLayout/AuthFooter";
+import React from "react";
 import CheckoutHeader from "./CheckoutHeader";
 
 export default async function CheckoutLayout({

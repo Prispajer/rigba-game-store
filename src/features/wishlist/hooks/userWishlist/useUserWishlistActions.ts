@@ -1,4 +1,5 @@
 "use client";
+
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import {
@@ -8,7 +9,7 @@ import {
 import useCurrentUser from "../../../user/hooks/useCurrentUser";
 import useAsyncActionWithLoading from "@/hooks/useAsyncActionWithLoading";
 import debounce from "@/utils/debounce";
-import AddUserProductToWishListDTO from "../../dto/AddUserProductToWishListDTO";
+import AddUserProductToWishlistDTO from "../../dto/AddUserProductToWishlistDTO";
 import { setUserWishlistOrdering } from "../../redux/slices/userWishlist/userWishlistSlice";
 
 export default function useUserWishlistActions(onRefresh?: () => void) {
@@ -18,10 +19,10 @@ export default function useUserWishlistActions(onRefresh?: () => void) {
   const { isLoading, executeWithLoading } = useAsyncActionWithLoading();
 
   const handleAddUserProductToWishlist = debounce(
-    async (addUserProductToWishListDTO: AddUserProductToWishListDTO) => {
+    async (addUserProductToWishlistDTO: AddUserProductToWishlistDTO) => {
       if (user?.email) {
         await executeWithLoading("addUserProductToWishlist", () =>
-          dispatch(addUserProductToWishlistThunk(addUserProductToWishListDTO))
+          dispatch(addUserProductToWishlistThunk(addUserProductToWishlistDTO))
         );
       }
       onRefresh?.();

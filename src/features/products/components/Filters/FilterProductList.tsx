@@ -2,7 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
-import AddToWishList from "../../../../components/Interface/Shared/ReusableComponents/AddToWishList";
+import AddToWishlist from "../../../../components/Interface/Shared/ReusableComponents/AddToWishlist";
 import useFetchGameData from "@/features/products/hooks/useFetchGameData";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import useSearchText from "@/hooks/useSearchText";
@@ -70,7 +70,7 @@ export default function FilterProductList() {
                 </div>
               </div>
             </div>
-            <AddToWishList
+            <AddToWishlist
               game={game}
               position="absolute right-[10px] top-0"
               added="border-[#FFFA84] bg-[#FFFA84]"

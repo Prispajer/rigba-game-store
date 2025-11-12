@@ -1,27 +1,27 @@
 import { injectable, inject } from "inversify";
 import { postgres } from "@/lib/db";
-import type IWishListService from "@/interfaces/IWishListService";
+import type IWishlistService from "@/interfaces/IWishlistService";
 import type ICheckerService from "@/interfaces/ICheckerService";
-import type IWishListRepository from "@/interfaces/IWishListRepository";
+import type IWishlistRepository from "@/interfaces/IWishlistRepository";
 import type IProductRepository from "@/interfaces/IProductRepository";
-import { User, WishList, Product } from "@prisma/client";
+import { User, Wishlist, Product } from "@prisma/client";
 import { RequestResponse, CLASSTYPES } from "@/types/types";
 import {
-  GetUserWishListDTO,
-  AddProductToWishListDTO,
-  DeleteProductFromWishListDTO,
+  GetUserWishlistDTO,
+  AddProductToWishlistDTO,
+  DeleteProductFromWishlistDTO,
 } from "@/utils/helpers/backendDTO";
 
 @injectable()
-export default class WishListService implements IWishListService {
+export default class WishlistService implements IWishlistService {
   private readonly _checkerService: ICheckerService;
-  private readonly _wishListRepository: IWishListRepository;
+  private readonly _wishListRepository: IWishlistRepository;
   private readonly _productRepository: IProductRepository;
 
   constructor(
     @inject(CLASSTYPES.ICheckerService) checkerService: ICheckerService,
-    @inject(CLASSTYPES.IWishListRepository)
-    wishListRepository: IWishListRepository,
+    @inject(CLASSTYPES.IWishlistRepository)
+    wishListRepository: IWishlistRepository,
     @inject(CLASSTYPES.IProductRepository)
     productRepository: IProductRepository
   ) {
@@ -30,28 +30,28 @@ export default class WishListService implements IWishListService {
     this._productRepository = productRepository;
   }
 
-  async getUserWishList(
-    getUserWishListDTO: GetUserWishListDTO
-  ): Promise<RequestResponse<WishList | null>> {
+  async getUserWishlist(
+    getUserWishlistDTO: GetUserWishlistDTO
+  ): Promise<RequestResponse<Wishlist | null>> {
     return await this._checkerService.getUserEntity(
-      getUserWishListDTO,
-      this._checkerService.checkDataExistsAndReturnUserWishList.bind(
+      getUserWishlistDTO,
+      this._checkerService.checkDataExistsAndReturnUserWishlist.bind(
         this._checkerService
       ),
-      this._wishListRepository.createUserWishList.bind(
+      this._wishListRepository.createUserWishlist.bind(
         this._wishListRepository
       ),
-      "WishList"
+      "Wishlist"
     );
   }
 
-  async addProductToWishList(
-    addProductToWishListDTO: AddProductToWishListDTO
-  ): Promise<RequestResponse<User | WishList | null>> {
+  async addProductToWishlist(
+    addProductToWishlistDTO: AddProductToWishlistDTO
+  ): Promise<RequestResponse<User | Wishlist | null>> {
     try {
       const getUserByEmailResponse =
         await this._checkerService.checkDataExistsAndReturnUser(
-          addProductToWishListDTO
+          addProductToWishlistDTO
         );
 
       if (
@@ -61,21 +61,21 @@ export default class WishListService implements IWishListService {
         return getUserByEmailResponse;
       }
 
-      const getUserWishListResponse =
-        await this._checkerService.checkDataExistsAndReturnUserWishList(
+      const getUserWishlistResponse =
+        await this._checkerService.checkDataExistsAndReturnUserWishlist(
           getUserByEmailResponse.data
         );
 
       if (
-        (getUserWishListResponse && !getUserWishListResponse.success) ||
-        !getUserWishListResponse.data
+        (getUserWishlistResponse && !getUserWishlistResponse.success) ||
+        !getUserWishlistResponse.data
       ) {
-        return getUserWishListResponse;
+        return getUserWishlistResponse;
       }
 
       const getUserProductResponse =
         await this._checkerService.checkDataExistsAndReturnProduct({
-          externalProductId: addProductToWishListDTO.externalProductId,
+          externalProductId: addProductToWishlistDTO.externalProductId,
           userId: getUserByEmailResponse.data.id,
         });
 
@@ -86,23 +86,23 @@ export default class WishListService implements IWishListService {
         ) {
           await postgres.product.update({
             where: { id: getUserProductResponse.data.id },
-            data: { wishListId: getUserWishListResponse.data.id },
+            data: { wishListId: getUserWishlistResponse.data.id },
           });
         }
         return this._checkerService.handleError(
           "User wishlist product already exists!"
         );
       } else {
-        await this._wishListRepository.createUserProductWishList({
-          ...addProductToWishListDTO,
-          wishListId: getUserWishListResponse.data.id,
+        await this._wishListRepository.createUserProductWishlist({
+          ...addProductToWishlistDTO,
+          wishListId: getUserWishlistResponse.data.id,
           userId: getUserByEmailResponse.data.id,
         });
       }
 
       return this._checkerService.handleSuccess(
         "Product added to wishlist successfully!",
-        getUserWishListResponse.data || null
+        getUserWishlistResponse.data || null
       );
     } catch (error) {
       console.error("Error while adding product to the wishlist:", error);
@@ -112,13 +112,13 @@ export default class WishListService implements IWishListService {
     }
   }
 
-  async deleteProductFromWishList(
-    deleteProductFromWishListDTO: DeleteProductFromWishListDTO
-  ): Promise<RequestResponse<User | Product | WishList | null>> {
+  async deleteProductFromWishlist(
+    deleteProductFromWishlistDTO: DeleteProductFromWishlistDTO
+  ): Promise<RequestResponse<User | Product | Wishlist | null>> {
     try {
       const getUserByEmailResponse =
         await this._checkerService.checkDataExistsAndReturnUser(
-          deleteProductFromWishListDTO
+          deleteProductFromWishlistDTO
         );
 
       if (
@@ -127,20 +127,20 @@ export default class WishListService implements IWishListService {
       )
         return getUserByEmailResponse;
 
-      const getUserWishListResponse =
-        await this._checkerService.checkDataExistsAndReturnUserWishList(
+      const getUserWishlistResponse =
+        await this._checkerService.checkDataExistsAndReturnUserWishlist(
           getUserByEmailResponse.data
         );
 
       if (
-        (getUserWishListResponse && !getUserWishListResponse.success) ||
-        !getUserWishListResponse.data
+        (getUserWishlistResponse && !getUserWishlistResponse.success) ||
+        !getUserWishlistResponse.data
       )
-        return getUserWishListResponse;
+        return getUserWishlistResponse;
 
       const getUserProductResponse =
         await this._checkerService.checkDataExistsAndReturnProduct({
-          externalProductId: deleteProductFromWishListDTO.externalProductId,
+          externalProductId: deleteProductFromWishlistDTO.externalProductId,
           userId: getUserByEmailResponse.data.id,
         });
 
@@ -157,14 +157,14 @@ export default class WishListService implements IWishListService {
           getUserProductResponse.data
         );
       } else {
-        await this._wishListRepository.deleteUserProductFromWishList(
+        await this._wishListRepository.deleteUserProductFromWishlist(
           getUserProductResponse.data
         );
       }
 
       return this._checkerService.handleSuccess(
         "Product deleted from wishlist successfully!",
-        getUserWishListResponse.data
+        getUserWishlistResponse.data
       );
     } catch (error) {
       return this._checkerService.handleError(

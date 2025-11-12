@@ -5,7 +5,7 @@ import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import AddToWishList from "../../../../components/Interface/Shared/ReusableComponents/AddToWishList";
+import AddToWishlist from "../../../../components/Interface/Shared/ReusableComponents/AddToWishlist";
 import ProductHeaders from "../../../../components/Interface/Shared/ReusableComponents/ProductHeaders";
 import ProductList from "../../../products/components/Product/ProductList";
 import { FormSuccess } from "../../../../components/Interface/Shared/FormsNotifications/FormSuccess";
@@ -201,7 +201,7 @@ export default function ReviewContainer({
                       <span className="overflow-hidden overflow-ellipsis line-clamp-1 text-[14px] text-[#ffffff80]">
                         {product.rating}
                       </span>
-                      <AddToWishList
+                      <AddToWishlist
                         game={product}
                         position="absolute right-[10px] top-0"
                         added="border-[#FFFA84] bg-[#FFFA84]"

@@ -2,18 +2,18 @@ import { ExtendedUser } from "@/auth";
 import { UserWishlistState } from "../../redux/slices/userWishlist/userWishlist.types";
 import { LocalStorageWishlistState } from "../../redux/slices/localStorageWishlist/localStorageWishlist.types";
 
-export default function WishListCounter({
+export default function WishlistCounter({
   user,
-  localWishListState,
-  userWishListState,
+  localWishlistState,
+  userWishlistState,
 }: {
   user: ExtendedUser | null;
-  localWishListState: LocalStorageWishlistState;
-  userWishListState: UserWishlistState;
+  localWishlistState: LocalStorageWishlistState;
+  userWishlistState: UserWishlistState;
 }) {
   const displayByRole = user
-    ? userWishListState.products
-    : localWishListState.localStorageWishlist;
+    ? userWishlistState.products
+    : localWishlistState.localStorageWishlist;
 
   return (
     <div className="flex items-center w-full bg-[#2a5286]">

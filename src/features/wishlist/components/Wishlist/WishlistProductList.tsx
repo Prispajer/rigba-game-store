@@ -2,23 +2,23 @@
 import React from "react";
 import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
-import AddToWishList from "../../../../components/Interface/Shared/ReusableComponents/AddToWishList";
+import AddToWishlist from "../../../../components/Interface/Shared/ReusableComponents/AddToWishlist";
 import Pagination from "../../../../components/Interface/Shared/ReusableComponents/Pagination";
 import { UserWishlistState } from "@/features/wishlist/redux/slices/userWishlist/userWishlist.types";
 import { LocalStorageWishlistState } from "@/features/wishlist/redux/slices/localStorageWishlist/localStorageWishlist.types";
 import usePagination from "@/hooks/usePagination";
 import { ExtendedUser } from "@/auth";
 
-export default function WishListProductList({
+export default function WishlistProductList({
   user,
-  localStorageWishListState,
-  userWishListState,
+  localStorageWishlistState,
+  userWishlistState,
   redirectToGame,
   searchWistListTextState,
 }: {
   user: ExtendedUser | null;
-  localStorageWishListState: LocalStorageWishlistState;
-  userWishListState: UserWishlistState;
+  localStorageWishlistState: LocalStorageWishlistState;
+  userWishlistState: UserWishlistState;
   redirectToGame: (
     name: string,
     callback?: (element: string) => void,
@@ -27,8 +27,8 @@ export default function WishListProductList({
   searchWistListTextState: string;
 }) {
   const currentWishlist = user
-    ? userWishListState.products
-    : localStorageWishListState.localStorageWishlist;
+    ? userWishlistState.products
+    : localStorageWishlistState.localStorageWishlist;
 
   const {
     pages,
@@ -38,7 +38,7 @@ export default function WishListProductList({
     handlePreviousPage,
   } = usePagination(currentWishlist);
 
-  const searchWishListByText = (
+  const searchWishlistByText = (
     array:
       | LocalStorageWishlistState["localStorageWishlist"]
       | UserWishlistState["products"]
@@ -56,17 +56,17 @@ export default function WishListProductList({
     });
   };
 
-  const paginatedWishListState = usePagination(
-    searchWishListByText(currentWishlist)
+  const paginatedWishlistState = usePagination(
+    searchWishlistByText(currentWishlist)
   ).pages[pagination.currentPage];
 
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xxl:grid-cols-4 gap-x-[10px]">
-        {paginatedWishListState &&
-        Array.isArray(paginatedWishListState) &&
-        paginatedWishListState.length > 0 ? (
-          paginatedWishListState.map((game) => {
+        {paginatedWishlistState &&
+        Array.isArray(paginatedWishlistState) &&
+        paginatedWishlistState.length > 0 ? (
+          paginatedWishlistState.map((game) => {
             if ("productsInformations" in game) {
               return (
                 <div
@@ -118,7 +118,7 @@ export default function WishListProductList({
                       </div>
                     </div>
                   </div>
-                  <AddToWishList
+                  <AddToWishlist
                     game={game}
                     position="absolute right-[10px] top-0"
                     added="border-[#FFFA84] bg-[#FFFA84]"
@@ -169,7 +169,7 @@ export default function WishListProductList({
                       </div>
                     </div>
                   </div>
-                  <AddToWishList
+                  <AddToWishlist
                     game={game}
                     position="absolute right-[10px] top-0"
                     added="border-[#FFFA84] bg-[#FFFA84]"
@@ -185,9 +185,9 @@ export default function WishListProductList({
           </div>
         )}
       </div>
-      {searchWishListByText(currentWishlist).length > 10 && (
+      {searchWishlistByText(currentWishlist).length > 10 && (
         <Pagination
-          loadingState={userWishListState.isLoading}
+          loadingState={userWishlistState.isLoading}
           currentPage={pagination.currentPage}
           pages={pages}
           handleNextPage={handleNextPage}

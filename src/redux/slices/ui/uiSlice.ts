@@ -55,4 +55,5 @@ export const {
     hideElement,
     toggleElement,
 } = uiSlice.actions;
+
 export default uiSlice.reducer;

@@ -1,3 +1,4 @@
+import React from "react";
 import { Metadata } from "next";
 import CheckoutLayout from "@/layout/CheckoutLayout/CheckoutLayout";
 

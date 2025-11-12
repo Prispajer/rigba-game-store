@@ -16,8 +16,8 @@ const initialState: UserWishlistState = {
   isLoading: false,
 };
 
-const userWishListSlice = createSlice({
-  name: "userWishList",
+const userWishlistSlice = createSlice({
+  name: "userWishlist",
   initialState,
   reducers: {
     setUserWishlistOrdering: (state, action: PayloadAction<string>) => {
@@ -142,5 +142,5 @@ const userWishListSlice = createSlice({
   },
 });
 
-export const { setUserWishlistOrdering } = userWishListSlice.actions;
-export default userWishListSlice.reducer;
+export const { setUserWishlistOrdering } = userWishlistSlice.actions;
+export default userWishlistSlice.reducer;

@@ -33,7 +33,7 @@ model User {
   cart                  Cart?
   cartHistory           CartHistory[]
   orderHistory          OrderHistory[]
-  wishList              WishList?
+  wishList              Wishlist?
   order                 Order[]
   reviews               Review[]
   reviewsLikers         ReviewLikers[]
@@ -133,7 +133,7 @@ model CartHistory {
 }
 
 
-model WishList {
+model Wishlist {
   id        String      @id @default(cuid())
   userId    String      @unique
   createdAt DateTime    @default(now())
@@ -190,7 +190,7 @@ model Product {
   reviewLikers         ReviewLikers[]
   reviews              Review[]     
   cart                 Cart?                 @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  wishList             WishList?             @relation(fields: [wishListId], references: [id], onDelete: Cascade)
+  wishlist             Wishlist?             @relation(fields: [wishListId], references: [id], onDelete: Cascade)
 }
 
 model ProductHistory {

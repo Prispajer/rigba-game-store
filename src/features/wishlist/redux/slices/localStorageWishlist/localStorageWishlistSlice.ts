@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { sortWishList } from "./localStorageWishlist.helpers";
+import { sortWishlist } from "./localStorageWishlist.helpers";
 import { LocalStorageWishlistState } from "./localStorageWishlist.types";
 import LocalStorageWishlistProduct from "@/features/wishlist/types/localStorageWishlistProduct";
 
@@ -18,7 +18,7 @@ const localStorageWishlistSlice = createSlice({
     ) => {
       state.localStorageWishlist = action.payload;
       if (state.ordering) {
-        state.localStorageWishlist = sortWishList(
+        state.localStorageWishlist = sortWishlist(
           state.localStorageWishlist,
           state.ordering
         );
@@ -26,21 +26,21 @@ const localStorageWishlistSlice = createSlice({
     },
     setLocalStorageWishlistOrdering: (state, action: PayloadAction<string>) => {
       state.ordering = action.payload;
-      state.localStorageWishlist = sortWishList(
+      state.localStorageWishlist = sortWishlist(
         state.localStorageWishlist,
         state.ordering
       );
     },
-    addLocalStorageProductToWishList: (
+    addLocalStorageProductToWishlist: (
       state,
       action: PayloadAction<LocalStorageWishlistProduct>
     ) => {
-      const isProductInWishList = state.localStorageWishlist.some(
+      const isProductInWishlist = state.localStorageWishlist.some(
         (product) =>
           product.externalProductId === action.payload.externalProductId
       );
 
-      if (isProductInWishList) {
+      if (isProductInWishlist) {
         return;
       }
 
@@ -48,12 +48,12 @@ const localStorageWishlistSlice = createSlice({
         ...state.localStorageWishlist,
         action.payload,
       ];
-      state.localStorageWishlist = sortWishList(
+      state.localStorageWishlist = sortWishlist(
         state.localStorageWishlist,
         state.ordering
       );
     },
-    deleteLocalStorageProductFromWishList: (
+    deleteLocalStorageProductFromWishlist: (
       state,
       action: PayloadAction<number>
     ) => {
@@ -67,8 +67,8 @@ const localStorageWishlistSlice = createSlice({
 export const {
   setLocalStorageWishlist,
   setLocalStorageWishlistOrdering,
-  addLocalStorageProductToWishList,
-  deleteLocalStorageProductFromWishList,
+  addLocalStorageProductToWishlist,
+  deleteLocalStorageProductFromWishlist,
 } = localStorageWishlistSlice.actions;
 
 export default localStorageWishlistSlice.reducer;

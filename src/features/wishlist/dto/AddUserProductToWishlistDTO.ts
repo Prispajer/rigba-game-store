@@ -1,4 +1,4 @@
-type AddUserProductToWishListDTO = {
+type AddUserProductToWishlistDTO = {
   email?: string;
   externalProductId: number;
   name: string;
@@ -11,4 +11,4 @@ type AddUserProductToWishListDTO = {
   added: number;
 };
 
-export default AddUserProductToWishListDTO;
+export default AddUserProductToWishlistDTO;

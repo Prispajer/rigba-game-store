@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
 import { MdOutlineSignalCellularNodata } from "react-icons/md";
-import AddToWishList from "../Shared/ReusableComponents/AddToWishList";
+import AddToWishlist from "../Shared/ReusableComponents/AddToWishlist";
 import LoadingAnimation from "../Shared/Animations/LoadingAnimation";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import fetchService from "@/services/FetchService";
@@ -89,7 +89,7 @@ export default function HomeProductList({ ordering }: { ordering: string }) {
                 </div>
               </div>
             </div>
-            <AddToWishList
+            <AddToWishlist
               game={game}
               position="absolute right-[10px] top-0"
               added="border-[#FFFA84] bg-[#FFFA84]"

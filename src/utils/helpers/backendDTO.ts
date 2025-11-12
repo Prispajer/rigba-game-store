@@ -18,7 +18,7 @@ export type CheckDataExistsAndReturnUserCartDTO = {
   id: string;
 };
 
-export type CheckDataExistsAndReturnUserWishListDTO = {
+export type CheckDataExistsAndReturnUserWishlistDTO = {
   email: string;
   id: string;
 };
@@ -223,7 +223,7 @@ export type GetUserPersonalDataDTO = {
   id: string;
 };
 
-export type GetUserWishListDTO = {
+export type GetUserWishlistDTO = {
   id: string;
   email: string;
 };
@@ -254,7 +254,7 @@ export type GetReviewLikerDTO = {
   reviewId: string;
 };
 
-export type GetUserWishListProductDTO = {
+export type GetUserWishlistProductDTO = {
   id: string;
   externalProductId: number;
 };
@@ -273,7 +273,7 @@ export type AddProductToCartDTO = {
   added: number;
 };
 
-export type AddProductToWishListDTO = {
+export type AddProductToWishlistDTO = {
   id: string;
   email: string;
   externalProductId: number;
@@ -344,7 +344,7 @@ export type CreateUserCartProductDTO = {
   added: number;
 };
 
-export type CreateUserProductWishListDTO = {
+export type CreateUserProductWishlistDTO = {
   wishListId: string;
   userId: string;
   externalProductId: number;
@@ -375,7 +375,7 @@ export type DeleteProductFromCartDTO = {
   externalProductId: number;
 };
 
-export type DeleteProductFromWishListDTO = {
+export type DeleteProductFromWishlistDTO = {
   email: string;
   externalProductId: number;
 };
@@ -385,7 +385,7 @@ export type DeleteUserProductFromCartDTO = {
   externalProductId: number;
 };
 
-export type DeleteUserProductFromWishListDTO = {
+export type DeleteUserProductFromWishlistDTO = {
   id: string;
   externalProductId: number;
 };

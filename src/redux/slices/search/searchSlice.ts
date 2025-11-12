@@ -33,4 +33,5 @@ export const {
     setSearchText,
     clearSearchText
 } = searchSlice.actions;
+
 export default searchSlice.reducer;

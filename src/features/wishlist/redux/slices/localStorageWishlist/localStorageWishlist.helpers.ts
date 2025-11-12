@@ -1,7 +1,7 @@
 import { LocalStorageWishlistState } from "./localStorageWishlist.types";
 import LocalStorageWishlistProduct from "@/features/wishlist/types/localStorageWishlistProduct";
 
-export const sortWishList = (
+export const sortWishlist = (
   wishlist: LocalStorageWishlistState["localStorageWishlist"],
   ordering: string | null
 ): LocalStorageWishlistProduct[] => {

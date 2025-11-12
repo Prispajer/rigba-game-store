@@ -1,7 +1,7 @@
 import React from "react";
 import { FiSearch } from "react-icons/fi";
 
-export default function WishListSearchBar({
+export default function WishlistSearchBar({
   handleSetSearchText,
   handleClearSearchText,
 }: {
@@ -12,7 +12,7 @@ export default function WishListSearchBar({
   handleClearSearchText: (key: string) => void;
 }) {
   React.useEffect(() => {
-    handleClearSearchText("searchWishListText");
+    handleClearSearchText("searchWishlistText");
   }, []);
 
   return (
@@ -24,7 +24,7 @@ export default function WishListSearchBar({
         <FiSearch className="" size="25px" color="white" />
         <input
           onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            handleSetSearchText("searchWishListText", event)
+            handleSetSearchText("searchWishlistText", event)
           }
           className="w-full max-h-[50px] p-[8px] bg-transparent outline-none"
           type="text"

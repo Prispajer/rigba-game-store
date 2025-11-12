@@ -1,9 +1,10 @@
 "use client";
+
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import {
-  addLocalStorageProductToWishList,
-  deleteLocalStorageProductFromWishList,
+  addLocalStorageProductToWishlist,
+  deleteLocalStorageProductFromWishlist,
   setLocalStorageWishlistOrdering,
 } from "../../redux/slices/localStorageWishlist/localStorageWishlistSlice";
 import LocalStorageWishlistProduct from "../../types/localStorageWishlistProduct";
@@ -11,16 +12,16 @@ import LocalStorageWishlistProduct from "../../types/localStorageWishlistProduct
 export default function useLocalStorageWishlistActions() {
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleAddLocalStorageProductToWishList = (
+  const handleAddLocalStorageProductToWishlist = (
     product: LocalStorageWishlistProduct
   ): void => {
-    dispatch(addLocalStorageProductToWishList(product));
+    dispatch(addLocalStorageProductToWishlist(product));
   };
 
-  const handleDeleteLocalStorageProductFromWishList = (
+  const handleDeleteLocalStorageProductFromWishlist = (
     externalProductId: number
   ): void => {
-    dispatch(deleteLocalStorageProductFromWishList(externalProductId));
+    dispatch(deleteLocalStorageProductFromWishlist(externalProductId));
   };
 
   const handleSetLocalStorageWishlistOrdering = (ordering: string): void => {
@@ -28,8 +29,8 @@ export default function useLocalStorageWishlistActions() {
   };
 
   return {
-    handleAddLocalStorageProductToWishList,
-    handleDeleteLocalStorageProductFromWishList,
+    handleAddLocalStorageProductToWishlist,
+    handleDeleteLocalStorageProductFromWishlist,
     handleSetLocalStorageWishlistOrdering,
   };
 }

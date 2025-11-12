@@ -18,10 +18,10 @@ import ProductUtils from "@/utils/ProductUtils";
 import type IProductUtils from "@/interfaces/IProductUtils";
 import CheckerService from "../services/CheckerService";
 import type ICheckerService from "@/interfaces/ICheckerService";
-import WishListService from "@/services/WishListService";
-import type IWishListService from "@/interfaces/IWishListService";
-import WishListRepository from "@/repositories/WishListRepository";
-import type IWishListRepository from "@/interfaces/IWishListRepository";
+import WishlistService from "../services/WishlistService";
+import type IWishlistService from "@/interfaces/IWishlistService";
+import WishlistRepository from "@/repositories/WishlistRepository";
+import type IWishlistRepository from "@/interfaces/IWishlistRepository";
 import CartService from "@/services/CartService";
 import type ICartService from "@/interfaces/ICartService";
 import CartRepository from "@/repositories/CartRepository";
@@ -52,11 +52,11 @@ container
 container.bind<ICartService>(CLASSTYPES.ICartService).to(CartService);
 container.bind<ICartRepository>(CLASSTYPES.ICartRepository).to(CartRepository);
 container
-  .bind<IWishListService>(CLASSTYPES.IWishListService)
-  .to(WishListService);
+  .bind<IWishlistService>(CLASSTYPES.IWishlistService)
+  .to(WishlistService);
 container
-  .bind<IWishListRepository>(CLASSTYPES.IWishListRepository)
-  .to(WishListRepository);
+  .bind<IWishlistRepository>(CLASSTYPES.IWishlistRepository)
+  .to(WishlistRepository);
 container.bind<IReviewService>(CLASSTYPES.IReviewService).to(ReviewService);
 container
   .bind<IReviewRepository>(CLASSTYPES.IReviewRepository)
@@ -86,11 +86,11 @@ export const cartService = container.get<ICartService>(CLASSTYPES.ICartService);
 export const cartRepository = container.get<ICartRepository>(
   CLASSTYPES.ICartRepository
 );
-export const wishListService = container.get<IWishListService>(
-  CLASSTYPES.IWishListService
+export const wishlistService = container.get<IWishlistService>(
+  CLASSTYPES.IWishlistService
 );
-export const wishListRepository = container.get<IWishListRepository>(
-  CLASSTYPES.IWishListRepository
+export const wishlistRepository = container.get<IWishlistRepository>(
+  CLASSTYPES.IWishlistRepository
 );
 export const reviewService = container.get<IReviewService>(
   CLASSTYPES.IReviewService

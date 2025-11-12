@@ -3,7 +3,7 @@ import {
   User,
   Product,
   Cart,
-  WishList,
+  Wishlist,
   Review,
   ReviewLikers,
   ProductHistory,
@@ -20,7 +20,7 @@ import {
   CheckDataExistsAndReturnProductReviewsDTO,
   CheckDataExistsAndReturnUserDTO,
   CheckDataExistsAndReturnUserCartDTO,
-  CheckDataExistsAndReturnUserWishListDTO,
+  CheckDataExistsAndReturnUserWishlistDTO,
   CheckIsEmailInUseDTO,
   CheckIsUserPasswordCorrectDTO,
   CheckDataExistsAndReturnReviewDTO,
@@ -58,9 +58,9 @@ export default interface ICheckerService {
   checkDataExistsAndReturnUserCart(
     checkDataExistsAndReturnUserCartDTO: CheckDataExistsAndReturnUserCartDTO
   ): Promise<RequestResponse<Cart | null>>;
-  checkDataExistsAndReturnUserWishList(
-    checkDataExistsAndReturnUserWishListDTO: CheckDataExistsAndReturnUserWishListDTO
-  ): Promise<RequestResponse<WishList | null>>;
+  checkDataExistsAndReturnUserWishlist(
+    checkDataExistsAndReturnUserWishlistDTO: CheckDataExistsAndReturnUserWishlistDTO
+  ): Promise<RequestResponse<Wishlist | null>>;
   checkDataExistsAndReturnProductReviews(
     checkDataExistsAndReturnProductReviewsDTO: CheckDataExistsAndReturnProductReviewsDTO
   ): Promise<RequestResponse<Product | null>>;

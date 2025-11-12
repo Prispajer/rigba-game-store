@@ -2,7 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { CiShare1 } from "react-icons/ci";
-import AddToWishList from "../../../../components/Interface/Shared/ReusableComponents/AddToWishList";
+import AddToWishlist from "../../../../components/Interface/Shared/ReusableComponents/AddToWishlist";
 import DigitalProductDetails from "./ProductDigitalProductDetails";
 import ProductShareButton from "./ProductShareButton";
 import { groupReviewsByRating, mergeReviews } from "@/utils/reviews";
@@ -52,7 +52,7 @@ export default function ProductInformations({
               </div>
               <div className="relative">
                 <div className="p-[6px] md:p-[10px] transition duration-300 cursor-pointer ">
-                  <AddToWishList
+                  <AddToWishlist
                     game={product}
                     position="absolute top-0 right-0"
                     added="border-[#FFFA84] bg-[#FFFA84]"

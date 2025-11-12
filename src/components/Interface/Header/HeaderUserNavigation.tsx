@@ -7,10 +7,11 @@ import AuthSidebar from "../Shared/Sidebars/AuthSidebar";
 import CartModalContainer from "../Shared/Modals/CartModalContainer";
 import { extendedNavItems } from "../Shared/Modals/ProfileModalContainer";
 import ProfileModalContainer from "../Shared/Modals/ProfileModalContainer";
-import useUIVisibility from "@/hooks/useWindowVisibility";
-import useUserCartActions from "@/features/cart/hooks/userCart/useUserCartActions";
-import useUserWishlistActions from "@/features/wishlist/hooks/userWishlist/useUserWishlistActions";
+import useUIVisibility from "@/hooks/useUiVisibility";
 import useUserCart from "@/features/cart/hooks/userCart/useUserCart";
+import useUserCartActions from "@/features/cart/hooks/userCart/useUserCartActions";
+import useUserWishlist from "@/features/wishlist/hooks/userWishlist/useUserWishlist";
+import useUserWishlistActions from "@/features/wishlist/hooks/userWishlist/useUserWishlistActions";
 import useLocalStorageCart from "@/features/cart/hooks/localStorageCart/useLocalStorageCart";
 import useLocalStorageWishlist from "@/features/wishlist/hooks/localStorageWishlist/useLocalStorageWishlist";
 import useLocalStorageCartActions from "@/features/cart/hooks/localStorageCart/useLocalStorageCartActions";
@@ -18,8 +19,6 @@ import useLocalStorageWishlistActions from "@/features/wishlist/hooks/localStora
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import mapProductToAddToCartDTO from "@/features/cart/mappers/mapProductToAddToCartDTO";
 import mapProductToAddToWishlistDTO from "@/features/wishlist/mappers/mapProductToAddToWishlistDTO";
-import useUserWishlist from "@/features/wishlist/hooks/userWishlist/useUserWishlist";
-import { getUserWishlistThunk } from "@/features/wishlist/redux/slices/userWishlist/userWishlist.thunk";
 import { AppDispatch } from "@/redux/store";
 
 export default function HeaderUserNavigation({}) {
@@ -28,7 +27,7 @@ export default function HeaderUserNavigation({}) {
   const { user } = useCurrentUser();
   const { userCartState, getUserCart } = useUserCart();
   const { getUserWishlist } = useUserWishlist();
-  const localStorageCartState = useLocalStorageCart("localStorageCart");
+  const { localStorageCartState }= useLocalStorageCart("localStorageCart");
   const localStorageWishlistState = useLocalStorageWishlist(
     "localStorageWishlist"
   );
@@ -36,17 +35,17 @@ export default function HeaderUserNavigation({}) {
   const { handleAddUserProductToWishlist } = useUserWishlistActions();
   const { handleDeleteLocalStorageProductFromCart } =
     useLocalStorageCartActions();
-  const { handleDeleteLocalStorageProductFromWishList } =
+  const { handleDeleteLocalStorageProductFromWishlist } =
     useLocalStorageWishlistActions();
   const { resolutionState, handleOpen } = useUIVisibility();
 
-  const cartLength = user
+  const cartProducts = user
     ? userCartState.products
     : localStorageCartState.localStorageCart;
 
   React.useEffect(() => {
     if (user?.email) {
-      dispatch(getUserWishlistThunk({ email: user.email }));
+      getUserWishlist();
     }
   }, []);
 
@@ -66,12 +65,12 @@ export default function HeaderUserNavigation({}) {
   React.useEffect(() => {
     if (localStorageWishlistState.localStorageWishlist.length > 0 && user) {
       localStorageWishlistState.localStorageWishlist.forEach(
-        (localWishListProduct) => {
+        (localWishlistProduct) => {
           handleAddUserProductToWishlist(
-            mapProductToAddToWishlistDTO(localWishListProduct, user.email)
+            mapProductToAddToWishlistDTO(localWishlistProduct, user.email)
           );
-          handleDeleteLocalStorageProductFromWishList(
-            localWishListProduct.externalProductId
+          handleDeleteLocalStorageProductFromWishlist(
+            localWishlistProduct.externalProductId
           );
         }
       );
@@ -93,7 +92,7 @@ export default function HeaderUserNavigation({}) {
           className="relative nav-icon"
         />
         <strong className="flex items-center justify-center absolute top-0 right-0 w-[20px] h-[20px] text-[12px] rounded-full bg-[#E0426E] text-[#FFFFFF] cursor-default">
-          {cartLength.length}
+          {cartProducts.length}
         </strong>
         <AuthSidebar />
       </div>

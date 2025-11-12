@@ -3,7 +3,7 @@ import Link from "next/link";
 import { LuPencil } from "react-icons/lu";
 import { ExtendedUser } from "@/auth";
 
-export default function WishListProfile({
+export default function WishlistProfile({
   user,
 }: {
   user: ExtendedUser | null;

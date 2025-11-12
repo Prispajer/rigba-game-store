@@ -1,11 +1,11 @@
 import { generateRandomPrice } from "@/utils/prices";
 import { GameAPIProduct } from "@/types/types";
-import AddUserProductToWishListDTO from "../dto/AddUserProductToWishListDTO";
+import AddUserProductToWishlistDTO from "../dto/AddUserProductToWishlistDTO";
 
 export default function mapProductToAddToWishlistDTO(
   product: GameAPIProduct,
   email?: string
-): AddUserProductToWishListDTO {
+): AddUserProductToWishlistDTO {
   return {
     email,
     externalProductId: product.id as number,

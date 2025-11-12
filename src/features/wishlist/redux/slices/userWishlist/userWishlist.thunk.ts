@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import requestService from "@/services/RequestService";
 import { RequestResponse, UserWishlist } from "@/types/types";
-import AddUserProductToWishListDTO from "@/features/wishlist/dto/AddUserProductToWishListDTO";
+import type AddUserProductToWishlistDTO from "@/features/wishlist/dto/AddUserProductToWishlistDTO";
 
 export const getUserWishlistThunk = createAsyncThunk<
   { products: UserWishlist["products"]; message: string },
@@ -11,7 +11,7 @@ export const getUserWishlistThunk = createAsyncThunk<
   try {
     const getUserWishlistThunkResponse: RequestResponse<UserWishlist> =
       await requestService.postMethod(
-        "products/endpoints/productManagement/getWishList",
+        "products/endpoints/productManagement/getWishlist",
         { email }
       );
     if (getUserWishlistThunkResponse.success) {
@@ -31,7 +31,7 @@ export const getUserWishlistThunk = createAsyncThunk<
 
 export const addUserProductToWishlistThunk = createAsyncThunk<
   { products: UserWishlist["products"]; message: string },
-  AddUserProductToWishListDTO,
+  AddUserProductToWishlistDTO,
   { rejectValue: string }
 >(
   "wishlist/addUserProductToWishlistThunk",
@@ -39,7 +39,7 @@ export const addUserProductToWishlistThunk = createAsyncThunk<
     try {
       const addUserProductToWishlistThunkResponse: RequestResponse<UserWishlist> =
         await requestService.postMethod(
-          "products/endpoints/productManagement/addProductToWishList",
+          "products/endpoints/productManagement/addProductToWishlist",
           addUserProductToWishlistDTO
         );
       if (
@@ -75,7 +75,7 @@ export const deleteUserProductFromWishlistThunk = createAsyncThunk<
     try {
       const deleteUserProductFromWishlistThunkResponse: RequestResponse<UserWishlist> =
         await requestService.deleteMethod(
-          "products/endpoints/productManagement/deleteProductFromWishList",
+          "products/endpoints/productManagement/deleteProductFromWishlist",
           { email, externalProductId }
         );
       if (deleteUserProductFromWishlistThunkResponse.success) {

@@ -5,9 +5,9 @@ import authConfig from "./auth.config";
 import {
   userRepository,
   cartRepository,
-  wishListRepository,
+  wishlistRepository,
 } from "./utils/injector";
-import { Cart, PersonalData, UserRole, WishList } from "@prisma/client";
+import { Cart, PersonalData, UserRole, Wishlist } from "@prisma/client";
 
 export type ExtendedUser = DefaultSession["user"] & {
   email: string;
@@ -19,7 +19,7 @@ export type ExtendedUser = DefaultSession["user"] & {
   wishListId: string | null;
   personalDataId: string | null;
   cart: Cart | null;
-  wishList: WishList | null;
+  wishList: Wishlist | null;
   personalData: PersonalData | null;
 };
 
@@ -118,7 +118,7 @@ export const {
       }
 
       const userCart = await cartRepository.getUserCart(existingUser);
-      const userWishList = await wishListRepository.getUserWishList(
+      const userWishlist = await wishlistRepository.getUserWishlist(
         existingUser
       );
       const userPersonalData = await userRepository.getUserPersonalData(
@@ -127,7 +127,7 @@ export const {
 
       token.role = existingUser.role;
       token.cartId = userCart?.id || null;
-      token.wishListId = userWishList?.id || null;
+      token.wishListId = userWishlist?.id || null;
       token.personalDataId = userPersonalData?.id || null;
       token.twoFactorEnabled = existingUser.isTwoFactorEnabled;
       token.emailVerificationDate = existingUser.emailVerified;
@@ -149,7 +149,7 @@ export const {
           session.user.cart = await cartRepository.getUserCart(session.user);
         }
         if (session.user.wishListId) {
-          session.user.wishList = await wishListRepository.getUserWishList(
+          session.user.wishList = await wishlistRepository.getUserWishlist(
             session.user
           );
         }

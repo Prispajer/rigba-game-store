@@ -8,15 +8,15 @@ import {
 } from "@/redux/slices/pagination/paginationSlice";
 import { paginatePages } from "@/utils/pagination";
 import {
-    selectCurrentPage,
-    selectTotalPages,
+    selectCurrentPageState,
+    selectTotalPagesState,
 } from "@/redux/slices/pagination/pagination.selectors";
 
 export default function usePagination<T>(data: T[]) {
     const dispatch = useDispatch();
 
-    const currentPageState = useSelector(selectCurrentPage);
-    const totalPagesState = useSelector(selectTotalPages);
+    const currentPageState = useSelector(selectCurrentPageState);
+    const totalPagesState = useSelector(selectTotalPagesState);
 
     const paginatedPages = React.useMemo(() => paginatePages(data), [data]);
 

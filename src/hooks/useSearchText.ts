@@ -5,25 +5,25 @@ import {
     clearSearchText,
 } from "@/redux/slices/search/searchSlice";
 import {
-    selectSearchGenreText,
-    selectSearchPlatformText,
-    selectSearchPublisherText,
-    selectSearchStoreText,
-    selectSearchWishlistText,
-    selectCompartmentNumberOne,
-    selectCompartmentNumberTwo,
+    selectSearchGenreTextState,
+    selectSearchPlatformTextState,
+    selectSearchPublisherTextState,
+    selectSearchStoreTextState,
+    selectSearchWishlistTextState,
+    selectCompartmentNumberOneState,
+    selectCompartmentNumberTwoState,
 } from "@/redux/slices/search/search.selectors";
 
 export default function useSearchText() {
     const dispatch = useDispatch();
 
-    const searchGenreTextState = useSelector(selectSearchGenreText);
-    const searchPlatformTextState = useSelector(selectSearchPlatformText);
-    const searchPublisherTextState = useSelector(selectSearchPublisherText);
-    const searchStoreTextState = useSelector(selectSearchStoreText);
-    const searchWishlistTextState = useSelector(selectSearchWishlistText);
-    const compartmentNumberOne = useSelector(selectCompartmentNumberOne);
-    const compartmentNumberTwo = useSelector(selectCompartmentNumberTwo);
+    const searchGenreTextState = useSelector(selectSearchGenreTextState);
+    const searchPlatformTextState = useSelector(selectSearchPlatformTextState);
+    const searchPublisherTextState = useSelector(selectSearchPublisherTextState);
+    const searchStoreTextState = useSelector(selectSearchStoreTextState);
+    const searchWishlistTextState = useSelector(selectSearchWishlistTextState);
+    const compartmentNumberOneState = useSelector(selectCompartmentNumberOneState);
+    const compartmentNumberTwoState = useSelector(selectCompartmentNumberTwoState);
 
     const handleSetSearchText = (
         key: string,
@@ -42,8 +42,8 @@ export default function useSearchText() {
         searchPublisherTextState,
         searchStoreTextState,
         searchWishlistTextState,
-        compartmentNumberOne,
-        compartmentNumberTwo,
+        compartmentNumberOneState,
+        compartmentNumberTwoState,
         handleSetSearchText,
         handleClearSearchText,
     };

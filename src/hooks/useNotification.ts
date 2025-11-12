@@ -1,40 +1,52 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectNotification } from "@/redux/slices/notification/notification.selectors";
 import {
-  showSuccess,
-  showError,
-  clearNotification,
+    showSuccessNotification,
+    showErrorNotification,
+    clearNotification,
 } from "@/redux/slices/notification/notificationSlice";
+import { selectSuccessState, selectMessageState, selectOriginState } from "@/redux/slices/notification/notification.selectors";
 import { NotificationOrigin } from "@/redux/slices/notification/notification.types";
 
 export default function useNotification() {
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
-  const notification = useSelector(selectNotification);
+    const successState = useSelector(selectSuccessState);
+    const messageState = useSelector(selectMessageState);
+    const originState = useSelector(selectOriginState);
 
-  React.useEffect(() => {
-    if (notification.success) {
-      const timer = setTimeout(() => {
-        handleReset();
-      }, 5000);
+    const handleShowSuccessNotification = React.useCallback(
+        (message: string, origin: NotificationOrigin) =>
+            dispatch(showSuccessNotification({ message, origin })),
+        [dispatch]
+    );
 
-      return () => clearTimeout(timer);
-    }
-  }, [notification.success]);
+    const handleShowErrorNotification = React.useCallback(
+        (message: string, origin: NotificationOrigin) =>
+            dispatch(showErrorNotification({ message, origin })),
+        [dispatch]
+    );
 
-  const handleSuccess = (message: string, origin: NotificationOrigin) =>
-    dispatch(showSuccess({ message, origin }));
+    const handleClearNotification = React.useCallback(
+        () => dispatch(clearNotification()),
+        [dispatch]
+    );
 
-  const handleError = (message: string, origin: NotificationOrigin) =>
-    dispatch(showError({ message, origin }));
+    React.useEffect(() => {
+        if (messageState) {
+            const timer = setTimeout(() => {
+                handleClearNotification();
+            }, 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [messageState, handleClearNotification]);
 
-  const handleReset = () => dispatch(clearNotification());
-
-  return {
-    notification,
-    handleSuccess,
-    handleError,
-    handleReset,
-  };
+    return {
+        successState,
+        messageState,
+        originState,
+        handleShowSuccessNotification,
+        handleShowErrorNotification,
+        handleClearNotification,
+    };
 }

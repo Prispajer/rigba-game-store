@@ -1,0 +1,23 @@
+import { RootState } from "@/redux/store";
+
+export const selectAuthSidebarState = (state: RootState) => state.ui.authSidebar;
+export const selectProfileModalState = (state: RootState) => state.ui.profileModal;
+export const selectCartModalState = (state: RootState) => state.ui.cartModal;
+export const selectNavSidebarState = (state: RootState) => state.ui.navSidebar;
+export const selectSearchBarModalState = (state: RootState) => state.ui.searchBarModal;
+export const selectAccountSidebarState = (state: RootState) => state.ui.accountSidebar;
+export const selectGameScreenshotModalState = (state: RootState) => state.ui.gameScreenshotModal;
+export const selectResolutionState = (state: RootState) => state.ui.resolution;
+export const selectPublishersModalState = (state: RootState) => state.ui.publishersModal;
+export const selectPlatformsModalState = (state: RootState) => state.ui.platformsModal;
+export const selectGenresModalState = (state: RootState) => state.ui.genresModal;
+export const selectStoresModalState = (state: RootState) => state.ui.storesModal;
+export const selectSortModalState = (state: RootState) => state.ui.sortModal;
+export const selectSortAndFilterModalState = (state: RootState) => state.ui.sortAndFilterModal;
+export const selectTwoFactorModalState = (state: RootState) => state.ui.twoFactorModal;
+export const selectSortMenuState = (state: RootState) => state.ui.sortMenu;
+export const selectPriceMenuState = (state: RootState) => state.ui.priceMenu;
+export const selectPublishersMenuState = (state: RootState) => state.ui.publishersMenu;
+export const selectPlatformsMenuState = (state: RootState) => state.ui.platformsMenu;
+export const selectGenresMenuState = (state: RootState) => state.ui.genresMenu;
+export const selectStoresMenuState = (state: RootState) => state.ui.storesMenu;

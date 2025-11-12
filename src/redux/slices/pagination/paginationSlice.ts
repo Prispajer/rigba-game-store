@@ -1,8 +1,8 @@
-import { PaginationState, PaginationPayload } from "./pagination.types";
+import { PaginationState } from "./pagination.types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: PaginationState = {
-  currentPage: 0,
+  currentPage: 1,
   totalPages: 0,
 };
 
@@ -10,7 +10,7 @@ const paginationSlice = createSlice({
   name: "pagination",
   initialState,
   reducers: {
-    showPagination: (state, action: PayloadAction<PaginationPayload>) => {
+    showPagination: (state, action: PayloadAction<PaginationState>) => {
       state.currentPage = action.payload.currentPage;
       state.totalPages = action.payload.totalPages;
     },
@@ -19,22 +19,22 @@ const paginationSlice = createSlice({
     },
     nextPage: (state) => {
       if (state.totalPages > 0 && state.currentPage < state.totalPages) {
-        state.currentPage += 1;
+        state.currentPage = state.currentPage + 1;
       }
     },
     prevPage: (state) => {
       if (state.currentPage > 1) {
-        state.currentPage -= 1;
+        state.currentPage = state.currentPage - 1;
       }
-    },
-    clearPagination: (state) => {
-      state.currentPage = 1;
-      state.totalPages = 0;
     },
   },
 });
 
-export const { showPagination, goToPage, nextPage, prevPage, clearPagination } =
-  paginationSlice.actions;
+export const {
+    showPagination,
+    goToPage,
+    nextPage,
+    prevPage,
+} = paginationSlice.actions;
 
 export default paginationSlice.reducer;

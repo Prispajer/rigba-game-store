@@ -1,56 +1,57 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  showPagination,
-  nextPage,
-  prevPage,
-  goToPage,
+    showPagination,
+    nextPage,
+    prevPage,
+    goToPage,
 } from "@/redux/slices/pagination/paginationSlice";
 import { paginatePages } from "@/utils/pagination";
-import { RootState } from "@/redux/store";
+import {
+    selectCurrentPage,
+    selectTotalPages,
+} from "@/redux/slices/pagination/pagination.selectors";
 
 export default function usePagination<T>(data: T[]) {
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
-  const pagination = useSelector((state: RootState) => state.pagination);
+    const currentPageState = useSelector(selectCurrentPage);
+    const totalPagesState = useSelector(selectTotalPages);
 
-  const pages = paginatePages(data);
+    const paginatedPages = React.useMemo(() => paginatePages(data), [data]);
 
-  React.useEffect(() => {
-    dispatch(
-      showPagination({
-        currentPage: pagination.currentPage,
-        totalPages: pages.length - 1,
-      })
+    const handleShowPagination = React.useCallback(
+        (currentPage: number, totalPages: number) => {
+            dispatch(showPagination({ currentPage, totalPages }));
+        },
+        [dispatch]
     );
-  }, [data, pagination.currentPage, dispatch]);
 
-  React.useEffect(() => {
-    dispatch(
-      showPagination({
-        currentPage: 0,
-        totalPages: pages.length,
-      })
+    const handleSetCurrentPage = React.useCallback(
+        (page: number) => {
+            dispatch(goToPage(page));
+        },
+        [dispatch]
     );
-  }, []);
 
-  const handleSetCurrentPage = (page: number) => {
-    dispatch(goToPage(page));
-  };
+    const handleNextPage = React.useCallback(() => {
+        dispatch(nextPage());
+    }, [dispatch]);
 
-  const handleNextPage = () => {
-    dispatch(nextPage());
-  };
+    const handlePreviousPage = React.useCallback(() => {
+        dispatch(prevPage());
+    }, [dispatch]);
 
-  const handlePreviousPage = () => {
-    dispatch(prevPage());
-  };
+    React.useEffect(() => {
+        handleShowPagination(1, paginatedPages.length);
+    }, [handleShowPagination, paginatedPages.length]);
 
-  return {
-    pages,
-    pagination,
-    handleSetCurrentPage,
-    handleNextPage,
-    handlePreviousPage,
-  };
+    return {
+        paginatedPages,
+        currentPageState,
+        totalPagesState,
+        handleSetCurrentPage,
+        handleNextPage,
+        handlePreviousPage,
+    };
 }

@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { Container, injectable } from "inversify";
+import { Container } from "inversify";
 import UserService from "../services/UserService";
 import type IUserService from "@/interfaces/IUserService";
 import UserRepository from "@/repositories/UserRepository";
@@ -30,11 +30,11 @@ import ReviewService from "@/services/ReviewService";
 import type IReviewService from "@/interfaces/IReviewService";
 import ReviewRepository from "@/repositories/ReviewRepository";
 import type IReviewRepository from "@/interfaces/IReviewRepository";
-import { CLASSTYPES } from "@/types/types";
 import IPurchaseHistoryRepository from "@/interfaces/IPurchaseHistoryRepository";
 import PurchaseHistoryService from "@/services/PurchaseHistoryService";
 import PurchaseHistoryRepository from "@/repositories/PurchaseHistoryRepository";
 import IPurchaseHistoryService from "@/interfaces/IPurchaseHistoryService";
+import CLASSTYPES from "@/shared/constants/classTypes";
 
 const container = new Container();
 

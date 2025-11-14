@@ -12,22 +12,22 @@ export default async function submitRequest<T>(
   payload: T,
   origin: NotificationOrigin,
   {
-    handleSuccess,
-    handleError,
-    handleReset,
+      handleShowSuccessNotification,
+      handleShowErrorNotification,
+      handleClearNotification,
   }: {
-    handleSuccess: (
+      handleShowSuccessNotification: (
       message: string,
       origin: NotificationOrigin
     ) => PayloadAction<NotificationPayload>;
-    handleError: (
+      handleShowErrorNotification: (
       message: string,
       origin: NotificationOrigin
     ) => PayloadAction<NotificationPayload>;
-    handleReset: () => void;
+      handleClearNotification: () => void;
   }
 ): Promise<any | null> {
-  handleReset();
+    handleClearNotification();
 
   try {
     let response;
@@ -50,14 +50,14 @@ export default async function submitRequest<T>(
     }
 
     if (!response.success) {
-      handleError(response.message, origin);
+        handleShowErrorNotification(response.message, origin);
       return null;
     }
 
-    handleSuccess(response.message, origin);
+    handleShowSuccessNotification(response.message, origin);
     return response;
   } catch (error) {
-    handleError("There was a problem with the request!", origin);
+      handleShowErrorNotification("There was a problem with the request!", origin);
     return null;
   }
 }

@@ -9,87 +9,97 @@ import useUserWishlistActions from "@/features/wishlist/hooks/userWishlist/useUs
 import useLocalStorageWishlistActions from "@/features/wishlist/hooks/localStorageWishlist/useLocalStorageWishlistActions";
 import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 import useLocalStorageWishlist from "@/features/wishlist/hooks/localStorageWishlist/useLocalStorageWishlist";
+import LocalStorageWishlistItem from "@/features/wishlist/types/localStorageWishlist/localStorageWishlistItem";
+import UserWishlistItem from "@/features/wishlist/types/userWishlist/userWishlistItem";
 
 export default function AddToWishlist({
                                           product,
+                                          wishlistItem,
                                           position,
                                           added,
                                           deleted,
                                       }: {
     product?: ApiProductDetails;
+    wishlistItem?:  LocalStorageWishlistItem |  UserWishlistItem
     position: string;
     added: string;
     deleted: string;
 }) {
     const { user } = useCurrentUser();
-    const { isLoading, getUserWishlist } = useUserWishlist();
-    const { userWishlistState } = useUserWishlist();
-    const {
-        handleAddUserProductToWishlist,
-        handleDeleteUserProductFromWishlist,
-    } = useUserWishlistActions(getUserWishlist);
-    const { localStorageWishlistState } = useLocalStorageWishlist(
-        "localStorageWishlist"
-    );
+    const { isLoading, getUserWishlist, userWishlistState } = useUserWishlist();
+    const { handleAddUserProductToWishlist, handleDeleteUserProductFromWishlist } =
+        useUserWishlistActions(getUserWishlist);
+
+    const { localStorageWishlistState } = useLocalStorageWishlist("localStorageWishlist");
     const {
         handleAddLocalStorageProductToWishlist,
         handleDeleteLocalStorageProductFromWishlist,
     } = useLocalStorageWishlistActions();
 
-    const isInLocalWishlist = localStorageWishlistState && localStorageWishlistState.localStorageWishlist.some(
-        (localWishlistProduct) =>
-            localWishlistProduct.externalProductId === (product && product.id)
+    const targetId = wishlistItem?.externalProductId ?? product?.id;
+
+    const isInLocalWishlist = localStorageWishlistState?.localStorageWishlist.some(
+        (item) => item.externalProductId === targetId
     );
 
-    const isInUserWishlist = userWishlistState && userWishlistState.products.some(
-        (userWishlistProduct) =>
-            userWishlistProduct.externalProductId === (product && product.id)
+    const isInUserWishlist = userWishlistState?.products.some(
+        (item) => item.externalProductId === targetId
     );
 
     const isInWishlist = user ? isInUserWishlist : isInLocalWishlist;
 
-    const handleWishlistAction = (event: React.MouseEvent) => {
-        event.stopPropagation();
-        if (!product) return;
-
-        if (user) {
-            if (isInWishlist) {
-                handleDeleteUserProductFromWishlist(user.email, product.id);
+    const toggleWishlist = () => {
+        if (product) {
+            if (user) {
+                if (isInWishlist) {
+                    handleDeleteUserProductFromWishlist(user.email, targetId!);
+                } else {
+                    handleAddUserProductToWishlist({
+                        email: user.email,
+                        externalProductId: product.id,
+                        name: product.name,
+                        description: product.description_raw,
+                        background_image: product.background_image,
+                        price: generateRandomPrice(),
+                        rating: product.rating,
+                        slug: product.slug,
+                        released: product.released,
+                        added: product.added,
+                    });
+                }
             } else {
-                handleAddUserProductToWishlist({
-                    email: user.email,
-                    externalProductId: product.id,
-                    name: product.name,
-                    description: product.description_raw,
-                    background_image: product.background_image,
-                    price: generateRandomPrice(),
-                    rating: product.rating,
-                    slug: product.slug,
-                    released: product.released,
-                    added: product.added,
-                });
+                if (isInWishlist) {
+                    handleDeleteLocalStorageProductFromWishlist(targetId!);
+                } else {
+                    handleAddLocalStorageProductToWishlist({
+                        externalProductId: product.id,
+                        name: product.name,
+                        price: generateRandomPrice(),
+                        background_image: product.background_image,
+                        rating: product.rating,
+                        slug: product.slug,
+                        released: product.released,
+                        added: product.added,
+                    });
+                }
             }
-        } else {
-            if (isInWishlist) {
-                handleDeleteLocalStorageProductFromWishlist(product.id);
+        }
+
+        if (!product && wishlistItem) {
+            if (user) {
+                handleDeleteUserProductFromWishlist(user!.email, wishlistItem.externalProductId);
             } else {
-                handleAddLocalStorageProductToWishlist({
-                    externalProductId: product.id,
-                    name: product.name,
-                    price: generateRandomPrice(),
-                    background_image: product.background_image,
-                    rating: product.rating,
-                    slug: product.slug,
-                    released: product.released,
-                    added: product.added,
-                });
+                handleDeleteLocalStorageProductFromWishlist(wishlistItem.externalProductId);
             }
         }
     };
 
     return (
         <button
-            onClick={handleWishlistAction}
+            onClick={(e) => {
+                e.stopPropagation();
+                toggleWishlist();
+            }}
             disabled={isLoading["userWishlist"]}
             className={`${position} p-[6px] md:p-[10px] border transition duration-300 cursor-pointer hover:bg-[#ffffff80] hover:border-[#ffffff] ${
                 isInWishlist ? added : deleted

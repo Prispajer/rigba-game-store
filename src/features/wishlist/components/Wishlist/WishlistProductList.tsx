@@ -62,13 +62,13 @@ export default function WishlistProductList({
                 {paginatedWishlistState &&
                 Array.isArray(paginatedWishlistState) &&
                 paginatedWishlistState.length > 0 ? (
-                    paginatedWishlistState.map((product) => {
-                        if ("productsInformations" in product) {
+                    paginatedWishlistState.map((wishlistItem) => {
+                        if ("productsInformations" in wishlistItem) {
                             return (
                                 <div
-                                    key={product.productsInformations.slug}
+                                    key={wishlistItem.productsInformations.slug}
                                     onClick={() =>
-                                        redirectToProduct(product.productsInformations.slug as string)
+                                        redirectToProduct(wishlistItem.productsInformations.slug as string)
                                     }
                                     className="relative flex sm:flex-col my-[10px] bg-tertiaryColor cursor-pointer"
                                 >
@@ -76,14 +76,14 @@ export default function WishlistProductList({
                                         <Image
                                             loading="eager"
                                             fill
-                                            src={product.productsInformations.background_image ?? "/icons/logo.png"}
-                                            alt={product.productsInformations.background_image ?? "/icons/logo.png"}
+                                            src={wishlistItem.productsInformations.background_image ?? "/icons/logo.png"}
+                                            alt={wishlistItem.productsInformations.background_image ?? "/icons/logo.png"}
                                         />
                                     </div>
                                     <div className="max-w-[50%] sm:max-w-[100%] my-[10px] px-[15px]">
                                         <div className="flex flex-col">
                       <span className="font-bold text-[14px] text-white line-clamp-1">
-                        {product.productsInformations.name}
+                        {wishlistItem.productsInformations.name}
                       </span>
                                             <span className="pt-[5px] text-[12px] text-[#fffa84] font-bold line-clamp-1">
                         GLOBAL
@@ -92,17 +92,18 @@ export default function WishlistProductList({
                                         <div className="h-[50%] md:h-[75px]">
                                             <div className="text-[14px] text-[#ffffff80] font-medium">From</div>
                                             <div className="text-[20px] text-white font-bold line-clamp-1">
-                                                ${product.productsInformations.price}
+                                                ${wishlistItem.productsInformations.price}
                                             </div>
                                             <div className="flex items-center">
                                                 <CiHeart className="ml-[-3px] mr-[3px]" size="20px" />
                                                 <span className="text-[14px] text-[#ffffff80] line-clamp-1">
-                          {product.productsInformations.rating}
+                          {wishlistItem.productsInformations.rating}
                         </span>
                                             </div>
                                         </div>
                                     </div>
                                     <AddToWishlist
+                                        wishlistItem={wishlistItem}
                                         position="absolute right-[10px] top-0"
                                         added="border-[#FFFA84] bg-[#FFFA84]"
                                         deleted="bg-[##d3d3d3]"
@@ -112,22 +113,22 @@ export default function WishlistProductList({
                         } else {
                             return (
                                 <div
-                                    key={product.slug}
-                                    onClick={() => redirectToProduct(product.slug as string)}
+                                    key={wishlistItem.slug}
+                                    onClick={() => redirectToProduct(wishlistItem.slug as string)}
                                     className="relative flex sm:flex-col my-[10px] bg-tertiaryColor cursor-pointer"
                                 >
                                     <div className="relative min-w-[95px] sm:h-[250px]">
                                         <Image
                                             loading="eager"
                                             fill
-                                            src={product.background_image ?? "/icons/logo.png"}
-                                            alt={product.background_image ?? "/icons/logo.png"}
+                                            src={wishlistItem.background_image ?? "/icons/logo.png"}
+                                            alt={wishlistItem.background_image ?? "/icons/logo.png"}
                                         />
                                     </div>
                                     <div className="max-w-[50%] sm:max-w-[100%] my-[10px] px-[15px]">
                                         <div className="flex flex-col">
                       <span className="font-bold text-[14px] text-white line-clamp-1">
-                        {product.name}
+                        {wishlistItem.name}
                       </span>
                                             <span className="pt-[5px] text-[12px] text-[#fffa84] font-bold line-clamp-1">
                         GLOBAL
@@ -136,17 +137,18 @@ export default function WishlistProductList({
                                         <div className="h-[50%] md:h-[75px]">
                                             <div className="text-[14px] text-[#ffffff80] font-medium">From</div>
                                             <div className="text-[20px] text-white font-bold line-clamp-1">
-                                                ${product.price}
+                                                ${wishlistItem.price}
                                             </div>
                                             <div className="flex items-center">
                                                 <CiHeart className="ml-[-3px] mr-[3px]" size="20px" />
                                                 <span className="text-[14px] text-[#ffffff80] line-clamp-1">
-                          {product.rating}
+                          {wishlistItem.rating}
                         </span>
                                             </div>
                                         </div>
                                     </div>
                                     <AddToWishlist
+                                        wishlistItem={wishlistItem}
                                         position="absolute right-[10px] top-0"
                                         added="border-[#FFFA84] bg-[#FFFA84]"
                                         deleted="bg-[##d3d3d3]"

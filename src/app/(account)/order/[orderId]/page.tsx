@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import OrderContainer from "@/features/auth/components/Auth/Orders/OrderContainer";
+import OrderDetailsContainer from "@/features/auth/components/Auth/Orders/OrderDetailsContainer";
 
 export const generateMetadata = async (data: {
   params: Promise<{ orderId: string }>;
@@ -21,5 +21,5 @@ export default async function OrderPage(data: {
 }) {
   const params = await data.params;
 
-  return <OrderContainer params={params} />;
+  return <OrderDetailsContainer params={params} />;
 }

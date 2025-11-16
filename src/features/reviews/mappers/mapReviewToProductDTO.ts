@@ -1,9 +1,9 @@
-import { generateRandomPrice } from "@/utils/prices";
-import { GameAPIProduct } from "@/types/types";
+import {generateRandomPrice} from "@/features/products/utils/prices";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 import AddReviewToProductDTO from "../dto/AddReviewToProductDTO";
 
 export default function mapReviewToProductDTO(
-  product: GameAPIProduct,
+  product: ApiProductDetails,
   email: string,
   reviewDescription: string,
   title: string

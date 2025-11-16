@@ -1,4 +1,5 @@
 import type ApiProductDetails from "@/features/products/types/api/apiProductDetails";
+import ApiPagination from "@/features/products/types/api/apiPagination";
 import type UserCartItem from "@/features/cart/types/userCart/userCartItem";
 import type LocalStorageCartProduct from "@/features/cart/types/localStorageCart/localStorageCartProduct";
 

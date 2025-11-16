@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,59 +9,50 @@ import { BiCartDownload } from "react-icons/bi";
 import { IoKeySharp } from "react-icons/io5";
 import { IoMdSettings } from "react-icons/io";
 import { IoCloseSharp } from "react-icons/io5";
-import { toggleScreen } from "@/redux/slices/window/windowSlice";
 import OutsideClickHandler from "@/components/Interface/Shared/Backdrop/OutsideCLickHandler";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
+import useUiVisibility from "@/hooks/useUiVisibility";
 
 export default function AccountSidebar() {
   const {
     accountSidebarState,
     resolutionState,
-    handleClose,
-    handleToggleScreen,
-  } = useWindowVisibility();
-
-  const dispatch = useDispatch();
+    handleHideElement,
+      handleSetResolution,
+  } = useUiVisibility();
 
   React.useEffect(() => {
     const handleResize = () => {
-      const windowScreen = window.innerWidth >= 768;
-      dispatch(toggleScreen(windowScreen));
-
-      if (windowScreen) {
-        handleClose("accountSidebar");
-      }
+        handleSetResolution();
+        resolutionState && handleHideElement("accountSidebar")
     };
 
     handleResize();
-
     window.addEventListener("resize", handleResize);
-
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [handleToggleScreen, dispatch]);
+  }, [handleHideElement, handleSetResolution, resolutionState]);
 
   return (
     <>
       {accountSidebarState && !resolutionState && (
         <OutsideClickHandler
-          handleOutsideClick={() => handleClose("accountSidebar")}
+          handleOutsideClick={() => handleHideElement("accountSidebar")}
         >
           <aside className="fixed md:hidden left-0 top-0 w-full max-w-[400px] h-[100vh] z-10 bg-primaryColor">
             <nav className="relative flex flex-col items-center justify-center font-medium">
               <ul className="w-full">
                 <div className="flex items-center justify-between px-4 py-2 border-b border-secondaryColor">
                   <Link
-                    onClick={() => handleClose("accountSidebar")}
+                    onClick={() => handleHideElement("accountSidebar")}
                     href="/"
                     className="flex items-center"
                   >
                     <Image
                       loading="eager"
                       src="/icons/logo.png"
-                      width="60"
-                      height="60"
+                      width={60}
+                      height={60}
                       alt="logo"
                       priority
                     />
@@ -69,7 +61,7 @@ export default function AccountSidebar() {
                     </span>
                   </Link>
                   <button
-                    onClick={() => handleClose("accountSidebar")}
+                    onClick={() => handleHideElement("accountSidebar")}
                     className="text-white"
                   >
                     <IoCloseSharp size="25px" />
@@ -77,7 +69,7 @@ export default function AccountSidebar() {
                 </div>
                 <li className="flex w-full">
                   <Link
-                    onClick={() => handleClose("accountSidebar")}
+                    onClick={() => handleHideElement("accountSidebar")}
                     className="flex-1 text-left text-[16px] text-[#F4F4F6]"
                     href="/login"
                   >
@@ -92,7 +84,7 @@ export default function AccountSidebar() {
                 </li>
                 <li className="flex w-full">
                   <Link
-                    onClick={() => handleClose("accountSidebar")}
+                    onClick={() => handleHideElement("accountSidebar")}
                     className="flex-1 text-left text-[16px] text-[#F4F4F6]"
                     href="/orders"
                   >
@@ -107,7 +99,7 @@ export default function AccountSidebar() {
                 </li>
                 <li className="flex w-full">
                   <Link
-                    onClick={() => handleClose("accountSidebar")}
+                    onClick={() => handleHideElement("accountSidebar")}
                     className="flex-1 text-left text-[16px] text-[#F4F4F6]"
                     href="/keys"
                   >
@@ -122,7 +114,7 @@ export default function AccountSidebar() {
                 </li>
                 <li className="flex w-full">
                   <Link
-                    onClick={() => handleClose("accountSidebar")}
+                    onClick={() => handleHideElement("accountSidebar")}
                     className="flex-1 text-left text-[16px] text-[#F4F4F6]"
                     href="/settings"
                   >

@@ -1,7 +1,7 @@
 import React from "react";
 import { IoCloseSharp } from "react-icons/io5";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
+import useUiVisibility from "@/hooks/useUiVisibility";
 
 export default function TwoFactorModalContainer({
   handleSubmit,
@@ -9,11 +9,11 @@ export default function TwoFactorModalContainer({
   handleSubmit: (code: string) => Promise<unknown>;
 }) {
   const [code, setCode] = React.useState<string>("");
-  const { twoFactorModalState, handleClose } = useWindowVisibility();
+  const { twoFactorModalState, handleHideElement } = useUiVisibility();
 
   const handleOutsideClick = () => {
     if (twoFactorModalState) {
-      handleClose("twoFactorModal");
+        handleHideElement("twoFactorModal");
     }
   };
 
@@ -27,7 +27,7 @@ export default function TwoFactorModalContainer({
                 <strong className="text-[16px] cursor-default">
                   TWO FACTOR AUTHENTICATION
                 </strong>
-                <button onClick={() => handleClose("twoFactorModal")}>
+                <button onClick={() => handleHideElement("twoFactorModal")}>
                   <IoCloseSharp
                     className="mt-[-4px] text-[#000000]"
                     size="25px"
@@ -47,7 +47,7 @@ export default function TwoFactorModalContainer({
               </div>
               <div className="flex justify-end gap-x-[20px]">
                 <button
-                  onClick={() => handleClose("twoFactorModal")}
+                  onClick={() => handleHideElement("twoFactorModal")}
                   className="min-h-[36px] font-[600] text-[#658fb2]"
                 >
                   Cancel

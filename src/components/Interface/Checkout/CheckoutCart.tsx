@@ -2,18 +2,18 @@
 
 import React from "react";
 import Link from "next/link";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
-import useLocalStorage from "@/hooks/useLocalStorage";
+import useUiVisibility from "@/hooks/useUiVisibility";
+import useLocalStorageCart from "@/features/cart/hooks/localStorageCart/useLocalStorageCart";
 import useUserCart from "@/features/cart/hooks/userCart/useUserCart";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 
 export default function CheckoutCart() {
-  const { resolutionState } = useWindowVisibility();
+  const { resolutionState } = useUiVisibility();
   const { user } = useCurrentUser();
   const { userCartState } = useUserCart();
-  const { localCartState } = useLocalStorage("localCart");
+  const { localStorageCartState }  = useLocalStorageCart("localCart");
 
-  const productsByRole = user ? userCartState.products : localCartState;
+  const cartProducts = user ? userCartState.products : localStorageCartState.localStorageCart;
 
   return (
     <>
@@ -29,7 +29,7 @@ export default function CheckoutCart() {
           <ul className="flex flex-col mb-[20px]">
             <li className="flex justify-between gap-x-[10px]">
               <span className="text-[#ffffffb3] text-[14px]">
-                {productsByRole.reduce(
+                {cartProducts.reduce(
                   (total: number, product) => total + (product.quantity || 1),
                   0
                 )}{" "}
@@ -37,11 +37,11 @@ export default function CheckoutCart() {
               </span>
               <strong className="text-[14px] text-[#FFFFFF]">
                 $
-                {productsByRole
+                {cartProducts
                   .reduce(
                     (total: number, product) =>
                       total +
-                      ("productsInformations" in product
+                      ("productsInformations" in product!
                         ? product.productsInformations?.price
                         : product.price) *
                         (product.quantity || 1),
@@ -57,7 +57,7 @@ export default function CheckoutCart() {
             </span>
             <span className="font-[700] text-[24px] text-[#FFFFFF]">
               $
-              {productsByRole
+              {cartProducts
                 .reduce(
                   (total: number, product) =>
                     total +

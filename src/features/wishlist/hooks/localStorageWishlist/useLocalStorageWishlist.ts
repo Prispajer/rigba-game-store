@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setLocalStorageWishlist } from "../../redux/slices/localStorageWishlist/localStorageWishlistSlice";
@@ -40,5 +41,5 @@ export default function useLocalStorageWishlist(key: string) {
     }
   }, [key, localStorageWishlistState, isLoaded]);
 
-  return localStorageWishlistState;
+  return { localStorageWishlistState };
 }

@@ -1,9 +1,9 @@
-import { GameAPIResponse } from "@/types/types";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 
 export default function ProductDescription({
   product,
 }: {
-  product: GameAPIResponse;
+  product: ApiProductDetails;
 }) {
   return (
     <section className="flex items-center justify-center z max-w-[1240px] md:mx-auto pb-[15px] mx-[-20px] px-[20px] pt-4 bg-secondaryColor">

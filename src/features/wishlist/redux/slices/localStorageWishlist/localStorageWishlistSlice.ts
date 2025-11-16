@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { sortWishlist } from "./localStorageWishlist.helpers";
 import { LocalStorageWishlistState } from "./localStorageWishlist.types";
-import LocalStorageWishlistProduct from "@/features/wishlist/types/localStorageWishlistProduct";
+import LocalStorageWishlistItem from "@/features/wishlist/types/localStorageWishlist/localStorageWishlistItem";
 
 const initialState: LocalStorageWishlistState = {
   localStorageWishlist: [],
@@ -33,7 +33,7 @@ const localStorageWishlistSlice = createSlice({
     },
     addLocalStorageProductToWishlist: (
       state,
-      action: PayloadAction<LocalStorageWishlistProduct>
+      action: PayloadAction<LocalStorageWishlistItem>
     ) => {
       const isProductInWishlist = state.localStorageWishlist.some(
         (product) =>

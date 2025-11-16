@@ -1,50 +1,61 @@
-import React from "react";
 import { useSearchParams } from "next/navigation";
 import submitRequest from "@/lib/submitRequest";
 import useNotification from "@/hooks/useNotification";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
-import requestService from "@/services/RequestService";
 import { NotificationOrigin } from "@/redux/slices/notification/notification.types";
-import { HttpMethod } from "@/types/types";
+import HttpMethod from "@/shared/enums/httpMethod";
 
 export default function useSecurityHandlers() {
-  const searchParams = useSearchParams();
-  const { handleSuccess, handleError, handleReset } = useNotification();
-  const { user } = useCurrentUser();
+    const searchParams = useSearchParams();
+    const {
+        handleShowSuccessNotification,
+        handleShowErrorNotification,
+        handleClearNotification,
+    } = useNotification();
+    const { user } = useCurrentUser();
 
-  const token = searchParams?.get("token");
+    const token = searchParams?.get("token");
 
-  const handleSubmitToggleTwoFactor = async (code: string) => {
-    const response = await submitRequest(
-      HttpMethod.POST,
-      "users/endpoints/userAuthentication/toggleTwoFactor",
-      { email: user?.email, code },
-      NotificationOrigin.ToggleTwoFactor,
-      { handleSuccess, handleError, handleReset }
-    );
+    const handleSubmitToggleTwoFactor = async (code: string) => {
+        const response = await submitRequest(
+            HttpMethod.POST,
+            "users/endpoints/userAuthentication/toggleTwoFactor",
+            { email: user?.email, code },
+            NotificationOrigin.ToggleTwoFactor,
+            {
+                handleShowSuccessNotification,
+                handleShowErrorNotification,
+                handleClearNotification,
+            }
+        );
 
-    if (!response) return;
-  };
+        if (!response) return;
+    };
 
-  const handleSubmitEmailVerification = async () => {
-    if (!token) {
-      handleError("Missing token!", NotificationOrigin.EmailVerification);
-      return;
-    }
+    const handleSubmitEmailVerification = async () => {
+        if (!token) {
+            handleShowErrorNotification("Missing token!", NotificationOrigin.EmailVerification);
+            return;
+        }
 
-    const response = await submitRequest(
-      HttpMethod.POST,
-      "users/endpoints/userAuthentication/emailVerification",
-      { token },
-      NotificationOrigin.EmailVerification,
-      { handleSuccess, handleError, handleReset }
-    );
+        const response = await submitRequest(
+            HttpMethod.POST,
+            "users/endpoints/userAuthentication/emailVerification",
+            { token },
+            NotificationOrigin.EmailVerification,
+            {
+                handleShowSuccessNotification,
+                handleShowErrorNotification,
+                handleClearNotification,
+            }
+        );
 
-    if (!response) return;
-  };
+        if (!response) return;
+    };
 
-  return {
-    handleSubmitToggleTwoFactor,
-    handleSubmitEmailVerification,
-  };
+    return {
+        token,
+        handleSubmitToggleTwoFactor,
+        handleSubmitEmailVerification,
+    };
 }

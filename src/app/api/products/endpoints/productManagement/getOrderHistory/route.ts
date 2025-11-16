@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { purchaseHistoryService } from "@/utils/injector";
-import { RequestResponse } from "@/types/types";
+import RequestResponse from "@/shared/types/requestResponse";
 import { OrderHistory } from "@prisma/client";
 
 export async function POST(request: NextRequest) {

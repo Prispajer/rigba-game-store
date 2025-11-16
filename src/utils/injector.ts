@@ -1,51 +1,45 @@
 import "reflect-metadata";
 import { Container } from "inversify";
-import UserService from "../services/UserService";
-import type IUserService from "@/interfaces/IUserService";
-import UserRepository from "@/repositories/UserRepository";
-import type IUserRepository from "@/interfaces/IUserRepository";
-import UserUtils from "@/utils/UserUtils";
-import type IUserUtils from "@/interfaces/IUserUtils";
-import TokenService from "../services/TokenService";
-import type ITokenService from "@/interfaces/ITokenService";
-import TokenRepository from "@/repositories/TokenRepository";
-import type ITokenRepository from "@/interfaces/ITokenRepository";
-import TokenUtils from "@/utils/TokenUtils";
-import type ITokenUtils from "@/interfaces/ITokenUtils";
-import ProductRepository from "@/repositories/ProductRepository";
-import type IProductRepository from "@/interfaces/IProductRepository";
-import ProductUtils from "@/utils/ProductUtils";
-import type IProductUtils from "@/interfaces/IProductUtils";
+import UserService from "../features/user/services/UserService";
+import type IUserService from "@/features/user/interfaces/IUserService";
+import UserRepository from "@/features/user/repositories/UserRepository";
+import type IUserRepository from "@/features/user/interfaces/IUserRepository";
+import TokenService from "../features/auth/services/TokenService";
+import type ITokenService from "@/features/auth/interfaces/ITokenService";
+import TokenRepository from "@/features/auth/repositories/TokenRepository";
+import type ITokenRepository from "@/features/auth/interfaces/ITokenRepository";
+import ProductService from "@/features/products/services/ProductService";
+import type IProductService from "@/features/products/interfaces/IProductService";
+import ProductRepository from "@/features/products/repositories/ProductRepository";
+import type IProductRepository from "@/features/products/interfaces/IProductRepository";
 import CheckerService from "../services/CheckerService";
 import type ICheckerService from "@/interfaces/ICheckerService";
-import WishlistService from "../services/WishlistService";
-import type IWishlistService from "@/interfaces/IWishlistService";
-import WishlistRepository from "@/repositories/WishlistRepository";
-import type IWishlistRepository from "@/interfaces/IWishlistRepository";
-import CartService from "@/services/CartService";
-import type ICartService from "@/interfaces/ICartService";
-import CartRepository from "@/repositories/CartRepository";
-import type ICartRepository from "@/interfaces/ICartRepository";
-import ReviewService from "@/services/ReviewService";
-import type IReviewService from "@/interfaces/IReviewService";
-import ReviewRepository from "@/repositories/ReviewRepository";
-import type IReviewRepository from "@/interfaces/IReviewRepository";
-import IPurchaseHistoryRepository from "@/interfaces/IPurchaseHistoryRepository";
-import PurchaseHistoryService from "@/services/PurchaseHistoryService";
-import PurchaseHistoryRepository from "@/repositories/PurchaseHistoryRepository";
-import IPurchaseHistoryService from "@/interfaces/IPurchaseHistoryService";
+import WishlistService from "../features/wishlist/services/WishlistService";
+import type IWishlistService from "@/features/wishlist/interfaces/IWishlistService";
+import WishlistRepository from "@/features/wishlist/repositories/WishlistRepository";
+import type IWishlistRepository from "@/features/wishlist/interfaces/IWishlistRepository";
+import CartService from "@/features/cart/services/CartService";
+import type ICartService from "@/features/cart/interfaces/ICartService";
+import CartRepository from "@/features/cart/repositories/CartRepository";
+import type ICartRepository from "@/features/cart/interfaces/ICartRepository";
+import ReviewService from "@/features/reviews/services/ReviewService";
+import type IReviewService from "@/features/reviews/interfaces/IReviewService";
+import ReviewRepository from "@/features/reviews/repositories/ReviewRepository";
+import type IReviewRepository from "@/features/reviews/interfaces/IReviewRepository";
+import IPurchaseHistoryRepository from "@/features/history/interfaces/IPurchaseHistoryRepository";
+import PurchaseHistoryService from "@/features/history/services/PurchaseHistoryService";
+import PurchaseHistoryRepository from "@/features/history/repositories/PurchaseHistoryRepository";
+import IPurchaseHistoryService from "@/features/history/interfaces/IPurchaseHistoryService";
 import CLASSTYPES from "@/shared/constants/classTypes";
 
 const container = new Container();
 
 container.bind<IUserService>(CLASSTYPES.IUserService).to(UserService);
 container.bind<IUserRepository>(CLASSTYPES.IUserRepository).to(UserRepository);
-container.bind<IUserUtils>(CLASSTYPES.IUserUtils).to(UserUtils);
 container.bind<ITokenService>(CLASSTYPES.ITokenService).to(TokenService);
 container
   .bind<ITokenRepository>(CLASSTYPES.ITokenRepository)
   .to(TokenRepository);
-container.bind<ITokenUtils>(CLASSTYPES.ITokenUtils).to(TokenUtils);
 container
   .bind<IProductRepository>(CLASSTYPES.IProductRepository)
   .to(ProductRepository);
@@ -61,7 +55,7 @@ container.bind<IReviewService>(CLASSTYPES.IReviewService).to(ReviewService);
 container
   .bind<IReviewRepository>(CLASSTYPES.IReviewRepository)
   .to(ReviewRepository);
-container.bind<IProductUtils>(CLASSTYPES.IProductUtils).to(ProductUtils);
+container.bind<IProductService>(CLASSTYPES.IProductService).to(ProductService);
 container.bind<ICheckerService>(CLASSTYPES.ICheckerService).to(CheckerService);
 container
   .bind<IPurchaseHistoryService>(CLASSTYPES.IPurchaseHistoryService)
@@ -74,14 +68,12 @@ export const userService = container.get<IUserService>(CLASSTYPES.IUserService);
 export const userRepository = container.get<IUserRepository>(
   CLASSTYPES.IUserRepository
 );
-export const userUtils = container.get<IUserUtils>(CLASSTYPES.IUserUtils);
 export const tokenService = container.get<ITokenService>(
   CLASSTYPES.ITokenService
 );
 export const tokenRepository = container.get<ITokenRepository>(
   CLASSTYPES.ITokenRepository
 );
-export const tokenUtils = container.get<ITokenUtils>(CLASSTYPES.ITokenUtils);
 export const cartService = container.get<ICartService>(CLASSTYPES.ICartService);
 export const cartRepository = container.get<ICartRepository>(
   CLASSTYPES.ICartRepository
@@ -101,8 +93,8 @@ export const reviewRepository = container.get<IReviewRepository>(
 export const productRepository = container.get<IProductRepository>(
   CLASSTYPES.IProductRepository
 );
-export const productUtils = container.get<IProductUtils>(
-  CLASSTYPES.IProductUtils
+export const productService = container.get<IProductService>(
+  CLASSTYPES.IProductService
 );
 export const checkerService = container.get<ICheckerService>(
   CLASSTYPES.ICheckerService

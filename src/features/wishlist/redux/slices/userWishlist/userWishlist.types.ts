@@ -1,4 +1,4 @@
-import { UserWishlist } from "@/types/types";
+import UserWishlist from "@/features/wishlist/types/userWishlist/userWishlist";
 
 export interface UserWishlistState {
   products: UserWishlist["products"];

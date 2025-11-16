@@ -1,10 +1,10 @@
-﻿import ApiProduct from "@/features/products/types/api/apiProduct";
+﻿import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 
 type ApiPagination = {
     count: number;
     next: string;
     previous: string;
-    results: ApiProduct[];
+    results: ApiProductDetails[];
 }
 
 export default ApiPagination;

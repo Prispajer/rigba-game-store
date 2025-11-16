@@ -1,5 +1,5 @@
 import IUtilsService from "../interfaces/IUtilsService";
-import { GameAPIResponse } from "../types/types";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 
 export default class UtilsService implements IUtilsService {
   private searchText: string = "";
@@ -16,7 +16,7 @@ export default class UtilsService implements IUtilsService {
     this.searchText = searchText;
   }
 
-  searchByString(searchData: GameAPIResponse[]): GameAPIResponse[] {
+  searchByString(searchData: ApiProductDetails[]): ApiProductDetails[] {
     const searchText = this.getSearchText();
     if (!searchData) {
       return [];

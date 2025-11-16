@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import Image from "next/image";
 import { CiHeart } from "react-icons/ci";
@@ -6,44 +7,44 @@ import AddToWishlist from "../../../../components/Interface/Shared/ReusableCompo
 import useFetchGameData from "@/features/products/hooks/useFetchGameData";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import useSearchText from "@/hooks/useSearchText";
-import { GameAPIResponse } from "@/types/types";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 
 export default function FilterProductList() {
-  const { productFilterState } = useFetchGameData();
-  const { compartmentNumberOne, compartmentNumberTwo, handleComparePrices } =
+  const { productFilterState, handleComparePrices } = useFetchGameData();
+  const { compartmentNumberOneState, compartmentNumberTwoState} =
     useSearchText();
-  const { redirectToGame } = useCustomRouter();
+  const { redirectToProduct } = useCustomRouter();
 
-  const displayByCondition: GameAPIResponse[] =
-    compartmentNumberOne && compartmentNumberTwo
+  const displayByCondition: ApiProductDetails[] =
+      compartmentNumberOneState && compartmentNumberTwoState
       ? handleComparePrices(
-          (compartmentNumberOne as number) ?? 0,
-          (compartmentNumberTwo as number) ?? 0
+          (compartmentNumberOneState as number) ?? 0,
+          (compartmentNumberTwoState as number) ?? 0
         )
       : productFilterState.productsWithFilters;
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-product-list-auto-fit gap-x-[10px]">
       {displayByCondition && displayByCondition.length > 0 ? (
-        displayByCondition.map((game) => (
+        displayByCondition.map((product) => (
           <div
-            key={game.slug}
-            onClick={() => redirectToGame(game.slug as string)}
+            key={product.slug}
+            onClick={() => redirectToProduct(product.slug as string)}
             className="relative my-[10px] flex flex-row sm:flex-col bg-tertiaryColor cursor-pointer"
           >
             <div className="relative min-w-[95px] sm:min-h-[250px] m-[5px] sm:m-[0px]">
               <Image
                 loading="eager"
                 fill={true}
-                src={game.background_image ?? ""}
-                alt={game.background_image ?? ""}
+                src={product.background_image ?? ""}
+                alt={product.background_image ?? ""}
                 sizes="(max-width: 576px) 95px, 100vw"
               />
             </div>
             <div className="max-w-[50%] sm:max-w-[100%] my-[10px] px-[15px]">
               <div className="flex flex-col justify-between min-h-[60px]">
                 <div className="leading-none line-clamp-1 text-[#ffffff]">
-                  <span className="font-bold text-[14px]">{game.name}</span>
+                  <span className="font-bold text-[14px]">{product.name}</span>
                 </div>
                 <div>
                   <span className="overflow-hidden overflow-ellipsis line-clamp-1 text-[12px] text-[#fffa84] font-bold">
@@ -56,7 +57,7 @@ export default function FilterProductList() {
                   From
                 </div>
                 <div className="overflow-hidden overflow-ellipsis line-clamp-1 text-[20px] text-[#ffffff] font-bold">
-                  ${game.price}
+                  ${product.price}
                 </div>
                 <div className="flex items-center">
                   <CiHeart
@@ -65,13 +66,13 @@ export default function FilterProductList() {
                     color="#ffffff80"
                   />
                   <span className="overflow-hidden overflow-ellipsis line-clamp-1 text-[14px] text-[#ffffff80]">
-                    {game.rating}
+                    {product.rating}
                   </span>
                 </div>
               </div>
             </div>
             <AddToWishlist
-              game={game}
+              product={product}
               position="absolute right-[10px] top-0"
               added="border-[#FFFA84] bg-[#FFFA84]"
               deleted="bg-[##d3d3d3]"

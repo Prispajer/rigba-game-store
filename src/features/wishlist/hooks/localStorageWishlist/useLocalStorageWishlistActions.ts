@@ -7,13 +7,13 @@ import {
   deleteLocalStorageProductFromWishlist,
   setLocalStorageWishlistOrdering,
 } from "../../redux/slices/localStorageWishlist/localStorageWishlistSlice";
-import LocalStorageWishlistProduct from "../../types/localStorageWishlistProduct";
+import LocalStorageWishlistItem from "@/features/wishlist/types/localStorageWishlist/localStorageWishlistItem";
 
 export default function useLocalStorageWishlistActions() {
   const dispatch = useDispatch<AppDispatch>();
 
   const handleAddLocalStorageProductToWishlist = (
-    product: LocalStorageWishlistProduct
+    product: LocalStorageWishlistItem
   ): void => {
     dispatch(addLocalStorageProductToWishlist(product));
   };

@@ -5,18 +5,18 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
 import { VscWorkspaceUnknown } from "react-icons/vsc";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
-import useUIVisibility from "@/hooks/useWindowVisibility";
+import useUIVisibility from "@/hooks/useUiVisibility";
 import useLocalStorageCart from "@/features/cart/hooks/localStorageCart/useLocalStorageCart";
 import useLocalStorageCartActions from "@/features/cart/hooks/localStorageCart/useLocalStorageCartActions";
 import useUserCart from "@/features/cart/hooks/userCart/useUserCart";
 import useUserCartActions from "@/features/cart/hooks/userCart/useUserCartActions";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import useCustomRouter from "@/hooks/useCustomRouter";
-import { calculateTotalPrice } from "@/utils/prices";
+import {calculateTotalPrice} from "@/features/products/utils/prices";
 
 export default function CartModalContainer() {
   const { user } = useCurrentUser();
-  const { cartModalState, handleClose } = useUIVisibility();
+  const { cartModalState, handleHideElement } = useUIVisibility();
   const {
     userCartState,
     isLoading: isCartLoading,
@@ -28,17 +28,17 @@ export default function CartModalContainer() {
     handleIncreaseQuantityUserProductFromCart,
   } = useUserCartActions(getUserCart);
 
-  const localStorageCartState = useLocalStorageCart("localStorageCart");
+  const { localStorageCartState } = useLocalStorageCart("localStorageCart");
   const {
     handleDeleteLocalStorageProductFromCart,
     handleDecreaseQuantityLocalStorageProductFromCart,
     handleIncreaseQuantityLocalStorageProductFromCart,
   } = useLocalStorageCartActions();
-  const { redirectToGame, redirectToCheckout } = useCustomRouter();
+  const { redirectToProduct, redirectToCheckout } = useCustomRouter();
 
   const handleOutsideClick = () => {
     if (cartModalState) {
-      handleClose("cartModal");
+        handleHideElement("cartModal");
     }
   };
 
@@ -57,7 +57,7 @@ export default function CartModalContainer() {
           >
             <div className="flex justify-between items-center text-white border-b-[1px] border-[#ffffff1a] p-[20px]">
               <strong className="text-[20px] cursor-default">My cart</strong>
-              <button onClick={() => handleClose("cartModal")}>
+              <button onClick={() => handleHideElement("cartModal")}>
                 <IoCloseSharp className="hover:text-modalHover" size="25px" />
               </button>
             </div>
@@ -73,9 +73,9 @@ export default function CartModalContainer() {
                         <Image
                           loading="eager"
                           onClick={() =>
-                            redirectToGame(
+                              redirectToProduct(
                               product.productsInformations?.slug as string,
-                              handleClose,
+                                handleHideElement,
                               "cartModal"
                             )
                           }
@@ -91,9 +91,9 @@ export default function CartModalContainer() {
                       <div className="flex flex-1 flex-col px-2 gap-y-[10px] text-white">
                         <div
                           onClick={() =>
-                            redirectToGame(
+                              redirectToProduct(
                               product.productsInformations.slug as string,
-                              handleClose,
+                                handleHideElement,
                               "cartModal"
                             )
                           }
@@ -170,23 +170,23 @@ export default function CartModalContainer() {
                         <Image
                           loading="eager"
                           onClick={() =>
-                            redirectToGame(
-                              product.slug,
-                              handleClose,
+                              redirectToProduct(
+                              product.slug as string,
+                                handleHideElement,
                               "cartModal"
                             )
                           }
                           fill={true}
                           src={product.background_image ?? ""}
-                          alt={product.name}
+                          alt={product.name as string}
                         />
                       </div>
                       <div className="flex flex-1 flex-col px-2 gap-y-[10px] text-white">
                         <div
                           onClick={() =>
-                            redirectToGame(
-                              product.slug,
-                              handleClose,
+                              redirectToProduct(
+                              product.slug as string,
+                                handleHideElement,
                               "cartModal"
                             )
                           }

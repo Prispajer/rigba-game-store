@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,7 +9,7 @@ import { FormSuccess } from "@/components/Interface/Shared/FormsNotifications/Fo
 import { FormError } from "@/components/Interface/Shared/FormsNotifications/FormError";
 import useAuthHandlers from "@/features/auth/hooks/useAuthHandlers";
 import useTokenHandlers from "@/features/auth/hooks/useTokenHandlers";
-import useUIVisibility from "@/hooks/useWindowVisibility";
+import useUIVisibility from "@/hooks/useUiVisibility";
 import { NewPasswordSchema } from "@/utils/schemas/user";
 import useNotification from "@/hooks/useNotification";
 import { NotificationOrigin } from "@/redux/slices/notification/notification.types";
@@ -18,8 +19,8 @@ export default function ChangePasswordContainer() {
 
   const { isPending, handleChangePasswordSubmit } = useAuthHandlers();
   const { handleSendChangePasswordToken } = useTokenHandlers();
-  const { notification } = useNotification();
-  const { twoFactorModalState, handleOpen } = useUIVisibility();
+  const { successState, messageState, originState } = useNotification();
+  const { twoFactorModalState, handleShowElement } = useUIVisibility();
 
   const changePasswordForm = useForm<z.infer<typeof NewPasswordSchema>>({
     resolver: zodResolver(NewPasswordSchema),
@@ -95,25 +96,25 @@ export default function ChangePasswordContainer() {
         </label>
         <FormSuccess
           message={
-            (notification.success &&
-              notification?.origin === NotificationOrigin.ChangePassword) ||
-            notification?.origin === NotificationOrigin.ChangePasswordToken
-              ? (notification.message as string)
+            (successState &&
+              originState === NotificationOrigin.ChangePassword) ||
+            originState === NotificationOrigin.ChangePasswordToken
+              ? (messageState as string)
               : ""
           }
         />
         <FormError
           message={
-            (!notification.success &&
-              notification?.origin === NotificationOrigin.ChangePassword) ||
-            notification?.origin === NotificationOrigin.ChangePasswordToken
-              ? (notification.message as string)
+            (!successState &&
+                originState === NotificationOrigin.ChangePassword) ||
+            originState === NotificationOrigin.ChangePasswordToken
+              ? (messageState as string)
               : ""
           }
         />
         <div className="max-w-[180px] pt-[20px]">
           <button
-            onClick={() => handleOpen("twoFactorModal")}
+            onClick={() => handleShowElement("twoFactorModal")}
             className="flex items-center justify-center w-full min-h-[36px] px-[10px] bg-buttonBackground hover:bg-buttonBackgroundHover"
           >
             <span className="text-buttonTextColor font-bold">Save</span>

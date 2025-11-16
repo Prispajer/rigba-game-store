@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cartService } from "@/utils/injector";
-import { RequestResponse } from "@/types/types";
+import RequestResponse from "@/shared/types/requestResponse";
 import { Cart } from "@prisma/client";
 
 export async function PATCH(request: NextRequest) {

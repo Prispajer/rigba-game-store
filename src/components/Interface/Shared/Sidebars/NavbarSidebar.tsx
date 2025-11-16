@@ -4,9 +4,9 @@ import Link from "next/link";
 import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 import { IoCloseSharp } from "react-icons/io5";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
-import useUIVisibility from "@/hooks/useWindowVisibility";
+import useUIVisibility from "@/hooks/useUiVisibility";
 import { navLinks } from "@/data/links";
-import { NavCurrentElement } from "@/types/types";
+import NavCurrentElement from "@/shared/enums/navCurrentElement";
 
 export default function NavbarSidebar() {
   const [currentElement, setCurrentElement] = React.useState<
@@ -20,7 +20,7 @@ export default function NavbarSidebar() {
   const [selectedSubCategory, setSelectedSubCategory] = React.useState<
     string | null
   >(null);
-  const { navSidebarState, handleClose } = useUIVisibility();
+  const { navSidebarState, handleHideElement } = useUIVisibility();
 
   const foundCategory = selectedCategory
     ? navLinks.find((element) => element.title === selectedCategory)
@@ -49,7 +49,7 @@ export default function NavbarSidebar() {
   };
 
   const handleOutsideClick = () => {
-    handleClose("navSidebar");
+      handleHideElement("navSidebar");
     setCurrentElement(NavCurrentElement.Category);
     setSelectedCategory(null);
     setSelectedSubCategory(null);
@@ -60,7 +60,7 @@ export default function NavbarSidebar() {
       <OutsideClickHandler handleOutsideClick={handleOutsideClick}>
         <div className="bg-primaryColor fixed h-full w-[300px] z-10">
           <div className="flex items-center justify-between w-full px-[10px] border-b-2 border-secondaryColor">
-            <Link onClick={() => handleClose("navSidebar")} href="/">
+            <Link onClick={() => handleHideElement("navSidebar")} href="/">
               <div className="flex items-center">
                 <Image
                   src="/icons/logo.png"
@@ -117,7 +117,7 @@ export default function NavbarSidebar() {
                   <button
                     className="pr-[20px]"
                     onClick={() => {
-                      handleClose("navSidebar"),
+                        handleHideElement("navSidebar"),
                         setCurrentElement(NavCurrentElement.Category);
                     }}
                   >
@@ -161,7 +161,7 @@ export default function NavbarSidebar() {
                   <button
                     className="pr-[20px]"
                     onClick={() => {
-                      handleClose("navSidebar"),
+                        handleHideElement("navSidebar"),
                         setCurrentElement(NavCurrentElement.Category);
                     }}
                   >
@@ -173,7 +173,7 @@ export default function NavbarSidebar() {
                     {foundSubCategory?.items.map((link) => (
                       <li key={link.name} className="sidebar-li">
                         <Link
-                          onClick={() => handleClose("navSidebar")}
+                          onClick={() => handleHideElement("navSidebar")}
                           href={link.url}
                           className="flex items-center w-full h-full"
                         >

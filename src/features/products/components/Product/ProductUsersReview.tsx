@@ -1,10 +1,10 @@
 import React from "react";
 import Image from "next/image";
 import LoadingAnimation from "../../../../components/Interface/Shared/Animations/LoadingAnimation";
-import { FormError } from "../../../../components/Interface/Shared/FormsNotifications/FormError";
+import { FormError } from "@/components/Interface/Shared/FormsNotifications/FormError";
 import { AiFillLike, AiFillDislike } from "react-icons/ai";
 import { generateStars } from "@/utils/ratings";
-import { GameAPIResponse } from "@/types/types";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 import { User } from "next-auth";
 import { UserReviewsState } from "@/features/reviews/redux/slices/userReviews/userReviews.types";
 
@@ -16,7 +16,7 @@ export default function ProductUsersReview({
   likeUserReviewAction,
   unlikeUserReviewAction,
 }: {
-  product: GameAPIResponse;
+  product: ApiProductDetails;
   isReviewLoading: boolean;
   user: User | null;
   userReviewsState: UserReviewsState;

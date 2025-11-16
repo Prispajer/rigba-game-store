@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import Image from "next/image";
 import LoadingAnimation from "@/components/Interface/Shared/Animations/LoadingAnimation";
@@ -11,8 +12,8 @@ export default function KeysContainer() {
   const { userProductHistoryState } = useUserProductHistory();
   const { redirectToKey } = useCustomRouter();
   const {
-    pages,
-    pagination,
+    paginatedPages,
+    currentPageState,
     handleSetCurrentPage,
     handleNextPage,
     handlePreviousPage,
@@ -38,8 +39,8 @@ export default function KeysContainer() {
           </div>
         ) : userProductHistoryState.productHistoryArray &&
           userProductHistoryState.productHistoryArray?.length > 0 ? (
-          pages.length > pagination.currentPage &&
-          pages[pagination.currentPage]?.map((product) => (
+            paginatedPages.length > currentPageState &&
+            paginatedPages[currentPageState]?.map((product) => (
             <div
               key={product.id}
               className="grid grid-cols-[1fr_4fr] lg:grid-cols-account-orders-auto-fit items-center p-[15px] lg:p-[0px] gap-x-[20px] border border-b-[3px] border-[#d3dfe9] bg-[#FFFFFF]"
@@ -134,8 +135,8 @@ export default function KeysContainer() {
         {userProductHistoryState.productHistoryArray.length >= 11 && (
           <Pagination
             loadingState={userProductHistoryState.isLoading}
-            currentPage={pagination.currentPage}
-            pages={pages}
+            currentPage={currentPageState}
+            pages={paginatedPages}
             handleNextPage={handleNextPage}
             handleCurrentSetPage={handleSetCurrentPage}
             handlePreviousPage={handlePreviousPage}

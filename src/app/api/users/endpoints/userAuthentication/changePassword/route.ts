@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { userService } from "@/utils/injector";
-import { RequestResponse, User } from "@/types/types";
-import { UpdatePasswordDTO } from "@/utils/helpers/backendDTO";
+import RequestResponse from "@/shared/types/requestResponse";
+import { User } from "@prisma/client";
 import { TwoFactorToken } from "@prisma/client";
 
 export async function POST(

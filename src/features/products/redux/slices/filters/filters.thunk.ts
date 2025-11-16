@@ -1,11 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import fetchService from "@/services/FetchService";
-import { assignPricesToExternalGames } from "@/utils/prices";
-import { GameAPIPagination } from "@/types/types";
+import { assignPricesToExternalGames } from "@/features/products/utils/prices";
+import ApiPagination from "@/features/products/types/api/apiPagination";
 import { FiltersState } from "./filters.types";
 
 export const getProductsWithFilters = createAsyncThunk<
-  GameAPIPagination,
+    ApiPagination,
   { page: number },
   { rejectValue: string; getState: () => FiltersState }
 >(

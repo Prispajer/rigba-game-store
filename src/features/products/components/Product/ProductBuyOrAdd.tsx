@@ -2,11 +2,11 @@
 
 import React from "react";
 import { FaCartPlus } from "react-icons/fa";
-import { generateRandomPrice } from "@/utils/prices";
-import { GameAPIProduct } from "@/types/types";
+import { generateRandomPrice } from "@/features/products/utils/prices";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 import { User } from "next-auth";
-import AddUserProductToCartDTO from "@/features/cart/dto/AddUserProductToCartDTO";
-import LocalStorageCartProduct from "@/features/cart/types/localStorageCartProduct";
+import AddUserCartItemDTO from "@/features/cart/dto/AddUserCartItemDTO";
+import LocalStorageCartProduct from "@/features/cart/types/localStorageCart/localStorageCartProduct";
 
 export default function ProductBuyOrAdd({
   product,
@@ -16,10 +16,10 @@ export default function ProductBuyOrAdd({
   handleAddLocalStorageProductToCart,
   redirectToCheckout,
 }: {
-  product: GameAPIProduct;
+  product: ApiProductDetails;
   user: User | null;
   isCartLoading: boolean;
-  handleAddUserProductToCart: (product: AddUserProductToCartDTO) => void;
+  handleAddUserProductToCart: (product: AddUserCartItemDTO) => void;
   handleAddLocalStorageProductToCart: (
     product: LocalStorageCartProduct
   ) => void;
@@ -41,7 +41,7 @@ export default function ProductBuyOrAdd({
     } else {
       handleAddLocalStorageProductToCart({
         externalProductId: product.id as number,
-        description: product.description_raw,
+        description: product.description_raw as string,
         price: generateRandomPrice(),
         quantity: 1,
         name: product.name,

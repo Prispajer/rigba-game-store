@@ -1,10 +1,10 @@
 import { LocalStorageWishlistState } from "./localStorageWishlist.types";
-import LocalStorageWishlistProduct from "@/features/wishlist/types/localStorageWishlistProduct";
+import LocalStorageWishlistItem from "@/features/wishlist/types/localStorageWishlist/localStorageWishlistItem";
 
 export const sortWishlist = (
   wishlist: LocalStorageWishlistState["localStorageWishlist"],
   ordering: string | null
-): LocalStorageWishlistProduct[] => {
+): LocalStorageWishlistItem[] => {
   switch (ordering) {
     case "price":
       return [...wishlist].sort((a, b) => (a.price || 0) - (b.price || 0));

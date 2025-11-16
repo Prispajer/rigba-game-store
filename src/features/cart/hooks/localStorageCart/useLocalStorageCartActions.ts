@@ -1,4 +1,5 @@
 "use client";
+
 import { useDispatch } from "react-redux";
 import {
   addLocalStorageProductToCart,
@@ -7,7 +8,7 @@ import {
   decreaseQuantityLocalStorageProductFromCart,
 } from "../../redux/slices/localStorageCart/localStorageCartSlice";
 import { AppDispatch } from "@/redux/store";
-import LocalStorageCartProduct from "../../types/localStorageCartProduct";
+import LocalStorageCartProduct from "../../types/localStorageCart/localStorageCartProduct";
 
 export default function useLocalStorageCartActions() {
   const dispatch = useDispatch<AppDispatch>();

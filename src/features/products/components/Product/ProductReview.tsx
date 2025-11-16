@@ -1,18 +1,17 @@
 import React from "react";
-import LoadingAnimation from "../../../../components/Interface/Shared/Animations/LoadingAnimation";
 import { generateStars } from "@/utils/ratings";
-import { groupReviewsByRating, mergeReviews } from "@/utils/reviews";
-import { GameAPIResponse } from "@/types/types";
-import { UserReviewsSlice } from "@/features/reviews/redux/slices/userReviews/userReviewsSlice";
+import { groupReviewsByRating, mergeReviews } from "@/features/reviews/utils/reviews";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
+import { UserReviewsState } from "@/features/reviews/redux/slices/userReviews/userReviews.types";
 
 export default function ProductReview({
   product,
   redirectToReview,
   userReviewsState,
 }: {
-  product: GameAPIResponse;
+  product: ApiProductDetails;
   redirectToReview: (name: string) => void;
-  userReviewsState: UserReviewsSlice;
+  userReviewsState: UserReviewsState;
 }) {
   const groupedReviewsByRating = React.useMemo(
     () => groupReviewsByRating(userReviewsState.reviews),
@@ -20,7 +19,7 @@ export default function ProductReview({
   );
   const mergedReviews = React.useMemo(
     () => mergeReviews(groupedReviewsByRating, product.ratings),
-    [userReviewsState.reviews, product.ratings]
+    [groupedReviewsByRating, product.ratings]
   );
 
   return (

@@ -1,7 +1,7 @@
-import { GameAPIResponse } from "@/types/types";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 
 export type FiltersState = {
-  productsWithFilters: GameAPIResponse[];
+  productsWithFilters: ApiProductDetails[];
   genresIdArray: number[];
   platformsIdArray: number[];
   storesIdArray: number[];

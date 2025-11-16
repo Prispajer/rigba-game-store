@@ -1,25 +1,24 @@
 "use client";
+
 import React from "react";
 import { useDispatch } from "react-redux";
-import { toggleScreen } from "@/redux/slices/window/windowSlice";
 import HeaderLogo from "@/components/Interface/Header/HeaderLogo";
 import HeaderUserNavigation from "@/components/Interface/Header//HeaderUserNavigation";
 import NavbarSidebar from "@/components/Interface/Shared/Sidebars/NavbarSidebar";
 import HeaderSearchBar from "@/components/Interface/Header/HeaderSearchBar";
-import useUIVisibility from "@/hooks/useWindowVisibility";
+import useUIVisibility from "@/hooks/useUiVisibility";
 
 export default function AppHeader() {
-  const { resolutionState, handleToggleScreen } = useUIVisibility();
+  const { resolutionState, handleSetResolution: handleSetResolution } = useUIVisibility();
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    const windowScreen = window.innerWidth >= 768;
-    dispatch(toggleScreen(windowScreen));
-    window.addEventListener("resize", handleToggleScreen(768));
-    return () => {
-      window.removeEventListener("resize", handleToggleScreen(768));
-    };
-  }, [handleToggleScreen, dispatch]);
+      handleSetResolution();
+      window.addEventListener("resize", handleSetResolution);
+      return () => {
+          window.removeEventListener("resize", handleSetResolution);
+      };
+  }, [dispatch, handleSetResolution]);
 
   return (
     <header

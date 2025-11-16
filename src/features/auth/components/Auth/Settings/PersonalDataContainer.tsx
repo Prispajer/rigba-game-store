@@ -1,4 +1,5 @@
 "use client";
+
 import "react-calendar/dist/Calendar.css";
 import React from "react";
 import Calendar from "react-calendar";
@@ -20,7 +21,7 @@ export default function PersonalDataContainer() {
   const [date, setDate] = React.useState<Value>(new Date());
 
   const { handleUpdateDataSubmit } = useUserHandlers();
-  const { notification } = useNotification();
+  const { successState, messageState, originState } = useNotification();
 
   const calendarRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -227,17 +228,17 @@ export default function PersonalDataContainer() {
         </div>
         <FormSuccess
           message={
-            notification.success &&
-            notification?.origin === NotificationOrigin.UpdateData
-              ? (notification.message as string)
+            successState &&
+            originState === NotificationOrigin.UpdateData
+              ? (messageState as string)
               : ""
           }
         />
         <FormError
           message={
-            !notification.success &&
-            notification?.origin === NotificationOrigin.UpdateData
-              ? (notification.message as string)
+            !successState &&
+            originState === NotificationOrigin.UpdateData
+              ? (messageState as string)
               : ""
           }
         />

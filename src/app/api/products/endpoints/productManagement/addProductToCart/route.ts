@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import { cartService } from "@/utils/injector";
-import { RequestResponse } from "@/types/types";
-import { Cart, User } from "@prisma/client";
+import {NextRequest, NextResponse} from "next/server";
+import {cartService} from "@/utils/injector";
+import RequestResponse from "@/shared/types/requestResponse"
+import {Cart} from "@prisma/client";
 
 export async function POST(request: NextRequest) {
   const addProductToCartClientData = await request.json();

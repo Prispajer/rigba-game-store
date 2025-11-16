@@ -2,14 +2,20 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { CiHeart, CiLogout } from "react-icons/ci";
+import {IconType} from "react-icons";
 import { IoReload, IoCloseSharp, IoPersonOutline } from "react-icons/io5";
 import { TbShoppingCartCopy } from "react-icons/tb";
 import { LuGamepad2 } from "react-icons/lu";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
-import useUIVisibility from "@/hooks/useWindowVisibility";
+import useUIVisibility from "@/hooks/useUiVisibility";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import { signOut } from "next-auth/react";
-import { ProfileModalContainerProps } from "@/types/types";
+
+export type ProfileModalContainerProps = {
+    navItems?: { href: string; icon: IconType; label: string }[];
+    translateX?: string;
+    translateY?: string;
+};
 
 export const defaultNavItems = [
   { href: "/wishlist", icon: CiHeart, label: "Wishlist" },
@@ -28,7 +34,7 @@ export default function ProfileModalContainer({
   translateX = "md:translate-x-[-2px]",
   translateY = "md:translate-y-[80px]",
 }: ProfileModalContainerProps) {
-  const { profileModalState, handleClose } = useUIVisibility();
+  const { profileModalState, handleShowElement } = useUIVisibility();
   const { user } = useCurrentUser();
 
   const handleLogout = () => {
@@ -37,7 +43,7 @@ export default function ProfileModalContainer({
 
   const handleOutsideClick = () => {
     if (profileModalState) {
-      handleClose("profileModal");
+        handleShowElement("profileModal");
     }
   };
 
@@ -68,7 +74,7 @@ export default function ProfileModalContainer({
               <div className="flex items-center flex-1 justify-end">
                 <button>
                   <IoCloseSharp
-                    onClick={() => handleClose("profileModal")}
+                    onClick={() => handleShowElement("profileModal")}
                     size="26px"
                   />
                 </button>
@@ -99,7 +105,7 @@ export default function ProfileModalContainer({
                 className="text-[#544D60] text-left border-b-[1px] px-[20px] py-[10px]"
               >
                 <Link
-                  onClick={() => handleClose("profileModal")}
+                  onClick={() => handleShowElement("profileModal")}
                   className="flex items-center text-[15px] text-[#544D60]"
                   href={item.href}
                 >

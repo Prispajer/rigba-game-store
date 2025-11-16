@@ -1,17 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import fetchService from "@/services/FetchService";
-import { GameAPIResponse } from "@/types/types";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 
 export const getPublishers = createAsyncThunk<
-  GameAPIResponse[],
+    ApiProductDetails[],
   { quantity: number },
   { rejectValue: string }
 >("publishers/getPublishers", async ({ quantity = 1 }, { rejectWithValue }) => {
   try {
-    const getPublishersResponse = await fetchService.getPublishersForProducts(
+      return await fetchService.getPublishersForProducts(
       quantity
     );
-    return getPublishersResponse;
   } catch (error) {
     return rejectWithValue((error as Error).message);
   }

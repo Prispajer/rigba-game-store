@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { wishlistService } from "@/utils/injector";
-import { RequestResponse } from "@/types/types";
+import RequestResponse from "@/shared/types/requestResponse";
 import { Wishlist } from "@prisma/client";
 
 export async function POST(request: NextRequest) {

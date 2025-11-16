@@ -1,52 +1,40 @@
 import React, { ReactNode } from "react";
 
 export default function CheckoutStatus({
-  stepOneElementStyles,
-  stepTwoElementStyles,
-  stepThreeElementStyles,
-  stepOneContent,
-  stepTwoContent,
-  stepThreeContent,
-  stepOneContentStyles,
-  stepTwoContentStyles,
-  stepThreeContentStyles,
-}: {
-  stepOneElementStyles: string;
-  stepTwoElementStyles: string;
-  stepThreeElementStyles: string;
-  stepOneContent: ReactNode | string;
-  stepTwoContent: ReactNode | string;
-  stepThreeContent: ReactNode | string;
-  stepOneContentStyles: string;
-  stepTwoContentStyles: string;
-  stepThreeContentStyles: string;
+                                           stepElementClasses,
+                                           stepContent,
+                                           stepContentClasses,
+                                       }: {
+    stepElementClasses: { step1: string; step2: string; step3: string };
+    stepContent: { step1: ReactNode | string; step2: ReactNode | string; step3: ReactNode | string };
+    stepContentClasses: { step1: string; step2: string; step3: string };
 }) {
-  return (
-    <ul className="flex flex-wrap items-center justify-between flex-1 ml-[40px]">
-      <li className={`checkout-status ${stepOneElementStyles}`}>
-        <button className="flex">
-          <span className={`checkout-status-step ${stepOneContentStyles}`}>
-            {stepOneContent}
+    return (
+        <ul className="flex flex-wrap items-center justify-between flex-1 ml-[40px]">
+            <li className={`checkout-status ${stepElementClasses.step1}`}>
+                <button className="flex">
+          <span className={`checkout-status-step ${stepContentClasses.step1}`}>
+            {stepContent.step1}
           </span>
-          <span>Cart</span>
-        </button>
-      </li>
-      <li className={`checkout-status ${stepTwoElementStyles}`}>
-        <button className="flex">
-          <span className={`checkout-status-step ${stepTwoContentStyles}`}>
-            {stepTwoContent}
+                    <span>Cart</span>
+                </button>
+            </li>
+            <li className={`checkout-status ${stepElementClasses.step2}`}>
+                <button className="flex">
+          <span className={`checkout-status-step ${stepContentClasses.step2}`}>
+            {stepContent.step2}
           </span>
-          <span>Payment</span>
-        </button>
-      </li>
-      <li className={`checkout-status ${stepThreeElementStyles}`}>
-        <button className="flex">
-          <span className={`checkout-status-step ${stepThreeContentStyles}`}>
-            {stepThreeContent}
+                    <span>Payment</span>
+                </button>
+            </li>
+            <li className={`checkout-status ${stepElementClasses.step3}`}>
+                <button className="flex">
+          <span className={`checkout-status-step ${stepContentClasses.step3}`}>
+            {stepContent.step3}
           </span>
-          <span>Redeem your product</span>
-        </button>
-      </li>
-    </ul>
-  );
+                    <span>Redeem your product</span>
+                </button>
+            </li>
+        </ul>
+    );
 }

@@ -1,20 +1,21 @@
-import { GameAPIPagination, GameAPIResponse } from "@/types/types";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
+import ApiPagination from "@/features/products/types/api/apiPagination";
 
 export default interface IFetchService {
   fetchData(url: string): Promise<any>;
-  getProduct(productSlug: string): Promise<GameAPIResponse>;
-  getProducts(searchQuery?: string): Promise<GameAPIResponse[]>;
+  getProduct(productSlug: string): Promise<ApiProductDetails>;
+  getProducts(searchQuery?: string): Promise<ApiProductDetails[]>;
   getScreenshotsForProduct(
     productId: string
-  ): Promise<GameAPIResponse["screenshots"]>;
+  ): Promise<ApiProductDetails["screenshots"]>;
   getProductsByOrdering(
     ordering: string,
     quantity?: number
-  ): Promise<GameAPIResponse[]>;
-  getGenresForProducts(quantity: number): Promise<GameAPIResponse[]>;
-  getPublishersForProducts(quantity: number): Promise<GameAPIResponse[]>;
-  getPlatformsForProducts(quantity: number): Promise<GameAPIResponse[]>;
-  getStoresForProducts(quantity: number): Promise<GameAPIResponse[]>;
+  ): Promise<ApiProductDetails[]>;
+  getGenresForProducts(quantity: number): Promise<ApiProductDetails[]>;
+  getPublishersForProducts(quantity: number): Promise<ApiProductDetails[]>;
+  getPlatformsForProducts(quantity: number): Promise<ApiProductDetails[]>;
+  getStoresForProducts(quantity: number): Promise<ApiProductDetails[]>;
   getProductsWithFilters(
     genresId: number[],
     page: number,
@@ -22,5 +23,5 @@ export default interface IFetchService {
     storesId?: number[],
     publishersId?: number[],
     ordering?: string
-  ): Promise<GameAPIPagination>;
+  ): Promise<ApiPagination>;
 }

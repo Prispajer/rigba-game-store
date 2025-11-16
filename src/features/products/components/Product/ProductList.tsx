@@ -1,18 +1,18 @@
 "use client";
+
 import React from "react";
 import Image from "next/image";
-import { GetServerSideProps } from "next";
 import { CiHeart } from "react-icons/ci";
 import AddToWishlist from "../../../../components/Interface/Shared/ReusableComponents/AddToWishlist";
 import LoadingAnimation from "../../../../components/Interface/Shared/Animations/LoadingAnimation";
 import ShowMoreButton from "../../../../components/Interface/Shared/Buttons/ShowMoreButton";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import fetchService from "@/services/FetchService";
-import { GameAPIResponse } from "@/types/types";
-import { assignPricesToExternalGames } from "@/utils/prices";
+import { assignPricesToExternalGames } from "@/features/products/utils/prices";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 
 export default function ProductList() {
-  const [productsArray, setProductsArray] = React.useState<GameAPIResponse[]>(
+  const [productsArray, setProductsArray] = React.useState<ApiProductDetails[]>(
     []
   );
   const [productsQuantity, setProductsQuantity] = React.useState(1);
@@ -20,7 +20,7 @@ export default function ProductList() {
     boolean[]
   >([]);
 
-  const { redirectToGame } = useCustomRouter();
+  const { redirectToProduct } = useCustomRouter();
 
   React.useEffect(() => {
     (async () => {
@@ -46,7 +46,7 @@ export default function ProductList() {
             key={productsArray[index]?.id ?? index}
             onClick={() => {
               if (productsArray[index]) {
-                redirectToGame(productsArray[index].slug as string);
+                  redirectToProduct(productsArray[index].slug as string);
               }
             }}
             className={`relative min-w-[200px] min-h-[150px] sm:min-h-[360px] my-[10px] flex sm:flex-col bg-tertiaryColor 
@@ -99,7 +99,7 @@ export default function ProductList() {
                   </div>
                 </div>
                 <AddToWishlist
-                  game={productsArray[index]}
+                  product={productsArray[index]}
                   position="absolute right-[10px] top-0"
                   added="border-[#FFFA84] bg-[#FFFA84]"
                   deleted="bg-[##d3d3d3]"

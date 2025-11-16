@@ -1,11 +1,12 @@
 "use client";
+
 import React from "react";
-import { GameAPIResponse } from "@/types/types";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 
 export default function ProductRequirements({
   product,
 }: {
-  product: GameAPIResponse;
+  product: ApiProductDetails;
 }) {
   const [activeTab, setActiveTab] = React.useState<string>("PC");
 
@@ -44,7 +45,7 @@ export default function ProductRequirements({
             <br />
           </>
         ) : (
-          <li className="text-[15px] text-[#DCD8E6] cursor-default">
+          <li className="text-[15px] text-[#DCD8E6] ml-[15px] list-dist cursor-default">
             No minimum system requirements for {platformName}.
           </li>
         )}
@@ -58,7 +59,7 @@ export default function ProductRequirements({
             </p>
           </>
         ) : (
-          <li className="text-[15px] text-[#DCD8E6] cursor-default">
+          <li className="text-[15px] text-[#DCD8E6] ml-[15px] list-dist cursor-default">
             No recommended system requirements for {platformName}.
           </li>
         )}
@@ -68,7 +69,7 @@ export default function ProductRequirements({
 
   return (
     <>
-      <div className="flex items-center z max-w-[1240px] mx-[-20px] md:mx-auto bg-tertiaryColor">
+      <div className="flex items-center max-w-[1240px] mx-[-20px] md:mx-auto bg-tertiaryColor">
         {["PC", "macOS", "Linux"].map((platform) => (
           <div
             key={platform}
@@ -87,7 +88,7 @@ export default function ProductRequirements({
           </div>
         ))}
       </div>
-      <div className="flex flex-col z max-w-[1240px] mx-[-20px] md:mx-auto pb-[15px] px-[20px] pt-4 bg-secondaryColor">
+      <div className="flex flex-col max-w-[1240px] mx-[-20px] md:mx-auto pb-[15px] px-[20px] pt-4 bg-secondaryColor">
         {["PC", "macOS", "Linux"].includes(activeTab) ? (
           renderRequirements(activeTab)
         ) : (

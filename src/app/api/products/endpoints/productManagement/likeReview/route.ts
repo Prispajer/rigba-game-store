@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { reviewService } from "@/utils/injector";
-import { RequestResponse } from "@/types/types";
+import RequestResponse from "@/shared/types/requestResponse";
 import { Review } from "@prisma/client";
 
 export async function PATCH(request: NextRequest) {

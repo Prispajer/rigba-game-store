@@ -3,18 +3,18 @@ import Image from "next/image";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
+import useUiVisibility from "@/hooks/useUiVisibility";
 import { IoCloseSharp } from "react-icons/io5";
-import { GameAPIResponse } from "@/types/types";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 
 export default function ProductScreenshotModalContainer({
   currentImageId,
   screenshots,
 }: {
   currentImageId: number | null;
-  screenshots: GameAPIResponse["screenshots"];
+  screenshots: ApiProductDetails["screenshots"];
 }) {
-  const { gameScreenshotModalState, handleClose } = useWindowVisibility();
+  const { gameScreenshotModalState, handleHideElement } = useUiVisibility();
   const [currentImageIndex, setCurrentImageIndex] = React.useState<number>(0);
 
   React.useEffect(() => {
@@ -30,7 +30,7 @@ export default function ProductScreenshotModalContainer({
 
   const handleOutsideClick = () => {
     if (gameScreenshotModalState) {
-      handleClose("gameScreenshotModal");
+        handleHideElement("gameScreenshotModal");
     }
   };
 
@@ -60,7 +60,7 @@ export default function ProductScreenshotModalContainer({
             <div className="relative w-full flex justify-center items-center">
               <button
                 className="absolute top-2 right-2 text-[#FFFFFF] z-10"
-                onClick={() => handleClose("gameScreenshotModal")}
+                onClick={() => handleHideElement("gameScreenshotModal")}
               >
                 <IoCloseSharp
                   className="transition duration-300 ease-in-out hover:text-modalHover"

@@ -1,6 +1,6 @@
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 
-export default function Pagination({
+export default function Pagination<T>({
   loadingState,
   currentPage,
   pages,
@@ -10,7 +10,7 @@ export default function Pagination({
 }: {
   loadingState: boolean;
   currentPage: number;
-  pages: any[][];
+  pages: T[][];
   handleNextPage: () => void;
   handleCurrentSetPage: (page: number) => void;
   handlePreviousPage: () => void;

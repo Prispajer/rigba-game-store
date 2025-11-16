@@ -267,7 +267,7 @@ export type AddProductToCartDTO = {
   price: number;
   background_image: string;
   rating: number;
-  quantity?: number;
+  quantity: number | null;
   slug: string;
   released: string;
   added: number;
@@ -337,7 +337,7 @@ export type CreateUserCartProductDTO = {
   description: string;
   price: number;
   background_image: string;
-  quantity?: number;
+  quantity: number | null;
   rating: number;
   slug: string;
   released: string;
@@ -345,7 +345,7 @@ export type CreateUserCartProductDTO = {
 };
 
 export type CreateUserProductWishlistDTO = {
-  wishListId: string;
+  wishlistId: string;
   userId: string;
   externalProductId: number;
   name: string;

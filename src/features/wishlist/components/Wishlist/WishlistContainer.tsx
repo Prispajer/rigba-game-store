@@ -8,7 +8,6 @@ import SortBy from "../../../../components/Interface/Shared/ReusableComponents/S
 import WishlistProductList from "./WishlistProductList";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import useUserWishlist from "@/features/wishlist/hooks/userWishlist/useUserWishlist";
-import useCustomRouter from "@/hooks/useCustomRouter";
 import useSearchText from "@/hooks/useSearchText";
 import useUserWishlistActions from "@/features/wishlist/hooks/userWishlist/useUserWishlistActions";
 import useLocalStorageWishlist from "@/features/wishlist/hooks/localStorageWishlist/useLocalStorageWishlist";
@@ -19,7 +18,7 @@ export default function WishlistContainer() {
   const { userWishlistState, getUserWishlist } = useUserWishlist();
   const { handleSetUserWishlistOrdering } =
     useUserWishlistActions(getUserWishlist);
-  const localStorageWishlistState = useLocalStorageWishlist(
+  const { localStorageWishlistState } = useLocalStorageWishlist(
     "localStorageWishlist"
   );
   const { handleSetLocalStorageWishlistOrdering } =
@@ -29,7 +28,6 @@ export default function WishlistContainer() {
     handleSetSearchText,
     handleClearSearchText,
   } = useSearchText();
-  const { redirectToGame } = useCustomRouter();
 
   return (
     <section className="flex items-start justify-center w-full min-h-[calc(100vh-62px)] md:min-h-[calc(100vh-156px)] bg-primaryColor">
@@ -69,7 +67,6 @@ export default function WishlistContainer() {
               user={user}
               localStorageWishlistState={localStorageWishlistState}
               userWishlistState={userWishlistState}
-              redirectToGame={redirectToGame}
               searchWistListTextState={searchWishlistTextState as string}
             />
           </div>

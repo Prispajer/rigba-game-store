@@ -43,7 +43,7 @@ export default function usePagination<T>(data: T[]) {
     }, [dispatch]);
 
     React.useEffect(() => {
-        handleShowPagination(1, paginatedPages.length);
+        handleShowPagination(0, paginatedPages.length);
     }, [handleShowPagination, paginatedPages.length]);
 
     return {

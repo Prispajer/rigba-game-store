@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { userService } from "@/utils/injector";
-import { User, RequestResponse } from "@/types/types";
+import RequestResponse from "@/shared/types/requestResponse";
 import { PasswordResetToken } from "@prisma/client";
 
 export async function POST(request: NextRequest, response: NextResponse) {

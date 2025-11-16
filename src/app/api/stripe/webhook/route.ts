@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { postgres } from "@/lib/db";
-import { generateGameKey } from "@/utils/keys";
+import { generateGameKey } from "@/features/payment/utils/keys";
 import { Order } from "@prisma/client";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);

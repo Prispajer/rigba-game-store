@@ -1,7 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import requestService from "@/services/RequestService";
-import { RequestResponse, UserWishlist } from "@/types/types";
-import type AddUserProductToWishlistDTO from "@/features/wishlist/dto/AddUserProductToWishlistDTO";
+import RequestResponse from "@/shared/types/requestResponse";
+import UserWishlist from "@/features/wishlist/types/userWishlist/userWishlist";
+import type AddUserWishlistItemDTO from "@/features/wishlist/dto/AddUserWishlistItemDTO";
 
 export const getUserWishlistThunk = createAsyncThunk<
   { products: UserWishlist["products"]; message: string },
@@ -31,7 +32,7 @@ export const getUserWishlistThunk = createAsyncThunk<
 
 export const addUserProductToWishlistThunk = createAsyncThunk<
   { products: UserWishlist["products"]; message: string },
-  AddUserProductToWishlistDTO,
+  AddUserWishlistItemDTO,
   { rejectValue: string }
 >(
   "wishlist/addUserProductToWishlistThunk",

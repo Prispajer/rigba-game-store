@@ -3,43 +3,56 @@ import submitRequest from "@/lib/submitRequest";
 import useNotification from "@/hooks/useNotification";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import { NotificationOrigin } from "@/redux/slices/notification/notification.types";
-import { HttpMethod } from "@/types/types";
+import HttpMethod from "@/shared/enums/httpMethod";
 
 export default function useTokenHandlers() {
-  const [isPending, startTransition] = React.useTransition();
+    const [isPending, startTransition] = React.useTransition();
 
-  const { handleSuccess, handleError, handleReset } = useNotification();
-  const { user } = useCurrentUser();
+    const {
+        handleShowSuccessNotification,
+        handleShowErrorNotification,
+        handleClearNotification,
+    } = useNotification();
 
-  const handleSendToggleTwoFactorToken = async () => {
-    const response = await submitRequest(
-      HttpMethod.POST,
-      "users/endpoints/tokenManagement/toggleTwoFactorToken",
-      { email: user?.email },
-      NotificationOrigin.ToggleTwoFactorToken,
-      { handleSuccess, handleError, handleReset }
-    );
+    const { user } = useCurrentUser();
 
-    if (!response) return;
-  };
+    const handleSendToggleTwoFactorToken = async () => {
+        const response = await submitRequest(
+            HttpMethod.POST,
+            "users/endpoints/tokenManagement/toggleTwoFactorToken",
+            { email: user?.email },
+            NotificationOrigin.ToggleTwoFactorToken,
+            {
+                handleShowSuccessNotification,
+                handleShowErrorNotification,
+                handleClearNotification,
+            }
+        );
 
-  const handleSendChangePasswordToken = async (oldPassword: string) => {
-    startTransition(async () => {
-      const response = await submitRequest(
-        HttpMethod.POST,
-        "users/endpoints/tokenManagement/changePasswordToken",
-        { email: user?.email, password: oldPassword },
-        NotificationOrigin.ChangePasswordToken,
-        { handleSuccess, handleError, handleReset }
-      );
+        if (!response) return;
+    };
 
-      if (!response) return;
-    });
-  };
+    const handleSendChangePasswordToken = async (oldPassword: string) => {
+        startTransition(async () => {
+            const response = await submitRequest(
+                HttpMethod.POST,
+                "users/endpoints/tokenManagement/changePasswordToken",
+                { email: user?.email, password: oldPassword },
+                NotificationOrigin.ChangePasswordToken,
+                {
+                    handleShowSuccessNotification,
+                    handleShowErrorNotification,
+                    handleClearNotification,
+                }
+            );
 
-  return {
-    isPending,
-    handleSendToggleTwoFactorToken,
-    handleSendChangePasswordToken,
-  };
+            if (!response) return;
+        });
+    };
+
+    return {
+        isPending,
+        handleSendToggleTwoFactorToken,
+        handleSendChangePasswordToken,
+    };
 }

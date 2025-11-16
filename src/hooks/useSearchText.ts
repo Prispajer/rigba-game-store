@@ -14,7 +14,7 @@ import {
     selectCompartmentNumberTwoState,
 } from "@/redux/slices/search/search.selectors";
 
-export default function useSearchText() {
+export default function  useSearchText() {
     const dispatch = useDispatch();
 
     const searchGenreTextState = useSelector(selectSearchGenreTextState);

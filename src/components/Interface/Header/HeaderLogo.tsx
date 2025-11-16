@@ -1,15 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { RxHamburgerMenu } from "react-icons/rx";
-import useUIVisibility from "@/hooks/useWindowVisibility";
+import useUIVisibility from "@/hooks/useUiVisibility";
 
 export default function HeaderLogo() {
-  const { handleOpen } = useUIVisibility();
+  const { handleShowElement } = useUIVisibility();
 
   return (
     <div className="flex items-center flex-0">
       <RxHamburgerMenu
-        onClick={() => handleOpen("navSidebar")}
+        onClick={() => handleShowElement("navSidebar")}
         size="30px"
         className="flex md:hidden mx-[6px] text-[#ffffff] cursor-pointer"
       />

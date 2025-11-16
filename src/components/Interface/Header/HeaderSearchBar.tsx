@@ -1,23 +1,22 @@
 import React from "react";
-import { GetServerSideProps } from "next";
 import { FaSearch } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
 import SearchResultsModalContainer from "../Shared/Modals/SearchResultsModalContainer";
 import OutsideClickHandler from "../Shared/Backdrop/OutsideCLickHandler";
-import useUIVisibility from "@/hooks/useWindowVisibility";
+import useUIVisibility from "@/hooks/useUiVisibility";
 import fetchService from "@/services/FetchService";
 import debounce from "@/utils/debounce";
-import { GameAPIResponse } from "@/types/types";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 
 export default function HeaderSearchBar() {
   const [searchText, setSearchText] = React.useState("");
-  const [productsArray, setProductsArray] = React.useState<GameAPIResponse[]>(
+  const [productsArray, setProductsArray] = React.useState<ApiProductDetails[]>(
     []
   );
   const [isLoading, setIsLoading] = React.useState(false);
 
   const searchBarInput = React.useRef<HTMLInputElement>(null);
-  const { searchBarState, resolutionState, handleClose, handleToggle } =
+  const { searchBarState, resolutionState, handleHideElement, handleToggleElement } =
     useUIVisibility();
 
   const fetchProductsBySearchText = React.useCallback(
@@ -34,7 +33,7 @@ export default function HeaderSearchBar() {
   );
 
   const handleOutsideClick = () => {
-    handleToggle("searchBarModal");
+    handleToggleElement("searchBarModal");
     setSearchText("");
     setProductsArray([]);
   };
@@ -45,7 +44,7 @@ export default function HeaderSearchBar() {
     } else {
       setProductsArray([]);
     }
-  }, [searchText]);
+  }, [fetchProductsBySearchText, searchText]);
 
   React.useEffect(() => {
     if (searchBarState && searchBarInput.current) {
@@ -54,7 +53,7 @@ export default function HeaderSearchBar() {
 
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        handleClose("searchBarModal");
+          handleHideElement("searchBarModal");
       }
     };
 
@@ -65,7 +64,7 @@ export default function HeaderSearchBar() {
     return () => {
       document.removeEventListener("keydown", handleEscape);
     };
-  }, [searchBarState]);
+  }, [handleHideElement, searchBarState]);
 
   return (
     <div
@@ -96,7 +95,7 @@ export default function HeaderSearchBar() {
               size="30px"
               color="white"
               className="mx-2"
-              onClick={() => handleClose("searchBarModal")}
+              onClick={() => handleHideElement("searchBarModal")}
             />
           </div>
           {searchText && (
@@ -129,7 +128,7 @@ export default function HeaderSearchBar() {
                 size="25px"
                 color="white"
                 className="cursor-pointer"
-                onClick={() => handleToggle("searchBarModal")}
+                onClick={() => handleToggleElement("searchBarModal")}
               />
             )}
             {searchText && (

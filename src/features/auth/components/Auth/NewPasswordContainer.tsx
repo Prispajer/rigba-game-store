@@ -5,14 +5,15 @@ import React from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormSuccess } from "../../../../components/Interface/Shared/FormsNotifications/FormSuccess";
-import { FormError } from "../../../../components/Interface/Shared/FormsNotifications/FormError";
-import useUserServices from "@/hooks/useUserServices";
+import { FormSuccess } from "@/components/Interface/Shared/FormsNotifications/FormSuccess";
+import { FormError } from "@/components/Interface/Shared/FormsNotifications/FormError";
+import useAuthHandlers from "@/features/auth/hooks/useAuthHandlers";
+import useNotification from "@/hooks/useNotification";
 import { NewPasswordSchema } from "@/utils/schemas/user";
 
 export default function ResetPasswordContainer() {
-  const { success, error, isPending, useUserActions } = useUserServices();
-  const { submitNewPasswordForm } = useUserActions();
+  const { isPending, handleNewPasswordSubmit } = useAuthHandlers();
+  const { messageState, originState } = useNotification();
 
   const resetPasswordForm = useForm<z.infer<typeof NewPasswordSchema>>({
     resolver: zodResolver(NewPasswordSchema),
@@ -46,7 +47,7 @@ export default function ResetPasswordContainer() {
           >
             Back to login
           </Link>
-          <form onSubmit={handleSubmit(submitNewPasswordForm)}>
+          <form onSubmit={handleSubmit(handleNewPasswordSubmit)}>
             <div className="pt-4 text-white">
               <input
                 {...register("password")}
@@ -85,14 +86,14 @@ export default function ResetPasswordContainer() {
             </div>
             <FormSuccess
               message={
-                success?.origin === "NewPassword"
-                  ? (success.message as string)
+                originState === "NewPassword"
+                  ? (messageState as string)
                   : ""
               }
             />
             <FormError
               message={
-                error?.origin === "NewPassword" ? (error.message as string) : ""
+                  originState === "NewPassword" ? (messageState as string) : ""
               }
             />
             <div className="flex flex-col items-center justfiy-center w- ">

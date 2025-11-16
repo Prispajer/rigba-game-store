@@ -1,4 +1,4 @@
-import { RequestResponse } from "@/types/types";
+import RequestResponse from "@/shared/types/requestResponse";
 
 export default interface IRequestService {
   getMethod<T>(endpoint: string): Promise<RequestResponse<T>>;

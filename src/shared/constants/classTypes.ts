@@ -1,10 +1,8 @@
 ﻿const CLASSTYPES = {
     IUserService: Symbol.for("IUserService"),
     IUserRepository: Symbol.for("IUserRepository"),
-    IUserUtils: Symbol.for("IUserUtils"),
     ITokenService: Symbol.for("ITokenService"),
     ITokenRepository: Symbol.for("ITokenRepository"),
-    ITokenUtils: Symbol.for("ITokenUtils"),
     ICartService: Symbol.for("ICartService"),
     ICartRepository: Symbol.for("ICartRepository"),
     IWishlistService: Symbol.for("IWishlistService"),
@@ -13,7 +11,6 @@
     IReviewRepository: Symbol.for("IReviewRepository"),
     IProductService: Symbol.for("IProductService"),
     IProductRepository: Symbol.for("IProductRepository"),
-    IProductUtils: Symbol.for("IProductUtils"),
     ICheckerService: Symbol.for("ICheckerService"),
     IPurchaseHistoryService: Symbol.for("IPurchaseHistoryService"),
     IPurchaseHistoryRepository: Symbol.for("IPurchaseHistoryRepository"),

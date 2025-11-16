@@ -9,12 +9,12 @@ import { FaDiscord } from "react-icons/fa";
 import { LoginSchema } from "@/utils/schemas/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { FormError } from "../../../../components/Interface/Shared/FormsNotifications/FormError";
-import { FormSuccess } from "../../../../components/Interface/Shared/FormsNotifications/FormSuccess";
+import { FormError } from "@/components/Interface/Shared/FormsNotifications/FormError";
+import { FormSuccess } from "@/components/Interface/Shared/FormsNotifications/FormSuccess";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import useAuthActions from "@/features/auth/hooks/useAuthHandlers";
 import { signInAccount } from "@/features/user/hooks/useCurrentUser";
-import { SignInProvider } from "@/types/types";
+import SignInProvider from "@/shared/enums/signInProvider";
 import useNotification from "@/hooks/useNotification";
 import { NotificationOrigin } from "@/redux/slices/notification/notification.types";
 
@@ -26,14 +26,14 @@ export default function LoginContainer() {
     isPending,
     providerError,
   } = useAuthActions();
-  const { notification, handleError } = useNotification();
+  const { successState, messageState, originState, handleShowErrorNotification } = useNotification();
   const { user } = useCurrentUser();
 
   const handleProviderLogin = async (provider: SignInProvider) => {
     try {
       await signInAccount(provider);
     } catch (error) {
-      handleError("Login failed. Please try again.", NotificationOrigin.Login);
+        handleShowErrorNotification("Login failed. Please try again.", NotificationOrigin.Login);
     }
   };
 
@@ -151,15 +151,15 @@ export default function LoginContainer() {
               </div>
               <FormSuccess
                 message={
-                  notification.success && notification?.origin === "Login"
-                    ? (notification.message as string)
+                  successState && originState === "Login"
+                    ? (messageState as string)
                     : ""
                 }
               />
               <FormError
                 message={
-                  (!notification.success && notification?.origin === "Login"
-                    ? (notification.message as string)
+                  (!successState && originState === "Login"
+                    ? (messageState as string)
                     : "") || providerError
                 }
               />
@@ -202,15 +202,15 @@ export default function LoginContainer() {
               </div>
               <FormSuccess
                 message={
-                  notification.success && notification?.origin === "Login"
-                    ? (notification.message as string)
+                  successState && originState === "Login"
+                    ? (messageState as string)
                     : ""
                 }
               />
               <FormError
                 message={
-                  (!notification.success && notification?.origin === "Login"
-                    ? (notification.message as string)
+                  (!successState && originState === "Login"
+                    ? (messageState as string)
                     : "") || providerError
                 }
               />

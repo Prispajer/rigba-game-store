@@ -9,17 +9,17 @@ import { FaGoogle } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
 import { FaDiscord } from "react-icons/fa";
 import { RegisterSchema } from "@/utils/schemas/user";
-import { FormError } from "../../../../components/Interface/Shared/FormsNotifications/FormError";
-import { FormSuccess } from "../../../../components/Interface/Shared/FormsNotifications/FormSuccess";
+import { FormError } from "@/components/Interface/Shared/FormsNotifications/FormError";
+import { FormSuccess } from "@/components/Interface/Shared/FormsNotifications/FormSuccess";
 import useAuthHandlers from "../../hooks/useAuthHandlers";
 import { signInAccount } from "@/features/user/hooks/useCurrentUser";
-import { SignInProvider } from "@/types/types";
+import SignInProvider from "@/shared/enums/signInProvider";
 import useNotification from "@/hooks/useNotification";
 import { NotificationOrigin } from "@/redux/slices/notification/notification.types";
 
 export default function RegisterContainer() {
   const { isPending, handleRegisterSubmit } = useAuthHandlers();
-  const { notification } = useNotification();
+  const { successState, messageState, originState } = useNotification();
 
   const registerForm = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
@@ -107,17 +107,17 @@ export default function RegisterContainer() {
           </div>
           <FormSuccess
             message={
-              notification.success &&
-              notification?.origin === NotificationOrigin.Register
-                ? (notification.message as string)
+              successState &&
+              originState === NotificationOrigin.Register
+                ? (messageState as string)
                 : ""
             }
           />
           <FormError
             message={
-              !notification.success &&
-              notification?.origin === NotificationOrigin.Register
-                ? (notification.message as string)
+              !successState &&
+              originState === NotificationOrigin.Register
+                ? (messageState as string)
                 : ""
             }
           />

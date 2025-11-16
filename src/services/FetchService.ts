@@ -1,5 +1,7 @@
 import IFetchService from "../interfaces/IFetchService";
-import { GameAPIPagination, GameAPIResponse } from "../types/types";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
+import ApiPagination from "@/features/products/types/api/apiPagination";
+
 export class FetchService implements IFetchService {
   public apiKey: string = process.env.NEXT_PUBLIC_RAWG_API_KEY || "";
   public baseUrl: string = process.env.NEXT_PUBLIC_RAWG_BASE_URL || "";
@@ -10,33 +12,32 @@ export class FetchService implements IFetchService {
       if (!res.ok) {
         throw new Error("Network response was not ok");
       }
-      const data: T = await res.json();
-      return data;
+        return await res.json();
     } catch (error) {
       console.error("An error occurred while fetching data from API!", error);
       throw error;
     }
   }
 
-  async getProduct(productSlug: string): Promise<GameAPIResponse> {
+  async getProduct(productSlug: string): Promise<ApiProductDetails> {
     const url = `${this.baseUrl}/games/${productSlug}?key=${this.apiKey}`;
     return this.fetchData(url);
   }
 
-  async getProducts(searchQuery?: string): Promise<GameAPIResponse[]> {
+  async getProducts(searchQuery?: string): Promise<ApiProductDetails[]> {
     const url = `${this.baseUrl}/games?key=${this.apiKey}${
       searchQuery ? `&search=${searchQuery}` : ""
     }&page_size=${10}`;
-    const data = await this.fetchData<{ results: GameAPIResponse[] }>(url);
+    const data = await this.fetchData<{ results: ApiProductDetails[] }>(url);
     return searchQuery && data.results ? data.results : [];
   }
 
   async getScreenshotsForProduct(
     productId: string
-  ): Promise<GameAPIResponse["screenshots"]> {
+  ): Promise<ApiProductDetails["screenshots"]> {
     const url = `${this.baseUrl}/games/${productId}/screenshots?key=${this.apiKey}`;
     const data = await this.fetchData<{
-      results: GameAPIResponse["screenshots"];
+      results: ApiProductDetails["screenshots"];
     }>(url);
     return data.results || [];
   }
@@ -44,47 +45,47 @@ export class FetchService implements IFetchService {
   async getProductsByOrdering(
     ordering: string,
     quantity: number = 4
-  ): Promise<GameAPIResponse[]> {
+  ): Promise<ApiProductDetails[]> {
     const url = `${this.baseUrl}/games?key=${
       this.apiKey
     }&ordering=${ordering}&page_size=${5 * quantity}`;
-    const data = await this.fetchData<{ results: GameAPIResponse[] }>(url);
+    const data = await this.fetchData<{ results: ApiProductDetails[] }>(url);
     return data.results || [];
   }
 
-  async getGenresForProducts(quantity: number = 1): Promise<GameAPIResponse[]> {
+  async getGenresForProducts(quantity: number = 1): Promise<ApiProductDetails[]> {
     const url = `${this.baseUrl}/genres?key=${this.apiKey}&page_size=${
       7 * quantity
     }`;
-    const data = await this.fetchData<{ results: GameAPIResponse[] }>(url);
+    const data = await this.fetchData<{ results: ApiProductDetails[] }>(url);
     return data.results || [];
   }
 
   async getPublishersForProducts(
     quantity: number = 1
-  ): Promise<GameAPIResponse[]> {
+  ): Promise<ApiProductDetails[]> {
     const url = `${this.baseUrl}/publishers?key=${this.apiKey}&page_size=${
       7 * quantity
     }`;
-    const data = await this.fetchData<{ results: GameAPIResponse[] }>(url);
+    const data = await this.fetchData<{ results: ApiProductDetails[] }>(url);
     return data.results || [];
   }
 
   async getPlatformsForProducts(
     quantity: number = 1
-  ): Promise<GameAPIResponse[]> {
+  ): Promise<ApiProductDetails[]> {
     const url = `${this.baseUrl}/platforms?key=${this.apiKey}&page_size=${
       7 * quantity
     }`;
-    const data = await this.fetchData<{ results: GameAPIResponse[] }>(url);
+    const data = await this.fetchData<{ results: ApiProductDetails[] }>(url);
     return data.results || [];
   }
 
-  async getStoresForProducts(quantity: number = 1): Promise<GameAPIResponse[]> {
+  async getStoresForProducts(quantity: number = 1): Promise<ApiProductDetails[]> {
     const url = `${this.baseUrl}/stores?key=${this.apiKey}&page_size=${
       7 * quantity
     }`;
-    const data = await this.fetchData<{ results: GameAPIResponse[] }>(url);
+    const data = await this.fetchData<{ results: ApiProductDetails[] }>(url);
     return data.results || [];
   }
 
@@ -95,7 +96,7 @@ export class FetchService implements IFetchService {
     storesId?: number[],
     publishersId?: number[],
     ordering?: string
-  ): Promise<GameAPIPagination> {
+  ): Promise<ApiPagination> {
     const genresQuery = genresId.join(",");
     const platformsQuery = platformsId?.join(",");
     const storesQuery = storesId?.join(",");
@@ -107,7 +108,7 @@ export class FetchService implements IFetchService {
     }${
       publishersQuery ? `&publishers=${publishersQuery}` : ""
     }&ordering=${ordering}`;
-    const data = await this.fetchData<GameAPIPagination>(url);
+    const data = await this.fetchData<ApiPagination>(url);
     return data || {};
   }
 }

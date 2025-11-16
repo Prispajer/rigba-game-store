@@ -4,18 +4,18 @@ import Link from "next/link";
 import Image from "next/image";
 import { RxHamburgerMenu } from "react-icons/rx";
 import ProfileModalContainer from "@/components/Interface/Shared/Modals/ProfileModalContainer";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
+import useUiVisibility from "@/hooks/useUiVisibility";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 
 export default function AccountHeader() {
-  const { handleOpen } = useWindowVisibility();
+  const { handleShowElement } = useUiVisibility();
   const { user } = useCurrentUser();
 
   return (
     <header className="flex justify-between items-center py-2 px-4 bg-primaryColor">
       <div className="flex items-center">
         <RxHamburgerMenu
-          onClick={() => handleOpen("accountSidebar")}
+          onClick={() => handleShowElement("accountSidebar")}
           size="30px"
           className="flex md:hidden mx-[6px] text-[#ffffff] cursor-pointer"
         />
@@ -32,7 +32,7 @@ export default function AccountHeader() {
       </div>
       <div>
         <button
-          onClick={() => handleOpen("profileModal")}
+          onClick={() => handleShowElement("profileModal")}
           className="flex items-center"
         >
           <span className="hidden md:flex pr-3 text-[#ffffff] font-[600]">

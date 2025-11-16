@@ -2,11 +2,12 @@ import React from "react";
 import Image from "next/image";
 import { FaCartPlus } from "react-icons/fa";
 import LoadingAnimation from "../Animations/LoadingAnimation";
-import useUIVisibility from "@/hooks/useWindowVisibility";
+import useUIVisibility from "@/hooks/useUiVisibility";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
-import { generateRandomPrice } from "@/utils/prices";
-import { GameAPIProduct, GameAPIResponse } from "@/types/types";
+import {generateRandomPrice} from "@/features/products/utils/prices";
+import ApiProduct from "@/features/products/types/api/apiProduct";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 import useUserCartActions from "@/features/cart/hooks/userCart/useUserCartActions";
 import useLocalStorageCartActions from "@/features/cart/hooks/localStorageCart/useLocalStorageCartActions";
 
@@ -14,24 +15,24 @@ export default function SearchResultsModalContainer({
   gamesArray,
   loadingState,
 }: {
-  gamesArray: GameAPIResponse[];
+  gamesArray: ApiProductDetails[];
   loadingState: boolean;
 }) {
   const { handleAddUserProductToCart } = useUserCartActions();
   const { handleAddLocalStorageProductToCart } = useLocalStorageCartActions();
   const { user } = useCurrentUser();
-  const { redirectToGame } = useCustomRouter();
-  const { handleClose } = useUIVisibility();
+  const { redirectToProduct } = useCustomRouter();
+  const { handleHideElement } = useUIVisibility();
 
   const handleAddProductToCart = (
-    game: GameAPIProduct,
+    game: ApiProduct,
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     event.stopPropagation();
     if (user) {
       handleAddUserProductToCart({
         ...game,
-        email: user.email as string,
+        email: user.email,
         externalProductId: game.id,
         description: game.description_raw,
         price: generateRandomPrice(),
@@ -40,7 +41,7 @@ export default function SearchResultsModalContainer({
     } else {
       handleAddLocalStorageProductToCart({
         ...game,
-        externalProductId: game.id as number,
+        externalProductId: game.id,
         description: game.description_raw,
         price: generateRandomPrice(),
         quantity: 1,
@@ -58,9 +59,9 @@ export default function SearchResultsModalContainer({
             <li
               className="my-[10px] py-[5px] cursor-pointer hover:bg-secondaryColor"
               onClick={() =>
-                redirectToGame(
+                  redirectToProduct(
                   game?.slug as string,
-                  handleClose,
+                    handleHideElement,
                   "searchBarModal"
                 )
               }

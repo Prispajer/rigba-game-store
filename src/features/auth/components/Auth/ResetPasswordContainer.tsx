@@ -6,13 +6,15 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { ResetPasswordSchema } from "@/utils/schemas/user";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormSuccess } from "../../../../components/Interface/Shared/FormsNotifications/FormSuccess";
-import { FormError } from "../../../../components/Interface/Shared/FormsNotifications/FormError";
-import useUserServices from "@/hooks/useUserServices";
+import { FormSuccess } from "@/components/Interface/Shared/FormsNotifications/FormSuccess";
+import { FormError } from "@/components/Interface/Shared/FormsNotifications/FormError";
+import useAuthHandlers from "@/features/auth/hooks/useAuthHandlers";
+import useNotification from "@/hooks/useNotification";
+import {NotificationOrigin} from "@/redux/slices/notification/notification.types";
 
 export default function ResetPasswordContainer() {
-  const { success, error, isPending, useUserActions } = useUserServices();
-  const { submitResetPasswordForm } = useUserActions();
+  const { isPending, handleResetPasswordSubmit } = useAuthHandlers();
+  const { messageState, originState } = useNotification();
 
   const ResetPasswordObject = useForm<z.infer<typeof ResetPasswordSchema>>({
     resolver: zodResolver(ResetPasswordSchema),
@@ -41,7 +43,7 @@ export default function ResetPasswordContainer() {
           <h3 className="cursor-default font-normal text-[14px] text-[#DFEDF2]">
             We will send you an email with a link to set a new password
           </h3>
-          <form onSubmit={handleSubmit(submitResetPasswordForm)}>
+          <form onSubmit={handleSubmit(handleResetPasswordSubmit)}>
             <div className="py-4 text-white">
               <input
                 {...register("email")}
@@ -60,15 +62,15 @@ export default function ResetPasswordContainer() {
             </div>
             <FormSuccess
               message={
-                success?.origin === "ResetPassword"
-                  ? (success.message as string)
+                  originState === NotificationOrigin.ResetPassword
+                  ? (messageState as string)
                   : ""
               }
             />
             <FormError
               message={
-                error?.origin === "ResetPassword"
-                  ? (error.message as string)
+                  originState === NotificationOrigin.ResetPassword
+                  ? (messageState as string)
                   : ""
               }
             />

@@ -1,14 +1,14 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
+import useUiVisibility from "@/hooks/useUiVisibility";
 
 export default function CheckoutLogo({
   mobileLogoTitle,
 }: {
   mobileLogoTitle: string;
 }) {
-  const { resolutionState } = useWindowVisibility();
+  const { resolutionState } = useUiVisibility();
 
   return (
     <div className="flex items-center ">

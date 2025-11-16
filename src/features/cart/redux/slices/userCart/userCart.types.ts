@@ -1,4 +1,4 @@
-import { UserCart } from "@/types/types";
+import UserCart from "@/features/cart/types/userCart/userCart";
 
 export interface UserCartState {
   products: UserCart["products"];

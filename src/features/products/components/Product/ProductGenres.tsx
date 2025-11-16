@@ -1,12 +1,11 @@
-"use client";
 import React from "react";
-import { GameAPIResponse } from "@/types/types";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 
 export default function ProductGenres({
   product,
   redirectToFilters,
 }: {
-  product: GameAPIResponse;
+  product: ApiProductDetails;
   redirectToFilters: (genresId: number[]) => void;
 }) {
   return (

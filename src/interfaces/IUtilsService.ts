@@ -1,7 +1,7 @@
-import { GameAPIResponse } from "@/types/types";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 
 export default interface IUtilsService {
   getSearchText(): string;
   setSearchText(searchText: string): void;
-  searchByString(searchData: GameAPIResponse[]): GameAPIResponse[];
+  searchByString(searchData: ApiProductDetails[]): ApiProductDetails[];
 }

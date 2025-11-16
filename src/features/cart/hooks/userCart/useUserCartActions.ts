@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import debounce from "@/utils/debounce";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import useAsyncActionWithLoading from "@/hooks/useAsyncActionWithLoading";
-import AddUserProductToCartDTO from "../../dto/AddUserProductToCartDTO";
+import AddUserCartItemDTO from "@/features/cart/dto/AddUserCartItemDTO";
 import {
   addUserProductToCartThunk,
   deleteUserProductFromCartThunk,
@@ -18,7 +18,7 @@ export default function useUserCartActions(onRefresh?: () => void) {
   const { isLoading, executeWithLoading } = useAsyncActionWithLoading();
 
   const handleAddUserProductToCart = React.useCallback(
-    debounce(async (addUserProductToCartDTO: AddUserProductToCartDTO) => {
+    debounce(async (addUserProductToCartDTO: AddUserCartItemDTO) => {
       if (user?.email) {
         await executeWithLoading("addUserProductToCart", () =>
           dispatch(addUserProductToCartThunk(addUserProductToCartDTO))

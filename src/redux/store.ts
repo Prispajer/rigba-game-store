@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import localStorageCartReducer from "../features/cart/redux/slices/localStorageCart/localStorageCartSlice";
 import localStorageWishlistReducer from "../features/wishlist/redux/slices/localStorageWishlist/localStorageWishlistSlice";
-import windowReducer from "./slices/window/windowSlice";
+import uiReducer from "@/redux/slices/ui/uiSlice";
 import productFilterReducer from "../features/products/redux/slices/filters/filtersSlice";
 import publishersReducer from "../features/products/redux/slices/publishers/publishersSlice";
 import genresReducer from "../features/products/redux/slices/genres/genresSlice";
@@ -14,25 +14,27 @@ import userProductHistoryReducer from "../features/history/redux/slices/productH
 import userOrderHistoryReducer from "../features/history/redux/slices/orderHistory/orderHistorySlice";
 import paginationReducer from "./slices/pagination/paginationSlice";
 import notificationReducer from "./slices/notification/notificationSlice";
+import searchReducer from "./slices/search/searchSlice";
 
 export const store = configureStore({
-  reducer: {
-    localStorageCart: localStorageCartReducer,
-    localStorageWishlist: localStorageWishlistReducer,
-    window: windowReducer,
-    productFilter: productFilterReducer,
-    publishers: publishersReducer,
-    genres: genresReducer,
-    stores: storesReducer,
-    platforms: platformsReducer,
-    userCart: userCartReducer,
-    userWishlist: userWishlistReducer,
-    userReviews: userReviewsReducer,
-    userProductHistory: userProductHistoryReducer,
-    userOrderHistory: userOrderHistoryReducer,
-    pagination: paginationReducer,
-    notification: notificationReducer,
-  },
+    reducer: {
+        localStorageCart: localStorageCartReducer,
+        localStorageWishlist: localStorageWishlistReducer,
+        ui: uiReducer,
+        notification: notificationReducer,
+        search: searchReducer,
+        productFilter: productFilterReducer,
+        publishers: publishersReducer,
+        genres: genresReducer,
+        stores: storesReducer,
+        platforms: platformsReducer,
+        userCart: userCartReducer,
+        userWishlist: userWishlistReducer,
+        userReviews: userReviewsReducer,
+        userProductHistory: userProductHistoryReducer,
+        userOrderHistory: userOrderHistoryReducer,
+        pagination: paginationReducer,
+    },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

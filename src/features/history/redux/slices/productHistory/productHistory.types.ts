@@ -1,7 +1,7 @@
-import { UserProductHistory } from "@/types/types";
+import PurchasedProductRecord from "@/features/history/types/purchasedProductRecord";
 
 export interface UserProductHistoryState {
-  productHistoryArray: UserProductHistory[];
+  productHistoryArray: PurchasedProductRecord[];
   status: string;
   error: string | null;
   success: string | null;

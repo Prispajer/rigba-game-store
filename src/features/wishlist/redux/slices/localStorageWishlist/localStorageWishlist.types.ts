@@ -1,6 +1,6 @@
-import LocalStorageWishlistProduct from "@/features/wishlist/types/localStorageWishlistProduct";
+import LocalStorageWishlistItem from "@/features/wishlist/types/localStorageWishlist/localStorageWishlistItem";
 
 export type LocalStorageWishlistState = {
-  localStorageWishlist: LocalStorageWishlistProduct[];
+  localStorageWishlist: LocalStorageWishlistItem[];
   ordering: string | null;
 };

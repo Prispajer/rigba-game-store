@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { IoCloseSharp } from "react-icons/io5";
 import OutsideClickHandler from "../Backdrop/OutsideCLickHandler";
-import useUIVisibility from "@/hooks/useWindowVisibility";
+import useUIVisibility from "@/hooks/useUiVisibility";
 
 export default function AuthSidebar() {
-  const { authSidebarState, handleClose } = useUIVisibility();
+  const { authSidebarState, handleHideElement } = useUIVisibility();
 
   const handleOutsideClick = () => {
     if (authSidebarState) {
-      handleClose("authSidebar");
+        handleHideElement("authSidebar");
     }
   };
 
@@ -31,7 +31,7 @@ export default function AuthSidebar() {
                 Register
               </Link>
               <IoCloseSharp
-                onClick={() => handleClose("authSidebar")}
+                onClick={() => handleHideElement("authSidebar")}
                 size="25"
                 className="absolute right-4 top-4 text-[#ffffff] cursor-pointer"
               />

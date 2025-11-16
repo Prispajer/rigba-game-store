@@ -1,18 +1,18 @@
 import React, { use } from "react";
 import { MdKeyboardArrowUp } from "react-icons/md";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
+import useUiVisibility from "@/hooks/useUiVisibility";
 import useSearchText from "@/hooks/useSearchText";
 
 export default function FilterByPrice() {
-  const { priceMenuState, handleToggle } = useWindowVisibility();
+  const { priceMenuState, handleToggleElement } = useUiVisibility();
   const { handleSetSearchText } = useSearchText();
 
   return (
     <div>
       <div className="py-[15px] px-[20px] text-[#FFFFFF] text-[18px] border-b-2 border-secondaryColor bg-filtersBackgroundColor">
         <div
-          onClick={() => handleToggle("priceMenu")}
+          onClick={() => handleToggleElement("priceMenu")}
           className="flex items-center justify-between max-w-[300px] cursor-pointer"
         >
           <span className="text-[18px] text-[#FFFFFF] font-bold">Price</span>

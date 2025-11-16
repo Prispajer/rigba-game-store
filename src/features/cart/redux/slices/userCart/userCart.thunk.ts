@@ -1,7 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import requestService from "@/services/RequestService";
-import { RequestResponse, UserCart } from "@/types/types";
-import AddUserProductToCartDTO from "@/features/cart/dto/AddUserProductToCartDTO";
+import RequestResponse from "@/shared/types/requestResponse";
+import UserCart from "@/features/cart/types/userCart/userCart";
+import AddUserCartItemDTO from "@/features/cart/dto/AddUserCartItemDTO";
 
 export const getUserCartThunk = createAsyncThunk<
   { products: UserCart["products"]; message: string },
@@ -30,7 +31,7 @@ export const getUserCartThunk = createAsyncThunk<
 
 export const addUserProductToCartThunk = createAsyncThunk<
   { products: UserCart["products"]; message: string },
-  AddUserProductToCartDTO,
+    AddUserCartItemDTO,
   { rejectValue: string }
 >(
   "cart/addUserProductToCartThunk",

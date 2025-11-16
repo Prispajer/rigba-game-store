@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -7,7 +8,7 @@ import LoadingAnimation from "@/components/Interface/Shared/Animations/LoadingAn
 import useUserHandlers from "@/features/user/hooks/useUserHandlers";
 import useUserProductHistory from "@/features/history/hooks/useUserProductHistory";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
-import { generateRandomName } from "@/utils/names";
+import {generateRandomName} from "@/features/user/utils/names";
 
 export default function AccountContainer() {
   const { handleUpdateNameSubmit } = useUserHandlers();

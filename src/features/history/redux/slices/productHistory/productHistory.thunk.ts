@@ -1,9 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import requestService from "@/services/RequestService";
-import { RequestResponse, UserProductHistory } from "@/types/types";
+import RequestResponse from "@/shared/types/requestResponse";
+import PurchasedProductRecord from "@/features/history/types/purchasedProductRecord";
 
 export const getUserProductHistory = createAsyncThunk<
-  { data: UserProductHistory[]; message: string },
+  { data: PurchasedProductRecord[]; message: string },
   { email: string },
   { rejectValue: string }
 >(
@@ -11,7 +12,7 @@ export const getUserProductHistory = createAsyncThunk<
   async ({ email }, { rejectWithValue }) => {
     try {
       const getUserProductHistoryResponse: RequestResponse<
-        UserProductHistory[]
+        PurchasedProductRecord[]
       > = await requestService.postMethod(
         "products/endpoints/productManagement/getProductHistory",
         { email }

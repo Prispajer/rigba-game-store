@@ -2,7 +2,7 @@ import { PaginationState } from "./pagination.types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: PaginationState = {
-    currentPage: 1,
+    currentPage: 0,
     totalPages: 0,
 };
 
@@ -23,7 +23,7 @@ const paginationSlice = createSlice({
             }
         },
         prevPage: (state) => {
-            if (state.currentPage > 1) {
+            if (state.currentPage >= 0) {
                 state.currentPage = state.currentPage - 1;
             }
         },

@@ -3,15 +3,15 @@ import bcrypt from "bcryptjs";
 import { inject, injectable } from "inversify";
 import { postgres } from "@/lib/db";
 import type ICheckerService from "../interfaces/ICheckerService";
-import type IUserRepository from "@/interfaces/IUserRepository";
-import type IProductRepository from "@/interfaces/IProductRepository";
-import type ITokenRepository from "@/interfaces/ITokenRepository";
-import type IWishlistRepository from "@/interfaces/IWishlistRepository";
-import type ICartRepository from "@/interfaces/ICartRepository";
-import type IReviewRepository from "@/interfaces/IReviewRepository";
-import type IPurchaseHistoryRepository from "@/interfaces/IPurchaseHistoryRepository";
-import { RequestResponse } from "@/types/types";
-import { CLASSTYPES } from "@/types/types";
+import type IUserRepository from "@/features/user/interfaces/IUserRepository";
+import type IProductRepository from "@/features/products/interfaces/IProductRepository";
+import type ITokenRepository from "@/features/auth/interfaces/ITokenRepository";
+import type IWishlistRepository from "@/features/wishlist/interfaces/IWishlistRepository";
+import type ICartRepository from "@/features/cart/interfaces/ICartRepository";
+import type IReviewRepository from "@/features/reviews/interfaces/IReviewRepository";
+import type IPurchaseHistoryRepository from "@/features/history/interfaces/IPurchaseHistoryRepository";
+import RequestResponse from "@/shared/types/requestResponse";
+import CLASSTYPES from "@/shared/constants/classTypes";
 import {
   CheckDataExistsAndReturnProductDTO,
   CheckDataExistsAndReturnProductReviewsDTO,
@@ -137,20 +137,18 @@ export default class CheckerService implements ICheckerService {
   async checkDataExistsAndReturnUser(
     checkDataExistsAndReturnUserDTO: CheckDataExistsAndReturnUserDTO
   ): Promise<RequestResponse<User | null>> {
-    const getUserByEmail = await this.checkDataExistsAndReturn(
+      return await this.checkDataExistsAndReturn(
       (checkDataExistsAndReturnUserDTO) =>
         this._userRepository.getUserByEmail(checkDataExistsAndReturnUserDTO),
       checkDataExistsAndReturnUserDTO,
       "User not found!"
     );
-
-    return getUserByEmail;
   }
 
   async checkDataExistsAndReturnUserPersonalData(
     checkDataExistsAndReturnUserPersonalDataDTO: CheckDataExistsAndReturnUserPersonalDataDTO
   ): Promise<RequestResponse<PersonalData | null>> {
-    const getPersonalData = await this.checkDataExistsAndReturn(
+      return await this.checkDataExistsAndReturn(
       (checkDataExistsAndReturnUserPersonalDataDTO) =>
         this._userRepository.getUserPersonalData(
           checkDataExistsAndReturnUserPersonalDataDTO
@@ -158,14 +156,12 @@ export default class CheckerService implements ICheckerService {
       checkDataExistsAndReturnUserPersonalDataDTO,
       "Personal data not found!"
     );
-
-    return getPersonalData;
   }
 
   async checkDataExistsAndReturnProduct(
     CheckDataExistsAndReturnProductDTO: CheckDataExistsAndReturnProductDTO
   ): Promise<RequestResponse<Product | null>> {
-    const getProductByExternalProductId = await this.checkDataExistsAndReturn(
+      return await this.checkDataExistsAndReturn(
       (CheckDataExistsAndReturnProductDTO) =>
         this._productRepository.getProductByExternalProductId(
           CheckDataExistsAndReturnProductDTO
@@ -173,27 +169,23 @@ export default class CheckerService implements ICheckerService {
       CheckDataExistsAndReturnProductDTO,
       "Product not found!"
     );
-
-    return getProductByExternalProductId;
   }
 
   async checkDataExistsAndReturnUserCart(
     checkDataExistsAndReturnUserCartDTO: CheckDataExistsAndReturnUserCartDTO
   ): Promise<RequestResponse<Cart | null>> {
-    const getUserCart = await this.checkDataExistsAndReturn(
+      return await this.checkDataExistsAndReturn(
       (checkDataExistsAndReturnUserCartDTO) =>
         this._cartRepository.getUserCart(checkDataExistsAndReturnUserCartDTO),
       checkDataExistsAndReturnUserCartDTO,
       "Cart not found!"
     );
-
-    return getUserCart;
   }
 
   async checkDataExistsAndReturnUserWishlist(
     checkDataExistsAndReturnUserWishlistDTO: CheckDataExistsAndReturnUserWishlistDTO
   ): Promise<RequestResponse<Wishlist | null>> {
-    const getUserWishlist = await this.checkDataExistsAndReturn(
+      return await this.checkDataExistsAndReturn(
       (checkDataExistsAndReturnUserWishlistDTO) =>
         this._wishListRepository.getUserWishlist(
           checkDataExistsAndReturnUserWishlistDTO
@@ -201,14 +193,12 @@ export default class CheckerService implements ICheckerService {
       checkDataExistsAndReturnUserWishlistDTO,
       "Wishlist not found!"
     );
-
-    return getUserWishlist;
   }
 
   async checkDataExistsAndReturnProductReviews(
     checkDataExistsAndReturnProductReviewsDTO: CheckDataExistsAndReturnProductReviewsDTO
   ): Promise<RequestResponse<Product | null>> {
-    const getProductReviews = await this.checkDataExistsAndReturn(
+      return await this.checkDataExistsAndReturn(
       (checkDataExistsAndReturnProductReviewsDTO) =>
         this._reviewRepository.getProductReviews(
           checkDataExistsAndReturnProductReviewsDTO
@@ -216,27 +206,23 @@ export default class CheckerService implements ICheckerService {
       checkDataExistsAndReturnProductReviewsDTO,
       "Reviews not found!"
     );
-
-    return getProductReviews;
   }
 
   async checkDataExistsAndReturnReview(
     checkDataExistsAndReturnReviewDTO: CheckDataExistsAndReturnReviewDTO
   ): Promise<RequestResponse<Review | null>> {
-    const getReview = await this.checkDataExistsAndReturn(
+      return await this.checkDataExistsAndReturn(
       (checkDataExistsAndReturnReviewDTO) =>
         this._reviewRepository.getReview(checkDataExistsAndReturnReviewDTO),
       checkDataExistsAndReturnReviewDTO,
       "Review not found!"
     );
-
-    return getReview;
   }
 
   async checkDataExistsAndReturnUserProductHistory(
     checkDataExistsAndReturnUserProductHistoryDTO: CheckDataExistsAndReturnUserProductHistoryDTO
   ): Promise<RequestResponse<ProductHistory[] | null>> {
-    const getUserProductHistory = await this.checkDataExistsAndReturn(
+      return await this.checkDataExistsAndReturn(
       (checkDataExistsAndReturnUserProductHistoryDTO) =>
         this._purchaseHistoryRepository.getUserProductHistory(
           checkDataExistsAndReturnUserProductHistoryDTO
@@ -244,14 +230,12 @@ export default class CheckerService implements ICheckerService {
       checkDataExistsAndReturnUserProductHistoryDTO,
       "Product history not found!"
     );
-
-    return getUserProductHistory;
   }
 
   async checkDataExistsAndReturnUserOrderHistory(
     checkDataExistsAndReturnUserOrderHistoryDTO: CheckDataExistsAndReturnUserOrderHistoryDTO
   ): Promise<RequestResponse<OrderHistory[] | null>> {
-    const getUserOrderHistory = await this.checkDataExistsAndReturn(
+      return await this.checkDataExistsAndReturn(
       (checkDataExistsAndReturnUserOrderHistoryDTO) =>
         this._purchaseHistoryRepository.getUserOrderHistory(
           checkDataExistsAndReturnUserOrderHistoryDTO
@@ -259,14 +243,12 @@ export default class CheckerService implements ICheckerService {
       checkDataExistsAndReturnUserOrderHistoryDTO,
       "Order history not found!"
     );
-
-    return getUserOrderHistory;
   }
 
   async checkDataExistsAndReturnReviewLikers(
     checkDataExistsAndReturnReviewLikersDTO: CheckDataExistsAndReturnReviewLikersDTO
   ): Promise<RequestResponse<ReviewLikers | null>> {
-    const getReviewLikers = await this.checkDataExistsAndReturn(
+      return await this.checkDataExistsAndReturn(
       (checkDataExistsAndReturnReviewDTO) =>
         this._reviewRepository.getReviewLikers(
           checkDataExistsAndReturnReviewDTO
@@ -274,8 +256,6 @@ export default class CheckerService implements ICheckerService {
       checkDataExistsAndReturnReviewLikersDTO,
       "Review likers not found!"
     );
-
-    return getReviewLikers;
   }
 
   async checkIsTokenValidAndReturnTwoFactorToken(

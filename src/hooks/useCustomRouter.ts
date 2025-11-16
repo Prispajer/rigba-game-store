@@ -40,7 +40,7 @@ export default function useCustomRouter() {
         [updateUrlParams]
     );
 
-    const redirectToGame = React.useCallback(
+    const redirectToProduct = React.useCallback(
         (name: string, callback?: (element: string) => void, element?: string): void => {
             router.push(`/product/${name}`);
             if (callback) {
@@ -92,7 +92,7 @@ export default function useCustomRouter() {
         url,
         getUrlParams,
         redirectToReview,
-        redirectToGame,
+        redirectToProduct,
         redirectToKey,
         redirectToOrder,
         redirectToCheckout,

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserReviewsThunk } from "../redux/slices/userReviews/userReviews.thunk";
 import { selectUserReviewsState } from "./../redux/slices/userReviews/userReviews.selectors";
 import { AppDispatch } from "@/redux/store";
-import executeWithLoading from "@/shared/executeWithLoading";
+import executeWithLoading from "@/utils/executeWithLoading";
 
 export default function useUserReviews(externalProductId: number) {
   const dispatch = useDispatch<AppDispatch>();

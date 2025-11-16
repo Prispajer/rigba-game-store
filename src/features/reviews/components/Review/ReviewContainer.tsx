@@ -1,4 +1,5 @@
 "use client";
+
 import { z } from "zod";
 import React from "react";
 import Image from "next/image";
@@ -8,27 +9,26 @@ import { useForm } from "react-hook-form";
 import AddToWishlist from "../../../../components/Interface/Shared/ReusableComponents/AddToWishlist";
 import ProductHeaders from "../../../../components/Interface/Shared/ReusableComponents/ProductHeaders";
 import ProductList from "../../../products/components/Product/ProductList";
-import { FormSuccess } from "../../../../components/Interface/Shared/FormsNotifications/FormSuccess";
-import { FormError } from "../../../../components/Interface/Shared/FormsNotifications/FormError";
+import { FormSuccess } from "@/components/Interface/Shared/FormsNotifications/FormSuccess";
+import { FormError } from "@/components/Interface/Shared/FormsNotifications/FormError";
 import useReviewHandlers from "../../hooks/useUserReviewHandlers";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import useNotification from "@/hooks/useNotification";
-import { generateRandomPrice } from "@/utils/prices";
-import { GameAPIResponse } from "@/types/types";
+import {generateRandomPrice} from "@/features/products/utils/prices";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 import { ReviewSchema } from "@/utils/schemas/product";
-import { RatingKeys } from "../../types/ratingKeys";
 import { NotificationOrigin } from "@/redux/slices/notification/notification.types";
 
 export default function ReviewContainer({
   product,
 }: {
-  product: GameAPIResponse;
+  product: ApiProductDetails;
 }) {
   const { user } = useCurrentUser();
-  const { redirectToGame } = useCustomRouter();
+  const { redirectToProduct } = useCustomRouter();
   const { handleReviewSubmit } = useReviewHandlers();
-  const { notification, handleError, handleSuccess } = useNotification();
+  const { successState, messageState, originState, handleShowErrorNotification } = useNotification();
   const reviewObject = useForm<z.infer<typeof ReviewSchema>>({
     resolver: zodResolver(ReviewSchema),
     defaultValues: {
@@ -58,7 +58,7 @@ export default function ReviewContainer({
           <form
             onSubmit={handleSubmit(async (payload) => {
               if (!user) {
-                handleError(
+                  handleShowErrorNotification(
                   "User must be logged in to submit a review!",
                   NotificationOrigin.AddReviewToProduct
                 );
@@ -84,6 +84,7 @@ export default function ReviewContainer({
                 {["5", "4", "3", "2", "1"].map((value) => (
                   <React.Fragment key={value}>
                     <input
+                      {...register("rating", { required: true })}
                       {...register("rating", { required: true })}
                       type="radio"
                       id={`rating-${value}`}
@@ -131,19 +132,19 @@ export default function ReviewContainer({
               <div className="mb-[10px] flex justify-end">
                 <FormSuccess
                   message={
-                    notification.success &&
-                    notification.origin ===
+                    successState &&
+                    originState ===
                       NotificationOrigin.AddReviewToProduct
-                      ? (notification.message as string)
+                      ? (messageState as string)
                       : ""
                   }
                 />
                 <FormError
                   message={
-                    !notification.success &&
-                    notification.origin ===
+                    !successState&&
+                    originState ===
                       NotificationOrigin.AddReviewToProduct
-                      ? (notification.message as string)
+                      ? (messageState as string)
                       : ""
                   }
                 />
@@ -158,7 +159,7 @@ export default function ReviewContainer({
           <div className="grid row-start-1 sm:row-start-auto mb-[15px]">
             <div
               key={product.id}
-              onClick={() => redirectToGame(product.slug as string)}
+              onClick={() => redirectToProduct(product.slug as string)}
               className={`relative min-w-[200px] max-h-[400px] min-h-[150px] sm:min-h-[360px] flex sm:flex-col bg-tertiaryColor cursor-pointer`}
             >
               <>
@@ -202,7 +203,7 @@ export default function ReviewContainer({
                         {product.rating}
                       </span>
                       <AddToWishlist
-                        game={product}
+                        product={product}
                         position="absolute right-[10px] top-0"
                         added="border-[#FFFA84] bg-[#FFFA84]"
                         deleted="bg-[#d3d3d3]"

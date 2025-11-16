@@ -2,7 +2,7 @@ import React from "react";
 import { MdKeyboardArrowUp, MdKeyboardArrowDown } from "react-icons/md";
 import { FaSortAmountUpAlt, FaSortAmountDownAlt } from "react-icons/fa";
 import { IconType } from "react-icons/lib";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
+import useUiVisibility from "@/hooks/useUiVisibility";
 
 const SortByElements = [
   { title: "Price: Low to High", icon: FaSortAmountUpAlt, ordering: "price" },
@@ -43,8 +43,8 @@ export default function SortBy({
 }) {
   const [currentSort, setCurrentSort] = React.useState(SortByElements[0]);
 
-  const { sortModalState, resolutionState, handleToggle, handleClose } =
-    useWindowVisibility();
+  const { sortModalState, resolutionState, handleToggleElement, handleHideElement } =
+    useUiVisibility();
 
   const handleSortSelection = (sortOption: {
     title: string;
@@ -67,7 +67,7 @@ export default function SortBy({
           <>
             <button
               className="flex items-center text-[18px] hover:text-headerHover text-[#FFFFFF]"
-              onClick={() => handleToggle("sortModal")}
+              onClick={() => handleToggleElement("sortModal")}
             >
               <currentSort.icon />
               <span className="ml-[8px] mr-[4px] font-bold">
@@ -87,7 +87,7 @@ export default function SortBy({
                       key={element.title}
                       className="w-full hover:bg-[#DCDCDC] hover:text-headerHover cursor-pointer"
                       onClick={() => {
-                        handleSortSelection(element), handleClose("sortModal");
+                        handleSortSelection(element), handleHideElement("sortModal");
                       }}
                     >
                       <button className="py-[5px] px-[15px] flex w-full text-[14px] font-bold text-[#000000] hover:text-headerHover">

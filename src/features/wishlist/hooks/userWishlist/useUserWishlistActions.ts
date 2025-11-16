@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import {
@@ -9,7 +10,7 @@ import {
 import useCurrentUser from "../../../user/hooks/useCurrentUser";
 import useAsyncActionWithLoading from "@/hooks/useAsyncActionWithLoading";
 import debounce from "@/utils/debounce";
-import AddUserProductToWishlistDTO from "../../dto/AddUserProductToWishlistDTO";
+import AddUserWishlistItemDTO from "../../dto/AddUserWishlistItemDTO";
 import { setUserWishlistOrdering } from "../../redux/slices/userWishlist/userWishlistSlice";
 
 export default function useUserWishlistActions(onRefresh?: () => void) {
@@ -18,8 +19,8 @@ export default function useUserWishlistActions(onRefresh?: () => void) {
   const { user } = useCurrentUser();
   const { isLoading, executeWithLoading } = useAsyncActionWithLoading();
 
-  const handleAddUserProductToWishlist = debounce(
-    async (addUserProductToWishlistDTO: AddUserProductToWishlistDTO) => {
+  const handleAddUserProductToWishlist = React.useCallback(debounce(
+    async (addUserProductToWishlistDTO: AddUserWishlistItemDTO) => {
       if (user?.email) {
         await executeWithLoading("addUserProductToWishlist", () =>
           dispatch(addUserProductToWishlistThunk(addUserProductToWishlistDTO))
@@ -28,9 +29,9 @@ export default function useUserWishlistActions(onRefresh?: () => void) {
       onRefresh?.();
     },
     200
-  );
+  ), [dispatch, user?.email]);
 
-  const handleDeleteUserProductFromWishlist = debounce(
+  const handleDeleteUserProductFromWishlist = React.useCallback(debounce(
     async (email: string, externalProductId: number) => {
       if (user?.email) {
         await executeWithLoading("deleteUserProductFromWishlist", () =>
@@ -45,12 +46,12 @@ export default function useUserWishlistActions(onRefresh?: () => void) {
       onRefresh?.();
     },
     200
-  );
+  ), [dispatch, user?.email]);
 
-  const handleSetUserWishlistOrdering = (ordering: string) => {
+  const handleSetUserWishlistOrdering = React.useCallback((ordering: string) => {
     dispatch(setUserWishlistOrdering(ordering));
     onRefresh?.();
-  };
+  }, [dispatch, onRefresh]);
 
   return {
     isLoading,

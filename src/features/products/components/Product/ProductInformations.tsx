@@ -1,21 +1,21 @@
 "use client";
+
 import React from "react";
 import Image from "next/image";
-import { CiShare1 } from "react-icons/ci";
 import AddToWishlist from "../../../../components/Interface/Shared/ReusableComponents/AddToWishlist";
 import DigitalProductDetails from "./ProductDigitalProductDetails";
 import ProductShareButton from "./ProductShareButton";
-import { groupReviewsByRating, mergeReviews } from "@/utils/reviews";
+import { groupReviewsByRating, mergeReviews } from "@/features/reviews/utils/reviews";
 import { generateStars, calculateAverageRating } from "@/utils/ratings";
-import { GameAPIResponse } from "@/types/types";
-import { UserReviewsSlice } from "@/features/reviews/redux/slices/userReviews/userReviewsSlice";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
+import { UserReviewsState } from "@/features/reviews/redux/slices/userReviews/userReviews.types";
 
 export default function ProductInformations({
   product,
   userReviewsState,
 }: {
-  product: GameAPIResponse;
-  userReviewsState: UserReviewsSlice;
+  product: ApiProductDetails;
+  userReviewsState: UserReviewsState;
 }) {
   const groupedReviewsByRating = React.useMemo(
     () => groupReviewsByRating(userReviewsState.reviews),
@@ -23,7 +23,7 @@ export default function ProductInformations({
   );
   const mergedReviews = React.useMemo(
     () => mergeReviews(groupedReviewsByRating, product.ratings),
-    [userReviewsState.reviews, product.ratings]
+    [groupedReviewsByRating, product.ratings]
   );
   const mergedRatingsCount = React.useMemo(
     () => mergedReviews.reduce((acc, review) => acc + review.count, 0) || 0,
@@ -53,7 +53,7 @@ export default function ProductInformations({
               <div className="relative">
                 <div className="p-[6px] md:p-[10px] transition duration-300 cursor-pointer ">
                   <AddToWishlist
-                    game={product}
+                    product={product}
                     position="absolute top-0 right-0"
                     added="border-[#FFFA84] bg-[#FFFA84]"
                     deleted="border-[#487CBD] bg-[#487CBD]"

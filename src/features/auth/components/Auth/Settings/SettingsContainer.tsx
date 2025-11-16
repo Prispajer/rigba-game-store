@@ -1,4 +1,5 @@
 "use client";
+
 import { z } from "zod";
 import React from "react";
 import Link from "next/link";
@@ -14,7 +15,7 @@ import TwoFactorModalContainer from "@/components/Interface/Shared/Modals/TwoFac
 import useTokenHandlers from "@/features/auth/hooks/useTokenHandlers";
 import useUserHandlers from "@/features/user/hooks/useUserHandlers";
 import useSecurityHandlers from "@/features/auth/hooks/useSecurityHandlers";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
+import useUiVisibility from "@/hooks/useUiVisibility";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import useNotification from "@/hooks/useNotification";
 import { UpdateNameSchema } from "@/utils/schemas/user";
@@ -24,8 +25,8 @@ export default function SettingsContainer() {
   const { isEditing, setIsEditing, handleUpdateNameSubmit } = useUserHandlers();
   const { handleSubmitToggleTwoFactor } = useSecurityHandlers();
   const { handleSendToggleTwoFactorToken } = useTokenHandlers();
-  const { notification } = useNotification();
-  const { handleOpen } = useWindowVisibility();
+  const { successState, messageState, originState } = useNotification();
+  const { handleShowElement } = useUiVisibility();
   const { user } = useCurrentUser();
 
   const updateNameForm = useForm<z.infer<typeof UpdateNameSchema>>({
@@ -115,17 +116,17 @@ export default function SettingsContainer() {
           </div>
           <FormSuccess
             message={
-              notification.success &&
-              notification?.origin === NotificationOrigin.UpdateName
-                ? (notification.message as string)
+              successState &&
+              originState === NotificationOrigin.UpdateName
+                ? (messageState as string)
                 : ""
             }
           />
           <FormError
             message={
-              !notification.success &&
-              notification?.origin === NotificationOrigin.UpdateName
-                ? (notification.message as string)
+              !successState &&
+              originState === NotificationOrigin.UpdateName
+                ? (messageState as string)
                 : ""
             }
           />
@@ -145,7 +146,7 @@ export default function SettingsContainer() {
             <button
               onClick={() => {
                 handleSendToggleTwoFactorToken();
-                handleOpen("twoFactorModal");
+                  handleShowElement("twoFactorModal");
               }}
               className={`flex items-center justify-center min-w-[140px] max-w-[240px] w-full min-h-[36px] gap-x-[6px] border-[2px] tranistion duration-300 ${
                 user?.isTwoFactorEnabled
@@ -159,19 +160,19 @@ export default function SettingsContainer() {
           </div>
           <FormSuccess
             message={
-              (notification.success &&
-                notification?.origin === NotificationOrigin.ToggleTwoFactor) ||
-              notification?.origin === NotificationOrigin.ToggleTwoFactorToken
-                ? (notification.message as string)
+              (successState &&
+                originState === NotificationOrigin.ToggleTwoFactor) ||
+              originState === NotificationOrigin.ToggleTwoFactorToken
+                ? (messageState as string)
                 : ""
             }
           />
           <FormError
             message={
-              (!notification.success &&
-                notification?.origin === NotificationOrigin.ToggleTwoFactor) ||
-              notification?.origin === NotificationOrigin.ToggleTwoFactorToken
-                ? (notification.message as string)
+              (!successState&&
+                  originState === NotificationOrigin.ToggleTwoFactor) ||
+              originState === NotificationOrigin.ToggleTwoFactorToken
+                ? (messageState as string)
                 : ""
             }
           />

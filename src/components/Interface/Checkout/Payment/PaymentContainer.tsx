@@ -10,8 +10,10 @@ import {
 import { PaymentElement } from "@stripe/react-stripe-js";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiMiniQuestionMarkCircle } from "react-icons/hi2";
-import useLocalStorage from "@/hooks/useLocalStorage";
+import useLocalStorageCart from "@/features/cart/hooks/localStorageCart/useLocalStorageCart";
+import useLocalStorageCartActions from "@/features/cart/hooks/localStorageCart/useLocalStorageCartActions";
 import useUserCart from "@/features/cart/hooks/userCart/useUserCart";
+import useUserCartActions from "@/features/cart/hooks/userCart/useUserCartActions";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import { Order } from "@prisma/client";
@@ -29,20 +31,18 @@ export default function PaymentContainer({
   const elements = useElements();
   const { user } = useCurrentUser();
   const {
-    userCartState,
-    handleDeleteUserProductFromCart,
-    handleDecreaseQuantityUserProductFromCart,
-    handleIncreaseQuantityUserProductFromCart,
+    userCartState
   } = useUserCart();
+  const { handleDeleteUserProductFromCart,
+      handleDecreaseQuantityUserProductFromCart,
+      handleIncreaseQuantityUserProductFromCart } = useUserCartActions();
   const {
-    localCartState,
-    handleDeleteLocalProductFromCart,
-    handleDecreaseQuantityLocalProductFromCart,
-    handleIncreaseQuantityLocalProductFromCart,
-  } = useLocalStorage("localCart");
-  const { redirectToGame } = useCustomRouter();
+    localStorageCartState
+  } = useLocalStorageCart("localStorageCart");
+  const {handleDeleteLocalStorageProductFromCart, handleIncreaseQuantityLocalStorageProductFromCart, handleDecreaseQuantityLocalStorageProductFromCart} = useLocalStorageCartActions()
+  const { redirectToProduct } = useCustomRouter();
 
-  const productsByRole = user ? userCartState.products : localCartState;
+  const cartProducts = user ? userCartState.products : localStorageCartState.localStorageCart;
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -95,13 +95,13 @@ export default function PaymentContainer({
             My cart
           </h2>
           <ul className="flex flex-col">
-            {productsByRole.map((product) => (
+            {cartProducts.map((product) => (
               <li
                 onClick={() =>
-                  redirectToGame(
-                    "productsInformations" in product
+                    redirectToProduct(
+                      ("productsInformations" in product
                       ? (product.productsInformations.slug as string)
-                      : product.slug
+                      : product.slug) ?? ""
                   )
                 }
                 key={product.externalProductId}
@@ -112,14 +112,14 @@ export default function PaymentContainer({
                     <Image
                       loading="eager"
                       src={
-                        "productsInformations" in product
+                          ("productsInformations" in product
                           ? product.productsInformations?.background_image
-                          : product.background_image
+                          : product.background_image) ?? ""
                       }
                       alt={
-                        "productsInformations" in product
+                          ("productsInformations" in product
                           ? (product.productsInformations.name as string)
-                          : product.name
+                          : product.name) ?? ""
                       }
                       fill={true}
                       sizes="(max-width: 768px) 50px, 90px"
@@ -142,7 +142,7 @@ export default function PaymentContainer({
                                 email: user.email as string,
                                 externalProductId: product.externalProductId,
                               })
-                            : handleDeleteLocalProductFromCart(
+                            : handleDeleteLocalStorageProductFromCart(
                                 product.externalProductId
                               );
                         }}
@@ -177,7 +177,7 @@ export default function PaymentContainer({
                                 email: user.email as string,
                                 externalProductId: product.externalProductId,
                               })
-                            : handleDecreaseQuantityLocalProductFromCart(
+                            : handleDecreaseQuantityLocalStorageProductFromCart(
                                 product.externalProductId
                               );
                         }}
@@ -196,7 +196,7 @@ export default function PaymentContainer({
                                 email: user.email as string,
                                 externalProductId: product.externalProductId,
                               })
-                            : handleIncreaseQuantityLocalProductFromCart(
+                            : handleIncreaseQuantityLocalStorageProductFromCart(
                                 product.externalProductId
                               );
                         }}

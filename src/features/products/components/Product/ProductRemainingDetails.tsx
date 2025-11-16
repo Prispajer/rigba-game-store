@@ -1,11 +1,12 @@
 "use client";
-import { GameAPIResponse } from "@/types/types";
+
 import React from "react";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 
 export default function ProductRemainingDetails({
   product,
 }: {
-  product: GameAPIResponse;
+  product: ApiProductDetails;
 }) {
   const getProductPublisher = () => {
     const publisher = product.publishers.find((publisher) => publisher);

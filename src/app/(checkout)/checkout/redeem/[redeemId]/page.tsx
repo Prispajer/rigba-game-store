@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
-import CheckoutHeader from "@/components/Interface/Checkout/CheckoutHeader";
+import CheckoutHeaderTemplate from "@/components/Interface/Checkout/CheckoutHeaderTemplate";
 import RedeemContainer from "@/components/Interface/Checkout/Redeem/RedeemContainer";
 
 export const generateMetadata = async (data: {
@@ -25,7 +25,7 @@ export default async function RedeemPage(data: {
 
   return (
     <>
-      <CheckoutHeader
+      <CheckoutHeaderTemplate
         mobileLogoTitle="Redeem your product"
         stepOneElementStyles="font-[500] text-[16px] text-[#FFFFFF] after:block after:h-[1px] after:flex-1 after:ml-[8px] after:bg-[#00cf9f]"
         stepTwoElementStyles="font-[500] text-[16px] text-[#FFFFFF] after:block after:h-[1px] after:flex-1 after:ml-[8px] after:bg-[#00cf9f]"

@@ -1,8 +1,9 @@
 "use client";
+
 import { signIn } from "next-auth/react";
 import { DEFAULT_LOGIN_REDIRECT } from "../../../../routes";
 import { useSession } from "next-auth/react";
-import { SignInProvider } from "@/types/types";
+import SignInProvider from "@/shared/enums/signInProvider";
 
 export const signInAccount = async (
   provider: SignInProvider,

@@ -6,12 +6,12 @@ import AddToWishlist from "../Shared/ReusableComponents/AddToWishlist";
 import LoadingAnimation from "../Shared/Animations/LoadingAnimation";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import fetchService from "@/services/FetchService";
-import { generateRandomPrice } from "@/utils/prices";
-import { GameAPIResponse } from "@/types/types";
+import { generateRandomPrice } from "@/features/products/utils/prices";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 
 export default function HomeProductList({ ordering }: { ordering: string }) {
-  const { redirectToGame } = useCustomRouter();
-  const [productsArray, setProductsArray] = React.useState<GameAPIResponse[]>(
+  const { redirectToProduct } = useCustomRouter();
+  const [productsArray, setProductsArray] = React.useState<ApiProductDetails[]>(
     []
   );
   const [isLoading, setIsLoading] = React.useState(true);
@@ -33,21 +33,21 @@ export default function HomeProductList({ ordering }: { ordering: string }) {
           <LoadingAnimation />
         </div>
       ) : (
-        productsArray.map((game, index) => (
+        productsArray.map((product, index) => (
           <div
             rel="preload"
-            key={game.id || index}
-            onClick={() => redirectToGame(game.slug as string)}
+            key={product.id || index}
+            onClick={() => redirectToProduct(product.slug as string)}
             className="relative flex flex-row sm:flex-col min-w-[200px] min-h-[120px] sm:min-h-[360px] mt-[20px] mb-[10px] bg-tertiaryColor cursor-pointer"
           >
             <div className="relative min-w-[95px] sm:h-[250px]">
-              {game.background_image ? (
+              {product.background_image ? (
                 <Image
                   fetchPriority="high"
                   loading="eager"
                   fill={true}
-                  src={game.background_image}
-                  alt={game.background_image}
+                  src={product.background_image}
+                  alt={product.background_image}
                   sizes="(max-width: 576px) 95px, 200px"
                 />
               ) : (
@@ -62,12 +62,12 @@ export default function HomeProductList({ ordering }: { ordering: string }) {
             <div className="max-w-[50%] sm:max-w-[100%] my-[10px] px-[15px]">
               <div className="leading-none line-clamp-1 text-[#ffffff]">
                 <span className="font-bold text-[13px] text-[#ffffff]">
-                  {game.name}
+                  {product.name}
                 </span>
               </div>
               <div>
                 <span className="text-[12px] text-[#fffa84] font-bold">
-                  {game.added}
+                  {product.added}
                 </span>
               </div>
               <div className="h-[50%] md:h-[75px]">
@@ -84,13 +84,13 @@ export default function HomeProductList({ ordering }: { ordering: string }) {
                     color="white"
                   />
                   <span className="overflow-hidden overflow-ellipsis line-clamp-1 text-[14px] text-[#ffffff80]">
-                    {game.rating}
+                    {product.rating}
                   </span>
                 </div>
               </div>
             </div>
             <AddToWishlist
-              game={game}
+              product={product}
               position="absolute right-[10px] top-0"
               added="border-[#FFFA84] bg-[#FFFA84]"
               deleted="bg-[##d3d3d3]"

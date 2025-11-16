@@ -1,6 +1,6 @@
 import requestService from "@/services/RequestService";
 import { PayloadAction } from "@reduxjs/toolkit";
-import { HttpMethod } from "@/types/types";
+import HttpMethod from "@/shared/enums/httpMethod";
 import {
   NotificationOrigin,
   NotificationPayload,

@@ -1,7 +1,7 @@
-import { UserReview } from "@/types/types";
+import ProductReviewRecord from "@/features/reviews/types/productReviewRecord";
 
 export type UserReviewsState = {
-  reviews: UserReview[];
+  reviews: ProductReviewRecord[];
   status: string;
   error: string | null;
   success: string | null;

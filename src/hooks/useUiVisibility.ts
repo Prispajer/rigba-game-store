@@ -67,6 +67,11 @@ export default function useUiVisibility() {
         dispatch(setElement({ key: "resolution", value: isWide }));
     }, [dispatch]);
 
+    const handleSetElement = React.useCallback((key: string): void => {
+        const isWide = window.innerWidth >= 768;
+        dispatch(setElement({ key: key, value: isWide}))
+    }, [dispatch])
+
     return {
         authSidebarState,
         profileModalState,
@@ -93,5 +98,6 @@ export default function useUiVisibility() {
         handleHideElement,
         handleToggleElement,
         handleSetResolution,
+        handleSetElement
     };
 }

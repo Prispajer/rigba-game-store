@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
 import { MoonLoader } from "react-spinners";
-import FilterFilters from "./FilterFilters";
-import FilterSelectedFilters from "./FilterSelectedFilters";
+import FilterPanel from "./FilterPanel";
+import FiltersToolbar from "./FiltersToolbar";
 import FilterProductList from "./FilterProductList";
-import FilterChangePage from "./FilterChangePage";
+import FilterPagination from "./FilterPagination";
 import SortBy from "../../../../components/Interface/Shared/ReusableComponents/SortBy";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import useFetchGameData from "@/features/products/hooks/useFetchGameData";
@@ -55,9 +55,9 @@ export default function FiltersContainer() {
           </h2>
         </div>
         <div className="flex w-full my-[20px] gap-x-[20px]">
-          <FilterFilters position="hidden md:flex flex-col md:max-w-[220px] min-w-[220px]" />
+          <FilterPanel position="hidden md:flex flex-col md:max-w-[220px] min-w-[220px]" />
           <section className="w-full lg:w-[calc(100%-220px)]">
-            <FilterSelectedFilters />
+            <FiltersToolbar />
             {productFilterState.isLoading ? (
               <div className="flex items-center justify-center">
                 <MoonLoader color="pink" />
@@ -78,7 +78,7 @@ export default function FiltersContainer() {
                 <FilterProductList />
                 {productFilterState.productsWithFilters.length > 0 &&
                 !productFilterState.error ? (
-                  <FilterChangePage />
+                  <FilterPagination />
                 ) : (
                   <div></div>
                 )}

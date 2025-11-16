@@ -1,15 +1,16 @@
 "use client";
+
 import React from "react";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import CheckoutHeader from "@/components/Interface/Checkout/CheckoutHeader";
+import CheckoutHeaderTemplate from "@/components/Interface/Checkout/CheckoutHeaderTemplate";
 import PaymentContainer from "@/components/Interface/Checkout/Payment/PaymentContainer";
 import LoadingAnimation from "@/components/Interface/Shared/Animations/LoadingAnimation";
-import useLocalStorage from "@/hooks/useLocalStorage";
 import useUserCart from "@/features/cart/hooks/userCart/useUserCart";
+import useLocalStorageCart from "@/features/cart/hooks/localStorageCart/useLocalStorageCart";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
-import { calculateTotalPrice } from "@/utils/prices";
+import {calculateTotalPrice} from "@/features/products/utils/prices";
 import { Order } from "@prisma/client";
 
 export default function PaymentPage() {
@@ -20,10 +21,10 @@ export default function PaymentPage() {
     React.useState(false);
   const [loading, setLoading] = React.useState<boolean>(true);
   const { userCartState } = useUserCart();
-  const { localCartState } = useLocalStorage("localCart");
+  const { localStorageCartState } = useLocalStorageCart("localStorageCart");
   const { user } = useCurrentUser();
 
-  const productsByRole = user ? userCartState.products : localCartState;
+  const cartProducts = user ? userCartState.products : localStorageCartState.localStorageCart;
 
   const loadStripeConfig = React.useCallback(async () => {
     try {
@@ -36,9 +37,9 @@ export default function PaymentPage() {
   }, []);
 
   const createPaymentIntent = React.useCallback(async () => {
-    if (productsByRole.length > 0) {
+    if (cartProducts.length > 0) {
       try {
-        const amount = parseFloat(calculateTotalPrice(productsByRole));
+        const amount = parseFloat(calculateTotalPrice(cartProducts));
         const response = await fetch("/api/stripe/create-payment-intent", {
           method: "POST",
           headers: {
@@ -46,7 +47,7 @@ export default function PaymentPage() {
           },
           body: JSON.stringify({
             email: user?.email || null,
-            cart: productsByRole,
+            cart: cartProducts,
             amount: amount,
           }),
         });
@@ -59,7 +60,7 @@ export default function PaymentPage() {
         setLoading(false);
       }
     }
-  }, [user?.email, productsByRole]);
+  }, [user?.email, cartProducts]);
 
   React.useEffect(() => {
     if (!stripePromise) {
@@ -68,13 +69,13 @@ export default function PaymentPage() {
   }, [stripePromise, loadStripeConfig]);
 
   React.useEffect(() => {
-    if (productsByRole.length > 0 && !clientSecret && !isPaymentIntentCreated) {
+    if (cartProducts.length > 0 && !clientSecret && !isPaymentIntentCreated) {
       setLoading(true);
       createPaymentIntent();
       setIsPaymentIntentCreated(true);
     }
   }, [
-    productsByRole,
+      cartProducts,
     clientSecret,
     isPaymentIntentCreated,
     createPaymentIntent,
@@ -112,7 +113,7 @@ export default function PaymentPage() {
 
   return (
     <>
-      <CheckoutHeader
+      <CheckoutHeaderTemplate
         mobileLogoTitle="Payment"
         stepOneElementStyles="font-[500] text-[16px] text-[#FFFFFF] after:block after:h-[1px] after:flex-1 after:ml-[8px] after:bg-[#00cf9f]"
         stepTwoElementStyles="font-[500] text-[16px] text-[#00cf9f] after:block after:h-[1px] after:flex-1 after:ml-[8px] after:bg-[#ffffff66]"

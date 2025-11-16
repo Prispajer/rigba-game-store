@@ -1,7 +1,7 @@
-import { GameAPIResponse } from "@/types/types";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 
 export type GenresState = {
-  genresArray: GameAPIResponse[];
+  genresArray: ApiProductDetails[];
   isLoading: boolean;
   error: string | null;
   page_size: number;

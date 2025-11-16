@@ -1,19 +1,18 @@
 import { z } from "zod";
 import submitRequest from "@/lib/submitRequest";
-import { generateRandomPrice } from "@/utils/prices";
 import useNotification from "@/hooks/useNotification";
 import { ReviewSchema } from "@/utils/schemas/product";
-import { GameAPIResponse } from "@/types/types";
-import { HttpMethod } from "@/types/types";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
+import HttpMethod from "@/shared/enums/httpMethod";
 import { NotificationOrigin } from "@/redux/slices/notification/notification.types";
 import mapReviewToProductDTO from "../mappers/mapReviewToProductDTO";
 
 export default function useUserReviewHandlers() {
-  const { handleSuccess, handleError, handleReset } = useNotification();
+  const { handleShowSuccessNotification, handleShowErrorNotification, handleClearNotification } = useNotification();
 
   const handleReviewSubmit = async (
     payload: z.infer<typeof ReviewSchema>,
-    product: GameAPIResponse,
+    product: ApiProductDetails,
     ratingsKeys: { [key: string]: string },
     email: string
   ) => {
@@ -25,7 +24,7 @@ export default function useUserReviewHandlers() {
       "products/endpoints/productManagement/addReviewToProduct",
       mapReviewToProductDTO(product, email, reviewDescription, title),
       NotificationOrigin.AddReviewToProduct,
-      { handleSuccess, handleError, handleReset }
+      { handleShowSuccessNotification, handleShowErrorNotification, handleClearNotification }
     );
 
     if (!response) return;

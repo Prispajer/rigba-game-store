@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import ProductInformations from "./ProductInformations";
 import ProductBuyOrAdd from "./ProductBuyOrAdd";
@@ -15,7 +16,6 @@ import ProductHeaders from "../../../../components/Interface/Shared/ReusableComp
 import ProductList from "./ProductList";
 import ProductRemainingDetails from "./ProductRemainingDetails";
 import ShowMoreButton from "../../../../components/Interface/Shared/Buttons/ShowMoreButton";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
 import useCustomRouter from "@/hooks/useCustomRouter";
 import useUserCart from "@/features/cart/hooks/userCart/useUserCart";
 import useLocalStorageCartActions from "@/features/cart/hooks/localStorageCart/useLocalStorageCartActions";
@@ -23,16 +23,15 @@ import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import useUserReviewActions from "@/features/reviews/hooks/useUserReviewActions";
 import useUserReviews from "@/features/reviews/hooks/useUserReviews";
 import useUserCartActions from "@/features/cart/hooks/userCart/useUserCartActions";
-import { GameAPIResponse } from "@/types/types";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 
 export default function ProductContainer({
   product,
   screenshots,
 }: {
-  product: GameAPIResponse;
-  screenshots: GameAPIResponse["screenshots"];
+  product: ApiProductDetails;
+  screenshots: ApiProductDetails["screenshots"];
 }) {
-  const { handleOpen } = useWindowVisibility();
   const { redirectToReview, redirectToFilters, redirectToCheckout } =
     useCustomRouter();
   const { isLoading: isCartLoading, getUserCart } = useUserCart();
@@ -72,7 +71,6 @@ export default function ProductContainer({
           <ProductDigitalProductDetails display="xl:hidden w-full" />
           <ProductScreenshots
             screenshots={screenshots}
-            handleOpen={handleOpen}
           />
           <ProductHeaders headerText="Gamers also viewed" />
           <ProductList />

@@ -1,120 +1,101 @@
 "use client";
+
 import React from "react";
 import { CiHeart } from "react-icons/ci";
 import useCurrentUser from "@/features/user/hooks/useCurrentUser";
 import useUserWishlist from "@/features/wishlist/hooks/userWishlist/useUserWishlist";
-import { generateRandomPrice } from "@/utils/prices";
-import { ProductInformations } from "@/types/types";
+import { generateRandomPrice } from "@/features/products/utils/prices";
 import useUserWishlistActions from "@/features/wishlist/hooks/userWishlist/useUserWishlistActions";
 import useLocalStorageWishlistActions from "@/features/wishlist/hooks/localStorageWishlist/useLocalStorageWishlistActions";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 import useLocalStorageWishlist from "@/features/wishlist/hooks/localStorageWishlist/useLocalStorageWishlist";
 
-export default function AddToWishlist<
-  T extends {
-    id: string | number;
-    externalProductId: number;
-    name: string;
-    description: string;
-    description_raw: string;
-    background_image: string;
-    price: number;
-    rating: number;
-    slug: string;
-    released: string;
-    added: number;
-    cartId: string | null;
-    userId: string | null;
-    quantity: number | null;
-    wishListId: string | null;
-    productsInformations: ProductInformations;
-  }
->({
-  game,
-  position,
-  added,
-  deleted,
-}: {
-  game: Partial<T>;
-  position: string;
-  added: string;
-  deleted: string;
+export default function AddToWishlist({
+                                          product,
+                                          position,
+                                          added,
+                                          deleted,
+                                      }: {
+    product?: ApiProductDetails;
+    position: string;
+    added: string;
+    deleted: string;
 }) {
-  const { user } = useCurrentUser();
-  const { isLoading, userWishlistState, getUserWishlist } = useUserWishlist();
-  const {
-    handleAddUserProductToWishlist,
-    handleDeleteUserProductFromWishlist,
-  } = useUserWishlistActions(getUserWishlist);
-  const localWishlistState = useLocalStorageWishlist("localStorageWishlist");
-  const {
-    handleAddLocalStorageProductToWishlist,
-    handleDeleteLocalStorageProductFromWishlist,
-  } = useLocalStorageWishlistActions();
+    const { user } = useCurrentUser();
+    const { isLoading, getUserWishlist } = useUserWishlist();
+    const { userWishlistState } = useUserWishlist();
+    const {
+        handleAddUserProductToWishlist,
+        handleDeleteUserProductFromWishlist,
+    } = useUserWishlistActions(getUserWishlist);
+    const { localStorageWishlistState } = useLocalStorageWishlist(
+        "localStorageWishlist"
+    );
+    const {
+        handleAddLocalStorageProductToWishlist,
+        handleDeleteLocalStorageProductFromWishlist,
+    } = useLocalStorageWishlistActions();
 
-  const isInLocalWishlist = localWishlistState.localStorageWishlist.some(
-    (product) =>
-      product.externalProductId === game?.id || game?.externalProductId
-  );
+    const isInLocalWishlist = localStorageWishlistState && localStorageWishlistState.localStorageWishlist.some(
+        (localWishlistProduct) =>
+            localWishlistProduct.externalProductId === (product && product.id)
+    );
 
-  const isInUserWishlist = userWishlistState.products.some(
-    (product) =>
-      product.externalProductId === game?.id || game?.externalProductId
-  );
+    const isInUserWishlist = userWishlistState && userWishlistState.products.some(
+        (userWishlistProduct) =>
+            userWishlistProduct.externalProductId === (product && product.id)
+    );
 
-  const isInCurrentWishlist = user ? isInUserWishlist : isInLocalWishlist;
+    const isInWishlist = user ? isInUserWishlist : isInLocalWishlist;
 
-  const handleWishlistAction = (event: React.MouseEvent) => {
-    event.stopPropagation();
-    if (user) {
-      if (isInCurrentWishlist) {
-        handleDeleteUserProductFromWishlist(
-          user.email,
-          (game.externalProductId as number) || (game.id as number)
-        );
-      } else {
-        handleAddUserProductToWishlist({
-          email: user.email as string,
-          externalProductId: game.id as number,
-          name: game.name as string,
-          description: game.description_raw as string,
-          background_image: game.background_image as string,
-          price: generateRandomPrice(),
-          rating: game.rating as number,
-          slug: game.slug as string,
-          released: game.released as string,
-          added: game.added as number,
-        });
-      }
-    } else {
-      if (isInCurrentWishlist) {
-        handleDeleteLocalStorageProductFromWishlist(
-          (game.externalProductId as number) || (game.id as number)
-        );
-      } else {
-        handleAddLocalStorageProductToWishlist({
-          externalProductId: parseInt(game.id as string),
-          name: game.name as string,
-          description: game.description_raw,
-          price: generateRandomPrice(),
-          background_image: game.background_image as string,
-          rating: game.rating as number,
-          slug: game.slug as string,
-          released: game.released as string,
-          added: game.added as number,
-        });
-      }
-    }
-  };
+    const handleWishlistAction = (event: React.MouseEvent) => {
+        event.stopPropagation();
+        if (!product) return;
 
-  return (
-    <button
-      onClick={(event: React.MouseEvent) => handleWishlistAction(event)}
-      disabled={isLoading["userWishlist"]}
-      className={`${position} p-[6px] md:p-[10px] border transition duration-300 cursor-pointer hover:bg-[#ffffff80] hover:border-[#ffffff] ${
-        isInCurrentWishlist ? `${added}` : `${deleted}`
-      }`}
-    >
-      <CiHeart size="30px" color={"white"} />
-    </button>
-  );
+        if (user) {
+            if (isInWishlist) {
+                handleDeleteUserProductFromWishlist(user.email, product.id);
+            } else {
+                handleAddUserProductToWishlist({
+                    email: user.email,
+                    externalProductId: product.id,
+                    name: product.name,
+                    description: product.description_raw,
+                    background_image: product.background_image,
+                    price: generateRandomPrice(),
+                    rating: product.rating,
+                    slug: product.slug,
+                    released: product.released,
+                    added: product.added,
+                });
+            }
+        } else {
+            if (isInWishlist) {
+                handleDeleteLocalStorageProductFromWishlist(product.id);
+            } else {
+                handleAddLocalStorageProductToWishlist({
+                    externalProductId: product.id,
+                    name: product.name,
+                    price: generateRandomPrice(),
+                    background_image: product.background_image,
+                    rating: product.rating,
+                    slug: product.slug,
+                    released: product.released,
+                    added: product.added,
+                });
+            }
+        }
+    };
+
+    return (
+        <button
+            onClick={handleWishlistAction}
+            disabled={isLoading["userWishlist"]}
+            className={`${position} p-[6px] md:p-[10px] border transition duration-300 cursor-pointer hover:bg-[#ffffff80] hover:border-[#ffffff] ${
+                isInWishlist ? added : deleted
+            }`}
+        >
+            <CiHeart size="30px" color="white" />
+        </button>
+    );
 }

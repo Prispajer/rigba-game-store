@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import LocalStorageCartProduct from "@/features/cart/types/localStorageCartProduct";
+import LocalStorageCartProduct from "@/features/cart/types/localStorageCart/localStorageCartProduct";
 import { LocalStorageCartState } from "./localStorageCart.types";
 
 const initialState: LocalStorageCartState = {
@@ -14,7 +14,7 @@ const localStorageCartSlice = createSlice({
       state,
       action: PayloadAction<LocalStorageCartState["localStorageCart"]>
     ) => {
-      state.localStorageCart = action.payload;
+      state.localStorageCart = action.payload ?? [];
     },
     addLocalStorageProductToCart: (
       state,

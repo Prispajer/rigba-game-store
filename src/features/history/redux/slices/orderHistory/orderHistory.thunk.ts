@@ -1,14 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import requestService from "@/services/RequestService";
-import { RequestResponse, UserOrderHistory } from "@/types/types";
+import RequestResponse from "@/shared/types/requestResponse";
+import OrderHistoryRecord from "@/features/history/types/orderHistoryRecord";
 
 export const getUserOrderHistory = createAsyncThunk<
-  { data: UserOrderHistory[]; message: string },
+  { data: OrderHistoryRecord[]; message: string },
   { email: string },
   { rejectValue: string }
 >("orderHistory/getOrderHistory", async ({ email }, { rejectWithValue }) => {
   try {
-    const getUserOrderHistoryResponse: RequestResponse<UserOrderHistory[]> =
+    const getUserOrderHistoryResponse: RequestResponse<OrderHistoryRecord[]> =
       await requestService.postMethod(
         "products/endpoints/productManagement/getOrderHistory",
         { email }

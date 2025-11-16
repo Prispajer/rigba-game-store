@@ -5,13 +5,13 @@ import submitRequest from "@/lib/submitRequest";
 import useNotification from "@/hooks/useNotification";
 import useCurrentUser from "./useCurrentUser";
 import { NotificationOrigin } from "@/redux/slices/notification/notification.types";
-import { HttpMethod } from "@/types/types";
+import HttpMethod from "@/shared/enums/httpMethod";
 
 export default function useUserHandlers() {
   const [isEditing, setIsEditing] = React.useState<boolean>(false);
 
   const { user, update } = useCurrentUser();
-  const { handleSuccess, handleError, handleReset } = useNotification();
+  const { handleShowSuccessNotification, handleShowErrorNotification, handleClearNotification } = useNotification();
 
   const handleUpdateNameSubmit = async (
     payload: z.infer<typeof UpdateNameSchema>
@@ -23,14 +23,14 @@ export default function useUserHandlers() {
       "users/endpoints/userAuthentication/updateName",
       { email: user?.email, name },
       NotificationOrigin.UpdateName,
-      { handleSuccess, handleError, handleReset }
+      { handleShowSuccessNotification, handleShowErrorNotification, handleClearNotification }
     );
 
     if (!response) return;
 
     if (response.success) {
       setIsEditing(false);
-      update(response.data);
+      await update(response.data);
     }
   };
 
@@ -63,13 +63,13 @@ export default function useUserHandlers() {
         phoneNumber,
       },
       NotificationOrigin.UpdateData,
-      { handleSuccess, handleError, handleReset }
+      { handleShowSuccessNotification, handleShowErrorNotification, handleClearNotification }
     );
 
     if (!response) return;
 
     if (response.success) {
-      update(response.data);
+      await update(response.data);
     }
   };
 

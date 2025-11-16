@@ -1,13 +1,13 @@
 import React from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { FaSearch } from "react-icons/fa";
-import useWindowVisibility from "@/hooks/useWindowVisibility";
+import useUiVisibility from "@/hooks/useUiVisibility";
 import useFetchGameData from "@/features/products/hooks/useFetchGameData";
 import useSearchText from "@/hooks/useSearchText";
 import UtilsService from "@/services/UtilsService";
 import IUtilsService from "@/interfaces/IUtilsService";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
-import { GameAPIResponse } from "@/types/types";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 
 export default function FilterByCategory({
   menuElement,
@@ -27,13 +27,13 @@ export default function FilterByCategory({
   filterLabel: string;
   searchText: string;
   searchTextState: string | boolean;
-  apiFiltersArray: GameAPIResponse[];
+  apiFiltersArray: ApiProductDetails[];
   selectedFiltersId: number[];
   setSelectedFiltersId: ActionCreatorWithPayload<number[]>;
   handleFetchApiFilters: (quantity: number) => void;
 }) {
   const [visibleItemsCount, setVisibleItemsCount] = React.useState<number>(10);
-  const { handleToggle } = useWindowVisibility();
+  const { handleToggleElement } = useUiVisibility();
   const { handleFilterChange } = useFetchGameData();
   const { handleSetSearchText } = useSearchText();
 
@@ -59,7 +59,7 @@ export default function FilterByCategory({
       >
         <div
           className="relative flex items-center max-w-[300px] cursor-pointer"
-          onClick={() => handleToggle(menuElement)}
+          onClick={() => handleToggleElement(menuElement)}
         >
           <span className="flex-1 text-[18px] text-[#FFFFFF] font-bold">
             {filterLabel}
@@ -102,10 +102,10 @@ export default function FilterByCategory({
                       <input
                         className="flex-0"
                         type="checkbox"
-                        checked={selectedFiltersId.includes(filterItem.id)}
+                        checked={selectedFiltersId.includes(filterItem.id as number)}
                         onChange={() =>
                           handleFilterChange(
-                            filterItem.id,
+                            filterItem.id as number,
                             selectedFiltersId,
                             setSelectedFiltersId
                           )

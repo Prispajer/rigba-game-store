@@ -1,9 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import requestService from "@/services/RequestService";
-import { RequestResponse, UserReview } from "@/types/types";
+import RequestResponse from "@/shared/types/requestResponse";
+import ProductReviewRecord from "@/features/reviews/types/productReviewRecord";
 
 export const getUserReviewsThunk = createAsyncThunk<
-  { reviews: UserReview[]; message: string },
+  { reviews: ProductReviewRecord[]; message: string },
   { externalProductId: number },
   { rejectValue: string }
 >(
@@ -11,7 +12,7 @@ export const getUserReviewsThunk = createAsyncThunk<
   async ({ externalProductId }, { rejectWithValue }) => {
     try {
       const getUserReviewsThunkResponse: RequestResponse<{
-        reviews: UserReview[];
+        reviews: ProductReviewRecord[];
       }> = await requestService.postMethod(
         "products/endpoints/productManagement/getReviews",
         { externalProductId }
@@ -32,7 +33,7 @@ export const getUserReviewsThunk = createAsyncThunk<
 );
 
 export const likeUserReviewThunk = createAsyncThunk<
-  { reviews: UserReview[]; message: string },
+  { reviews: ProductReviewRecord[]; message: string },
   { email: string; externalProductId: number; reviewId: string },
   { rejectValue: string }
 >(
@@ -40,7 +41,7 @@ export const likeUserReviewThunk = createAsyncThunk<
   async ({ email, externalProductId, reviewId }, { rejectWithValue }) => {
     try {
       const likeUserReviewThunkResponse: RequestResponse<{
-        reviews: UserReview[];
+        reviews: ProductReviewRecord[];
       }> = await requestService.patchMethod(
         "products/endpoints/productManagement/likeReview",
         { email, externalProductId, reviewId }
@@ -61,7 +62,7 @@ export const likeUserReviewThunk = createAsyncThunk<
 );
 
 export const unlikeUserReviewThunk = createAsyncThunk<
-  { reviews: UserReview[]; message?: string },
+  { reviews: ProductReviewRecord[]; message?: string },
   { email: string; externalProductId: number; reviewId: string },
   { rejectValue: string }
 >(
@@ -69,7 +70,7 @@ export const unlikeUserReviewThunk = createAsyncThunk<
   async ({ email, externalProductId, reviewId }, { rejectWithValue }) => {
     try {
       const unlikeUserReviewThunkResponse: RequestResponse<{
-        reviews: UserReview[];
+        reviews: ProductReviewRecord[];
       }> = await requestService.patchMethod(
         "products/endpoints/productManagement/unLikeReview",
         { email, externalProductId, reviewId }

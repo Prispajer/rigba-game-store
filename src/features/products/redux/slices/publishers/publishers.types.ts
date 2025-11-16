@@ -1,7 +1,7 @@
-import { GameAPIResponse } from "@/types/types";
+import ApiProductDetails from "@/features/products/types/api/apiProductDetails";
 
 export type PublishersState = {
-  publishersArray: GameAPIResponse[];
+  publishersArray: ApiProductDetails[];
   isLoading: boolean;
   error: string | null;
   page_size: number;

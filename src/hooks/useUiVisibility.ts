@@ -22,7 +22,7 @@ import {
     selectPublishersMenuState,
     selectPlatformsMenuState,
     selectGenresMenuState,
-    selectStoresMenuState,
+    selectStoresMenuState, selectCheckoutStep,
 } from "@/redux/slices/ui/ui.selectors";
 
 export default function useUiVisibility() {
@@ -49,6 +49,7 @@ export default function useUiVisibility() {
     const platformsMenuState = useSelector(selectPlatformsMenuState);
     const genresMenuState = useSelector(selectGenresMenuState);
     const storesMenuState = useSelector(selectStoresMenuState);
+    const checkoutStepState = useSelector(selectCheckoutStep);
 
     const handleShowElement = React.useCallback((element: string): void => {
         dispatch(showElement(element));
@@ -94,6 +95,7 @@ export default function useUiVisibility() {
         platformsMenuState,
         genresMenuState,
         storesMenuState,
+        checkoutStepState,
         handleShowElement,
         handleHideElement,
         handleToggleElement,

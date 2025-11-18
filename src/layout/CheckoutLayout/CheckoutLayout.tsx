@@ -1,7 +1,7 @@
 import React from "react";
 import CheckoutHeader from "./CheckoutHeader";
 
-export default async function CheckoutLayout({
+export default function CheckoutLayout({
   children,
 }: {
   children: React.ReactNode;

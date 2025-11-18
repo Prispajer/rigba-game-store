@@ -21,3 +21,4 @@ export const selectPublishersMenuState = (state: RootState) => state.ui.publishe
 export const selectPlatformsMenuState = (state: RootState) => state.ui.platformsMenu;
 export const selectGenresMenuState = (state: RootState) => state.ui.genresMenu;
 export const selectStoresMenuState = (state: RootState) => state.ui.storesMenu;
+export const selectCheckoutStep = (state: RootState) => state.ui.checkoutStep;

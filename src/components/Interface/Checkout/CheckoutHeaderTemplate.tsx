@@ -7,28 +7,33 @@ import CheckoutStatus from "./CheckoutStatus";
 export default function CheckoutHeaderTemplate({
                                                    headerClassName,
                                                    mobileLogoTitle,
-                                                   stepElementClasses = { step1: "", step2: "", step3: "" },
-                                                   stepContent = { step1: "", step2: "", step3: "" },
-                                                   stepContentClasses = { step1: "", step2: "", step3: "" },
-
+                                                   steps,
+                                                   resolutionState
                                                }: {
     headerClassName: string;
     mobileLogoTitle: string;
-    stepElementClasses: { step1: string; step2: string; step3: string };
-    stepContent: { step1: React.ReactNode | string; step2: React.ReactNode | string; step3: React.ReactNode | string };
-    stepContentClasses: { step1: string; step2: string; step3: string };
+    steps: {
+        label: string;
+        index: number;
+        stepNumber: React.ReactNode | string;
+        elementClass: string;
+        contentClass: string;
+        activeStep: string;
+    }[];
+    resolutionState: boolean;
 }) {
     return (
         <header className={headerClassName}>
             <div className="flex items-center max-w-[1240px] w-full mx-auto md:py-2">
                 <CheckoutLogo mobileLogoTitle={mobileLogoTitle} />
-                <CheckoutStatus
-                    stepElementClasses={stepElementClasses}
-                    stepContent={stepContent}
-                    stepContentClasses={stepContentClasses}
-                />
-
+                {resolutionState ? (
+                    <>
+                <CheckoutStatus steps={steps} />
                 <div className="hidden xl:flex md:flex-0 w-[100px]" />
+                    </>
+                ) : (
+                    ""
+                    )}
             </div>
         </header>
     );

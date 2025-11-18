@@ -27,7 +27,6 @@ export default function CartModalContainer() {
     handleDecreaseQuantityUserProductFromCart,
     handleIncreaseQuantityUserProductFromCart,
   } = useUserCartActions(getUserCart);
-
   const { localStorageCartState } = useLocalStorageCart("localStorageCart");
   const {
     handleDeleteLocalStorageProductFromCart,
@@ -45,6 +44,10 @@ export default function CartModalContainer() {
   const currentCart = user
     ? userCartState.products
     : localStorageCartState.localStorageCart;
+
+  React.useEffect(() => {
+      void getUserCart();
+  }, [user?.email, getUserCart])
 
   return (
     <>
@@ -74,7 +77,7 @@ export default function CartModalContainer() {
                           loading="eager"
                           onClick={() =>
                               redirectToProduct(
-                              product.productsInformations?.slug as string,
+                              product.productsInformations?.slug,
                                 handleHideElement,
                               "cartModal"
                             )
@@ -84,7 +87,7 @@ export default function CartModalContainer() {
                             product.productsInformations.background_image ?? ""
                           }
                           alt={
-                            (product.productsInformations.name as string) ?? ""
+                            (product.productsInformations.name) ?? ""
                           }
                         />
                       </div>
@@ -92,7 +95,7 @@ export default function CartModalContainer() {
                         <div
                           onClick={() =>
                               redirectToProduct(
-                              product.productsInformations.slug as string,
+                              product.productsInformations.slug,
                                 handleHideElement,
                               "cartModal"
                             )
@@ -116,7 +119,7 @@ export default function CartModalContainer() {
                               className="mr-2 hover:text-modalHover"
                               onClick={() =>
                                 handleDecreaseQuantityUserProductFromCart(
-                                  user?.email as string,
+                                  user?.email,
                                   product.externalProductId
                                 )
                               }
@@ -131,7 +134,7 @@ export default function CartModalContainer() {
                               className="ml-2 hover:text-modalHover"
                               onClick={() =>
                                 handleIncreaseQuantityUserProductFromCart(
-                                  user?.email as string,
+                                  user?.email,
                                   product.externalProductId
                                 )
                               }
@@ -143,7 +146,7 @@ export default function CartModalContainer() {
                             disabled={isCartLoading["getUserCart"]}
                             onClick={() =>
                               handleDeleteUserProductFromCart(
-                                user?.email as string,
+                                user?.email,
                                 product.externalProductId
                               )
                             }
@@ -171,21 +174,21 @@ export default function CartModalContainer() {
                           loading="eager"
                           onClick={() =>
                               redirectToProduct(
-                              product.slug as string,
+                              product.slug,
                                 handleHideElement,
                               "cartModal"
                             )
                           }
                           fill={true}
                           src={product.background_image ?? ""}
-                          alt={product.name as string}
+                          alt={product.name}
                         />
                       </div>
                       <div className="flex flex-1 flex-col px-2 gap-y-[10px] text-white">
                         <div
                           onClick={() =>
                               redirectToProduct(
-                              product.slug as string,
+                              product.slug,
                                 handleHideElement,
                               "cartModal"
                             )

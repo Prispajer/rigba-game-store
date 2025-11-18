@@ -10,22 +10,18 @@ import { selectUserCartState } from "../../redux/slices/userCart/userCart.select
 
 export default function useUserCart() {
     const dispatch = useDispatch<AppDispatch>();
-
     const { user } = useCurrentUser();
     const { isLoading, executeWithLoading } = useAsyncActionWithLoading();
 
     const userCartState = useSelector(selectUserCartState);
 
-    const getUserCart = React.useCallback(
-        async () => {
-            if (user?.email) {
-                await executeWithLoading("getUserCart", () =>
-                    dispatch(getUserCartThunk({ email: user.email }))
-                );
-            }
-        },
-        [dispatch, user?.email, executeWithLoading]
-    );
+    const getUserCart = React.useCallback(async () => {
+        if (user?.email) {
+            await executeWithLoading("getUserCart", () =>
+                dispatch(getUserCartThunk({ email: user.email }))
+            );
+        }
+    }, [dispatch, user?.email, executeWithLoading]);
 
     return {
         isLoading,

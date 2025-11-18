@@ -26,7 +26,6 @@
       const [isProcessing, setIsProcessing] = React.useState(false);
       const [errorMessage, setErrorMessage] = React.useState<string>("");
       const [email, setEmail] = React.useState<string>("");
-
       const stripe = useStripe();
       const elements = useElements();
       const { user } = useCurrentUser();
@@ -138,10 +137,10 @@
                             onClick={(e) => {
                               e.stopPropagation();
                               user
-                                ? handleDeleteUserProductFromCart({
-                                    email: user.email as string,
-                                    externalProductId: product.externalProductId,
-                                  })
+                                ? handleDeleteUserProductFromCart(
+                                    user?.email,
+                                    product.externalProductId,
+                                  )
                                 : handleDeleteLocalStorageProductFromCart(
                                     product.externalProductId
                                   );
@@ -173,10 +172,10 @@
                             onClick={(e) => {
                               e.stopPropagation();
                               user
-                                ? handleDecreaseQuantityUserProductFromCart({
-                                    email: user.email as string,
-                                    externalProductId: product.externalProductId,
-                                  })
+                                ? handleDecreaseQuantityUserProductFromCart(
+                                    user.email,
+                                    product.externalProductId,
+                                  )
                                 : handleDecreaseQuantityLocalStorageProductFromCart(
                                     product.externalProductId
                                   );
@@ -192,10 +191,10 @@
                             onClick={(e) => {
                               e.stopPropagation();
                               user
-                                ? handleIncreaseQuantityUserProductFromCart({
-                                    email: user.email as string,
-                                    externalProductId: product.externalProductId,
-                                  })
+                                ? handleIncreaseQuantityUserProductFromCart(
+                                    user.email,
+                                    product.externalProductId,
+                                  )
                                 : handleIncreaseQuantityLocalStorageProductFromCart(
                                     product.externalProductId
                                   );

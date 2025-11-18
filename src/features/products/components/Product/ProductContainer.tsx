@@ -47,6 +47,7 @@ export default function ProductContainer({
     unlikeUserReviewAction,
   } = useUserReviewActions(getUserReviews);
 
+
   return (
     <section className="pb-[100px] bg-primaryColor">
       <div className="grid grid-cols-1 lg:grid-cols-[calc(100%-380px),380px] max-w-[1600px] mx-auto px-[20px]">

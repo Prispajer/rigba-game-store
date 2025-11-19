@@ -8,7 +8,7 @@
 
 # Environments
 - **Local Version**: Provides full functionality but requires downloading and running the app locally.
-- **Live Version**: Offers limited functionality (e.g., Stripe payment processing and email sending via the Resend API are not supported).
+- **Live Version**: Offers limited functionality (email sending via the Resend API is not supported).
 
 # Key Features
 The application includes a comprehensive set of features for users to enjoy a seamless experience:

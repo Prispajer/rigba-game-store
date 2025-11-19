@@ -149,20 +149,20 @@ export default function LoginContainer() {
                   </p>
                 )}
               </div>
-              <FormSuccess
+                {successState && <FormSuccess
                 message={
-                  successState && originState === "Login"
+                  originState === "Login"
                     ? (messageState as string)
                     : ""
                 }
-              />
-              <FormError
+              />}
+                {!successState && <FormError
                 message={
-                  (!successState && originState === "Login"
+                  (originState === "Login"
                     ? (messageState as string)
                     : "") || providerError
                 }
-              />
+              />}
               <div className="flex flex-col items-center justfiy-center w- pt-4">
                 <button
                   disabled={isPending}
@@ -200,20 +200,20 @@ export default function LoginContainer() {
                   </p>
                 )}
               </div>
-              <FormSuccess
+                {successState && <FormSuccess
                 message={
-                  successState && originState === "Login"
+                  originState === "Login"
                     ? (messageState as string)
                     : ""
                 }
-              />
-              <FormError
+              />}
+                {!successState && <FormError
                 message={
-                  (!successState && originState === "Login"
+                  (originState === "Login"
                     ? (messageState as string)
                     : "") || providerError
                 }
-              />
+              />}
               <div className="flex flex-col items-center justfiy-center w- pt-4">
                 <button
                   disabled={isPending}

@@ -94,24 +94,22 @@ export default function ChangePasswordContainer() {
             <p className="text-red-500">{errors.confirmPassword.message}</p>
           )}
         </label>
-        <FormSuccess
+          {successState && <FormSuccess
           message={
-            (successState &&
-              originState === NotificationOrigin.ChangePassword) ||
+            (originState === NotificationOrigin.ChangePassword) ||
             originState === NotificationOrigin.ChangePasswordToken
               ? (messageState as string)
               : ""
           }
-        />
-        <FormError
+        />}
+          {!successState && <FormError
           message={
-            (!successState &&
-                originState === NotificationOrigin.ChangePassword) ||
+            (originState === NotificationOrigin.ChangePassword) ||
             originState === NotificationOrigin.ChangePasswordToken
               ? (messageState as string)
               : ""
           }
-        />
+        />}
         <div className="max-w-[180px] pt-[20px]">
           <button
             onClick={() => handleShowElement("twoFactorModal")}

@@ -13,7 +13,7 @@ import { NewPasswordSchema } from "@/utils/schemas/user";
 
 export default function ResetPasswordContainer() {
   const { isPending, handleNewPasswordSubmit } = useAuthHandlers();
-  const { messageState, originState } = useNotification();
+  const { successState, messageState, originState } = useNotification();
 
   const resetPasswordForm = useForm<z.infer<typeof NewPasswordSchema>>({
     resolver: zodResolver(NewPasswordSchema),
@@ -84,18 +84,18 @@ export default function ResetPasswordContainer() {
                 At least one number or special character
               </span>
             </div>
-            <FormSuccess
+              {successState && <FormSuccess
               message={
                 originState === "NewPassword"
                   ? (messageState as string)
                   : ""
               }
-            />
-            <FormError
+            />}
+              {!successState && <FormError
               message={
                   originState === "NewPassword" ? (messageState as string) : ""
               }
-            />
+            />}
             <div className="flex flex-col items-center justfiy-center w- ">
               <button
                 className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px] mt-4"

@@ -226,22 +226,20 @@ export default function PersonalDataContainer() {
             <span className="text-buttonTextColor font-bold">Save</span>
           </button>
         </div>
-        <FormSuccess
+          {successState && <FormSuccess
           message={
-            successState &&
             originState === NotificationOrigin.UpdateData
               ? (messageState as string)
               : ""
           }
-        />
-        <FormError
+        />}
+          {!successState && <FormError
           message={
-            !successState &&
             originState === NotificationOrigin.UpdateData
               ? (messageState as string)
               : ""
           }
-        />
+        />}
       </form>
     </div>
   );

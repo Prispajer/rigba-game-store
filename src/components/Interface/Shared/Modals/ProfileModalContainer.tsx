@@ -34,7 +34,7 @@ export default function ProfileModalContainer({
   translateX = "md:translate-x-[-2px]",
   translateY = "md:translate-y-[80px]",
 }: ProfileModalContainerProps) {
-  const { profileModalState, handleShowElement } = useUIVisibility();
+  const { profileModalState, handleShowElement, handleHideElement } = useUIVisibility();
   const { user } = useCurrentUser();
 
   const handleLogout = () => {
@@ -43,7 +43,7 @@ export default function ProfileModalContainer({
 
   const handleOutsideClick = () => {
     if (profileModalState) {
-        handleShowElement("profileModal");
+        handleHideElement("profileModal");
     }
   };
 
@@ -74,7 +74,7 @@ export default function ProfileModalContainer({
               <div className="flex items-center flex-1 justify-end">
                 <button>
                   <IoCloseSharp
-                    onClick={() => handleShowElement("profileModal")}
+                    onClick={() => handleHideElement("profileModal")}
                     size="26px"
                   />
                 </button>
@@ -105,7 +105,7 @@ export default function ProfileModalContainer({
                 className="text-[#544D60] text-left border-b-[1px] px-[20px] py-[10px]"
               >
                 <Link
-                  onClick={() => handleShowElement("profileModal")}
+                  onClick={() => handleHideElement("profileModal")}
                   className="flex items-center text-[15px] text-[#544D60]"
                   href={item.href}
                 >

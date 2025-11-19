@@ -105,22 +105,20 @@ export default function RegisterContainer() {
               </p>
             )}
           </div>
-          <FormSuccess
+            {successState && <FormSuccess
             message={
-              successState &&
+                originState === NotificationOrigin.Register
+                ? (messageState as string)
+                : ""
+            }
+          />}
+            {!successState && <FormError
+            message={
               originState === NotificationOrigin.Register
                 ? (messageState as string)
                 : ""
             }
-          />
-          <FormError
-            message={
-              !successState &&
-              originState === NotificationOrigin.Register
-                ? (messageState as string)
-                : ""
-            }
-          />
+          />}
           <div className="flex flex-col items-center justfiy-center py-4">
             <button
               disabled={isPending}

@@ -31,20 +31,20 @@ export default function EmailVerificationContainer() {
         </span>
             </h1>
             <div className="flex justify-center text-center mt-[40px]">
-                <FormSuccess
+                {successState && <FormSuccess
                     message={
-                        successState && originState === "EmailVerification"
+                    originState === "EmailVerification"
                             ? (messageState as string)
                             : ""
                     }
-                />
-                <FormError
+                />}
+                {!successState && <FormError
                     message={
-                        !successState && originState === "EmailVerification"
+                        originState === "EmailVerification"
                             ? (messageState as string)
                             : ""
                     }
-                />
+                />}
                 {isLoading && <MoonLoader />}
             </div>
             <div className="flex items-center justify-center w-full mt-[60px]">

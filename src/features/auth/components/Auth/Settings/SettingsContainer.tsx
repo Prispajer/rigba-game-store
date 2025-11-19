@@ -114,22 +114,20 @@ export default function SettingsContainer() {
               </button>
             </Link>
           </div>
-          <FormSuccess
+            {successState && <FormSuccess
             message={
-              successState &&
               originState === NotificationOrigin.UpdateName
                 ? (messageState as string)
                 : ""
             }
-          />
-          <FormError
+          />}
+            {!successState && <FormError
             message={
-              !successState &&
               originState === NotificationOrigin.UpdateName
                 ? (messageState as string)
                 : ""
             }
-          />
+          />}
         </div>
       </div>
       <div className="relative flex flex-col max-w-[750px] w-full mt-[20px] bg-[white]">
@@ -158,24 +156,22 @@ export default function SettingsContainer() {
               <span> {user?.isTwoFactorEnabled ? "Turn off" : "Turn on"}</span>
             </button>
           </div>
-          <FormSuccess
+            {successState && <FormSuccess
             message={
-              (successState &&
-                originState === NotificationOrigin.ToggleTwoFactor) ||
+              (originState === NotificationOrigin.ToggleTwoFactor) ||
               originState === NotificationOrigin.ToggleTwoFactorToken
                 ? (messageState as string)
                 : ""
             }
-          />
-          <FormError
+          />}
+            {!successState &&  <FormError
             message={
-              (!successState&&
-                  originState === NotificationOrigin.ToggleTwoFactor) ||
+              (originState === NotificationOrigin.ToggleTwoFactor) ||
               originState === NotificationOrigin.ToggleTwoFactorToken
                 ? (messageState as string)
                 : ""
             }
-          />
+          />}
         </div>
         <TwoFactorModalContainer
           handleSubmit={(code: string) => handleSubmitToggleTwoFactor(code)}

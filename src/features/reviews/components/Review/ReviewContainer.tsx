@@ -130,24 +130,22 @@ export default function ReviewContainer({
                 </p>
               )}
               <div className="mb-[10px] flex justify-end">
-                <FormSuccess
+                  { successState && <FormSuccess
                   message={
-                    successState &&
                     originState ===
                       NotificationOrigin.AddReviewToProduct
                       ? (messageState as string)
                       : ""
                   }
-                />
-                <FormError
+                />}
+                  {!successState && <FormError
                   message={
-                    !successState&&
                     originState ===
                       NotificationOrigin.AddReviewToProduct
                       ? (messageState as string)
                       : ""
                   }
-                />
+                />}
               </div>
               <div className="flex justify-end">
                 <button className="min-w-[200px] min-h-[35px] transition duration-300 font-medium text-buttonTextColor bg-buttonBackground hover:bg-buttonBackgroundHover">

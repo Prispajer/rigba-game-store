@@ -14,7 +14,7 @@ import {NotificationOrigin} from "@/redux/slices/notification/notification.types
 
 export default function ResetPasswordContainer() {
   const { isPending, handleResetPasswordSubmit } = useAuthHandlers();
-  const { messageState, originState } = useNotification();
+  const { successState, messageState, originState } = useNotification();
 
   const ResetPasswordObject = useForm<z.infer<typeof ResetPasswordSchema>>({
     resolver: zodResolver(ResetPasswordSchema),
@@ -60,20 +60,20 @@ export default function ResetPasswordContainer() {
                 </p>
               )}
             </div>
-            <FormSuccess
+              {successState && <FormSuccess
               message={
                   originState === NotificationOrigin.ResetPassword
                   ? (messageState as string)
                   : ""
               }
-            />
-            <FormError
+            />}
+              {!successState && <FormError
               message={
                   originState === NotificationOrigin.ResetPassword
                   ? (messageState as string)
                   : ""
               }
-            />
+            />}
             <div className="flex flex-col items-center justfiy-center w- pt-4">
               <button
                 className="text-buttonTextColor font-semibold	w-full bg-buttonBackground hover:bg-buttonBackgroundHover transition duration-300 p-[10px]"

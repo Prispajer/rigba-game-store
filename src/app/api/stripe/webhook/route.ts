@@ -7,27 +7,28 @@ import { Order } from "@prisma/client";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 export async function POST(request: NextRequest) {
-  let event: Stripe.Event;
-  let order: Order | null;
+    const sig = request.headers.get("stripe-signature");
+    const body = await request.text();
 
-  const stripeBody = await request.text();
-  const signature = await request.headers.get("stripe-signature");
+    if (!sig) {
+        return new NextResponse("Missing Stripe signature", { status: 400 });
+    }
 
-  if (!signature) {
-    throw new Error("Missing Stripe signature");
-  }
+    let event: Stripe.Event;
+    let order: Order | null;
 
-  try {
-    event = await stripe.webhooks.constructEvent(
-      stripeBody,
-      signature as string,
-      process.env.WEBHOOK_SECRET_KEY as string
-    );
 
-    const paymentIntent = event.data.object as Stripe.PaymentIntent;
-    const userId = paymentIntent.metadata.userId;
-    const cartId = paymentIntent.metadata.cartId;
-    const orderId = paymentIntent.metadata.orderId;
+    try {
+        event = stripe.webhooks.constructEvent(
+            body,
+            sig,
+            process.env.WEBHOOK_SECRET_KEY as string
+        );
+
+        const paymentIntent = event.data.object as Stripe.PaymentIntent;
+        const userId = paymentIntent.metadata.userId;
+        const cartId = paymentIntent.metadata.cartId;
+        const orderId = paymentIntent.metadata.orderId;
 
     order = await postgres.order.findFirst({
       where: { id: orderId, userId: userId },
@@ -138,9 +139,8 @@ export async function POST(request: NextRequest) {
         where: { id: orderId, userId: userId },
       });
     }
-  } catch (error) {
-    return NextResponse.json({ error: "Processing error" }, { status: 500 });
-  }
-
-  return NextResponse.json({ received: true });
+  } catch (err: any) {
+        return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 });
+    }
+    return NextResponse.json({ received: true });
 }

@@ -62,7 +62,7 @@ export default function RedeemContainer({
                     </div>
                   </div>
                   <div className="flex p-[10px]">
-                    <h3 className="text-[14px] text-[#FFFFFF] font-bold break-words line-clamp-2">
+                    <h3 className="sm:w-[70px] text-[14px] text-[#FFFFFF] font-bold break-words line-clamp-2 cursor-default">
                       {product.productsInformations?.name}
                     </h3>
                   </div>
